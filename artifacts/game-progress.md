@@ -84,7 +84,7 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 ### Remaining work
 
 - City expansion per `artifacts/city_expansion_plan.md`: compressed District 1 loop with Nhà thờ Đức Bà and Tòa Thị Chính placed by real-world relation to Bến Thành. Landmark GLBs are built by a separate agent; integrate when exported.
-- Player: young boy. Tripo model `a941ef32-2a0d-4a3a-8ff8-0282bace5a0d`, rig `1b29e85d-06ea-4f87-9677-2874435515a8`, clips idle `2bbe8482-…`, walk `31945dc5-…`, run `b8f46272-…`; checkpoint `artifacts/jobs/player-boy.json`; merged GLB `assets/player-boy/player-boy.glb` via `scripts/blender/merge-player.py`.
+- Player: young tourist in the Kenney mini-character style. Source `assets/player-tourist/player-tourist.blend` (base `character-male-e`, authored sun hat, sunglasses, backpack, camera), built by `scripts/blender/build-tourist.py`; reuses the pack's 32 clips. Obsolete: the Tripo young-boy job (`artifacts/jobs/player-boy.json`, `assets/player-boy/`) was replaced at the user's request and is not used at runtime.
 - Agent harness per `artifacts/agent-harness.md` (Mastra, backend-authoritative quests).
 
 ## Open follow-ups
@@ -102,3 +102,13 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 - 2026-10-31: Rebuilt central rose-window tracery with concentric rings and radial spokes to better match the ornate reference facade; saved/exported/rendered.
 
 - 2026-10-31: Added matching terracotta arch trim to six side-window bays on both left and right elevations; blend/GLB export completed.
+
+- 2026-10-31: Brightened brick, trim, and slate material values toward the reference palette; re-exported GLB and refreshed three-quarter preview.
+
+- 2026-10-31: Added seven rear apse window openings with terracotta arch rings, breaking up the blank rear wall and matching the reference back-view rhythm; re-rendered rear preview.
+
+- 2026-10-31: Added nine rear apse pilasters to articulate the curved wall between windows, then re-rendered rear validation.
+
+- 2026-10-31: Added 24 clock-face tick markers across both front clocks for closer reference detail; re-exported GLB and refreshed front render.
+
+- 2026-10-31: Added twelve sloped slate side-canopy planes over the left/right bay rhythm to better match the reference shed-roof silhouette; refreshed three-quarter render.

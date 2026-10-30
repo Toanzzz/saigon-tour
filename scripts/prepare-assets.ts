@@ -94,6 +94,13 @@ for (const mesh of market.getRoot().listMeshes()) {
 await market.transform(flatten(), dedup(), join(), weld(), prune())
 await io.write(marketTarget, market)
 records.push(await record(marketTarget, market))
+const playerTarget = resolve(output, 'people/player-tourist.glb')
+const player = await io.read(
+  resolve(root, 'assets/player-tourist/player-tourist.glb')
+)
+await player.transform(dedup(), prune())
+await io.write(playerTarget, player)
+records.push(await record(playerTarget, player))
 await writeFile(
   resolve(output, 'manifest.json'),
   `${JSON.stringify(records, null, 2)}\n`

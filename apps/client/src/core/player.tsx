@@ -108,7 +108,7 @@ export function Player() {
     >
       <CapsuleCollider args={[0.45, 0.35]} />
       <group ref={avatar} visible={!riding} position={[0, -0.8, 0]}>
-        <Character model="male-b" animation={animation} />
+        <Character path="people/player-tourist" animation={animation} />
       </group>
     </RigidBody>
   )

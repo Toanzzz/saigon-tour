@@ -655,5 +655,59 @@
       ]
     },
     "animations": []
+  },
+  {
+    "path": "people/player-tourist.glb",
+    "bytes": 225320,
+    "meshes": 13,
+    "materials": 7,
+    "triangles": 1660,
+    "vertices": 2987,
+    "bounds": {
+      "min": [
+        -0.3835841417312622,
+        1.043081283569336e-7,
+        -0.299999941903917
+      ],
+      "max": [
+        0.3835841417312622,
+        0.7110000103712096,
+        0.3000000819379408
+      ]
+    },
+    "animations": [
+      "attack-kick-left",
+      "attack-kick-right",
+      "attack-melee-left",
+      "attack-melee-right",
+      "crouch",
+      "die",
+      "drive",
+      "emote-no",
+      "emote-yes",
+      "fall",
+      "holding-both",
+      "holding-both-shoot",
+      "holding-left",
+      "holding-left-shoot",
+      "holding-right",
+      "holding-right-shoot",
+      "idle",
+      "interact-left",
+      "interact-right",
+      "jump",
+      "pick-up",
+      "sit",
+      "sprint",
+      "static",
+      "walk",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-back",
+      "wheelchair-move-forward",
+      "wheelchair-move-left",
+      "wheelchair-move-right",
+      "wheelchair-sit"
+    ]
   }
 ]

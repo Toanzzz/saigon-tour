@@ -167,18 +167,23 @@ function Instances({
 
 export function Character({
   model = 'female-b',
+  path,
   position = [0, 0, 0],
   rotation,
   animation = 'idle',
   scale = 2.35,
 }: {
   model?: 'female-a' | 'female-b' | 'male-a' | 'male-b'
+  /** Runtime model path override, e.g. the tourist player. */
+  path?: string
   position?: Vec3
   rotation?: Vec3
   animation?: string
   scale?: number
 }) {
-  const { scene, animations } = useGLTF(modelUrl(`people/character-${model}`))
+  const { scene, animations } = useGLTF(
+    modelUrl(path ?? `people/character-${model}`)
+  )
   const object = useMemo(() => {
     const result = clone(scene)
     result.traverse((child) => {

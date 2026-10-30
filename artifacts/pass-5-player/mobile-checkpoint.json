@@ -1,0 +1,129 @@
+{
+  "beforeTouch": {
+    "renderer": {
+      "render": {
+        "frame": 213,
+        "calls": 150,
+        "triangles": 302528,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 88,
+        "textures": 47
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 193,
+      "position": [
+        -23,
+        0.7987181544303894,
+        10
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "fps": 59.95305505431673,
+    "dpr": 1
+  },
+  "afterTouch": {
+    "renderer": {
+      "render": {
+        "frame": 287,
+        "calls": 149,
+        "triangles": 302526,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 88,
+        "textures": 47
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 267,
+      "position": [
+        -23,
+        0.7987186908721924,
+        6.226748943328857
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "fps": 60.13147398155129,
+    "dpr": 1
+  },
+  "xrSessionSupported": false,
+  "errors": [],
+  "requests": []
+}

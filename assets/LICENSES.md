@@ -9,6 +9,7 @@ remain in their source folders.
 | Market landmark | `chobenthanh/model/ben-thanh-market.glb` | Project artwork reconstructed from supplied references | Original project model; source provenance described in its README |
 | City buildings and parasols | `city-kit-commercial` | Kenney | `city-kit-commercial/License.txt`, CC0 |
 | Character models and animations | `mini-characters` | Kenney | `mini-characters/License.txt`, CC0 |
+| Tourist player | `player-tourist/player-tourist.blend` | Kenney `character-male-e` plus project-authored hat, backpack, and camera | Built by `scripts/blender/build-tourist.py`; CC0 base |
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |
 | Tram | `train-kit` | Kenney, Guus Vermeulen, Tony Schaer | `train-kit/License.txt`, CC0 |
