@@ -1,0 +1,63 @@
+{
+  "renderer": {
+    "render": {
+      "frame": 1265,
+      "calls": 196,
+      "triangles": 389345,
+      "points": 0,
+      "lines": 0
+    },
+    "memory": {
+      "geometries": 89,
+      "textures": 51
+    }
+  },
+  "state": {
+    "screen": "playing",
+    "panel": "transport",
+    "muted": false,
+    "frame": 1241,
+    "position": [
+      -9.998687744140625,
+      0.7987185120582581,
+      12.20167350769043
+    ],
+    "currency": 30,
+    "quest": "hoa-herbs-delivery",
+    "completed": 0,
+    "ride": null,
+    "source": "live",
+    "animation": "idle"
+  },
+  "physics": {
+    "engine": "rapier",
+    "timestep": 0.016666666666666666,
+    "bodies": 2,
+    "colliders": 94,
+    "ccdBodies": 1
+  },
+  "audio": {
+    "state": "running",
+    "loaded": [
+      "confirm",
+      "bell",
+      "reward",
+      "city"
+    ],
+    "errors": [],
+    "muted": false,
+    "volume": 0.5,
+    "paused": false,
+    "activeEffects": 1,
+    "ambienceLoops": 1,
+    "events": {
+      "click": 2,
+      "pickup": 1,
+      "board": 0,
+      "arrive": 0,
+      "reward": 0
+    }
+  },
+  "fps": 60.08474403335269,
+  "dpr": 1
+}

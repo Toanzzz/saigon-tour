@@ -2,6 +2,7 @@ import { DEMO_QUEST, objectiveSatisfied } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { PLACES, route } from '../src/core/places'
 import { grantQuest, grantReward, initialState } from '../src/state/game'
+import { ROADS } from '../src/world/district'
 
 describe('the delivery journey', () => {
   it('grants the carried parcel once and keeps its verified reward idempotent', () => {
@@ -46,8 +47,22 @@ describe('the delivery journey', () => {
           expect(point[0] === previous[0] || point[2] === previous[2]).toBe(
             true
           )
-          expect(Math.abs(point[0])).toBeLessThan(47)
-          expect(Math.abs(point[2])).toBeLessThan(38)
+          const mid: [number, number] = [
+            (point[0] + previous[0]) / 2,
+            (point[2] + previous[2]) / 2,
+          ]
+          for (const p of [point, mid]) {
+            const x = p[0]
+            const z = p.length === 3 ? (p as number[])[2] : p[1]
+            expect(
+              ROADS.some(
+                (r) =>
+                  Math.abs(x - r.x) <= r.w / 2 + 1 &&
+                  Math.abs(z - r.z) <= r.d / 2 + 1
+              ),
+              `(${x}, ${z}) on ${from}->${to}`
+            ).toBe(true)
+          }
         })
       }
     }

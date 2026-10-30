@@ -111,11 +111,15 @@ export function Planting() {
 export function Promenade() {
   return (
     <group>
-      <Block position={[0, 0.02, 35]} scale={[98, 0.15, 7]} color="#c6b79a" />
-      <Block position={[0, -0.35, 49]} scale={[130, 0.3, 21]} color="#5b9896" />
+      <Block position={[28, 0.02, 35]} scale={[154, 0.15, 7]} color="#c6b79a" />
+      <Block
+        position={[28, -0.35, 52]}
+        scale={[214, 0.3, 26]}
+        color="#5b9896"
+      />
       <Blocks
         color="#ddcfaf"
-        placements={Array.from({ length: 25 }, (_, i) => ({
+        placements={Array.from({ length: 39 }, (_, i) => ({
           position: [-48 + i * 4, 0.6, 38],
           scale: [0.3, 1.2, 0.35],
         }))}
@@ -123,8 +127,8 @@ export function Promenade() {
       <Blocks
         color="#516b61"
         placements={[0.5, 1].map((y) => ({
-          position: [0, y, 38],
-          scale: [98, 0.09, 0.12],
+          position: [28, y, 38],
+          scale: [154, 0.09, 0.12],
         }))}
       />
       <Bench position={[24, 0, 33]} />
@@ -155,9 +159,17 @@ export function Crosswalk({ x, z }: { x: number; z: number }) {
     />
   )
 }
-export function StopSign({ position, name }: { position: Vec3; name: string }) {
+export function StopSign({
+  position,
+  rotation,
+  name,
+}: {
+  position: Vec3
+  rotation?: Vec3
+  name: string
+}) {
   return (
-    <group position={position}>
+    <group position={position} rotation={rotation}>
       <Block position={[0, 1.2, 0]} scale={[0.12, 2.4, 0.12]} color="#46635a" />
       <Sign
         text={name}

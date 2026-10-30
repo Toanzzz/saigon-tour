@@ -6,7 +6,7 @@ export interface NpcPersona {
   role: string
   personality: string
   speakingStyle: string
-  location: 'market' | 'park' | 'cathedral' | 'river'
+  location: import('./contracts').LocationId
   knowledge: string[]
 }
 

@@ -54,3 +54,48 @@ Validated on October 30, 2026 from the local production previews.
 - Required client assets exist in `apps/client/dist/`.
 - Client secret scan found no Meta key, endpoint, bearer credential, or model identifier in client source/build output.
 - No deployment or public hosting verification was performed.
+
+## City hub, player, and District 1 (October 31, 2026)
+
+- Hub: `artifacts/pass-4-hub/`. Desktop flow opened the hub after the reward, matched wallet to game coins, showed three done story steps, opened Journal from the hub, toggled with `H`, closed with `Esc`. Mobile at 390 px: hub opened from the header, zero horizontal overflow, sound toggle muted the game.
+- Tourist player: `artifacts/pass-5-player/`; desktop and mobile flows passed with walk, sprint, and idle clips from the pack.
+- District 1: `artifacts/pass-6-city/`. Desktop and mobile quest flows passed with no page or console errors. `scripts/qa-ride.mjs` boarded the bus from Bến Thành to Nhà thờ Đức Bà through the transport panel: 16.8 s ride, 5 coins charged, arrival at the cathedral stop, then walked north into Công xã Paris.
+- Landmark runtime copies: Nhà thờ Đức Bà 36k triangles / 1.2 MB, Tòa Thị Chính 19k triangles / 0.87 MB (sources 90k and 42k triangles with 4K maps).
+- Renderer, desktop 1440×900: active play 171 calls / 383k triangles / 42 textures; City Hall 101 calls / 221k; cathedral 79 calls / 253k.
+- Renderer, mobile 390×844: active play 123 calls / 379k triangles / 41 textures; City Hall 89 calls / 205k; cathedral 79 calls / 253k. Mobile active play is over the 300k triangle starting budget; the Bến Thành market model (189k triangles) is the main cost and was already the largest asset.
+- Third refinement pass: asset increased to 463 objects; side walls now have repeated lower/upper arched windows, pilasters, cornices, projecting bay rooflets, and warmer reference-matched materials/lighting.
+- Fourth refinement pass: replaced the oversized front gable silhouette with compact sloped roof planes, added stepped gable bands, clock faces, rose tracery, and center pilasters; asset now contains 489 objects.
+- Fifth refinement pass: added rear apse rose-window tracery, layered roof rings, radial buttresses, rear windows, and rear finial; asset now contains 528 objects.
+- Recovery and front-view validation: loaded the detailed 528-object asset from `nhathoducba.blend1`, made `Cathedral_Recovery` the active scene, saved a corrected `nhathoducba.blend`, re-exported `nhathoducba.glb`, and rendered `nhathoducba-front-preview.png` from a straight-on camera.
+- Presentation refinement: corrected the saved scene to a 528-object cathedral, warmed facade/slate materials, increased studio fill, and re-rendered the straight front view at 1000x780.
+- Front composition refinement: pulled the camera back to include full twin spires and crosses in the primary front render; preview is now 1000x820.
+- Front-detail pass: added tower window arch trim, window sills, warm gable accents, and inset door panels; asset now contains 560 objects and was re-exported.
+- Spire detail pass: added repeated front dormer trim/glass accents and spire ridge accents; asset now contains 574 objects and was re-exported.
+
+- 2026-10-31: Inspected three-quarter render; confirmed twin spires, layered roof, side aisle rhythm, facade clocks/rose, and warm terracotta/slate palette. Added bevel pass to soften blocky edges and refreshed deliverables/previews.
+
+- 2026-10-31: Applied additional presentation refinement: neutral blue-gray world, brighter multi-light studio, and preserved editable/exportable asset state.
+
+- 2026-10-31: Geometry refinement added warm terracotta Gothic arch framing around both tower window stacks; export and render validation passed.
+
+- 2026-10-31: Rose-window fidelity pass validated in Blender and GLB export.
+
+- 2026-10-31: Refreshed three-quarter render after rose tracery pass; asset remains 584+ editable objects with valid GLB export.
+
+- 2026-10-31: Side elevation fidelity pass added repeated Gothic window framing on both sides and validated export.
+
+- 2026-10-31: Material fidelity pass completed with warmer terracotta and lighter slate values; export/render validation passed.
+
+- 2026-10-31: Added and rendered a dedicated rear validation camera to inspect the apse/rear silhouette; rear preview generated successfully.
+
+- 2026-10-31: Rear apse fidelity pass validated with new repeated windows and arch trims.
+
+- 2026-10-31: Rear silhouette refinement added vertical Gothic articulation matching the reference apse segmentation.
+
+- 2026-10-31: Front facade clock fidelity pass validated in Blender/GLB/render.
+
+- 2026-10-31: Side roof silhouette pass validated with new sloped canopy planes and GLB export.
+
+- 2026-10-31: Side-buttress cap pass validated: 12 cap meshes present, `.blend` saved, `.glb` re-exported with `glTF` binary signature, and the three-quarter preview refreshed. Remaining visual gap: side elevations and apse still need substantial architectural refinement toward the reference sheet.
+
+- 2026-10-31: Structural pass validated in Blender: transept and apse roof-curve meshes present, misleading railing-like extras hidden, `.blend` saved, `.glb` re-exported, and three-quarter preview refreshed. Significant mismatch remains in Gothic proportions and facade fidelity; objective not complete.

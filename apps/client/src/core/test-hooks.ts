@@ -2,7 +2,7 @@ import { DEMO_QUEST } from '@saigon/shared'
 import { game, initialState, update } from '../state/game'
 import { clearInput } from './input'
 import { motion } from './motion'
-import { SPAWN } from './places'
+import { PLACES, SPAWN } from './places'
 
 type TestState =
   | 'title'
@@ -12,6 +12,8 @@ type TestState =
   | 'reward'
   | 'transport'
   | 'riding'
+  | 'cityhall'
+  | 'cathedral'
 
 let screenshotPaused = false
 let debugUiHidden = false
@@ -115,6 +117,18 @@ function setTestState(name: string) {
       stop: 'market',
       ride: { from: 'market', to: 'park', mode: 'bus', progress: 0.45 },
     })
+  } else if (name === 'cityhall' || name === 'cathedral') {
+    const place = PLACES[name]
+    resetState({
+      screen: 'playing',
+      position: [place.at[0], 0.9, place.at[2] + 10],
+      stop: name,
+      world: {
+        ...initialState().world,
+        locationId: name,
+        visitedLocations: ['market', name],
+      },
+    })
   } else {
     resetState({
       screen: 'playing',
@@ -134,6 +148,8 @@ function isTestState(name: string): name is TestState {
     'reward',
     'transport',
     'riding',
+    'cityhall',
+    'cathedral',
   ].includes(name)
 }
 

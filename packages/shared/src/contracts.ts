@@ -2,7 +2,13 @@ import { z } from 'zod'
 
 export const NpcIdSchema = z.enum(['hoa', 'tam', 'linh', 'ba'])
 export type NpcId = z.infer<typeof NpcIdSchema>
-export const LocationIdSchema = z.enum(['market', 'park', 'cathedral', 'river'])
+export const LocationIdSchema = z.enum([
+  'market',
+  'park',
+  'cathedral',
+  'cityhall',
+  'river',
+])
 export type LocationId = z.infer<typeof LocationIdSchema>
 export const ItemIdSchema = z.enum(['herbs', 'postcard'])
 export type ItemId = z.infer<typeof ItemIdSchema>

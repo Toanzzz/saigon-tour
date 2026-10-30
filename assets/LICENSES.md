@@ -9,6 +9,7 @@ remain in their source folders.
 | Market landmark | `chobenthanh/model/ben-thanh-market.glb` | Project artwork reconstructed from supplied references | Original project model; source provenance described in its README |
 | City buildings and parasols | `city-kit-commercial` | Kenney | `city-kit-commercial/License.txt`, CC0 |
 | Character models and animations | `mini-characters` | Kenney | `mini-characters/License.txt`, CC0 |
+| Tòa Thị Chính, Nhà thờ Đức Bà | `toathichinh/toathichinh-model.glb`, `nhathoducba/nhathoducba-model.glb` | Project models generated from supplied references | Runtime copies are simplified and resized by `scripts/prepare-assets.ts` |
 | Tourist player | `player-tourist/player-tourist.blend` | Kenney `character-male-e` plus project-authored hat, backpack, and camera | Built by `scripts/blender/build-tourist.py`; CC0 base |
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |
@@ -20,6 +21,6 @@ Kenney packs permit personal, educational, and commercial use under Creative Com
 The full license text is retained beside each source pack. The UI sprite sheets are excluded
 from the runtime subset because their supplied folder does not contain license evidence.
 
-The cathedral, transport adaptations, street signs, stall assembly, paving, and district
+Transport adaptations, street signs, stall assembly, paving, and district
 composition are authored in the game's world modules. No externally generated assets are
 required for the current district.

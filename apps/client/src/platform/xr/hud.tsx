@@ -58,24 +58,16 @@ export function XRGameHud() {
       <XRWorldPanel
         title="Choose a ride"
         lines={[
-          `${state.world.currency} coins in your wallet. Bus to the park costs ${MODES.bus.fare}.`,
+          `${state.world.currency} coins in your wallet. Every bus ride costs ${MODES.bus.fare}.`,
         ]}
         buttons={[
-          {
-            id: 'park',
-            label: 'Bus → park',
-            onClick: () => board('park', 'bus'),
-          },
-          {
-            id: 'cathedral',
-            label: 'Bus → cathedral',
-            onClick: () => board('cathedral', 'bus'),
-          },
-          {
-            id: 'river',
-            label: 'Bus → river',
-            onClick: () => board('river', 'bus'),
-          },
+          ...(Object.keys(PLACES) as (keyof typeof PLACES)[])
+            .filter((id) => id !== state.stop)
+            .map((id) => ({
+              id,
+              label: `Bus → ${PLACES[id].name}`,
+              onClick: () => board(id, 'bus'),
+            })),
           { id: 'close', label: 'Continue', onClick: close },
         ]}
       />

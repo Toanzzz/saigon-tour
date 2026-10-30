@@ -7,6 +7,7 @@ import { CameraRig } from './core/camera'
 import { Diagnostics } from './core/diagnostics'
 import { Neighbors } from './core/neighbors'
 import { Player } from './core/player'
+import { Sun } from './core/sun'
 import { Transport } from './core/transport'
 import { XRGameHud, XRRuntime, xrStore } from './platform/xr'
 import { game } from './state/game'
@@ -18,7 +19,7 @@ export function Scene() {
   return (
     <Canvas
       shadows
-      camera={{ position: [14, 32, 39], fov: 49, near: 0.1, far: 180 }}
+      camera={{ position: [14, 32, 39], fov: 49, near: 0.1, far: 220 }}
       dpr={[1, 1.5]}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
@@ -30,19 +31,7 @@ export function Scene() {
       <color attach="background" args={['#b1b8cb']} />
       <fog attach="fog" args={['#b1b8cb', 75, 150]} />
       <hemisphereLight args={['#fff3d5', '#7e8976', 2.1]} />
-      <directionalLight
-        position={[-22, 38, 23]}
-        intensity={3.2}
-        color="#ffdfaa"
-        castShadow
-        shadow-mapSize={[2048, 2048]}
-        shadow-camera-left={-55}
-        shadow-camera-right={55}
-        shadow-camera-top={45}
-        shadow-camera-bottom={-45}
-        shadow-camera-far={110}
-        shadow-normalBias={0.06}
-      />
+      <Sun />
       <Suspense fallback={null}>
         <XRRuntime store={xrStore} hud={<XRGameHud />}>
           <Physics gravity={[0, -20, 0]} timeStep={1 / 60} paused={paused}>

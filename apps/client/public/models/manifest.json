@@ -168,6 +168,132 @@
     "animations": []
   },
   {
+    "path": "city/building-skyscraper-a.glb",
+    "bytes": 87980,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1292,
+    "vertices": 2118,
+    "bounds": {
+      "min": [
+        -0.680000364780426,
+        0,
+        -0.6800000667572021
+      ],
+      "max": [
+        0.6799994111061096,
+        2.879999876022339,
+        0.6800000667572021
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-skyscraper-b.glb",
+    "bytes": 106680,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1592,
+    "vertices": 2646,
+    "bounds": {
+      "min": [
+        -0.6800006031990051,
+        0,
+        -0.6799999475479126
+      ],
+      "max": [
+        0.6799991726875305,
+        4.480000019073486,
+        0.6800000071525574
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-skyscraper-d.glb",
+    "bytes": 126404,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1892,
+    "vertices": 3206,
+    "bounds": {
+      "min": [
+        -0.6400001049041748,
+        0,
+        -0.6939456462860107
+      ],
+      "max": [
+        0.6399996876716614,
+        5.469999313354492,
+        0.6939457058906555
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-skyscraper-e.glb",
+    "bytes": 81408,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1156,
+    "vertices": 1938,
+    "bounds": {
+      "min": [
+        -0.6474997997283936,
+        0,
+        -0.6210000514984131
+      ],
+      "max": [
+        0.6475000381469727,
+        4.079999923706055,
+        0.6210001707077026
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/low-detail-building-a.glb",
+    "bytes": 21000,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 188,
+    "vertices": 252,
+    "bounds": {
+      "min": [
+        -0.25,
+        0,
+        -0.25
+      ],
+      "max": [
+        0.25,
+        2,
+        0.25
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/low-detail-building-wide-a.glb",
+    "bytes": 19908,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 156,
+    "vertices": 220,
+    "bounds": {
+      "min": [
+        -0.5,
+        0,
+        -0.25
+      ],
+      "max": [
+        0.5,
+        1.100000023841858,
+        0.25
+      ]
+    },
+    "animations": []
+  },
+  {
     "path": "people/character-female-a.glb",
     "bytes": 162576,
     "meshes": 2,
@@ -652,6 +778,48 @@
         17.125000534976152,
         14.669999926903031,
         13.210643815609728
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "landmarks/nha-tho-duc-ba.glb",
+    "bytes": 1229848,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 35996,
+    "vertices": 27787,
+    "bounds": {
+      "min": [
+        -0.2895050048828125,
+        0.0003662109375,
+        -0.4903564453125
+      ],
+      "max": [
+        0.2895355224609375,
+        0.7177734375,
+        0.490325927734375
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "landmarks/toa-thi-chinh.glb",
+    "bytes": 868092,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 19046,
+    "vertices": 18439,
+    "bounds": {
+      "min": [
+        -0.4906463623046875,
+        0.000061005353927612305,
+        -0.22867587208747864
+      ],
+      "max": [
+        0.4906463623046875,
+        0.63848876953125,
+        0.22856906056404114
       ]
     },
     "animations": []

@@ -138,7 +138,7 @@ function XRWorldButton({
       context.font = `800 34px ${DISPLAY}`
       context.textAlign = 'center'
       context.textBaseline = 'middle'
-      context.fillText(label.slice(0, 26), 256, 56)
+      context.fillText(label, 256, 56, 480)
     }
     const result = new CanvasTexture(canvas)
     result.colorSpace = SRGBColorSpace

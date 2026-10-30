@@ -27,11 +27,17 @@ export const PLACES: Record<
     stop: [19, 0, 1],
     label: 'CÔNG VIÊN',
   },
+  cityhall: {
+    name: 'Tòa Thị Chính',
+    at: [69, 0, -12],
+    stop: [60, 0, 12],
+    label: 'TÒA THỊ CHÍNH',
+  },
   cathedral: {
-    name: 'Cathedral square',
-    at: [27, 0, -23],
-    stop: [18, 0, -23],
-    label: 'NHÀ THỜ',
+    name: 'Nhà thờ Đức Bà',
+    at: [88, 0, -72],
+    stop: [88, 0, -58],
+    label: 'NHÀ THỜ ĐỨC BÀ',
   },
   river: {
     name: 'Sài Gòn riverside',
@@ -48,39 +54,28 @@ export const MODES: Record<
   bus: {
     name: 'City bus',
     fare: 5,
-    speed: 6.8,
+    speed: 10,
     description: 'A window seat through the neighborhood',
   },
   xeom: {
     name: 'Xe ôm',
     fare: 8,
-    speed: 9,
+    speed: 13,
     description: 'A quick ride with Anh Tâm',
   },
   cyclo: {
     name: 'Xích lô',
     fare: 3,
-    speed: 4.6,
+    speed: 5.5,
     description: 'Slow down and take in the city',
   },
   metro: {
     name: 'Metro',
     fare: 6,
-    speed: 11,
+    speed: 15,
     description: 'Glide between the northern stations',
   },
 }
-export function route(from: LocationId, to: LocationId): Point[] {
-  const a = PLACES[from].stop
-  const b = PLACES[to].stop
-  return ([a, [8, 0, a[2]], [8, 0, b[2]], b] as Point[]).filter(
-    (point, index, points) =>
-      index === 0 ||
-      Math.hypot(
-        point[0] - points[index - 1][0],
-        point[2] - points[index - 1][2]
-      ) > 0.1
-  )
-}
+export { route } from './routes'
 export const distance = (a: Point, b: Point) =>
   Math.hypot(a[0] - b[0], a[2] - b[2])

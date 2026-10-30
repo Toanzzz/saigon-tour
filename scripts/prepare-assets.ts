@@ -8,8 +8,12 @@ import {
   getBounds,
   join,
   prune,
+  simplify,
+  textureCompress,
   weld,
 } from '@gltf-transform/functions'
+import { MeshoptSimplifier } from 'meshoptimizer'
+import sharp from 'sharp'
 
 const root = resolve(import.meta.dirname, '..')
 const output = resolve(root, 'apps/client/public/models')
@@ -25,6 +29,12 @@ const selected: Record<string, { directory: string; names: string[] }> = {
       'building-j',
       'detail-awning',
       'detail-parasol-a',
+      'building-skyscraper-a',
+      'building-skyscraper-b',
+      'building-skyscraper-d',
+      'building-skyscraper-e',
+      'low-detail-building-a',
+      'low-detail-building-wide-a',
     ],
   },
   people: {
@@ -94,6 +104,39 @@ for (const mesh of market.getRoot().listMeshes()) {
 await market.transform(flatten(), dedup(), join(), weld(), prune())
 await io.write(marketTarget, market)
 records.push(await record(marketTarget, market))
+// Generated landmark sources keep 4K maps; runtime copies are browser-sized.
+const landmarks = {
+  'nha-tho-duc-ba': 'nhathoducba/nhathoducba-model.glb',
+  'toa-thi-chinh': 'toathichinh/toathichinh-model.glb',
+}
+await MeshoptSimplifier.ready
+for (const [name, source] of Object.entries(landmarks)) {
+  const target = resolve(output, `landmarks/${name}.glb`)
+  await mkdir(dirname(target), { recursive: true })
+  const document = await io.read(resolve(root, 'assets', source))
+  // Toy-diorama lighting reads better from albedo alone; drop PBR maps.
+  for (const material of document.getRoot().listMaterials()) {
+    material.setNormalTexture(null)
+    material.setMetallicRoughnessTexture(null)
+    material.setMetallicFactor(0)
+    material.setRoughnessFactor(0.85)
+  }
+  for (const extension of document.getRoot().listExtensionsUsed())
+    if (extension.extensionName === 'KHR_materials_volume') extension.dispose()
+  await document.transform(
+    weld(),
+    simplify({ simplifier: MeshoptSimplifier, ratio: 0.4, error: 0.0015 }),
+    textureCompress({
+      encoder: sharp,
+      targetFormat: 'webp',
+      resize: [1024, 1024],
+    }),
+    dedup(),
+    prune()
+  )
+  await io.write(target, document)
+  records.push(await record(target, document))
+}
 const playerTarget = resolve(output, 'people/player-tourist.glb')
 const player = await io.read(
   resolve(root, 'assets/player-tourist/player-tourist.glb')

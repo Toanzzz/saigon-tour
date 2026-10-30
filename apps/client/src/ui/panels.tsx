@@ -161,7 +161,10 @@ export function MapPanel({ state }: { state: GameState }) {
         <span>
           <i className="stop" /> Transport stops
         </span>
-        <span>{state.world.visitedLocations.length}/4 places discovered</span>
+        <span>
+          {state.world.visitedLocations.length}/{Object.keys(PLACES).length}{' '}
+          places discovered
+        </span>
       </div>
       <p className="panel-intro">
         Take a ride or follow your curiosity. Every street leads somewhere.
