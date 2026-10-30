@@ -3,7 +3,7 @@ import { useStore } from '@tanstack/react-store'
 import { useMemo, useRef } from 'react'
 import { type Group, Vector3 } from 'three'
 import { audio } from '../audio'
-import { game, notify, update } from '../state/game'
+import { game, notify, update, visit } from '../state/game'
 import { Character, Vehicle } from '../world'
 import { motion } from './motion'
 import { MODES, PLACES, route } from './places'
@@ -72,13 +72,7 @@ export function Transport() {
         ride: null,
         position: [motion.position.x, 0.9, motion.position.z],
         stop: ride.to,
-        world: {
-          ...game.state.world,
-          locationId: ride.to,
-          visitedLocations: [
-            ...new Set([...game.state.world.visitedLocations, ride.to]),
-          ],
-        },
+        ...visit(game.state, ride.to),
       })
       audio.play('arrive')
       notify(`Welcome to ${PLACES[ride.to].name}`)

@@ -27,6 +27,7 @@ declare global {
       setPausedForScreenshot: (paused: boolean) => void
       setReducedMotion: (reduced: boolean) => void
       hideDebugUi: (hidden: boolean) => void
+      teleport: (x: number, z: number) => void
     }
   }
 }
@@ -177,6 +178,16 @@ export function installTestHooks() {
     },
     hideDebugUi(hidden) {
       debugUiHidden = hidden
+    },
+    teleport(x, z) {
+      clearInput()
+      motion.position.set(x, 0.9, z)
+      // Remounting the player places its rigid body at the new position.
+      game.setState((state) => ({
+        ...state,
+        position: [x, 0.9, z],
+        generation: state.generation + 1,
+      }))
     },
   }
 }

@@ -214,9 +214,24 @@ try {
     await page
       .getByRole('button', { name: 'Deliver the herbs', exact: true })
       .click()
+    await page.locator('.speech.assistant').nth(1).waitFor({ timeout: 30000 })
+    assert.equal(
+      (await diag()).state.completed,
+      0,
+      'handing over the herbs alone grants no reward'
+    )
+    await capture('delivered-to-linh')
+    await page.keyboard.press('Escape')
+    // Back to Cô Hoa by bus; she verifies the delivery on the server.
+    await page.evaluate(() => window.__THREE_GAME_TEST_HOOKS__.teleport(-23, 6))
+    await page.waitForTimeout(800)
+    await page.keyboard.press('e')
+    await page
+      .getByRole('button', { name: 'Check my progress', exact: true })
+      .click({ timeout: 30000 })
     await page
       .getByRole('heading', { name: 'A little kindness goes far.' })
-      .waitFor()
+      .waitFor({ timeout: 30000 })
     await page.waitForFunction(
       () => window.__THREE_GAME_DIAGNOSTICS__?.state?.completed === 1
     )
@@ -245,7 +260,10 @@ try {
     await hub.waitFor()
     await page.keyboard.press('Escape')
     await hub.waitFor({ state: 'detached' })
-    assert.equal((await diag()).state.screen, 'playing', 'Esc closes hub')
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.screen === 'playing',
+      { timeout: 2000 }
+    )
     await page.getByRole('button', { name: 'Pause game' }).click()
     await page
       .getByRole('button', { name: 'Start a new journey', exact: true })

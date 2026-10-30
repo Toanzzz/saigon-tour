@@ -1,6 +1,7 @@
 import {
   type AgentSource,
   type NpcId,
+  type PlayerEvent,
   type Quest,
   STARTING_CURRENCY,
   type WorldState,
@@ -40,6 +41,8 @@ export interface GameState {
   dialogue: Dialogue | null
   lastLine: Partial<Record<NpcId, string>>
   hubShown: boolean
+  /** World events observed since the last server sync. */
+  pending: PlayerEvent[]
   ride: Ride | null
   stop: WorldState['locationId']
   source: AgentSource | null
@@ -71,6 +74,7 @@ export function initialState(generation = 0): GameState {
     dialogue: null,
     lastLine: {},
     hubShown: false,
+    pending: [],
     ride: null,
     stop: 'market',
     source: null,
@@ -137,5 +141,26 @@ export function grantReward(state: GameState, quest: Quest): GameState {
           }
         : state.world.inventory,
     },
+  }
+}
+
+/** Mark a place as visited and queue the event for the next server sync. */
+export function visit(
+  state: GameState,
+  place: WorldState['locationId']
+): Partial<GameState> {
+  const seen = state.world.visitedLocations.includes(place)
+  if (seen && state.world.locationId === place) return {}
+  return {
+    world: {
+      ...state.world,
+      locationId: place,
+      visitedLocations: seen
+        ? state.world.visitedLocations
+        : [...state.world.visitedLocations, place],
+    },
+    pending: seen
+      ? state.pending
+      : [...state.pending, { type: 'visit', locationId: place }],
   }
 }

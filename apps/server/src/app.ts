@@ -1,22 +1,19 @@
-import {
-  ChatRequestSchema,
-  QuestRequestSchema,
-  VerifyRequestSchema,
-} from '@saigon/shared'
+import { InteractRequestSchema, NpcIdSchema } from '@saigon/shared'
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { cors } from 'hono/cors'
 import { validator } from 'hono/validator'
-import { NpcAgent } from './agent'
 import { isLiveConfigured, readConfig, type ServerConfig } from './config'
 import { log } from './logger'
-import type { Fetcher } from './meta'
+import { NpcHarness } from './npc/mastra'
+
+export type Fetcher = typeof fetch
 
 export function createApp(
   config: ServerConfig = readConfig(),
   fetcher: Fetcher = fetch
 ) {
-  const agent = new NpcAgent(config, fetcher)
+  const harness = new NpcHarness(config, fetcher)
   const app = new Hono()
     .use(
       '*',
@@ -46,31 +43,24 @@ export function createApp(
       })
     )
     .post(
-      '/npc/chat',
+      '/npc/:npcId/interact',
+      validator('param', (value, c) => {
+        const result = NpcIdSchema.safeParse(value.npcId)
+        if (!result.success) return c.json({ error: 'unknown_npc' }, 404)
+        return { npcId: result.data }
+      }),
       validator('json', (value, c) => {
-        const result = ChatRequestSchema.safeParse(value)
+        const result = InteractRequestSchema.safeParse(value)
         if (!result.success) return c.json({ error: 'invalid_request' }, 400)
         return result.data
       }),
-      async (c) => c.json(await agent.chat(c.req.valid('json')))
-    )
-    .post(
-      '/npc/quest',
-      validator('json', (value, c) => {
-        const result = QuestRequestSchema.safeParse(value)
-        if (!result.success) return c.json({ error: 'invalid_request' }, 400)
-        return result.data
-      }),
-      async (c) => c.json(await agent.quest(c.req.valid('json')))
-    )
-    .post(
-      '/npc/verify',
-      validator('json', (value, c) => {
-        const result = VerifyRequestSchema.safeParse(value)
-        if (!result.success) return c.json({ error: 'invalid_request' }, 400)
-        return result.data
-      }),
-      (c) => c.json(agent.verify(c.req.valid('json')))
+      async (c) =>
+        c.json(
+          await harness.interact(
+            c.req.valid('param').npcId,
+            c.req.valid('json')
+          )
+        )
     )
   app.onError((_error, c) => {
     log(

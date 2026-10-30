@@ -1,15 +1,8 @@
-import { NPCS, type NpcId, objectiveSatisfied } from '@saigon/shared'
+import { NPCS, type NpcId } from '@saigon/shared'
 import { audio } from '../audio'
-import { agent, queryClient } from '../net/agent'
 import { isXRPresenting } from '../platform/xr/store'
-import {
-  game,
-  grantQuest,
-  grantReward,
-  initialState,
-  notify,
-  update,
-} from '../state/game'
+import { game, initialState, notify, update } from '../state/game'
+import { converse, deliver } from './conversation'
 import {
   distance,
   MODES,
@@ -106,19 +99,6 @@ export function interact() {
   else update({ panel: 'transport', stop: target.id as keyof typeof PLACES })
   audio.play('click')
 }
-function body(npc: NpcId) {
-  return {
-    sessionId: game.state.sessionId,
-    personaId: npc,
-    worldState: game.state.world,
-  }
-}
-async function mutate<T>(fn: () => Promise<T>) {
-  return queryClient
-    .getMutationCache()
-    .build(queryClient, { mutationFn: fn })
-    .execute(undefined)
-}
 export async function talk(npc: NpcId) {
   const state = game.state
   if (state.dialogue || distance(state.position, PEOPLE[npc].at) > 4) return
@@ -133,141 +113,33 @@ export async function talk(npc: NpcId) {
     },
     world: { ...s.world, talkedTo: [...new Set([...s.world.talkedTo, npc])] },
   }))
-  await chat('Chào bạn! What is happening in the neighborhood?', true)
-}
-export async function chat(text: string, opening = false) {
-  const dialog = game.state.dialogue
-  if (!dialog || (!opening && dialog.thinking) || !text.trim()) return
-  const session = game.state.sessionId
-  const requestId = dialog.requestId
-  const history = opening
-    ? dialog.history
-    : [...dialog.history, { role: 'user' as const, content: text }]
-  update({ dialogue: { ...dialog, history, thinking: true } })
-  const result = await mutate(() =>
-    agent.chat({
-      ...body(dialog.npc),
-      history: dialog.history.slice(-10),
-      playerText: text.slice(0, 500),
-    })
+  await converse(
+    'Chào bạn! What is happening in the neighborhood?',
+    'chat',
+    true
   )
-  if (
-    game.state.sessionId !== session ||
-    game.state.dialogue?.requestId !== requestId
-  )
-    return
-  update({
-    source: result.source,
-    lastLine: { ...game.state.lastLine, [dialog.npc]: result.reply },
-    dialogue: {
-      ...dialog,
-      thinking: false,
-      source: result.source,
-      history: [
-        ...history,
-        { role: 'assistant' as const, content: result.reply },
-      ].slice(-12),
-    },
-  })
 }
+export const chat = (text: string) => converse(text, 'chat')
 export async function acceptQuest() {
-  const dialog = game.state.dialogue
-  if (!dialog || dialog.thinking || game.state.quest) return
-  const session = game.state.sessionId
-  const requestId = dialog.requestId
-  update({ dialogue: { ...dialog, thinking: true } })
-  const result = await mutate(() =>
-    agent.quest({
-      ...body(dialog.npc),
-      context: 'I would love to help a neighbor. Offer a short errand.',
-      history: dialog.history,
-    })
-  )
-  if (
-    game.state.sessionId !== session ||
-    game.state.dialogue?.requestId !== requestId
-  )
-    return
-  game.setState((s) => ({
-    ...grantQuest(s, result.quest),
-    source: result.source,
-    lastLine: { ...s.lastLine, [dialog.npc]: result.line },
-    dialogue: {
-      ...dialog,
-      thinking: false,
-      source: result.source,
-      history: [
-        ...dialog.history,
-        { role: 'assistant' as const, content: result.line },
-      ].slice(-12),
-    },
-  }))
-  audio.play('pickup')
-  notify('Fresh herbs tucked into your bag')
+  const state = game.state
+  if (!state.dialogue || state.dialogue.thinking || state.quest) return
+  await converse('I would love to help. Do you have an errand for me?', 'help')
 }
 export async function deliverOrVerify() {
-  const s = game.state
-  const { quest, dialogue } = s
+  const { quest, dialogue, world } = game.state
   if (!quest || !dialogue || dialogue.thinking) return
   const objective = quest.objective
   if (
     objective.type === 'DELIVER' &&
     objective.npcId === dialogue.npc &&
-    (s.world.inventory[objective.itemId] ?? 0) > 0
+    (world.inventory[objective.itemId] ?? 0) > 0
   ) {
-    game.setState((state) => ({
-      ...state,
-      world: {
-        ...state.world,
-        inventory: {
-          ...state.world.inventory,
-          [objective.itemId]:
-            (state.world.inventory[objective.itemId] ?? 1) - 1,
-        },
-        deliveredItems: [
-          ...new Set([
-            ...state.world.deliveredItems,
-            `${objective.itemId}:${dialogue.npc}`,
-          ]),
-        ],
-      },
-    }))
+    game.setState((state) => deliver(state, objective.itemId, dialogue.npc))
     audio.play('pickup')
-  }
-  update({ dialogue: { ...dialogue, thinking: true } })
-  const result = await mutate(() =>
-    agent.verify({
-      ...body(quest.giverNpcId),
-      quest,
-      playerClaim: 'Please check my errand.',
-    })
-  )
-  if (
-    game.state.sessionId !== s.sessionId ||
-    game.state.quest?.id !== quest.id ||
-    game.state.dialogue?.requestId !== dialogue.requestId
-  )
+    await converse(`Here are the ${objective.itemId} from Cô Hoa!`, 'chat')
     return
-  if (
-    result.status === 'COMPLETE' &&
-    objectiveSatisfied(quest, game.state.world)
-  ) {
-    game.setState((state) =>
-      grantReward(state, { ...quest, reward: result.reward })
-    )
-    audio.play('reward')
-  } else if (game.state.dialogue?.npc === dialogue.npc) {
-    update({
-      dialogue: {
-        ...dialogue,
-        thinking: false,
-        history: [
-          ...dialogue.history,
-          { role: 'assistant' as const, content: result.line },
-        ].slice(-12),
-      },
-    })
   }
+  await converse('I finished your errand. Can you check?', 'check')
 }
 export function board(to: keyof typeof PLACES, mode: TravelMode) {
   const state = game.state
@@ -282,6 +154,7 @@ export function board(to: keyof typeof PLACES, mode: TravelMode) {
     panel: 'none',
     dialogue: null,
     world: { ...state.world, currency: state.world.currency - fare },
+    pending: [...state.pending, { type: 'spend', amount: fare }],
   })
   audio.play('board')
 }

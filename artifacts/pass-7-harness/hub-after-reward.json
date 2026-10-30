@@ -1,0 +1,62 @@
+{
+  "renderer": {
+    "render": {
+      "frame": 2854,
+      "calls": 172,
+      "triangles": 384708,
+      "points": 0,
+      "lines": 0
+    },
+    "memory": {
+      "geometries": 94,
+      "textures": 55
+    }
+  },
+  "state": {
+    "screen": "hub",
+    "panel": "none",
+    "muted": false,
+    "frame": 2835,
+    "position": [
+      -23,
+      0.7987181544303894,
+      5.999997138977051
+    ],
+    "currency": 75,
+    "completed": 1,
+    "ride": null,
+    "source": "live",
+    "animation": "idle"
+  },
+  "physics": {
+    "engine": "rapier",
+    "timestep": 0.016666666666666666,
+    "bodies": 2,
+    "colliders": 94,
+    "ccdBodies": 1
+  },
+  "audio": {
+    "state": "running",
+    "loaded": [
+      "confirm",
+      "bell",
+      "reward",
+      "city"
+    ],
+    "errors": [],
+    "muted": false,
+    "volume": 0.5,
+    "paused": false,
+    "activeEffects": 0,
+    "ambienceLoops": 1,
+    "events": {
+      "click": 4,
+      "pickup": 2,
+      "board": 1,
+      "arrive": 1,
+      "reward": 1
+    }
+  },
+  "fps": 33.193421098820146,
+  "dpr": 1
+}

@@ -7,7 +7,7 @@ import {
 import { useStore } from '@tanstack/react-store'
 import { useEffect, useRef, useState } from 'react'
 import { type Group, Vector3 } from 'three'
-import { game, update } from '../state/game'
+import { game, update, visit } from '../state/game'
 import { Character } from '../world'
 import { input } from './input'
 import { motion } from './motion'
@@ -80,18 +80,7 @@ export function Player() {
       const place = (Object.keys(PLACES) as (keyof typeof PLACES)[]).find(
         (key) => distance(position, PLACES[key].at) < 10
       )
-      update({
-        position,
-        world: place
-          ? {
-              ...state.world,
-              locationId: place,
-              visitedLocations: [
-                ...new Set([...state.world.visitedLocations, place]),
-              ],
-            }
-          : state.world,
-      })
+      update({ position, ...(place ? visit(state, place) : {}) })
     }
   })
   return (

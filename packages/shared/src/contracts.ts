@@ -69,62 +69,66 @@ export const WorldStateSchema = z
   .strict()
 export type WorldState = z.infer<typeof WorldStateSchema>
 
-export const HistorySchema = z
-  .array(
-    z
+/* Agent harness: POST /npc/:npcId/interact. */
+export const TimeOfDaySchema = z.enum([
+  'morning',
+  'afternoon',
+  'evening',
+  'night',
+])
+export type TimeOfDay = z.infer<typeof TimeOfDaySchema>
+export const PlayerEventSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('visit'), locationId: LocationIdSchema }).strict(),
+  z.object({ type: z.literal('talk'), npcId: NpcIdSchema }).strict(),
+  z
+    .object({
+      type: z.literal('deliver'),
+      itemId: ItemIdSchema,
+      npcId: NpcIdSchema,
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('spend'),
+      amount: z.number().int().min(1).max(20),
+    })
+    .strict(),
+])
+export type PlayerEvent = z.infer<typeof PlayerEventSchema>
+export const InteractRequestSchema = z
+  .object({
+    playerId: z.string().regex(/^[a-zA-Z0-9_-]{8,80}$/),
+    message: z.string().trim().min(1).max(500),
+    intent: z.enum(['chat', 'help', 'check']).default('chat'),
+    events: z.array(PlayerEventSchema).max(16).default([]),
+    worldContext: z
       .object({
-        role: z.enum(['user', 'assistant']),
-        content: z.string().min(1).max(500),
+        playerLocation: LocationIdSchema,
+        nearbyNpcs: z.array(NpcIdSchema).max(8).default([]),
+        timeOfDay: TimeOfDaySchema,
+      })
+      .strict(),
+  })
+  .strict()
+export type InteractRequest = z.infer<typeof InteractRequestSchema>
+export const QuestOutcomeSchema = z.enum(['offered', 'completed', 'incomplete'])
+export const InteractResponseSchema = z
+  .object({
+    npcId: NpcIdSchema,
+    reply: z.string().min(1).max(700),
+    source: SourceSchema,
+    degraded: z.boolean(),
+    world: WorldStateSchema,
+    quest: QuestSchema.nullable(),
+    questEvent: z
+      .object({
+        type: QuestOutcomeSchema,
+        quest: QuestSchema,
+        reward: RewardSchema,
       })
       .strict()
-  )
-  .max(12)
-export const RequestBaseSchema = z
-  .object({
-    sessionId: z.string().regex(/^[a-zA-Z0-9_-]{8,80}$/),
-    personaId: NpcIdSchema,
-    worldState: WorldStateSchema,
+      .nullable(),
+    toolCalls: z.array(z.string().max(40)).max(8),
   })
   .strict()
-export const ChatRequestSchema = RequestBaseSchema.extend({
-  history: HistorySchema.default([]),
-  playerText: z.string().trim().min(1).max(500),
-})
-export type ChatRequest = z.infer<typeof ChatRequestSchema>
-export const QuestRequestSchema = RequestBaseSchema.extend({
-  context: z.string().max(500).default('I would like to help.'),
-  history: HistorySchema.default([]),
-  playerText: z.string().max(500).optional(),
-})
-export type QuestRequest = z.infer<typeof QuestRequestSchema>
-export const VerifyRequestSchema = RequestBaseSchema.extend({
-  quest: QuestSchema,
-  playerClaim: z.string().max(500).default('Please check my progress.'),
-})
-export type VerifyRequest = z.infer<typeof VerifyRequestSchema>
-
-export const ChatResponseSchema = z
-  .object({
-    reply: z.string().min(1).max(700),
-    mayOfferQuest: z.boolean(),
-    source: SourceSchema,
-  })
-  .strict()
-export type ChatResponse = z.infer<typeof ChatResponseSchema>
-export const QuestResponseSchema = z
-  .object({
-    quest: QuestSchema,
-    line: z.string().min(1).max(700),
-    source: SourceSchema,
-  })
-  .strict()
-export type QuestResponse = z.infer<typeof QuestResponseSchema>
-export const VerifyResponseSchema = z
-  .object({
-    status: z.enum(['COMPLETE', 'INCOMPLETE']),
-    reward: RewardSchema,
-    line: z.string().min(1).max(700),
-    source: SourceSchema,
-  })
-  .strict()
-export type VerifyResponse = z.infer<typeof VerifyResponseSchema>
+export type InteractResponse = z.infer<typeof InteractResponseSchema>

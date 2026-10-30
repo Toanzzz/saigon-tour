@@ -7,7 +7,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 ## Decisions
 
 - Stack: React Three Fiber, Three.js, Rapier, Bun, Node/Hono, shared Zod contracts.
-- Meta endpoint: `https://api.meta.ai/v1/chat/completions`.
+- Meta endpoint: `https://api.meta.ai/v1/chat/completions`, via Mastra and `@ai-sdk/openai-compatible`.
 - Meta model: `muse-spark-1.3-contributor`.
 - Server secret: `META_MUSE_API_KEY`; it is not present in client source or build output.
 - Project dates: October 27–November 4, 2026; submission November 4, 9 PM ET.
@@ -25,6 +25,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 4. Complete: city hub inside the client (`ui/hub/`), driven by `hubView(state)`; story road, last neighbor line, cheapest affordable ride, places discovered, sound. `apps/design` and `scripts/qa-hub.mjs` retired.
 5. Complete: young tourist player built from the Kenney mini-character pack.
 6. Complete: compressed District 1 map (`world/district.ts`) with Tòa Thị Chính and Nhà thờ Đức Bà GLBs placed by OSM bearing, Nguyễn Huệ, Lê Thánh Tôn, Đồng Khởi, Công xã Paris, river skyline, five bus stops on a road-tree route, player-following shadow frustum, and an oriented minimap.
+7. Complete: Mastra NPC harness per `artifacts/agent-harness.md`: `POST /npc/:npcId/interact`, backend-authoritative `GameService`, four tool-restricted agents, memory, event scheduler, fallbacks, limits. Old `/npc/chat|quest|verify` routes removed.
 
 ## Current validation
 
@@ -87,7 +88,6 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 
 - City expansion later phases (`artifacts/city_expansion_plan.md`): Opera House, Post Office, Bùi Viện alley, crowds, and time of day are not built.
 - Player: young tourist in the Kenney mini-character style. Source `assets/player-tourist/player-tourist.blend` (base `character-male-e`, authored sun hat, sunglasses, backpack, camera), built by `scripts/blender/build-tourist.py`; reuses the pack's 32 clips. Obsolete: the Tripo young-boy job (`artifacts/jobs/player-boy.json`, `assets/player-boy/`) was replaced at the user's request and is not used at runtime.
-- Agent harness per `artifacts/agent-harness.md` (Mastra, backend-authoritative quests).
 
 ## Open follow-ups
 

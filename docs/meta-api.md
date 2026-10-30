@@ -1,54 +1,74 @@
-# NPC model service
+# NPC agent harness
 
-The server uses `muse-spark-1.3-contributor` at
-`https://api.meta.ai/v1/chat/completions`. `META_MUSE_API_KEY` is the primary server-only
-credential; `META_API_KEY` is an accepted alias. `META_MODEL` and `META_API_URL` override the
-model and full completion URL for a compatible endpoint. No credential enters Vite's client
-configuration.
+NPCs run on Mastra (`@mastra/core` 1.80, `@mastra/memory` 1.39) inside the Node + Hono API.
+The model is Meta `muse-spark-1.3-contributor` at `https://api.meta.ai/v1/chat/completions`,
+reached through `@ai-sdk/openai-compatible` 3.0.71 (pinned to the provider spec Mastra 1.80
+accepts). `META_MUSE_API_KEY` is the server-only credential; `META_API_KEY` is an alias.
+`META_MODEL` and `META_API_URL` override the model and completion URL. No credential, endpoint,
+or model ID enters the client build.
 
-The request uses a `developer` persona message, a serialized game-state/user message,
-`reasoning_effort: "minimal"`, `max_completion_tokens: 800`, and
-`response_format: { "type": "json_object" }`. Temperature remains at the provider default.
-The provider's private reasoning tokens share the completion-token allowance.
+## Route
 
-`/npc/chat` returns validated dialogue and a quest-offer decision. `/npc/quest` returns a
-validated, reachable herb-delivery quest and the model's chosen wording and reward.
-`/npc/verify` checks recorded world events against the issued quest; it cannot grant a reward
-on the strength of a player's textual claim. Quest generation is constrained to the demo
-route. Source fields explicitly distinguish live model output from deterministic fallback.
+`POST /npc/:npcId/interact` with `{ playerId, message, intent, events, worldContext }`.
+`intent` is `chat`, `help` (the player pressed Help), or `check` (the player asked for
+verification). `events` are world observations since the last call: `visit`, `talk`,
+`deliver`, `spend`. The response carries the reply, `source` (`live`/`fallback`), `degraded`,
+the authoritative `world`, the active `quest`, a `questEvent` (`offered`/`completed`/
+`incomplete`), and the tool names the agent called.
 
-## Guardrails
+## Authority
 
-- 16 KiB request bodies; bounded histories, item counts, currency, IDs and text.
-- 8-second upstream timeout and a maximum of 800 completion tokens.
-- 24 upstream calls per session per hour, minimum 400 ms between calls.
-- 500 calls per server process and a conservative reserved-spend ceiling of $5 per process
-  (`META_SPEND_LIMIT_USD`), reserving $0.03 before each upstream call, including failed calls.
-- Bounded five-minute dialogue cache and one-hour issued-quest cache.
-- Unreachable, malformed, unsafe, over-budget, or unconfigured model requests use a playable
-  fallback. UI labels identify fallback dialogue.
+- `GameService` (`apps/server/src/game/state.ts`) owns per-player world state, quests,
+  coins, inventory, and reputation. Records expire after an hour of inactivity.
+- Agents act only through tools: `offer-quest`, `check-quest`, `remember-player-fact`,
+  `get-world-context`. Every tool calls `GameService`, which validates the template, giver,
+  and objective. Rewards come from the quest template, never from the model.
+- A `deliver` event counts only if the server knows the player is carrying the item.
+- Help and Check always run their validated tool, even if the model forgets to call it.
+- The client replaces its world with the server's `world` after each turn.
 
-The reserve covers a 20,000-input-token / 800-output-token request at the documented Muse
-Spark standard rates; the configured contributor model is cheaper. Custom models require
-reviewing this reserve. These are application limits, not an account-wide billing cap.
-Restarting the service resets them, and each replica has its own limit. The provider dashboard
-spend limit has not been inspected or changed. Set the account cap there before public hosting.
+## Agents
 
-This is a single-player session service. World events come from the game client, and are not
-an anti-cheat or monetary trust boundary. Client reward application is idempotent by quest ID.
+| NPC | Persona | Tools |
+| --- | --- | --- |
+| Cô Hoa | Market vendor; offers and verifies the herb errand | all four |
+| Anh Tâm | Xe ôm driver; routes and fares, reacts to reputation | remember, world context |
+| Chị Linh | Park volunteer; social hub and rumors | remember, world context |
+| Ông Ba | Cyclo driver; river stories | remember |
+
+Memory: Mastra message history (last 10) per `npcId:playerId` thread in an in-memory store,
+plus up to 12 remembered facts per NPC and player, injected as context. Both reset when the
+server restarts.
+
+`NpcScheduler` wakes queued NPCs on events (player nearby, quest deadline, world event,
+schedule), at most three per tick with a two-minute cooldown, and pauses during rides.
+
+## Reliability
+
+- 8 s per model step, 10 s per turn, at most three steps, one retry.
+- Deterministic in-character fallback lines per NPC; the browser has its own offline path
+  when the API is unreachable.
+- Replies with links, markup, or control characters are rejected.
+- Rate limits: 24 model turns per player per hour, 400 ms between turns, 12 turns per
+  NPC per player, 500 per process, and a reserved-spend ceiling (`META_SPEND_LIMIT_USD`,
+  default $5) at $0.03 per turn.
+- Token usage and estimated cost are tracked per process and logged outside production.
+
+These are per-process application limits. The provider account spend cap has not been
+inspected or changed; set it before public hosting.
 
 ## Verification
 
-- Live chat: HTTP 200, validated JSON, 3.264 seconds, 233 total tokens.
-- Live quest through the actual Hono application: HTTP 200, `source: "live"`, validated
-  herb-delivery objective and 50-coin/postcard reward, 6.081 seconds.
-- Eighteen server tests cover malformed requests/output, unavailable/timeout fallbacks,
-  unsafe text, unreachable quests, premature/inflated/duplicate rewards, CORS, body limits,
-  cache reuse, session/global call guards, and the spend ceiling.
+- 21 server tests cover tool-only quest offers, foreign or unknown templates, verified
+  one-time rewards, fabricated delivery events, garbage and hung model responses, unsafe
+  text, multi-turn memory, three personas with restricted tools, route validation, rate
+  limits, CORS, body limits, and the scheduler.
+- Live run through the harness: Cô Hoa called `offer-quest` (herbs added), then
+  `check-quest` + `remember-player-fact` after delivery (30 → 80 coins), recalled the
+  errand on the next turn; Anh Tâm called `get-world-context`. Four turns, 10,167 input
+  and 960 output tokens.
 
 ## Provider references
 
-- Overview: `https://dev.meta.ai/docs/overview`
 - Chat wire format: `https://dev.meta.ai/docs/protocols/chat-completions`
-- Reasoning budget: `https://dev.meta.ai/docs/reasoning`
 - Pricing and rate limits: `https://dev.meta.ai/docs/pricing-rate-limits`
