@@ -27,6 +27,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 6. Complete: compressed District 1 map (`world/district.ts`) with Tòa Thị Chính and Nhà thờ Đức Bà GLBs placed by OSM bearing, Nguyễn Huệ, Lê Thánh Tôn, Đồng Khởi, Công xã Paris, river skyline, five bus stops on a road-tree route, player-following shadow frustum, and an oriented minimap.
 7. Complete: Mastra NPC harness per `artifacts/agent-harness.md`: `POST /npc/:npcId/interact`, backend-authoritative `GameService`, four tool-restricted agents, memory, event scheduler, fallbacks, limits. Old `/npc/chat|quest|verify` routes removed.
 8. Complete: landmark sources moved to `assets/landmarks/`. They use Draco mesh compression; `prepare-assets.ts` registers the `draco3d` decoder, drops Draco from runtime copies, and no longer simplifies already-decimated meshes.
+9. Complete: simplified Chợ Bến Thành (142k triangles) at `models/landmarks/cho-ben-thanh.glb`. All runtime models are Draco-compressed (edgebreaker); the decoder is self-hosted in `public/draco`.
 
 ## Current validation
 

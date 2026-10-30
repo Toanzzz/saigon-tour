@@ -1,9 +1,11 @@
-import { mkdir, stat, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, stat, writeFile } from 'node:fs/promises'
+import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { NodeIO } from '@gltf-transform/core'
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions'
 import {
   dedup,
+  draco,
   flatten,
   getBounds,
   join,
@@ -69,11 +71,13 @@ const selected: Record<string, { directory: string; names: string[] }> = {
     names: ['light-curved', 'electricity-pole'],
   },
 }
-// Landmark sources are Draco-compressed; decoding needs the draco3d module.
+// Runtime copies use Draco: about 32% smaller than meshopt after gzip.
+// The client decodes them with three's decoder, copied to public/draco.
 const io = new NodeIO()
   .registerExtensions(ALL_EXTENSIONS)
   .registerDependencies({
     'draco3d.decoder': await draco3d.createDecoderModule(),
+    'draco3d.encoder': await draco3d.createEncoderModule(),
   })
 /** Read a source and drop Draco so runtime copies load without a decoder. */
 async function readSource(path: string) {
@@ -93,6 +97,17 @@ const records: {
   bounds: { min: number[]; max: number[] } | null
   animations: string[]
 }[] = []
+/** Draco-compress a runtime copy, then write and record it. */
+async function writeRuntime(
+  target: string,
+  document: Awaited<ReturnType<NodeIO['read']>>
+) {
+  await document.transform(
+    draco({ method: 'edgebreaker', encodeSpeed: 5, decodeSpeed: 5 })
+  )
+  await io.write(target, document)
+  records.push(await record(target, document))
+}
 for (const [pack, selection] of Object.entries(selected)) {
   for (const name of selection.names) {
     const source = resolve(root, 'assets', selection.directory, `${name}.glb`)
@@ -101,8 +116,7 @@ for (const [pack, selection] of Object.entries(selected)) {
     // NodeIO embeds each pack's external palette so every runtime GLB is portable.
     const document = await io.read(source)
     await document.transform(dedup(), prune())
-    await io.write(target, document)
-    records.push(await record(target, document))
+    await writeRuntime(target, document)
   }
 }
 const marketTarget = resolve(output, 'landmarks/cho-ben-thanh.glb')
@@ -113,8 +127,7 @@ for (const mesh of market.getRoot().listMeshes()) {
     primitive.setAttribute('TEXCOORD_0', null)
 }
 await market.transform(flatten(), dedup(), join(), weld(), prune())
-await io.write(marketTarget, market)
-records.push(await record(marketTarget, market))
+await writeRuntime(marketTarget, market)
 // Landmark sources are already decimated; runtime copies only cap textures.
 const landmarks = {
   'nha-tho-duc-ba': 'landmarks/nhathoducba-model.glb',
@@ -143,16 +156,26 @@ for (const [name, source] of Object.entries(landmarks)) {
     dedup(),
     prune()
   )
-  await io.write(target, document)
-  records.push(await record(target, document))
+  await writeRuntime(target, document)
 }
 const playerTarget = resolve(output, 'people/player-tourist.glb')
 const player = await io.read(
   resolve(root, 'assets/player-tourist/player-tourist.glb')
 )
 await player.transform(dedup(), prune())
-await io.write(playerTarget, player)
-records.push(await record(playerTarget, player))
+await writeRuntime(playerTarget, player)
+const decoderSource = resolve(
+  dirname(
+    createRequire(resolve(root, 'apps/client/package.json')).resolve(
+      'three/package.json'
+    )
+  ),
+  'examples/jsm/libs/draco/gltf'
+)
+const decoderTarget = resolve(root, 'apps/client/public/draco')
+await mkdir(decoderTarget, { recursive: true })
+for (const file of ['draco_decoder.wasm', 'draco_wasm_wrapper.js'])
+  await copyFile(resolve(decoderSource, file), resolve(decoderTarget, file))
 await writeFile(
   resolve(output, 'manifest.json'),
   `${JSON.stringify(records, null, 2)}\n`

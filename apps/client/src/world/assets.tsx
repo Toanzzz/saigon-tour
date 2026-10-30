@@ -20,6 +20,9 @@ export type Placement = {
 }
 export const modelUrl = (path: string) =>
   `${import.meta.env.BASE_URL}models/${path}.glb`
+/** Runtime models are Draco-compressed; the decoder is self-hosted. */
+const DRACO = `${import.meta.env.BASE_URL}draco/`
+const loadModel = (path: string) => useGLTF(modelUrl(path), DRACO)
 
 const CITY_TINTS: Record<string, string> = {
   'city/building-a': '#f0d6b2',
@@ -68,7 +71,7 @@ export function Model({
   scale?: number | Vec3
   shadow?: boolean
 }) {
-  const { scene } = useGLTF(modelUrl(path))
+  const { scene } = loadModel(path)
   const object = useMemo(() => {
     const value = scene.clone(true)
     prepareScene(value, path)
@@ -100,7 +103,7 @@ export function ModelInstances({
   placements: Placement[]
   shadow?: boolean
 }) {
-  const { scene } = useGLTF(modelUrl(path))
+  const { scene } = loadModel(path)
   const meshes = useMemo(() => {
     scene.updateMatrixWorld(true)
     prepareScene(scene, path)
@@ -181,9 +184,7 @@ export function Character({
   animation?: string
   scale?: number
 }) {
-  const { scene, animations } = useGLTF(
-    modelUrl(path ?? `people/character-${model}`)
-  )
+  const { scene, animations } = loadModel(path ?? `people/character-${model}`)
   const object = useMemo(() => {
     const result = clone(scene)
     result.traverse((child) => {

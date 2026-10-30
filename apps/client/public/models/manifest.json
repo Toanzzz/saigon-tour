@@ -1,11 +1,11 @@
 [
   {
     "path": "city/building-a.glb",
-    "bytes": 86304,
+    "bytes": 16852,
     "meshes": 1,
     "materials": 1,
     "triangles": 1252,
-    "vertices": 2074,
+    "vertices": 1544,
     "bounds": {
       "min": [
         -0.44179391860961914,
@@ -22,11 +22,11 @@
   },
   {
     "path": "city/building-c.glb",
-    "bytes": 82088,
+    "bytes": 17032,
     "meshes": 1,
     "materials": 1,
     "triangles": 1195,
-    "vertices": 1953,
+    "vertices": 1389,
     "bounds": {
       "min": [
         -0.44179391860961914,
@@ -43,11 +43,11 @@
   },
   {
     "path": "city/building-e.glb",
-    "bytes": 99656,
+    "bytes": 17760,
     "meshes": 1,
     "materials": 1,
     "triangles": 1509,
-    "vertices": 2443,
+    "vertices": 1954,
     "bounds": {
       "min": [
         -0.8199999928474426,
@@ -64,11 +64,11 @@
   },
   {
     "path": "city/building-f.glb",
-    "bytes": 114132,
+    "bytes": 18624,
     "meshes": 1,
     "materials": 1,
     "triangles": 1794,
-    "vertices": 2842,
+    "vertices": 2156,
     "bounds": {
       "min": [
         -0.42000001668930054,
@@ -85,11 +85,11 @@
   },
   {
     "path": "city/building-g.glb",
-    "bytes": 126092,
+    "bytes": 18944,
     "meshes": 1,
     "materials": 1,
     "triangles": 2006,
-    "vertices": 3176,
+    "vertices": 2504,
     "bounds": {
       "min": [
         -0.48500001430511475,
@@ -106,11 +106,11 @@
   },
   {
     "path": "city/building-j.glb",
-    "bytes": 315420,
+    "bytes": 28656,
     "meshes": 1,
     "materials": 1,
     "triangles": 5246,
-    "vertices": 8485,
+    "vertices": 6295,
     "bounds": {
       "min": [
         -1.041793942451477,
@@ -127,11 +127,11 @@
   },
   {
     "path": "city/detail-awning.glb",
-    "bytes": 14996,
+    "bytes": 12872,
     "meshes": 1,
     "materials": 1,
     "triangles": 40,
-    "vertices": 76,
+    "vertices": 68,
     "bounds": {
       "min": [
         -0.20000000298023224,
@@ -148,11 +148,11 @@
   },
   {
     "path": "city/detail-parasol-a.glb",
-    "bytes": 18228,
+    "bytes": 13068,
     "meshes": 1,
     "materials": 1,
     "triangles": 96,
-    "vertices": 172,
+    "vertices": 116,
     "bounds": {
       "min": [
         -0.17320507764816284,
@@ -169,11 +169,11 @@
   },
   {
     "path": "city/building-skyscraper-a.glb",
-    "bytes": 87980,
+    "bytes": 17300,
     "meshes": 1,
     "materials": 1,
     "triangles": 1292,
-    "vertices": 2118,
+    "vertices": 1797,
     "bounds": {
       "min": [
         -0.680000364780426,
@@ -190,11 +190,11 @@
   },
   {
     "path": "city/building-skyscraper-b.glb",
-    "bytes": 106680,
+    "bytes": 18296,
     "meshes": 1,
     "materials": 1,
     "triangles": 1592,
-    "vertices": 2646,
+    "vertices": 2261,
     "bounds": {
       "min": [
         -0.6800006031990051,
@@ -211,11 +211,11 @@
   },
   {
     "path": "city/building-skyscraper-d.glb",
-    "bytes": 126404,
+    "bytes": 19556,
     "meshes": 1,
     "materials": 1,
     "triangles": 1892,
-    "vertices": 3206,
+    "vertices": 2632,
     "bounds": {
       "min": [
         -0.6400001049041748,
@@ -232,11 +232,11 @@
   },
   {
     "path": "city/building-skyscraper-e.glb",
-    "bytes": 81408,
+    "bytes": 16716,
     "meshes": 1,
     "materials": 1,
     "triangles": 1156,
-    "vertices": 1938,
+    "vertices": 1634,
     "bounds": {
       "min": [
         -0.6474997997283936,
@@ -253,7 +253,7 @@
   },
   {
     "path": "city/low-detail-building-a.glb",
-    "bytes": 21000,
+    "bytes": 13280,
     "meshes": 1,
     "materials": 1,
     "triangles": 188,
@@ -274,7 +274,7 @@
   },
   {
     "path": "city/low-detail-building-wide-a.glb",
-    "bytes": 19908,
+    "bytes": 13196,
     "meshes": 1,
     "materials": 1,
     "triangles": 156,
@@ -295,11 +295,11 @@
   },
   {
     "path": "people/character-female-a.glb",
-    "bytes": 162576,
+    "bytes": 74356,
     "meshes": 2,
     "materials": 1,
     "triangles": 876,
-    "vertices": 1576,
+    "vertices": 948,
     "bounds": {
       "min": [
         -0.5493935346603394,
@@ -349,11 +349,11 @@
   },
   {
     "path": "people/character-female-b.glb",
-    "bytes": 147540,
+    "bytes": 73688,
     "meshes": 2,
     "materials": 1,
     "triangles": 742,
-    "vertices": 1322,
+    "vertices": 756,
     "bounds": {
       "min": [
         -0.3835841417312622,
@@ -403,11 +403,11 @@
   },
   {
     "path": "people/character-male-a.glb",
-    "bytes": 143892,
+    "bytes": 73776,
     "meshes": 2,
     "materials": 1,
     "triangles": 723,
-    "vertices": 1259,
+    "vertices": 771,
     "bounds": {
       "min": [
         -0.3835841417312622,
@@ -457,11 +457,11 @@
   },
   {
     "path": "people/character-male-b.glb",
-    "bytes": 144084,
+    "bytes": 73376,
     "meshes": 2,
     "materials": 1,
     "triangles": 690,
-    "vertices": 1266,
+    "vertices": 770,
     "bounds": {
       "min": [
         -0.3835841417312622,
@@ -511,11 +511,11 @@
   },
   {
     "path": "cars/van.glb",
-    "bytes": 89824,
+    "bytes": 23340,
     "meshes": 3,
     "materials": 1,
     "triangles": 1418,
-    "vertices": 2194,
+    "vertices": 1444,
     "bounds": {
       "min": [
         -0.75,
@@ -532,11 +532,11 @@
   },
   {
     "path": "trains/train-tram-modern.glb",
-    "bytes": 86064,
+    "bytes": 21820,
     "meshes": 3,
     "materials": 1,
     "triangles": 1182,
-    "vertices": 1986,
+    "vertices": 1453,
     "bounds": {
       "min": [
         -0.5638303756713889,
@@ -553,7 +553,7 @@
   },
   {
     "path": "nature/tree_palmDetailedTall.glb",
-    "bytes": 16552,
+    "bytes": 4332,
     "meshes": 3,
     "materials": 2,
     "triangles": 336,
@@ -574,11 +574,11 @@
   },
   {
     "path": "nature/tree_fat.glb",
-    "bytes": 4192,
+    "bytes": 2136,
     "meshes": 1,
     "materials": 2,
     "triangles": 50,
-    "vertices": 192,
+    "vertices": 96,
     "bounds": {
       "min": [
         -0.3775000274181366,
@@ -595,7 +595,7 @@
   },
   {
     "path": "nature/plant_bush.glb",
-    "bytes": 3336,
+    "bytes": 1472,
     "meshes": 1,
     "materials": 1,
     "triangles": 32,
@@ -616,11 +616,11 @@
   },
   {
     "path": "nature/flower_redA.glb",
-    "bytes": 5424,
+    "bytes": 2408,
     "meshes": 1,
     "materials": 2,
     "triangles": 76,
-    "vertices": 268,
+    "vertices": 134,
     "bounds": {
       "min": [
         -0.10453449934720993,
@@ -637,11 +637,11 @@
   },
   {
     "path": "nature/flower_yellowA.glb",
-    "bytes": 5440,
+    "bytes": 2364,
     "meshes": 1,
     "materials": 2,
     "triangles": 76,
-    "vertices": 268,
+    "vertices": 134,
     "bounds": {
       "min": [
         -0.10453449934720993,
@@ -658,11 +658,11 @@
   },
   {
     "path": "food/bowl-broth.glb",
-    "bytes": 22052,
+    "bytes": 14480,
     "meshes": 2,
     "materials": 1,
     "triangles": 210,
-    "vertices": 266,
+    "vertices": 224,
     "bounds": {
       "min": [
         -0.2751316726207733,
@@ -679,11 +679,11 @@
   },
   {
     "path": "food/pot.glb",
-    "bytes": 23992,
+    "bytes": 13208,
     "meshes": 1,
     "materials": 1,
     "triangles": 228,
-    "vertices": 328,
+    "vertices": 248,
     "bounds": {
       "min": [
         -0.3287247121334076,
@@ -700,11 +700,11 @@
   },
   {
     "path": "food/loaf-baguette.glb",
-    "bytes": 19588,
+    "bytes": 13060,
     "meshes": 1,
     "materials": 1,
     "triangles": 122,
-    "vertices": 222,
+    "vertices": 125,
     "bounds": {
       "min": [
         -0.41499999165534973,
@@ -721,11 +721,11 @@
   },
   {
     "path": "roads/light-curved.glb",
-    "bytes": 18112,
+    "bytes": 13520,
     "meshes": 1,
     "materials": 1,
     "triangles": 92,
-    "vertices": 156,
+    "vertices": 120,
     "bounds": {
       "min": [
         -0.02500000037252903,
@@ -742,11 +742,11 @@
   },
   {
     "path": "roads/electricity-pole.glb",
-    "bytes": 41620,
+    "bytes": 15224,
     "meshes": 1,
     "materials": 1,
     "triangles": 416,
-    "vertices": 820,
+    "vertices": 356,
     "bounds": {
       "min": [
         -0.29736000299453735,
@@ -763,7 +763,7 @@
   },
   {
     "path": "landmarks/cho-ben-thanh.glb",
-    "bytes": 7211432,
+    "bytes": 392328,
     "meshes": 13,
     "materials": 13,
     "triangles": 141572,
@@ -784,7 +784,7 @@
   },
   {
     "path": "landmarks/nha-tho-duc-ba.glb",
-    "bytes": 300060,
+    "bytes": 118348,
     "meshes": 1,
     "materials": 1,
     "triangles": 3853,
@@ -805,7 +805,7 @@
   },
   {
     "path": "landmarks/toa-thi-chinh.glb",
-    "bytes": 236268,
+    "bytes": 123428,
     "meshes": 1,
     "materials": 1,
     "triangles": 2364,
@@ -826,11 +826,11 @@
   },
   {
     "path": "people/player-tourist.glb",
-    "bytes": 225320,
+    "bytes": 136696,
     "meshes": 13,
     "materials": 7,
     "triangles": 1660,
-    "vertices": 2987,
+    "vertices": 2813,
     "bounds": {
       "min": [
         -0.3835841417312622,

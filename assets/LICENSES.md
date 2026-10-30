@@ -1,7 +1,9 @@
 # Asset provenance
 
 Runtime assets are an optimized subset of the source packs in this directory. The preparation
-script embeds palette textures and merges the static market by material. Editable source files
+script embeds palette textures, merges the static market by material, and Draco-compresses every
+runtime model. The Draco decoder in `apps/client/public/draco` is copied from `three`
+(Apache-2.0). Editable source files
 remain in their source folders.
 
 | Runtime collection | Source | Author | License evidence |
@@ -9,7 +11,7 @@ remain in their source folders.
 | Market landmark | `landmarks/chobenthanh-model.glb` | Project artwork reconstructed from supplied references | Original project model; reference renders `landmarks/chobenthanh*.png` |
 | City buildings and parasols | `city-kit-commercial` | Kenney | `city-kit-commercial/License.txt`, CC0 |
 | Character models and animations | `mini-characters` | Kenney | `mini-characters/License.txt`, CC0 |
-| Tòa Thị Chính, Nhà thờ Đức Bà | `landmarks/toathichinh-model.glb`, `landmarks/nhathoducba-model.glb` | Project models generated from supplied references | Sources are Draco-compressed; `scripts/prepare-assets.ts` decodes them and caps textures at 1024 px |
+| Tòa Thị Chính, Nhà thờ Đức Bà | `landmarks/toathichinh-model.glb`, `landmarks/nhathoducba-model.glb` | Project models generated from supplied references | `scripts/prepare-assets.ts` caps textures at 1024 px |
 | Tourist player | `player-tourist/player-tourist.blend` | Kenney `character-male-e` plus project-authored hat, backpack, and camera | Built by `scripts/blender/build-tourist.py`; CC0 base |
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |
