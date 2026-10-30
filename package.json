@@ -8,7 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun scripts/dev.ts",
+    "dev": "conc -k 'bun:dev:*'",
+    "dev:client": "bun run --filter '@saigon/client' dev",
+    "dev:server": "bun run --filter '@saigon/server' dev",
     "check": "biome check .",
     "check:types": "tsgo -b",
     "build": "bun run --filter '@saigon/client' build && bun run --filter '@saigon/server' build",
@@ -19,9 +21,10 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.1",
     "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/extensions": "4.5.1",
     "@gltf-transform/functions": "4.5.1",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
-    "typescript": "7.0.2",
-    "@gltf-transform/extensions": "4.5.1"
+    "concurrently": "^10.0.6",
+    "typescript": "7.0.2"
   }
 }
