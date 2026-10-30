@@ -25,6 +25,8 @@ export function fallbackLine(
       ? 'Cảm ơn! These herbs smell like home. Cô Hoa will be happy to hear they arrived.'
       : 'Hello! I am waiting for Cô Hoa’s fresh herbs for our community lunch.',
     ba: 'Sit a moment, cháu. The river has seen this city grow. The city can wait a few minutes.',
+    mai: 'Chào bạn! Pull up a stool for cà phê sữa and bánh mì. Follow Lê Lợi to Nguyễn Huệ when you are ready for another little walk.',
+    alex: 'The Opera House columns are lovely in this light. Have you seen the cathedral and Post Office square, or the skyline from the riverfront?',
   }
   return lines[npcId]
 }

@@ -1,10 +1,11 @@
-import { DEMO_QUEST, type InteractRequestSchema } from '@saigon/shared'
+import { DEMO_QUEST, type InteractRequestSchema, NPCS } from '@saigon/shared'
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import type { z } from 'zod'
 import { createApp } from '../src/app'
 import { readConfig, type ServerConfig } from '../src/config'
 import { NPC_PERSONAS } from '../src/npc/agents'
 import { NpcScheduler } from '../src/npc/scheduler'
+import { GREETING_BUCKETS } from '../src/npc/short-lines'
 import { fixture } from './fixture'
 
 type InteractInput = z.input<typeof InteractRequestSchema>
@@ -364,15 +365,17 @@ describe('Mastra NPC harness', () => {
       { ...live, model: 'prewarm-test-model' },
       scripted([{ text: 'Chào! Enjoy the neighborhood.' }], seen)
     )
+    const bucketCount = Object.keys(NPCS).length * GREETING_BUCKETS.length
+    expect(bucketCount).toBe(24)
     const first = await harness.prewarm()
-    expect(first).toHaveLength(16)
+    expect(first).toHaveLength(bucketCount)
     expect(first.every((line) => !line.cached && line.source === 'live')).toBe(
       true
     )
-    expect(seen).toHaveLength(16)
+    expect(seen).toHaveLength(bucketCount)
     const second = await harness.prewarm()
     expect(second.every((line) => line.cached)).toBe(true)
-    expect(seen).toHaveLength(16)
+    expect(seen).toHaveLength(bucketCount)
   })
 
   it('uses fallback without a model call when the daily budget is exhausted', async () => {

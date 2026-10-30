@@ -552,6 +552,48 @@
     "animations": []
   },
   {
+    "path": "boats/boat-fishing-small.glb",
+    "bytes": 11792,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 237,
+    "vertices": 311,
+    "bounds": {
+      "min": [
+        -0.8924999833106995,
+        0,
+        -1.934999942779541
+      ],
+      "max": [
+        0.8924999833106995,
+        2.5999999046325684,
+        1.934999942779541
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "boats/boat-row-small.glb",
+    "bytes": 12244,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 168,
+    "vertices": 218,
+    "bounds": {
+      "min": [
+        -1.3742690086364346,
+        -6.767919641759458e-17,
+        -1.1860731840133667
+      ],
+      "max": [
+        1.3742690086365146,
+        0.8476955137593079,
+        1.1860731840133667
+      ]
+    },
+    "animations": []
+  },
+  {
     "path": "nature/tree_palmDetailedTall.glb",
     "bytes": 4332,
     "meshes": 3,
@@ -715,6 +757,48 @@
         0.41499999165534973,
         0.25,
         0.125
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/cup-coffee.glb",
+    "bytes": 12892,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 108,
+    "vertices": 120,
+    "bounds": {
+      "min": [
+        -0.10814492404460907,
+        -2.8199664484680564e-18,
+        -0.16439910233020782
+      ],
+      "max": [
+        0.10814492404460907,
+        0.14000000059604645,
+        0.12225036323070526
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/banana.glb",
+    "bytes": 12900,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 104,
+    "vertices": 78,
+    "bounds": {
+      "min": [
+        -0.06879999488592148,
+        0,
+        -0.3149356245994568
+      ],
+      "max": [
+        0.06879999488592148,
+        0.19580039381980896,
+        0.3149356245994568
       ]
     },
     "animations": []

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { PartySnapshotSchema } from './party'
 
-export const NpcIdSchema = z.enum(['hoa', 'tam', 'linh', 'ba'])
+export const NpcIdSchema = z.enum(['hoa', 'tam', 'linh', 'ba', 'mai', 'alex'])
 export type NpcId = z.infer<typeof NpcIdSchema>
 export const LocationIdSchema = z.enum([
   'market',
@@ -77,7 +77,7 @@ export const WorldStateSchema = z
         z
           .string()
           .regex(
-            /^(herbs|postcard|photo|noodles|broth|baguette|coffee):(hoa|tam|linh|ba)$/
+            /^(herbs|postcard|photo|noodles|broth|baguette|coffee):(hoa|tam|linh|ba|mai|alex)$/
           )
       )
       .max(32),

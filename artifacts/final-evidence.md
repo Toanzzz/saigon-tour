@@ -10,6 +10,15 @@
 - Root types, production build, 58 server tests, and 38 client tests pass. Lint passes for the integrated landmark changes.
 - Evidence: `artifacts/city-expansion-landmarks/`. Baseline artifacts interrupted by HMR are incomplete and are not used as performance proof.
 
+### City life and named conversations
+
+- Headless Playwright: `scripts/qa-city-expansion.mjs --pass=life`; desktop `1440×900` and mobile `390×844`.
+- Observed: movement/map/bus flow still passed; 20 ambient residents reported in diagnostics. Active crowd counts were market 10, plaza 3, river 2, and food alley 10 with a 32-unit animation radius.
+- Mai and Alex were opened with real keyboard/touch interaction, each completed a two-reply conversation, showed “Live NPC conversation”, and left the wallet unchanged with no quest controls.
+- No page/console errors or failed requests. Active-life renderer: desktop 208 calls / 348,737 triangles; mobile 154 calls / 341,462 triangles. Mobile remains above the 300k starting triangle budget; the large market landmark dominates the count.
+- Runtime assets: 40 prepared models / 1.48 MiB total prepared collection; fishing boat 237 triangles, rowboat 168 triangles, coffee 108 triangles, banana 104 triangles.
+- Evidence: `artifacts/city-expansion-life/`.
+
 Validated on October 30, 2026 from the local production previews.
 
 ## Playable loop

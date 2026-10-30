@@ -1,11 +1,10 @@
 import { Html } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
 import { NPCS, type NpcId } from '@saigon/shared'
 import { useStore } from '@tanstack/react-store'
-import { useRef } from 'react'
-import type { Group } from 'three'
 import { game } from '../state/game'
 import { Character } from '../world'
+import { Crowd } from './crowd'
+import { motion } from './motion'
 import { PEOPLE } from './places'
 import { isTestPausedForScreenshot } from './test-hooks'
 
@@ -20,6 +19,14 @@ export function Neighbors() {
           <Character
             model={PEOPLE[id].model as 'female-a'}
             animation={id === 'tam' ? 'idle' : 'idle'}
+            active={() =>
+              game.state.screen === 'playing' &&
+              !isTestPausedForScreenshot() &&
+              Math.hypot(
+                motion.position.x - PEOPLE[id].at[0],
+                motion.position.z - PEOPLE[id].at[2]
+              ) < 36
+            }
           />
           <mesh position={[0, 0.045, 0]} rotation={[-Math.PI / 2, 0, 0]}>
             <ringGeometry args={[0.75, id === active ? 0.93 : 0.8, 40]} />
@@ -46,42 +53,7 @@ export function Neighbors() {
           </Html>
         </group>
       ))}
-      <Pedestrian origin={[-4, 0, 18]} phase={0} model="female-a" />
-      <Pedestrian origin={[35, 0, 16.7]} phase={3} model="male-a" />
-      <Pedestrian origin={[16, 0, -17]} phase={1.5} model="female-b" />
+      <Crowd />
     </>
-  )
-}
-function Pedestrian({
-  origin,
-  phase,
-  model,
-}: {
-  origin: [number, number, number]
-  phase: number
-  model: 'male-a' | 'female-a' | 'female-b'
-}) {
-  const ref = useRef<Group>(null)
-  const time = useRef(phase)
-  useFrame((_, delta) => {
-    if (
-      isTestPausedForScreenshot() ||
-      !ref.current ||
-      game.state.screen === 'paused'
-    )
-      return
-    time.current += Math.min(delta, 0.05) * 0.45
-    ref.current.position.set(
-      origin[0] + Math.sin(time.current) * 3.4,
-      0.12,
-      origin[2]
-    )
-    ref.current.rotation.y =
-      Math.cos(time.current) > 0 ? Math.PI / 2 : -Math.PI / 2
-  })
-  return (
-    <group ref={ref}>
-      <Character model={model} animation="walk" scale={2.25} />
-    </group>
   )
 }

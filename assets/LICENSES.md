@@ -18,6 +18,7 @@ remain in their source folders.
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |
 | Tram | `train-kit` | Kenney, Guus Vermeulen, Tony Schaer | `train-kit/License.txt`, CC0 |
+| River boats | `watercraft-pack` | Kenney | `watercraft-pack/License.txt`, CC0 |
 | Palms, trees, planting | `nature-kit` | Kenney | `nature-kit/License.txt`, CC0 |
 | Food and stall props | `food-kit` | Kenney | `food-kit/License.txt`, CC0 |
 

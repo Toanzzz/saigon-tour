@@ -52,6 +52,10 @@ const selected: Record<string, { directory: string; names: string[] }> = {
     names: ['van'],
   },
   trains: { directory: 'train-kit/GLB format', names: ['train-tram-modern'] },
+  boats: {
+    directory: 'watercraft-pack/GLB format',
+    names: ['boat-fishing-small', 'boat-row-small'],
+  },
   nature: {
     directory: 'nature-kit/GLTF format',
     names: [
@@ -64,7 +68,7 @@ const selected: Record<string, { directory: string; names: string[] }> = {
   },
   food: {
     directory: 'food-kit/GLB format',
-    names: ['bowl-broth', 'pot', 'loaf-baguette'],
+    names: ['bowl-broth', 'pot', 'loaf-baguette', 'cup-coffee', 'banana'],
   },
   roads: {
     directory: 'city-kit-roads/GLB format',

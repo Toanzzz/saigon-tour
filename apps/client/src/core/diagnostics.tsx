@@ -6,6 +6,7 @@ import { eventDiagnostics } from '../net/events'
 import { npcSpeech, presence, speech } from '../net/presence'
 import { net } from '../net/status'
 import { game } from '../state/game'
+import { crowdStats } from './crowd'
 import { motion } from './motion'
 
 declare global {
@@ -42,6 +43,7 @@ export function Diagnostics() {
             : 'walk'
           : 'idle',
       },
+      world: crowdStats(),
       physics: {
         engine: 'rapier',
         timestep: 1 / 60,

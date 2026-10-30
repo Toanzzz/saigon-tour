@@ -3,6 +3,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { movePlayer } from './qa-city-controls.mjs'
+import { verifyCityLife } from './qa-city-life.mjs'
 
 const require = createRequire(
   `${process.env.QA_MODULE_ROOT || '/private/tmp/saigon-tour-qa'}/package.json`
@@ -44,6 +45,7 @@ async function verify(viewport) {
   const requests = []
   const models = new Map()
   const captures = {}
+  let life = null
   page.on('pageerror', (error) => errors.push(error.message))
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text())
@@ -199,6 +201,14 @@ async function verify(viewport) {
       await teleport(-25, 25)
       await capture('alley')
     }
+    if (pass === 'life' || pass === 'complete')
+      life = await verifyCityLife({
+        page,
+        diag,
+        teleport,
+        capture,
+        mobile,
+      })
     assert.deepEqual(errors, [], 'no page or console errors')
     assert.deepEqual(requests, [], 'no failed requests')
     const report = {
@@ -209,6 +219,7 @@ async function verify(viewport) {
       arrived,
       mapText,
       captures,
+      life,
       models: Object.fromEntries(models),
       errors,
       requests,

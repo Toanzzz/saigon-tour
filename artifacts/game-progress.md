@@ -14,7 +14,8 @@ Stylized Sài Gòn exploration game from `spec/`, with the compact District 1 ex
 - Transport/discovery: eight map destinations and connected routes; façade collision proxies protect landmark bodies while forecourts remain walkable.
 - Steering: the café owner and tourist are named chat NPCs. Ambient crowds supplement the existing quest NPCs.
 - Current validation: root types/build/test pass; route coverage exercises every destination pair. Desktop and 390px mobile Playwright pass movement, map, bus fare/arrival, and runtime statue loading. Facade-facing and map-label checks are in progress.
-- Pending: city-life prop integration; proximity-managed crowds and traffic; café owner/tourist conversations; day/evening lighting and crowds; localized ambience; service-specific transport; market purchases; river postcard viewpoint.
+- Pass 2 complete: 20 authored ambient residents cover the market, cafés, park, plazas, Opera House, Post Office, riverside, and food alley. Their mixers pause outside a 32-unit activity radius; diagnostics report authored and active crowd counts. Mai (sidewalk café owner) and Alex (visiting photographer) are named server-backed NPCs with memory/context tools, no quest or purchase authority. Food carts, café tables/stools, parked motorbikes, delivery boxes, plants, flags, overhead cables, exercise equipment, river boats, a landing, and a distant Landmark 81-like skyline silhouette are integrated.
+- Pending: day/evening lighting and localized ambience; service-specific transport; market purchases; river postcard viewpoint. These are the final interaction/time-of-day pass.
 - Constraints: reuse the running dev server; request a user restart only if needed. Commit each validated pass. Physical Quest 3 performance requires hardware evidence.
 
 ## Decisions

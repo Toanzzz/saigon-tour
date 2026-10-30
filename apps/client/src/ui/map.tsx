@@ -145,7 +145,7 @@ export function NeighborhoodMap({
           {large && (
             <MapLabel
               x={place.stop[0] > 85 ? -4 : 0}
-              y={place.stop[2] > 20 ? -7 : 10}
+              y={id === 'alley' ? 12 : place.stop[2] > 20 ? -7 : 10}
               size={4}
               anchor={place.stop[0] > 85 ? 'end' : 'middle'}
             >

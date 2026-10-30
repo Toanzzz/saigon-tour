@@ -176,6 +176,8 @@ export function Character({
   animation = 'idle',
   scale = 2.35,
   color,
+  active,
+  shadow = true,
 }: {
   model?: 'female-a' | 'female-b' | 'male-a' | 'male-b'
   /** Runtime model path override, e.g. the tourist player. */
@@ -185,13 +187,16 @@ export function Character({
   animation?: string
   scale?: number
   color?: string
+  /** Nearby actors can suspend their mixer without removing their pose. */
+  active?: () => boolean
+  shadow?: boolean
 }) {
   const { scene, animations } = loadModel(path ?? `people/character-${model}`)
   const object = useMemo(() => {
     const result = clone(scene)
     result.traverse((child) => {
       if (child instanceof Mesh) {
-        child.castShadow = true
+        child.castShadow = shadow
         child.receiveShadow = true
         if (color) {
           const tint = (source: Material) => {
@@ -210,7 +215,7 @@ export function Character({
       }
     })
     return result
-  }, [scene, color])
+  }, [scene, color, shadow])
   useEffect(
     () => () => {
       if (!color) return
@@ -243,7 +248,9 @@ export function Character({
     },
     [mixer, object]
   )
-  useFrame((_, delta) => mixer.update(Math.min(delta, 0.05)))
+  useFrame((_, delta) => {
+    if (!active || active()) mixer.update(Math.min(delta, 0.05))
+  })
   return (
     <primitive
       object={object}

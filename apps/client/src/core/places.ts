@@ -10,6 +10,8 @@ export const PEOPLE: Record<
   tam: { at: NPC_POSITIONS.tam, model: 'male-a', color: '#85c7b6' },
   linh: { at: NPC_POSITIONS.linh, model: 'female-a', color: '#ed9d86' },
   ba: { at: NPC_POSITIONS.ba, model: 'male-b', color: '#eddca7' },
+  mai: { at: NPC_POSITIONS.mai, model: 'female-b', color: '#baddc1' },
+  alex: { at: NPC_POSITIONS.alex, model: 'male-a', color: '#c6b5e5' },
 }
 export const PLACES: Record<
   LocationId,

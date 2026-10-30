@@ -59,6 +59,32 @@ export const NPCS: Record<NpcId, NpcPersona> = {
       'Bến Thành is the heart of the neighborhood.',
     ],
   },
+  mai: {
+    id: 'mai',
+    name: 'Mai',
+    role: 'Sidewalk café owner',
+    personality: 'Warm, observant, quietly witty, remembers regulars',
+    speakingStyle: 'Easy conversation with short Vietnamese food phrases',
+    location: 'market',
+    knowledge: [
+      'A cà phê sữa and a little shade make a lovely market break.',
+      'Follow Lê Lợi to Nguyễn Huệ, or find the food alley beside the market.',
+      'The Central Post Office is a lovely place to send a postcard.',
+    ],
+  },
+  alex: {
+    id: 'alex',
+    name: 'Alex',
+    role: 'Visiting photographer',
+    personality: 'Curious, upbeat, considerate of the neighborhood',
+    speakingStyle: 'Short observations and friendly questions',
+    location: 'opera',
+    knowledge: [
+      'The Opera House columns catch beautiful afternoon light.',
+      'The cathedral and Central Post Office share a compact square.',
+      'The riverfront viewpoint looks back toward the city skyline.',
+    ],
+  },
 }
 
 export const STARTING_CURRENCY = 30

@@ -2,8 +2,10 @@ import { Agent } from '@mastra/core/agent'
 import type { MastraModelConfig } from '@mastra/core/llm'
 import type { NpcId } from '@saigon/shared'
 import { createNpcMemory } from '../memory/npc-memory'
+import { cafeOwnerPersona } from '../personas/cafe-owner'
 import { cycloDriverPersona } from '../personas/cyclo-driver'
 import { marketVendorPersona } from '../personas/market-vendor'
+import { visitingPhotographerPersona } from '../personas/visiting-photographer'
 import { volunteerPersona } from '../personas/volunteer'
 import { xeOmDriverPersona } from '../personas/xe-om-driver'
 import { createCheckQuestTool } from '../tools/check-quest'
@@ -17,6 +19,8 @@ export const NPC_PERSONAS: Record<NpcId, string> = {
   tam: xeOmDriverPersona,
   linh: volunteerPersona,
   ba: cycloDriverPersona,
+  mai: cafeOwnerPersona,
+  alex: visitingPhotographerPersona,
 }
 
 /** Each NPC gets its own persona and only the tools its role needs. */
@@ -52,5 +56,13 @@ export function createNpcAgents(
       getWorldContext,
     }),
     ba: agent('ba', 'Ông Ba', cycloDriverPersona, { rememberPlayerFact }),
+    mai: agent('mai', 'Mai', cafeOwnerPersona, {
+      rememberPlayerFact,
+      getWorldContext,
+    }),
+    alex: agent('alex', 'Alex', visitingPhotographerPersona, {
+      rememberPlayerFact,
+      getWorldContext,
+    }),
   } satisfies Record<NpcId, Agent>
 }

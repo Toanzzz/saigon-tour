@@ -14,7 +14,9 @@ import { MarketStall, ParkFeatures } from './landmarks'
 import { buildingRows } from './layout'
 import { Block, Sign } from './primitives'
 import { Roads } from './roads'
+import { STREET_PROPS_COLLIDERS, StreetLife } from './street-life'
 import { Planting, Promenade, Shophouses, StopSign } from './streets'
+import { WaterfrontLife } from './waterfront'
 
 const palmPlacements: Placement[] = [
   [-38, -25],
@@ -99,6 +101,8 @@ export function CityWorld() {
       <ParkFeatures />
       <CivicDistrict />
       <CulturalLandmarks />
+      <StreetLife />
+      <WaterfrontLife />
       <Skyline />
       <ModelInstances
         path="nature/tree_palmDetailedTall"
@@ -151,6 +155,13 @@ function Collision() {
           key={`${f.x}/${f.z}`}
           args={[f.w / 2, 6, f.d / 2]}
           position={[f.x, 6, f.z]}
+        />
+      ))}
+      {STREET_PROPS_COLLIDERS.map((f) => (
+        <CuboidCollider
+          key={`prop-${f.x}/${f.z}`}
+          args={[f.w / 2, f.h / 2, f.d / 2]}
+          position={[f.x, f.h / 2, f.z]}
         />
       ))}
       <CuboidCollider args={[1.95, 0.6, 0.7]} position={[-23, 0.6, 1.35]} />
