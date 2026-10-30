@@ -10,7 +10,7 @@ decisions are driven live by Meta's AI models. NPCs behave as goal-directed agen
 converse naturally, assign context-aware quests, verify completion, and grant rewards.
 
 The project is a submission to the **Meta Global AI Developer Hackathon** (building period
-Oct 27 – Nov 4, 2025; submission due Nov 4, 9:00 PM ET). It targets the **"Build for Your
+Oct 27 – Nov 4, 2026; submission due Nov 4, 9:00 PM ET). It targets the **"Build for Your
 World"** problem statement and the **Best Agentic Use-Case** bonus prize, with Quest 3 VR
 support as a differentiator.
 

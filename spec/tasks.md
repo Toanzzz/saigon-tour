@@ -26,7 +26,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - Confirm the spend limit is set to protect the $150 budget.
   - _Requirements: R0.1, R9.2, Design D2_
 
-- [ ] 3. **Backend AI proxy skeleton** (R9)
+- [x] 3. **Backend AI proxy skeleton** (R9)
   - Hono server (TS) with `/health`, env-based Meta key, credentialed CORS for the Cloudflare
     client origin, 7-key structured logger, and `export type AppType` for the `hc<>` client.
   - `MetaClient` wrapper + model selector (hosted vs open-weight) behind config.
@@ -36,64 +36,64 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 
 ## Phase 1 — Explorable city + movement (P0)
 
-- [ ] 4. **Scene bootstrap and desktop render loop** (R1, R2)
+- [x] 4. **Scene bootstrap and desktop render loop** (R1, R2)
   - Set up camera, lighting, skybox, ground; a fixed render/update loop.
   - _Requirements: R1.1, R1.4, R2.1_
 
-- [ ] 5. **Build the Sài Gòn mini-district greybox** (R1)
+- [x] 5. **Build the Sài Gòn mini-district greybox** (R1)
   - Block out streets, shophouses, a Bến Thành-style market, a cathedral, a central park;
     place bounds (invisible walls/water).
   - Import low-poly GLTF assets; record licenses in `assets/LICENSES`.
   - _Requirements: R1.1, R1.5, A3, R0.3_
 
-- [ ] 6. **PlayerController + physics (desktop)** (R2, R1.2)
+- [x] 6. **PlayerController + physics (desktop)** (R2, R1.2)
   - WASD + mouse-look + sprint + interact; capsule collider; walkable-surface constraint;
     movement state machine `WALKING | RIDING | IN_DIALOGUE`.
   - _Requirements: R2.1, R2.2, R1.2_
 
-- [ ] 7. **InteractionSystem + contextual prompts** (R1.3)
+- [x] 7. **InteractionSystem + contextual prompts** (R1.3)
   - Forward raycast/proximity detection; "Press E to talk / board" prompts; event routing.
   - _Requirements: R1.3, R6.1_
 
 ## Phase 2 — Agentic NPC (P0 core differentiator)
 
-- [ ] 8. **NPC persona data + one seeded NPC in-world** (R3.2)
+- [x] 8. **NPC persona data + one seeded NPC in-world** (R3.2)
   - Define `NpcPersona` records; place **Cô Hoa** in the market with an idle presence.
   - _Requirements: R3.2, Design §6_
 
-- [ ] 9. **`/npc/chat` dialogue turn end-to-end** (R3.1, R3.5, R3.7, R9.3)
+- [x] 9. **`/npc/chat` dialogue turn end-to-end** (R3.1, R3.5, R3.7, R9.3)
   - PromptBuilder (persona + world rules + output contract); call Muse Spark; thinking
     indicator; timeout + unreachable fallback lines; dev logging.
   - Desktop dialogue UI: NPC name, history, text input.
   - _Requirements: R3.1, R3.5, R3.6, R3.7, R6.3, R9.3, R10.3_
 
-- [ ] 10. **`/npc/quest` structured quest proposal** (R3.3, R5.2)
+- [x] 10. **`/npc/quest` structured quest proposal** (R3.3, R5.2)
   - Model returns a schema-validated `Quest` (Zod); OutputValidator repair/reject path.
   - NPC autonomously decides when to offer; quest enters the QuestSystem.
   - _Requirements: R3.3, R5.2, R9.3, Design §5_
 
-- [ ] 11. **QuestSystem + Inventory + HUD** (R5, R6.1)
+- [x] 11. **QuestSystem + Inventory + HUD** (R5, R6.1)
   - Quest log (active/completed), objective types (`TALK_TO/GO_TO/DELIVER/COLLECT`),
     currency + items; minimal HUD (currency, active-quest hint, prompts).
   - _Requirements: R5.1, R5.2, R5.4, R5.5, R6.1_
 
-- [ ] 12. **`/npc/verify` completion + reward grant** (R3.4, R5.3)
+- [x] 12. **`/npc/verify` completion + reward grant** (R3.4, R5.3)
   - Deterministic checks for `GO_TO/COLLECT`; model-assisted judgment for fuzzy claims;
     grant reward, mark quest complete, reward feedback in UI.
   - _Requirements: R3.4, R5.3, Design D3_
 
-- [ ] 13. **Output safety + cost guard** (R3.6, R9.3)
+- [x] 13. **Output safety + cost guard** (R3.6, R9.3)
   - System-prompt scoping, output sanitation, per-session rate/cost ceiling → fallback.
   - _Requirements: R3.6, R9.3_
 
 ## Phase 3 — Transport (P0: one mode; P1: the rest)
 
-- [ ] 14. **TransportSystem data model + first rideable mode** (R4.1, R4.2, R4.6)
+- [x] 14. **TransportSystem data model + first rideable mode** (R4.1, R4.2, R4.6)
   - `TransportNetwork` (stops/routes/vehicles); implement **xe ôm** or **bus** end-to-end:
     board → pick destination → fare → `RIDING` with camera-on-vehicle → arrive.
   - _Requirements: R4.1, R4.2, R4.4, R4.5, R4.6_
 
-- [ ] 15. **Wire transport into the quest loop** (R4.5)
+- [x] 15. **Wire transport into the quest loop** (R4.5)
   - Place the demo quest's target across the map so transport is the natural way there.
   - _Requirements: R4.5, R5.3_
 
@@ -104,7 +104,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
     reward; pre-warm/cache the demo path's AI responses; verify every fallback path.
   - _Requirements: R10.1, R10.2, R10.4_
 
-- [ ] 17. **Title/intro + controls screen** (R6.2)
+- [x] 17. **Title/intro + controls screen** (R6.2)
   - _Requirements: R6.2_
 
 - [ ] 18. **First playtest + perf pass (desktop)** (R1.4, R10)
@@ -116,11 +116,11 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 
 ## Phase 5 — Breadth (P1)
 
-- [ ] 19. **Add remaining NPCs (3–4 total)** — Anh Tâm, Chị Linh, Ông Ba. _(R3.2)_
-- [ ] 20. **Add transport modes** — modern (Metro Line 1, e-bus) + traditional (cyclo, bus).
+- [x] 19. **Add remaining NPCs (3–4 total)** — Anh Tâm, Chị Linh, Ông Ba. _(R3.2)_
+- [x] 20. **Add transport modes** — modern (Metro Line 1, e-bus) + traditional (cyclo, bus).
   _(R4.3)_
-- [ ] 21. **Full quest-log UI + inventory screen.** _(R5.1, R6.1)_
-- [ ] 22. **Ambient city life + basic audio** (decorative traffic, pedestrians, street SFX).
+- [x] 21. **Full quest-log UI + inventory screen.** _(R5.1, R6.1)_
+- [x] 22. **Ambient city life + basic audio** (decorative traffic, pedestrians, street SFX).
   _(Design §4.4, out-of-scope traffic = decorative only)_
 
 ## Phase 6 — Differentiators (P2)

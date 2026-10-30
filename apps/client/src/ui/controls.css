@@ -1,0 +1,132 @@
+.game-toast {
+  position: absolute;
+  left: 50%;
+  top: 100px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  border-bottom: 2px solid var(--gold);
+  padding: 12px 20px;
+  background: #163b36f2;
+  color: var(--ivory);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+.game-toast svg {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.ride-banner {
+  position: absolute;
+  bottom: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 18px;
+  width: min(420px, calc(100% - 40px));
+  padding: 20px 26px;
+  background: #163b36f0;
+  border-top: 2px solid var(--gold);
+}
+.ride-banner > svg {
+  color: var(--gold);
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+.ride-banner > div {
+  flex: 1;
+}
+.ride-banner .eyebrow {
+  font-size: 8px;
+}
+.ride-banner strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 5px;
+}
+.ride-banner progress {
+  width: 100%;
+  height: 3px;
+  appearance: none;
+  display: block;
+  border: none;
+  margin-top: 14px;
+}
+.ride-banner progress::-webkit-progress-bar {
+  background: #ffffff22;
+}
+.ride-banner progress::-webkit-progress-value {
+  background: var(--gold);
+}
+.touch-only {
+  display: none;
+}
+.touch-stick {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  bottom: max(30px, env(safe-area-inset-bottom));
+  left: 24px;
+  width: 112px;
+  height: 112px;
+  border: 1px solid #fff4d066;
+  border-radius: 50%;
+  background: #163b3666;
+  touch-action: none;
+  user-select: none;
+}
+.stick-knob {
+  position: absolute;
+  top: 34px;
+  left: 34px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff3cdcc;
+  box-shadow: 0 3px 13px #163b3640;
+}
+.stick-direction {
+  position: absolute;
+  color: #fff1cbcc;
+  font-size: 16px;
+  line-height: 1;
+}
+.stick-direction.north {
+  top: 9px;
+  left: 50px;
+}
+.stick-direction.south {
+  bottom: 9px;
+  left: 50px;
+}
+.stick-direction.west {
+  left: 9px;
+  top: 47px;
+}
+.stick-direction.east {
+  right: 9px;
+  top: 47px;
+}
+.touch-interact {
+  position: absolute;
+  right: 27px;
+  bottom: max(45px, calc(env(safe-area-inset-bottom) + 15px));
+  width: 78px;
+  height: 78px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: #163b36dd;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  color: var(--gold);
+}
+.touch-interact > span {
+  font-size: 11px;
+}

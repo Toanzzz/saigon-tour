@@ -1,0 +1,82 @@
+@media (max-width: 700px) {
+  .portrait {
+    left: 21px;
+    top: 24px;
+  }
+  .journal-dialog {
+    padding: 21px;
+    max-height: calc(100dvh - 30px);
+    width: calc(100vw - 28px);
+  }
+  .dialog-heading {
+    margin-bottom: 17px;
+  }
+  .dialog-heading h2 {
+    font-size: 25px;
+  }
+  .conversation .dialog-heading h2 {
+    font-size: 28px;
+  }
+  .conversation-history {
+    max-height: 35dvh;
+  }
+  .speech {
+    font-size: 13px;
+    line-height: 1.75;
+  }
+  .conversation-footer {
+    gap: 6px;
+  }
+  .source-label {
+    font-size: 8px;
+  }
+  .conversation-footer .text-button {
+    font-size: 10px;
+  }
+  .ride-options {
+    gap: 5px;
+  }
+  .ride-choice {
+    padding: 11px 7px;
+  }
+  .ride-choice span {
+    font-size: 10px;
+  }
+  .ride-choice small {
+    font-size: 8px;
+  }
+  .controls-reference {
+    gap: 11px;
+  }
+  .controls-reference > span {
+    font-size: 9px;
+  }
+  .reward-dialog .dialog-heading h2 {
+    font-size: 26px;
+  }
+  .postcard {
+    padding: 20px 12px 17px;
+    margin-top: 15px;
+    margin-bottom: 23px;
+  }
+  .postcard-mark {
+    font-size: 26px;
+  }
+}
+@media (max-height: 550px) {
+  .journal-dialog {
+    max-height: calc(100dvh - 24px);
+  }
+  .conversation-history {
+    max-height: 20dvh;
+  }
+  .conversation .dialog-heading {
+    margin-bottom: 8px;
+  }
+  .dialog-heading h2 {
+    font-size: 24px;
+  }
+  .conversation-actions {
+    margin: 4px 0 8px;
+  }
+}

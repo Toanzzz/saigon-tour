@@ -1,0 +1,27 @@
+{
+  "name": "saigon-tour",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.4.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun scripts/dev.ts",
+    "check": "biome check .",
+    "check:types": "tsgo -b",
+    "build": "bun run --filter '@saigon/client' build && bun run --filter '@saigon/server' build",
+    "test": "bun run --filter '@saigon/server' test && bun run --filter '@saigon/client' test",
+    "prepare:assets": "bun scripts/prepare-assets.ts",
+    "preview": "bun run --filter '@saigon/client' preview"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.1",
+    "@gltf-transform/core": "4.5.1",
+    "@gltf-transform/functions": "4.5.1",
+    "@typescript/native-preview": "7.0.0-dev.20260707.2",
+    "typescript": "7.0.2",
+    "@gltf-transform/extensions": "4.5.1"
+  }
+}

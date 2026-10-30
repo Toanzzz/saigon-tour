@@ -1,1 +1,10 @@
+node_modules/
+dist/
 .env
+.env.*
+!.env.example
+.tsbuildinfo
+.DS_Store
+*.blend1
+artifacts/qa-browser/
+artifacts/*/video/

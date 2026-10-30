@@ -1,0 +1,173 @@
+@media (pointer: coarse) {
+  .touch-only {
+    display: block;
+  }
+  .game-ui .desktop-only {
+    display: none;
+  }
+}
+@media (max-width: 700px) {
+  .game-ui .desktop-only {
+    display: none;
+  }
+  .touch-only {
+    display: block;
+  }
+  .title-screen {
+    background: linear-gradient(90deg, #163b36e8, #163b3699 68%, #163b3655);
+  }
+  .title-content {
+    top: 46%;
+    left: 28px;
+    right: 25px;
+    transform: translateY(-42%);
+  }
+  .title-kicker {
+    font-size: 8px;
+    letter-spacing: 0.13em;
+    margin-bottom: 19px;
+  }
+  .title-content h1 {
+    font-size: 65px;
+  }
+  .title-content :where(h1) > span {
+    font-size: 30px;
+  }
+  .title-description {
+    font-size: 15px;
+    margin: 23px 0;
+  }
+  .title-controls {
+    max-width: 260px;
+    font-size: 11px;
+    line-height: 1.7;
+    margin-top: 18px;
+  }
+  .title-corner {
+    right: 23px;
+    bottom: 28px;
+    color: #f4e6c5;
+  }
+  .title-edition {
+    display: none;
+  }
+  .game-header {
+    top: max(14px, env(safe-area-inset-top));
+    left: 14px;
+    right: 14px;
+    gap: 8px;
+  }
+  .game-identity {
+    padding: 12px 12px;
+  }
+  .game-identity > span {
+    font-size: 22px;
+  }
+  .game-identity > small {
+    font-size: 6.5px;
+    letter-spacing: 0.12em;
+    margin-top: 7px;
+  }
+  .header-tools {
+    padding: 2px 2px 2px 9px;
+  }
+  .header-tools .icon-button {
+    min-width: 44px;
+  }
+  .wallet {
+    gap: 4px;
+    margin-right: 1px;
+  }
+  .wallet b {
+    width: 28px;
+    font-size: 15px;
+  }
+  .wallet svg {
+    width: 17px;
+  }
+  .objective-note {
+    left: 14px;
+    right: 14px;
+    top: 94px;
+    bottom: auto;
+    width: auto;
+    padding: 13px 14px 13px 0;
+    gap: 12px;
+  }
+  .objective-note > span:nth-child(2) {
+    gap: 4px;
+  }
+  .objective-note strong {
+    font-size: 18px;
+  }
+  .objective-note .objective-hint {
+    font-size: 10px;
+  }
+  .objective-note .eyebrow {
+    font-size: 7px;
+  }
+  .minimap-button {
+    width: 102px;
+    right: 17px;
+    bottom: 156px;
+    padding: 3px;
+  }
+  .minimap-button > span {
+    font-size: 5.5px;
+    gap: 3px;
+    padding: 5px 1px 2px;
+  }
+  .minimap-button kbd {
+    display: none;
+  }
+  .game-toast {
+    top: 190px;
+    width: max-content;
+    font-size: 11px;
+    padding: 11px 14px;
+  }
+  .ride-banner {
+    bottom: 35px;
+    padding: 18px;
+  }
+  .ride-banner strong {
+    font-size: 14px;
+  }
+}
+@media (max-height: 550px) and (orientation: landscape) {
+  .title-content {
+    top: 44%;
+  }
+  .title-content h1 {
+    font-size: 55px;
+  }
+  .title-content :where(h1) > span {
+    font-size: 24px;
+  }
+  .title-description {
+    margin: 13px 0;
+    font-size: 12px;
+  }
+  .title-kicker {
+    margin-bottom: 9px;
+  }
+  .title-controls {
+    margin-top: 13px;
+  }
+  .objective-note {
+    top: 90px;
+    width: 270px;
+    right: auto;
+  }
+  .minimap-button {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none;
+    animation: none;
+  }
+}

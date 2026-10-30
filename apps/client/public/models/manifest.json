@@ -1,0 +1,827 @@
+[
+  {
+    "path": "city/building-a.glb",
+    "bytes": 86304,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1252,
+    "vertices": 2074,
+    "bounds": {
+      "min": [
+        -0.44179391860961914,
+        0,
+        -0.4699999690055847
+      ],
+      "max": [
+        0.4417939782142639,
+        1.2929999828338623,
+        0.4700000286102295
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-c.glb",
+    "bytes": 82088,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1195,
+    "vertices": 1953,
+    "bounds": {
+      "min": [
+        -0.44179391860961914,
+        0,
+        -0.5450000166893005
+      ],
+      "max": [
+        0.4417939782142639,
+        0.8930000066757202,
+        0.5450000762939453
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-e.glb",
+    "bytes": 99656,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1509,
+    "vertices": 2443,
+    "bounds": {
+      "min": [
+        -0.8199999928474426,
+        0,
+        -0.5039456486701965
+      ],
+      "max": [
+        0.8200000524520874,
+        0.8930000066757202,
+        0.5039458870887756
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-f.glb",
+    "bytes": 114132,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1794,
+    "vertices": 2842,
+    "bounds": {
+      "min": [
+        -0.42000001668930054,
+        0,
+        -0.5149999856948853
+      ],
+      "max": [
+        0.42000001668930054,
+        1.693000078201294,
+        0.5150002241134644
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-g.glb",
+    "bytes": 126092,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 2006,
+    "vertices": 3176,
+    "bounds": {
+      "min": [
+        -0.48500001430511475,
+        0,
+        -0.460999995470047
+      ],
+      "max": [
+        0.48500001430511475,
+        1.693000078201294,
+        0.4610002040863037
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-j.glb",
+    "bytes": 315420,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 5246,
+    "vertices": 8485,
+    "bounds": {
+      "min": [
+        -1.041793942451477,
+        0,
+        -0.6700000166893005
+      ],
+      "max": [
+        1.0417940616607666,
+        1.693000078201294,
+        0.6700000166893005
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/building-l.glb",
+    "bytes": 211868,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 3512,
+    "vertices": 5574,
+    "bounds": {
+      "min": [
+        -0.6850000023841858,
+        0,
+        -0.7009999752044678
+      ],
+      "max": [
+        0.6850000023841858,
+        2.2699999809265137,
+        0.7010000348091125
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/detail-awning.glb",
+    "bytes": 14996,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 40,
+    "vertices": 76,
+    "bounds": {
+      "min": [
+        -0.20000000298023224,
+        -3.1583624553714476e-16,
+        0.09999999403953552
+      ],
+      "max": [
+        0.20000000298023224,
+        0.4000000059604645,
+        0.24789130687713623
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "city/detail-parasol-a.glb",
+    "bytes": 18228,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 96,
+    "vertices": 172,
+    "bounds": {
+      "min": [
+        -0.17320507764816284,
+        0,
+        -0.20000000298023224
+      ],
+      "max": [
+        0.17320507764816284,
+        0.45000001788139343,
+        0.20000000298023224
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "people/character-female-a.glb",
+    "bytes": 162576,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 876,
+    "vertices": 1576,
+    "bounds": {
+      "min": [
+        -0.5493935346603394,
+        1.043081283569336e-7,
+        -0.29189151525497437
+      ],
+      "max": [
+        0.5493935346603394,
+        0.7755283713340759,
+        0.20763878524303436
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "sprint",
+      "jump",
+      "fall",
+      "crouch",
+      "sit",
+      "drive",
+      "die",
+      "pick-up",
+      "emote-yes",
+      "emote-no",
+      "holding-right",
+      "holding-left",
+      "holding-both",
+      "holding-right-shoot",
+      "holding-left-shoot",
+      "holding-both-shoot",
+      "attack-melee-right",
+      "attack-melee-left",
+      "attack-kick-right",
+      "attack-kick-left",
+      "interact-right",
+      "interact-left",
+      "wheelchair-sit",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-forward",
+      "wheelchair-move-back",
+      "wheelchair-move-left",
+      "wheelchair-move-right"
+    ]
+  },
+  {
+    "path": "people/character-female-b.glb",
+    "bytes": 147540,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 742,
+    "vertices": 1322,
+    "bounds": {
+      "min": [
+        -0.3835841417312622,
+        1.043081283569336e-7,
+        -0.21088343858718872
+      ],
+      "max": [
+        0.3835841417312622,
+        0.7233532667160034,
+        0.20763881504535675
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "sprint",
+      "jump",
+      "fall",
+      "crouch",
+      "sit",
+      "drive",
+      "die",
+      "pick-up",
+      "emote-yes",
+      "emote-no",
+      "holding-right",
+      "holding-left",
+      "holding-both",
+      "holding-right-shoot",
+      "holding-left-shoot",
+      "holding-both-shoot",
+      "attack-melee-right",
+      "attack-melee-left",
+      "attack-kick-right",
+      "attack-kick-left",
+      "interact-right",
+      "interact-left",
+      "wheelchair-sit",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-forward",
+      "wheelchair-move-back",
+      "wheelchair-move-left",
+      "wheelchair-move-right"
+    ]
+  },
+  {
+    "path": "people/character-male-a.glb",
+    "bytes": 143892,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 723,
+    "vertices": 1259,
+    "bounds": {
+      "min": [
+        -0.3835841417312622,
+        1.043081283569336e-7,
+        -0.17236123979091644
+      ],
+      "max": [
+        0.3835841417312622,
+        0.6713249683380127,
+        0.1676386147737503
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "sprint",
+      "jump",
+      "fall",
+      "crouch",
+      "sit",
+      "drive",
+      "die",
+      "pick-up",
+      "emote-yes",
+      "emote-no",
+      "holding-right",
+      "holding-left",
+      "holding-both",
+      "holding-right-shoot",
+      "holding-left-shoot",
+      "holding-both-shoot",
+      "attack-melee-right",
+      "attack-melee-left",
+      "attack-kick-right",
+      "attack-kick-left",
+      "interact-right",
+      "interact-left",
+      "wheelchair-sit",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-forward",
+      "wheelchair-move-back",
+      "wheelchair-move-left",
+      "wheelchair-move-right"
+    ]
+  },
+  {
+    "path": "people/character-male-b.glb",
+    "bytes": 144084,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 690,
+    "vertices": 1266,
+    "bounds": {
+      "min": [
+        -0.3835841417312622,
+        1.043081283569336e-7,
+        -0.16286130249500275
+      ],
+      "max": [
+        0.3835841417312622,
+        0.6613249778747559,
+        0.22661079466342926
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "sprint",
+      "jump",
+      "fall",
+      "crouch",
+      "sit",
+      "drive",
+      "die",
+      "pick-up",
+      "emote-yes",
+      "emote-no",
+      "holding-right",
+      "holding-left",
+      "holding-both",
+      "holding-right-shoot",
+      "holding-left-shoot",
+      "holding-both-shoot",
+      "attack-melee-right",
+      "attack-melee-left",
+      "attack-kick-right",
+      "attack-kick-left",
+      "interact-right",
+      "interact-left",
+      "wheelchair-sit",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-forward",
+      "wheelchair-move-back",
+      "wheelchair-move-left",
+      "wheelchair-move-right"
+    ]
+  },
+  {
+    "path": "cars/van.glb",
+    "bytes": 89824,
+    "meshes": 3,
+    "materials": 1,
+    "triangles": 1418,
+    "vertices": 2194,
+    "bounds": {
+      "min": [
+        -0.75,
+        -1.1920928966180355e-8,
+        -1.4000001192092895
+      ],
+      "max": [
+        0.75,
+        1.349999976158142,
+        1.3500001192092896
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cars/taxi.glb",
+    "bytes": 87684,
+    "meshes": 3,
+    "materials": 1,
+    "triangles": 1408,
+    "vertices": 2194,
+    "bounds": {
+      "min": [
+        -0.75,
+        -1.1920928966180355e-8,
+        -1.3999998807907104
+      ],
+      "max": [
+        0.75,
+        1.4999999046325683,
+        1.3499998807907105
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cars/hatchback-sports.glb",
+    "bytes": 104608,
+    "meshes": 3,
+    "materials": 1,
+    "triangles": 1424,
+    "vertices": 2653,
+    "bounds": {
+      "min": [
+        -0.6499999761581421,
+        -1.1920928966180355e-8,
+        -1.4500000715255736
+      ],
+      "max": [
+        0.6499999761581421,
+        1.099999988079071,
+        1.4000000715255738
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "trains/train-tram-modern.glb",
+    "bytes": 86064,
+    "meshes": 3,
+    "materials": 1,
+    "triangles": 1182,
+    "vertices": 1986,
+    "bounds": {
+      "min": [
+        -0.5638303756713889,
+        -9.132383738119643e-11,
+        -1.3433014154434204
+      ],
+      "max": [
+        0.5638303756713845,
+        2.300901230057831,
+        1.3433012962341309
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "nature/tree_palmDetailedTall.glb",
+    "bytes": 16552,
+    "meshes": 3,
+    "materials": 2,
+    "triangles": 336,
+    "vertices": 640,
+    "bounds": {
+      "min": [
+        -0.5171645106041536,
+        -0.05,
+        -0.5145974433699035
+      ],
+      "max": [
+        0.5171645461356535,
+        1.373466974036579,
+        0.5197316133699036
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "nature/tree_palmBend.glb",
+    "bytes": 11576,
+    "meshes": 1,
+    "materials": 2,
+    "triangles": 200,
+    "vertices": 656,
+    "bounds": {
+      "min": [
+        -0.4677448570728302,
+        -0.05,
+        -0.5063817501068115
+      ],
+      "max": [
+        0.4677448570728302,
+        1.3299107074737548,
+        0.5063817501068115
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "nature/tree_fat.glb",
+    "bytes": 4192,
+    "meshes": 1,
+    "materials": 2,
+    "triangles": 50,
+    "vertices": 192,
+    "bounds": {
+      "min": [
+        -0.3775000274181366,
+        -0.05,
+        -0.32692450284957886
+      ],
+      "max": [
+        0.3775000274181366,
+        1.100387406349182,
+        0.32692450284957886
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "nature/plant_bush.glb",
+    "bytes": 3336,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 32,
+    "vertices": 80,
+    "bounds": {
+      "min": [
+        -0.1979999989271164,
+        -0.05,
+        -0.1979999989271164
+      ],
+      "max": [
+        0.1979999989271164,
+        0.19444358050823213,
+        0.1979999989271164
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "nature/flower_redA.glb",
+    "bytes": 5424,
+    "meshes": 1,
+    "materials": 2,
+    "triangles": 76,
+    "vertices": 268,
+    "bounds": {
+      "min": [
+        -0.10453449934720993,
+        -0.05,
+        -0.09052953124046326
+      ],
+      "max": [
+        0.054563019424676895,
+        0.24249998927116395,
+        0.09052953124046326
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "nature/flower_yellowA.glb",
+    "bytes": 5440,
+    "meshes": 1,
+    "materials": 2,
+    "triangles": 76,
+    "vertices": 268,
+    "bounds": {
+      "min": [
+        -0.10453449934720993,
+        -0.05,
+        -0.09052953124046326
+      ],
+      "max": [
+        0.054563019424676895,
+        0.14249999523162843,
+        0.09052953124046326
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/bowl-broth.glb",
+    "bytes": 22052,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 210,
+    "vertices": 266,
+    "bounds": {
+      "min": [
+        -0.2751316726207733,
+        0,
+        -0.2899182140827179
+      ],
+      "max": [
+        0.25107651948928833,
+        0.29030901193618774,
+        0.2899182140827179
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/bowl-soup.glb",
+    "bytes": 18552,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 132,
+    "vertices": 188,
+    "bounds": {
+      "min": [
+        -0.25107651948928833,
+        0,
+        -0.2899182140827179
+      ],
+      "max": [
+        0.25107651948928833,
+        0.2138247787952423,
+        0.2899182140827179
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/pot.glb",
+    "bytes": 23992,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 228,
+    "vertices": 328,
+    "bounds": {
+      "min": [
+        -0.3287247121334076,
+        0,
+        -0.41103580594062805
+      ],
+      "max": [
+        0.3287247121334076,
+        0.36079999804496765,
+        0.41103580594062805
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/loaf-baguette.glb",
+    "bytes": 19588,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 122,
+    "vertices": 222,
+    "bounds": {
+      "min": [
+        -0.41499999165534973,
+        0,
+        -0.125
+      ],
+      "max": [
+        0.41499999165534973,
+        0.25,
+        0.125
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/cup-coffee.glb",
+    "bytes": 16332,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 108,
+    "vertices": 120,
+    "bounds": {
+      "min": [
+        -0.10814492404460907,
+        -2.8199664484680564e-18,
+        -0.16439910233020782
+      ],
+      "max": [
+        0.10814492404460907,
+        0.14000000059604645,
+        0.12225036323070526
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "food/banana.glb",
+    "bytes": 19232,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 104,
+    "vertices": 212,
+    "bounds": {
+      "min": [
+        -0.06879999488592148,
+        0,
+        -0.3149356245994568
+      ],
+      "max": [
+        0.06879999488592148,
+        0.19580039381980896,
+        0.3149356245994568
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "roads/light-curved.glb",
+    "bytes": 18112,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 92,
+    "vertices": 156,
+    "bounds": {
+      "min": [
+        -0.02500000037252903,
+        0,
+        -0.20000000298023224
+      ],
+      "max": [
+        0.02500000037252903,
+        0.6749999523162842,
+        0.02500000037252903
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "roads/electricity-pole.glb",
+    "bytes": 41620,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 416,
+    "vertices": 820,
+    "bounds": {
+      "min": [
+        -0.29736000299453735,
+        4.511975103434207e-16,
+        -0.10711249709129333
+      ],
+      "max": [
+        0.2817249894142151,
+        0.5249999761581421,
+        0.10711249709129333
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "roads/road-sign-street.glb",
+    "bytes": 22612,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 154,
+    "vertices": 276,
+    "bounds": {
+      "min": [
+        -0.17125001549720764,
+        0,
+        -0.02500000037252903
+      ],
+      "max": [
+        0.02500000037252903,
+        0.4750000238418579,
+        0.17124979197978973
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "ben-thanh-market.glb",
+    "bytes": 8971352,
+    "meshes": 13,
+    "materials": 13,
+    "triangles": 188854,
+    "vertices": 326084,
+    "bounds": {
+      "min": [
+        -17.125,
+        -4.7213176124216716e-7,
+        -15.125000891884156
+      ],
+      "max": [
+        17.125000534976152,
+        14.669999926903031,
+        13.210643815609728
+      ]
+    },
+    "animations": []
+  }
+]

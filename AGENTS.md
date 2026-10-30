@@ -1,0 +1,17 @@
+# Saigon Tour
+
+- Bun 1.4.2, isolated workspaces. TypeScript 7/tsgo, Biome 2.5.x.
+- Client: React Three Fiber, Three.js, Rapier, TanStack Store/Query, WebXR.
+- Server: Node + Hono in a Docker image. Shared contracts: zod 4, raw TypeScript package.
+- Cloudflare serves static client assets. AI traffic goes directly to the backend origin.
+- Keep secrets in server environment variables. Never copy `.env` into builds or images.
+- Reuse licensed assets in `assets/`; runtime copies belong in `apps/client/public`.
+- `bun run dev`: client 58000, server 58001. This repository owns port block 58000–58009.
+- `bun run prepare:assets` creates runtime models; preserve the source models.
+- Feature modules expose public APIs through `index.ts`; imports flow toward shared contracts.
+- Each package owns its composite TypeScript project; no cross-package relative imports.
+- Target ≤300 lines per source file.
+- Definition of Done: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.
+- UI verification uses headless Playwright with real controls, desktop and 390px mobile flows.
+- Update `artifacts/game-progress.md` while working. Record observed results in `artifacts/final-evidence.md`.
+- Commit each validated pass. Never add AI attribution to commits, docs, or code.

@@ -1,0 +1,93 @@
+.title-screen {
+  height: 100%;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    #102e2bee 0%,
+    #163b36c7 28%,
+    #163b3640 57%,
+    transparent 83%
+  );
+}
+.title-content {
+  position: absolute;
+  top: 50%;
+  left: clamp(30px, 7vw, 110px);
+  transform: translateY(-46%);
+}
+.title-kicker {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 26px;
+}
+.title-kicker > span {
+  width: 24px;
+  height: 1px;
+  background: var(--gold);
+}
+.title-content h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #fff4d9;
+  font-size: clamp(64px, 7.6vw, 116px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.05;
+  text-shadow: 0 3px 40px #10352b33;
+}
+.title-content h1 > span {
+  display: block;
+  font-size: clamp(28px, 3.1vw, 43px);
+  letter-spacing: 0.025em;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.title-description {
+  color: #f4efdce0;
+  font-size: 17px;
+  line-height: 1.85;
+  font-weight: 400;
+  margin: 28px 0 30px;
+}
+.title-start {
+  min-width: 215px;
+  justify-content: space-between;
+}
+.title-controls {
+  font-size: 11px;
+  color: #dee4d6;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.title-controls > span {
+  padding: 0 4px;
+  opacity: 0.5;
+}
+.title-corner {
+  position: absolute;
+  right: 38px;
+  bottom: 34px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #173d32;
+}
+.title-corner span {
+  font-size: 10px;
+  line-height: 1.9;
+  letter-spacing: 0.12em;
+}
+.title-corner b {
+  font-weight: 600;
+  font-size: 9px;
+}
+.title-edition {
+  position: absolute;
+  bottom: 36px;
+  left: clamp(30px, 7vw, 110px);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: #d6dacb;
+}

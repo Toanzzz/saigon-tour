@@ -1,0 +1,119 @@
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 28px 0 8px;
+  font-size: 12px;
+}
+.settings-row output {
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.pause-dialog input[type="range"] {
+  width: 100%;
+  accent-color: var(--gold);
+  height: 44px;
+  margin: 0 0 10px;
+}
+.setting-checkbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 45px;
+  font-size: 12px;
+  border-bottom: 1px solid #eee1af1f;
+}
+.setting-checkbox input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+.controls-reference {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 24px 0 6px;
+}
+.controls-reference > span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #c5d2b9;
+}
+.controls-reference kbd {
+  font-size: 9px;
+  min-width: 28px;
+  text-align: center;
+}
+.restart-button {
+  display: block;
+  margin: 12px auto -8px;
+  color: #d7d8bf;
+  font-size: 11px;
+}
+.reward-dialog {
+  width: min(450px, calc(100vw - 32px));
+  text-align: center;
+}
+.reward-dialog .dialog-heading {
+  text-align: left;
+}
+.reward-dialog .dialog-heading h2 {
+  font-size: 29px;
+}
+.reward-dialog .eyebrow {
+  font-size: 8px;
+}
+.postcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: #b3bd8b;
+  color: #254d3d;
+  border: 6px solid #e1d5ad;
+  padding: 25px 15px 20px;
+  transform: rotate(-2deg);
+  margin: 18px 8px 27px;
+  box-shadow: 0 5px 16px #082a2440;
+}
+.postcard-mark {
+  font-family: Georgia, serif;
+  letter-spacing: 0.16em;
+  font-size: 30px;
+}
+.postcard > span:last-of-type {
+  font-size: 9px;
+  letter-spacing: 0.03em;
+}
+.postcard-stamp {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 2px dotted #4b7052;
+  padding: 5px;
+  transform: rotate(12deg);
+}
+.postcard > svg {
+  stroke-width: 1.1;
+}
+.reward-copy {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #d6e0c7;
+}
+.reward-earned {
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+  margin: 21px 0 24px;
+  color: var(--gold);
+  font-size: 12px;
+}
+.reward-earned span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}

@@ -1,0 +1,186 @@
+.journal-dialog {
+  color: var(--ivory);
+  background: var(--jade);
+  border: 1px solid #f4cb7660;
+  border-top: 3px solid var(--gold);
+  border-radius: 5px;
+  width: min(460px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  padding: 26px;
+  box-shadow: 0 22px 90px #06282060;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.journal-dialog::backdrop {
+  background: #0c2c2452;
+  backdrop-filter: blur(3px);
+}
+.dialog-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.dialog-heading h2 {
+  font-family: Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-top: 5px;
+}
+.dialog-heading .eyebrow {
+  font-size: 8px;
+}
+.dialog-heading .icon-button {
+  margin: -7px -10px 0 0;
+}
+.panel-intro {
+  color: #d1dcc8;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.conversation {
+  width: min(560px, calc(100vw - 32px));
+}
+.conversation .dialog-heading {
+  padding-right: 4px;
+  margin-bottom: 15px;
+}
+.conversation .dialog-heading h2 {
+  font-size: 31px;
+}
+.conversation .dialog-heading > div {
+  padding-left: 60px;
+}
+.portrait {
+  position: absolute;
+  top: 29px;
+  left: 26px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #e9d29580;
+  border-radius: 50%;
+  background: #d4aa72;
+  color: #173b32;
+  font-family: Georgia, serif;
+  font-size: 25px;
+}
+.portrait-linh {
+  background: #e2aa93;
+}
+.portrait-tam {
+  background: #a6c6ac;
+}
+.portrait-ba {
+  background: #d7c9a0;
+}
+.conversation-history {
+  max-height: min(320px, 38dvh);
+  min-height: 85px;
+  overflow: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #6a8872 transparent;
+}
+.speech {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #f4efd9;
+  margin: 0 0 16px;
+}
+.speaker {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: #bfd1b8;
+  margin-bottom: 3px;
+}
+.speech.user {
+  margin-left: 34px;
+  padding: 10px 14px;
+  border-left: 1px solid #e2c98a66;
+  background: #ffffff07;
+  font-size: 12px;
+}
+.speech.user .speaker {
+  color: var(--gold);
+}
+.thinking {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #d3dec9;
+  font-size: 12px;
+  padding: 16px 0;
+}
+.thinking > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: breathe 1.2s ease infinite;
+}
+@keyframes breathe {
+  50% {
+    opacity: 0.3;
+  }
+}
+.conversation-actions {
+  margin: 10px 0 16px;
+}
+.conversation-actions .primary-button {
+  font-size: 13px;
+  min-height: 46px;
+}
+.conversation-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid #eee1af33;
+  border-bottom: 1px solid #eee1af33;
+  padding: 8px 0;
+  margin-top: 9px;
+}
+.conversation-input input {
+  min-width: 0;
+  flex: 1;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--ivory);
+  outline-offset: -2px;
+  font-size: 13px;
+  padding: 10px;
+}
+.conversation-input input::placeholder {
+  color: #b9cab4;
+}
+.conversation-input > button {
+  color: var(--gold);
+}
+.conversation-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 6px;
+}
+.source-label {
+  font-size: 9px;
+  color: #b8c8af;
+  line-height: 1.5;
+}
+.source-label.live {
+  color: #b8ddaa;
+}
+.source-label.fallback {
+  color: #dfc89a;
+}
+.conversation-footer .text-button {
+  font-size: 10px;
+  white-space: nowrap;
+}

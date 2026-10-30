@@ -1,0 +1,153 @@
+.ride-options {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.ride-options legend,
+.field-label {
+  font-size: 10px;
+  color: #d7dfca;
+  margin-bottom: 10px;
+  display: block;
+}
+.ride-choice {
+  min-width: 0;
+  border: 1px solid #c2d1b63d;
+  border-radius: 3px;
+  background: #ffffff04;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: left;
+  padding: 12px 10px;
+  min-height: 64px;
+}
+.ride-choice span {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ride-choice small {
+  font-size: 9px;
+  color: #c5d0b9;
+}
+.ride-choice.selected {
+  border-color: var(--gold);
+  background: #f4cb7612;
+  color: var(--gold);
+}
+.ride-choice:hover {
+  background: #ffffff0e;
+}
+.ride-description {
+  font-size: 10px;
+  color: #becdb5;
+  margin: 12px 0 22px;
+}
+.journal-dialog select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #c2d1b655;
+  border-radius: 3px;
+  padding: 10px 12px;
+  background: #214b40;
+  color: var(--ivory);
+  font-size: 13px;
+}
+.fare-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  font-size: 11px;
+  color: #cbd6be;
+}
+.fare-row strong {
+  color: var(--gold);
+  font-weight: 500;
+}
+.help-text {
+  font-size: 11px;
+  color: #e8c69e;
+  margin-top: 15px;
+  line-height: 1.6;
+}
+.journal-section {
+  border-top: 1px solid #eee1af29;
+  padding: 18px 0;
+}
+.journal-section h3 {
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 13px;
+}
+.journal-section h4 {
+  font-family: Georgia, serif;
+  font-size: 21px;
+  font-weight: 400;
+  margin: 0 0 8px;
+}
+.journal-section p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #d7dfc9;
+}
+.journal-reward {
+  font-size: 10px;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+.bag-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+}
+.bag-items span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+}
+.bag-items svg {
+  color: var(--gold);
+  width: 17px;
+}
+.completed-errand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.completed-errand svg {
+  color: var(--gold);
+  width: 16px;
+}
+.journal-section .muted-copy {
+  color: #c0cdb6;
+}
+.map-dialog {
+  width: min(570px, calc(100vw - 32px));
+}
+.map-dialog .neighborhood-map {
+  border: 1px solid #f4cb763d;
+}
+.map-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 9px;
+  color: #d4dec9;
+  margin: 15px 0;
+}
+.map-legend .gold {
+  color: var(--gold);
+}
+.map-dialog .panel-intro {
+  margin-bottom: 0;
+}
