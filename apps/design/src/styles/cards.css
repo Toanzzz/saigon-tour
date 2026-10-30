@@ -154,8 +154,8 @@
   font-size: 13px;
   color: var(--ink-soft);
 }
-.stop.next {
-  opacity: 0.75;
+.stop.next .stop-marker {
+  background: var(--pavement);
 }
 .story-footer {
   display: flex;
