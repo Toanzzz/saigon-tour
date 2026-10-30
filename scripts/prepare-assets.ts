@@ -132,6 +132,8 @@ await writeRuntime(marketTarget, market)
 const landmarks = {
   'nha-tho-duc-ba': 'landmarks/nhathoducba-model.glb',
   'toa-thi-chinh': 'landmarks/toathichinh-model.glb',
+  'nha-tho-duc-ba-statue': 'landmarks/nhathoducba-statue-model.glb',
+  'toa-thi-chinh-statue': 'landmarks/toathichinh-statue-model.glb',
 }
 for (const [name, source] of Object.entries(landmarks)) {
   const target = resolve(output, `landmarks/${name}.glb`)

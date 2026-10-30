@@ -1,7 +1,15 @@
 import { CuboidCollider, RigidBody } from '@react-three/rapier'
 import { Model, ModelInstances, type Placement } from './assets'
 import { CivicDistrict, Skyline } from './civic'
-import { BOUNDS, GROUND, LANDMARKS, MARKET, WALLS } from './district'
+import { CulturalLandmarks } from './cultural'
+import {
+  BOUNDS,
+  CULTURAL_FOOTPRINTS,
+  GROUND,
+  LANDMARKS,
+  MARKET,
+  WALLS,
+} from './district'
 import { MarketStall, ParkFeatures } from './landmarks'
 import { buildingRows } from './layout'
 import { Block, Sign } from './primitives'
@@ -90,6 +98,7 @@ export function CityWorld() {
       <Shophouses />
       <ParkFeatures />
       <CivicDistrict />
+      <CulturalLandmarks />
       <Skyline />
       <ModelInstances
         path="nature/tree_palmDetailedTall"
@@ -131,6 +140,13 @@ function Collision() {
       />
       <CuboidCollider args={[11.8, 4, 9.8]} position={[-23, 4, -12]} />
       {Object.values(LANDMARKS).map(({ footprint: f }) => (
+        <CuboidCollider
+          key={`${f.x}/${f.z}`}
+          args={[f.w / 2, 6, f.d / 2]}
+          position={[f.x, 6, f.z]}
+        />
+      ))}
+      {Object.values(CULTURAL_FOOTPRINTS).map((f) => (
         <CuboidCollider
           key={`${f.x}/${f.z}`}
           args={[f.w / 2, 6, f.d / 2]}

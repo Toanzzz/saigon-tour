@@ -2,7 +2,20 @@
 
 ## Intent
 
-Stylized Sài Gòn exploration game from `spec/`. The validated build has a playable desktop/mobile quest loop, browser XR integration, audio, visual polish, and a separate React/Tailwind city hub. Existing assets are reused; no additional image or 3D generation was needed.
+Stylized Sài Gòn exploration game from `spec/`, with the compact District 1 expansion defined in `artifacts/city_expansion_plan.md`. The city uses the existing licensed asset collection, authored modular façades, and the supplied landmark statues. The city hub is an in-game overlay.
+
+## City expansion
+
+- Play promise: meet neighbors, help with the community lunch, and discover a compact, busy Sài Gòn district.
+- Core loop: walk or pay for a scenic shortcut, talk to a neighbor, carry out an errand, and collect a persistent reward. Transport spends coins; walking stays free.
+- Spatial plan: Bến Thành anchors Lê Lợi; Nguyễn Huệ joins City Hall to the river; Đồng Khởi joins the Opera House to the cathedral/Post Office square. A food alley sits behind the market, with the park providing a quiet contrast.
+- Compressed scale: 176 × 160 units. Walking speed is 4 units/second; the longest authored route remains a short trip.
+- Landmarks integrated: Bến Thành, City Hall, cathedral, Opera House, Central Post Office, Nguyễn Huệ, riverfront, food alley, park. The cathedral and City Hall plazas use the supplied statue models.
+- Transport/discovery: eight map destinations and connected routes; façade collision proxies protect landmark bodies while forecourts remain walkable.
+- Steering: the café owner and tourist are named chat NPCs. Ambient crowds supplement the existing quest NPCs.
+- Current validation: root types/build/test pass; route coverage exercises every destination pair. Desktop and 390px mobile Playwright pass movement, map, bus fare/arrival, and runtime statue loading. Facade-facing and map-label checks are in progress.
+- Pending: city-life prop integration; proximity-managed crowds and traffic; café owner/tourist conversations; day/evening lighting and crowds; localized ambience; service-specific transport; market purchases; river postcard viewpoint.
+- Constraints: reuse the running dev server; request a user restart only if needed. Commit each validated pass. Physical Quest 3 performance requires hardware evidence.
 
 ## Decisions
 
@@ -88,7 +101,7 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 
 ### Remaining work
 
-- City expansion later phases (`artifacts/city_expansion_plan.md`): Opera House, Post Office, Bùi Viện alley, crowds, and time of day are not built.
+- City expansion work is tracked in the current City expansion section above.
 - Player: young tourist in the Kenney mini-character style. Source `assets/player-tourist/player-tourist.blend` (base `character-male-e`, authored sun hat, sunglasses, backpack, camera), built by `scripts/blender/build-tourist.py`; reuses the pack's 32 clips. Obsolete: the Tripo young-boy job (`artifacts/jobs/player-boy.json`, `assets/player-boy/`) was replaced at the user's request and is not used at runtime.
 
 ## Open follow-ups

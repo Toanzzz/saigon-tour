@@ -26,7 +26,7 @@ export function CivicDistrict() {
       <Model
         path={cathedral.model}
         position={cathedral.position}
-        rotation={[0, Math.PI, 0]}
+        rotation={[0, 0, 0]}
         scale={cathedral.scale}
       />
       <CongXaParis />
@@ -59,11 +59,10 @@ function NguyenHue() {
         <cylinderGeometry args={[2.1, 2.1, 0.06, 24]} />
         <meshStandardMaterial color="#5dada3" roughness={0.25} />
       </mesh>
-      <Block position={[69, 1.5, -11]} scale={[1, 2, 1]} color="#e2d2b0" />
-      <Block
-        position={[69, 3.1, -11]}
-        scale={[0.5, 1.4, 0.4]}
-        color="#6d8f86"
+      <Model
+        path="landmarks/toa-thi-chinh-statue"
+        position={[69, 0.6, -11]}
+        scale={4.2}
       />
       <Sign
         text="PHỐ ĐI BỘ NGUYỄN HUỆ"
@@ -88,11 +87,11 @@ function CongXaParis() {
         <cylinderGeometry args={[4, 4.2, 0.3, 28]} />
         <meshStandardMaterial color="#8fba75" roughness={0.9} />
       </mesh>
-      <Block position={[88, 1.2, -72]} scale={[1.2, 2, 1.2]} color="#e8dcc0" />
-      <mesh position={[88, 2.8, -72]} castShadow>
-        <cylinderGeometry args={[0.3, 0.45, 1.2, 10]} />
-        <meshStandardMaterial color="#f0e9da" roughness={0.6} />
-      </mesh>
+      <Model
+        path="landmarks/nha-tho-duc-ba-statue"
+        position={[88, 0.35, -72]}
+        scale={4.8}
+      />
       <Sign
         text="NHÀ THỜ ĐỨC BÀ"
         subtitle="CÔNG XÃ PARIS"

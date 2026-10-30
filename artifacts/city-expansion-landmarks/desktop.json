@@ -1,0 +1,972 @@
+{
+  "pass": "landmarks",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "rideSeconds": 16.803425459000003,
+  "before": {
+    "renderer": {
+      "render": {
+        "frame": 141,
+        "calls": 174,
+        "triangles": 328614,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 82,
+        "textures": 47
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 112,
+      "position": [
+        -23,
+        0.7987181544303894,
+        9.5
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 93,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "network": {
+      "connection": "connected",
+      "room": "Đồng Khởi 1",
+      "playerCount": 1,
+      "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+      "guestName": "Mây Xanh 98",
+      "serverRevision": 0,
+      "partyVersion": 2,
+      "remotePlayers": 0,
+      "npcLines": [],
+      "emotes": [],
+      "events": {
+        "sequence": 1793403501260,
+        "inFlight": null,
+        "pending": 0,
+        "httpBusy": false
+      },
+      "party": null,
+      "invite": null
+    },
+    "fps": 59.76457157411091,
+    "dpr": 1
+  },
+  "arrived": {
+    "renderer": {
+      "render": {
+        "frame": 1429,
+        "calls": 104,
+        "triangles": 170660,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 108,
+        "textures": 64
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 1400,
+      "position": [
+        89.80000305175781,
+        0.7987181544303894,
+        -58
+      ],
+      "currency": 25,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 93,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 1,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 1,
+        "pickup": 0,
+        "board": 1,
+        "arrive": 1,
+        "reward": 0
+      }
+    },
+    "network": {
+      "connection": "connected",
+      "room": "Đồng Khởi 1",
+      "playerCount": 1,
+      "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+      "guestName": "Mây Xanh 98",
+      "serverRevision": 2,
+      "partyVersion": 8,
+      "remotePlayers": 0,
+      "npcLines": [],
+      "emotes": [],
+      "events": {
+        "sequence": 1793403501262,
+        "inFlight": null,
+        "pending": 0,
+        "httpBusy": false
+      },
+      "party": null,
+      "invite": null
+    },
+    "fps": 59.940957180200584,
+    "dpr": 1
+  },
+  "mapText": "Your neighborhood\n\nA city of small stories\nBẾN THÀNH\nCÔNG VIÊN\nTÒA THỊ CHÍNH\nNHÀ THỜ ĐỨC BÀ\nBẾN SÔNG\nNHÀ HÁT THÀNH PHỐ\nBƯU ĐIỆN TRUNG TÂM\nHẺM ẨM THỰC\nN\nYou\nTransport stops\n1/8 places discovered\n\nTake a ride or follow your curiosity. Every street leads somewhere.",
+  "captures": {
+    "active-play": {
+      "renderer": {
+        "render": {
+          "frame": 261,
+          "calls": 173,
+          "triangles": 329340,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 82,
+          "textures": 47
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 232,
+        "position": [
+          -23,
+          0.7987188696861267,
+          5.497067451477051
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 0,
+        "partyVersion": 2,
+        "remotePlayers": 0,
+        "npcLines": [
+          [
+            "hoa",
+            {
+              "text": "Sáng rồi con ơi, phở nóng hổi đây — smell the basil and lime from Chợ Bến Thành!",
+              "until": 10814.5
+            }
+          ]
+        ],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501260,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.95397482691469,
+      "dpr": 1
+    },
+    "map": {
+      "renderer": {
+        "render": {
+          "frame": 315,
+          "calls": 173,
+          "triangles": 329340,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 82,
+          "textures": 47
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "map",
+        "muted": false,
+        "frame": 286,
+        "position": [
+          -23,
+          0.7987188696861267,
+          5.497067451477051
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 0,
+        "partyVersion": 2,
+        "remotePlayers": 0,
+        "npcLines": [
+          [
+            "hoa",
+            {
+              "text": "Sáng rồi con ơi, phở nóng hổi đây — smell the basil and lime from Chợ Bến Thành!",
+              "until": 10814.5
+            }
+          ]
+        ],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501260,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 60.19763820473016,
+      "dpr": 1
+    },
+    "riding": {
+      "renderer": {
+        "render": {
+          "frame": 422,
+          "calls": 182,
+          "triangles": 331893,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 92,
+          "textures": 51
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 393,
+        "position": [
+          -3.4990000000596044,
+          0.9,
+          12
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": {
+          "from": "market",
+          "to": "cathedral",
+          "mode": "bus",
+          "progress": 0.038696428571073783
+        },
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 1,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 1,
+        "partyVersion": 3,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501261,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.893085699368044,
+      "dpr": 1
+    },
+    "cathedral": {
+      "renderer": {
+        "render": {
+          "frame": 1520,
+          "calls": 103,
+          "triangles": 168584,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 110,
+          "textures": 64
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1491,
+        "position": [
+          88,
+          0.7987181544303894,
+          -64
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "reconnecting",
+        "room": "Đồng Khởi 1",
+        "playerCount": 0,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 2,
+        "partyVersion": 8,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501262,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.94217308445455,
+      "dpr": 1
+    },
+    "cityhall": {
+      "renderer": {
+        "render": {
+          "frame": 1623,
+          "calls": 108,
+          "triangles": 184215,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 127,
+          "textures": 73
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1594,
+        "position": [
+          69,
+          0.7987181544303894,
+          0
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 2,
+        "partyVersion": 9,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501262,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 60.037063387518,
+      "dpr": 1
+    },
+    "opera": {
+      "renderer": {
+        "render": {
+          "frame": 1738,
+          "calls": 95,
+          "triangles": 169302,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 127,
+          "textures": 73
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1709,
+        "position": [
+          90,
+          0.7987181544303894,
+          -35
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 3,
+        "partyVersion": 9,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501263,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.99722104065403,
+      "dpr": 1
+    },
+    "postoffice": {
+      "renderer": {
+        "render": {
+          "frame": 1837,
+          "calls": 98,
+          "triangles": 150556,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 127,
+          "textures": 73
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1808,
+        "position": [
+          99,
+          0.7987181544303894,
+          -84
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 4,
+        "partyVersion": 9,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501264,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 60.01004858573012,
+      "dpr": 1
+    },
+    "opera-stop": {
+      "renderer": {
+        "render": {
+          "frame": 2258,
+          "calls": 98,
+          "triangles": 168476,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 125,
+          "textures": 71
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2229,
+        "position": [
+          89.80000305175781,
+          0.7987181544303894,
+          -35
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 1,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 6,
+        "partyVersion": 12,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501266,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.99289365921754,
+      "dpr": 1
+    },
+    "alley": {
+      "renderer": {
+        "render": {
+          "frame": 2356,
+          "calls": 181,
+          "triangles": 329262,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 128,
+          "textures": 74
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2327,
+        "position": [
+          -25,
+          0.7987181544303894,
+          25
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 93,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Đồng Khởi 1",
+        "playerCount": 1,
+        "selfId": "b6cefe7a-3072-4119-9e90-0271d710c397",
+        "guestName": "Mây Xanh 98",
+        "serverRevision": 7,
+        "partyVersion": 12,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793403501267,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 60.0038064091229,
+      "dpr": 1
+    }
+  },
+  "models": {
+    "landmarks/cho-ben-thanh.glb": 200,
+    "food/pot.glb": 200,
+    "food/bowl-broth.glb": 200,
+    "food/loaf-baguette.glb": 200,
+    "city/building-a.glb": 200,
+    "city/building-c.glb": 200,
+    "city/building-e.glb": 200,
+    "city/building-f.glb": 200,
+    "city/building-g.glb": 200,
+    "city/building-j.glb": 200,
+    "city/detail-awning.glb": 200,
+    "city/detail-parasol-a.glb": 200,
+    "roads/electricity-pole.glb": 200,
+    "landmarks/toa-thi-chinh.glb": 200,
+    "nature/plant_bush.glb": 200,
+    "landmarks/toa-thi-chinh-statue.glb": 200,
+    "landmarks/nha-tho-duc-ba.glb": 200,
+    "landmarks/nha-tho-duc-ba-statue.glb": 200,
+    "city/building-skyscraper-b.glb": 200,
+    "city/building-skyscraper-d.glb": 200,
+    "city/building-skyscraper-a.glb": 200,
+    "city/building-skyscraper-e.glb": 200,
+    "city/low-detail-building-wide-a.glb": 200,
+    "nature/tree_palmDetailedTall.glb": 200,
+    "nature/tree_fat.glb": 200,
+    "roads/light-curved.glb": 200,
+    "nature/flower_redA.glb": 200,
+    "nature/flower_yellowA.glb": 200,
+    "people/player-tourist.glb": 200,
+    "cars/van.glb": 200,
+    "people/character-female-b.glb": 200,
+    "people/character-female-a.glb": 200,
+    "people/character-male-a.glb": 200,
+    "people/character-male-b.glb": 200
+  },
+  "errors": [],
+  "requests": []
+}

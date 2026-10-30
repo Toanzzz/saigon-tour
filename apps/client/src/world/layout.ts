@@ -33,7 +33,7 @@ export const buildingRows = [
     { x: 81, z, scale: 6, yaw: -Math.PI / 2, type: ['e', 'c', 'g', 'a'][i] },
   ]),
   // East side of Đồng Khởi, then the north corridor to the cathedral.
-  ...[-56, -46, -36, -26, -6, 2, 21, 30].map((z, i) => ({
+  ...[-56, -46, -26, -6, 2, 21, 30].map((z, i) => ({
     x: 97,
     z,
     scale: 6,
@@ -47,8 +47,11 @@ export const buildingRows = [
     yaw: Math.PI / 2,
     type: ['c', 'f', 'a'][i],
   })),
-  ...[-77, -67].flatMap((z, i) => [
-    { x: 75, z, scale: 6, yaw: Math.PI / 2, type: ['g', 'e'][i] },
-    { x: 100, z, scale: 6, yaw: -Math.PI / 2, type: ['f', 'a'][i] },
-  ]),
+  ...[-77, -67].map((z, i) => ({
+    x: 75,
+    z,
+    scale: 6,
+    yaw: Math.PI / 2,
+    type: ['g', 'e'][i],
+  })),
 ]

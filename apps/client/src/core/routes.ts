@@ -10,6 +10,8 @@ const NODES = {
   parkSpur: [8, 0, 1],
   riverSpur: [8, 0, 29],
   dkhoi: [88, 0, 12],
+  paris: [88, 0, -62],
+  postSpur: [100, 0, -62],
 } satisfies Record<string, Point>
 type Node = keyof typeof NODES | LocationId
 const EDGES: [Node, Node][] = [
@@ -18,9 +20,14 @@ const EDGES: [Node, Node][] = [
   ['parkSpur', 'park'],
   ['lloi', 'riverSpur'],
   ['riverSpur', 'river'],
+  ['riverSpur', 'alley'],
   ['lloi', 'cityhall'],
   ['cityhall', 'dkhoi'],
-  ['dkhoi', 'cathedral'],
+  ['dkhoi', 'opera'],
+  ['opera', 'cathedral'],
+  ['cathedral', 'paris'],
+  ['paris', 'postSpur'],
+  ['postSpur', 'postoffice'],
 ]
 const at = (node: Node): Point =>
   node in NODES

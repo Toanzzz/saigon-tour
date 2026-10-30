@@ -1,5 +1,6 @@
 export type { Placement, Vec3 } from './assets'
 export { Character, Model, ModelInstances, modelUrl } from './assets'
 export { CityWorld } from './city'
+export { CulturalLandmarks } from './cultural'
 export { Sign } from './primitives'
 export { Vehicle } from './vehicles'

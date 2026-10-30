@@ -825,6 +825,48 @@
     "animations": []
   },
   {
+    "path": "landmarks/nha-tho-duc-ba-statue.glb",
+    "bytes": 38196,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 1121,
+    "vertices": 1024,
+    "bounds": {
+      "min": [
+        -0.2805176079273224,
+        0,
+        -0.2683105766773224
+      ],
+      "max": [
+        0.2805218994617462,
+        0.99951171875,
+        0.2683252990245819
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "landmarks/toa-thi-chinh-statue.glb",
+    "bytes": 25824,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 2126,
+    "vertices": 1710,
+    "bounds": {
+      "min": [
+        -0.19409185647964478,
+        0,
+        -0.19506841897964478
+      ],
+      "max": [
+        0.19410890340805054,
+        0.99951171875,
+        0.19508463144302368
+      ]
+    },
+    "animations": []
+  },
+  {
     "path": "people/player-tourist.glb",
     "bytes": 136696,
     "meshes": 13,

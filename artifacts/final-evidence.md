@@ -1,5 +1,15 @@
 # Final evidence
 
+## City expansion validation
+
+- Target: the running dev client `http://127.0.0.1:58000` and API `58001`, with Postgres available.
+- Headless Playwright: `scripts/qa-city-expansion.mjs --pass=landmarks`; desktop `1440×900` and mobile `390×844`.
+- Observed: keyboard and touch movement, map open/close, real transport controls, five-coin bus fare, cathedral stop arrival in 16.8 seconds, statue requests returning 200, no page/console errors or failed requests.
+- Runtime statue copies: cathedral 38,196 bytes / 1,121 triangles; City Hall 25,824 bytes / 2,126 triangles. Draco decoding and glTF headers verified; sources retained.
+- Representative active view: desktop 173 calls / 329,340 triangles; mobile 128 calls / 324,591 triangles. Mobile is above the 300k triangle starting budget; more culling/LOD is pending with city-life integration.
+- Root types, production build, 58 server tests, and 38 client tests pass. Lint passes for the integrated landmark changes.
+- Evidence: `artifacts/city-expansion-landmarks/`. Baseline artifacts interrupted by HMR are incomplete and are not used as performance proof.
+
 Validated on October 30, 2026 from the local production previews.
 
 ## Playable loop

@@ -4,6 +4,7 @@ import { PEOPLE, PLACES } from '../core/places'
 import type { GameState } from '../state/game'
 import {
   BOUNDS,
+  CULTURAL_FOOTPRINTS,
   GROUND,
   LANDMARKS,
   MARKET,
@@ -26,7 +27,7 @@ function MapLabel({
   x?: number
   y: number
   size: number
-  anchor?: 'start' | 'middle'
+  anchor?: 'start' | 'middle' | 'end'
   children: ReactNode
 }) {
   const ref = useRef<SVGTextElement>(null)
@@ -69,7 +70,7 @@ function MapLabel({
   )
 }
 
-// World x −52…108 and z −116…44 map onto a 160 × 160 viewBox.
+// World x −52…124 and z −116…44 map onto a 176 × 160 viewBox.
 const x = (value: number) => value - BOUNDS.minX
 const z = (value: number) => value - BOUNDS.minZ
 const rect = (r: Rect, fill: string, key?: string) => (
@@ -93,12 +94,12 @@ export function NeighborhoodMap({
   return (
     <svg
       className={large ? 'neighborhood-map large' : 'neighborhood-map'}
-      viewBox="0 0 160 160"
+      viewBox="0 0 176 160"
       role="img"
       aria-label={`Neighborhood map. You are near ${PLACES[state.world.locationId].name}.`}
     >
       <title>Sài Gòn neighborhood map</title>
-      <rect width="160" height="160" fill="#b1b8cb" />
+      <rect width="176" height="160" fill="#b1b8cb" />
       {GROUND.map((r) => rect(r, '#d3d7e6'))}
       {rect(WATER, '#9dc3e7')}
       {rect(PARK, '#47b08c')}
@@ -107,7 +108,22 @@ export function NeighborhoodMap({
       {rect(MARKET, '#ee7448', 'market')}
       {rect(cityhall.footprint, '#ffd84d', 'cityhall')}
       {rect(cathedral.footprint, '#c2532f', 'cathedral')}
+      {rect(CULTURAL_FOOTPRINTS.opera, '#b76a45', 'opera')}
+      {rect(CULTURAL_FOOTPRINTS.postoffice, '#d6ad55', 'postoffice')}
       {[MARKET, cityhall.footprint, cathedral.footprint].map((r) => (
+        <rect
+          key={`edge-${r.x}`}
+          x={x(r.x - r.w / 2)}
+          y={z(r.z - r.d / 2)}
+          width={r.w}
+          height={r.d}
+          rx="1.5"
+          fill="none"
+          stroke="#262835"
+          strokeWidth="1"
+        />
+      ))}
+      {[CULTURAL_FOOTPRINTS.opera, CULTURAL_FOOTPRINTS.postoffice].map((r) => (
         <rect
           key={`edge-${r.x}`}
           x={x(r.x - r.w / 2)}
@@ -127,7 +143,12 @@ export function NeighborhoodMap({
         >
           <circle r="3.4" fill="#ee7448" stroke="#262835" strokeWidth="1.5" />
           {large && (
-            <MapLabel y={place.stop[2] > 20 ? -7 : 11} size={5}>
+            <MapLabel
+              x={place.stop[0] > 85 ? -4 : 0}
+              y={place.stop[2] > 20 ? -7 : 10}
+              size={4}
+              anchor={place.stop[0] > 85 ? 'end' : 'middle'}
+            >
               {place.label}
             </MapLabel>
           )}
@@ -140,9 +161,7 @@ export function NeighborhoodMap({
             transform={`translate(${x(person.at[0])} ${z(person.at[2])})`}
           >
             <circle r="2.6" fill={person.color} />
-            <MapLabel y={-6} size={6}>
-              {NPCS[id as NpcId].name}
-            </MapLabel>
+            <title>{NPCS[id as NpcId].name}</title>
           </g>
         ))}
       <circle

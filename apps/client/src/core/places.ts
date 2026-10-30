@@ -45,6 +45,24 @@ export const PLACES: Record<
     stop: [17, 0, 29],
     label: 'BẾN SÔNG',
   },
+  opera: {
+    name: 'Saigon Opera House',
+    at: [92, 0, -35],
+    stop: [88, 0, -35],
+    label: 'NHÀ HÁT THÀNH PHỐ',
+  },
+  postoffice: {
+    name: 'Central Post Office',
+    at: [100, 0, -84],
+    stop: [100, 0, -74],
+    label: 'BƯU ĐIỆN TRUNG TÂM',
+  },
+  alley: {
+    name: 'Bùi Viện food alley',
+    at: [-24, 0, 28],
+    stop: [-5, 0, 29],
+    label: 'HẺM ẨM THỰC',
+  },
 }
 export type TravelMode = 'bus' | 'metro' | 'xeom' | 'cyclo'
 export const MODES: Record<

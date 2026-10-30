@@ -12,6 +12,8 @@ remain in their source folders.
 | City buildings and parasols | `city-kit-commercial` | Kenney | `city-kit-commercial/License.txt`, CC0 |
 | Character models and animations | `mini-characters` | Kenney | `mini-characters/License.txt`, CC0 |
 | Tòa Thị Chính, Nhà thờ Đức Bà | `landmarks/toathichinh-model.glb`, `landmarks/nhathoducba-model.glb` | Project models generated from supplied references | `scripts/prepare-assets.ts` caps textures at 1024 px |
+| City Hall statue | `landmarks/toathichinh-statue-model.glb` | Supplied project artwork | Original source retained; runtime copy prepared by `scripts/prepare-assets.ts` |
+| Cathedral square statue | `landmarks/nhathoducba-statue-model.glb` | Supplied project artwork | Original source and reference render retained; runtime copy prepared by `scripts/prepare-assets.ts` |
 | Tourist player | `player-tourist/player-tourist.blend` | Kenney `character-male-e` plus project-authored hat, backpack, and camera | Built by `scripts/blender/build-tourist.py`; CC0 base |
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |

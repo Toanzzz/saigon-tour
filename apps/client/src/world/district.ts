@@ -15,18 +15,20 @@ export type Vec3 = [number, number, number]
 /** Map arrow angle: real north relative to game −z, clockwise. */
 export const NORTH_ANGLE = 45
 
-export const BOUNDS = { minX: -52, maxX: 108, minZ: -116, maxZ: 44 }
+export const BOUNDS = { minX: -52, maxX: 124, minZ: -116, maxZ: 44 }
 export const GROUND: Rect[] = [
-  { x: 28, z: 0, w: 160, d: 96 },
-  { x: 87, z: -82, w: 42, d: 68 },
+  { x: 36, z: 0, w: 176, d: 96 },
+  { x: 95, z: -82, w: 58, d: 68 },
 ]
 export const ROADS: (Rect & { name?: string })[] = [
   { x: 29, z: 12, w: 158, d: 7, name: 'LÊ LỢI' },
   { x: 8, z: -2, w: 7, d: 84 },
   { x: 14.5, z: 1, w: 13, d: 4 },
-  { x: 13.5, z: 29, w: 11, d: 4 },
+  { x: 7, z: 29, w: 25, d: 4 },
   { x: 75, z: -16, w: 66, d: 6, name: 'LÊ THÁNH TÔN' },
   { x: 88, z: -24, w: 6, d: 79, name: 'ĐỒNG KHỞI' },
+  { x: 96, z: -62, w: 36, d: 6 },
+  { x: 100, z: -72, w: 6, d: 26, name: 'CÔNG XÃ PARIS' },
 ]
 /** Pedestrian paving: Nguyễn Huệ, the City Hall forecourt, Công xã Paris. */
 export const PLAZAS: (Rect & { name?: string })[] = [
@@ -34,10 +36,17 @@ export const PLAZAS: (Rect & { name?: string })[] = [
   { x: 69, z: 24, w: 14, d: 16 },
   { x: 69, z: -19, w: 26, d: 3 },
   { x: 88, z: -72, w: 18, d: 16, name: 'CÔNG XÃ PARIS' },
+  { x: 91, z: -35, w: 5, d: 17, name: 'NHÀ HÁT' },
+  { x: 99, z: -84, w: 5, d: 14, name: 'BƯU ĐIỆN' },
+  { x: -24, z: 28, w: 46, d: 6, name: 'HẺM ẨM THỰC' },
 ]
 export const PARK: Rect = { x: 27, z: -9, w: 22, d: 16 }
 export const MARKET: Rect = { x: -23, z: -12, w: 24, d: 20 }
 export const WATER: Rect = { x: 28, z: 52, w: 210, d: 24 }
+export const CULTURAL_FOOTPRINTS = {
+  opera: { x: 101, z: -35, w: 12, d: 14 },
+  postoffice: { x: 112, z: -84, w: 12, d: 18 },
+}
 
 export const LANDMARKS = {
   cityhall: {
@@ -59,7 +68,7 @@ export const WALLS: [number, number, number, number][] = [
   [-48.5, -4, 0.5, 42.5],
   [11, -46.5, 59, 0.5],
   [70.5, -79, 0.5, 33],
-  [87, -112.5, 17, 0.5],
-  [103.5, -37, 0.5, 76],
-  [27.5, 39.2, 76.5, 0.5],
+  [95, -112.5, 25, 0.5],
+  [121.5, -37, 0.5, 76],
+  [36.5, 39.2, 85.5, 0.5],
 ]

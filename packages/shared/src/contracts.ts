@@ -9,6 +9,9 @@ export const LocationIdSchema = z.enum([
   'cathedral',
   'cityhall',
   'river',
+  'opera',
+  'postoffice',
+  'alley',
 ])
 export type LocationId = z.infer<typeof LocationIdSchema>
 export const ItemIdSchema = z.enum([
