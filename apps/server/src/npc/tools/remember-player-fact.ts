@@ -17,6 +17,8 @@ export const createRememberPlayerFactTool = ({ memory }: NpcServices) =>
       const { playerId, npcId, outcome } = requestValues(context)
       outcome.calls.push('remember-player-fact')
       if (!safeLine(fact)) return { stored: false }
-      return { stored: memory.remember({ npcId, playerId, fact, importance }) }
+      return {
+        stored: await memory.remember({ npcId, playerId, fact, importance }),
+      }
     },
   })

@@ -7,12 +7,10 @@ interface SessionBudget {
 export class CostGuard {
   private sessions = new Map<string, SessionBudget>()
   private globalCalls = 0
-  private reservedSpendUsd = 0
 
   constructor(
     private readonly sessionLimit: number,
-    private readonly globalLimit: number,
-    private readonly spendLimitUsd = 5
+    private readonly globalLimit: number
   ) {}
 
   allow(sessionId: string, now = Date.now()): boolean {
@@ -25,7 +23,6 @@ export class CostGuard {
       expiresAt: now + 60 * 60 * 1000,
     }
     if (
-      this.reservedSpendUsd + 0.03 > this.spendLimitUsd ||
       this.globalCalls >= this.globalLimit ||
       session.calls >= this.sessionLimit ||
       (session.lastCallAt > 0 && now - session.lastCallAt < 400)
@@ -36,7 +33,6 @@ export class CostGuard {
     session.calls += 1
     session.lastCallAt = now
     this.globalCalls += 1
-    this.reservedSpendUsd += 0.03
     this.sessions.set(sessionId, session)
     return true
   }

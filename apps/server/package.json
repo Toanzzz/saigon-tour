@@ -11,19 +11,29 @@
     "build": "bun build src/index.ts --target=node --outdir=dist",
     "start": "node dist/index.js",
     "check:types": "tsgo -b",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prewarm": "bun src/prewarm.ts",
+    "test:integration": "RUN_POSTGRES_INTEGRATION=1 vitest run test/integration.spec.ts"
   },
   "dependencies": {
     "@ai-sdk/openai-compatible": "3.0.71",
     "@hono/node-server": "2.1.5",
     "@mastra/core": "1.80.0",
     "@mastra/memory": "1.39.1",
+    "@mastra/pg": "1.33.0",
     "@saigon/shared": "workspace:*",
+    "drizzle-orm": "0.45.4",
     "hono": "4.13.14",
+    "pg": "8.23.1",
+    "ws": "8.22.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.11",
     "@types/node": "26.6.6",
+    "@types/pg": "8.23.1",
+    "@types/ws": "^8.18.2",
+    "drizzle-kit": "0.31.11",
     "vitest": "5.0.5"
   }
 }

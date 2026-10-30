@@ -23,7 +23,7 @@ export const createOfferQuestTool = ({ game }: NpcServices) =>
     execute: async ({ questTemplateId }, context) => {
       const { playerId, npcId, outcome } = requestValues(context)
       outcome.calls.push('offer-quest')
-      const result = game.offerQuest(playerId, npcId, questTemplateId)
+      const result = await game.offerQuest(playerId, npcId, questTemplateId)
       if (!result.accepted) return { accepted: false, reason: result.reason }
       outcome.offered = result.quest
       const { id, title, description, reward } = result.quest

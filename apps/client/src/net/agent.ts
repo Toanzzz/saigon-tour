@@ -9,30 +9,42 @@ import {
 } from '@saigon/shared'
 import { QueryClient } from '@tanstack/react-query'
 import type { GameState } from '../state/game'
+import { API_BASE, authorizationHeaders, guestToken } from './session'
 
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
 })
-const base = import.meta.env.VITE_API_BASE_URL || '/api'
+export interface InteractionResult {
+  response: InteractResponse
+  synced: boolean
+}
 
 /** Talk to an NPC. If the backend is unreachable, keep the loop playable offline. */
 export async function interactWith(
   npc: NpcId,
   body: InteractRequest,
   state: GameState
-): Promise<InteractResponse> {
+): Promise<InteractionResult> {
   try {
-    const response = await fetch(`${base}/npc/${npc}/interact`, {
+    if (!guestToken() || state.guestStatus !== 'online')
+      throw new Error('Offline guest')
+    const response = await fetch(`${API_BASE}/npc/${npc}/interact`, {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...authorizationHeaders(),
+      },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(14000),
     })
     if (!response.ok) throw new Error(`Guide unavailable (${response.status})`)
-    return InteractResponseSchema.parse(await response.json())
+    return {
+      response: InteractResponseSchema.parse(await response.json()),
+      synced: true,
+    }
   } catch {
-    return offline(npc, body, state)
+    return { response: offline(npc, body, state), synced: false }
   }
 }
 
@@ -83,6 +95,8 @@ function offline(
     reply,
     source: 'fallback',
     degraded: true,
+    cached: false,
+    party: null,
     world,
     quest,
     questEvent,

@@ -1,76 +1,89 @@
+import type { MastraCompositeStore } from '@mastra/core/storage'
 import { InteractRequestSchema, NpcIdSchema } from '@saigon/shared'
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { cors } from 'hono/cors'
-import { validator } from 'hono/validator'
 import { isLiveConfigured, readConfig, type ServerConfig } from './config'
+import type { GameDb } from './db'
 import { log } from './logger'
 import { NpcHarness } from './npc/mastra'
 
 export type Fetcher = typeof fetch
-
+export interface AppServices {
+  db: GameDb
+  storage?: MastraCompositeStore
+}
 export function createApp(
   config: ServerConfig = readConfig(),
-  fetcher: Fetcher = fetch
+  fetcher: Fetcher = fetch,
+  services: AppServices
 ) {
-  const harness = new NpcHarness(config, fetcher)
+  const { db, storage } = services
+  const harness = new NpcHarness(config, fetcher, db, storage)
   const app = new Hono()
-    .use(
-      '*',
-      cors({
-        origin: (origin) =>
-          config.origins.includes(origin) ? origin : undefined,
-        credentials: true,
-        allowMethods: ['GET', 'POST', 'OPTIONS'],
-        allowHeaders: ['Content-Type'],
-        maxAge: 86400,
-      })
-    )
-    .use(
-      '*',
-      bodyLimit({
-        maxSize: 16 * 1024,
-        onError: (c) => c.json({ error: 'request_too_large' }, 413),
-      })
-    )
-    .get('/health', (c) =>
-      c.json({
-        ok: true,
-        mode: isLiveConfigured(config)
-          ? ('live' as const)
-          : ('fallback' as const),
-        model: isLiveConfigured(config) ? config.model : null,
-      })
-    )
-    .post(
-      '/npc/:npcId/interact',
-      validator('param', (value, c) => {
-        const result = NpcIdSchema.safeParse(value.npcId)
-        if (!result.success) return c.json({ error: 'unknown_npc' }, 404)
-        return { npcId: result.data }
-      }),
-      validator('json', (value, c) => {
-        const result = InteractRequestSchema.safeParse(value)
-        if (!result.success) return c.json({ error: 'invalid_request' }, 400)
-        return result.data
-      }),
-      async (c) =>
-        c.json(
-          await harness.interact(
-            c.req.valid('param').npcId,
-            c.req.valid('json')
-          )
-        )
-    )
-  app.onError((_error, c) => {
-    log(
-      'request_failed',
-      'Request failed without exposing internal details',
-      'warn'
-    )
-    return c.json({ error: 'request_failed' }, 500)
+  app.use(
+    '*',
+    cors({
+      origin: (origin) =>
+        config.origins.includes(origin) ? origin : undefined,
+      credentials: true,
+      allowMethods: ['GET', 'POST', 'OPTIONS'],
+      allowHeaders: ['Content-Type', 'Authorization'],
+      maxAge: 86400,
+    })
+  )
+  app.use(
+    '*',
+    bodyLimit({
+      maxSize: 16 * 1024,
+      onError: (c) => c.json({ error: 'request_too_large' }, 413),
+    })
+  )
+  app.get('/health', async (c) => {
+    try {
+      await db.health()
+    } catch {
+      return c.json({ ok: false, db: 'down' }, 503)
+    }
+    return c.json({
+      ok: true,
+      db: 'up',
+      mode: isLiveConfigured(config) ? 'live' : 'fallback',
+      model: isLiveConfigured(config) ? config.model : null,
+    })
   })
-  return app
+  app.post('/guest', async (c) => c.json(await db.createGuest(), 201))
+  app.get('/me', async (c) => {
+    const player = await db.authenticate(
+      c.req.header('Authorization')?.replace(/^Bearer /, '') ?? ''
+    )
+    return player ? c.json({ player }) : c.json({ error: 'unauthorized' }, 401)
+  })
+  app.post('/me/reset', async (c) => {
+    const player = await db.authenticate(
+      c.req.header('Authorization')?.replace(/^Bearer /, '') ?? ''
+    )
+    if (!player) return c.json({ error: 'unauthorized' }, 401)
+    await harness.clearMemory(player.id)
+    return c.json({ player: await db.reset(player.id) })
+  })
+  app.post('/npc/:npcId/interact', async (c) => {
+    const npc = NpcIdSchema.safeParse(c.req.param('npcId'))
+    if (!npc.success) return c.json({ error: 'unknown_npc' }, 404)
+    const player = await db.authenticate(
+      c.req.header('Authorization')?.replace(/^Bearer /, '') ?? ''
+    )
+    if (!player) return c.json({ error: 'unauthorized' }, 401)
+    const request = InteractRequestSchema.safeParse(
+      await c.req.json().catch(() => null)
+    )
+    if (!request.success) return c.json({ error: 'invalid_request' }, 400)
+    return c.json(await harness.interact(npc.data, request.data, player.id))
+  })
+  app.onError((_error, c) => {
+    log('request_failed', 'Storage or request unavailable', 'warn')
+    return c.json({ error: 'service_unavailable' }, 503)
+  })
+  return Object.assign(app, { harness, db })
 }
-
 export type AppType = ReturnType<typeof createApp>

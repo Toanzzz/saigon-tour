@@ -1,7 +1,8 @@
 import { Memory } from '@mastra/memory'
 import type { NpcId } from '@saigon/shared'
+import type { GameDb } from '../../db'
 
-/** Recent conversation per npc+player thread, kept in Mastra storage. */
+/** Recent conversation per npc+player thread, kept in injected Mastra storage. */
 export const createNpcMemory = () =>
   new Memory({ options: { lastMessages: 10, generateTitle: false } })
 
@@ -13,31 +14,15 @@ export interface PlayerFact {
   createdAt: string
 }
 
-/** Durable facts each NPC chose to remember, scoped by npcId + playerId. */
+/** The database enforces deduplication and a twelve-fact bound per thread. */
 export class NpcMemoryService {
-  private facts = new Map<string, PlayerFact[]>()
+  constructor(private readonly db: GameDb) {}
 
-  constructor(
-    private readonly perThread = 12,
-    private readonly maxThreads = 4000
-  ) {}
-
-  remember(fact: Omit<PlayerFact, 'createdAt'>): boolean {
-    const key = `${fact.npcId}:${fact.playerId}`
-    const list = this.facts.get(key) ?? []
-    if (list.some((entry) => entry.fact === fact.fact)) return true
-    if (!this.facts.has(key) && this.facts.size >= this.maxThreads) {
-      const oldest = this.facts.keys().next().value
-      if (oldest !== undefined) this.facts.delete(oldest)
-    }
-    list.push({ ...fact, createdAt: new Date().toISOString() })
-    const rank = { high: 2, medium: 1, low: 0 }
-    list.sort((a, b) => rank[b.importance] - rank[a.importance])
-    this.facts.set(key, list.slice(0, this.perThread))
-    return true
+  async remember(fact: Omit<PlayerFact, 'createdAt'>): Promise<boolean> {
+    return this.db.rememberFact(fact)
   }
 
-  recall(npcId: NpcId, playerId: string): PlayerFact[] {
-    return this.facts.get(`${npcId}:${playerId}`) ?? []
+  async recall(npcId: NpcId, playerId: string): Promise<PlayerFact[]> {
+    return this.db.recallFacts(npcId, playerId)
   }
 }

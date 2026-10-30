@@ -1,4 +1,10 @@
-import type { InteractResponse, ItemId, NpcId, TimeOfDay } from '@saigon/shared'
+import {
+  applyPlayerEvents,
+  type InteractResponse,
+  type ItemId,
+  type NpcId,
+  type TimeOfDay,
+} from '@saigon/shared'
 import { audio } from '../audio'
 import { interactWith, queryClient } from '../net/agent'
 import {
@@ -10,7 +16,7 @@ import {
 } from '../state/game'
 import { distance, PEOPLE } from './places'
 
-export type Intent = 'chat' | 'help' | 'check'
+export type Intent = 'chat' | 'help' | 'check' | 'greet'
 
 const timeOfDay = (hour = new Date().getHours()): TimeOfDay =>
   hour < 11
@@ -53,7 +59,8 @@ async function mutate<T>(fn: () => Promise<T>) {
 export async function converse(text: string, intent: Intent, opening = false) {
   const dialog = game.state.dialogue
   if (!dialog || (!opening && dialog.thinking) || !text.trim()) return
-  const { sessionId, pending, position } = game.state
+  const snapshot = game.state
+  const { sessionId, pending, position } = snapshot
   const requestId = dialog.requestId
   const history =
     opening || intent !== 'chat'
@@ -67,7 +74,6 @@ export async function converse(text: string, intent: Intent, opening = false) {
     interactWith(
       dialog.npc,
       {
-        playerId: sessionId,
         message: text.slice(0, 500),
         intent,
         events: pending,
@@ -77,28 +83,29 @@ export async function converse(text: string, intent: Intent, opening = false) {
           timeOfDay: timeOfDay(),
         },
       },
-      game.state
+      snapshot
     )
   )
-  if (
-    game.state.sessionId !== sessionId ||
-    game.state.dialogue?.requestId !== requestId
-  )
-    return
-  apply(result, dialog.npc, history)
+  if (game.state.sessionId !== sessionId) return
+  apply(result.response, dialog.npc, history, requestId)
+  if (!result.synced)
+    game.setState((state) => ({
+      ...state,
+      pending: [...pending, ...state.pending],
+    }))
 }
 
 function apply(
   result: InteractResponse,
   npc: NpcId,
-  history: { role: 'user' | 'assistant'; content: string }[]
+  history: { role: 'user' | 'assistant'; content: string }[],
+  requestId: string
 ) {
   const event = result.questEvent
   game.setState((state) => {
     let next: GameState = {
       ...state,
-      // Server state is authoritative; keep only local fields it does not own.
-      world: { ...result.world, locationId: state.world.locationId },
+      world: applyPlayerEvents(result.world, state.pending),
       quest: result.quest,
       source: result.source,
       lastLine: { ...state.lastLine, [npc]: result.reply },
@@ -123,15 +130,18 @@ function apply(
     }
     return {
       ...next,
-      dialogue: state.dialogue && {
-        ...state.dialogue,
-        thinking: false,
-        source: result.source,
-        history: [
-          ...history,
-          { role: 'assistant' as const, content: result.reply },
-        ].slice(-12),
-      },
+      dialogue:
+        state.dialogue?.requestId === requestId
+          ? {
+              ...state.dialogue,
+              thinking: false,
+              source: result.source,
+              history: [
+                ...history,
+                { role: 'assistant' as const, content: result.reply },
+              ].slice(-12),
+            }
+          : state.dialogue,
     }
   })
   if (event?.type === 'offered') {

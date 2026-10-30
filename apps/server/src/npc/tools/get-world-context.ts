@@ -19,7 +19,7 @@ export const createGetWorldContextTool = ({ game }: NpcServices) =>
     execute: async (_input, context) => {
       const { playerId, outcome } = requestValues(context)
       outcome.calls.push('get-world-context')
-      const record = game.get(playerId)
+      const record = await game.get(playerId)
       return {
         coins: record.world.currency,
         visited: record.world.visitedLocations,

@@ -33,6 +33,11 @@ export interface GameState {
   screen: 'title' | 'playing' | 'paused' | 'hub'
   panel: Panel
   sessionId: string
+  guestId: string | null
+  guestName: string | null
+  guestColor: string | null
+  guestStatus: 'loading' | 'online' | 'offline' | 'resetting'
+  returningGuest: boolean
   generation: number
   position: Point
   world: WorldState
@@ -59,6 +64,11 @@ export function initialState(generation = 0): GameState {
     panel: 'none',
     generation,
     sessionId: crypto.randomUUID(),
+    guestId: null,
+    guestName: null,
+    guestColor: null,
+    guestStatus: 'loading',
+    returningGuest: false,
     position: [...SPAWN],
     world: {
       locationId: 'market',
@@ -159,8 +169,6 @@ export function visit(
         ? state.world.visitedLocations
         : [...state.world.visitedLocations, place],
     },
-    pending: seen
-      ? state.pending
-      : [...state.pending, { type: 'visit', locationId: place }],
+    pending: [...state.pending, { type: 'visit', locationId: place }],
   }
 }

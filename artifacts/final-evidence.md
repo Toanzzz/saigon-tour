@@ -104,3 +104,12 @@ Validated on October 30, 2026 from the local production previews.
 - 2026-10-31: Side-buttress cap pass validated: 12 cap meshes present, `.blend` saved, `.glb` re-exported with `glTF` binary signature, and the three-quarter preview refreshed. Remaining visual gap: side elevations and apse still need substantial architectural refinement toward the reference sheet.
 
 - 2026-10-31: Structural pass validated in Blender: transept and apse roof-curve meshes present, misleading railing-like extras hidden, `.blend` saved, `.glb` re-exported, and three-quarter preview refreshed. Significant mismatch remains in Gothic proportions and facade fidelity; objective not complete.
+
+## Postgres saves and NPC harness validation
+
+- `bun run check`, `bun run check:types`, `bun run build`, `bun run test`: passed. Server 30 tests, client 14 tests; real-Postgres test runs separately.
+- `bun run test:integration`: passed against Compose Postgres 18 on 58002. Fresh app instances retain saves; concurrent completion checks yield one 50-coin reward and one completion row.
+- Docker API image build passed, including generated migrations. Postgres Mastra storage initialized successfully against the shared pool.
+- `prewarm` passed; unit proof covers all 16 greeting keys and zero model requests on rerun.
+- Production headless Playwright: desktop quest, bus, herb delivery, reward, city hub, and restart passed; 390px joystick, hub, audio, and overflow checks passed. Evidence: `artifacts/pass-persistence/` and `artifacts/pass-persistence-mobile/`.
+- `scripts/qa-persistence.mjs`: 1440px and 390px guest reload/reset passed. Reload shows the same guest name and 80 coins; actual pause/reset buttons retain the name and restore 30 coins. `session-flow.json` records observed values.

@@ -11,6 +11,7 @@ FROM node:24-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production PORT=58001
 COPY --from=build /app/apps/server/dist ./dist
+COPY --from=build /app/apps/server/drizzle ./drizzle
 USER node
 EXPOSE 58001
 HEALTHCHECK --interval=30s --timeout=3s CMD node -e "fetch('http://127.0.0.1:58001/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"

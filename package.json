@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "conc -k 'bun:dev:*'",
+    "dev": "bun run db:up && conc -k 'bun:dev:*'",
     "dev:client": "bun run --filter '@saigon/client' dev",
     "dev:server": "bun run --filter '@saigon/server' dev",
     "check": "biome check .",
@@ -16,7 +16,9 @@
     "build": "bun run --filter '@saigon/client' build && bun run --filter '@saigon/server' build",
     "test": "bun run --filter '@saigon/server' test && bun run --filter '@saigon/client' test",
     "prepare:assets": "bun scripts/prepare-assets.ts",
-    "preview": "bun run --filter '@saigon/client' preview"
+    "preview": "bun run --filter '@saigon/client' preview",
+    "db:up": "docker compose up -d --wait db",
+    "test:integration": "bun run --filter @saigon/server test:integration"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.1",

@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client'
 import { installInput } from './core/input'
 import { installTestHooks } from './core/test-hooks'
 import { queryClient } from './net/agent'
+import { initializeSession } from './net/session'
 import { Scene } from './scene'
 import { GameUI } from './ui'
 import '@fontsource-variable/baloo-2/wght.css'
@@ -24,6 +25,7 @@ function Loading() {
 }
 function App() {
   useEffect(() => {
+    void initializeSession()
     installTestHooks()
     return installInput()
   }, [])

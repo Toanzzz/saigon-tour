@@ -97,9 +97,8 @@ export const PlayerEventSchema = z.discriminatedUnion('type', [
 export type PlayerEvent = z.infer<typeof PlayerEventSchema>
 export const InteractRequestSchema = z
   .object({
-    playerId: z.string().regex(/^[a-zA-Z0-9_-]{8,80}$/),
     message: z.string().trim().min(1).max(500),
-    intent: z.enum(['chat', 'help', 'check']).default('chat'),
+    intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
       .object({
@@ -114,6 +113,8 @@ export type InteractRequest = z.infer<typeof InteractRequestSchema>
 export const QuestOutcomeSchema = z.enum(['offered', 'completed', 'incomplete'])
 export const InteractResponseSchema = z
   .object({
+    cached: z.boolean(),
+    party: z.null(),
     npcId: NpcIdSchema,
     reply: z.string().min(1).max(700),
     source: SourceSchema,
@@ -132,3 +133,14 @@ export const InteractResponseSchema = z
   })
   .strict()
 export type InteractResponse = z.infer<typeof InteractResponseSchema>
+
+export const GuestPlayerSchema = z.object({
+  id: z.uuid(),
+  name: z.string(),
+  color: z.string(),
+  world: WorldStateSchema,
+  quest: QuestSchema.nullable(),
+  completed: z.array(QuestSchema),
+  reputation: z.number(),
+})
+export type GuestPlayer = z.infer<typeof GuestPlayerSchema>

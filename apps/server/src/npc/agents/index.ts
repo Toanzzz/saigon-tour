@@ -12,6 +12,13 @@ import { createGetWorldContextTool } from '../tools/get-world-context'
 import { createOfferQuestTool } from '../tools/offer-quest'
 import { createRememberPlayerFactTool } from '../tools/remember-player-fact'
 
+export const NPC_PERSONAS: Record<NpcId, string> = {
+  hoa: marketVendorPersona,
+  tam: xeOmDriverPersona,
+  linh: volunteerPersona,
+  ba: cycloDriverPersona,
+}
+
 /** Each NPC gets its own persona and only the tools its role needs. */
 export function createNpcAgents(
   model: MastraModelConfig,

@@ -24,24 +24,29 @@ import './panels.css'
 
 function TitleScreen() {
   const { active, progress } = useProgress()
+  const { guestName, guestStatus, returningGuest } = useStore(game, (s) => s)
   return (
     <section className="title-screen" aria-label="Welcome to Sài Gòn">
       <div className="title-content">
         <h1>Sài Gòn</h1>
         <p className="title-subtitle">A little journey</p>
         <p className="title-description">
-          Meet a neighbor, lend a hand, and let the city surprise you.
+          {returningGuest && guestName
+            ? `Welcome back, ${guestName}`
+            : 'Meet a neighbor, lend a hand, and let the city surprise you.'}
         </p>
         <div className="title-actions">
           <button
             type="button"
             className="primary-button title-start"
-            disabled={active}
+            disabled={active || guestStatus === 'loading'}
             onClick={start}
           >
             {active
               ? `Opening the neighborhood… ${Math.round(progress)}%`
-              : 'Start exploring'}
+              : guestStatus === 'loading'
+                ? 'Finding your journey…'
+                : 'Start exploring'}
           </button>
           <XRSessionButton store={xrStore} />
         </div>

@@ -240,6 +240,7 @@ export function PausePanel({ state }: { state: GameState }) {
       <button
         type="button"
         className="text-button restart-button"
+        disabled={state.guestStatus === 'resetting'}
         onClick={restart}
       >
         Start a new journey
@@ -281,6 +282,7 @@ export function RewardPanel({ state }: { state: GameState }) {
       <button
         type="button"
         className="text-button restart-button"
+        disabled={state.guestStatus === 'resetting'}
         onClick={restart}
       >
         Start a new journey

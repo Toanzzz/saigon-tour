@@ -1,5 +1,6 @@
 import { NPCS, type NpcId } from '@saigon/shared'
 import { audio } from '../audio'
+import { guestState, resetSession } from '../net/session'
 import { isXRPresenting } from '../platform/xr/store'
 import { game, initialState, notify, update } from '../state/game'
 import { converse, deliver } from './conversation'
@@ -16,12 +17,28 @@ export function start() {
   update({ screen: 'playing' })
   void audio.unlock()
 }
-export function restart() {
+export async function restart() {
   const state = game.state
+  if (state.guestStatus === 'resetting') return
+  update({ guestStatus: 'resetting' })
+  let player = null
+  try {
+    player = await resetSession()
+  } catch {
+    update({ guestStatus: state.guestStatus })
+    notify('Your saved journey could not be reset. Try again when connected.')
+    return
+  }
   audio.setPaused(false)
   game.setState(() => ({
     ...initialState(state.generation + 1),
     screen: 'playing',
+    guestId: state.guestId,
+    guestName: state.guestName,
+    guestColor: state.guestColor,
+    guestStatus: player ? 'online' : 'offline',
+    returningGuest: state.returningGuest,
+    ...(player ? guestState(player) : {}),
     muted: state.muted,
     volume: state.volume,
     reducedMotion: state.reducedMotion,
@@ -112,10 +129,11 @@ export async function talk(npc: NpcId) {
       source: null,
     },
     world: { ...s.world, talkedTo: [...new Set([...s.world.talkedTo, npc])] },
+    pending: [...s.pending, { type: 'talk', npcId: npc }],
   }))
   await converse(
     'Chào bạn! What is happening in the neighborhood?',
-    'chat',
+    'greet',
     true
   )
 }

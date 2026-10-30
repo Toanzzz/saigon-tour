@@ -1,4 +1,6 @@
 export interface ServerConfig {
+  databaseUrl: string
+  barkDailyLimit: number
   port: number
   origins: string[]
   apiUrl?: string
@@ -12,6 +14,8 @@ export interface ServerConfig {
 }
 
 export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
+  if (env.NODE_ENV === 'production' && !env.DATABASE_URL)
+    throw new Error('DATABASE_URL is required in production')
   const spendLimitUsd = Number(env.META_SPEND_LIMIT_USD ?? 5)
   if (
     !Number.isFinite(spendLimitUsd) ||
@@ -32,6 +36,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     }
   }
   return {
+    databaseUrl:
+      env.DATABASE_URL || 'postgres://saigon:saigon@127.0.0.1:58002/saigon',
+    barkDailyLimit: Number(env.NPC_BARK_DAILY_LIMIT ?? 200),
     port: Number(env.PORT ?? 58001),
     origins: (
       env.CORS_ORIGINS ?? 'http://localhost:58000,http://127.0.0.1:58000'

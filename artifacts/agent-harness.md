@@ -576,14 +576,15 @@ Each NPC should have its own persona file, agent definition, and restricted tool
 
 ## 12. Acceptance checklist
 
-- [ ] Bun backend can start with Mastra installed
-- [ ] Meta Model API key is stored only in backend environment variables
-- [ ] At least one NPC can hold a multi-turn conversation
-- [ ] NPC memory persists during the play session
-- [ ] NPC can offer a structured quest through a validated tool
-- [ ] Quest completion is verified by backend game logic
-- [ ] Rewards are granted only by the backend
-- [ ] Invalid or unsafe model output is rejected
-- [ ] Model timeout or API failure produces a fallback line
-- [ ] At least three NPCs use the same harness with different personas
+- [x] Bun backend can start with Mastra installed
+- [x] Meta Model API key is stored only in backend environment variables
+- [x] At least one NPC can hold a multi-turn conversation
+- [x] NPC memory persists during the play session
+- [x] NPC can offer a structured quest through a validated tool
+- [x] Quest completion is verified by backend game logic
+- [x] Rewards are granted only by the backend
+- [x] Invalid or unsafe model output is rejected
+- [x] Model timeout or API failure produces a fallback line
+- [x] At least three NPCs use the same harness with different personas
 - [ ] Background NPC updates are event-driven, not per-frame
+Evidence: `apps/server/test/harness.spec.ts`, `persistence.spec.ts`, and `artifacts/pass-persistence/`; background room scheduler validation belongs to the shared-world pass.

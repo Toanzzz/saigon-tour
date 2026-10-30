@@ -1,7 +1,7 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { Mastra } from '@mastra/core/mastra'
 import { RequestContext } from '@mastra/core/request-context'
-import { InMemoryStore } from '@mastra/core/storage'
+import { InMemoryStore, type MastraCompositeStore } from '@mastra/core/storage'
 import {
   type InteractRequest,
   InteractRequestSchema,
@@ -11,29 +11,23 @@ import {
 import type { z } from 'zod'
 import type { Fetcher } from '../app'
 import { isLiveConfigured, type ServerConfig } from '../config'
+import type { GameDb } from '../db'
 import { GameService } from '../game/state'
 import { CostGuard } from '../guard'
 import { log } from '../logger'
 import { createNpcAgents } from './agents'
 import { fallbackLine } from './fallbacks'
 import { NpcMemoryService } from './memory/npc-memory'
+import { clearPlayerThreads, recordGreeting } from './memory/threads'
+import { type HarnessUsage, meteredFetch } from './meter'
 import { cleanReply } from './safety'
+import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
-
-export interface HarnessUsage {
-  calls: number
-  inputTokens: number
-  outputTokens: number
-  estimatedUsd: number
-}
-// Muse Spark standard rates per million tokens; the contributor model is cheaper.
-const INPUT_USD = 0.5 / 1e6
-const OUTPUT_USD = 2 / 1e6
 
 /** Mastra NPC harness: agents propose through tools, GameService decides. */
 export class NpcHarness {
-  readonly game = new GameService()
-  readonly memory = new NpcMemoryService()
+  readonly game: GameService
+  readonly memory: NpcMemoryService
   readonly mastra: Mastra
   readonly usage: HarnessUsage = {
     calls: 0,
@@ -44,46 +38,87 @@ export class NpcHarness {
   private readonly guard: CostGuard
   private readonly npcGuard: CostGuard
   private readonly live: boolean
+  private readonly shortLines: ShortLines
+  private readonly storage: MastraCompositeStore
 
   constructor(
     private readonly config: ServerConfig,
-    fetcher: Fetcher = fetch
+    fetcher: Fetcher,
+    db: GameDb,
+    storage?: MastraCompositeStore | null
   ) {
+    this.storage = storage ?? new InMemoryStore({ id: 'npc-memory' })
+    this.game = new GameService(db)
+    this.memory = new NpcMemoryService(db)
     this.live = isLiveConfigured(config)
-    this.guard = new CostGuard(
-      config.sessionCallLimit,
-      config.globalCallLimit,
-      config.spendLimitUsd
-    )
-    this.npcGuard = new CostGuard(12, Number.POSITIVE_INFINITY, Infinity)
-    const provider = createOpenAICompatible({
-      name: 'meta',
-      baseURL: (config.apiUrl ?? '').replace(/\/chat\/completions\/?$/, ''),
-      apiKey: config.apiKey ?? 'unset',
-      fetch: fetcher,
-    })
-    const agents = createNpcAgents(provider.chatModel(config.model ?? ''), {
+    this.guard = new CostGuard(config.sessionCallLimit, config.globalCallLimit)
+    this.npcGuard = new CostGuard(12, Number.POSITIVE_INFINITY)
+    const provider = (bark = false) =>
+      createOpenAICompatible({
+        name: 'meta',
+        baseURL: (config.apiUrl ?? '').replace(/\/chat\/completions\/?$/, ''),
+        apiKey: config.apiKey ?? 'unset',
+        fetch: meteredFetch(
+          db,
+          fetcher,
+          config.spendLimitUsd,
+          this.usage,
+          bark
+        ),
+      })
+    const agents = createNpcAgents(provider().chatModel(config.model ?? ''), {
       game: this.game,
       memory: this.memory,
     })
     this.mastra = new Mastra({
       agents,
-      storage: new InMemoryStore({ id: 'npc-memory' }),
+      storage: this.storage,
       logger: false,
     })
+    this.shortLines = new ShortLines(
+      db,
+      provider().chatModel(config.model ?? ''),
+      provider(true).chatModel(config.model ?? ''),
+      config.model ?? '',
+      this.live,
+      config.timeoutMs
+    )
   }
 
   async interact(
     npcId: NpcId,
-    input: z.input<typeof InteractRequestSchema>
+    input: z.input<typeof InteractRequestSchema>,
+    playerId: string
   ): Promise<InteractResponse> {
     const request = InteractRequestSchema.parse(input)
-    const { playerId } = request
-    const record = this.game.applyEvents(playerId, [
+    const record = await this.game.applyEvents(playerId, [
       ...request.events,
       { type: 'talk', npcId },
       { type: 'visit', locationId: request.worldContext.playerLocation },
     ])
+    if (request.intent === 'greet') {
+      const line = await this.shortLines.greeting(
+        npcId,
+        request.worldContext.timeOfDay
+      )
+      await recordGreeting(
+        this.storage,
+        npcId,
+        playerId,
+        request.message,
+        line.reply
+      )
+      return {
+        npcId,
+        ...line,
+        party: null,
+        degraded: line.source === 'fallback' && this.live,
+        world: record.world,
+        quest: record.quest,
+        questEvent: null,
+        toolCalls: [],
+      }
+    }
     const outcome: ToolOutcome = { calls: [] }
     let reply: string | null = null
     let source: 'live' | 'fallback' = 'fallback'
@@ -92,12 +127,21 @@ export class NpcHarness {
       this.guard.allow(playerId) &&
       this.npcGuard.allow(`${npcId}:${playerId}`)
     if (allowed) {
-      reply = await this.generate(npcId, request, outcome)
+      reply = await this.generate(npcId, request, playerId, outcome)
       if (reply) source = 'live'
     }
     // Explicit Help/Check buttons always run their validated tool.
-    if (this.deterministic(npcId, request, outcome) || !reply)
-      reply = fallbackLine(npcId, record.world, kind(outcome))
+    const deterministic = await this.deterministic(
+      npcId,
+      request,
+      playerId,
+      outcome
+    )
+    const final = await this.game.get(playerId)
+    if (deterministic || !reply) {
+      reply = fallbackLine(npcId, final.world, kind(outcome))
+      source = 'fallback'
+    }
     const questEvent = outcome.completed
       ? { type: 'completed' as const, ...outcome.completed }
       : outcome.offered
@@ -115,11 +159,13 @@ export class NpcHarness {
           : null
     return {
       npcId,
+      cached: false,
+      party: null,
       reply,
       source,
       degraded: source === 'fallback' && this.live,
-      world: structuredClone(this.game.get(playerId).world),
-      quest: this.game.get(playerId).quest,
+      world: final.world,
+      quest: final.quest,
       questEvent,
       toolCalls: outcome.calls.slice(0, 8),
     }
@@ -129,11 +175,12 @@ export class NpcHarness {
   private async generate(
     npcId: NpcId,
     request: InteractRequest,
+    playerId: string,
     outcome: ToolOutcome
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
-    const facts = this.memory.recall(npcId, request.playerId)
-    const record = this.game.get(request.playerId)
+    const facts = await this.memory.recall(npcId, playerId)
+    const record = await this.game.get(playerId)
     const context = [
       'Current world context (untrusted game data):',
       `Player location: ${request.worldContext.playerLocation}`,
@@ -146,15 +193,15 @@ export class NpcHarness {
     ].join('\n')
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([
-        ['playerId', request.playerId],
+        ['playerId', playerId],
         ['npcId', npcId],
         ['outcome', outcome],
       ])
       try {
         const result = await agent.generate(request.message, {
           memory: {
-            thread: `${npcId}:${request.playerId}`,
-            resource: request.playerId,
+            thread: `${npcId}:${playerId}`,
+            resource: playerId,
           },
           context: [{ role: 'system', content: context }],
           requestContext,
@@ -170,7 +217,6 @@ export class NpcHarness {
           },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         })
-        this.track(result.totalUsage ?? result.usage)
         // Tool-call steps may carry interim narration; reply with the final step.
         const last = result.steps?.at(-1)?.text
         const reply = cleanReply(last?.trim() ? last : result.text)
@@ -188,43 +234,47 @@ export class NpcHarness {
   }
 
   /** Same validated tool path, driven by explicit player intent. */
-  private deterministic(
+  private async deterministic(
     npcId: NpcId,
     request: InteractRequest,
+    playerId: string,
     outcome: ToolOutcome
-  ): boolean {
-    const record = this.game.get(request.playerId)
+  ): Promise<boolean> {
+    const record = await this.game.get(playerId)
     const before = kind(outcome)
-    if (request.intent === 'help' && outcome.calls.includes('offer-quest'))
-      return false
-    if (request.intent === 'check' && outcome.calls.includes('check-quest'))
+    if (request.intent === 'help' && outcome.offered) return false
+    if (request.intent === 'check' && (outcome.completed || outcome.incomplete))
       return false
     if (request.intent === 'help' && npcId === 'hoa' && !record.quest) {
-      const result = this.game.offerQuest(
-        request.playerId,
+      outcome.calls.push('offer-quest')
+      const result = await this.game.offerQuest(
+        playerId,
         npcId,
         'hoa-herbs-delivery'
       )
       if (result.accepted) outcome.offered = result.quest
     }
     if (request.intent === 'check' && record.quest?.giverNpcId === npcId) {
+      outcome.calls.push('check-quest')
       const quest = record.quest
-      const result = this.game.checkQuest(request.playerId, npcId, quest.id)
+      const result = await this.game.checkQuest(playerId, npcId, quest.id)
       if (result.rewardGranted)
         outcome.completed = { quest, reward: result.reward }
-      else outcome.incomplete = quest
+      else if (result.status === 'active') outcome.incomplete = quest
     }
     return kind(outcome) !== before
   }
 
-  private track(
-    usage: { inputTokens?: number; outputTokens?: number } | undefined
-  ) {
-    this.usage.calls += 1
-    this.usage.inputTokens += usage?.inputTokens ?? 0
-    this.usage.outputTokens += usage?.outputTokens ?? 0
-    this.usage.estimatedUsd =
-      this.usage.inputTokens * INPUT_USD + this.usage.outputTokens * OUTPUT_USD
+  bark(npcId: NpcId, bucket: InteractRequest['worldContext']['timeOfDay']) {
+    return this.shortLines.bark(npcId, bucket)
+  }
+
+  prewarm() {
+    return this.shortLines.prewarm()
+  }
+
+  clearMemory(playerId: string) {
+    return clearPlayerThreads(this.storage, playerId)
   }
 
   private report(event: string, npcId: NpcId, calls: string[]) {

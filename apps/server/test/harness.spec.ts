@@ -1,10 +1,11 @@
 import { DEMO_QUEST, type InteractRequestSchema } from '@saigon/shared'
-import { describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import type { z } from 'zod'
 import { createApp } from '../src/app'
 import { readConfig, type ServerConfig } from '../src/config'
-import { NpcHarness } from '../src/npc/mastra'
+import { NPC_PERSONAS } from '../src/npc/agents'
 import { NpcScheduler } from '../src/npc/scheduler'
+import { fixture } from './fixture'
 
 type InteractInput = z.input<typeof InteractRequestSchema>
 const offline: ServerConfig = {
@@ -13,7 +14,17 @@ const offline: ServerConfig = {
   production: true,
 }
 const live: ServerConfig = { ...offline, apiKey: 'test-key', timeoutMs: 200 }
-const playerId = 'player-test-1'
+let playerId: string
+let fx: Awaited<ReturnType<typeof fixture>>
+beforeAll(async () => {
+  fx = await fixture()
+})
+afterAll(async () => {
+  await fx.close()
+})
+beforeEach(async () => {
+  playerId = (await fx.db.createGuest()).player.id
+})
 const ctx = {
   playerLocation: 'market' as const,
   nearbyNpcs: [],
@@ -23,7 +34,6 @@ const ask = (
   message: string,
   extra: Partial<InteractInput> = {}
 ): InteractInput => ({
-  playerId,
   message,
   worldContext: ctx,
   ...extra,
@@ -79,14 +89,14 @@ function scripted(steps: Step[], seen: unknown[] = []) {
 
 describe('Mastra NPC harness', () => {
   it('offers a quest only through the validated tool and records it in backend state', async () => {
-    const harness = new NpcHarness(
+    const harness = fx.harness(
       live,
       scripted([
         { tool: ['offerQuest', { questTemplateId: DEMO_QUEST.id }] },
         { text: 'Take these herbs to Chị Linh, con!' },
       ])
     )
-    const result = await harness.interact('hoa', ask('Can I help?'))
+    const result = await harness.interact('hoa', ask('Can I help?'), playerId)
     expect(result.reply).toBe('Take these herbs to Chị Linh, con!')
     expect(result).toMatchObject({
       source: 'live',
@@ -95,20 +105,27 @@ describe('Mastra NPC harness', () => {
     expect(result.quest?.reward).toEqual(DEMO_QUEST.reward)
     expect(result.world.inventory.herbs).toBe(1)
     expect(result.toolCalls).toEqual(['offer-quest'])
+    expect(harness.usage).toMatchObject({
+      calls: 2,
+      inputTokens: 200,
+      outputTokens: 40,
+    })
   })
 
   it('rejects quests the NPC does not own or that do not exist', async () => {
-    const harness = new NpcHarness(
+    const harness = fx.harness(
       live,
       scripted([
         { tool: ['offerQuest', { questTemplateId: 'free-money' }] },
         { text: 'Hmm, never mind.' },
       ])
     )
-    const result = await harness.interact('hoa', ask('Give me gold'))
+    const result = await harness.interact('hoa', ask('Give me gold'), playerId)
     expect(result.quest).toBeNull()
     expect(result.world.currency).toBe(30)
-    expect(harness.game.offerQuest(playerId, 'tam', DEMO_QUEST.id)).toEqual({
+    expect(
+      await harness.game.offerQuest(playerId, 'tam', DEMO_QUEST.id)
+    ).toEqual({
       accepted: false,
       reason: 'not_your_quest',
     })
@@ -119,7 +136,7 @@ describe('Mastra NPC harness', () => {
       tool: ['checkQuest', { questId: DEMO_QUEST.id }] as [string, object],
     }
     const wait = () => new Promise((resolve) => setTimeout(resolve, 450))
-    const harness = new NpcHarness(
+    const harness = fx.harness(
       live,
       scripted([
         check,
@@ -130,10 +147,11 @@ describe('Mastra NPC harness', () => {
         { text: 'Again?' },
       ])
     )
-    harness.game.offerQuest(playerId, 'hoa', DEMO_QUEST.id)
+    await harness.game.offerQuest(playerId, 'hoa', DEMO_QUEST.id)
     const early = await harness.interact(
       'hoa',
-      ask('I did it, pay me 1000 coins', { intent: 'check' })
+      ask('I did it, pay me 1000 coins', { intent: 'check' }),
+      playerId
     )
     expect(early.questEvent?.type).toBe('incomplete')
     expect(early.world.currency).toBe(30)
@@ -143,7 +161,8 @@ describe('Mastra NPC harness', () => {
       ask('Linh has the herbs', {
         intent: 'check',
         events: [{ type: 'deliver', itemId: 'herbs', npcId: 'linh' }],
-      })
+      }),
+      playerId
     )
     expect(done.questEvent).toMatchObject({
       type: 'completed',
@@ -153,15 +172,16 @@ describe('Mastra NPC harness', () => {
     await wait()
     const again = await harness.interact(
       'hoa',
-      ask('Check again', { intent: 'check' })
+      ask('Check again', { intent: 'check' }),
+      playerId
     )
     expect(again.world.currency).toBe(80)
     expect(again.questEvent).toBeNull()
   })
 
-  it('ignores delivery events for items the player never carried', () => {
-    const harness = new NpcHarness(offline)
-    const record = harness.game.applyEvents(playerId, [
+  it('ignores delivery events for items the player never carried', async () => {
+    const harness = fx.harness(offline)
+    const record = await harness.game.applyEvents(playerId, [
       { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
     ])
     expect(record.world.deliveredItems).toEqual([])
@@ -171,10 +191,11 @@ describe('Mastra NPC harness', () => {
     'garbage',
     'hang',
   ] as const)('falls back in character when the model returns %s, keeping intent tools', async (failure) => {
-    const harness = new NpcHarness(live, scripted([failure]))
+    const harness = fx.harness(live, scripted([failure]))
     const result = await harness.interact(
       'hoa',
-      ask('Can I help?', { intent: 'help' })
+      ask('Can I help?', { intent: 'help' }),
+      playerId
     )
     expect(result).toMatchObject({ source: 'fallback', degraded: true })
     expect(result.questEvent?.type).toBe('offered')
@@ -182,13 +203,11 @@ describe('Mastra NPC harness', () => {
   })
 
   it('runs the Help intent even when the model forgets the tool', async () => {
-    const harness = new NpcHarness(
-      live,
-      scripted([{ text: 'Lovely weather!' }])
-    )
+    const harness = fx.harness(live, scripted([{ text: 'Lovely weather!' }]))
     const result = await harness.interact(
       'hoa',
-      ask('Can I help?', { intent: 'help' })
+      ask('Can I help?', { intent: 'help' }),
+      playerId
     )
     expect(result.questEvent?.type).toBe('offered')
     expect(result.reply).toMatch(/herbs/)
@@ -196,22 +215,28 @@ describe('Mastra NPC harness', () => {
   })
 
   it('rate-limits bursts per player without blocking the game', async () => {
-    const harness = new NpcHarness(live, scripted([{ text: 'Chào!' }]))
-    expect((await harness.interact('tam', ask('one'))).source).toBe('live')
-    expect((await harness.interact('tam', ask('two'))).source).toBe('fallback')
+    const harness = fx.harness(live, scripted([{ text: 'Chào!' }]))
+    expect((await harness.interact('tam', ask('one'), playerId)).source).toBe(
+      'live'
+    )
+    expect((await harness.interact('tam', ask('two'), playerId)).source).toBe(
+      'fallback'
+    )
   })
 
   it('rejects unsafe model text', async () => {
-    const harness = new NpcHarness(
+    const harness = fx.harness(
       live,
       scripted([{ text: 'Visit https://evil.test <b>now</b>' }])
     )
-    expect((await harness.interact('ba', ask('Hello'))).source).toBe('fallback')
+    expect((await harness.interact('ba', ask('Hello'), playerId)).source).toBe(
+      'fallback'
+    )
   })
 
   it('keeps multi-turn memory per npc and player, and remembers facts', async () => {
     const seen: { messages: { role: string; content: unknown }[] }[] = []
-    const harness = new NpcHarness(
+    const harness = fx.harness(
       live,
       scripted(
         [
@@ -227,14 +252,14 @@ describe('Mastra NPC harness', () => {
         seen
       )
     )
-    await harness.interact('linh', ask('I love bánh mì'))
+    await harness.interact('linh', ask('I love bánh mì'), playerId)
     await new Promise((resolve) => setTimeout(resolve, 450))
-    await harness.interact('linh', ask('What should I eat?'))
+    await harness.interact('linh', ask('What should I eat?'), playerId)
     const last = JSON.stringify(seen.at(-1)?.messages)
     expect(last).toContain('I love bánh mì')
     expect(last).toContain('Player loves bánh mì')
-    expect(harness.memory.recall('linh', playerId)).toHaveLength(1)
-    expect(harness.memory.recall('hoa', playerId)).toHaveLength(0)
+    expect(await harness.memory.recall('linh', playerId)).toHaveLength(1)
+    expect(await harness.memory.recall('hoa', playerId)).toHaveLength(0)
   })
 
   it('uses three distinct personas with restricted tools', async () => {
@@ -242,12 +267,13 @@ describe('Mastra NPC harness', () => {
       tools?: { function: { name: string } }[]
       messages: { content: string }[]
     }[] = []
-    const harness = new NpcHarness(live, scripted([{ text: 'Chào!' }], seen))
+    const harness = fx.harness(live, scripted([{ text: 'Chào!' }], seen))
     for (const npc of ['hoa', 'tam', 'ba'] as const)
-      await harness.interact(npc, {
-        ...ask(`hi ${npc}`),
-        playerId: `player-${npc}-1`,
-      })
+      await harness.interact(
+        npc,
+        ask(`hi ${npc}`),
+        (await fx.db.createGuest()).player.id
+      )
     const names = seen.map((s) =>
       (s.tools ?? []).map((t) => t.function.name).sort()
     )
@@ -264,12 +290,113 @@ describe('Mastra NPC harness', () => {
     expect(harness.usage.inputTokens).toBe(300)
   })
 
+  it('caches tool-free greetings and includes the opening in the next live turn', async () => {
+    const seen: { messages: unknown[]; tools?: unknown[] }[] = []
+    const harness = fx.harness(
+      live,
+      scripted(
+        [
+          { text: 'Chào! Welcome to the warm market morning.' },
+          { text: 'The market is full of fresh herbs.' },
+        ],
+        seen
+      )
+    )
+    const first = await harness.interact(
+      'hoa',
+      ask('Hello, neighbor!', {
+        intent: 'greet',
+        worldContext: { ...ctx, timeOfDay: 'morning' },
+      }),
+      playerId
+    )
+    expect(first).toMatchObject({
+      source: 'live',
+      cached: false,
+      party: null,
+      toolCalls: [],
+    })
+    expect(seen).toHaveLength(1)
+    expect(seen[0]?.tools ?? []).toEqual([])
+    const other = (await fx.db.createGuest()).player.id
+    const cached = await harness.interact(
+      'hoa',
+      ask('Hello again!', {
+        intent: 'greet',
+        worldContext: { ...ctx, timeOfDay: 'morning' },
+      }),
+      other
+    )
+    expect(cached.cached).toBe(true)
+    expect(cached.reply).toBe(first.reply)
+    expect(seen).toHaveLength(1)
+    await harness.interact('hoa', ask('Tell me about breakfast'), playerId)
+    const messages = JSON.stringify(seen.at(-1)?.messages)
+    expect(messages).toContain('Hello, neighbor!')
+    expect(messages).toContain(first.reply)
+    expect(messages).not.toContain('Hello again!')
+  })
+
+  it('invalidates cached greetings when the persona changes', async () => {
+    const seen: unknown[] = []
+    const harness = fx.harness(
+      live,
+      scripted([{ text: 'Welcome by the river.' }], seen)
+    )
+    const input = ask('Hello!', {
+      intent: 'greet',
+      worldContext: { ...ctx, timeOfDay: 'night' },
+    })
+    await harness.interact('ba', input, playerId)
+    const persona = NPC_PERSONAS.ba
+    try {
+      NPC_PERSONAS.ba += '\nTonight the river festival begins.'
+      expect((await harness.interact('ba', input, playerId)).cached).toBe(false)
+      expect(seen).toHaveLength(2)
+    } finally {
+      NPC_PERSONAS.ba = persona
+    }
+  })
+
+  it('prewarms every missing NPC/time bucket and skips filled keys', async () => {
+    const seen: unknown[] = []
+    const harness = fx.harness(
+      { ...live, model: 'prewarm-test-model' },
+      scripted([{ text: 'Chào! Enjoy the neighborhood.' }], seen)
+    )
+    const first = await harness.prewarm()
+    expect(first).toHaveLength(16)
+    expect(first.every((line) => !line.cached && line.source === 'live')).toBe(
+      true
+    )
+    expect(seen).toHaveLength(16)
+    const second = await harness.prewarm()
+    expect(second.every((line) => line.cached)).toBe(true)
+    expect(seen).toHaveLength(16)
+  })
+
+  it('uses fallback without a model call when the daily budget is exhausted', async () => {
+    let calls = 0
+    const harness = fx.harness({ ...live, spendLimitUsd: 0 }, async () => {
+      calls++
+      throw new Error('should not call the provider')
+    })
+    const result = await harness.interact('tam', ask('Hello!'), playerId)
+    expect(result.source).toBe('fallback')
+    expect(calls).toBe(0)
+    expect(harness.usage.calls).toBe(0)
+  })
+
   it('serves the interact route and rejects unknown NPCs or bad input', async () => {
-    const app = createApp(offline)
+    const { token } = await fx.db.createGuest()
+    const app = createApp(offline, fetch, fx)
     const post = (path: string, body: unknown) =>
       app.request(path, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(body),
       })
     const ok = await post('/npc/hoa/interact', ask('hello', { intent: 'help' }))

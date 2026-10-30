@@ -12,8 +12,8 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 - Server secret: `META_MUSE_API_KEY`; it is not present in client source or build output.
 - Project dates: October 27–November 4, 2026; submission November 4, 9 PM ET.
 - Art direction: toy diorama from `assets/landmarks/chobenthanh.png`. Periwinkle sky, butter walls, terracotta roofs, mint trees. UI surfaces are toy blocks: ink edge, solid side face, roof-ridge header strip. Tokens live in `packages/shared/tokens.css`, shared by client and hub. Type: Baloo 2 (display) and Be Vietnam Pro (body), self-hosted with Vietnamese subsets.
-- Runtime ports: client `58000`, server `58001`.
-- Hub placement: in-play overlay (header button, `H`) plus once after the first reward closes. `apps/design` deleted after the port. Persistence: session only.
+- Runtime ports: client `58000`, server `58001`, Postgres `58002`.
+- Hub placement: in-play overlay (header button, `H`) plus once after the first reward closes. `apps/design` deleted after the port. Persistence: anonymous guests and progress in Postgres 18.
 - No deployment or public publishing has been performed.
 
 ## Passes
@@ -120,3 +120,12 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 - 2026-10-31: Added twelve terracotta side-buttress cap blocks across both side elevations; saved the editable blend and re-exported the portable GLB. Three-quarter preview refreshed for inspection.
 
 - 2026-10-31: Structural refinement pass: added paired side transept bodies, gabled pediments, rose discs, and three apse roof-curve rings; hid roof-rib/eave strips and side trim/cap artifacts that read as railings; saved blend, re-exported GLB, and refreshed three-quarter preview.
+
+## Persistence and NPC harness
+
+- Guest bearer tokens are stored as SHA-256 hashes; browser storage keeps the opaque token.
+- Postgres 18 owns saves, one-time quest completions, bounded NPC facts, daily model spend, and greeting cache. Mastra threads use the same pool in the `mastra` schema.
+- Startup applies generated Drizzle migrations and sweeps guests unseen for 30 days. `/health` verifies the database; storage failures return 503.
+- Greetings use tool-free short generations, cache by persona/model/time bucket, and write the opening exchange into the conversation thread. `prewarm` fills 16 keys.
+- Validation: root lint/types/build/tests; 30 server + 14 client tests; real Postgres concurrency/persistence integration; Docker image build. Headless production desktop solo quest/bus/reward/reset and 390px touch/hub flows passed with no errors. Guest reload retained name and 80 coins; reset retained identity and restored 30 coins at both widths.
+- Remaining implementation: shared rooms/presence, NPC room broadcasts, parties, and team lunch errand.

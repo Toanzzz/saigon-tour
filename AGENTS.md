@@ -6,7 +6,7 @@
 - Cloudflare serves static client assets. AI traffic goes directly to the backend origin.
 - Keep secrets in server environment variables. Never copy `.env` into builds or images.
 - Reuse licensed assets in `assets/`; runtime copies belong in `apps/client/public`.
-- `bun run dev`: client 58000, server 58001. This repository owns port block 58000–58009.
+- `bun run dev`: client 58000, server 58001, Postgres 58002. This repository owns port block 58000–58009.
 - `bun run prepare:assets` creates runtime models; preserve the source models.
 - Feature modules expose public APIs through `index.ts`; imports flow toward shared contracts.
 - Each package owns its composite TypeScript project; no cross-package relative imports.
