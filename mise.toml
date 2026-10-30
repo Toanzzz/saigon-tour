@@ -1,0 +1,6 @@
+[tools]
+bun = "1"
+node = "lts"
+
+[env]
+_.file = '.env'
