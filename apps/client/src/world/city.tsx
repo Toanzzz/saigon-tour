@@ -81,7 +81,7 @@ export function CityWorld() {
       />
       <Block position={[-23, 0.07, 3]} scale={[27, 0.14, 8]} color="#dfccaa" />
       <Model
-        path="ben-thanh-market"
+        path="landmarks/cho-ben-thanh"
         position={[-23, 0.12, -12]}
         scale={0.7}
         shadow={false}

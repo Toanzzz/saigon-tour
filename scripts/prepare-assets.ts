@@ -105,7 +105,8 @@ for (const [pack, selection] of Object.entries(selected)) {
     records.push(await record(target, document))
   }
 }
-const marketTarget = resolve(output, 'ben-thanh-market.glb')
+const marketTarget = resolve(output, 'landmarks/cho-ben-thanh.glb')
+await mkdir(dirname(marketTarget), { recursive: true })
 const market = await readSource('landmarks/chobenthanh-model.glb')
 for (const mesh of market.getRoot().listMeshes()) {
   for (const primitive of mesh.listPrimitives())

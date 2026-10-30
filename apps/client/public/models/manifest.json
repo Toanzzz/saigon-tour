@@ -762,12 +762,12 @@
     "animations": []
   },
   {
-    "path": "ben-thanh-market.glb",
-    "bytes": 8112748,
+    "path": "landmarks/cho-ben-thanh.glb",
+    "bytes": 7211432,
     "meshes": 13,
     "materials": 13,
-    "triangles": 188834,
-    "vertices": 290316,
+    "triangles": 141572,
+    "vertices": 264577,
     "bounds": {
       "min": [
         -17.125,
