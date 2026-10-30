@@ -46,6 +46,7 @@ async function request(path: string, method = 'GET') {
 }
 export function guestState(player: Guest) {
   return {
+    serverRevision: player.revision,
     guestId: player.id,
     guestName: player.name,
     guestColor: player.color,
@@ -79,22 +80,30 @@ export function initializeSession(): Promise<void> {
         saveToken(value)
       }
       if (game.state.sessionId !== sessionId) return
-      game.setState((state) => ({
-        ...state,
-        ...guestState(player),
-        world: applyPlayerEvents(player.world, state.pending),
-        guestStatus: 'online',
-        returningGuest,
-        stop: player.world.locationId,
-        position:
-          state.screen === 'title'
-            ? [
-                PLACES[player.world.locationId].at[0],
-                0.9,
-                PLACES[player.world.locationId].at[2] + 6,
-              ]
-            : state.position,
-      }))
+      game.setState((state) =>
+        player.revision < state.serverRevision
+          ? {
+              ...state,
+              guestStatus: 'online',
+              returningGuest,
+            }
+          : {
+              ...state,
+              ...guestState(player),
+              world: applyPlayerEvents(player.world, state.pending),
+              guestStatus: 'online',
+              returningGuest,
+              stop: player.world.locationId,
+              position:
+                state.screen === 'title'
+                  ? [
+                      PLACES[player.world.locationId].at[0],
+                      0.9,
+                      PLACES[player.world.locationId].at[2] + 6,
+                    ]
+                  : state.position,
+            }
+      )
       if (game.state.screen === 'title')
         motion.teleport = [game.state.position[0], game.state.position[2]]
     } catch {

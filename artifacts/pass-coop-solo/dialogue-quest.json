@@ -1,0 +1,83 @@
+{
+  "renderer": {
+    "render": {
+      "frame": 320,
+      "calls": 172,
+      "triangles": 337426,
+      "points": 0,
+      "lines": 0
+    },
+    "memory": {
+      "geometries": 81,
+      "textures": 47
+    }
+  },
+  "state": {
+    "screen": "playing",
+    "panel": "none",
+    "muted": false,
+    "frame": 302,
+    "position": [
+      -23,
+      0.7987189292907715,
+      5.496100902557373
+    ],
+    "currency": 30,
+    "quest": "hoa-herbs-delivery",
+    "completed": 0,
+    "ride": null,
+    "source": "fallback",
+    "animation": "idle"
+  },
+  "physics": {
+    "engine": "rapier",
+    "timestep": 0.016666666666666666,
+    "bodies": 2,
+    "colliders": 94,
+    "ccdBodies": 1
+  },
+  "audio": {
+    "state": "running",
+    "loaded": [
+      "confirm",
+      "bell",
+      "reward",
+      "city"
+    ],
+    "errors": [],
+    "muted": false,
+    "volume": 0.5,
+    "paused": false,
+    "activeEffects": 2,
+    "ambienceLoops": 1,
+    "events": {
+      "click": 1,
+      "pickup": 1,
+      "board": 0,
+      "arrive": 0,
+      "reward": 0
+    }
+  },
+  "network": {
+    "connection": "connected",
+    "room": "Nguyễn Huệ 1",
+    "playerCount": 1,
+    "selfId": "c578932c-5d68-493f-83c3-67e129c92577",
+    "guestName": "Mây Xanh 15",
+    "serverRevision": 3,
+    "partyVersion": 1,
+    "remotePlayers": 0,
+    "npcLines": [],
+    "emotes": [],
+    "events": {
+      "sequence": 1793401870359,
+      "inFlight": null,
+      "pending": 0,
+      "httpBusy": false
+    },
+    "party": null,
+    "invite": null
+  },
+  "fps": 60.14544642126431,
+  "dpr": 1
+}

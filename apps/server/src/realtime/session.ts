@@ -5,6 +5,7 @@ import {
 } from '@saigon/shared'
 import type { GameDb } from '../db'
 import type { GameService } from '../game/state'
+import type { PartyMessage } from '../party'
 import type { RoomManager, RoomSocket } from './rooms'
 
 export class SocketSession {
@@ -20,7 +21,11 @@ export class SocketSession {
     private readonly socket: RoomSocket,
     private readonly rooms: RoomManager,
     private readonly db: GameDb,
-    private readonly game: GameService
+    private readonly game: GameService,
+    private readonly hooks?: {
+      onMessage(playerId: string, message: PartyMessage): Promise<void>
+      onConnected(playerId: string): void
+    }
   ) {
     this.deadline = setTimeout(() => this.close(1008, 'hello_timeout'), 5000)
     this.deadline.unref()
@@ -103,7 +108,7 @@ export class SocketSession {
           playerId: this.playerId,
           emote: message.emote,
         })
-    } else {
+    } else if (message.type === 'events') {
       const playerId = this.playerId
       void this.rooms
         .processEvents(playerId, message.sequence, message.events, this.game)
@@ -119,6 +124,19 @@ export class SocketSession {
         })
         .catch(() => {
           this.error()
+        })
+    } else {
+      void this.hooks
+        ?.onMessage(this.playerId, message)
+        .catch((error: unknown) => {
+          if (!this.closed)
+            this.socket.send(
+              JSON.stringify({
+                type: 'error',
+                message:
+                  error instanceof Error ? error.message : 'party_unavailable',
+              })
+            )
         })
     }
   }
@@ -142,6 +160,7 @@ export class SocketSession {
       this.playerId = player.id
       clearTimeout(this.deadline)
       this.rooms.connect(player, this.socket)
+      this.hooks?.onConnected(player.id)
     } catch {
       this.error()
       this.close(1011, 'service_unavailable')

@@ -13,6 +13,7 @@ export type Fetcher = typeof fetch
 export interface AppServices {
   db: GameDb
   storage?: MastraCompositeStore
+  now?: () => number
 }
 export function createApp(
   config: ServerConfig = readConfig(),
@@ -66,6 +67,7 @@ export function createApp(
     )
     if (!player) return c.json({ error: 'unauthorized' }, 401)
     await harness.clearMemory(player.id)
+    await realtime.party.leave(player.id)
     realtime.manager.remove(player.id)
     return c.json({ player: await db.reset(player.id) })
   })
@@ -86,7 +88,7 @@ export function createApp(
     log('request_failed', 'Storage or request unavailable', 'warn')
     return c.json({ error: 'service_unavailable' }, 503)
   })
-  const realtime = createRealtime(app, config, harness, db)
+  const realtime = createRealtime(app, config, harness, db, services.now)
   return Object.assign(app, { harness, db, realtime })
 }
 export type AppType = ReturnType<typeof createApp>

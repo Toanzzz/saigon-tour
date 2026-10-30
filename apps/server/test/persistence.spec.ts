@@ -17,6 +17,20 @@ afterAll(async () => {
 const headers = (token: string) => ({ Authorization: `Bearer ${token}` })
 
 describe('durable guest progress', () => {
+  it('advances save revisions across events, rewards, and reset', async () => {
+    const { player } = await fx.db.createGuest()
+    const game = new GameService(fx.db)
+    expect(player.revision).toBe(0)
+    const moved = await game.applyEvents(player.id, [
+      { type: 'visit', locationId: 'park' },
+    ])
+    expect(moved.revision).toBe(1)
+    const reset = await fx.db.reset(player.id)
+    expect(reset.revision).toBe(2)
+    expect(reset.world.currency).toBe(30)
+    expect((await fx.db.player(player.id)).revision).toBe(2)
+  })
+
   it('issues opaque tokens, stores their hash, and authenticates only valid credentials', async () => {
     const app = createApp(config, fetch, fx)
     const response = await app.request('/guest', { method: 'POST' })

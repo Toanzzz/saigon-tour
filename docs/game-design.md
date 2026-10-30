@@ -6,7 +6,7 @@ Be the neighbor who brings a small kindness across a lively city. Wander, talk, 
 
 Every 5–30 seconds the player chooses a direction, meets someone, boards a ride, or checks a landmark. Over three minutes, Cô Hoa entrusts fresh herbs to the player, Chị Linh receives them in the park, and the player earns coins, reputation, and a postcard.
 
-Fares make route choice matter: walking is free, the bus costs 5 coins. A premature claim earns clear directions rather than a reward. Restart resets the session immediately. Better players read the map, use nearby stops, and spend fewer fares. No combat, health bar, or imposed deadline.
+Fares make route choice matter: walking is free, the bus costs 5 coins. A premature claim earns clear directions rather than a reward. Restart resets the saved journey while keeping the guest identity. Better players read the map, use nearby stops, and spend fewer fares. No combat, health bar, or imposed deadline.
 
 ## Core loop contract
 
@@ -35,3 +35,10 @@ Lê Lợi links the market to Nguyễn Huệ, a paved walking street with plante
 The player starts in front of the market, facing Cô Hoa. The first decision is whether to help her or explore. The first cost is a bus fare. A short ride reveals the district before the park arrival and first reward. Five places to discover support free exploration after delivery.
 
 Modular shophouses, palms, pavement, stall props, benches, and ambient pedestrians form the surrounding city. Static building colliders use simple Rapier proxies; detailed meshes do not drive collision.
+
+
+## Shared neighborhood and co-op
+
+Anonymous guests retain progress in Postgres. The People control (`P`) shows the public room and party invitations; `Q` sends fixed emotes and phrases. Nearby tourists interpolate at a 150 ms delay. NPC room lines run on proximity events and bounded cooldowns.
+
+Parties of two to four can carry Cô Hoa’s lunch to Chị Linh. Each assigned player has one distinct dish; the team progress appears in the objective and journal. Once all assignments arrive, Cô Hoa rewards each assigned member with 40 coins, a photo, and two reputation. The herb errand remains an independent solo story. See `docs/multiplayer.md` for protocol, topology, and persistence behavior.

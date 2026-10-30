@@ -98,6 +98,7 @@ function offline(
     reply =
       'Chào bạn! Welcome to my little corner of Bến Thành. Could you help me with an errand?'
   return {
+    revision: state.serverRevision,
     npcId: npc,
     reply,
     source: 'fallback',

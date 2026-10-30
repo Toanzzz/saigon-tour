@@ -46,24 +46,29 @@ export function currentEventBatch() {
 export function acknowledgeWorld(
   message: Extract<ServerSocketMessage, { type: 'world' }>
 ) {
-  if (httpBusy && !inFlight) return
-  if (inFlight && message.sequence < inFlight.sequence) return
-  if (!inFlight && message.sequence <= sequence) return
+  const newerSave = message.revision > game.state.serverRevision
+  if (!newerSave && inFlight && message.sequence < inFlight.sequence) return
+  if (!newerSave && !inFlight && message.sequence <= sequence) return
   if (inFlight && message.sequence >= inFlight.sequence) {
     inFlight = null
     for (const resolve of waiters) resolve()
     waiters.clear()
   }
-  game.setState((state) => ({
-    ...state,
-    world: applyPlayerEvents(message.world, [
-      ...(inFlight?.events ?? []),
-      ...state.pending,
-    ]),
-    quest: message.quest,
-    completed: message.completed,
-    reputation: message.reputation,
-  }))
+  game.setState((state) =>
+    message.revision < state.serverRevision
+      ? state
+      : {
+          ...state,
+          serverRevision: message.revision,
+          world: applyPlayerEvents(message.world, [
+            ...(inFlight?.events ?? []),
+            ...state.pending,
+          ]),
+          quest: message.quest,
+          completed: message.completed,
+          reputation: message.reputation,
+        }
+  )
 }
 /** Pause socket flushing before reading the HTTP turn's events. */
 export async function beginHttpTurn() {
@@ -74,6 +79,7 @@ export async function beginHttpTurn() {
     const done = () => {
       clearTimeout(timer)
       waiters.delete(done)
+      if (inFlight) httpBusy = false
       resolve(!inFlight)
     }
     const timer = setTimeout(done, 5000)

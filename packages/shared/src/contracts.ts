@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { PartySnapshotSchema } from './party'
 
 export const NpcIdSchema = z.enum(['hoa', 'tam', 'linh', 'ba'])
 export type NpcId = z.infer<typeof NpcIdSchema>
@@ -10,7 +11,15 @@ export const LocationIdSchema = z.enum([
   'river',
 ])
 export type LocationId = z.infer<typeof LocationIdSchema>
-export const ItemIdSchema = z.enum(['herbs', 'postcard'])
+export const ItemIdSchema = z.enum([
+  'herbs',
+  'postcard',
+  'photo',
+  'noodles',
+  'broth',
+  'baguette',
+  'coffee',
+])
 export type ItemId = z.infer<typeof ItemIdSchema>
 export const SourceSchema = z.enum(['live', 'fallback'])
 export type AgentSource = z.infer<typeof SourceSchema>
@@ -61,7 +70,13 @@ export const WorldStateSchema = z
     visitedLocations: z.array(LocationIdSchema).max(16),
     talkedTo: z.array(NpcIdSchema).max(32),
     deliveredItems: z
-      .array(z.string().regex(/^(herbs|postcard):(hoa|tam|linh|ba)$/))
+      .array(
+        z
+          .string()
+          .regex(
+            /^(herbs|postcard|photo|noodles|broth|baguette|coffee):(hoa|tam|linh|ba)$/
+          )
+      )
       .max(32),
     completedQuestIds: z.array(z.string().max(64)).max(32),
     currency: z.number().int().min(0).max(100000),
@@ -98,7 +113,7 @@ export type PlayerEvent = z.infer<typeof PlayerEventSchema>
 export const InteractRequestSchema = z
   .object({
     message: z.string().trim().min(1).max(500),
-    intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
+    intent: z.enum(['chat', 'help', 'check', 'greet', 'team']).default('chat'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
       .object({
@@ -113,8 +128,9 @@ export type InteractRequest = z.infer<typeof InteractRequestSchema>
 export const QuestOutcomeSchema = z.enum(['offered', 'completed', 'incomplete'])
 export const InteractResponseSchema = z
   .object({
+    revision: z.number().int().min(0).default(0),
     cached: z.boolean(),
-    party: z.null(),
+    party: PartySnapshotSchema.nullable(),
     npcId: NpcIdSchema,
     reply: z.string().min(1).max(700),
     source: SourceSchema,
@@ -135,6 +151,7 @@ export const InteractResponseSchema = z
 export type InteractResponse = z.infer<typeof InteractResponseSchema>
 
 export const GuestPlayerSchema = z.object({
+  revision: z.number().int().min(0).default(0),
   id: z.uuid(),
   name: z.string(),
   color: z.string(),

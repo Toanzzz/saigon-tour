@@ -1,6 +1,15 @@
-import { NPCS } from '@saigon/shared'
+import { DEMO_QUEST, NPCS } from '@saigon/shared'
+import { useStore } from '@tanstack/react-store'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
-import { acceptQuest, chat, close, deliverOrVerify } from '../core/actions'
+import {
+  acceptQuest,
+  chat,
+  close,
+  deliverOrVerify,
+  deliverTeamDish,
+  teamErrand,
+} from '../core/actions'
+import { net } from '../net/status'
 import type { GameState } from '../state/game'
 import { Dialog } from './dialog'
 import { Icon } from './icons'
@@ -18,6 +27,12 @@ function messageKey(message: object) {
 
 export function Conversation({ state }: { state: GameState }) {
   const dialog = state.dialogue
+  const network = useStore(net, (value) => value)
+  const party = network.party
+  const team = party?.quest
+  const assignment = team?.assignments.find(
+    (entry) => entry.playerId === network.selfId
+  )
   const [text, setText] = useState('')
   const historyRef = useRef<HTMLDivElement>(null)
   const historyLength = dialog?.history.length
@@ -77,7 +92,7 @@ export function Conversation({ state }: { state: GameState }) {
         <div className="conversation-actions">
           {dialog.npc === 'hoa' &&
             !state.quest &&
-            state.completed.length === 0 && (
+            !state.world.completedQuestIds.includes(DEMO_QUEST.id) && (
               <button
                 type="button"
                 className="primary-button"
@@ -101,6 +116,38 @@ export function Conversation({ state }: { state: GameState }) {
               {delivery ? 'Deliver the herbs' : 'Check my progress'}
             </button>
           )}
+          {dialog.npc === 'hoa' &&
+            party &&
+            party.members.length >= 2 &&
+            !team?.completed &&
+            !state.world.completedQuestIds.includes('hoa-team-lunch') && (
+              <button
+                type="button"
+                className="primary-button"
+                disabled={network.connection !== 'connected'}
+                onClick={() => {
+                  void teamErrand()
+                }}
+              >
+                <Icon name="users" />
+                {team ? 'Check team errand' : 'Team errand'}
+              </button>
+            )}
+          {dialog.npc === 'linh' &&
+            assignment &&
+            !assignment.delivered &&
+            !team?.completed && (
+              <button
+                type="button"
+                className="primary-button"
+                disabled={network.connection !== 'connected'}
+                onClick={() => {
+                  void deliverTeamDish()
+                }}
+              >
+                Deliver the {assignment.dish}
+              </button>
+            )}
         </div>
       )}
       <form

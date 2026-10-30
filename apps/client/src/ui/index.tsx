@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import { audio } from '../audio'
 import { close, interact, nearby, start } from '../core/actions'
 import { PLACES } from '../core/places'
+import { teamObjective } from '../net/party'
+import { net } from '../net/status'
 import { useXRPresenting, XRSessionButton, xrStore } from '../platform/xr'
 import { type GameState, game, update } from '../state/game'
 import { Conversation } from './dialogue'
@@ -11,14 +13,10 @@ import { GameHeader } from './header'
 import { HubScreen } from './hub'
 import { Icon } from './icons'
 import { NeighborhoodMap } from './map'
-import {
-  JournalPanel,
-  MapPanel,
-  PausePanel,
-  RewardPanel,
-  TransportPanel,
-} from './panels'
+import { JournalPanel, MapPanel, PausePanel, TransportPanel } from './panels'
+import { PartyInviteControls } from './party'
 import { EmoteControls, PeoplePanel } from './people'
+import { RewardPanel } from './reward'
 import { TouchStick } from './touch'
 import './styles.css'
 import './panels.css'
@@ -71,6 +69,8 @@ function TitleScreen() {
 }
 
 function Objective({ state }: { state: GameState }) {
+  const network = useStore(net, (value) => value)
+  const team = teamObjective(network.party, network.selfId)
   const quest = state.quest
   const delivered = state.world.deliveredItems.includes('herbs:linh')
   const hint = quest
@@ -90,19 +90,24 @@ function Objective({ state }: { state: GameState }) {
       <span className="objective-rule" />
       <span>
         <span className="eyebrow">
-          {quest
-            ? 'A neighbor needs a hand'
-            : state.completed.length
-              ? 'Make another memory'
-              : 'Your first little story'}
+          {team
+            ? 'A little teamwork'
+            : quest
+              ? 'A neighbor needs a hand'
+              : state.completed.length
+                ? 'Make another memory'
+                : 'Your first little story'}
         </span>
         <strong>
-          {quest?.title ??
+          {team?.title ??
+            quest?.title ??
             (state.completed.length
               ? 'Take the scenic route'
               : 'A warm welcome')}
         </strong>
-        <span className="objective-hint">{hint}</span>
+        <span className="objective-hint">
+          {team ? `${team.hint} ${team.progress}` : hint}
+        </span>
       </span>
       <Icon name={quest ? 'leaf' : 'book'} size={22} />
     </button>
@@ -128,6 +133,11 @@ export function GameUI() {
   return (
     <div className="game-ui">
       <GameHeader state={state} />
+      {clear && !xrPresenting && (
+        <div className="party-invite-toast">
+          <PartyInviteControls />
+        </div>
+      )}
       {clear && !xrPresenting && <EmoteControls />}
       {state.panel === 'people' && !xrPresenting && <PeoplePanel />}
       {clear && !state.ride && (

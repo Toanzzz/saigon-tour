@@ -4,6 +4,7 @@ import { WebSocketServer } from 'ws'
 import type { ServerConfig } from '../config'
 import type { GameDb } from '../db'
 import type { NpcHarness } from '../npc/mastra'
+import { PartyService } from '../party'
 import { RoomManager } from './rooms'
 import { SocketSession } from './session'
 
@@ -14,9 +15,12 @@ export function createRealtime(
   app: Hono,
   config: ServerConfig,
   harness: NpcHarness,
-  db: GameDb
+  db: GameDb,
+  now = Date.now
 ) {
-  const manager = new RoomManager(harness)
+  const manager = new RoomManager(harness, now)
+  const party = new PartyService(manager, db, now)
+  harness.game.team = party
   const sessions = new Set<SocketSession>()
   const server = new WebSocketServer({ noServer: true, maxPayload: 4096 })
   let stopped = false
@@ -38,7 +42,10 @@ export function createRealtime(
             socket.close(1013, 'server_full')
             return
           }
-          session = new SocketSession(socket, manager, db, harness.game)
+          session = new SocketSession(socket, manager, db, harness.game, {
+            onMessage: (id, message) => party.handle(id, message),
+            onConnected: (id) => party.connected(id),
+          })
           sessions.add(session)
         },
         onMessage(event) {
@@ -62,6 +69,7 @@ export function createRealtime(
   manager.start()
   return {
     manager,
+    party,
     server,
     shutdown() {
       stopped = true

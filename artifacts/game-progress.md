@@ -128,7 +128,7 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 - Startup applies generated Drizzle migrations and sweeps guests unseen for 30 days. `/health` verifies the database; storage failures return 503.
 - Greetings use tool-free short generations, cache by persona/model/time bucket, and write the opening exchange into the conversation thread. `prewarm` fills 16 keys.
 - Validation: root lint/types/build/tests; 30 server + 14 client tests; real Postgres concurrency/persistence integration; Docker image build. Headless production desktop solo quest/bus/reward/reset and 390px touch/hub flows passed with no errors. Guest reload retained name and 80 coins; reset retained identity and restored 30 coins at both widths.
-- Shared-world pass complete: public rooms, presence, emotes, NPC room lines, reconnects, and event acknowledgements. Remaining implementation: parties and the team lunch errand.
+- Shared-world pass complete: public rooms, presence, emotes, NPC room lines, reconnects, and event acknowledgements. Parties and the team lunch errand are implemented and validated.
 
 
 ## Shared world
@@ -137,3 +137,15 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 - Client presence is a mutable interpolation buffer: nearest eight players within 45 units, six on mobile, 150 ms delay. The People panel shows room/connection/player count; Q and touch controls send fixed emotes without stopping movement.
 - NPC proximity barks use one tool-free step, daily bark limits, scheduler cooldowns, and authored fallback lines. State/event batches are sequenced and serialized per retained room member across reconnects.
 - Validation: 43 server tests plus 13 realtime cases; 21 client tests; lint/types/build passed. Bun and Node websocket welcome/shutdown smoke passed. Two-context desktop + 390px headless QA saw both guests, room presence, wave propagation, no console errors, and no mobile overflow. Evidence: `artifacts/pass-multiplayer/`.
+
+
+## Co-op
+
+- Parties hold 2–4 connected neighbors, validate same room and eight-unit proximity on invitation/acceptance, expire invitations after 30 seconds, and retain disconnected members for 60 seconds.
+- Cô Hoa’s `hoa-team-lunch` assigns noodles, broth, baguette, and coffee in join order. Assignments live on the party. Each member delivers their own dish to Chị Linh. Cô Hoa’s check grants each assigned member 40 coins, a photo, and +2 reputation once through a transactional completion row.
+- Solo herb quest remains independent. Party leave/reset removes assignments and cancels the errand when fewer than two remain. Canonical team tools and deterministic team controls use the same backend validation.
+- Save revisions fence stale HTTP/socket snapshots. Party versions fence late HTTP party snapshots. Controlled tests reproduced both ordering failures before the fix; 38 client tests now pass.
+- Final gates: lint → types → build → tests, real Postgres integration, Docker API build. Server: 58 passing tests plus the separately executed integration test. Client: 38 passing tests.
+- Production preview + Compose API/Postgres: desktop and 390px contexts invited/accepted with real controls, received distinct dishes, delivered via NPC buttons, saw +40 coins/photo/+2 reputation, and reloaded with the same guest names and 70 coins. Existing debug teleport is used only to position the two guests at NPCs; quest/party/reward mutations use real controls. Solo production bus/herb/reward flow and guest reset/reload also passed.
+- Evidence: `artifacts/pass-coop/`, `artifacts/pass-coop-solo/`, `artifacts/pass-coop-mobile/`, and `artifacts/pass-persistence/server-restart.json`.
+- Runtime topology remains one API replica. Rooms and parties end on API restart; saved journeys remain. No deployment or public hosting was performed.

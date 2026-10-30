@@ -5,6 +5,7 @@ import {
   QuestSchema,
   WorldStateSchema,
 } from './contracts'
+import { PartyInviteSchema, PartySnapshotSchema } from './party'
 
 export const WORLD_BOUNDS = { x: [-110, 150], z: [-120, 100] } as const
 export const NPC_POSITIONS = {
@@ -57,6 +58,15 @@ export const ClientSocketMessageSchema = z.discriminatedUnion('type', [
     })
     .strict(),
   z.object({ type: z.literal('emote'), emote: EmoteSchema }).strict(),
+  z.object({ type: z.literal('party-invite'), targetId: z.uuid() }).strict(),
+  z
+    .object({
+      type: z.literal('party-respond'),
+      inviteId: z.uuid(),
+      accept: z.boolean(),
+    })
+    .strict(),
+  z.object({ type: z.literal('party-leave') }).strict(),
 ])
 export type ClientSocketMessage = z.infer<typeof ClientSocketMessageSchema>
 export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
@@ -84,6 +94,7 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
   }),
   z.object({
     type: z.literal('world'),
+    revision: z.number().int().min(0).default(0),
     sequence: z.number().int().min(0),
     world: WorldStateSchema,
     quest: QuestSchema.nullable(),
@@ -91,5 +102,15 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     reputation: z.number(),
   }),
   z.object({ type: z.literal('error'), message: z.string() }),
+  z.object({ type: z.literal('party'), party: PartySnapshotSchema.nullable() }),
+  PartyInviteSchema.extend({ type: z.literal('party-invited') }),
+  z.object({
+    type: z.literal('quest-completed'),
+    revision: z.number().int().min(0).default(0),
+    quest: QuestSchema,
+    world: WorldStateSchema,
+    completed: z.array(QuestSchema),
+    reputation: z.number(),
+  }),
 ])
 export type ServerSocketMessage = z.infer<typeof ServerSocketMessageSchema>

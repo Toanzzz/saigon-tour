@@ -119,3 +119,14 @@ Validated on October 30, 2026 from the local production previews.
 
 - 13 real Node WebSocket tests passed: origin/token rejection, hello deadline, player broadcast, snapshots, emotes, bounds, payload/rate limits, room capacity, replacement sockets, NPC bark cooldown/cap, reconnect event dedupe, and room expiry.
 - Browser QA with one desktop and one 390px context passed People panel presence, fixed Wave propagation, connection diagnostics, and mobile width checks with no page or console errors. Evidence: `artifacts/pass-multiplayer/flow.json`.
+
+
+## Co-op and final verification
+
+- Required gate order completed: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server: 58 passed, one integration case skipped in the unit run. Client: 38 passed. `bun run test:integration` separately passed the real-Postgres case.
+- Docker image `saigon-tour-api` built with Node 24, both generated Drizzle migrations, and Mastra Postgres memory. Compose health returned `{ok:true,db:"up",mode:"fallback",model:null}`. API restart retained guest identity, 80 solo coins, and the completed quest (`artifacts/pass-persistence/server-restart.json`).
+- Thirteen party tests cover connected/same-room/eight-unit rules, exact distance boundary, invitation recipient/expiry/decline, capacity recheck, join-order assignments, invalid deliveries, four-member concurrent one-time payouts, canonical tool outcomes with an active solo quest, leave/cancel, reset, reconnect retention/expiry, and real WebSocket party routing.
+- Controlled tests first failed for HTTP solo-save loss during a team completion and stale HTTP party restoration. Save revisions and party ordering fences resolve both. Budget storage failure first returned 200 in a controlled test; it now returns 503.
+- Two headless production contexts (1440px desktop and 390px touch) used People/Invite/Accept, Team errand, assigned delivery, and Check team errand controls. Both saved wallets increased 30→70; both gained one photo and +2 reputation. Reload kept the same names and balances. Existing debug teleports position guests at NPCs; no state injection grants progress/rewards. Results and reward captures: `artifacts/pass-coop/flow.json`, `reward-0.png`, `reward-1.png`.
+- Final solo production regression covers walking, City bus, herbs, Chị Linh, Cô Hoa verification, reward, hub, and restart. Final mobile regression covers joystick, hub, sound, and width. No page/console errors in passing runs.
+- Existing Vite large-chunk and Three.js test CJS-deprecation warnings remain; all gates pass. No public deployment or physical XR hardware test is claimed.

@@ -1,5 +1,9 @@
+import { DEMO_QUEST, TEAM_QUEST } from '@saigon/shared'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { converse } from '../src/core/conversation'
+import { acknowledgeWorld, resetEventSequence } from '../src/net/events'
+import { handlePartyMessage } from '../src/net/party'
+import { net, updateNet } from '../src/net/status'
 import { game, initialState, update } from '../src/state/game'
 
 const reply = () => ({
@@ -15,6 +19,8 @@ const reply = () => ({
   toolCalls: [],
 })
 beforeEach(() => {
+  resetEventSequence()
+  updateNet({ party: null })
   vi.stubGlobal('localStorage', { getItem: () => 'guest-token' })
   game.setState(() => ({
     ...initialState(),
@@ -80,4 +86,146 @@ describe('guest NPC turns', () => {
     expect(game.state.pending).toEqual([{ type: 'talk', npcId: 'hoa' }])
     expect(game.state.lastLine.hoa).toContain('Chào bạn')
   })
+})
+
+async function deferredTurn() {
+  let resolve!: (response: Response) => void
+  const fetchMock = vi.fn(
+    () =>
+      new Promise<Response>((done) => {
+        resolve = done
+      })
+  )
+  vi.stubGlobal('fetch', fetchMock)
+  const turn = converse('Help, please!', 'help', true)
+  await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
+  return { turn, resolve }
+}
+const oldParty = {
+  id: '11111111-1111-4111-8111-111111111111',
+  members: [],
+  quest: null,
+}
+const soloReply = (revision: number, currency: number) => ({
+  ...reply(),
+  revision,
+  party: oldParty,
+  world: { ...initialState().world, currency, inventory: { herbs: 1 } },
+  quest: DEMO_QUEST,
+  questEvent: { type: 'offered', quest: DEMO_QUEST, reward: DEMO_QUEST.reward },
+})
+describe('HTTP and socket ordering', () => {
+  it('syncs a newer solo save after a team push closes its dialogue', async () => {
+    const { turn, resolve } = await deferredTurn()
+    handlePartyMessage({
+      type: 'quest-completed',
+      revision: 2,
+      quest: TEAM_QUEST,
+      world: {
+        ...initialState().world,
+        currency: 70,
+        completedQuestIds: [TEAM_QUEST.id],
+      },
+      completed: [TEAM_QUEST],
+      reputation: 2,
+    })
+    expect(game.state.dialogue).toBeNull()
+    resolve(Response.json(soloReply(3, 70)))
+    await turn
+    expect(game.state.quest).toEqual(DEMO_QUEST)
+    expect(game.state.world.inventory.herbs).toBe(1)
+    expect(game.state.world.currency).toBe(70)
+    expect(game.state.dialogue).toBeNull()
+  })
+  it('does not resurrect a party left while HTTP was pending', async () => {
+    updateNet({ party: oldParty })
+    const { turn, resolve } = await deferredTurn()
+    handlePartyMessage({ type: 'party', party: null })
+    resolve(Response.json(soloReply(1, 30)))
+    await turn
+    expect(net.state.party).toBeNull()
+  })
+  it('rejects an older HTTP save after a newer team reward push', async () => {
+    const { turn, resolve } = await deferredTurn()
+    handlePartyMessage({
+      type: 'quest-completed',
+      revision: 4,
+      quest: TEAM_QUEST,
+      world: {
+        ...initialState().world,
+        currency: 70,
+        completedQuestIds: [TEAM_QUEST.id],
+      },
+      completed: [TEAM_QUEST],
+      reputation: 2,
+    })
+    resolve(Response.json(soloReply(3, 30)))
+    await turn
+    expect(game.state.world.currency).toBe(70)
+    expect(game.state.quest).toBeNull()
+  })
+})
+
+it('rejects old HTTP world and quest while still finishing its dialogue', async () => {
+  const { turn, resolve } = await deferredTurn()
+  acknowledgeWorld({
+    type: 'world',
+    sequence: 0,
+    revision: 5,
+    world: { ...initialState().world, currency: 80 },
+    quest: null,
+    completed: [],
+    reputation: 0,
+  })
+  expect(game.state.dialogue?.thinking).toBe(true)
+  resolve(Response.json(soloReply(4, 30)))
+  await turn
+  expect(game.state.world.currency).toBe(80)
+  expect(game.state.quest).toBeNull()
+  expect(game.state.dialogue?.thinking).toBe(false)
+})
+it('does not replace a completed socket party with the active HTTP party', async () => {
+  updateNet({ party: oldParty })
+  const { turn, resolve } = await deferredTurn()
+  const completedParty = {
+    ...oldParty,
+    quest: { id: 'hoa-team-lunch' as const, assignments: [], completed: true },
+  }
+  handlePartyMessage({ type: 'party', party: completedParty })
+  resolve(Response.json(soloReply(1, 30)))
+  await turn
+  expect(net.state.party).toEqual(completedParty)
+})
+it('keeps completed reward UI closed when HTTP duplicates a socket completion', async () => {
+  const { turn, resolve } = await deferredTurn()
+  const world = {
+    ...initialState().world,
+    currency: 70,
+    completedQuestIds: [TEAM_QUEST.id],
+  }
+  handlePartyMessage({
+    type: 'quest-completed',
+    revision: 3,
+    quest: TEAM_QUEST,
+    world,
+    completed: [TEAM_QUEST],
+    reputation: 2,
+  })
+  update({ panel: 'none', rewardQuest: DEMO_QUEST })
+  resolve(
+    Response.json({
+      ...reply(),
+      revision: 3,
+      world,
+      questEvent: {
+        type: 'completed',
+        quest: TEAM_QUEST,
+        reward: TEAM_QUEST.reward,
+      },
+    })
+  )
+  await turn
+  expect(game.state.panel).toBe('none')
+  expect(game.state.completed).toEqual([TEAM_QUEST])
+  expect(game.state.reputation).toBe(2)
 })

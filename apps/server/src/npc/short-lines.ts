@@ -4,6 +4,7 @@ import type { MastraModelConfig } from '@mastra/core/llm'
 import { NPCS, type NpcId, type TimeOfDay } from '@saigon/shared'
 import type { GameDb } from '../db'
 import { NPC_PERSONAS } from './agents'
+import { storageUnavailable } from './meter'
 import { cleanReply } from './safety'
 
 export interface ShortLine {
@@ -122,7 +123,8 @@ export class ShortLines {
       )
       const reply = cleanReply(result.text)
       if (reply) return { reply, source: 'live' }
-    } catch {
+    } catch (error) {
+      if (storageUnavailable(error)) throw error
       /* Deterministic neighborhood life continues without the model. */
     }
     return fallback(npc, bucket)

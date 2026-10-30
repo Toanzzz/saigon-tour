@@ -11,6 +11,7 @@ import {
 } from 'drizzle-orm/pg-core'
 
 export const players = pgTable('players', {
+  revision: integer().notNull().default(0),
   id: uuid().primaryKey(),
   tokenHash: text('token_hash').notNull().unique(),
   name: text().notNull(),

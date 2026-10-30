@@ -586,5 +586,6 @@ Each NPC should have its own persona file, agent definition, and restricted tool
 - [x] Invalid or unsafe model output is rejected
 - [x] Model timeout or API failure produces a fallback line
 - [x] At least three NPCs use the same harness with different personas
-- [ ] Background NPC updates are event-driven, not per-frame
-Evidence: `apps/server/test/harness.spec.ts`, `persistence.spec.ts`, and `artifacts/pass-persistence/`; background room scheduler validation is covered by `apps/server/test/realtime.spec.ts` and `artifacts/pass-multiplayer/flow.json`; parties remain for the co-op pass.
+- [x] Background NPC updates are event-driven, not per-frame
+
+Evidence: `apps/server/test/harness.spec.ts`, `persistence.spec.ts`, and `artifacts/pass-persistence/`; background room scheduler validation is covered by `apps/server/test/realtime.spec.ts` and `artifacts/pass-multiplayer/flow.json`; parties and team reward authority are covered by `apps/server/test/party.spec.ts` and `artifacts/pass-coop/flow.json`.

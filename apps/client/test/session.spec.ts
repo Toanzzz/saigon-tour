@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { initialState } from '../src/state/game'
 
 const saved = {
+  revision: 7,
   id: 'b258d475-4914-409d-bc43-e38d6137dc92',
   name: 'Sóc Nắng 27',
   color: '#ddaa77',
@@ -69,6 +70,7 @@ describe('guest sessions', () => {
         headers: { Authorization: 'Bearer existing-token' },
       })
     )
+    expect(game.state.serverRevision).toBe(7)
     expect(game.state.world.currency).toBe(75)
     expect(game.state.completed).toEqual([DEMO_QUEST])
     expect(game.state.guestName).toBe(saved.name)

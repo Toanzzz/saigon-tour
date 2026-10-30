@@ -1,0 +1,82 @@
+{
+  "renderer": {
+    "render": {
+      "frame": 288,
+      "calls": 126,
+      "triangles": 332629,
+      "points": 0,
+      "lines": 0
+    },
+    "memory": {
+      "geometries": 80,
+      "textures": 44
+    }
+  },
+  "state": {
+    "screen": "playing",
+    "panel": "none",
+    "muted": false,
+    "frame": 271,
+    "position": [
+      -23,
+      0.7987188100814819,
+      5.726883411407471
+    ],
+    "currency": 30,
+    "completed": 0,
+    "ride": null,
+    "source": null,
+    "animation": "idle"
+  },
+  "physics": {
+    "engine": "rapier",
+    "timestep": 0.016666666666666666,
+    "bodies": 2,
+    "colliders": 94,
+    "ccdBodies": 1
+  },
+  "audio": {
+    "state": "running",
+    "loaded": [
+      "confirm",
+      "bell",
+      "reward",
+      "city"
+    ],
+    "errors": [],
+    "muted": false,
+    "volume": 0.5,
+    "paused": false,
+    "activeEffects": 0,
+    "ambienceLoops": 1,
+    "events": {
+      "click": 0,
+      "pickup": 0,
+      "board": 0,
+      "arrive": 0,
+      "reward": 0
+    }
+  },
+  "network": {
+    "connection": "connected",
+    "room": "Lê Lợi 1",
+    "playerCount": 1,
+    "selfId": "d5dff235-b953-4cea-90d7-ec899dc686f5",
+    "guestName": "Sen Hồng 37",
+    "serverRevision": 0,
+    "partyVersion": 2,
+    "remotePlayers": 0,
+    "npcLines": [],
+    "emotes": [],
+    "events": {
+      "sequence": 1793401960299,
+      "inFlight": null,
+      "pending": 0,
+      "httpBusy": false
+    },
+    "party": null,
+    "invite": null
+  },
+  "fps": 57.515209777548684,
+  "dpr": 1
+}

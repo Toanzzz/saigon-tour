@@ -1,6 +1,9 @@
+import { useStore } from '@tanstack/react-store'
 import { useState } from 'react'
 import { board, close, pause, restart } from '../core/actions'
 import { MODES, PLACES, type TravelMode } from '../core/places'
+import { teamObjective } from '../net/party'
+import { net } from '../net/status'
 import { type GameState, game, update } from '../state/game'
 import { Dialog } from './dialog'
 import { Icon } from './icons'
@@ -79,12 +82,32 @@ export function TransportPanel({ state }: { state: GameState }) {
 }
 
 export function JournalPanel({ state }: { state: GameState }) {
+  const network = useStore(net, (value) => value)
+  const team = teamObjective(network.party, network.selfId)
   return (
     <Dialog
       title="Your little journey"
       eyebrow="Travel journal"
       onClose={close}
     >
+      {team && (
+        <section className="journal-section" aria-label="Team errand progress">
+          <h3>{team.title}</h3>
+          <p>{team.hint}</p>
+          <p>{team.progress}</p>
+          <ul>
+            {network.party?.quest?.assignments.map((assignment) => (
+              <li key={assignment.playerId}>
+                {assignment.name}: {assignment.dish} ·{' '}
+                {assignment.delivered ? 'delivered' : 'on the way'}
+              </li>
+            ))}
+          </ul>
+          <span className="journal-reward">
+            40 coins · a group photo · +2 reputation each
+          </span>
+        </section>
+      )}
       <div className="journal-section">
         <h3>On your mind</h3>
         {state.quest ? (
@@ -121,6 +144,12 @@ export function JournalPanel({ state }: { state: GameState }) {
             <span>
               <Icon name="map" />
               Sài Gòn postcard × {state.world.inventory.postcard}
+            </span>
+          )}
+          {(state.world.inventory.photo ?? 0) > 0 && (
+            <span>
+              <Icon name="star" />
+              Group photo × {state.world.inventory.photo}
             </span>
           )}
         </div>
@@ -237,48 +266,6 @@ export function PausePanel({ state }: { state: GameState }) {
           <kbd>M</kbd> Map
         </span>
       </div>
-      <button
-        type="button"
-        className="text-button restart-button"
-        disabled={state.guestStatus === 'resetting'}
-        onClick={restart}
-      >
-        Start a new journey
-      </button>
-    </Dialog>
-  )
-}
-
-export function RewardPanel({ state }: { state: GameState }) {
-  return (
-    <Dialog
-      title="A little kindness goes far."
-      eyebrow="A good day in Sài Gòn"
-      onClose={close}
-      className="reward-dialog"
-    >
-      <div className="postcard" role="img" aria-label="Sài Gòn postcard earned">
-        <span className="postcard-mark">Sài Gòn</span>
-        <span>with love, from the neighborhood</span>
-        <i className="postcard-stamp">
-          <Icon name="star" size={28} />
-        </i>
-      </div>
-      <p className="reward-copy">
-        The herbs made it to Chị Linh’s community lunch. Cô Hoa sends her
-        thanks.
-      </p>
-      <div className="reward-earned">
-        <span>
-          <Icon name="coin" />+{state.reward} coins
-        </span>
-        <span>
-          <Icon name="star" />A new friend
-        </span>
-      </div>
-      <button type="button" className="primary-button wide" onClick={close}>
-        Continue exploring
-      </button>
       <button
         type="button"
         className="text-button restart-button"

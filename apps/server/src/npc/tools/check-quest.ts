@@ -18,8 +18,9 @@ export const createCheckQuestTool = ({ game }: NpcServices) =>
     execute: async ({ questId }, context) => {
       const { playerId, npcId, outcome } = requestValues(context)
       outcome.calls.push('check-quest')
-      const quest = (await game.get(playerId)).quest
+      const solo = (await game.get(playerId)).quest
       const result = await game.checkQuest(playerId, npcId, questId)
+      const quest = result.quest ?? solo
       if (result.rewardGranted && quest)
         outcome.completed = { quest, reward: result.reward }
       else if (result.status === 'active' && quest) outcome.incomplete = quest

@@ -1,7 +1,7 @@
 import type { Emote } from '@saigon/shared'
 import { useStore } from '@tanstack/react-store'
 import { close } from '../core/actions'
-import { sendEmote } from '../net/socket'
+import { sendEmote, sendParty } from '../net/socket'
 import { net, updateNet } from '../net/status'
 import { useXRPresenting } from '../platform/xr'
 import { update } from '../state/game'
@@ -36,6 +36,27 @@ export function PeoplePanel() {
           ? 'Sharing this little corner of Sài Gòn'
           : 'Reconnecting to the neighborhood…'}
       </p>
+      {state.party && (
+        <section className="party-roster" aria-label="Your party">
+          <h3>Your party · {state.party.members.length}/4</h3>
+          <ul>
+            {state.party.members.map((member) => (
+              <li key={member.id}>
+                {member.name}
+                {member.id === state.selfId ? ' (you)' : ''}
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            className="text-button"
+            disabled={state.connection !== 'connected'}
+            onClick={() => sendParty({ type: 'party-leave' })}
+          >
+            Leave party
+          </button>
+        </section>
+      )}
       <ul className="people-list">
         {state.players.map((player) => (
           <li key={player.id}>
@@ -45,12 +66,37 @@ export function PeoplePanel() {
             />
             <strong>{player.name}</strong>
             {player.id === state.selfId && <span>You</span>}
+            {player.id !== state.selfId &&
+              !state.party?.members.some(
+                (member) => member.id === player.id
+              ) && (
+                <button
+                  type="button"
+                  className="text-button"
+                  disabled={
+                    state.connection !== 'connected' ||
+                    (state.party?.members.length ?? 0) >= 4
+                  }
+                  aria-label={`Invite ${player.name}`}
+                  onClick={() => {
+                    if (
+                      sendParty({ type: 'party-invite', targetId: player.id })
+                    )
+                      updateNet({ emotesOpen: false })
+                  }}
+                >
+                  Invite
+                </button>
+              )}
           </li>
         ))}
       </ul>
       {!state.players.length && (
         <p>Your neighbors will appear when connected.</p>
       )}
+      <p className="muted-copy">
+        Invite a neighbor within a few steps. Parties hold up to four people.
+      </p>
     </Dialog>
   )
 }

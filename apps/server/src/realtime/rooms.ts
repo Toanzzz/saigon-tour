@@ -48,6 +48,7 @@ export class RoomManager {
   private counter = 0
   private timer?: ReturnType<typeof setInterval>
   private leaveHooks = new Set<(playerId: string) => void>()
+  private tickHooks = new Set<(now: number) => void>()
 
   constructor(
     private readonly harness: Pick<NpcHarness, 'bark'>,
@@ -65,6 +66,11 @@ export class RoomManager {
   onLeave(hook: (playerId: string) => void) {
     this.leaveHooks.add(hook)
     return () => this.leaveHooks.delete(hook)
+  }
+
+  onTick(hook: (now: number) => void) {
+    this.tickHooks.add(hook)
+    return () => this.tickHooks.delete(hook)
   }
 
   connect(
@@ -87,7 +93,7 @@ export class RoomManager {
         color: guest.color,
         position: [-16, 0, 8],
         heading: 0,
-        ride: null,
+        ride: 'loading',
       }
       room.members.set(guest.id, {
         player,
@@ -178,6 +184,7 @@ export class RoomManager {
   }
 
   tick(now = this.now()) {
+    for (const hook of this.tickHooks) hook(now)
     for (const room of this.rooms.values()) {
       for (const [id, member] of room.members)
         if (

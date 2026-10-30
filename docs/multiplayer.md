@@ -21,3 +21,11 @@ Remote tourists interpolate snapshots with a 150 ms delay. The client draws the 
 `bun run dev` starts Postgres before the client and API. Compose binds Postgres to `127.0.0.1:58002`; client and API use 58000 and 58001. `docker compose --profile api up -d --build` runs the API image with migrations applied at startup. `DATABASE_URL` is required in production.
 
 Guest tokens live in browser local storage; the server stores only SHA-256 hashes. Reset retains the guest name and token while clearing saved progress and NPC memory. Guests unseen for 30 days are removed by the startup/daily sweep.
+
+## Parties and the lunch errand
+
+The People panel invites a connected neighbor within eight units. Invites expire after 30 seconds. A party holds two to four guests; every member can invite, accept, decline, or leave. Acceptance checks room, proximity, and available space again. Invitations remain accessible while a modal or city hub is open.
+
+Any member can ask Cô Hoa for the team lunch while every member is eligible. Dishes are assigned in party join order: noodles, broth, baguette, coffee. The assignment belongs to the party rather than the saved inventory. Each assigned member hands their own dish to Chị Linh. Once all remaining assignments are delivered, any member checks with Cô Hoa. Every assigned member receives 40 coins, a photo, and two reputation, once. Leaving removes the assignment; fewer than two assignments cancels the errand. The solo herb errand is independent.
+
+Save snapshots carry an increasing database revision. The client uses it to reject stale HTTP/socket saves, while party snapshot updates have their own ordering fence. Quest rewards have a separate socket push so a teammate sees the reward immediately.

@@ -15,11 +15,15 @@ export const createGetWorldContextTool = ({ game }: NpcServices) =>
       activeQuest: z.string().nullable(),
       completedQuests: z.number(),
       reputation: z.number(),
+      partySize: z.number(),
+      partyMembers: z.array(z.string()),
+      teamQuest: z.string().nullable(),
     }),
     execute: async (_input, context) => {
       const { playerId, outcome } = requestValues(context)
       outcome.calls.push('get-world-context')
       const record = await game.get(playerId)
+      const party = game.team?.snapshot(playerId)
       return {
         coins: record.world.currency,
         visited: record.world.visitedLocations,
@@ -27,6 +31,9 @@ export const createGetWorldContextTool = ({ game }: NpcServices) =>
         activeQuest: record.quest?.title ?? null,
         completedQuests: record.completed.length,
         reputation: record.reputation,
+        partySize: party?.members.length ?? 0,
+        partyMembers: party?.members.map((member) => member.name) ?? [],
+        teamQuest: party?.quest?.id ?? null,
       }
     },
   })

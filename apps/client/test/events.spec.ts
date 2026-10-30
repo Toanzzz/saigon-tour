@@ -17,6 +17,7 @@ function world(
 ): Extract<ServerSocketMessage, { type: 'world' }> {
   return {
     type: 'world',
+    revision: 0,
     sequence,
     world: { ...initialState().world, currency },
     quest: null,
@@ -84,5 +85,54 @@ describe('socket event acknowledgement', () => {
     const before = eventDiagnostics().sequence
     resetEventSequence()
     expect(eventDiagnostics().sequence).toBeGreaterThan(before)
+  })
+  it('a second HTTP turn cannot take or release the active lock', async () => {
+    expect(await beginHttpTurn()).toBe(true)
+    expect(await beginHttpTurn()).toBe(false)
+    update({ pending: [{ type: 'spend', amount: 5 }] })
+    expect(nextEventBatch()).toBeNull()
+    expect(eventDiagnostics().httpBusy).toBe(true)
+    endHttpTurn()
+    expect(nextEventBatch()).not.toBeNull()
+  })
+  it('fences old socket acknowledgements after reset', () => {
+    update({ pending: [{ type: 'spend', amount: 5 }] })
+    const batch = nextEventBatch()
+    if (!batch) throw new Error('expected event batch')
+    acknowledgeWorld(world(batch.sequence))
+    resetEventSequence()
+    update({ world: initialState().world })
+    acknowledgeWorld(world(batch.sequence))
+    expect(game.state.world.currency).toBe(initialState().world.currency)
+  })
+})
+
+describe('save revisions and socket sequences', () => {
+  it('applies a newer save push during HTTP even with an old event sequence', async () => {
+    expect(await beginHttpTurn()).toBe(true)
+    update({ pending: [{ type: 'spend', amount: 3 }] })
+    acknowledgeWorld({ ...world(0, 70), revision: 4 })
+    expect(game.state.world.currency).toBe(67)
+    expect(game.state.serverRevision).toBe(4)
+    endHttpTurn()
+  })
+  it('acknowledges an older save without rolling back a newer reward', () => {
+    update({ pending: [{ type: 'spend', amount: 5 }] })
+    const batch = nextEventBatch()
+    if (!batch) throw new Error('expected event batch')
+    update({ serverRevision: 5, world: { ...game.state.world, currency: 70 } })
+    acknowledgeWorld({ ...world(batch.sequence, 25), revision: 4 })
+    expect(currentEventBatch()).toBeNull()
+    expect(game.state.world.currency).toBe(70)
+    expect(game.state.serverRevision).toBe(5)
+  })
+  it('replays an unacknowledged batch on a newer unrelated save push', () => {
+    update({ pending: [{ type: 'spend', amount: 5 }] })
+    const batch = nextEventBatch()
+    if (!batch) throw new Error('expected event batch')
+    update({ pending: [{ type: 'spend', amount: 3 }] })
+    acknowledgeWorld({ ...world(0, 70), revision: 2 })
+    expect(currentEventBatch()).toEqual(batch)
+    expect(game.state.world.currency).toBe(62)
   })
 })

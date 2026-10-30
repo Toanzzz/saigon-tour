@@ -1,0 +1,82 @@
+{
+  "renderer": {
+    "render": {
+      "frame": 1070,
+      "calls": 168,
+      "triangles": 336650,
+      "points": 0,
+      "lines": 0
+    },
+    "memory": {
+      "geometries": 94,
+      "textures": 53
+    }
+  },
+  "state": {
+    "screen": "playing",
+    "panel": "reward",
+    "muted": false,
+    "frame": 1052,
+    "position": [
+      -23,
+      0.7987163066864014,
+      6
+    ],
+    "currency": 75,
+    "completed": 1,
+    "ride": null,
+    "source": "fallback",
+    "animation": "idle"
+  },
+  "physics": {
+    "engine": "rapier",
+    "timestep": 0.016666666666666666,
+    "bodies": 2,
+    "colliders": 94,
+    "ccdBodies": 1
+  },
+  "audio": {
+    "state": "running",
+    "loaded": [
+      "confirm",
+      "bell",
+      "reward",
+      "city"
+    ],
+    "errors": [],
+    "muted": false,
+    "volume": 0.5,
+    "paused": false,
+    "activeEffects": 2,
+    "ambienceLoops": 1,
+    "events": {
+      "click": 4,
+      "pickup": 2,
+      "board": 1,
+      "arrive": 1,
+      "reward": 1
+    }
+  },
+  "network": {
+    "connection": "connected",
+    "room": "Nguyễn Huệ 1",
+    "playerCount": 1,
+    "selfId": "c578932c-5d68-493f-83c3-67e129c92577",
+    "guestName": "Mây Xanh 15",
+    "serverRevision": 11,
+    "partyVersion": 4,
+    "remotePlayers": 0,
+    "npcLines": [],
+    "emotes": [],
+    "events": {
+      "sequence": 1793401870362,
+      "inFlight": null,
+      "pending": 0,
+      "httpBusy": false
+    },
+    "party": null,
+    "invite": null
+  },
+  "fps": 60.05198490657633,
+  "dpr": 1
+}

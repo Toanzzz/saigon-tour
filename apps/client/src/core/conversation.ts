@@ -3,21 +3,17 @@ import {
   type InteractResponse,
   type ItemId,
   type NpcId,
+  TEAM_QUEST,
   type TimeOfDay,
 } from '@saigon/shared'
 import { audio } from '../audio'
 import { interactWith, queryClient } from '../net/agent'
 import { beginHttpTurn, endHttpTurn } from '../net/events'
-import {
-  type GameState,
-  game,
-  grantReward,
-  notify,
-  update,
-} from '../state/game'
+import { net, updateNet } from '../net/status'
+import { type GameState, game, notify, update } from '../state/game'
 import { distance, PEOPLE } from './places'
 
-export type Intent = 'chat' | 'help' | 'check' | 'greet'
+export type Intent = 'chat' | 'help' | 'check' | 'greet' | 'team'
 
 const timeOfDay = (hour = new Date().getHours()): TimeOfDay =>
   hour < 11
@@ -68,7 +64,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
     game.state.sessionId !== session ||
     game.state.dialogue?.requestId !== dialog.requestId
   ) {
-    endHttpTurn()
+    if (canSend) endHttpTurn()
     if (game.state.dialogue?.requestId === dialog.requestId)
       update({ dialogue: { ...game.state.dialogue, thinking: false } })
     return
@@ -76,6 +72,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
   const snapshot = game.state
   const { sessionId, pending, position } = snapshot
   const sentEvents = pending.slice(0, 16)
+  const partyVersion = net.state.partyVersion
   const requestId = dialog.requestId
   const history =
     opening || intent !== 'chat'
@@ -106,7 +103,14 @@ export async function converse(text: string, intent: Intent, opening = false) {
   )
   endHttpTurn()
   if (game.state.sessionId !== sessionId) return
-  apply(result.response, dialog.npc, history, requestId)
+  apply(
+    result.response,
+    dialog.npc,
+    history,
+    requestId,
+    result.synced,
+    partyVersion
+  )
   if (!result.synced)
     game.setState((state) => ({
       ...state,
@@ -118,33 +122,54 @@ function apply(
   result: InteractResponse,
   npc: NpcId,
   history: { role: 'user' | 'assistant'; content: string }[],
-  requestId: string
+  requestId: string,
+  synced: boolean,
+  partyVersion: number
 ) {
   const event = result.questEvent
+  if (synced && net.state.partyVersion === partyVersion)
+    updateNet({ party: result.party })
+  let offered = false
+  let completed = false
+  const teamEvent = event?.quest.id === TEAM_QUEST.id
   game.setState((state) => {
-    if (state.dialogue?.requestId !== requestId) return state
+    if (result.revision < state.serverRevision) {
+      return state.dialogue?.requestId === requestId
+        ? { ...state, dialogue: { ...state.dialogue, thinking: false } }
+        : state
+    }
     let next: GameState = {
       ...state,
+      serverRevision: synced ? result.revision : state.serverRevision,
       world: applyPlayerEvents(result.world, state.pending),
       quest: result.quest,
       source: result.source,
       lastLine: { ...state.lastLine, [npc]: result.reply },
     }
-    if (event?.type === 'offered' && !state.quest)
-      next = { ...next, quest: event.quest }
-    if (event?.type === 'completed') {
-      const rewarded = grantReward(
-        { ...state, quest: event.quest },
-        event.quest
-      )
+    offered =
+      event?.type === 'offered' &&
+      !state.quest &&
+      !state.completed.some((quest) => quest.id === event.quest.id)
+    if (offered && event && !teamEvent) next.quest = event.quest
+    if (
+      event?.type === 'completed' &&
+      !state.completed.some((quest) => quest.id === event.quest.id)
+    ) {
+      completed = true
+      const rewarded = {
+        completed: [...state.completed, event.quest],
+        reputation: state.reputation + event.reward.reputation,
+      }
       next = {
         ...next,
         completed: rewarded.completed,
         reward: event.reward.currency,
+        rewardQuest: event.quest,
         reputation: rewarded.reputation,
         panel: 'reward',
         dialogue: null,
-        quest: null,
+        quest: teamEvent ? result.quest : null,
+        screen: 'playing',
       }
       return next
     }
@@ -164,9 +189,13 @@ function apply(
           : state.dialogue,
     }
   })
-  if (event?.type === 'offered') {
+  if (offered) {
     audio.play('pickup')
-    notify('Fresh herbs tucked into your bag')
+    notify(
+      teamEvent
+        ? 'Team dishes assigned. See your travel journal.'
+        : 'Fresh herbs tucked into your bag'
+    )
   }
-  if (event?.type === 'completed') audio.play('reward')
+  if (completed) audio.play('reward')
 }

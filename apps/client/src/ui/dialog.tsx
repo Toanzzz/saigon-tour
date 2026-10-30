@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useId, useRef } from 'react'
 import { Icon } from './icons'
+import { PartyInviteControls } from './party'
 
 export function Dialog({
   title,
@@ -45,6 +46,7 @@ export function Dialog({
           <Icon name="close" />
         </button>
       </div>
+      <PartyInviteControls />
       {children}
     </dialog>
   )

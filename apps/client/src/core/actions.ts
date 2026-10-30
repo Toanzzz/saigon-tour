@@ -1,6 +1,8 @@
 import { NPCS, type NpcId } from '@saigon/shared'
 import { audio } from '../audio'
+import { beginHttpTurn, endHttpTurn, resetEventSequence } from '../net/events'
 import { guestState, resetSession } from '../net/session'
+import { net } from '../net/status'
 import { isXRPresenting } from '../platform/xr/store'
 import { game, initialState, notify, update } from '../state/game'
 import { converse, deliver } from './conversation'
@@ -20,15 +22,24 @@ export function start() {
 export async function restart() {
   const state = game.state
   if (state.guestStatus === 'resetting') return
+  const acquired = await beginHttpTurn()
+  if (!acquired) {
+    notify(
+      'Please wait for your current conversation to finish, then try again.'
+    )
+    return
+  }
   update({ guestStatus: 'resetting' })
   let player = null
   try {
     player = await resetSession()
   } catch {
+    endHttpTurn()
     update({ guestStatus: state.guestStatus })
     notify('Your saved journey could not be reset. Try again when connected.')
     return
   }
+  resetEventSequence()
   audio.setPaused(false)
   game.setState(() => ({
     ...initialState(state.generation + 1),
@@ -138,6 +149,32 @@ export async function talk(npc: NpcId) {
   )
 }
 export const chat = (text: string) => converse(text, 'chat')
+export async function teamErrand() {
+  if (net.state.connection !== 'connected') return
+  await converse('Can you offer or check our team lunch errand?', 'team')
+}
+export async function deliverTeamDish() {
+  const { dialogue } = game.state
+  const assignment = net.state.party?.quest?.assignments.find(
+    (entry) => entry.playerId === net.state.selfId
+  )
+  if (
+    dialogue?.npc !== 'linh' ||
+    dialogue.thinking ||
+    !assignment ||
+    assignment.delivered ||
+    net.state.connection !== 'connected'
+  )
+    return
+  game.setState((state) => ({
+    ...state,
+    pending: [
+      ...state.pending,
+      { type: 'deliver', itemId: assignment.dish, npcId: 'linh' },
+    ],
+  }))
+  await converse(`Here is the ${assignment.dish} for the team lunch!`, 'chat')
+}
 export async function acceptQuest() {
   const state = game.state
   if (!state.dialogue || state.dialogue.thinking || state.quest) return

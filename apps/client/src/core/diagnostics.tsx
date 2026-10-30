@@ -56,6 +56,8 @@ export function Diagnostics() {
         playerCount: net.state.players.length,
         selfId: net.state.selfId,
         guestName: state.guestName,
+        serverRevision: state.serverRevision,
+        partyVersion: net.state.partyVersion,
         remotePlayers: presence.size,
         npcLines: [...npcSpeech.entries()].filter(
           ([, value]) => value.until > performance.now()
@@ -64,6 +66,8 @@ export function Diagnostics() {
           ([, value]) => value.until > performance.now()
         ),
         events: eventDiagnostics(),
+        party: net.state.party,
+        invite: net.state.invite,
       },
       fps: 1 / motion.dt,
       dpr: gl.getPixelRatio(),

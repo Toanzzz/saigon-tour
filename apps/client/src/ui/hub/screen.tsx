@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { closeHub } from '../../core/actions'
 import type { GameState } from '../../state/game'
 import { Icon } from '../icons'
+import { PartyInviteControls } from '../party'
 import { NeighborCard, StoryCard } from './cards'
 import { PlacesCard, RideCard, SoundCard } from './city'
 import { HubHero } from './hero'
@@ -49,6 +50,7 @@ export function HubScreen({ state }: { state: GameState }) {
             <Icon name="close" />
           </button>
         </header>
+        <PartyInviteControls />
         <HubHero view={view} />
         <section className="hub-grid" aria-label="Your day in the city">
           <StoryCard view={view} />

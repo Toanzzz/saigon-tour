@@ -1,10 +1,13 @@
 import {
   applyPlayerEvents,
+  DishSchema,
   type NpcId,
   objectiveSatisfied,
+  type PartySnapshot,
   type PlayerEvent,
   type Quest,
   type Reward,
+  TEAM_QUEST,
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { GameDb, PlayerSave } from '../db'
@@ -15,14 +18,30 @@ export type OfferResult =
   | { accepted: true; quest: Quest }
   | { accepted: false; reason: string }
 export type CheckResult = {
+  quest?: Quest
   status: 'active' | 'completed' | 'not_found'
   rewardGranted: boolean
   reward: Reward
   message: string
 }
+export interface TeamService {
+  snapshot(playerId: string): PartySnapshot | null
+  offerQuest(
+    playerId: string,
+    giver: NpcId,
+    templateId: string
+  ): Promise<OfferResult>
+  checkQuest(
+    playerId: string,
+    giver: NpcId,
+    questId: string
+  ): Promise<CheckResult>
+  deliver(playerId: string, event: PlayerEvent, npcId?: NpcId): Promise<boolean>
+}
 
 /** Authoritative mutations are serialized and persisted by the database. */
 export class GameService {
+  team?: TeamService
   constructor(private readonly db: GameDb) {}
 
   async get(playerId: string): Promise<PlayerRecord> {
@@ -32,10 +51,20 @@ export class GameService {
   /** Apply client-observed world events. Only physically plausible ones count. */
   async applyEvents(
     playerId: string,
-    events: PlayerEvent[]
+    events: PlayerEvent[],
+    npcId?: NpcId
   ): Promise<PlayerRecord> {
+    const ordinary: PlayerEvent[] = []
+    for (const event of events) {
+      if (
+        event.type === 'deliver' &&
+        DishSchema.safeParse(event.itemId).success
+      )
+        await this.team?.deliver(playerId, event, npcId)
+      else ordinary.push(event)
+    }
     return this.db.mutatePlayer(playerId, (record) => {
-      record.world = applyPlayerEvents(record.world, events)
+      record.world = applyPlayerEvents(record.world, ordinary)
       return structuredClone(record)
     })
   }
@@ -45,6 +74,10 @@ export class GameService {
     giver: NpcId,
     templateId: string
   ): Promise<OfferResult> {
+    if (templateId === TEAM_QUEST.id)
+      return this.team
+        ? this.team.offerQuest(playerId, giver, templateId)
+        : { accepted: false, reason: 'party_required' }
     return this.db.mutatePlayer<OfferResult>(playerId, (record) => {
       const template = questTemplate(templateId)
       if (!template) return { accepted: false, reason: 'unknown_template' }
@@ -74,6 +107,16 @@ export class GameService {
     giver: NpcId,
     questId: string
   ): Promise<CheckResult> {
+    if (questId === TEAM_QUEST.id)
+      return this.team
+        ? this.team.checkQuest(playerId, giver, questId)
+        : {
+            quest: structuredClone(TEAM_QUEST),
+            status: 'not_found',
+            rewardGranted: false,
+            reward: ZERO_REWARD,
+            message: 'No active team errand.',
+          }
     return this.db.mutatePlayer<CheckResult>(playerId, (record) => {
       if (record.world.completedQuestIds.includes(questId))
         return {

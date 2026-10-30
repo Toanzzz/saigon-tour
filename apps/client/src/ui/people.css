@@ -32,6 +32,40 @@
   gap: 10px;
   align-items: center;
 }
+.people-list strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.people-list button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.party-roster ul {
+  padding-left: 20px;
+}
+.party-invite {
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: var(--round);
+  padding: 12px;
+  pointer-events: auto;
+}
+.party-invite p {
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;
+}
+.party-invite > div {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.party-invite-toast {
+  position: absolute;
+  z-index: 10;
+  top: 90px;
+  right: 20px;
+  width: min(340px, calc(100vw - 40px));
+}
 .people-list li > span:last-child:not(.player-color) {
   margin-left: auto;
 }

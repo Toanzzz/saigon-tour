@@ -8,6 +8,7 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { Pool } from 'pg'
 
 export interface PlayerSave {
+  revision: number
   world: WorldState
   quest: Quest | null
   completed: Quest[]
@@ -25,6 +26,7 @@ export interface Reservation {
 }
 const hash = (token: string) => createHash('sha256').update(token).digest('hex')
 const initial = (): PlayerSave => ({
+  revision: 0,
   world: {
     locationId: 'market',
     inventory: {},
@@ -102,6 +104,7 @@ export class GameDb {
           )
           if (!rows[0]) throw new Error('player_not_found')
           const save: PlayerSave = publicPlayer(rows[0])
+          save.revision += 1
           const result = await fn(save, client)
           for (const quest of save.completed)
             await client.query(
@@ -109,13 +112,14 @@ export class GameDb {
               [id, quest.id]
             )
           await client.query(
-            'UPDATE players SET world=$2,quest=$3,completed=$4,reputation=$5,seen_at=now() WHERE id=$1',
+            'UPDATE players SET world=$2,quest=$3,completed=$4,reputation=$5,revision=$6,seen_at=now() WHERE id=$1',
             [
               id,
               JSON.stringify(save.world),
               JSON.stringify(save.quest),
               JSON.stringify(save.completed),
               save.reputation,
+              save.revision,
             ]
           )
           await client.query('COMMIT')
@@ -136,7 +140,8 @@ export class GameDb {
   }
   async reset(id: string) {
     await this.mutatePlayer(id, async (save, client) => {
-      Object.assign(save, initial())
+      const revision = save.revision
+      Object.assign(save, initial(), { revision })
       await client.query('DELETE FROM npc_facts WHERE player_id=$1', [id])
       await client.query('DELETE FROM quest_completions WHERE player_id=$1', [
         id,

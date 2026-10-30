@@ -92,3 +92,13 @@ export function objectiveSatisfied(
       )
   }
 }
+
+export const TEAM_QUEST: Quest = {
+  id: 'hoa-team-lunch',
+  title: 'Lunch tastes better together',
+  description:
+    'Bring your assigned dishes to Chị Linh in the park, then check with Cô Hoa together.',
+  objective: { type: 'TALK_TO', npcId: 'hoa' },
+  reward: { currency: 40, itemId: 'photo', reputation: 2 },
+  giverNpcId: 'hoa',
+}

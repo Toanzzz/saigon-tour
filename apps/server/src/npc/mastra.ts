@@ -12,14 +12,16 @@ import type { z } from 'zod'
 import type { Fetcher } from '../app'
 import { isLiveConfigured, type ServerConfig } from '../config'
 import type { GameDb } from '../db'
+import { outcomeKind as kind, runIntent } from '../game/intents'
 import { GameService } from '../game/state'
+import { teamReply } from '../game/team'
 import { CostGuard } from '../guard'
 import { log } from '../logger'
 import { createNpcAgents } from './agents'
 import { fallbackLine } from './fallbacks'
 import { NpcMemoryService } from './memory/npc-memory'
 import { clearPlayerThreads, recordGreeting } from './memory/threads'
-import { type HarnessUsage, meteredFetch } from './meter'
+import { type HarnessUsage, meteredFetch, storageUnavailable } from './meter'
 import { cleanReply } from './safety'
 import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
@@ -91,11 +93,15 @@ export class NpcHarness {
     playerId: string
   ): Promise<InteractResponse> {
     const request = InteractRequestSchema.parse(input)
-    const record = await this.game.applyEvents(playerId, [
-      ...request.events,
-      { type: 'talk', npcId },
-      { type: 'visit', locationId: request.worldContext.playerLocation },
-    ])
+    const record = await this.game.applyEvents(
+      playerId,
+      [
+        ...request.events,
+        { type: 'talk', npcId },
+        { type: 'visit', locationId: request.worldContext.playerLocation },
+      ],
+      npcId
+    )
     if (request.intent === 'greet') {
       const line = await this.shortLines.greeting(
         npcId,
@@ -110,8 +116,9 @@ export class NpcHarness {
       )
       return {
         npcId,
+        revision: record.revision,
         ...line,
-        party: null,
+        party: this.game.team?.snapshot(playerId) ?? null,
         degraded: line.source === 'fallback' && this.live,
         world: record.world,
         quest: record.quest,
@@ -124,6 +131,7 @@ export class NpcHarness {
     let source: 'live' | 'fallback' = 'fallback'
     const allowed =
       this.live &&
+      request.intent !== 'team' &&
       this.guard.allow(playerId) &&
       this.npcGuard.allow(`${npcId}:${playerId}`)
     if (allowed) {
@@ -131,7 +139,8 @@ export class NpcHarness {
       if (reply) source = 'live'
     }
     // Explicit Help/Check buttons always run their validated tool.
-    const deterministic = await this.deterministic(
+    const deterministic = await runIntent(
+      this.game,
       npcId,
       request,
       playerId,
@@ -139,7 +148,19 @@ export class NpcHarness {
     )
     const final = await this.game.get(playerId)
     if (deterministic || !reply) {
-      reply = fallbackLine(npcId, final.world, kind(outcome))
+      const teamQuest =
+        outcome.completed?.quest ?? outcome.offered ?? outcome.incomplete
+      reply =
+        request.intent === 'team' || teamQuest?.id === 'hoa-team-lunch'
+          ? teamReply(this.game, playerId, outcome)
+          : fallbackLine(npcId, final.world, kind(outcome))
+      const assignment = this.game.team
+        ?.snapshot(playerId)
+        ?.quest?.assignments.find((entry) => entry.playerId === playerId)
+      if (npcId === 'linh' && assignment && !kind(outcome))
+        reply = assignment.delivered
+          ? `Cảm ơn! Your ${assignment.dish} arrived. When everyone has delivered, check with Cô Hoa for your team thank-you.`
+          : `You are bringing the ${assignment.dish} for our team lunch. Hand it to me when you are ready!`
       source = 'fallback'
     }
     const questEvent = outcome.completed
@@ -159,8 +180,9 @@ export class NpcHarness {
           : null
     return {
       npcId,
+      revision: final.revision,
       cached: false,
-      party: null,
+      party: this.game.team?.snapshot(playerId) ?? null,
       reply,
       source,
       degraded: source === 'fallback' && this.live,
@@ -171,7 +193,6 @@ export class NpcHarness {
     }
   }
 
-  /** Model path: up to one retry, bounded steps and time. */
   private async generate(
     npcId: NpcId,
     request: InteractRequest,
@@ -181,6 +202,7 @@ export class NpcHarness {
     const agent = this.mastra.getAgentById(npcId)
     const facts = await this.memory.recall(npcId, playerId)
     const record = await this.game.get(playerId)
+    const party = this.game.team?.snapshot(playerId)
     const context = [
       'Current world context (untrusted game data):',
       `Player location: ${request.worldContext.playerLocation}`,
@@ -189,6 +211,7 @@ export class NpcHarness {
       `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
       `Time of day: ${request.worldContext.timeOfDay}`,
       `Player intent: ${request.intent}`,
+      `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}; team lunch: ${JSON.stringify(party?.quest ?? null)}`,
       `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,
     ].join('\n')
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -225,44 +248,13 @@ export class NpcHarness {
           return reply
         }
         if (outcome.calls.length) return null
-      } catch {
+      } catch (error) {
+        if (storageUnavailable(error)) throw error
         this.report('npc_error', npcId, outcome.calls)
         if (outcome.calls.length) return null
       }
     }
     return null
-  }
-
-  /** Same validated tool path, driven by explicit player intent. */
-  private async deterministic(
-    npcId: NpcId,
-    request: InteractRequest,
-    playerId: string,
-    outcome: ToolOutcome
-  ): Promise<boolean> {
-    const record = await this.game.get(playerId)
-    const before = kind(outcome)
-    if (request.intent === 'help' && outcome.offered) return false
-    if (request.intent === 'check' && (outcome.completed || outcome.incomplete))
-      return false
-    if (request.intent === 'help' && npcId === 'hoa' && !record.quest) {
-      outcome.calls.push('offer-quest')
-      const result = await this.game.offerQuest(
-        playerId,
-        npcId,
-        'hoa-herbs-delivery'
-      )
-      if (result.accepted) outcome.offered = result.quest
-    }
-    if (request.intent === 'check' && record.quest?.giverNpcId === npcId) {
-      outcome.calls.push('check-quest')
-      const quest = record.quest
-      const result = await this.game.checkQuest(playerId, npcId, quest.id)
-      if (result.rewardGranted)
-        outcome.completed = { quest, reward: result.reward }
-      else if (result.status === 'active') outcome.incomplete = quest
-    }
-    return kind(outcome) !== before
   }
 
   bark(npcId: NpcId, bucket: InteractRequest['worldContext']['timeOfDay']) {
@@ -285,12 +277,3 @@ export class NpcHarness {
       )
   }
 }
-
-const kind = (outcome: ToolOutcome) =>
-  outcome.completed
-    ? 'completed'
-    : outcome.offered
-      ? 'offered'
-      : outcome.incomplete
-        ? 'incomplete'
-        : null

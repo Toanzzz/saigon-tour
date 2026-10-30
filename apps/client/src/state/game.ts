@@ -33,6 +33,7 @@ export interface Ride {
 export interface GameState {
   screen: 'title' | 'playing' | 'paused' | 'hub'
   panel: Panel
+  serverRevision: number
   sessionId: string
   guestId: string | null
   guestName: string | null
@@ -57,10 +58,12 @@ export interface GameState {
   volume: number
   reducedMotion: boolean
   reward: number
+  rewardQuest: Quest | null
   reputation: number
 }
 export function initialState(generation = 0): GameState {
   return {
+    serverRevision: 0,
     screen: 'title',
     panel: 'none',
     generation,
@@ -94,6 +97,7 @@ export function initialState(generation = 0): GameState {
     volume: 0.5,
     reducedMotion: false,
     reward: 0,
+    rewardQuest: null,
     reputation: 0,
   }
 }
@@ -137,6 +141,7 @@ export function grantReward(state: GameState, quest: Quest): GameState {
     quest: null,
     completed: [...state.completed, quest],
     reward: quest.reward.currency,
+    rewardQuest: quest,
     reputation: state.reputation + quest.reward.reputation,
     panel: 'reward',
     dialogue: null,
