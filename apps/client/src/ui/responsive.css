@@ -14,149 +14,141 @@
     display: block;
   }
   .title-screen {
-    background: linear-gradient(90deg, #163b36e8, #163b3699 68%, #163b3655);
+    background: linear-gradient(
+      180deg,
+      var(--sky) 0%,
+      #b1b8cbe0 52%,
+      #b1b8cb40 100%
+    );
   }
   .title-content {
-    top: 46%;
-    left: 28px;
-    right: 25px;
-    transform: translateY(-42%);
-  }
-  .title-kicker {
-    font-size: 8px;
-    letter-spacing: 0.13em;
-    margin-bottom: 19px;
+    top: auto;
+    bottom: max(48px, env(safe-area-inset-bottom));
+    left: 24px;
+    right: 24px;
+    transform: none;
   }
   .title-content h1 {
-    font-size: 65px;
+    font-size: 88px;
+    -webkit-text-stroke-width: 2.5px;
   }
-  .title-content :where(h1) > span {
+  .title-subtitle {
     font-size: 30px;
+    margin-top: 12px;
   }
   .title-description {
-    font-size: 15px;
-    margin: 23px 0;
+    font-size: 16px;
+    margin: 14px 0 22px;
+  }
+  .title-start {
+    flex: 1;
   }
   .title-controls {
-    max-width: 260px;
-    font-size: 11px;
-    line-height: 1.7;
+    font-size: 14px;
+    line-height: 1.55;
     margin-top: 18px;
   }
-  .title-corner {
-    right: 23px;
-    bottom: 28px;
-    color: #f4e6c5;
-  }
-  .title-edition {
-    display: none;
-  }
   .game-header {
-    top: max(14px, env(safe-area-inset-top));
-    left: 14px;
-    right: 14px;
+    top: max(12px, env(safe-area-inset-top));
+    left: 12px;
+    right: 12px;
     gap: 8px;
   }
   .game-identity {
-    padding: 12px 12px;
+    padding: 0 12px 7px;
+  }
+  .game-identity::before {
+    height: 9px;
+    margin: 0 -12px 5px;
   }
   .game-identity > span {
-    font-size: 22px;
+    font-size: 21px;
   }
   .game-identity > small {
-    font-size: 6.5px;
-    letter-spacing: 0.12em;
-    margin-top: 7px;
+    font-size: 11px;
   }
   .header-tools {
-    padding: 2px 2px 2px 9px;
-  }
-  .header-tools .icon-button {
-    min-width: 44px;
+    padding: 3px;
   }
   .wallet {
+    padding: 4px 9px 4px 6px;
     gap: 4px;
-    margin-right: 1px;
   }
   .wallet b {
-    width: 28px;
-    font-size: 15px;
+    font-size: 17px;
   }
   .wallet svg {
     width: 17px;
   }
   .objective-note {
-    left: 14px;
-    right: 14px;
-    top: 94px;
+    left: 12px;
+    right: 12px;
+    top: 98px;
     bottom: auto;
     width: auto;
-    padding: 13px 14px 13px 0;
+    padding: 10px 14px 10px 0;
     gap: 12px;
   }
-  .objective-note > span:nth-child(2) {
-    gap: 4px;
+  .objective-rule {
+    margin: -10px 0;
   }
   .objective-note strong {
-    font-size: 18px;
+    font-size: 20px;
   }
   .objective-note .objective-hint {
-    font-size: 10px;
-  }
-  .objective-note .eyebrow {
-    font-size: 7px;
+    font-size: 13px;
   }
   .minimap-button {
-    width: 102px;
-    right: 17px;
-    bottom: 156px;
-    padding: 3px;
+    width: 108px;
+    right: 14px;
+    bottom: 160px;
+    padding: 4px;
   }
   .minimap-button > span {
-    font-size: 5.5px;
-    gap: 3px;
-    padding: 5px 1px 2px;
+    font-size: 11px;
+    gap: 4px;
+    padding: 5px 1px 1px;
   }
   .minimap-button kbd {
     display: none;
   }
   .game-toast {
-    top: 190px;
+    top: 200px;
     width: max-content;
-    font-size: 11px;
-    padding: 11px 14px;
+    font-size: 13px;
   }
   .ride-banner {
-    bottom: 35px;
-    padding: 18px;
+    bottom: 36px;
+    padding: 14px 16px;
   }
   .ride-banner strong {
-    font-size: 14px;
+    font-size: 19px;
   }
 }
 @media (max-height: 550px) and (orientation: landscape) {
   .title-content {
-    top: 44%;
+    top: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translateY(-50%);
   }
   .title-content h1 {
-    font-size: 55px;
+    font-size: 64px;
   }
-  .title-content :where(h1) > span {
+  .title-subtitle {
     font-size: 24px;
+    margin-top: 8px;
   }
   .title-description {
-    margin: 13px 0;
-    font-size: 12px;
-  }
-  .title-kicker {
-    margin-bottom: 9px;
+    margin: 10px 0 14px;
+    font-size: 14px;
   }
   .title-controls {
-    margin-top: 13px;
+    margin-top: 12px;
   }
   .objective-note {
     top: 90px;
-    width: 270px;
+    width: 280px;
     right: auto;
   }
   .minimap-button {

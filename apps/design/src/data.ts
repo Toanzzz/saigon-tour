@@ -8,13 +8,21 @@ import {
 
 export const navItems: { id: string; label: string; icon: LucideIcon }[] = [
   { id: 'overview', label: 'Overview', icon: Home },
-  { id: 'journey', label: 'Journey journal', icon: MapIcon },
+  { id: 'journey', label: 'Journal', icon: MapIcon },
   { id: 'neighbors', label: 'Neighbors', icon: UsersRound },
-  { id: 'routes', label: 'Routes & rides', icon: Route },
+  { id: 'routes', label: 'Rides', icon: Route },
 ]
-export const stops = [
-  { label: 'Bến Thành', x: '18%', y: '53%', tone: 'gold', icon: '✦' },
-  { label: 'Công viên', x: '67%', y: '32%', tone: 'coral', icon: '●' },
-  { label: 'Nhà thờ', x: '77%', y: '69%', tone: 'cream', icon: '✚' },
-  { label: 'Bến sông', x: '38%', y: '82%', tone: 'jade', icon: '≈' },
+
+/* Pin positions are percentages of the Chợ Bến Thành diorama image. */
+export const pins = [
+  { id: 'market', label: 'Chợ Bến Thành', x: 45.5, y: 49, here: true },
+  { id: 'roundabout', label: 'Bùng binh', x: 36.5, y: 63 },
+  { id: 'bus', label: 'Bus stop', x: 83, y: 61 },
+  { id: 'park', label: 'Công viên', x: 89, y: 77 },
 ]
+
+export const steps = [
+  { title: 'Meet Cô Hoa', detail: 'Market stall', state: 'done' },
+  { title: 'Deliver the herbs', detail: 'Chị Linh, in the park', state: 'now' },
+  { title: 'Make a memory', detail: 'Earn a postcard', state: 'next' },
+] as const

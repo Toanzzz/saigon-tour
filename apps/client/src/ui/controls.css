@@ -1,67 +1,3 @@
-.game-toast {
-  position: absolute;
-  left: 50%;
-  top: 100px;
-  transform: translateX(-50%);
-  max-width: calc(100% - 32px);
-  border-bottom: 2px solid var(--gold);
-  padding: 12px 20px;
-  background: #163b36f2;
-  color: var(--ivory);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  text-align: center;
-}
-.game-toast svg {
-  color: var(--gold);
-  flex-shrink: 0;
-}
-.ride-banner {
-  position: absolute;
-  bottom: 55px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 18px;
-  width: min(420px, calc(100% - 40px));
-  padding: 20px 26px;
-  background: #163b36f0;
-  border-top: 2px solid var(--gold);
-}
-.ride-banner > svg {
-  color: var(--gold);
-  margin-top: 7px;
-  flex-shrink: 0;
-}
-.ride-banner > div {
-  flex: 1;
-}
-.ride-banner .eyebrow {
-  font-size: 8px;
-}
-.ride-banner strong {
-  display: block;
-  font-size: 15px;
-  font-weight: 500;
-  margin-top: 5px;
-}
-.ride-banner progress {
-  width: 100%;
-  height: 3px;
-  appearance: none;
-  display: block;
-  border: none;
-  margin-top: 14px;
-}
-.ride-banner progress::-webkit-progress-bar {
-  background: #ffffff22;
-}
-.ride-banner progress::-webkit-progress-value {
-  background: var(--gold);
-}
 .touch-only {
   display: none;
 }
@@ -73,60 +9,85 @@
   left: 24px;
   width: 112px;
   height: 112px;
-  border: 1px solid #fff4d066;
+  border: var(--edge);
   border-radius: 50%;
-  background: #163b3666;
+  background: #d3d7e6cc;
+  box-shadow: var(--lift);
   touch-action: none;
   user-select: none;
 }
 .stick-knob {
   position: absolute;
-  top: 34px;
-  left: 34px;
-  width: 42px;
-  height: 42px;
+  top: 31px;
+  left: 31px;
+  width: 46px;
+  height: 46px;
+  border: var(--edge);
   border-radius: 50%;
-  background: #fff3cdcc;
-  box-shadow: 0 3px 13px #163b3640;
+  background: var(--roof);
+  box-shadow:
+    inset 0 -5px 0 var(--roof-side),
+    0 3px 0 var(--ink);
 }
 .stick-direction {
   position: absolute;
-  color: #fff1cbcc;
-  font-size: 16px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1;
 }
 .stick-direction.north {
-  top: 9px;
-  left: 50px;
+  top: 8px;
+  left: 49px;
 }
 .stick-direction.south {
-  bottom: 9px;
-  left: 50px;
+  bottom: 8px;
+  left: 49px;
 }
 .stick-direction.west {
-  left: 9px;
-  top: 47px;
+  left: 8px;
+  top: 46px;
 }
 .stick-direction.east {
-  right: 9px;
-  top: 47px;
+  right: 8px;
+  top: 46px;
 }
 .touch-interact {
   position: absolute;
-  right: 27px;
-  bottom: max(45px, calc(env(safe-area-inset-bottom) + 15px));
-  width: 78px;
-  height: 78px;
-  border: 1px solid var(--gold);
+  right: 26px;
+  bottom: max(46px, calc(env(safe-area-inset-bottom) + 16px));
+  width: 80px;
+  height: 80px;
+  border: var(--edge);
   border-radius: 50%;
-  background: #163b36dd;
+  background: var(--roof);
+  box-shadow:
+    inset 0 -6px 0 var(--roof-side),
+    var(--lift);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 4px;
-  color: var(--gold);
+  gap: 1px;
+  color: var(--ink);
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+.touch-interact:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow:
+    inset 0 -3px 0 var(--roof-side),
+    0 1px 0 var(--ink);
+}
+.touch-interact:disabled {
+  background: var(--pavement);
+  box-shadow: var(--lift);
+  opacity: 0.8;
 }
 .touch-interact > span {
-  font-size: 11px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
 }

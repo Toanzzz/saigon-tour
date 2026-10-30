@@ -7,6 +7,11 @@ import { installTestHooks } from './core/test-hooks'
 import { queryClient } from './net/agent'
 import { Scene } from './scene'
 import { GameUI } from './ui'
+import '@fontsource-variable/baloo-2/wght.css'
+import '@fontsource/be-vietnam-pro/400.css'
+import '@fontsource/be-vietnam-pro/600.css'
+import '@fontsource/be-vietnam-pro/700.css'
+import '@saigon/shared/tokens.css'
 import './ui/styles.css'
 
 function Loading() {

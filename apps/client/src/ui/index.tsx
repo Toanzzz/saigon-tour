@@ -25,46 +25,39 @@ function TitleScreen() {
   return (
     <section className="title-screen" aria-label="Welcome to Sài Gòn">
       <div className="title-content">
-        <p className="eyebrow title-kicker">
-          <span />A NEIGHBORHOOD TO GET LOST IN
-        </p>
-        <h1>
-          SÀI GÒN<span>A little journey</span>
-        </h1>
+        <h1>Sài Gòn</h1>
+        <p className="title-subtitle">A little journey</p>
         <p className="title-description">
-          Meet a neighbor. Lend a hand.
-          <br />
-          Let the city surprise you.
+          Meet a neighbor, lend a hand, and let the city surprise you.
         </p>
-        <button
-          type="button"
-          className="primary-button title-start"
-          disabled={active}
-          onClick={start}
-        >
-          {active
-            ? `Opening the neighborhood… ${Math.round(progress)}%`
-            : 'Start exploring'}
-          <Icon name="arrow" size={22} />
-        </button>
-        <XRSessionButton store={xrStore} />
+        <div className="title-actions">
+          <button
+            type="button"
+            className="primary-button title-start"
+            disabled={active}
+            onClick={start}
+          >
+            {active
+              ? `Opening the neighborhood… ${Math.round(progress)}%`
+              : 'Start exploring'}
+          </button>
+          <XRSessionButton store={xrStore} />
+        </div>
         <p className="title-controls desktop-only">
-          <kbd>W A S D</kbd> move <span>·</span>
-          <kbd>Drag</kbd> look <span>·</span>
-          <kbd>E</kbd> say hello
+          <span>
+            <kbd>W A S D</kbd> move
+          </span>
+          <span>
+            <kbd>Drag</kbd> look
+          </span>
+          <span>
+            <kbd>E</kbd> say hello
+          </span>
         </p>
         <p className="title-controls touch-only">
           Use the thumbstick to move. Drag the city to look around.
         </p>
       </div>
-      <div className="title-corner">
-        <Icon name="compass" size={26} />
-        <span>
-          10°46′ N &nbsp; 106°41′ E<br />
-          <b>CHÀO MỪNG BẠN</b>
-        </span>
-      </div>
-      <p className="title-edition">EXPLORE · CONNECT · TAKE THE SCENIC ROUTE</p>
     </section>
   )
 }
@@ -90,10 +83,10 @@ function Objective({ state }: { state: GameState }) {
       <span>
         <span className="eyebrow">
           {quest
-            ? 'A NEIGHBOR NEEDS A HAND'
+            ? 'A neighbor needs a hand'
             : state.completed.length
-              ? 'MAKE ANOTHER MEMORY'
-              : 'YOUR FIRST LITTLE STORY'}
+              ? 'Make another memory'
+              : 'Your first little story'}
         </span>
         <strong>
           {quest?.title ??
@@ -127,8 +120,8 @@ export function GameUI() {
     <div className="game-ui">
       <header className="game-header">
         <div className="game-identity">
-          <span>SÀI GÒN</span>
-          <small>{PLACES[state.world.locationId].label}</small>
+          <span>Sài Gòn</span>
+          <small>{PLACES[state.world.locationId].name}</small>
         </div>
         <nav className="header-tools" aria-label="Game controls">
           <span className="wallet">
@@ -175,7 +168,7 @@ export function GameUI() {
             <NeighborhoodMap state={state} />
             <span>
               <Icon name="compass" size={14} />
-              NEIGHBORHOOD<kbd>M</kbd>
+              Neighborhood<kbd>M</kbd>
             </span>
           </button>
           <div className="touch-only">
@@ -205,9 +198,15 @@ export function GameUI() {
             </button>
           )}
           <div className="desktop-hint desktop-only">
-            <kbd>WASD</kbd> stroll <span>·</span>
-            <kbd>Drag</kbd> look <span>·</span>
-            <kbd>J</kbd> journal
+            <span>
+              <kbd>WASD</kbd> stroll
+            </span>
+            <span>
+              <kbd>Drag</kbd> look
+            </span>
+            <span>
+              <kbd>J</kbd> journal
+            </span>
           </div>
         </>
       )}
@@ -215,7 +214,7 @@ export function GameUI() {
         <div className="ride-banner">
           <Icon name="bus" />
           <div>
-            <span className="eyebrow">WATCH THE CITY GO BY</span>
+            <span className="eyebrow">Watch the city go by</span>
             <strong>On the way to {PLACES[state.ride.to].name}</strong>
             <progress
               aria-label="Ride progress"

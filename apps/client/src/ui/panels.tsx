@@ -68,7 +68,6 @@ export function TransportPanel({ state }: { state: GameState }) {
         <Icon name="bus" />
         Board {MODES[mode].name}
         <span>{fare} coins</span>
-        <Icon name="arrow" />
       </button>
       {!affordable && (
         <p className="help-text" role="status">
@@ -83,7 +82,7 @@ export function JournalPanel({ state }: { state: GameState }) {
   return (
     <Dialog
       title="Your little journey"
-      eyebrow="TRAVEL JOURNAL"
+      eyebrow="Travel journal"
       onClose={close}
     >
       <div className="journal-section">
@@ -141,7 +140,6 @@ export function JournalPanel({ state }: { state: GameState }) {
       </div>
       <button type="button" className="primary-button wide" onClick={close}>
         Continue exploring
-        <Icon name="arrow" />
       </button>
     </Dialog>
   )
@@ -151,14 +149,18 @@ export function MapPanel({ state }: { state: GameState }) {
   return (
     <Dialog
       title="A city of small stories"
-      eyebrow="YOUR NEIGHBORHOOD"
+      eyebrow="Your neighborhood"
       onClose={close}
       className="map-dialog"
     >
       <NeighborhoodMap state={state} large />
       <div className="map-legend">
-        <span>● You</span>
-        <span className="gold">● Transport stops</span>
+        <span>
+          <i /> You
+        </span>
+        <span>
+          <i className="stop" /> Transport stops
+        </span>
         <span>{state.world.visitedLocations.length}/4 places discovered</span>
       </div>
       <p className="panel-intro">
@@ -176,13 +178,12 @@ export function PausePanel({ state }: { state: GameState }) {
   return (
     <Dialog
       title="Take your time."
-      eyebrow="THE CITY CAN WAIT"
+      eyebrow="The city can wait"
       onClose={resume}
       className="pause-dialog"
     >
       <button type="button" className="primary-button wide" onClick={resume}>
         Continue exploring
-        <Icon name="arrow" />
       </button>
       <div className="settings-row">
         <label htmlFor="game-volume">City sounds</label>
@@ -248,13 +249,12 @@ export function RewardPanel({ state }: { state: GameState }) {
   return (
     <Dialog
       title="A little kindness goes far."
-      eyebrow="A GOOD DAY IN SÀI GÒN"
+      eyebrow="A good day in Sài Gòn"
       onClose={close}
       className="reward-dialog"
     >
       <div className="postcard" role="img" aria-label="Sài Gòn postcard earned">
-        <span className="postcard-mark">SÀI GÒN</span>
-        <Icon name="leaf" size={48} />
+        <span className="postcard-mark">Sài Gòn</span>
         <span>with love, from the neighborhood</span>
         <i className="postcard-stamp">
           <Icon name="star" size={28} />
@@ -274,7 +274,6 @@ export function RewardPanel({ state }: { state: GameState }) {
       </div>
       <button type="button" className="primary-button wide" onClick={close}>
         Continue exploring
-        <Icon name="arrow" />
       </button>
       <button
         type="button"

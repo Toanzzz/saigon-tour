@@ -4,14 +4,14 @@ Validated on October 30, 2026 from the local production previews.
 
 ## Playable loop
 
-- Desktop production flow: `artifacts/pass-2-final/`
+- Desktop production flow: `artifacts/pass-3-design/`
 - States covered: title, active play, live quest dialogue, stop arrival, transport menu, riding, reward, and restart.
 - Live quest completion reached `completed: 1` and reward state.
 - No page errors, console errors, or failed requests were recorded in the final flow checkpoint.
 
 ## Mobile and XR
 
-- Mobile viewport: `390×844`; canvas capture: `390×664`.
+- Mobile viewport: `390×844`; canvas capture: `390×664`. Mobile flow: `artifacts/pass-3-design-mobile/`.
 - Real touch joystick moved the player and reset on pointer release.
 - Touch interaction target was present.
 - `navigator.xr` was present, while `immersive-vr` reported unsupported in the test browser; the XR entry control stayed hidden.
@@ -41,10 +41,8 @@ Validated on October 30, 2026 from the local production previews.
 
 - Source: `apps/design/`
 - Desktop and mobile evidence: `artifacts/design-hub/`
-- `bunx biome check apps/design` passed.
-- `bun run --filter '@saigon/design' check:types` passed.
-- `bun run --filter '@saigon/design' build` passed.
-- Headless Playwright passed navigation, map stop selection, sound toggle, responsive width, and error checks.
+- `bun run check` covers `apps/design`; `tsgo -b` and `vite build` in `apps/design` passed.
+- `node scripts/qa-hub.mjs` passed at `1440×900` and `390×844`: navigation, diorama pin selection, conversation action, sound toggle, Vietnamese fonts loaded, zero horizontal overflow, no page or console errors.
 
 ## Release checks
 

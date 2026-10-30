@@ -87,7 +87,6 @@ export function Conversation({ state }: { state: GameState }) {
               >
                 <Icon name="leaf" />
                 Help Cô Hoa
-                <Icon name="arrow" />
               </button>
             )}
           {canVerify && (
@@ -134,9 +133,9 @@ export function Conversation({ state }: { state: GameState }) {
       <div className="conversation-footer">
         <span className={`source-label ${dialog.source ?? ''}`}>
           {dialog.source === 'live'
-            ? '● Live NPC conversation'
+            ? 'Live NPC conversation'
             : dialog.source === 'fallback'
-              ? '○ Offline conversation'
+              ? 'Offline conversation'
               : 'Connecting with your neighbor…'}
         </span>
         <button type="button" className="text-button" onClick={close}>

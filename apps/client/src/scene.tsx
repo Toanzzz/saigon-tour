@@ -27,8 +27,8 @@ export function Scene() {
         gl.shadowMap.type = PCFSoftShadowMap
       }}
     >
-      <color attach="background" args={['#e5d4b1']} />
-      <fog attach="fog" args={['#e5d4b1', 75, 150]} />
+      <color attach="background" args={['#b1b8cb']} />
+      <fog attach="fog" args={['#b1b8cb', 75, 150]} />
       <hemisphereLight args={['#fff3d5', '#7e8976', 2.1]} />
       <directionalLight
         position={[-22, 38, 23]}

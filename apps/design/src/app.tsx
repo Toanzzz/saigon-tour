@@ -1,38 +1,31 @@
-import { useState } from 'react'
-import { HubFooter } from './components/footer'
-import { AgentCard, StoryCard, Welcome } from './components/hero'
-import { MapCard, PulseCard, RideCard } from './components/map-section'
-import { Sidebar } from './components/sidebar'
+import { useRef, useState } from 'react'
+import { NeighborCard, StoryCard } from './components/cards'
+import { PulseCard, RideCard, SoundCard } from './components/city'
+import { Hero } from './components/hero'
 import { Topbar } from './components/topbar'
 import { navItems } from './data'
 
 export function App() {
   const [active, setActive] = useState('overview')
   const [toast, setToast] = useState('')
+  const timer = useRef(0)
   const setAction = (message: string) => {
     setToast(message)
-    window.setTimeout(() => setToast(''), 2600)
+    window.clearTimeout(timer.current)
+    timer.current = window.setTimeout(() => setToast(''), 2600)
   }
   return (
     <div className="hub-shell">
-      <Sidebar active={active} onSelect={setActive} onAction={setAction} />
+      <Topbar active={active} onSelect={setActive} onAction={setAction} />
       <main className="hub-main">
-        <Topbar active={active} onAction={setAction} />
-        <div className="hub-content">
-          <Welcome onAction={setAction} />
-          <section className="hero-grid">
-            <StoryCard onAction={setAction} />
-            <AgentCard onAction={setAction} />
-          </section>
-          <section className="lower-grid">
-            <MapCard onAction={setAction} />
-            <div className="right-stack">
-              <RideCard onAction={setAction} />
-              <PulseCard />
-            </div>
-          </section>
-          <HubFooter />
-        </div>
+        <Hero onAction={setAction} />
+        <section className="hub-grid" aria-label="Your day in the city">
+          <StoryCard onAction={setAction} />
+          <NeighborCard onAction={setAction} />
+          <RideCard onAction={setAction} />
+          <PulseCard />
+          <SoundCard />
+        </section>
       </main>
       {toast && (
         <div className="hub-toast" role="status">
@@ -44,11 +37,11 @@ export function App() {
           <button
             key={id}
             type="button"
-            className={active === id ? 'active' : ''}
+            aria-current={active === id ? 'page' : undefined}
             onClick={() => setActive(id)}
           >
-            <Icon size={18} />
-            <span>{label.split(' ')[0]}</span>
+            <Icon size={19} strokeWidth={2.2} />
+            <span>{label}</span>
           </button>
         ))}
       </nav>

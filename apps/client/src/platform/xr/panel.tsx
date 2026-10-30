@@ -39,23 +39,39 @@ function drawText(
   return row + 1
 }
 
+// Mirrors packages/shared/tokens.css; canvas textures cannot read CSS variables.
+const TONE = {
+  wall: '#f6e5aa',
+  roof: '#ee7448',
+  roofSide: '#c2532f',
+  ink: '#262835',
+}
+const DISPLAY = '"Baloo 2 Variable", system-ui, sans-serif'
+const BODY = '"Be Vietnam Pro", system-ui, sans-serif'
+
 function panelTexture(title: string, lines: string[]): CanvasTexture {
   const canvas = document.createElement('canvas')
   canvas.width = 1024
   canvas.height = 640
   const context = canvas.getContext('2d')
   if (!context) return new CanvasTexture(canvas)
-  context.fillStyle = '#123b36'
+  context.fillStyle = TONE.wall
   context.fillRect(0, 0, canvas.width, canvas.height)
-  context.strokeStyle = '#f4cb76'
+  for (let x = 0; x < canvas.width; x += 30) {
+    context.fillStyle = TONE.roof
+    context.fillRect(x, 0, 26, 40)
+    context.fillStyle = TONE.roofSide
+    context.fillRect(x + 26, 0, 4, 40)
+  }
+  context.strokeStyle = TONE.ink
   context.lineWidth = 8
-  context.strokeRect(18, 18, canvas.width - 36, canvas.height - 36)
-  context.fillStyle = '#f4cb76'
-  context.font = 'bold 48px Georgia, serif'
-  context.fillText(title, 54, 82)
-  context.fillStyle = '#fff4db'
-  context.font = '30px Arial, sans-serif'
-  let y = 142
+  context.strokeRect(4, 4, canvas.width - 8, canvas.height - 8)
+  context.fillStyle = TONE.ink
+  context.fillRect(0, 40, canvas.width, 6)
+  context.font = `800 54px ${DISPLAY}`
+  context.fillText(title, 54, 116)
+  context.font = `30px ${BODY}`
+  let y = 170
   for (const line of lines) {
     y += drawText(context, line, 54, y, 916, 40) * 40 + 14
   }
@@ -111,10 +127,15 @@ function XRWorldButton({
     canvas.height = 112
     const context = canvas.getContext('2d')
     if (context) {
-      context.fillStyle = '#e89768'
+      context.fillStyle = TONE.roof
       context.fillRect(0, 0, 512, 112)
-      context.fillStyle = '#fff4db'
-      context.font = 'bold 30px Arial, sans-serif'
+      context.fillStyle = TONE.roofSide
+      context.fillRect(0, 92, 512, 20)
+      context.strokeStyle = TONE.ink
+      context.lineWidth = 8
+      context.strokeRect(4, 4, 504, 104)
+      context.fillStyle = TONE.ink
+      context.font = `800 34px ${DISPLAY}`
       context.textAlign = 'center'
       context.textBaseline = 'middle'
       context.fillText(label.slice(0, 26), 256, 56)

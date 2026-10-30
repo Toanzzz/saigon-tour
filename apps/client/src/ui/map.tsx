@@ -19,34 +19,63 @@ export function NeighborhoodMap({
       aria-label={`Neighborhood map. You are near ${PLACES[state.world.locationId].name}.`}
     >
       <title>Sài Gòn neighborhood map</title>
-      <rect x="0" y="0" width="192" height="160" fill="#264b43" />
-      <path d="M183 0v160" stroke="#6aa6a3" strokeWidth="17" />
+      <rect x="0" y="0" width="192" height="160" fill="#d3d7e6" />
+      <path d="M183 0v160" stroke="#9dc3e7" strokeWidth="17" />
       <path
         d="M112 4v152M8 104h168M10 42h166"
-        stroke="#aeae84"
+        stroke="#3d3f4c"
         strokeWidth="9"
       />
       <path
         d="M112 4v152M8 104h168M10 42h166"
-        stroke="#e4d4a0"
+        stroke="#fff6d6"
         strokeWidth="1"
         strokeDasharray="3 4"
       />
-      <rect x="21" y="49" width="51" height="39" rx="2" fill="#cf8d5d" />
-      <path d="m21 49 25-13 26 13" fill="#e6ac71" />
-      <rect x="127" y="54" width="39" height="31" rx="9" fill="#6e9874" />
-      <path d="M138 17h18v19h-18zm-4 5h26v6h-26" fill="#c7b47e" />
+      <rect
+        x="21"
+        y="49"
+        width="51"
+        height="39"
+        rx="2"
+        fill="#f6e5aa"
+        stroke="#262835"
+        strokeWidth="1.2"
+      />
+      <path
+        d="m21 49 25-13 26 13z"
+        fill="#ee7448"
+        stroke="#262835"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+      <rect
+        x="127"
+        y="54"
+        width="39"
+        height="31"
+        rx="9"
+        fill="#47b08c"
+        stroke="#262835"
+        strokeWidth="1.2"
+      />
+      <path
+        d="M138 17h18v19h-18zm-4 5h26v6h-26"
+        fill="#f6e5aa"
+        stroke="#262835"
+        strokeWidth="1"
+      />
       {Object.entries(PLACES).map(([id, place]) => (
         <g
           key={id}
           transform={`translate(${x(place.stop[0])} ${z(place.stop[2])})`}
         >
-          <circle r="3" fill="#f4cb76" stroke="#163b36" strokeWidth="1.5" />
+          <circle r="3.4" fill="#ee7448" stroke="#262835" strokeWidth="1.5" />
           {large && (
             <text
               y="12"
               textAnchor="middle"
-              fill="#fff3d5"
+              fill="#262835"
               fontSize="5.7"
               fontWeight="600"
             >
@@ -62,7 +91,13 @@ export function NeighborhoodMap({
             transform={`translate(${x(person.at[0])} ${z(person.at[2])})`}
           >
             <circle r="2.6" fill={person.color} />
-            <text y="-6" textAnchor="middle" fill="#fff3d5" fontSize="6">
+            <text
+              y="-6"
+              textAnchor="middle"
+              fill="#262835"
+              fontSize="6"
+              fontWeight="600"
+            >
               {NPCS[id as NpcId].name}
             </text>
           </g>
@@ -71,18 +106,18 @@ export function NeighborhoodMap({
         cx={x(state.position[0])}
         cy={z(state.position[2])}
         r="5.5"
-        fill="#fff4cf"
-        fillOpacity=".25"
+        fill="#ffd84d"
+        fillOpacity=".5"
       />
       <circle
         cx={x(state.position[0])}
         cy={z(state.position[2])}
         r="3"
-        fill="#fff8e4"
-        stroke="#183f36"
+        fill="#fff6d6"
+        stroke="#262835"
         strokeWidth="1.2"
       />
-      <text x="10" y="15" fill="#f4cb76" fontSize="8" fontWeight="600">
+      <text x="10" y="15" fill="#262835" fontSize="8" fontWeight="700">
         N ↑
       </text>
     </svg>

@@ -1,15 +1,18 @@
 {
-  "result": "PASS",
-  "results": {
-    "desktop": {
-      "width": 1440,
-      "active": "City hub\nJourney journal",
-      "sound": 1
+  "desktop": {
+    "fonts": {
+      "display": true,
+      "body": true
     },
-    "mobile": {
-      "width": 390,
-      "active": "City hubJourney journal"
-    }
+    "overflow": 0,
+    "errors": []
   },
-  "errors": []
+  "mobile": {
+    "fonts": {
+      "display": true,
+      "body": true
+    },
+    "overflow": 0,
+    "errors": []
+  }
 }

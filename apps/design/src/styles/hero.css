@@ -1,0 +1,129 @@
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(400px, 0.85fr) 1.5fr;
+  align-items: center;
+  gap: 8px;
+  min-height: min(640px, 74vh);
+  margin: 0 -32px 0 0;
+}
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  padding: 24px 0;
+}
+.hero-when {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(64px, 7.4vw, 108px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  margin: 10px 0 0;
+  padding-top: 0.1em;
+  color: var(--wall-hi);
+  -webkit-text-stroke: 3px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: var(--extrude);
+}
+.hero-lede {
+  max-width: 30ch;
+  margin: 22px 0 30px;
+  font-size: 18px;
+  line-height: 1.6;
+}
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.diorama {
+  position: relative;
+  margin: 0 -2% 0 -6%;
+}
+.diorama img {
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-mask-image: radial-gradient(
+    ellipse 64% 60% at 52% 52%,
+    #000 72%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 64% 60% at 52% 52%,
+    #000 72%,
+    transparent 100%
+  );
+  user-select: none;
+}
+
+/* Pins stand on the diorama like little street signs. */
+.pin {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  transform: translate(-50%, -100%);
+}
+.pin::after {
+  content: "";
+  width: 4px;
+  height: 18px;
+  background: var(--ink);
+}
+.pin::before {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  width: 14px;
+  height: 8px;
+  border-radius: 50%;
+  background: #26283555;
+}
+.pin span {
+  padding: 6px 12px;
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: 99px;
+  box-shadow: var(--lift-sm);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: transform 0.12s;
+}
+.pin small {
+  order: -1;
+  margin-bottom: 4px;
+  padding: 2px 8px;
+  background: var(--ink);
+  color: var(--wall-hi);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.pin.here span {
+  background: var(--roof);
+}
+.pin:hover span {
+  transform: translateY(-3px);
+}
+.pin:active span {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+.pin:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.pin:focus-visible span {
+  outline: 3px solid var(--bus);
+  outline-offset: 3px;
+}

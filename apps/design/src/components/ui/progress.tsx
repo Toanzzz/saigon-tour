@@ -1,15 +1,15 @@
-import { cn } from '../../lib/utils'
-
-export function Progress({
-  value,
-  className,
-}: {
-  value: number
-  className?: string
-}) {
+export function Progress({ value, label }: { value: number; label: string }) {
+  const clamped = Math.max(0, Math.min(100, value))
   return (
-    <div className={cn('progress-track', className)}>
-      <span style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
+    <div
+      className="progress-track"
+      role="progressbar"
+      aria-label={label}
+      aria-valuenow={clamped}
+      aria-valuemin={0}
+      aria-valuemax={100}
+    >
+      <span style={{ width: `${clamped}%` }} />
     </div>
   )
 }

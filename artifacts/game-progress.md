@@ -11,7 +11,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 - Meta model: `muse-spark-1.3-contributor`.
 - Server secret: `META_MUSE_API_KEY`; it is not present in client source or build output.
 - Project dates: October 27–November 4, 2026; submission November 4, 9 PM ET.
-- Art direction: warm afternoon, ochre market, terracotta shophouses, jade transport, and lush green park.
+- Art direction: toy diorama from `assets/chobenthanh/chobenthanh.png`. Periwinkle sky, butter walls, terracotta roofs, mint trees. UI surfaces are toy blocks: ink edge, solid side face, roof-ridge header strip. Tokens live in `packages/shared/tokens.css`, shared by client and hub. Type: Baloo 2 (display) and Be Vietnam Pro (body), self-hosted with Vietnamese subsets.
 - Runtime ports: client `58000`, server `58001`, design hub `58003`.
 - No deployment or public publishing has been performed.
 
@@ -19,6 +19,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 
 1. Complete: foundation, live/fallback agent backend, authored district, keyboard/touch movement, delivery quest, bus, reward, retry, and first production browser flow. Lint, types, build, and 21 tests passed.
 2. Complete: XR entry/exit and controller locomotion, snap turn, world-space panels, XR HUD, mobile joystick QA, stale dialogue protection, soft city tint, foliage material correction, runtime asset pruning, audio lifecycle handling, visual canvas inspection, release checks, and the responsive Sài Gòn city hub in `apps/design`.
+3. Complete: diorama design overhaul across the game UI (title, HUD, touch controls, dialogs, minimap, XR canvas panels, scene sky/fog) and the city hub (diorama hero with map pins, story road, neighbor, ride, pulse, and sound cards).
 
 ## Current validation
 

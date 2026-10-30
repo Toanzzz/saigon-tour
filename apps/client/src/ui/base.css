@@ -1,13 +1,7 @@
 :root {
-  --jade: #163b36;
-  --deep-jade: #0f2f2b;
-  --gold: #f4cb76;
-  --ivory: #fff5dd;
-  --muted: #c0cdb6;
-  --terracotta: #cf7859;
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
-  color: var(--ivory);
-  background: #d2dbcd;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--sky);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -22,27 +16,22 @@ button,
 input,
 select {
   font: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 button {
   cursor: pointer;
-}
-button,
-input,
-select {
-  -webkit-tap-highlight-color: transparent;
+  color: inherit;
 }
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid var(--gold);
-  outline-offset: 4px;
+  outline: 3px solid var(--bus);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--ink);
 }
 button:disabled {
   cursor: default;
-  opacity: 0.5;
-}
-button {
-  color: inherit;
+  opacity: 0.55;
 }
 h1,
 h2,
@@ -73,35 +62,53 @@ p {
 .touch-stick {
   pointer-events: auto;
 }
+
+/* A toy block: lit face, ink edge, solid side face below. */
+.block {
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: var(--round);
+  box-shadow: var(--lift), var(--ground);
+}
 .primary-button {
-  border: 1px solid #ffe0a2;
-  border-radius: 3px;
-  min-height: 50px;
-  background: var(--gold);
-  color: #17372e;
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  min-height: 52px;
+  background: var(--roof);
+  color: var(--ink);
+  box-shadow: var(--lift);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 12px 22px;
-  font-weight: 700;
-  font-size: 14px;
+  gap: 10px;
+  padding: 10px 22px;
+  font-family: var(--font-display);
+  font-weight: 750;
+  font-size: 18px;
+  line-height: 1;
   transition:
-    background 0.16s,
-    transform 0.16s;
+    transform 0.08s,
+    box-shadow 0.08s,
+    background 0.12s;
 }
-.primary-button:hover {
-  background: #ffe0a0;
-  transform: translateY(-1px);
+.primary-button:hover:not(:disabled) {
+  background: var(--roof-hi);
 }
-.primary-button:active {
-  transform: translateY(1px);
+.primary-button:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--ink);
 }
 .primary-button.wide {
   width: 100%;
 }
 :where(.primary-button.wide) > span {
   margin-left: auto;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--wall-hi);
+  border-radius: 99px;
+  padding: 5px 10px;
 }
 .icon-button {
   display: inline-flex;
@@ -109,44 +116,49 @@ p {
   justify-content: center;
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   background: transparent;
-  border-radius: 3px;
-  color: var(--ivory);
+  border-radius: var(--round-sm);
+  color: var(--ink);
   flex-shrink: 0;
 }
-.icon-button:hover {
-  background: #ffffff12;
-  border-color: #e7d9ae35;
+.icon-button:hover:not(:disabled) {
+  background: var(--wall-hi);
+  border-color: var(--ink);
 }
 .text-button {
   padding: 12px 4px;
   min-height: 44px;
   border: 0;
   background: none;
-  color: var(--gold);
-  font-size: 12px;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: underline;
+  text-decoration-color: var(--roof);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
 }
 .text-button:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration-color: var(--ink);
 }
 .eyebrow {
-  color: var(--gold);
-  font-size: 10px;
-  font-weight: 650;
-  letter-spacing: 0.17em;
-  line-height: 1.7;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
 }
 kbd {
-  font-family: inherit;
-  font-size: 10px;
-  border: 1px solid #fff2cf50;
-  border-radius: 3px;
-  padding: 4px 6px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--wall-hi);
+  border: var(--edge);
+  border-radius: 7px;
+  box-shadow: 0 2px 0 var(--ink);
+  padding: 2px 7px;
   display: inline-block;
-  font-weight: 500;
-  letter-spacing: 0.02em;
 }
 .game-canvas {
   position: fixed;
@@ -159,43 +171,57 @@ kbd {
 .loading-badge {
   position: fixed;
   z-index: 30;
-  bottom: 18px;
+  bottom: 22px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 12px 18px;
-  background: #163b36ed;
-  color: var(--ivory);
-  border-bottom: 2px solid var(--gold);
-  font-size: 11px;
+  padding: 10px 18px;
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: 99px;
+  box-shadow: var(--lift-sm);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
   white-space: nowrap;
 }
 .loading-badge span {
-  color: var(--gold);
-  margin-left: 12px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  margin-left: 10px;
+  color: var(--roof-side);
 }
 .fatal-error {
   min-height: 100dvh;
-  padding: 10vw;
-  background: var(--jade);
+  padding: 8vw;
+  background:
+    var(--sky) url("/images/ben-thanh.webp") right 8% center / min(60vw, 820px)
+    no-repeat;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: 22px;
+  gap: 20px;
 }
 .fatal-error h1 {
-  font-family: Georgia, serif;
-  font-weight: 400;
-  font-size: 40px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1;
+  max-width: 14ch;
 }
 .fatal-error p {
-  max-width: 430px;
-  line-height: 1.7;
+  max-width: 40ch;
+  line-height: 1.65;
 }
 .fatal-error button {
-  min-height: 48px;
-  border: 0;
-  background: var(--gold);
-  color: var(--jade);
+  min-height: 52px;
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  box-shadow: var(--lift);
+  background: var(--roof);
+  color: var(--ink);
   padding: 12px 22px;
+  font-family: var(--font-display);
+  font-weight: 750;
+  font-size: 18px;
 }

@@ -1,0 +1,48 @@
+/*
+ * Sài Gòn diorama tokens, sampled from the Chợ Bến Thành reference render.
+ * Surfaces are toy blocks: a lit top face, an ink outline, and a solid side
+ * face offset below. Shared by the game client and the city hub.
+ */
+:root {
+  --sky: #b1b8cb;
+  --sky-deep: #959dba;
+  --pavement: #d3d7e6;
+  --wall: #f6e5aa;
+  --wall-hi: #fff6d6;
+  --wall-side: #d9c27f;
+  --roof: #ee7448;
+  --roof-hi: #ff9a72;
+  --roof-side: #c2532f;
+  --leaf: #47b08c;
+  --leaf-hi: #8fe0b8;
+  --leaf-side: #2e8a6a;
+  --bus: #ffd84d;
+  --bus-red: #f0505c;
+  --pool: #9dc3e7;
+  --ink: #262835;
+  --ink-soft: #545870;
+  --asphalt: #3d3f4c;
+
+  --font-display: "Baloo 2 Variable", "Baloo 2", system-ui, sans-serif;
+  --font-body: "Be Vietnam Pro", system-ui, sans-serif;
+
+  --edge: 2px solid var(--ink);
+  --lift: 0 5px 0 var(--ink);
+  --lift-sm: 0 3px 0 var(--ink);
+  --ground: 0 14px 24px -10px #4a4f6e80;
+  --round: 14px;
+  --round-sm: 10px;
+
+  /* Roof ridges: tile rows seen from above, used on panel headers. */
+  --ridges: repeating-linear-gradient(
+    90deg,
+    var(--roof) 0 13px,
+    var(--roof-side) 13px 15px,
+    var(--roof-hi) 15px 16px
+  );
+  /* Block lettering: a solid extrusion stacked under display type. */
+  --extrude:
+    1px 1px 0 var(--roof-side), 2px 2px 0 var(--roof-side),
+    3px 3px 0 var(--roof-side), 4px 4px 0 var(--roof-side),
+    5px 5px 0 var(--ink);
+}

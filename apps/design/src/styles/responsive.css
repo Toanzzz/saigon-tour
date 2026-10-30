@@ -1,152 +1,170 @@
-@media (max-width: 980px) {
-  .hub-sidebar {
-    width: 202px;
-    flex-basis: 202px;
+@media (max-width: 1080px) {
+  .top-nav button {
+    padding: 0 12px;
   }
-  .topbar {
-    padding: 0 24px;
-  }
-  .hub-content {
-    padding: 32px 24px;
-  }
-  .hero-grid,
-  .lower-grid {
-    grid-template-columns: 1fr;
-  }
-  .right-stack {
-    grid-template-columns: 1fr 1fr;
-  }
-  .map-illustration {
-    height: 230px;
-  }
-}
-@media (max-width: 680px) {
-  body {
-    padding-bottom: 70px;
-  }
-  .hub-sidebar {
+  .top-nav svg {
     display: none;
   }
-  .hub-main {
-    width: 100%;
+  .ride-card,
+  .pulse-card {
+    grid-column: span 6;
   }
+  .sound-card {
+    grid-column: span 12;
+  }
+  .story-card,
+  .neighbor-card {
+    grid-column: span 12;
+  }
+}
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    margin: 0 -32px;
+  }
+  .hero-copy {
+    padding: 24px 32px 0;
+  }
+  .diorama {
+    margin: -8px 0 0;
+  }
+}
+@media (max-width: 760px) {
   .topbar {
-    min-height: 62px;
-    padding: 0 17px;
+    padding: 16px 18px 0;
   }
-  .mobile-brand {
-    display: flex;
-  }
-  .mobile-brand strong {
-    font-size: 14px;
-  }
-  .breadcrumbs {
+  .top-nav {
     display: none;
   }
   .top-actions {
-    gap: 9px;
+    margin-left: auto;
   }
-  .top-actions .icon-action:first-child,
-  .hub-separator,
   .profile-chip span {
     display: none;
   }
-  .wallet-chip {
-    padding: 7px 8px;
-    border-radius: 3px;
-    background: #f4cb7628;
+  .profile-chip {
+    padding: 0 12px;
   }
-  .hub-content {
-    padding: 27px 15px 20px;
+  .hub-main {
+    padding: 0 18px calc(104px + env(safe-area-inset-bottom));
   }
-  .welcome-row {
-    display: block;
-    margin-bottom: 22px;
+  .hero {
+    margin: 0 -18px;
+    overflow: hidden;
   }
-  .welcome-row h1 {
-    font-size: 34px;
+  .hero-copy {
+    padding: 22px 18px 0;
   }
-  .welcome-copy {
-    max-width: 310px;
-    margin-bottom: 18px;
-    font-size: 12px;
+  .hero h1 {
+    font-size: 72px;
+    -webkit-text-stroke-width: 2.5px;
   }
-  .primary-cta {
-    width: 100%;
+  .hero-lede {
+    font-size: 16px;
+    margin: 14px 0 22px;
   }
-  .card-header {
-    padding: 18px 16px 12px;
+  .hero-actions .hub-button {
+    flex: 1 1 auto;
   }
-  .card-content {
-    padding: 5px 16px 17px;
+  .diorama {
+    margin: 0 -14%;
+  }
+  .pin span {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  .pin small {
+    font-size: 10px;
+  }
+  .pin::after {
+    height: 10px;
+  }
+  .hub-grid {
+    gap: 22px;
+  }
+  .ride-card,
+  .pulse-card {
+    grid-column: span 12;
+  }
+  .hub-card {
+    padding: 18px 18px 20px;
+  }
+  .hub-card.roofed {
+    padding-top: 32px;
   }
   .card-title {
-    font-size: 21px;
+    font-size: 24px;
   }
-  .quest-footer {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .soft-button {
-    width: 100%;
-  }
-  .agent-quote {
-    font-size: 16px;
-  }
-  .lower-grid {
-    margin-top: 14px;
-  }
-  .right-stack {
+  .story-road {
     grid-template-columns: 1fr;
     gap: 14px;
   }
-  .map-card .card-header {
-    display: block;
+  .story-road::before {
+    top: 18px;
+    bottom: 18px;
+    left: 15px;
+    right: auto;
+    width: 14px;
+    height: auto;
+    background: var(--asphalt);
   }
-  .map-card .text-button {
-    margin-top: 11px;
+  .stop {
+    grid-template-columns: 44px 1fr;
+    column-gap: 14px;
   }
-  .map-illustration {
-    height: 220px;
+  .stop-marker {
+    grid-row: span 2;
+    margin: 0;
   }
-  .footer-row {
-    align-items: flex-start;
-    flex-direction: column;
-    margin-top: 18px;
+  .stop.now .stop-marker {
+    margin: -4px 0 0 -4px;
   }
-  .hub-note {
-    align-self: flex-end;
+  .story-footer .hub-button {
+    margin-left: 0;
+    width: 100%;
   }
   .mobile-nav {
     position: fixed;
     z-index: 15;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 68px;
+    left: 12px;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    padding: 8px 8px max(8px, env(safe-area-inset-bottom));
-    border-top: 1px solid #d8cbb0;
-    background: #fffaf0f2;
-    backdrop-filter: blur(12px);
+    gap: 4px;
+    padding: 5px;
+    background: var(--wall);
+    border: var(--edge);
+    border-radius: 22px;
+    box-shadow: var(--lift), var(--ground);
   }
   .mobile-nav button {
-    border: 0;
     display: grid;
     place-items: center;
-    gap: 3px;
-    color: var(--muted);
+    gap: 2px;
+    min-height: 54px;
+    border: 2px solid transparent;
+    border-radius: 16px;
     background: transparent;
-    font-size: 9px;
+    font-size: 12px;
+    font-weight: 600;
   }
-  .mobile-nav button.active {
-    color: var(--jade);
+  .mobile-nav button[aria-current="page"] {
+    background: var(--bus);
+    border-color: var(--ink);
   }
   .hub-toast {
-    right: 15px;
-    bottom: 82px;
-    left: 15px;
+    bottom: calc(96px + env(safe-area-inset-bottom));
+    width: max-content;
     text-align: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none;
+    animation: none;
   }
 }
