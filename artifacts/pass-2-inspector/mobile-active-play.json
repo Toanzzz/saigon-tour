@@ -1,0 +1,136 @@
+{
+  "url": "http://127.0.0.1:58002/?debug=1",
+  "mode": "mobile",
+  "state": "mobile-active-play",
+  "requestedState": "mobile-active-play",
+  "appliedState": "mobile-active-play",
+  "runId": "pass-2",
+  "seed": 42,
+  "screenshotPath": "artifacts/pass-2-inspector/mobile-active-play.png",
+  "gpu": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "softwareRendered": false
+  },
+  "result": {
+    "ok": true,
+    "reason": "nonblank",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 664
+    },
+    "drawingBuffer": {
+      "width": 585,
+      "height": 996
+    },
+    "alphaPixels": 4111,
+    "variance": 241,
+    "colorBuckets": 163,
+    "metrics": {
+      "colorBuckets": 227,
+      "colorEntropyBits": 4.36,
+      "edgeDensity": 0.231,
+      "luminance": {
+        "mean": 123.9,
+        "p5": 47.3,
+        "p95": 218.5,
+        "contrast": 171.2
+      },
+      "dominantColorShare": 0.195,
+      "nonBackgroundShare": 0.805
+    },
+    "renderBudget": {
+      "tier": "mobile",
+      "note": "starting-point budget; adjust per game and document overrides",
+      "rows": [
+        {
+          "metric": "calls",
+          "actual": null,
+          "limit": 150,
+          "ok": null
+        },
+        {
+          "metric": "triangles",
+          "actual": null,
+          "limit": 300000,
+          "ok": null
+        },
+        {
+          "metric": "geometries",
+          "actual": null,
+          "limit": 200,
+          "ok": null
+        },
+        {
+          "metric": "textures",
+          "actual": null,
+          "limit": 40,
+          "ok": null
+        }
+      ],
+      "withinBudget": true
+    },
+    "diagnostics": {
+      "renderer": {
+        "render": {
+          "frame": 292,
+          "calls": 129,
+          "triangles": 300612,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 64,
+          "textures": 40
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "frame": 275,
+        "position": [
+          -23,
+          0.9,
+          10
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 55,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "locked",
+        "loaded": [],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 0,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "fps": 60.0354360003647,
+      "dpr": 1.5
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "consoleErrorCount": 0,
+  "pageErrorCount": 0
+}

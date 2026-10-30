@@ -8,6 +8,7 @@ import { Diagnostics } from './core/diagnostics'
 import { Neighbors } from './core/neighbors'
 import { Player } from './core/player'
 import { Transport } from './core/transport'
+import { XRGameHud, XRRuntime, xrStore } from './platform/xr'
 import { game } from './state/game'
 import { CityWorld } from './world'
 
@@ -43,15 +44,17 @@ export function Scene() {
         shadow-normalBias={0.06}
       />
       <Suspense fallback={null}>
-        <Physics gravity={[0, -20, 0]} timeStep={1 / 60} paused={paused}>
-          <CityWorld />
-          <Player key={generation} />
-          <Transport />
-          <Neighbors />
-          <Diagnostics />
-        </Physics>
+        <XRRuntime store={xrStore} hud={<XRGameHud />}>
+          <Physics gravity={[0, -20, 0]} timeStep={1 / 60} paused={paused}>
+            <CityWorld />
+            <Player key={generation} />
+            <Transport />
+            <Neighbors />
+            <Diagnostics />
+          </Physics>
+          <CameraRig />
+        </XRRuntime>
       </Suspense>
-      <CameraRig />
     </Canvas>
   )
 }

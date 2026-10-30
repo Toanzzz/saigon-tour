@@ -123,7 +123,11 @@ try {
     route.fulfill({ status: 404, body: '' })
   )
   await page.getByRole('button', { name: 'Start sound', exact: true }).click()
-  await page.waitForFunction(() => window.audio.stats().errors.length === 1)
+  await page.waitForFunction(
+    () =>
+      window.audio.stats().errors.length === 1 &&
+      window.audio.stats().loaded.length === 3
+  )
   const failed = await stats()
   assert.equal(failed.ambienceLoops, 0)
   assert.equal(failed.loaded.length, 3)

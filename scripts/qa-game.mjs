@@ -17,10 +17,20 @@ const browser = await chromium.launch({
   executablePath,
   args: ['--enable-webgl'],
 })
+const mobile = process.env.QA_MODE === 'mobile'
+const viewport = mobile
+  ? { width: 390, height: 844 }
+  : { width: 1440, height: 900 }
+const recordVideo =
+  process.env.QA_RECORD_VIDEO === '0'
+    ? undefined
+    : { dir: `${out}/video`, size: viewport }
 const context = await browser.newContext({
-  viewport: { width: 1440, height: 900 },
+  viewport,
+  isMobile: mobile,
+  hasTouch: mobile,
   deviceScaleFactor: 1,
-  recordVideo: { dir: `${out}/video`, size: { width: 1440, height: 900 } },
+  ...(recordVideo ? { recordVideo } : {}),
 })
 const page = await context.newPage()
 const errors = []
@@ -42,6 +52,32 @@ try {
   await page
     .getByRole('button', { name: 'Start exploring', exact: true })
     .waitFor({ timeout: 45000 })
+  let xrSessionSupported = null
+  if (mobile) {
+    assert.equal(
+      await page.locator('body').evaluate((node) => node.scrollWidth),
+      390,
+      'mobile UI fits the viewport width'
+    )
+    xrSessionSupported = await page.evaluate(async () => {
+      if (!navigator.xr) return false
+      try {
+        return await navigator.xr.isSessionSupported('immersive-vr')
+      } catch {
+        return false
+      }
+    })
+    assert.equal(
+      xrSessionSupported,
+      false,
+      'browser cannot start an immersive XR session'
+    )
+    assert.equal(
+      await page.locator('.xr-session-button:visible').count(),
+      0,
+      'XR button stays hidden when immersive XR is unsupported'
+    )
+  }
   await page.waitForFunction(
     () => window.__THREE_GAME_DIAGNOSTICS__?.renderer?.render?.triangles > 1000
   )
@@ -51,104 +87,144 @@ try {
     .getByRole('button', { name: 'Start exploring', exact: true })
     .click()
   await page.waitForTimeout(2000)
-  await capture('desktop-active-play')
-  const before = await diag()
-  await page.keyboard.down('w')
-  await page.waitForTimeout(1000)
-  await page.keyboard.up('w')
-  await page.waitForTimeout(300)
-  const after = await diag()
-  assert(
-    after.state.position[2] < before.state.position[2] - 2,
-    'W moves the player toward the market'
-  )
-  await page.keyboard.press('e')
-  await page
-    .getByRole('button', { name: 'Help Cô Hoa', exact: true })
-    .waitFor({ timeout: 20000 })
-  await page.getByRole('button', { name: 'Help Cô Hoa', exact: true }).click()
-  await page.waitForFunction(
-    () => Boolean(window.__THREE_GAME_DIAGNOSTICS__?.state?.quest),
-    { timeout: 20000 }
-  )
-  await capture('dialogue-quest')
-  await page.keyboard.press('Escape')
-  await page.keyboard.down('s')
-  await page.waitForTimeout(1100)
-  await page.keyboard.up('s')
-  await page.keyboard.down('d')
-  await page.waitForTimeout(3000)
-  await page.keyboard.up('d')
-  await page.keyboard.down('s')
-  await page.waitForTimeout(440)
-  await page.keyboard.up('s')
-  await page.keyboard.down('d')
-  await page.waitForTimeout(250)
-  await page.keyboard.up('d')
-  await page.waitForTimeout(300)
-  await capture('at-stop')
-  await page.keyboard.press('e')
-  await page.waitForTimeout(300)
-  await capture('transport-menu')
-  await page.getByRole('button', { name: /Board City bus/ }).click()
-  await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.state?.ride !== null
-  )
-  await capture('riding')
-  await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.state?.ride === null,
-    { timeout: 20000 }
-  )
-  assert.equal(
-    (await diag()).state.currency,
-    25,
-    'The bus charges exactly five coins'
-  )
-  await page.keyboard.down('d')
-  await page.waitForTimeout(750)
-  await page.keyboard.up('d')
-  await page.keyboard.down('w')
-  await page.waitForTimeout(1000)
-  await page.keyboard.up('w')
-  await page.waitForTimeout(200)
-  await page.keyboard.press('e')
-  await page
-    .getByRole('button', { name: 'Deliver the herbs', exact: true })
-    .waitFor({ timeout: 20000 })
-  await page
-    .getByRole('button', { name: 'Deliver the herbs', exact: true })
-    .click()
-  await page
-    .getByRole('heading', { name: 'A little kindness goes far.' })
-    .waitFor()
-  await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.state?.completed === 1
-  )
-  assert.equal((await diag()).state.completed, 1)
-  await capture('reward')
-  await page
-    .getByRole('button', { name: 'Start a new journey', exact: true })
-    .click()
-  await page.waitForTimeout(700)
-  const restarted = await diag()
-  assert.equal(restarted.state.currency, 30)
-  assert.equal(restarted.state.completed, 0)
-  assert(Math.abs(restarted.state.position[0] + 23) < 0.1)
-  await writeFile(
-    `${out}/flow-checkpoint.json`,
-    JSON.stringify(
-      {
-        before,
-        after,
-        current: await diag(),
-        text: await page.locator('body').innerText(),
-        errors,
-        requests,
-      },
-      null,
-      2
+  if (mobile) {
+    const stick = page.getByRole('group', { name: 'Movement joystick' })
+    await stick.waitFor({ timeout: 5000 })
+    const box = await stick.boundingBox()
+    assert(box, 'mobile joystick is visible')
+    const beforeTouch = await diag()
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+    await page.mouse.down()
+    await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.15, {
+      steps: 4,
+    })
+    await page.waitForTimeout(900)
+    await page.mouse.up()
+    await page.waitForTimeout(250)
+    const afterTouch = await diag()
+    assert(
+      afterTouch.state.position[2] < beforeTouch.state.position[2] - 0.5,
+      'touch joystick moves the player'
     )
-  )
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('.stick-knob')
+          ?.getAttribute('style')
+          ?.includes('translate(0px, 0px)'),
+      { timeout: 3000 }
+    )
+    const interact = page.locator('button.touch-interact')
+    assert.equal(await interact.count(), 1, 'touch interaction target exists')
+    await capture('mobile-active-play')
+    await writeFile(
+      `${out}/mobile-checkpoint.json`,
+      JSON.stringify(
+        { beforeTouch, afterTouch, xrSessionSupported, errors, requests },
+        null,
+        2
+      )
+    )
+  } else {
+    await capture('desktop-active-play')
+    const before = await diag()
+    await page.keyboard.down('w')
+    await page.waitForTimeout(1000)
+    await page.keyboard.up('w')
+    await page.waitForTimeout(300)
+    const after = await diag()
+    assert(
+      after.state.position[2] < before.state.position[2] - 2,
+      'W moves the player toward the market'
+    )
+    await page.keyboard.press('e')
+    await page
+      .getByRole('button', { name: 'Help Cô Hoa', exact: true })
+      .waitFor({ timeout: 20000 })
+    await page.getByRole('button', { name: 'Help Cô Hoa', exact: true }).click()
+    await page.waitForFunction(
+      () => Boolean(window.__THREE_GAME_DIAGNOSTICS__?.state?.quest),
+      { timeout: 20000 }
+    )
+    await capture('dialogue-quest')
+    await page.keyboard.press('Escape')
+    await page.keyboard.down('s')
+    await page.waitForTimeout(1100)
+    await page.keyboard.up('s')
+    await page.keyboard.down('d')
+    await page.waitForTimeout(3000)
+    await page.keyboard.up('d')
+    await page.keyboard.down('s')
+    await page.waitForTimeout(440)
+    await page.keyboard.up('s')
+    await page.keyboard.down('d')
+    await page.waitForTimeout(250)
+    await page.keyboard.up('d')
+    await page.waitForTimeout(300)
+    await capture('at-stop')
+    await page.keyboard.press('e')
+    await page.waitForTimeout(300)
+    await capture('transport-menu')
+    await page.getByRole('button', { name: /Board City bus/ }).click()
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.ride !== null
+    )
+    await capture('riding')
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.ride === null,
+      { timeout: 20000 }
+    )
+    assert.equal(
+      (await diag()).state.currency,
+      25,
+      'The bus charges exactly five coins'
+    )
+    await page.keyboard.down('d')
+    await page.waitForTimeout(750)
+    await page.keyboard.up('d')
+    await page.keyboard.down('w')
+    await page.waitForTimeout(1000)
+    await page.keyboard.up('w')
+    await page.waitForTimeout(200)
+    await page.keyboard.press('e')
+    await page
+      .getByRole('button', { name: 'Deliver the herbs', exact: true })
+      .waitFor({ timeout: 20000 })
+    await page
+      .getByRole('button', { name: 'Deliver the herbs', exact: true })
+      .click()
+    await page
+      .getByRole('heading', { name: 'A little kindness goes far.' })
+      .waitFor()
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.completed === 1
+    )
+    assert.equal((await diag()).state.completed, 1)
+    await capture('reward')
+    await page
+      .getByRole('button', { name: 'Start a new journey', exact: true })
+      .click()
+    await page.waitForTimeout(700)
+    const restarted = await diag()
+    assert.equal(restarted.state.currency, 30)
+    assert.equal(restarted.state.completed, 0)
+    assert(Math.abs(restarted.state.position[0] + 23) < 0.1)
+    await writeFile(
+      `${out}/flow-checkpoint.json`,
+      JSON.stringify(
+        {
+          before,
+          after,
+          current: await diag(),
+          text: await page.locator('body').innerText(),
+          errors,
+          requests,
+        },
+        null,
+        2
+      )
+    )
+  }
   assert.equal(errors.length, 0, errors.join('\n'))
 } catch (error) {
   await page.screenshot({ path: `${out}/failure.png` }).catch(() => {})

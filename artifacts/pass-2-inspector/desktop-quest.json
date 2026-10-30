@@ -1,0 +1,137 @@
+{
+  "url": "http://127.0.0.1:58002/?debug=1",
+  "mode": "desktop",
+  "state": "quest",
+  "requestedState": "quest",
+  "appliedState": "quest",
+  "runId": "pass-2",
+  "seed": 42,
+  "screenshotPath": "artifacts/pass-2-inspector/desktop-quest.png",
+  "gpu": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+    "vendor": "Google Inc. (Apple)",
+    "softwareRendered": false
+  },
+  "result": {
+    "ok": true,
+    "reason": "nonblank",
+    "rect": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "drawingBuffer": {
+      "width": 1280,
+      "height": 720
+    },
+    "alphaPixels": 4096,
+    "variance": 238,
+    "colorBuckets": 116,
+    "metrics": {
+      "colorBuckets": 153,
+      "colorEntropyBits": 4.52,
+      "edgeDensity": 0.237,
+      "luminance": {
+        "mean": 102.1,
+        "p5": 50.8,
+        "p95": 158.8,
+        "contrast": 108
+      },
+      "dominantColorShare": 0.248,
+      "nonBackgroundShare": 0.752
+    },
+    "renderBudget": {
+      "tier": "desktop",
+      "note": "starting-point budget; adjust per game and document overrides",
+      "rows": [
+        {
+          "metric": "calls",
+          "actual": null,
+          "limit": 300,
+          "ok": null
+        },
+        {
+          "metric": "triangles",
+          "actual": null,
+          "limit": 750000,
+          "ok": null
+        },
+        {
+          "metric": "geometries",
+          "actual": null,
+          "limit": 300,
+          "ok": null
+        },
+        {
+          "metric": "textures",
+          "actual": null,
+          "limit": 60,
+          "ok": null
+        }
+      ],
+      "withinBudget": true
+    },
+    "diagnostics": {
+      "renderer": {
+        "render": {
+          "frame": 292,
+          "calls": 179,
+          "triangles": 307490,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 73,
+          "textures": 45
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "frame": 275,
+        "position": [
+          -23,
+          0.9,
+          3.5
+        ],
+        "currency": 30,
+        "quest": "hoa-herbs-delivery",
+        "completed": 0,
+        "ride": null,
+        "source": "live",
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 55,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "locked",
+        "loaded": [],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 0,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "fps": 60.01342632039127,
+      "dpr": 1
+    }
+  },
+  "consoleErrors": [],
+  "pageErrors": [],
+  "consoleErrorCount": 0,
+  "pageErrorCount": 0
+}

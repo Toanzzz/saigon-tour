@@ -3,7 +3,9 @@ import { useFrame } from '@react-three/fiber'
 import { useEffect, useMemo, useRef } from 'react'
 import {
   AnimationMixer,
+  Color,
   type InstancedMesh,
+  type Material,
   Matrix4,
   Mesh,
   Object3D,
@@ -18,6 +20,40 @@ export type Placement = {
 }
 export const modelUrl = (path: string) =>
   `${import.meta.env.BASE_URL}models/${path}.glb`
+
+const CITY_TINTS: Record<string, string> = {
+  'city/building-a': '#f0d6b2',
+  'city/building-c': '#e9c7a8',
+  'city/building-e': '#eed8bd',
+  'city/building-f': '#e0c2a5',
+  'city/building-g': '#f2d9b8',
+  'city/building-j': '#dcc4ad',
+}
+
+function prepareMeshMaterial(mesh: Mesh, path: string) {
+  const foliage = path.startsWith('nature/')
+  const tint = CITY_TINTS[path]
+  if (!foliage && !tint) return
+  const cloneMaterial = (source: Material) => {
+    const material = source.clone()
+    if (foliage && 'metalness' in material) {
+      ;(material as { metalness: number }).metalness = 0
+    }
+    if (tint && 'color' in material) {
+      ;(material as { color: Color }).color.lerp(new Color(tint), 0.18)
+    }
+    return material
+  }
+  mesh.material = Array.isArray(mesh.material)
+    ? mesh.material.map(cloneMaterial)
+    : cloneMaterial(mesh.material)
+}
+
+function prepareScene(scene: Object3D, path: string) {
+  scene.traverse((child) => {
+    if (child instanceof Mesh) prepareMeshMaterial(child, path)
+  })
+}
 
 export function Model({
   path,
@@ -35,6 +71,7 @@ export function Model({
   const { scene } = useGLTF(modelUrl(path))
   const object = useMemo(() => {
     const value = scene.clone(true)
+    prepareScene(value, path)
     value.traverse((child) => {
       if (child instanceof Mesh) {
         child.castShadow = shadow
@@ -42,7 +79,7 @@ export function Model({
       }
     })
     return value
-  }, [scene, shadow])
+  }, [path, scene, shadow])
   return (
     <primitive
       object={object}
@@ -66,12 +103,13 @@ export function ModelInstances({
   const { scene } = useGLTF(modelUrl(path))
   const meshes = useMemo(() => {
     scene.updateMatrixWorld(true)
+    prepareScene(scene, path)
     const result: Mesh[] = []
     scene.traverse((child) => {
       if (child instanceof Mesh) result.push(child)
     })
     return result
-  }, [scene])
+  }, [path, scene])
   return (
     <group>
       {meshes.map((mesh) => (

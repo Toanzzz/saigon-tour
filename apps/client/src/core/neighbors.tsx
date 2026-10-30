@@ -7,6 +7,7 @@ import type { Group } from 'three'
 import { game } from '../state/game'
 import { Character } from '../world'
 import { PEOPLE } from './places'
+import { isTestPausedForScreenshot } from './test-hooks'
 
 export function Neighbors() {
   const quest = useStore(game, (s) => s.quest)
@@ -59,7 +60,12 @@ function Pedestrian({
   const ref = useRef<Group>(null)
   const time = useRef(phase)
   useFrame((_, delta) => {
-    if (!ref.current || game.state.screen === 'paused') return
+    if (
+      isTestPausedForScreenshot() ||
+      !ref.current ||
+      game.state.screen === 'paused'
+    )
+      return
     time.current += Math.min(delta, 0.05) * 0.45
     ref.current.position.set(
       origin[0] + Math.sin(time.current) * 3.4,

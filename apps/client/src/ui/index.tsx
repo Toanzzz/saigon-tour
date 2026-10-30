@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { audio } from '../audio'
 import { close, interact, nearby, pause, start } from '../core/actions'
 import { PLACES } from '../core/places'
+import { XRSessionButton, xrStore } from '../platform/xr'
 import { type GameState, game, update } from '../state/game'
 import { Conversation } from './dialogue'
 import { Icon } from './icons'
@@ -46,6 +47,7 @@ function TitleScreen() {
             : 'Start exploring'}
           <Icon name="arrow" size={22} />
         </button>
+        <XRSessionButton store={xrStore} />
         <p className="title-controls desktop-only">
           <kbd>W A S D</kbd> move <span>·</span>
           <kbd>Drag</kbd> look <span>·</span>
@@ -142,6 +144,7 @@ export function GameUI() {
           >
             <Icon name="book" />
           </button>
+          <XRSessionButton store={xrStore} />
           <button
             type="button"
             className="icon-button"

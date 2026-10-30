@@ -1,0 +1,152 @@
+@media (max-width: 980px) {
+  .hub-sidebar {
+    width: 202px;
+    flex-basis: 202px;
+  }
+  .topbar {
+    padding: 0 24px;
+  }
+  .hub-content {
+    padding: 32px 24px;
+  }
+  .hero-grid,
+  .lower-grid {
+    grid-template-columns: 1fr;
+  }
+  .right-stack {
+    grid-template-columns: 1fr 1fr;
+  }
+  .map-illustration {
+    height: 230px;
+  }
+}
+@media (max-width: 680px) {
+  body {
+    padding-bottom: 70px;
+  }
+  .hub-sidebar {
+    display: none;
+  }
+  .hub-main {
+    width: 100%;
+  }
+  .topbar {
+    min-height: 62px;
+    padding: 0 17px;
+  }
+  .mobile-brand {
+    display: flex;
+  }
+  .mobile-brand strong {
+    font-size: 14px;
+  }
+  .breadcrumbs {
+    display: none;
+  }
+  .top-actions {
+    gap: 9px;
+  }
+  .top-actions .icon-action:first-child,
+  .hub-separator,
+  .profile-chip span {
+    display: none;
+  }
+  .wallet-chip {
+    padding: 7px 8px;
+    border-radius: 3px;
+    background: #f4cb7628;
+  }
+  .hub-content {
+    padding: 27px 15px 20px;
+  }
+  .welcome-row {
+    display: block;
+    margin-bottom: 22px;
+  }
+  .welcome-row h1 {
+    font-size: 34px;
+  }
+  .welcome-copy {
+    max-width: 310px;
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+  .primary-cta {
+    width: 100%;
+  }
+  .card-header {
+    padding: 18px 16px 12px;
+  }
+  .card-content {
+    padding: 5px 16px 17px;
+  }
+  .card-title {
+    font-size: 21px;
+  }
+  .quest-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .soft-button {
+    width: 100%;
+  }
+  .agent-quote {
+    font-size: 16px;
+  }
+  .lower-grid {
+    margin-top: 14px;
+  }
+  .right-stack {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .map-card .card-header {
+    display: block;
+  }
+  .map-card .text-button {
+    margin-top: 11px;
+  }
+  .map-illustration {
+    height: 220px;
+  }
+  .footer-row {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-top: 18px;
+  }
+  .hub-note {
+    align-self: flex-end;
+  }
+  .mobile-nav {
+    position: fixed;
+    z-index: 15;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 68px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 8px 8px max(8px, env(safe-area-inset-bottom));
+    border-top: 1px solid #d8cbb0;
+    background: #fffaf0f2;
+    backdrop-filter: blur(12px);
+  }
+  .mobile-nav button {
+    border: 0;
+    display: grid;
+    place-items: center;
+    gap: 3px;
+    color: var(--muted);
+    background: transparent;
+    font-size: 9px;
+  }
+  .mobile-nav button.active {
+    color: var(--jade);
+  }
+  .hub-toast {
+    right: 15px;
+    bottom: 82px;
+    left: 15px;
+    text-align: center;
+  }
+}

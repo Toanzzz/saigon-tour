@@ -7,6 +7,7 @@ import { game, notify, update } from '../state/game'
 import { Character, Vehicle } from '../world'
 import { motion } from './motion'
 import { MODES, PLACES, route } from './places'
+import { isTestPausedForScreenshot } from './test-hooks'
 
 export function Transport() {
   const ride = useStore(game, (s) => s.ride)
@@ -21,7 +22,13 @@ export function Transport() {
     return route(from, to).map((point) => new Vector3(...point))
   }, [from, to])
   useFrame((_, delta) => {
-    if (!ride || !vehicle.current || game.state.screen !== 'playing') return
+    if (
+      isTestPausedForScreenshot() ||
+      !ride ||
+      !vehicle.current ||
+      game.state.screen !== 'playing'
+    )
+      return
     const length = path
       .slice(1)
       .reduce((sum, p, index) => sum + p.distanceTo(path[index]), 0)

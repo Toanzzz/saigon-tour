@@ -126,27 +126,6 @@
     "animations": []
   },
   {
-    "path": "city/building-l.glb",
-    "bytes": 211868,
-    "meshes": 1,
-    "materials": 1,
-    "triangles": 3512,
-    "vertices": 5574,
-    "bounds": {
-      "min": [
-        -0.6850000023841858,
-        0,
-        -0.7009999752044678
-      ],
-      "max": [
-        0.6850000023841858,
-        2.2699999809265137,
-        0.7010000348091125
-      ]
-    },
-    "animations": []
-  },
-  {
     "path": "city/detail-awning.glb",
     "bytes": 14996,
     "meshes": 1,
@@ -426,48 +405,6 @@
     "animations": []
   },
   {
-    "path": "cars/taxi.glb",
-    "bytes": 87684,
-    "meshes": 3,
-    "materials": 1,
-    "triangles": 1408,
-    "vertices": 2194,
-    "bounds": {
-      "min": [
-        -0.75,
-        -1.1920928966180355e-8,
-        -1.3999998807907104
-      ],
-      "max": [
-        0.75,
-        1.4999999046325683,
-        1.3499998807907105
-      ]
-    },
-    "animations": []
-  },
-  {
-    "path": "cars/hatchback-sports.glb",
-    "bytes": 104608,
-    "meshes": 3,
-    "materials": 1,
-    "triangles": 1424,
-    "vertices": 2653,
-    "bounds": {
-      "min": [
-        -0.6499999761581421,
-        -1.1920928966180355e-8,
-        -1.4500000715255736
-      ],
-      "max": [
-        0.6499999761581421,
-        1.099999988079071,
-        1.4000000715255738
-      ]
-    },
-    "animations": []
-  },
-  {
     "path": "trains/train-tram-modern.glb",
     "bytes": 86064,
     "meshes": 3,
@@ -505,27 +442,6 @@
         0.5171645461356535,
         1.373466974036579,
         0.5197316133699036
-      ]
-    },
-    "animations": []
-  },
-  {
-    "path": "nature/tree_palmBend.glb",
-    "bytes": 11576,
-    "meshes": 1,
-    "materials": 2,
-    "triangles": 200,
-    "vertices": 656,
-    "bounds": {
-      "min": [
-        -0.4677448570728302,
-        -0.05,
-        -0.5063817501068115
-      ],
-      "max": [
-        0.4677448570728302,
-        1.3299107074737548,
-        0.5063817501068115
       ]
     },
     "animations": []
@@ -636,27 +552,6 @@
     "animations": []
   },
   {
-    "path": "food/bowl-soup.glb",
-    "bytes": 18552,
-    "meshes": 1,
-    "materials": 1,
-    "triangles": 132,
-    "vertices": 188,
-    "bounds": {
-      "min": [
-        -0.25107651948928833,
-        0,
-        -0.2899182140827179
-      ],
-      "max": [
-        0.25107651948928833,
-        0.2138247787952423,
-        0.2899182140827179
-      ]
-    },
-    "animations": []
-  },
-  {
     "path": "food/pot.glb",
     "bytes": 23992,
     "meshes": 1,
@@ -699,48 +594,6 @@
     "animations": []
   },
   {
-    "path": "food/cup-coffee.glb",
-    "bytes": 16332,
-    "meshes": 1,
-    "materials": 1,
-    "triangles": 108,
-    "vertices": 120,
-    "bounds": {
-      "min": [
-        -0.10814492404460907,
-        -2.8199664484680564e-18,
-        -0.16439910233020782
-      ],
-      "max": [
-        0.10814492404460907,
-        0.14000000059604645,
-        0.12225036323070526
-      ]
-    },
-    "animations": []
-  },
-  {
-    "path": "food/banana.glb",
-    "bytes": 19232,
-    "meshes": 1,
-    "materials": 1,
-    "triangles": 104,
-    "vertices": 212,
-    "bounds": {
-      "min": [
-        -0.06879999488592148,
-        0,
-        -0.3149356245994568
-      ],
-      "max": [
-        0.06879999488592148,
-        0.19580039381980896,
-        0.3149356245994568
-      ]
-    },
-    "animations": []
-  },
-  {
     "path": "roads/light-curved.glb",
     "bytes": 18112,
     "meshes": 1,
@@ -778,27 +631,6 @@
         0.2817249894142151,
         0.5249999761581421,
         0.10711249709129333
-      ]
-    },
-    "animations": []
-  },
-  {
-    "path": "roads/road-sign-street.glb",
-    "bytes": 22612,
-    "meshes": 1,
-    "materials": 1,
-    "triangles": 154,
-    "vertices": 276,
-    "bounds": {
-      "min": [
-        -0.17125001549720764,
-        0,
-        -0.02500000037252903
-      ],
-      "max": [
-        0.02500000037252903,
-        0.4750000238418579,
-        0.17124979197978973
       ]
     },
     "animations": []

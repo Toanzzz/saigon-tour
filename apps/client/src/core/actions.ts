@@ -99,7 +99,13 @@ export async function talk(npc: NpcId) {
   if (state.dialogue || distance(state.position, PEOPLE[npc].at) > 4) return
   game.setState((s) => ({
     ...s,
-    dialogue: { npc, history: [], thinking: true, source: null },
+    dialogue: {
+      npc,
+      requestId: crypto.randomUUID(),
+      history: [],
+      thinking: true,
+      source: null,
+    },
     world: { ...s.world, talkedTo: [...new Set([...s.world.talkedTo, npc])] },
   }))
   await chat('Chào bạn! What is happening in the neighborhood?', true)
@@ -108,6 +114,7 @@ export async function chat(text: string, opening = false) {
   const dialog = game.state.dialogue
   if (!dialog || (!opening && dialog.thinking) || !text.trim()) return
   const session = game.state.sessionId
+  const requestId = dialog.requestId
   const history = opening
     ? dialog.history
     : [...dialog.history, { role: 'user' as const, content: text }]
@@ -121,7 +128,7 @@ export async function chat(text: string, opening = false) {
   )
   if (
     game.state.sessionId !== session ||
-    game.state.dialogue?.npc !== dialog.npc
+    game.state.dialogue?.requestId !== requestId
   )
     return
   update({
@@ -141,6 +148,7 @@ export async function acceptQuest() {
   const dialog = game.state.dialogue
   if (!dialog || dialog.thinking || game.state.quest) return
   const session = game.state.sessionId
+  const requestId = dialog.requestId
   update({ dialogue: { ...dialog, thinking: true } })
   const result = await mutate(() =>
     agent.quest({
@@ -151,7 +159,7 @@ export async function acceptQuest() {
   )
   if (
     game.state.sessionId !== session ||
-    game.state.dialogue?.npc !== dialog.npc
+    game.state.dialogue?.requestId !== requestId
   )
     return
   game.setState((s) => ({
@@ -207,7 +215,11 @@ export async function deliverOrVerify() {
       playerClaim: 'Please check my errand.',
     })
   )
-  if (game.state.sessionId !== s.sessionId || game.state.quest?.id !== quest.id)
+  if (
+    game.state.sessionId !== s.sessionId ||
+    game.state.quest?.id !== quest.id ||
+    game.state.dialogue?.requestId !== dialogue.requestId
+  )
     return
   if (
     result.status === 'COMPLETE' &&

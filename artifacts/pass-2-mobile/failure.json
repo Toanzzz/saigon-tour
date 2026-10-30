@@ -1,0 +1,67 @@
+{
+  "error": "ReferenceError: xrSessionSupported is not defined",
+  "diagnostics": {
+    "renderer": {
+      "render": {
+        "frame": 292,
+        "calls": 127,
+        "triangles": 300586,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 75,
+        "textures": 47
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "frame": 275,
+      "position": [
+        -23,
+        0.7987182140350342,
+        6.23008918762207
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "fps": 60.055116990300576,
+    "dpr": 1
+  },
+  "text": "!Cô Hoa\nAnh Tâm\nChị Linh\nÔng Ba\nSÀI GÒN\nBẾN THÀNH\nCoins\n30\nYOUR FIRST LITTLE STORY\nA warm welcome\nSay hello to Cô Hoa at the market stall.\nN ↑\nNEIGHBORHOOD\n↑\n↓\n←\n→\nTalk",
+  "errors": [],
+  "requests": []
+}

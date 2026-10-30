@@ -17,6 +17,7 @@ export type Panel =
   | 'reward'
 export interface Dialogue {
   npc: NpcId
+  requestId: string
   history: { role: 'user' | 'assistant'; content: string }[]
   thinking: boolean
   source: AgentSource | null

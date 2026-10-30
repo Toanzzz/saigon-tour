@@ -53,6 +53,20 @@
   min-width: 215px;
   justify-content: space-between;
 }
+.xr-session-button {
+  min-height: 44px;
+  margin-left: 10px;
+  padding: 10px 14px;
+  border: 1px solid #f4cb76a8;
+  border-radius: 3px;
+  background: #163b36d9;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 650;
+}
+.xr-session-button:hover {
+  background: #23554d;
+}
 .title-controls {
   font-size: 11px;
   color: #dee4d6;

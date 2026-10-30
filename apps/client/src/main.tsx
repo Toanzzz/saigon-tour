@@ -3,6 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { installInput } from './core/input'
+import { installTestHooks } from './core/test-hooks'
 import { queryClient } from './net/agent'
 import { Scene } from './scene'
 import { GameUI } from './ui'
@@ -17,7 +18,10 @@ function Loading() {
   ) : null
 }
 function App() {
-  useEffect(installInput, [])
+  useEffect(() => {
+    installTestHooks()
+    return installInput()
+  }, [])
   return (
     <QueryClientProvider client={queryClient}>
       <main aria-label="Sài Gòn exploration game">

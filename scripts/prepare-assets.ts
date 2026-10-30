@@ -23,7 +23,6 @@ const selected: Record<string, { directory: string; names: string[] }> = {
       'building-f',
       'building-g',
       'building-j',
-      'building-l',
       'detail-awning',
       'detail-parasol-a',
     ],
@@ -39,14 +38,13 @@ const selected: Record<string, { directory: string; names: string[] }> = {
   },
   cars: {
     directory: 'car-kit/GLB format',
-    names: ['van', 'taxi', 'hatchback-sports'],
+    names: ['van'],
   },
   trains: { directory: 'train-kit/GLB format', names: ['train-tram-modern'] },
   nature: {
     directory: 'nature-kit/GLTF format',
     names: [
       'tree_palmDetailedTall',
-      'tree_palmBend',
       'tree_fat',
       'plant_bush',
       'flower_redA',
@@ -55,18 +53,11 @@ const selected: Record<string, { directory: string; names: string[] }> = {
   },
   food: {
     directory: 'food-kit/GLB format',
-    names: [
-      'bowl-broth',
-      'bowl-soup',
-      'pot',
-      'loaf-baguette',
-      'cup-coffee',
-      'banana',
-    ],
+    names: ['bowl-broth', 'pot', 'loaf-baguette'],
   },
   roads: {
     directory: 'city-kit-roads/GLB format',
-    names: ['light-curved', 'electricity-pole', 'road-sign-street'],
+    names: ['light-curved', 'electricity-pole'],
   },
 }
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS)

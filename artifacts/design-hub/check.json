@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "results": {
+    "desktop": {
+      "width": 1440,
+      "active": "City hub\nJourney journal",
+      "sound": 1
+    },
+    "mobile": {
+      "width": 390,
+      "active": "City hubJourney journal"
+    }
+  },
+  "errors": []
+}
