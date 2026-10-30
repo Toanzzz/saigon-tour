@@ -8,11 +8,10 @@ import {
   getBounds,
   join,
   prune,
-  simplify,
   textureCompress,
   weld,
 } from '@gltf-transform/functions'
-import { MeshoptSimplifier } from 'meshoptimizer'
+import draco3d from 'draco3d'
 import sharp from 'sharp'
 
 const root = resolve(import.meta.dirname, '..')
@@ -70,7 +69,20 @@ const selected: Record<string, { directory: string; names: string[] }> = {
     names: ['light-curved', 'electricity-pole'],
   },
 }
-const io = new NodeIO().registerExtensions(ALL_EXTENSIONS)
+// Landmark sources are Draco-compressed; decoding needs the draco3d module.
+const io = new NodeIO()
+  .registerExtensions(ALL_EXTENSIONS)
+  .registerDependencies({
+    'draco3d.decoder': await draco3d.createDecoderModule(),
+  })
+/** Read a source and drop Draco so runtime copies load without a decoder. */
+async function readSource(path: string) {
+  const document = await io.read(resolve(root, 'assets', path))
+  for (const extension of document.getRoot().listExtensionsUsed())
+    if (extension.extensionName === 'KHR_draco_mesh_compression')
+      extension.dispose()
+  return document
+}
 const records: {
   path: string
   bytes: number
@@ -94,9 +106,7 @@ for (const [pack, selection] of Object.entries(selected)) {
   }
 }
 const marketTarget = resolve(output, 'ben-thanh-market.glb')
-const market = await io.read(
-  resolve(root, 'assets/chobenthanh/model/ben-thanh-market.glb')
-)
+const market = await readSource('landmarks/chobenthanh-model.glb')
 for (const mesh of market.getRoot().listMeshes()) {
   for (const primitive of mesh.listPrimitives())
     primitive.setAttribute('TEXCOORD_0', null)
@@ -104,16 +114,15 @@ for (const mesh of market.getRoot().listMeshes()) {
 await market.transform(flatten(), dedup(), join(), weld(), prune())
 await io.write(marketTarget, market)
 records.push(await record(marketTarget, market))
-// Generated landmark sources keep 4K maps; runtime copies are browser-sized.
+// Landmark sources are already decimated; runtime copies only cap textures.
 const landmarks = {
-  'nha-tho-duc-ba': 'nhathoducba/nhathoducba-model.glb',
-  'toa-thi-chinh': 'toathichinh/toathichinh-model.glb',
+  'nha-tho-duc-ba': 'landmarks/nhathoducba-model.glb',
+  'toa-thi-chinh': 'landmarks/toathichinh-model.glb',
 }
-await MeshoptSimplifier.ready
 for (const [name, source] of Object.entries(landmarks)) {
   const target = resolve(output, `landmarks/${name}.glb`)
   await mkdir(dirname(target), { recursive: true })
-  const document = await io.read(resolve(root, 'assets', source))
+  const document = await readSource(source)
   // Toy-diorama lighting reads better from albedo alone; drop PBR maps.
   for (const material of document.getRoot().listMaterials()) {
     material.setNormalTexture(null)
@@ -125,7 +134,6 @@ for (const [name, source] of Object.entries(landmarks)) {
     if (extension.extensionName === 'KHR_materials_volume') extension.dispose()
   await document.transform(
     weld(),
-    simplify({ simplifier: MeshoptSimplifier, ratio: 0.4, error: 0.0015 }),
     textureCompress({
       encoder: sharp,
       targetFormat: 'webp',

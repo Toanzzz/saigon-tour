@@ -11,7 +11,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 - Meta model: `muse-spark-1.3-contributor`.
 - Server secret: `META_MUSE_API_KEY`; it is not present in client source or build output.
 - Project dates: October 27–November 4, 2026; submission November 4, 9 PM ET.
-- Art direction: toy diorama from `assets/chobenthanh/chobenthanh.png`. Periwinkle sky, butter walls, terracotta roofs, mint trees. UI surfaces are toy blocks: ink edge, solid side face, roof-ridge header strip. Tokens live in `packages/shared/tokens.css`, shared by client and hub. Type: Baloo 2 (display) and Be Vietnam Pro (body), self-hosted with Vietnamese subsets.
+- Art direction: toy diorama from `assets/landmarks/chobenthanh.png`. Periwinkle sky, butter walls, terracotta roofs, mint trees. UI surfaces are toy blocks: ink edge, solid side face, roof-ridge header strip. Tokens live in `packages/shared/tokens.css`, shared by client and hub. Type: Baloo 2 (display) and Be Vietnam Pro (body), self-hosted with Vietnamese subsets.
 - Runtime ports: client `58000`, server `58001`.
 - Hub placement: in-play overlay (header button, `H`) plus once after the first reward closes. `apps/design` deleted after the port. Persistence: session only.
 - No deployment or public publishing has been performed.
@@ -26,6 +26,7 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 5. Complete: young tourist player built from the Kenney mini-character pack.
 6. Complete: compressed District 1 map (`world/district.ts`) with Tòa Thị Chính and Nhà thờ Đức Bà GLBs placed by OSM bearing, Nguyễn Huệ, Lê Thánh Tôn, Đồng Khởi, Công xã Paris, river skyline, five bus stops on a road-tree route, player-following shadow frustum, and an oriented minimap.
 7. Complete: Mastra NPC harness per `artifacts/agent-harness.md`: `POST /npc/:npcId/interact`, backend-authoritative `GameService`, four tool-restricted agents, memory, event scheduler, fallbacks, limits. Old `/npc/chat|quest|verify` routes removed.
+8. Complete: landmark sources moved to `assets/landmarks/`. They use Draco mesh compression; `prepare-assets.ts` registers the `draco3d` decoder, drops Draco from runtime copies, and no longer simplifies already-decimated meshes.
 
 ## Current validation
 

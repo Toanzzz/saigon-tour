@@ -44,6 +44,15 @@ export function Player() {
     motion.dt += (delta - motion.dt) * 0.05
     if (isTestPausedForScreenshot()) return
     if (!body.current || state.ride) return
+    if (motion.teleport) {
+      const [tx, tz] = motion.teleport
+      motion.teleport = null
+      body.current.setTranslation({ x: tx, y: 0.9, z: tz }, true)
+      body.current.setLinvel({ x: 0, y: 0, z: 0 }, true)
+      motion.position.set(tx, 0.9, tz)
+      update({ position: [tx, 0.9, tz] })
+      return
+    }
     const enabled =
       state.screen === 'playing' && !state.dialogue && state.panel === 'none'
     const x = enabled ? input.x : 0

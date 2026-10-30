@@ -8,4 +8,6 @@ export const motion = {
   sprinting: false,
   frames: 0,
   dt: 1 / 60,
+  /** Pending teleport, consumed by the player's next frame. */
+  teleport: null as [number, number] | null,
 }

@@ -224,7 +224,13 @@ try {
     await page.keyboard.press('Escape')
     // Back to Cô Hoa by bus; she verifies the delivery on the server.
     await page.evaluate(() => window.__THREE_GAME_TEST_HOOKS__.teleport(-23, 6))
-    await page.waitForTimeout(800)
+    await page.waitForFunction(
+      () =>
+        Math.abs(window.__THREE_GAME_DIAGNOSTICS__.state.position[0] + 23) <
+        0.5,
+      { timeout: 5000 }
+    )
+    await page.waitForTimeout(300)
     await page.keyboard.press('e')
     await page
       .getByRole('button', { name: 'Check my progress', exact: true })

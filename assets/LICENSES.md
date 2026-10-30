@@ -6,10 +6,10 @@ remain in their source folders.
 
 | Runtime collection | Source | Author | License evidence |
 | --- | --- | --- | --- |
-| Market landmark | `chobenthanh/model/ben-thanh-market.glb` | Project artwork reconstructed from supplied references | Original project model; source provenance described in its README |
+| Market landmark | `landmarks/chobenthanh-model.glb` | Project artwork reconstructed from supplied references | Original project model; reference renders `landmarks/chobenthanh*.png` |
 | City buildings and parasols | `city-kit-commercial` | Kenney | `city-kit-commercial/License.txt`, CC0 |
 | Character models and animations | `mini-characters` | Kenney | `mini-characters/License.txt`, CC0 |
-| Tòa Thị Chính, Nhà thờ Đức Bà | `toathichinh/toathichinh-model.glb`, `nhathoducba/nhathoducba-model.glb` | Project models generated from supplied references | Runtime copies are simplified and resized by `scripts/prepare-assets.ts` |
+| Tòa Thị Chính, Nhà thờ Đức Bà | `landmarks/toathichinh-model.glb`, `landmarks/nhathoducba-model.glb` | Project models generated from supplied references | Sources are Draco-compressed; `scripts/prepare-assets.ts` decodes them and caps textures at 1024 px |
 | Tourist player | `player-tourist/player-tourist.blend` | Kenney `character-male-e` plus project-authored hat, backpack, and camera | Built by `scripts/blender/build-tourist.py`; CC0 base |
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |

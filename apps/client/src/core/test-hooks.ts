@@ -181,13 +181,7 @@ export function installTestHooks() {
     },
     teleport(x, z) {
       clearInput()
-      motion.position.set(x, 0.9, z)
-      // Remounting the player places its rigid body at the new position.
-      game.setState((state) => ({
-        ...state,
-        position: [x, 0.9, z],
-        generation: state.generation + 1,
-      }))
+      motion.teleport = [x, z]
     },
   }
 }

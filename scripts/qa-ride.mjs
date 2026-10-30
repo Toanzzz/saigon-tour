@@ -19,7 +19,7 @@ const errors = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
 const diag = () => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__.state)
-await page.goto('http://127.0.0.1:58000/?debug=1')
+await page.goto(process.env.GAME_URL || 'http://127.0.0.1:58000/?debug=1')
 await page
   .getByRole('button', { name: 'Start exploring', exact: true })
   .waitFor({ timeout: 60000 })
