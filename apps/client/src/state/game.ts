@@ -29,7 +29,7 @@ export interface Ride {
   progress: number
 }
 export interface GameState {
-  screen: 'title' | 'playing' | 'paused'
+  screen: 'title' | 'playing' | 'paused' | 'hub'
   panel: Panel
   sessionId: string
   generation: number
@@ -38,6 +38,8 @@ export interface GameState {
   quest: Quest | null
   completed: Quest[]
   dialogue: Dialogue | null
+  lastLine: Partial<Record<NpcId, string>>
+  hubShown: boolean
   ride: Ride | null
   stop: WorldState['locationId']
   source: AgentSource | null
@@ -67,6 +69,8 @@ export function initialState(generation = 0): GameState {
     quest: null,
     completed: [],
     dialogue: null,
+    lastLine: {},
+    hubShown: false,
     ride: null,
     stop: 'market',
     source: null,

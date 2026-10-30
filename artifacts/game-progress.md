@@ -12,7 +12,8 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 - Server secret: `META_MUSE_API_KEY`; it is not present in client source or build output.
 - Project dates: October 27–November 4, 2026; submission November 4, 9 PM ET.
 - Art direction: toy diorama from `assets/chobenthanh/chobenthanh.png`. Periwinkle sky, butter walls, terracotta roofs, mint trees. UI surfaces are toy blocks: ink edge, solid side face, roof-ridge header strip. Tokens live in `packages/shared/tokens.css`, shared by client and hub. Type: Baloo 2 (display) and Be Vietnam Pro (body), self-hosted with Vietnamese subsets.
-- Runtime ports: client `58000`, server `58001`, design hub `58003`.
+- Runtime ports: client `58000`, server `58001`.
+- Hub placement: in-play overlay (header button, `H`) plus once after the first reward closes. `apps/design` deleted after the port. Persistence: session only.
 - No deployment or public publishing has been performed.
 
 ## Passes
@@ -20,6 +21,8 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 1. Complete: foundation, live/fallback agent backend, authored district, keyboard/touch movement, delivery quest, bus, reward, retry, and first production browser flow. Lint, types, build, and 21 tests passed.
 2. Complete: XR entry/exit and controller locomotion, snap turn, world-space panels, XR HUD, mobile joystick QA, stale dialogue protection, soft city tint, foliage material correction, runtime asset pruning, audio lifecycle handling, visual canvas inspection, release checks, and the responsive Sài Gòn city hub in `apps/design`.
 3. Complete: diorama design overhaul across the game UI (title, HUD, touch controls, dialogs, minimap and map labels on translucent pills, NPC name tags, quest marker, XR canvas panels, scene sky/fog) and the city hub (diorama hero with map pins, story road, neighbor, ride, pulse, and sound cards).
+
+4. Complete: city hub inside the client (`ui/hub/`), driven by `hubView(state)`; story road, last neighbor line, cheapest affordable ride, places discovered, sound. `apps/design` and `scripts/qa-hub.mjs` retired.
 
 ## Current validation
 
@@ -33,9 +36,9 @@ Stylized Sài Gòn exploration game from `spec/`. The validated build has a play
 - Design hub checks passed with desktop and mobile headless Playwright flows, including navigation, map stop selection, sound toggle, and no page or console errors.
 - Docker API image build passed.
 
-## Next: city hub integration
+## City hub integration (complete)
 
-Bring the hub (`apps/design`) into the client as a live screen driven by game state. Tokens, fonts, and the diorama language are already shared.
+The hub (`apps/design`) is a live client screen driven by game state. Tokens, fonts, and the diorama language are already shared.
 
 ### Target
 
@@ -78,14 +81,24 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 4. Retire `apps/design`, `scripts/qa-hub.mjs`, and port `58003` after the client hub passes QA.
 5. Update `docs/game-design.md` and `artifacts/final-evidence.md`.
 
-### Open decisions (defaults first)
+### Remaining work
 
-- Placement: in-play overlay + after reward / replace title / pause menu.
-- `apps/design` after the port: delete / keep as a style sandbox.
-- Persistence: session only / `localStorage` save of world, completed quests, and settings.
+- City expansion per `artifacts/city_expansion_plan.md`: compressed District 1 loop with Nhà thờ Đức Bà and Tòa Thị Chính placed by real-world relation to Bến Thành. Landmark GLBs are built by a separate agent; integrate when exported.
+- Player: young boy. Tripo model `a941ef32-2a0d-4a3a-8ff8-0282bace5a0d`, rig `1b29e85d-06ea-4f87-9677-2874435515a8`, clips idle `2bbe8482-…`, walk `31945dc5-…`, run `b8f46272-…`; checkpoint `artifacts/jobs/player-boy.json`; merged GLB `assets/player-boy/player-boy.glb` via `scripts/blender/merge-player.py`.
+- Agent harness per `artifacts/agent-harness.md` (Mastra, backend-authoritative quests).
 
 ## Open follow-ups
 
 - Physical Quest 3 verification requires hardware and was not performed.
 - Deployment and public hosting verification remain outside this local pass.
 - The historical failed mobile capture files remain under `artifacts/pass-2-mobile/failure.*`; the final mobile run passed and is recorded in `artifacts/pass-2-inspector/mobile-active-play.json`.
+
+- 2026-10-31: Applied controlled bevel/smooth shading pass across 530 architectural meshes, re-saved blend and re-exported GLB; refreshed front and three-quarter previews.
+
+- 2026-10-31: Tuned studio/world illumination toward the reference pastel presentation, re-saved source and re-exported GLB; front preview regenerated and verified.
+
+- 2026-10-31: Added eight front tower arched trim curves aligned to the reference window groups; saved blend, re-exported GLB, and refreshed front render.
+
+- 2026-10-31: Rebuilt central rose-window tracery with concentric rings and radial spokes to better match the ornate reference facade; saved/exported/rendered.
+
+- 2026-10-31: Added matching terracotta arch trim to six side-window bays on both left and right elevations; blend/GLB export completed.

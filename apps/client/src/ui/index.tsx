@@ -2,11 +2,13 @@ import { useProgress } from '@react-three/drei'
 import { useStore } from '@tanstack/react-store'
 import { useEffect } from 'react'
 import { audio } from '../audio'
-import { close, interact, nearby, pause, start } from '../core/actions'
+import { close, interact, nearby, start } from '../core/actions'
 import { PLACES } from '../core/places'
-import { XRSessionButton, xrStore } from '../platform/xr'
+import { useXRPresenting, XRSessionButton, xrStore } from '../platform/xr'
 import { type GameState, game, update } from '../state/game'
 import { Conversation } from './dialogue'
+import { GameHeader } from './header'
+import { HubScreen } from './hub'
 import { Icon } from './icons'
 import { NeighborhoodMap } from './map'
 import {
@@ -104,6 +106,7 @@ function Objective({ state }: { state: GameState }) {
 export function GameUI() {
   const state = useStore(game, (value) => value)
   const target = nearby(state.position)
+  const xrPresenting = useXRPresenting()
   useEffect(() => {
     audio.setMuted(state.muted)
     audio.setVolume(state.volume)
@@ -118,44 +121,7 @@ export function GameUI() {
     state.screen === 'playing' && state.panel === 'none' && !state.dialogue
   return (
     <div className="game-ui">
-      <header className="game-header">
-        <div className="game-identity">
-          <span>Sài Gòn</span>
-          <small>{PLACES[state.world.locationId].name}</small>
-        </div>
-        <nav className="header-tools" aria-label="Game controls">
-          <span className="wallet">
-            <span className="sr-only">Coins</span>
-            <Icon name="coin" />
-            <b>{state.world.currency}</b>
-          </span>
-          <button
-            type="button"
-            className="icon-button desktop-only"
-            aria-label="Open journal"
-            onClick={() => update({ panel: 'journal' })}
-          >
-            <Icon name="book" />
-          </button>
-          <XRSessionButton store={xrStore} />
-          <button
-            type="button"
-            className="icon-button"
-            aria-label={state.muted ? 'Unmute audio' : 'Mute audio'}
-            onClick={() => update({ muted: !state.muted })}
-          >
-            <Icon name={state.muted ? 'muted' : 'sound'} />
-          </button>
-          <button
-            type="button"
-            className="icon-button"
-            aria-label="Pause game"
-            onClick={pause}
-          >
-            <Icon name="pause" />
-          </button>
-        </nav>
-      </header>
+      <GameHeader state={state} />
       {clear && !state.ride && (
         <>
           <Objective state={state} />
@@ -207,6 +173,9 @@ export function GameUI() {
             <span>
               <kbd>J</kbd> journal
             </span>
+            <span>
+              <kbd>H</kbd> hub
+            </span>
           </div>
         </>
       )}
@@ -238,6 +207,7 @@ export function GameUI() {
       {(state.screen === 'paused' || state.panel === 'settings') && (
         <PausePanel state={state} />
       )}
+      {state.screen === 'hub' && !xrPresenting && <HubScreen state={state} />}
       {state.panel !== 'none' && (
         <button type="button" className="sr-only" onClick={close}>
           Return to city

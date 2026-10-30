@@ -1,4 +1,5 @@
 import { createXRStore, type XRStore } from '@react-three/xr'
+import { useSyncExternalStore } from 'react'
 
 function chooseFrameRate(rates: ArrayLike<number>): number | false {
   for (let index = 0; index < rates.length; index += 1) {
@@ -24,4 +25,14 @@ export async function supportsImmersiveVR(): Promise<boolean> {
   } catch {
     return false
   }
+}
+
+export const isXRPresenting = () => Boolean(xrStore.getState().session)
+
+export function useXRPresenting(): boolean {
+  return useSyncExternalStore(
+    (listener) => xrStore.subscribe(listener),
+    isXRPresenting,
+    () => false
+  )
 }

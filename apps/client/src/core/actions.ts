@@ -1,6 +1,7 @@
 import { NPCS, type NpcId, objectiveSatisfied } from '@saigon/shared'
 import { audio } from '../audio'
 import { agent, queryClient } from '../net/agent'
+import { isXRPresenting } from '../platform/xr/store'
 import {
   game,
   grantQuest,
@@ -39,9 +40,33 @@ export function pause() {
   audio.setPaused(paused)
 }
 export function close() {
-  if (game.state.dialogue?.thinking) {
-    update({ dialogue: null, panel: 'none' })
-  } else update({ dialogue: null, panel: 'none' })
+  const { panel, hubShown } = game.state
+  if (panel === 'reward' && !hubShown && !isXRPresenting()) {
+    update({ dialogue: null, panel: 'none', screen: 'hub', hubShown: true })
+    return
+  }
+  update({ dialogue: null, panel: 'none' })
+}
+export function canOpenHub(state = game.state) {
+  return (
+    state.screen === 'playing' &&
+    !state.dialogue &&
+    !state.ride &&
+    !isXRPresenting()
+  )
+}
+export function openHub() {
+  if (!canOpenHub()) return
+  update({ screen: 'hub', panel: 'none', hubShown: true })
+  audio.play('click')
+}
+export function closeHub(panel: 'none' | 'journal' | 'map' = 'none') {
+  if (game.state.screen !== 'hub') return
+  update({ screen: 'playing', panel })
+}
+export function toggleHub() {
+  if (game.state.screen === 'hub') closeHub()
+  else openHub()
 }
 export function nearby(
   position = game.state.position
@@ -133,6 +158,7 @@ export async function chat(text: string, opening = false) {
     return
   update({
     source: result.source,
+    lastLine: { ...game.state.lastLine, [dialog.npc]: result.reply },
     dialogue: {
       ...dialog,
       thinking: false,
@@ -165,6 +191,7 @@ export async function acceptQuest() {
   game.setState((s) => ({
     ...grantQuest(s, result.quest),
     source: result.source,
+    lastLine: { ...s.lastLine, [dialog.npc]: result.line },
     dialogue: {
       ...dialog,
       thinking: false,

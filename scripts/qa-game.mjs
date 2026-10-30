@@ -117,6 +117,27 @@ try {
     const interact = page.locator('button.touch-interact')
     assert.equal(await interact.count(), 1, 'touch interaction target exists')
     await capture('mobile-active-play')
+    await page.getByRole('button', { name: 'Open city hub' }).click()
+    const hub = page.locator('dialog.hub-screen')
+    await hub.waitFor()
+    await hub.getByText('Active story').waitFor()
+    assert.equal(
+      await hub.evaluate((node) => node.scrollWidth - node.clientWidth),
+      0,
+      'hub fits 390px without horizontal overflow'
+    )
+    await capture('mobile-hub')
+    await hub.evaluate((node) => node.scrollTo(0, node.scrollHeight))
+    await page.waitForTimeout(200)
+    await page.screenshot({ path: `${out}/mobile-hub-bottom.png` })
+    await hub.getByRole('button', { name: 'Mute city sounds' }).click()
+    await hub.getByRole('button', { name: 'Play city sounds' }).waitFor()
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.muted === true,
+      { timeout: 3000 }
+    )
+    await hub.getByRole('button', { name: 'Close city hub' }).click()
+    await hub.waitFor({ state: 'detached' })
     await writeFile(
       `${out}/mobile-checkpoint.json`,
       JSON.stringify(
@@ -201,6 +222,31 @@ try {
     )
     assert.equal((await diag()).state.completed, 1)
     await capture('reward')
+    await page
+      .getByRole('button', { name: 'Continue exploring', exact: true })
+      .click()
+    const hub = page.locator('dialog.hub-screen')
+    await hub.waitFor()
+    await page.waitForTimeout(400)
+    assert.equal((await diag()).state.screen, 'hub', 'hub opens after reward')
+    assert.equal(
+      await hub.locator('.wallet b').innerText(),
+      String((await diag()).state.currency),
+      'hub wallet mirrors game coins'
+    )
+    await hub.getByText('Story complete').waitFor()
+    assert.equal(await hub.locator('.stop.done').count(), 3)
+    await capture('hub-after-reward')
+    await hub.getByRole('button', { name: 'Open journal' }).click()
+    await page.getByRole('heading', { name: 'Your little journey' }).waitFor()
+    await page.keyboard.press('Escape')
+    await page.waitForTimeout(200)
+    await page.keyboard.press('h')
+    await hub.waitFor()
+    await page.keyboard.press('Escape')
+    await hub.waitFor({ state: 'detached' })
+    assert.equal((await diag()).state.screen, 'playing', 'Esc closes hub')
+    await page.getByRole('button', { name: 'Pause game' }).click()
     await page
       .getByRole('button', { name: 'Start a new journey', exact: true })
       .click()

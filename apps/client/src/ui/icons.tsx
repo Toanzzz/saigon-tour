@@ -14,6 +14,11 @@ const paths = {
   bus: 'M5 17V5c0-3 14-3 14 0v12H5Zm0-10h14M5 13h14M7 17v3m10-3v3M8 15h1m6 0h1',
   compass: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4 5-3 7-6 3 3-7 6-3Z',
   check: 'm5 12 5 5L20 7',
+  home: 'M3 11 12 4l9 7M5 10v10h14V10M10 20v-6h4v6',
+  users:
+    'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 10c0-4 3-6 7-6s7 2 7 6m1-10a3 3 0 1 0 0-6m2 16c0-3-1-5-3-6',
+  stamp: 'M9 3h6v5l-2 3v3h7v4H4v-4h7v-3L9 8V3Zm-5 18h16',
+  play: 'M7 4v16l13-8L7 4Z',
 } as const
 
 export function Icon({

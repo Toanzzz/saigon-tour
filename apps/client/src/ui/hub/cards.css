@@ -1,0 +1,216 @@
+/* Cards */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 26px 22px;
+  margin-top: 8px;
+}
+.hub-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 22px 24px 24px;
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: 18px;
+  box-shadow:
+    0 6px 0 var(--ink),
+    var(--ground);
+  overflow: hidden;
+}
+.hub-card.roofed {
+  padding-top: 36px;
+}
+.hub-card.roofed::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 16px;
+  background: var(--ridges);
+  border-bottom: var(--edge);
+}
+.hub-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.card-kicker {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.card-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+.tile-icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  box-shadow: var(--lift-sm);
+}
+.tile-icon.bus-red {
+  background: var(--bus-red);
+}
+.tile-icon.leaf {
+  background: var(--leaf-hi);
+}
+.hub-screen .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px 5px 8px;
+  border: var(--edge);
+  border-radius: 99px;
+  background: var(--wall-hi);
+  font-size: 13px;
+  font-weight: 700;
+}
+.chip.bus {
+  background: var(--bus);
+}
+.chip.leaf,
+.chip.visited {
+  background: var(--leaf-hi);
+}
+
+.story-card {
+  grid-column: span 7;
+}
+.story-road {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 6px 0 20px;
+  padding: 0;
+  list-style: none;
+}
+.story-road::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 18px;
+  right: 18px;
+  height: 14px;
+  background: var(--asphalt);
+  border-radius: 99px;
+}
+.stop {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  align-content: start;
+}
+.stop-marker {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 10px;
+  background: var(--pavement);
+  border: var(--edge);
+  border-radius: 50%;
+  box-shadow: var(--lift-sm);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+}
+.stop.done .stop-marker {
+  background: var(--leaf);
+}
+.stop.now .stop-marker {
+  background: var(--roof);
+  width: 52px;
+  height: 52px;
+  margin: -4px 0 6px -4px;
+}
+.stop strong {
+  font-size: 16px;
+}
+.stop small {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.story-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 2px dashed var(--wall-side);
+}
+.story-footer .block-button {
+  margin-left: auto;
+}
+
+.neighbor-card {
+  grid-column: span 5;
+  background: var(--pavement);
+}
+.neighbor-id {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.neighbor-id small {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.portrait {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  background: var(--roof-hi);
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  box-shadow: var(--lift-sm);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+}
+.hub-card .status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hub-card .status::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border: var(--edge);
+  border-radius: 50%;
+  background: var(--bus);
+}
+.hub-card .status.live::before {
+  background: var(--leaf);
+}
+.bubble {
+  margin: 0 0 18px;
+  padding: 14px 18px;
+  background: var(--wall-hi);
+  border: var(--edge);
+  border-radius: 4px 16px 16px 16px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.neighbor-card .primary-button {
+  margin-top: auto;
+}

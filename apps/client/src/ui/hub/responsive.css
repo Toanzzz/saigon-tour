@@ -1,0 +1,96 @@
+@media (max-width: 1080px) {
+  .story-card,
+  .neighbor-card {
+    grid-column: span 12;
+  }
+  .ride-card,
+  .places-card {
+    grid-column: span 6;
+  }
+  .sound-card {
+    grid-column: span 12;
+  }
+}
+@media (max-width: 900px) {
+  .hub-hero {
+    grid-template-columns: 1fr;
+  }
+  .hub-diorama {
+    margin: -8px 0 0;
+  }
+}
+@media (max-width: 700px) {
+  .hub-inner {
+    padding: max(14px, env(safe-area-inset-top)) 16px
+      max(28px, env(safe-area-inset-bottom));
+  }
+  .hub-hero h1 {
+    font-size: 48px;
+    -webkit-text-stroke-width: 2.5px;
+  }
+  .hub-lede {
+    font-size: 16px;
+    margin: 12px 0 18px;
+  }
+  .hub-actions > * {
+    flex: 1 1 auto;
+  }
+  .hub-diorama {
+    margin: 0 -12%;
+  }
+  .hub-pin span {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+  .hub-grid {
+    gap: 22px;
+  }
+  .ride-card,
+  .places-card {
+    grid-column: span 12;
+  }
+  .hub-card {
+    padding: 18px 18px 20px;
+  }
+  .hub-card.roofed {
+    padding-top: 32px;
+  }
+  .card-title {
+    font-size: 23px;
+  }
+  .story-road {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .story-road::before {
+    top: 18px;
+    bottom: 18px;
+    left: 15px;
+    right: auto;
+    width: 14px;
+    height: auto;
+  }
+  .stop {
+    grid-template-columns: 44px 1fr;
+    column-gap: 14px;
+  }
+  .stop-marker {
+    grid-row: span 2;
+    margin: 0;
+  }
+  .stop.now .stop-marker {
+    margin: -4px 0 0 -4px;
+  }
+  .story-footer .block-button {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hub-screen *,
+  .hub-screen *::before,
+  .hub-screen *::after {
+    transition: none;
+    animation: none;
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: hub sound toggle mutes\n\nfalse !== true\n",
+  "diagnostics": {
+    "renderer": {
+      "render": {
+        "frame": 319,
+        "calls": 127,
+        "triangles": 300586,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 75,
+        "textures": 47
+      }
+    },
+    "state": {
+      "screen": "hub",
+      "panel": "none",
+      "muted": true,
+      "frame": 299,
+      "position": [
+        -23,
+        0.7987180948257446,
+        6.223361492156982
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": true,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 1,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 1,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "fps": 59.96949575659812,
+    "dpr": 1
+  },
+  "text": "!\nCô Hoa\nAnh Tâm\nChị Linh\nÔng Ba\nSài Gòn\nBến Thành Market\nCoins\n30\nSài Gòn\nCity hub\nCoins\n30\n\n1 of 4 places discovered\n\nChào buổi sáng!\n\nNext: meet cô hoa. Market stall.\n\nContinue exploring\nOpen full map\nChợ Bến Thành\nYou are here\nChợ Bến Thành diorama. Select the pin to open the full map.\n\nActive story\n\nA little taste of home\n1\nMeet Cô Hoa\nMarket stall\nCurrent step\n2\nDeliver the herbs\nChị Linh, in the park\nLater\n3\nTell Cô Hoa\nEarn a postcard\nLater\n50 coins\nA Sài Gòn postcard\nOpen journal\nNeighbors\nNo one met yet\n\nCô Hoa is waiting at the market stall. Say hello!\n\nFind Cô Hoa\n\nBest value ride\n\nXích lô\n\nBẾN THÀNH\nCÔNG VIÊN\n\n3 coins from your wallet\n\nFind the stop\n\nPlaces discovered\n\n1 of 4\nBến Thành Market\n, visited\nThe neighborhood park\n, not visited yet\nCathedral square\n, not visited yet\nSài Gòn riverside\n, not visited yet\n\nCity sounds\n\nMuted\nVolume 50%",
+  "errors": [],
+  "requests": []
+}

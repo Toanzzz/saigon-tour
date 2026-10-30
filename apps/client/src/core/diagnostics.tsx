@@ -25,6 +25,7 @@ export function Diagnostics() {
       state: {
         screen: state.screen,
         panel: state.panel,
+        muted: state.muted,
         frame: motion.frames,
         position: state.position,
         currency: state.world.currency,

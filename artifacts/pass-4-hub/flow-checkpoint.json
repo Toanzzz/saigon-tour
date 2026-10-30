@@ -1,0 +1,191 @@
+{
+  "before": {
+    "renderer": {
+      "render": {
+        "frame": 228,
+        "calls": 175,
+        "triangles": 305237,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 82,
+        "textures": 51
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 208,
+      "position": [
+        -23,
+        0.7987181544303894,
+        10
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "fps": 60.05932608135955,
+    "dpr": 1
+  },
+  "after": {
+    "renderer": {
+      "render": {
+        "frame": 306,
+        "calls": 172,
+        "triangles": 305221,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 82,
+        "textures": 51
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 286,
+      "position": [
+        -23,
+        0.7987180948257446,
+        6.0018229484558105
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "fps": 60.16286439363692,
+    "dpr": 1
+  },
+  "current": {
+    "renderer": {
+      "render": {
+        "frame": 1575,
+        "calls": 172,
+        "triangles": 306017,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 88,
+        "textures": 54
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 1554,
+      "position": [
+        -23,
+        0.7987181544303894,
+        10
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 55,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 4,
+        "pickup": 2,
+        "board": 1,
+        "arrive": 1,
+        "reward": 1
+      }
+    },
+    "fps": 59.99803046227192,
+    "dpr": 1
+  },
+  "text": "!\nCô Hoa\nAnh Tâm\nChị Linh\nÔng Ba\nSài Gòn\nBến Thành Market\nCoins\n30\nYour first little story\nA warm welcome\nSay hello to Cô Hoa at the market stall.\nN ↑\nNeighborhood\nM\nWASD\nstroll\nDrag\nlook\nJ\njournal\nH\nhub",
+  "errors": [],
+  "requests": []
+}
