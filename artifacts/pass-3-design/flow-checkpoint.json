@@ -2,7 +2,7 @@
   "before": {
     "renderer": {
       "render": {
-        "frame": 225,
+        "frame": 221,
         "calls": 175,
         "triangles": 305237,
         "points": 0,
@@ -16,7 +16,7 @@
     "state": {
       "screen": "playing",
       "panel": "none",
-      "frame": 209,
+      "frame": 206,
       "position": [
         -23,
         0.7987181544303894,
@@ -57,13 +57,13 @@
         "reward": 0
       }
     },
-    "fps": 60.02823151408352,
+    "fps": 59.97391262722869,
     "dpr": 1
   },
   "after": {
     "renderer": {
       "render": {
-        "frame": 303,
+        "frame": 300,
         "calls": 172,
         "triangles": 305221,
         "points": 0,
@@ -77,11 +77,11 @@
     "state": {
       "screen": "playing",
       "panel": "none",
-      "frame": 287,
+      "frame": 285,
       "position": [
         -23,
-        0.7987180352210999,
-        5.984394073486328
+        0.7987180948257446,
+        5.9882659912109375
       ],
       "currency": 30,
       "completed": 0,
@@ -118,13 +118,13 @@
         "reward": 0
       }
     },
-    "fps": 59.9811424473868,
+    "fps": 60.049213231847965,
     "dpr": 1
   },
   "current": {
     "renderer": {
       "render": {
-        "frame": 1954,
+        "frame": 2045,
         "calls": 170,
         "triangles": 305141,
         "points": 0,
@@ -138,10 +138,10 @@
     "state": {
       "screen": "playing",
       "panel": "none",
-      "frame": 1937,
+      "frame": 2029,
       "position": [
         -23,
-        0.7987174987792969,
+        0.7987181544303894,
         10
       ],
       "currency": 30,
@@ -179,10 +179,10 @@
         "reward": 1
       }
     },
-    "fps": 60.022399490979375,
+    "fps": 59.94501893049605,
     "dpr": 1
   },
-  "text": "!Cô Hoa\nAnh Tâm\nChị Linh\nÔng Ba\nSài Gòn\nBến Thành Market\nCoins\n30\nYour first little story\nA warm welcome\nSay hello to Cô Hoa at the market stall.\nN ↑\nNeighborhood\nM\nWASD\nstroll\nDrag\nlook\nJ\njournal",
+  "text": "!\nCô Hoa\nAnh Tâm\nChị Linh\nÔng Ba\nSài Gòn\nBến Thành Market\nCoins\n30\nYour first little story\nA warm welcome\nSay hello to Cô Hoa at the market stall.\nN ↑\nNeighborhood\nM\nWASD\nstroll\nDrag\nlook\nJ\njournal",
   "errors": [],
   "requests": []
 }

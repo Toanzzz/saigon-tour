@@ -2,7 +2,7 @@
   "beforeTouch": {
     "renderer": {
       "render": {
-        "frame": 209,
+        "frame": 210,
         "calls": 128,
         "triangles": 300588,
         "points": 0,
@@ -16,7 +16,7 @@
     "state": {
       "screen": "playing",
       "panel": "none",
-      "frame": 192,
+      "frame": 193,
       "position": [
         -23,
         0.7987181544303894,
@@ -57,13 +57,13 @@
         "reward": 0
       }
     },
-    "fps": 59.9586104406567,
+    "fps": 59.92017244221372,
     "dpr": 1
   },
   "afterTouch": {
     "renderer": {
       "render": {
-        "frame": 283,
+        "frame": 284,
         "calls": 127,
         "triangles": 300586,
         "points": 0,
@@ -77,11 +77,11 @@
     "state": {
       "screen": "playing",
       "panel": "none",
-      "frame": 266,
+      "frame": 267,
       "position": [
         -23,
-        0.798718273639679,
-        6.246475696563721
+        0.7987187504768372,
+        6.243427276611328
       ],
       "currency": 30,
       "completed": 0,
@@ -118,7 +118,7 @@
         "reward": 0
       }
     },
-    "fps": 59.97761743629909,
+    "fps": 59.965377768082575,
     "dpr": 1
   },
   "xrSessionSupported": false,

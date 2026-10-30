@@ -1,7 +1,7 @@
 {
   "renderer": {
     "render": {
-      "frame": 286,
+      "frame": 288,
       "calls": 127,
       "triangles": 300586,
       "points": 0,
@@ -15,11 +15,11 @@
   "state": {
     "screen": "playing",
     "panel": "none",
-    "frame": 269,
+    "frame": 271,
     "position": [
       -23,
-      0.798718273639679,
-      6.246475696563721
+      0.7987187504768372,
+      6.243427276611328
     ],
     "currency": 30,
     "completed": 0,
@@ -56,6 +56,6 @@
       "reward": 0
     }
   },
-  "fps": 60.013280524680994,
+  "fps": 60.01562676677392,
   "dpr": 1
 }

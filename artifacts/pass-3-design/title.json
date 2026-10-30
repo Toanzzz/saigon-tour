@@ -1,7 +1,7 @@
 {
   "renderer": {
     "render": {
-      "frame": 92,
+      "frame": 91,
       "calls": 205,
       "triangles": 309155,
       "points": 0,
@@ -51,6 +51,6 @@
       "reward": 0
     }
   },
-  "fps": 59.513834168560656,
+  "fps": 57.93433820515635,
   "dpr": 1
 }

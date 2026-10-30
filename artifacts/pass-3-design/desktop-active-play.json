@@ -1,7 +1,7 @@
 {
   "renderer": {
     "render": {
-      "frame": 225,
+      "frame": 221,
       "calls": 175,
       "triangles": 305237,
       "points": 0,
@@ -15,7 +15,7 @@
   "state": {
     "screen": "playing",
     "panel": "none",
-    "frame": 209,
+    "frame": 206,
     "position": [
       -23,
       0.7987181544303894,
@@ -56,6 +56,6 @@
       "reward": 0
     }
   },
-  "fps": 60.02823151408352,
+  "fps": 59.97391262722869,
   "dpr": 1
 }

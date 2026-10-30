@@ -36,8 +36,12 @@ export function Neighbors() {
             style={{ pointerEvents: 'none' }}
           >
             <div className={`world-label ${id === active ? 'active' : ''}`}>
-              {id === active && <span className="quest-dot">!</span>}
-              {NPCS[id].name}
+              {id === active && (
+                <span className="quest-marker" aria-hidden="true">
+                  <b>!</b>
+                </span>
+              )}
+              <span className="name-tag">{NPCS[id].name}</span>
             </div>
           </Html>
         </group>

@@ -1,7 +1,7 @@
 {
   "renderer": {
     "render": {
-      "frame": 886,
+      "frame": 889,
       "calls": 171,
       "triangles": 305173,
       "points": 0,
@@ -15,11 +15,11 @@
   "state": {
     "screen": "playing",
     "panel": "none",
-    "frame": 870,
+    "frame": 874,
     "position": [
       -23,
-      0.7987180352210999,
-      5.9835124015808105
+      0.7987180948257446,
+      5.98664665222168
     ],
     "currency": 30,
     "quest": "hoa-herbs-delivery",
@@ -57,6 +57,6 @@
       "reward": 0
     }
   },
-  "fps": 60.083887089925405,
+  "fps": 60.075394869842896,
   "dpr": 1
 }

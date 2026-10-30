@@ -1,0 +1,60 @@
+/* Labels drawn over the 3D scene with drei <Html>. */
+.world-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  user-select: none;
+  color: var(--ink);
+}
+.name-tag {
+  padding: 4px 14px 5px;
+  background: #fff6d6e6;
+  border: var(--edge);
+  border-radius: 99px;
+  box-shadow: var(--lift-sm);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+}
+.world-label.active .name-tag {
+  background: var(--wall);
+}
+
+/* Quest marker: a little roof-tile sign that bobs above whoever needs you. */
+.quest-marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 8px;
+  background: var(--bus);
+  border: 4px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: 0 5px 0 var(--ink);
+  transform: rotate(45deg);
+  animation: quest-bob 1.4s ease-in-out infinite;
+}
+.quest-marker::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 3px solid var(--roof);
+  border-radius: 10px;
+}
+.quest-marker b {
+  transform: rotate(-45deg);
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1;
+  padding-top: 4px;
+}
+@keyframes quest-bob {
+  50% {
+    transform: rotate(45deg) translate(-5px, -5px);
+  }
+}

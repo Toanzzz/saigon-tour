@@ -1,7 +1,7 @@
 {
   "renderer": {
     "render": {
-      "frame": 1236,
+      "frame": 1235,
       "calls": 179,
       "triangles": 305423,
       "points": 0,
@@ -17,9 +17,9 @@
     "panel": "none",
     "frame": 1220,
     "position": [
-      -9.210520000040532,
-      0.9,
-      12
+      -10.001577377319336,
+      0.7987189292907715,
+      12.189591407775879
     ],
     "currency": 25,
     "quest": "hoa-herbs-delivery",
@@ -28,7 +28,7 @@
       "from": "market",
       "to": "park",
       "mode": "bus",
-      "progress": 0.01973699999898672
+      "progress": 0
     },
     "source": "live",
     "animation": "idle"
@@ -62,6 +62,6 @@
       "reward": 0
     }
   },
-  "fps": 60.0833896578416,
+  "fps": 60.05467510677208,
   "dpr": 1
 }
