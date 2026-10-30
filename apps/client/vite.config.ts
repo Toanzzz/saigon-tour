@@ -9,6 +9,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
+        ws: true,
         target: 'http://127.0.0.1:58001',
         rewrite: (p) => p.replace(/^\/api/, ''),
       },
@@ -20,6 +21,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
+        ws: true,
         target: 'http://127.0.0.1:58001',
         rewrite: (p) => p.replace(/^\/api/, ''),
       },

@@ -1,3 +1,5 @@
+import { net, updateNet } from '../net/status'
+import { isXRPresenting } from '../platform/xr/store'
 import { game, update } from '../state/game'
 import { close, closeHub, interact, pause, toggleHub } from './actions'
 
@@ -34,7 +36,8 @@ export function installInput() {
     if (event.code === 'KeyE') interact()
     if (event.code === 'Escape') {
       clearInput()
-      if (game.state.screen === 'hub') closeHub()
+      if (net.state.emotesOpen) updateNet({ emotesOpen: false })
+      else if (game.state.screen === 'hub') closeHub()
       else if (game.state.panel !== 'none' || game.state.dialogue) close()
       else if (game.state.screen !== 'title') pause()
     }
@@ -51,6 +54,15 @@ export function installInput() {
       update({ panel: game.state.panel === 'journal' ? 'none' : 'journal' })
     if (event.code === 'KeyM' && canOpen)
       update({ panel: game.state.panel === 'map' ? 'none' : 'map' })
+    if (event.code === 'KeyP' && canOpen && !isXRPresenting())
+      update({ panel: game.state.panel === 'people' ? 'none' : 'people' })
+    if (
+      event.code === 'KeyQ' &&
+      canOpen &&
+      game.state.panel === 'none' &&
+      !isXRPresenting()
+    )
+      updateNet({ emotesOpen: !net.state.emotesOpen })
   }
   const up = (event: KeyboardEvent) => {
     keys.delete(event.code)

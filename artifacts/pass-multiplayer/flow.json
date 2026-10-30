@@ -1,0 +1,181 @@
+{
+  "guests": [
+    {
+      "id": "eb716e39-ffad-4f52-8ad2-2d3195301446",
+      "name": "Sóc Nắng 57",
+      "coins": 30
+    },
+    {
+      "id": "b30c329f-5844-4e12-bd10-266afeb214e3",
+      "name": "Sóc Nắng 16",
+      "coins": 30
+    }
+  ],
+  "diagnostics": [
+    {
+      "renderer": {
+        "render": {
+          "frame": 176,
+          "calls": 199,
+          "triangles": 340020,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 84,
+          "textures": 49
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 155,
+        "position": [
+          -23,
+          0.7987181544303894,
+          9.5
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 94,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Lê Lợi 1",
+        "playerCount": 2,
+        "selfId": "eb716e39-ffad-4f52-8ad2-2d3195301446",
+        "guestName": "Sóc Nắng 57",
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793400747119,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        }
+      },
+      "fps": 59.79421189209213,
+      "dpr": 1
+    },
+    {
+      "renderer": {
+        "render": {
+          "frame": 75,
+          "calls": 151,
+          "triangles": 335231,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 79,
+          "textures": 43
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 53,
+        "position": [
+          -23,
+          0.7987181544303894,
+          9.5
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 94,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Lê Lợi 1",
+        "playerCount": 2,
+        "selfId": "b30c329f-5844-4e12-bd10-266afeb214e3",
+        "guestName": "Sóc Nắng 16",
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [
+          [
+            "eb716e39-ffad-4f52-8ad2-2d3195301446",
+            {
+              "text": "👋 Wave",
+              "until": 6225.0999999940395
+            }
+          ]
+        ],
+        "events": {
+          "sequence": 1793400749093,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        }
+      },
+      "fps": 57.3252674620066,
+      "dpr": 1
+    }
+  ],
+  "errors": []
+}

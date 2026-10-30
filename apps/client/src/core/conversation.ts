@@ -7,6 +7,7 @@ import {
 } from '@saigon/shared'
 import { audio } from '../audio'
 import { interactWith, queryClient } from '../net/agent'
+import { beginHttpTurn, endHttpTurn } from '../net/events'
 import {
   type GameState,
   game,
@@ -59,14 +60,31 @@ async function mutate<T>(fn: () => Promise<T>) {
 export async function converse(text: string, intent: Intent, opening = false) {
   const dialog = game.state.dialogue
   if (!dialog || (!opening && dialog.thinking) || !text.trim()) return
+  update({ dialogue: { ...dialog, thinking: true } })
+  const session = game.state.sessionId
+  const canSend = await beginHttpTurn()
+  if (
+    !canSend ||
+    game.state.sessionId !== session ||
+    game.state.dialogue?.requestId !== dialog.requestId
+  ) {
+    endHttpTurn()
+    if (game.state.dialogue?.requestId === dialog.requestId)
+      update({ dialogue: { ...game.state.dialogue, thinking: false } })
+    return
+  }
   const snapshot = game.state
   const { sessionId, pending, position } = snapshot
+  const sentEvents = pending.slice(0, 16)
   const requestId = dialog.requestId
   const history =
     opening || intent !== 'chat'
       ? dialog.history
       : [...dialog.history, { role: 'user' as const, content: text }]
-  update({ dialogue: { ...dialog, history, thinking: true }, pending: [] })
+  update({
+    dialogue: { ...dialog, history, thinking: true },
+    pending: pending.slice(sentEvents.length),
+  })
   const nearbyNpcs = (Object.keys(PEOPLE) as NpcId[]).filter(
     (id) => id !== dialog.npc && distance(PEOPLE[id].at, position) < 12
   )
@@ -76,7 +94,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
       {
         message: text.slice(0, 500),
         intent,
-        events: pending,
+        events: sentEvents,
         worldContext: {
           playerLocation: game.state.world.locationId,
           nearbyNpcs,
@@ -86,12 +104,13 @@ export async function converse(text: string, intent: Intent, opening = false) {
       snapshot
     )
   )
+  endHttpTurn()
   if (game.state.sessionId !== sessionId) return
   apply(result.response, dialog.npc, history, requestId)
   if (!result.synced)
     game.setState((state) => ({
       ...state,
-      pending: [...pending, ...state.pending],
+      pending: [...sentEvents, ...state.pending],
     }))
 }
 
@@ -103,6 +122,7 @@ function apply(
 ) {
   const event = result.questEvent
   game.setState((state) => {
+    if (state.dialogue?.requestId !== requestId) return state
     let next: GameState = {
       ...state,
       world: applyPlayerEvents(result.world, state.pending),

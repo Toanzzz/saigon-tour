@@ -16,6 +16,7 @@ export type Panel =
   | 'settings'
   | 'transport'
   | 'reward'
+  | 'people'
 export interface Dialogue {
   npc: NpcId
   requestId: string

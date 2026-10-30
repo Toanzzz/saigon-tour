@@ -1,4 +1,4 @@
-import type { LocationId, NpcId } from '@saigon/shared'
+import { type LocationId, NPC_POSITIONS, type NpcId } from '@saigon/shared'
 
 export type Point = [number, number, number]
 export const SPAWN: Point = [-23, 0.9, 10]
@@ -6,10 +6,10 @@ export const PEOPLE: Record<
   NpcId,
   { at: Point; model: string; color: string }
 > = {
-  hoa: { at: [-23, 0, 3.5], model: 'female-b', color: '#f6c568' },
-  tam: { at: [-12, 0, 10], model: 'male-a', color: '#85c7b6' },
-  linh: { at: [24, 0, -5], model: 'female-a', color: '#ed9d86' },
-  ba: { at: [23, 0, 29], model: 'male-b', color: '#eddca7' },
+  hoa: { at: NPC_POSITIONS.hoa, model: 'female-b', color: '#f6c568' },
+  tam: { at: NPC_POSITIONS.tam, model: 'male-a', color: '#85c7b6' },
+  linh: { at: NPC_POSITIONS.linh, model: 'female-a', color: '#ed9d86' },
+  ba: { at: NPC_POSITIONS.ba, model: 'male-b', color: '#eddca7' },
 }
 export const PLACES: Record<
   LocationId,

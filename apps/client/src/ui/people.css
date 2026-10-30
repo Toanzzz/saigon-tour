@@ -1,0 +1,135 @@
+.people-button {
+  position: relative;
+  gap: 3px;
+  display: inline-flex;
+  align-items: center;
+}
+.people-button > span {
+  font-size: 12px;
+}
+.connection-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #957450;
+  position: absolute;
+  bottom: 3px;
+  right: 4px;
+}
+.connection-dot.connected {
+  background: #24754d;
+}
+.people-list {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  max-height: 50vh;
+  overflow: auto;
+}
+.people-list li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.people-list li > span:last-child:not(.player-color) {
+  margin-left: auto;
+}
+.player-color {
+  width: 18px;
+  height: 18px;
+  border: var(--edge);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.emote-controls {
+  position: absolute;
+  bottom: 28px;
+  right: 220px;
+  pointer-events: auto;
+}
+.emote-opener,
+.emote-popover {
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: var(--round);
+  box-shadow: var(--lift);
+}
+.emote-opener {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+}
+.emote-popover {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  width: 180px;
+  padding: 8px;
+  display: grid;
+  gap: 5px;
+}
+.emote-popover button {
+  text-align: left;
+  padding: 10px;
+  border-radius: 8px;
+}
+.emote-popover button:hover {
+  background: var(--bus);
+}
+.presence-bubble {
+  max-width: 210px;
+  width: max-content;
+  padding: 9px 13px;
+  background: var(--wall);
+  color: var(--ink);
+  border: var(--edge);
+  border-radius: 14px;
+  font-size: 13px;
+  text-align: center;
+  white-space: normal;
+  margin: 0 auto 8px;
+}
+.remote-tag {
+  white-space: nowrap;
+  display: block;
+  padding: 4px 8px;
+  background: var(--wall);
+  color: var(--ink);
+  border-radius: 8px;
+  border: var(--edge);
+  font-size: 12px;
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .game-identity {
+    min-width: 0;
+    flex: 1;
+  }
+  .game-identity > small {
+    max-width: 92px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-tools {
+    flex-shrink: 0;
+  }
+  .header-tools .icon-button {
+    width: 30px;
+    min-width: 30px;
+    padding: 4px;
+  }
+  .header-tools .wallet {
+    padding: 4px;
+    margin-right: 0;
+  }
+  .emote-controls {
+    bottom: 122px;
+    right: 20px;
+  }
+  .emote-opener kbd {
+    display: none;
+  }
+}

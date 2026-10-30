@@ -7,6 +7,7 @@ import { isLiveConfigured, readConfig, type ServerConfig } from './config'
 import type { GameDb } from './db'
 import { log } from './logger'
 import { NpcHarness } from './npc/mastra'
+import { createRealtime } from './realtime'
 
 export type Fetcher = typeof fetch
 export interface AppServices {
@@ -65,6 +66,7 @@ export function createApp(
     )
     if (!player) return c.json({ error: 'unauthorized' }, 401)
     await harness.clearMemory(player.id)
+    realtime.manager.remove(player.id)
     return c.json({ player: await db.reset(player.id) })
   })
   app.post('/npc/:npcId/interact', async (c) => {
@@ -84,6 +86,7 @@ export function createApp(
     log('request_failed', 'Storage or request unavailable', 'warn')
     return c.json({ error: 'service_unavailable' }, 503)
   })
-  return Object.assign(app, { harness, db })
+  const realtime = createRealtime(app, config, harness, db)
+  return Object.assign(app, { harness, db, realtime })
 }
 export type AppType = ReturnType<typeof createApp>

@@ -175,6 +175,7 @@ export function Character({
   rotation,
   animation = 'idle',
   scale = 2.35,
+  color,
 }: {
   model?: 'female-a' | 'female-b' | 'male-a' | 'male-b'
   /** Runtime model path override, e.g. the tourist player. */
@@ -183,6 +184,7 @@ export function Character({
   rotation?: Vec3
   animation?: string
   scale?: number
+  color?: string
 }) {
   const { scene, animations } = loadModel(path ?? `people/character-${model}`)
   const object = useMemo(() => {
@@ -191,10 +193,38 @@ export function Character({
       if (child instanceof Mesh) {
         child.castShadow = true
         child.receiveShadow = true
+        if (color) {
+          const tint = (source: Material) => {
+            const material = source.clone()
+            if ('color' in material)
+              (material as Material & { color: Color }).color.lerp(
+                new Color(color),
+                0.45
+              )
+            return material
+          }
+          child.material = Array.isArray(child.material)
+            ? child.material.map(tint)
+            : tint(child.material)
+        }
       }
     })
     return result
-  }, [scene])
+  }, [scene, color])
+  useEffect(
+    () => () => {
+      if (!color) return
+      object.traverse((child) => {
+        if (child instanceof Mesh) {
+          const materials = Array.isArray(child.material)
+            ? child.material
+            : [child.material]
+          for (const material of materials) material.dispose()
+        }
+      })
+    },
+    [object, color]
+  )
   const mixer = useMemo(() => new AnimationMixer(object), [object])
   useEffect(() => {
     const clip =

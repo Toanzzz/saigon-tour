@@ -128,4 +128,12 @@ Story steps: no quest → step 1 current; quest active and `herbs:linh` undelive
 - Startup applies generated Drizzle migrations and sweeps guests unseen for 30 days. `/health` verifies the database; storage failures return 503.
 - Greetings use tool-free short generations, cache by persona/model/time bucket, and write the opening exchange into the conversation thread. `prewarm` fills 16 keys.
 - Validation: root lint/types/build/tests; 30 server + 14 client tests; real Postgres concurrency/persistence integration; Docker image build. Headless production desktop solo quest/bus/reward/reset and 390px touch/hub flows passed with no errors. Guest reload retained name and 80 coins; reset retained identity and restored 30 coins at both widths.
-- Remaining implementation: shared rooms/presence, NPC room broadcasts, parties, and team lunch errand.
+- Shared-world pass complete: public rooms, presence, emotes, NPC room lines, reconnects, and event acknowledgements. Remaining implementation: parties and the team lunch errand.
+
+
+## Shared world
+
+- `/ws` uses protocol 1, origin checks, 4 KB messages, hello timeout, 400 connection cap, single active socket per guest, public 20-player rooms, retained disconnects, and 10 Hz snapshots.
+- Client presence is a mutable interpolation buffer: nearest eight players within 45 units, six on mobile, 150 ms delay. The People panel shows room/connection/player count; Q and touch controls send fixed emotes without stopping movement.
+- NPC proximity barks use one tool-free step, daily bark limits, scheduler cooldowns, and authored fallback lines. State/event batches are sequenced and serialized per retained room member across reconnects.
+- Validation: 43 server tests plus 13 realtime cases; 21 client tests; lint/types/build passed. Bun and Node websocket welcome/shutdown smoke passed. Two-context desktop + 390px headless QA saw both guests, room presence, wave propagation, no console errors, and no mobile overflow. Evidence: `artifacts/pass-multiplayer/`.

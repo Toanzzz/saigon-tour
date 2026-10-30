@@ -6,6 +6,7 @@ import { installInput } from './core/input'
 import { installTestHooks } from './core/test-hooks'
 import { queryClient } from './net/agent'
 import { initializeSession } from './net/session'
+import { installRealtime } from './net/socket'
 import { Scene } from './scene'
 import { GameUI } from './ui'
 import '@fontsource-variable/baloo-2/wght.css'
@@ -27,7 +28,12 @@ function App() {
   useEffect(() => {
     void initializeSession()
     installTestHooks()
-    return installInput()
+    const stopInput = installInput()
+    const stopRealtime = installRealtime()
+    return () => {
+      stopInput()
+      stopRealtime()
+    }
   }, [])
   return (
     <QueryClientProvider client={queryClient}>

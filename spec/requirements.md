@@ -141,8 +141,7 @@ goals and a sense of progress.
    quest complete.
 4. The system SHALL maintain a simple inventory / currency balance affected by rewards and
    fares.
-5. Quest state SHALL persist for the duration of a play session (persistence across
-   sessions is P2).
+5. Quest state SHALL persist across browser reloads and API restarts for an anonymous guest.
 
 ## Requirement 6 — UI, HUD, and onboarding (P1; minimal HUD is P0)
 
@@ -228,8 +227,7 @@ so nothing breaks on stage.
 ## Out of scope (for the hackathon window)
 
 - Large open-world map, full city scale, or accurate geographic replica of HCMC.
-- Multiplayer / networking between players.
-- Persistent accounts, cloud saves, monetization.
+- Real accounts, cross-browser identity, typed public chat, monetization, and XR party controls.
 - Photorealistic graphics; the art target is a clean stylized/low-poly look.
 - Full traffic simulation; ambient traffic is decorative only.
 

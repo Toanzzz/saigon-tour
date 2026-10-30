@@ -7,6 +7,7 @@ import { CameraRig } from './core/camera'
 import { Diagnostics } from './core/diagnostics'
 import { Neighbors } from './core/neighbors'
 import { Player } from './core/player'
+import { RemotePlayers } from './core/remote-players'
 import { Sun } from './core/sun'
 import { Transport } from './core/transport'
 import { XRGameHud, XRRuntime, xrStore } from './platform/xr'
@@ -39,6 +40,7 @@ export function Scene() {
             <Player key={generation} />
             <Transport />
             <Neighbors />
+            <RemotePlayers />
             <Diagnostics />
           </Physics>
           <CameraRig />

@@ -18,6 +18,7 @@ import {
   RewardPanel,
   TransportPanel,
 } from './panels'
+import { EmoteControls, PeoplePanel } from './people'
 import { TouchStick } from './touch'
 import './styles.css'
 import './panels.css'
@@ -127,6 +128,8 @@ export function GameUI() {
   return (
     <div className="game-ui">
       <GameHeader state={state} />
+      {clear && !xrPresenting && <EmoteControls />}
+      {state.panel === 'people' && !xrPresenting && <PeoplePanel />}
       {clear && !state.ride && (
         <>
           <Objective state={state} />

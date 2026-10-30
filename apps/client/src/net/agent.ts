@@ -8,8 +8,13 @@ import {
   objectiveSatisfied,
 } from '@saigon/shared'
 import { QueryClient } from '@tanstack/react-query'
-import type { GameState } from '../state/game'
-import { API_BASE, authorizationHeaders, guestToken } from './session'
+import { type GameState, game } from '../state/game'
+import {
+  API_BASE,
+  authorizationHeaders,
+  guestToken,
+  initializeSession,
+} from './session'
 
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
@@ -26,8 +31,10 @@ export async function interactWith(
   state: GameState
 ): Promise<InteractionResult> {
   try {
-    if (!guestToken() || state.guestStatus !== 'online')
-      throw new Error('Offline guest')
+    if (!guestToken() || state.guestStatus !== 'online') {
+      await initializeSession()
+      if (game.state.guestStatus !== 'online') throw new Error('Offline guest')
+    }
     const response = await fetch(`${API_BASE}/npc/${npc}/interact`, {
       method: 'POST',
       credentials: 'include',

@@ -2,6 +2,9 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useRapier } from '@react-three/rapier'
 import { useEffect } from 'react'
 import { audio } from '../audio'
+import { eventDiagnostics } from '../net/events'
+import { npcSpeech, presence, speech } from '../net/presence'
+import { net } from '../net/status'
 import { game } from '../state/game'
 import { motion } from './motion'
 
@@ -47,6 +50,21 @@ export function Diagnostics() {
         ccdBodies: 1,
       },
       audio: audio.stats(),
+      network: {
+        connection: net.state.connection,
+        room: net.state.room,
+        playerCount: net.state.players.length,
+        selfId: net.state.selfId,
+        guestName: state.guestName,
+        remotePlayers: presence.size,
+        npcLines: [...npcSpeech.entries()].filter(
+          ([, value]) => value.until > performance.now()
+        ),
+        emotes: [...speech.entries()].filter(
+          ([, value]) => value.until > performance.now()
+        ),
+        events: eventDiagnostics(),
+      },
       fps: 1 / motion.dt,
       dpr: gl.getPixelRatio(),
     }

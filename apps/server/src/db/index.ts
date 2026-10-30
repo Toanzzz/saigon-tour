@@ -228,10 +228,14 @@ export class GameDb {
 }
 export async function createDb(url: string, barkLimit = 200) {
   const pool = new Pool({ connectionString: url, max: 12 })
-  await migrate(drizzle(pool), {
-    migrationsFolder: existsSync('drizzle')
-      ? 'drizzle'
-      : fileURLToPath(new URL('../../drizzle', import.meta.url)),
-  })
+  const migrationsFolder = [
+    'drizzle',
+    'apps/server/drizzle',
+    fileURLToPath(new URL('../drizzle', import.meta.url)),
+    fileURLToPath(new URL('../../drizzle', import.meta.url)),
+  ].find((path) => existsSync(`${path}/meta/_journal.json`))
+  if (!migrationsFolder) throw new Error('database_migrations_missing')
+  await migrate(drizzle(pool), { migrationsFolder })
+
   return Object.assign(new GameDb(pool, pool, undefined, barkLimit), { pool })
 }

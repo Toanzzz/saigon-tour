@@ -30,6 +30,7 @@ const server = serve({
   fetch: app.fetch,
   port: config.port,
   hostname: '0.0.0.0',
+  websocket: { server: app.realtime.server },
 })
 log(
   'server_started',
@@ -38,6 +39,7 @@ log(
 for (const signal of ['SIGTERM', 'SIGINT'] as const)
   process.on(signal, () => {
     clearInterval(retention)
+    app.realtime.shutdown()
     server.close(() => {
       void db.close()
     })

@@ -3,6 +3,7 @@ import { PLACES } from '../core/places'
 import { XRSessionButton, xrStore } from '../platform/xr'
 import { type GameState, update } from '../state/game'
 import { Icon } from './icons'
+import { PeopleButton } from './people'
 
 export function GameHeader({ state }: { state: GameState }) {
   const canHub = canOpenHub(state)
@@ -13,6 +14,7 @@ export function GameHeader({ state }: { state: GameState }) {
         <small>{PLACES[state.world.locationId].name}</small>
       </div>
       <nav className="header-tools" aria-label="Game controls">
+        <PeopleButton />
         <span className="wallet">
           <span className="sr-only">Coins</span>
           <Icon name="coin" />

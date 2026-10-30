@@ -113,3 +113,9 @@ Validated on October 30, 2026 from the local production previews.
 - `prewarm` passed; unit proof covers all 16 greeting keys and zero model requests on rerun.
 - Production headless Playwright: desktop quest, bus, herb delivery, reward, city hub, and restart passed; 390px joystick, hub, audio, and overflow checks passed. Evidence: `artifacts/pass-persistence/` and `artifacts/pass-persistence-mobile/`.
 - `scripts/qa-persistence.mjs`: 1440px and 390px guest reload/reset passed. Reload shows the same guest name and 80 coins; actual pause/reset buttons retain the name and restore 30 coins. `session-flow.json` records observed values.
+
+
+## Shared-world validation
+
+- 13 real Node WebSocket tests passed: origin/token rejection, hello deadline, player broadcast, snapshots, emotes, bounds, payload/rate limits, room capacity, replacement sockets, NPC bark cooldown/cap, reconnect event dedupe, and room expiry.
+- Browser QA with one desktop and one 390px context passed People panel presence, fixed Wave propagation, connection diagnostics, and mobile width checks with no page or console errors. Evidence: `artifacts/pass-multiplayer/flow.json`.
