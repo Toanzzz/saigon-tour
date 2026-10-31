@@ -85,6 +85,46 @@ export const NPCS: Record<NpcId, NpcPersona> = {
       'The riverfront viewpoint looks back toward the city skyline.',
     ],
   },
+  vy: {
+    id: 'vy',
+    name: 'Vy',
+    role: 'Lantern maker near City Hall',
+    personality: 'Patient, inventive, and quietly proud of the evening streets',
+    speakingStyle: 'Gentle English with vivid details about light and color',
+    location: 'cityhall',
+    knowledge: [
+      'The lanterns make Nguyễn Huệ glow after sunset.',
+      'The food alley has a quiet corner where a missing lantern might turn up.',
+      'The City Hall gardens are brightest when families gather for an evening walk.',
+    ],
+  },
+  son: {
+    id: 'son',
+    name: 'Sơn',
+    role: 'Postcard collector',
+    personality: 'Curious, sentimental, and always looking for a new view',
+    speakingStyle: 'Thoughtful observations with a collector’s excitement',
+    location: 'postoffice',
+    knowledge: [
+      'The Central Post Office square is a perfect place to start a city story.',
+      'A river view gives every postcard a little more sky.',
+      'Old postcards connect the market, the landmarks, and the people between them.',
+    ],
+  },
+  thao: {
+    id: 'thao',
+    name: 'Thảo',
+    role: 'Opera House music student',
+    personality:
+      'Bright, earnest, and attentive to small sounds around the city',
+    speakingStyle: 'Warm, musical, and a little shy when sharing a secret',
+    location: 'opera',
+    knowledge: [
+      'The Opera House steps are a lovely place to hear the city breathe.',
+      'The cathedral square carries a clear echo between its façades.',
+      'A short walk can turn a melody into a memory.',
+    ],
+  },
 }
 
 export const STARTING_CURRENCY = 30
@@ -99,6 +139,36 @@ export const DEMO_QUEST: Quest = {
   reward: { currency: 50, itemId: 'postcard', reputation: 1 },
   giverNpcId: 'hoa',
 }
+
+export const SECRET_QUESTS = {
+  'cityhall-lanterns': {
+    id: 'cityhall-lanterns',
+    title: 'A lantern for the evening walk',
+    description:
+      'Find the quiet food-alley corner where Vy’s missing lantern is waiting, then return to City Hall.',
+    objective: { type: 'GO_TO', locationId: 'alley' },
+    reward: { currency: 20, itemId: 'coffee', reputation: 1 },
+    giverNpcId: 'vy',
+  },
+  'postoffice-river-postcard': {
+    id: 'postoffice-river-postcard',
+    title: 'A postcard with room to breathe',
+    description:
+      'Visit the riverfront and bring Sơn one wide view for his growing postcard collection.',
+    objective: { type: 'GO_TO', locationId: 'river' },
+    reward: { currency: 25, itemId: 'photo', reputation: 1 },
+    giverNpcId: 'son',
+  },
+  'opera-cathedral-note': {
+    id: 'opera-cathedral-note',
+    title: 'A note across the square',
+    description:
+      'Carry Thảo’s melody from the Opera House to the cathedral square and listen for its echo.',
+    objective: { type: 'GO_TO', locationId: 'cathedral' },
+    reward: { currency: 30, itemId: 'postcard', reputation: 1 },
+    giverNpcId: 'thao',
+  },
+} as const satisfies Record<string, Quest>
 
 export function objectiveSatisfied(
   quest: Quest,

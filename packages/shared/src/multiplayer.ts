@@ -15,6 +15,9 @@ export const NPC_POSITIONS = {
   ba: [23, 0, 29],
   mai: [-30, 0, 18],
   alex: [92, 0, -38],
+  vy: [64, 0, -18],
+  son: [103, 0, -78],
+  thao: [94, 0, -31],
 } satisfies Record<z.infer<typeof NpcIdSchema>, [number, number, number]>
 export const EmoteSchema = z.enum(['wave', 'thanks', 'hello', 'follow-me'])
 export type Emote = z.infer<typeof EmoteSchema>

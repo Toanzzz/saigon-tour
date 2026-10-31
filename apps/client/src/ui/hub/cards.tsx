@@ -39,6 +39,29 @@ export function StoryCard({ view }: { view: HubView }) {
           </li>
         ))}
       </ol>
+      <div className="secret-quests">
+        <div className="secret-heading">
+          <span className="card-kicker">Wandering secrets</span>
+          <small>Find the people who know the city between landmarks.</small>
+        </div>
+        <ul>
+          {story.secrets.map((secret) => (
+            <li key={secret.id} className={`secret-quest ${secret.state}`}>
+              <span className="secret-dot" aria-hidden="true">
+                {secret.state === 'done' ? (
+                  <Icon name="check" size={14} />
+                ) : (
+                  '!'
+                )}
+              </span>
+              <span>
+                <strong>{secret.title}</strong>
+                <small>{secret.detail}</small>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="story-footer">
         <span className="chip bus">
           <Icon name="coin" size={15} /> {story.coins} coins

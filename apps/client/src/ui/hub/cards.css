@@ -155,6 +155,72 @@
 .story-footer .block-button {
   margin-left: auto;
 }
+.secret-quests {
+  margin: 0 0 18px;
+  padding-top: 16px;
+  border-top: 2px dashed var(--wall-side);
+}
+.secret-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.secret-heading small {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+.secret-quests ul {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.secret-quest {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px;
+  background: var(--wall-hi);
+  border: 2px solid var(--wall-side);
+  border-radius: 10px;
+}
+.secret-quest strong,
+.secret-quest small {
+  display: block;
+}
+.secret-quest strong {
+  font-size: 12px;
+  line-height: 1.2;
+}
+.secret-quest small {
+  margin-top: 3px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.25;
+}
+.secret-dot {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  background: var(--roof-hi);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 800;
+}
+.secret-quest.done .secret-dot {
+  background: var(--leaf);
+}
+.secret-quest.now .secret-dot {
+  background: var(--roof);
+}
 
 .neighbor-card {
   grid-column: span 5;

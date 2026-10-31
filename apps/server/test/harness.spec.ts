@@ -366,7 +366,7 @@ describe('Mastra NPC harness', () => {
       scripted([{ text: 'Chào! Enjoy the neighborhood.' }], seen)
     )
     const bucketCount = Object.keys(NPCS).length * GREETING_BUCKETS.length
-    expect(bucketCount).toBe(24)
+    expect(bucketCount).toBe(36)
     const first = await harness.prewarm()
     expect(first).toHaveLength(bucketCount)
     expect(first.every((line) => !line.cached && line.source === 'live')).toBe(

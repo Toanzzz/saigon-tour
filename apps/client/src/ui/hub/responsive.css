@@ -69,6 +69,16 @@
     grid-template-columns: 1fr;
     gap: 14px;
   }
+  .secret-heading {
+    display: block;
+  }
+  .secret-heading small {
+    display: block;
+    margin-top: 4px;
+  }
+  .secret-quests ul {
+    grid-template-columns: 1fr;
+  }
   .story-road::before {
     top: 18px;
     bottom: 18px;

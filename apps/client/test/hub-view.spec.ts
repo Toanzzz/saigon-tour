@@ -10,17 +10,77 @@ const states = (view: ReturnType<typeof hubView>) =>
 describe('city hub view', () => {
   it('follows the story road through the herb delivery', () => {
     const start = { ...initialState(), screen: 'playing' as const }
-    expect(states(hubView(start, now))).toEqual(['now', 'next', 'next'])
+    expect(states(hubView(start, now))).toEqual([
+      'now',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+    ])
     const accepted = grantQuest(start, DEMO_QUEST)
-    expect(states(hubView(accepted, now))).toEqual(['done', 'now', 'next'])
+    expect(states(hubView(accepted, now))).toEqual([
+      'done',
+      'now',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+    ])
     const delivered = {
       ...accepted,
-      world: { ...accepted.world, deliveredItems: ['herbs:linh'] },
+      world: {
+        ...accepted.world,
+        locationId: 'park' as const,
+        visitedLocations: ['market' as const, 'park' as const],
+        deliveredItems: ['herbs:linh'],
+      },
     }
-    expect(states(hubView(delivered, now))).toEqual(['done', 'done', 'now'])
-    const complete = grantReward(delivered, DEMO_QUEST)
+    expect(states(hubView(delivered, now))).toEqual([
+      'now',
+      'done',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+      'next',
+    ])
+    const complete = grantReward(
+      {
+        ...delivered,
+        world: {
+          ...delivered.world,
+          locationId: 'river',
+          visitedLocations: [
+            'market',
+            'park',
+            'cityhall',
+            'opera',
+            'cathedral',
+            'postoffice',
+            'alley',
+            'river',
+          ],
+        },
+      },
+      DEMO_QUEST
+    )
     const view = hubView(complete, now)
-    expect(states(view)).toEqual(['done', 'done', 'done'])
+    expect(states(view)).toEqual([
+      'done',
+      'done',
+      'done',
+      'done',
+      'done',
+      'done',
+      'done',
+      'done',
+    ])
     expect(view.story.done).toBe(true)
     expect(view.coins).toBe(80)
   })

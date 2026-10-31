@@ -1,4 +1,4 @@
-import { NPCS } from '@saigon/shared'
+import { NPCS, SECRET_QUESTS } from '@saigon/shared'
 import { useStore } from '@tanstack/react-store'
 import {
   acceptQuest,
@@ -27,6 +27,13 @@ export function XRGameHud() {
       state.quest?.objective.type === 'DELIVER' &&
       state.quest.objective.npcId === state.dialogue.npc &&
       (state.world.inventory[state.quest.objective.itemId] ?? 0) > 0
+    const secretQuest = Object.values(SECRET_QUESTS).find(
+      (quest) => quest.giverNpcId === state.dialogue?.npc
+    )
+    const canHearSecret =
+      secretQuest &&
+      !state.quest &&
+      !state.world.completedQuestIds.includes(secretQuest.id)
     return (
       <XRWorldPanel
         title={npc.name}
@@ -41,9 +48,11 @@ export function XRGameHud() {
                   id: delivery ? 'deliver' : 'quest',
                   label: delivery
                     ? 'Deliver herbs'
-                    : state.dialogue.npc === 'hoa' && !state.quest
-                      ? 'Help Hoa'
-                      : 'Check progress',
+                    : canHearSecret
+                      ? 'Hear secret quest'
+                      : state.dialogue.npc === 'hoa' && !state.quest
+                        ? 'Help Hoa'
+                        : 'Check progress',
                   onClick:
                     delivery || state.quest ? deliverOrVerify : acceptQuest,
                 },

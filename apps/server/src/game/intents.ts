@@ -1,5 +1,6 @@
 import type { InteractRequest, NpcId } from '@saigon/shared'
 import type { ToolOutcome } from '../npc/tools/context'
+import { secretQuestFor } from './quests'
 import type { GameService } from './state'
 import { runTeamIntent } from './team'
 
@@ -20,10 +21,13 @@ export async function runIntent(
   if (request.intent === 'help' && outcome.offered) return false
   if (request.intent === 'check' && (outcome.completed || outcome.incomplete))
     return false
-  if (request.intent === 'help' && npcId === 'hoa' && !record.quest) {
-    outcome.calls.push('offer-quest')
-    const result = await game.offerQuest(playerId, npcId, 'hoa-herbs-delivery')
-    if (result.accepted) outcome.offered = result.quest
+  if (request.intent === 'help' && !record.quest) {
+    const quest = secretQuestFor(npcId)
+    if (quest) {
+      outcome.calls.push('offer-quest')
+      const result = await game.offerQuest(playerId, npcId, quest.id)
+      if (result.accepted) outcome.offered = result.quest
+    }
   }
   if (request.intent === 'check' && record.quest?.giverNpcId === npcId) {
     outcome.calls.push('check-quest')

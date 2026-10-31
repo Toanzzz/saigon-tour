@@ -1,9 +1,21 @@
-import { DEMO_QUEST, type LocationId, NPCS, type NpcId } from '@saigon/shared'
+import {
+  DEMO_QUEST,
+  type LocationId,
+  NPCS,
+  type NpcId,
+  SECRET_QUESTS,
+} from '@saigon/shared'
 import { MODES, PLACES, type TravelMode } from '../../core/places'
 import type { GameState } from '../../state/game'
 
 export type StepState = 'done' | 'now' | 'next'
 export interface HubStep {
+  title: string
+  detail: string
+  state: StepState
+}
+export interface HubSecret {
+  id: string
   title: string
   detail: string
   state: StepState
@@ -19,7 +31,13 @@ export interface HubView {
   coins: number
   greeting: string
   lede: string
-  story: { title: string; steps: HubStep[]; coins: number; done: boolean }
+  story: {
+    title: string
+    steps: HubStep[]
+    secrets: HubSecret[]
+    coins: number
+    done: boolean
+  }
   neighbor: {
     id: NpcId
     name: string
@@ -43,30 +61,96 @@ export function greetingFor(date: Date) {
   return 'Chào buổi tối!'
 }
 
+const CITY_TRAIL: {
+  location: LocationId
+  title: string
+  detail: string
+}[] = [
+  { location: 'market', title: 'Bến Thành Market', detail: 'Taste the city' },
+  {
+    location: 'park',
+    title: 'Neighborhood park',
+    detail: 'Pause under the trees',
+  },
+  { location: 'cityhall', title: 'City Hall', detail: 'Walk Nguyễn Huệ' },
+  { location: 'opera', title: 'Opera House', detail: 'Hear the cultural core' },
+  {
+    location: 'cathedral',
+    title: 'Nhà thờ Đức Bà',
+    detail: 'Cross Công xã Paris',
+  },
+  {
+    location: 'postoffice',
+    title: 'Central Post Office',
+    detail: 'Send a story onward',
+  },
+  { location: 'alley', title: 'Food alley', detail: 'Follow the lanterns' },
+  {
+    location: 'river',
+    title: 'Sài Gòn riverside',
+    detail: 'Look back at the skyline',
+  },
+]
+
+function objectiveLocation(state: GameState): LocationId | null {
+  const objective = state.quest?.objective
+  if (!objective) return null
+  if (objective.type === 'GO_TO') return objective.locationId
+  if (objective.type === 'TALK_TO') return NPCS[objective.npcId].location
+  if (objective.type === 'DELIVER') {
+    const delivered = state.world.deliveredItems.includes(
+      `${objective.itemId}:${objective.npcId}`
+    )
+    const target = delivered
+      ? (state.quest?.giverNpcId ?? objective.npcId)
+      : objective.npcId
+    return NPCS[target].location
+  }
+  return null
+}
+
 function storySteps(state: GameState): HubStep[] {
-  const quest = state.quest
-  const complete = state.world.completedQuestIds.includes(DEMO_QUEST.id)
-  const delivered = state.world.deliveredItems.includes('herbs:linh')
-  const step = complete ? 4 : !quest ? 1 : !delivered ? 2 : 3
-  const at = (index: number): StepState =>
-    index < step ? 'done' : index === step ? 'now' : 'next'
-  return [
-    { title: 'Meet Cô Hoa', detail: 'Market stall', state: at(1) },
-    {
-      title: 'Deliver the herbs',
-      detail: 'Chị Linh, in the park',
-      state: at(2),
-    },
-    { title: 'Tell Cô Hoa', detail: 'Earn a postcard', state: at(3) },
-  ]
+  const target = objectiveLocation(state) ?? state.world.locationId
+  const allVisited = CITY_TRAIL.every((stop) =>
+    state.world.visitedLocations.includes(stop.location)
+  )
+  return CITY_TRAIL.map((stop) => ({
+    title: stop.title,
+    detail: stop.detail,
+    state: allVisited
+      ? 'done'
+      : stop.location === target && state.quest
+        ? 'now'
+        : !state.quest && stop.location === state.world.locationId
+          ? 'now'
+          : state.world.visitedLocations.includes(stop.location)
+            ? 'done'
+            : 'next',
+  }))
+}
+
+function secretSteps(state: GameState) {
+  return Object.values(SECRET_QUESTS).map((quest) => {
+    const completed = state.world.completedQuestIds.includes(quest.id)
+    const active = state.quest?.id === quest.id
+    return {
+      id: quest.id,
+      title: quest.title,
+      detail: completed
+        ? 'Completed'
+        : active
+          ? `Active · ${NPCS[quest.giverNpcId].name}`
+          : `Ask ${NPCS[quest.giverNpcId].name} for the secret`,
+      state: completed ? 'done' : active ? 'now' : 'next',
+    } satisfies HubSecret
+  })
 }
 
 /** Next useful destination: the quest target first, then somewhere new. */
 function nextStop(state: GameState): LocationId | null {
   const from = state.stop
-  const delivered = state.world.deliveredItems.includes('herbs:linh')
-  if (state.quest && !delivered && from !== 'park') return 'park'
-  if (state.quest && delivered && from !== 'market') return 'market'
+  const target = objectiveLocation(state)
+  if (target && from !== target) return target
   const ids = Object.keys(PLACES) as LocationId[]
   return (
     ids.find(
@@ -95,21 +179,31 @@ export function cheapestRide(state: GameState): HubRide | null {
 
 export function hubView(state: GameState, now = new Date()): HubView {
   const steps = storySteps(state)
-  const done = steps.every((step) => step.state === 'done')
+  const done =
+    steps.every((step) => step.state === 'done') && state.quest === null
+  const secrets = secretSteps(state)
   const last = state.world.talkedTo.at(-1)
   const ids = Object.keys(PLACES) as LocationId[]
   const current = steps.find((step) => step.state === 'now')
+  const active = state.quest
   return {
     coins: state.world.currency,
     greeting: greetingFor(now),
-    lede: done
-      ? 'The herbs made it to lunch. The whole city is yours to wander.'
-      : current
-        ? `Next: ${current.title.toLowerCase()}. ${current.detail}.`
-        : '',
+    lede: active
+      ? `${active.title}: ${active.description}`
+      : done
+        ? 'The whole city is yours to wander. Look for a neighbor with a secret.'
+        : current
+          ? `Next: ${current.title.toLowerCase()}. ${current.detail}.`
+          : '',
     story: {
-      title: state.quest?.title ?? DEMO_QUEST.title,
+      title:
+        state.quest?.title ??
+        (state.world.completedQuestIds.includes(DEMO_QUEST.id)
+          ? 'A walk through Sài Gòn'
+          : DEMO_QUEST.title),
       steps,
+      secrets,
       coins: state.quest?.reward.currency ?? DEMO_QUEST.reward.currency,
       done,
     },

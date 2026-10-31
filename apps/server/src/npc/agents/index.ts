@@ -4,7 +4,10 @@ import type { NpcId } from '@saigon/shared'
 import { createNpcMemory } from '../memory/npc-memory'
 import { cafeOwnerPersona } from '../personas/cafe-owner'
 import { cycloDriverPersona } from '../personas/cyclo-driver'
+import { lanternMakerPersona } from '../personas/lantern-maker'
 import { marketVendorPersona } from '../personas/market-vendor'
+import { musicStudentPersona } from '../personas/music-student'
+import { postcardCollectorPersona } from '../personas/postcard-collector'
 import { visitingPhotographerPersona } from '../personas/visiting-photographer'
 import { volunteerPersona } from '../personas/volunteer'
 import { xeOmDriverPersona } from '../personas/xe-om-driver'
@@ -21,6 +24,9 @@ export const NPC_PERSONAS: Record<NpcId, string> = {
   ba: cycloDriverPersona,
   mai: cafeOwnerPersona,
   alex: visitingPhotographerPersona,
+  vy: lanternMakerPersona,
+  son: postcardCollectorPersona,
+  thao: musicStudentPersona,
 }
 
 /** Each NPC gets its own persona and only the tools its role needs. */
@@ -61,6 +67,24 @@ export function createNpcAgents(
       getWorldContext,
     }),
     alex: agent('alex', 'Alex', visitingPhotographerPersona, {
+      rememberPlayerFact,
+      getWorldContext,
+    }),
+    vy: agent('vy', 'Vy', lanternMakerPersona, {
+      offerQuest,
+      checkQuest,
+      rememberPlayerFact,
+      getWorldContext,
+    }),
+    son: agent('son', 'Sơn', postcardCollectorPersona, {
+      offerQuest,
+      checkQuest,
+      rememberPlayerFact,
+      getWorldContext,
+    }),
+    thao: agent('thao', 'Thảo', musicStudentPersona, {
+      offerQuest,
+      checkQuest,
       rememberPlayerFact,
       getWorldContext,
     }),

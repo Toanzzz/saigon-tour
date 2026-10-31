@@ -1,4 +1,4 @@
-import { DEMO_QUEST, NPCS } from '@saigon/shared'
+import { DEMO_QUEST, NPCS, SECRET_QUESTS } from '@saigon/shared'
 import { useStore } from '@tanstack/react-store'
 import { type FormEvent, useEffect, useRef, useState } from 'react'
 import {
@@ -49,6 +49,13 @@ export function Conversation({ state }: { state: GameState }) {
     (state.world.inventory[state.quest.objective.itemId] ?? 0) > 0
   const canVerify =
     state.quest && (state.quest.giverNpcId === dialog.npc || delivery)
+  const secretQuest = Object.values(SECRET_QUESTS).find(
+    (quest) => quest.giverNpcId === dialog.npc
+  )
+  const canHearSecret =
+    secretQuest &&
+    !state.quest &&
+    !state.world.completedQuestIds.includes(secretQuest.id)
   async function send(event: FormEvent) {
     event.preventDefault()
     if (!text.trim() || dialog?.thinking) return
@@ -90,20 +97,21 @@ export function Conversation({ state }: { state: GameState }) {
       </div>
       {!dialog.thinking && (
         <div className="conversation-actions">
-          {dialog.npc === 'hoa' &&
+          {((dialog.npc === 'hoa' &&
             !state.quest &&
-            !state.world.completedQuestIds.includes(DEMO_QUEST.id) && (
-              <button
-                type="button"
-                className="primary-button"
-                onClick={() => {
-                  void acceptQuest()
-                }}
-              >
-                <Icon name="leaf" />
-                Help Cô Hoa
-              </button>
-            )}
+            !state.world.completedQuestIds.includes(DEMO_QUEST.id)) ||
+            canHearSecret) && (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={() => {
+                void acceptQuest()
+              }}
+            >
+              <Icon name="leaf" />
+              {canHearSecret ? 'Hear a secret quest' : 'Help Cô Hoa'}
+            </button>
+          )}
           {canVerify && (
             <button
               type="button"

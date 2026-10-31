@@ -6,6 +6,7 @@ import {
   NPCS,
   type NpcId,
   objectiveSatisfied,
+  SECRET_QUESTS,
 } from '@saigon/shared'
 import { QueryClient } from '@tanstack/react-query'
 import { type GameState, game } from '../state/game'
@@ -55,7 +56,7 @@ export async function interactWith(
   }
 }
 
-/** Client-only fallback: mirrors the server's validated rules for one demo quest. */
+/** Client-only fallback: mirrors the server's validated quest rules. */
 function offline(
   npc: NpcId,
   body: InteractRequest,
@@ -66,37 +67,66 @@ function offline(
   let quest = state.quest
   let questEvent: InteractResponse['questEvent'] = null
   let reply = `Chào bạn! I'm ${NPCS[npc].name}. ${NPCS[npc].knowledge[0]}`
-  const done = world.completedQuestIds.includes(DEMO_QUEST.id)
-  if (npc === 'hoa' && body.intent === 'help' && !quest && !done) {
-    quest = structuredClone(DEMO_QUEST)
+  const template =
+    npc === 'hoa'
+      ? DEMO_QUEST
+      : Object.values(SECRET_QUESTS).find(
+          (candidate) => candidate.giverNpcId === npc
+        )
+  const done = template ? world.completedQuestIds.includes(template.id) : false
+  if (template && body.intent === 'help' && !quest && !done) {
+    quest = structuredClone(template)
     world.inventory = {
       ...world.inventory,
-      herbs: (world.inventory.herbs ?? 0) + 1,
+      ...(template.objective.type === 'DELIVER'
+        ? {
+            [template.objective.itemId]:
+              (world.inventory[template.objective.itemId] ?? 0) + 1,
+          }
+        : {}),
     }
     questEvent = { type: 'offered', quest, reward: quest.reward }
-    reply = 'Fresh herbs for Chị Linh in the park. Cảm ơn con!'
-  } else if (npc === 'hoa' && body.intent === 'check' && quest) {
+    reply =
+      npc === 'hoa'
+        ? 'Fresh herbs for Chị Linh in the park. Cảm ơn con!'
+        : `Keep this quiet: ${quest.description}`
+  } else if (
+    template &&
+    body.intent === 'check' &&
+    quest?.id === template.id &&
+    quest.giverNpcId === npc
+  ) {
     if (objectiveSatisfied(quest, world)) {
       world.currency += quest.reward.currency
       world.completedQuestIds = [...world.completedQuestIds, quest.id]
-      world.inventory = {
-        ...world.inventory,
-        postcard: (world.inventory.postcard ?? 0) + 1,
-      }
+      if (quest.reward.itemId)
+        world.inventory = {
+          ...world.inventory,
+          [quest.reward.itemId]:
+            (world.inventory[quest.reward.itemId] ?? 0) + 1,
+        }
       questEvent = { type: 'completed', quest, reward: quest.reward }
       quest = null
-      reply = 'Perfect! A little kindness makes this city feel like home.'
+      reply =
+        npc === 'hoa'
+          ? 'Perfect! A little kindness makes this city feel like home.'
+          : 'You found the secret in the city. Cảm ơn for bringing it back to me.'
     } else {
       questEvent = {
         type: 'incomplete',
         quest,
         reward: { currency: 0, itemId: null, reputation: 0 },
       }
-      reply = 'Chị Linh is waiting in the park. Bring the herbs to her first.'
+      reply =
+        npc === 'hoa'
+          ? 'Chị Linh is waiting in the park. Bring the herbs to her first.'
+          : `The secret is still waiting at ${quest.objective.type === 'GO_TO' ? quest.objective.locationId : 'the next stop'}.`
     }
-  } else if (npc === 'hoa' && !quest && !done)
+  } else if (template && !quest && !done)
     reply =
-      'Chào bạn! Welcome to my little corner of Bến Thành. Could you help me with an errand?'
+      npc === 'hoa'
+        ? 'Chào bạn! Welcome to my little corner of Bến Thành. Could you help me with an errand?'
+        : `I may know a secret about this city. Ask me when you are ready.`
   return {
     revision: state.serverRevision,
     npcId: npc,

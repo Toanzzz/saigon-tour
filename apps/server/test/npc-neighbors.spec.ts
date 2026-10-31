@@ -1,4 +1,4 @@
-import { DEMO_QUEST, NPCS } from '@saigon/shared'
+import { DEMO_QUEST, NPCS, SECRET_QUESTS } from '@saigon/shared'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createApp } from '../src/app'
 import { readConfig } from '../src/config'
@@ -110,5 +110,64 @@ describe('new neighborhood conversations', () => {
     expect(String(seen[0]?.messages[0]?.content)).toContain(NPCS[npc].name)
     expect(result.world.currency).toBe(30)
     expect(result.quest).toBeNull()
+  })
+
+  it.each([
+    ['vy', 'cityhall', 'alley', 'cityhall-lanterns', 20],
+    ['son', 'postoffice', 'river', 'postoffice-river-postcard', 25],
+    ['thao', 'opera', 'cathedral', 'opera-cathedral-note', 30],
+  ] as const)('%s reveals and verifies a secret city quest', async (npc, start, destination, questId, reward) => {
+    const harness = fx.harness(offline)
+    const identity = await fx.db.createGuest()
+    const offered = await harness.interact(
+      npc,
+      {
+        message: 'Do you know a secret?',
+        intent: 'help',
+        worldContext: {
+          playerLocation: start,
+          nearbyNpcs: [npc],
+          timeOfDay: 'afternoon',
+        },
+      },
+      identity.player.id
+    )
+    expect(offered.questEvent).toMatchObject({
+      type: 'offered',
+      quest: SECRET_QUESTS[questId],
+    })
+    const incomplete = await harness.interact(
+      npc,
+      {
+        message: 'I am ready to check.',
+        intent: 'check',
+        worldContext: {
+          playerLocation: start,
+          nearbyNpcs: [npc],
+          timeOfDay: 'afternoon',
+        },
+      },
+      identity.player.id
+    )
+    expect(incomplete.questEvent?.type).toBe('incomplete')
+    const completed = await harness.interact(
+      npc,
+      {
+        message: 'I found it.',
+        intent: 'check',
+        events: [{ type: 'visit', locationId: destination }],
+        worldContext: {
+          playerLocation: destination,
+          nearbyNpcs: [npc],
+          timeOfDay: 'afternoon',
+        },
+      },
+      identity.player.id
+    )
+    expect(completed.questEvent).toMatchObject({
+      type: 'completed',
+      reward: { currency: reward },
+    })
+    expect(completed.world.completedQuestIds).toContain(questId)
   })
 })
