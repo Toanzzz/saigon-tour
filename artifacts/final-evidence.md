@@ -2,7 +2,7 @@
 
 ## Current city completion (October 31, 2026)
 
-- Commits: `5925fd9` (NPC labels and live-guide layout), `b3b65c4` (wandering NPCs, secret quests, city-wide story trail), `872fd06` (landmark plaza and river promenade density), `8ca2b10` (hub completion edge case), and `0c07a41` (clock-side cathedral entrance orientation).
+- Commits: `5925fd9` (NPC labels and live-guide layout), `b3b65c4` (wandering NPCs, secret quests, city-wide story trail), `872fd06` (landmark plaza and river promenade density), `8ca2b10` (hub completion edge case), `0c07a41` (clock-side cathedral entrance orientation), `f95e0a9` (destination story beats and offline quest parity), and `31f8f32` (second density and transport-sign pass).
 - Required gates passed after the final pass: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test`.
 - Server tests: 65 passing and one skipped. Client tests: 40 passing.
 - Headless Playwright on the reused dev server (`58000`/`58001`) passed at `1440×900` and `390×844`:
@@ -10,6 +10,7 @@
   - `scripts/qa-city-expansion.mjs --pass=complete`: movement, map, bus fare and arrival, landmark GLB requests, Opera/Post Office/alley views, and filled plaza captures.
   - Focused secret-NPC flow: Vy remained visible while inactive labels stayed hidden, the City Hall lantern quest offered and completed after a real destination visit, the active label moved to Vy, the hub showed all eight city stops plus the secret quest, and the layout had no horizontal overflow.
 - The corrected cathedral captures show the clock-side entrance and front doors facing the Công xã Paris square; the apse is behind the building.
+- The second density pass was exercised at six zones—City Hall, park, Opera, Post Office, riverfront, and food alley—in both viewports with no page errors or failed requests. The hub trail assertion found all eight destination names and their named story beats (`Cô Hoa`, `Chị Linh`, `Vy`, `Thảo`, `Sơn`) at both widths.
 - Renderer observations from the complete city flow: desktop active view `212 calls / 351,713 triangles`; mobile active view `158 calls / 344,438 triangles`. The mobile triangle count remains above the starting budget because the market landmark and expanded city life are visible together.
 - Evidence: [city-expansion-2026-10-31](city-expansion-2026-10-31/), including desktop/mobile JSON reports and captures for the city density, secret quest, hub trail, cathedral, Opera House, Post Office, riverfront, and food alley.
 
