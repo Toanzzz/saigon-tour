@@ -13,5 +13,5 @@
 - Target ≤300 lines per source file.
 - Definition of Done: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.
 - UI verification uses headless Playwright with real controls, desktop and 390px mobile flows.
-- Update `artifacts/game-progress.md` while working. Record observed results in `artifacts/final-evidence.md`.
+- Update `docs/game-progress.md` while working. Record observed results in `docs/final-evidence.md`.
 - Commit each validated pass. Never add AI attribution to commits, docs, or code.

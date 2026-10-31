@@ -54,8 +54,9 @@ Credentials belong only in the backend runtime environment.
 
 - [Design and controls](docs/game-design.md)
 - [Meta integration](docs/meta-api.md)
-- [Progress and open checks](artifacts/game-progress.md)
-- [Requirements](spec/requirements.md) · [Implementation plan](spec/tasks.md)
+- [Architecture](docs/architecture.md)
+- [Progress and open checks](docs/game-progress.md)
+- [Requirements](docs/requirements.md) · [Implementation plan](docs/tasks.md)
 
 Project period: October 27–November 4, 2026. Submission deadline: November 4, 9 PM ET.
 The repository includes supplied asset packs and a custom market source model; their

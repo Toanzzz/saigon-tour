@@ -1,9 +1,0 @@
-{
-  "id": "451fbe3a-ec00-48e7-9b36-d0c6c4f54183",
-  "name": "Sóc Nắng 38",
-  "currency": 80,
-  "completedQuestIds": [
-    "hoa-herbs-delivery"
-  ],
-  "dockerRestart": true
-}

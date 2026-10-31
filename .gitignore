@@ -6,5 +6,5 @@ dist/
 .tsbuildinfo
 .DS_Store
 *.blend1
-artifacts/qa-browser/
-artifacts/*/video/
+
+artifacts/
