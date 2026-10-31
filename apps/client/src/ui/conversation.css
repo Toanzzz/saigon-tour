@@ -59,7 +59,7 @@
   padding-left: 64px;
   min-height: 52px;
 }
-.portrait {
+.conversation .portrait {
   position: absolute;
   top: 34px;
   left: 26px;
