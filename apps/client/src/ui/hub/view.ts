@@ -179,8 +179,11 @@ export function cheapestRide(state: GameState): HubRide | null {
 
 export function hubView(state: GameState, now = new Date()): HubView {
   const steps = storySteps(state)
+  const demoComplete = state.world.completedQuestIds.includes(DEMO_QUEST.id)
   const done =
-    steps.every((step) => step.state === 'done') && state.quest === null
+    demoComplete &&
+    steps.every((step) => step.state === 'done') &&
+    state.quest === null
   const secrets = secretSteps(state)
   const last = state.world.talkedTo.at(-1)
   const ids = Object.keys(PLACES) as LocationId[]
