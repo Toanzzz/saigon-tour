@@ -28,7 +28,7 @@
 .quest-marker {
   position: absolute;
   left: 50%;
-  top: -31px;
+  top: -75px;
   display: grid;
   place-items: center;
   width: 60px;
