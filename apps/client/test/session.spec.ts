@@ -64,11 +64,10 @@ describe('guest sessions', () => {
     update({ pending: [{ type: 'spend', amount: 5 }] })
     resolve(Response.json({ player: saved }))
     await loading
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api/me',
-      expect.objectContaining({
-        headers: { Authorization: 'Bearer existing-token' },
-      })
+    const [meUrl, meInit] = fetchMock.mock.calls[0] as [string, RequestInit]
+    expect(meUrl).toBe('/api/me')
+    expect(new Headers(meInit.headers).get('Authorization')).toBe(
+      'Bearer existing-token'
     )
     expect(game.state.serverRevision).toBe(7)
     expect(game.state.world.currency).toBe(75)
@@ -106,12 +105,14 @@ describe('guest sessions', () => {
     const player = { ...saved, world: initialState().world, completed: [] }
     fetchMock.mockResolvedValue(Response.json({ player }))
     expect(await session.resetSession()).toEqual(player)
-    expect(fetchMock).toHaveBeenCalledWith(
-      '/api/me/reset',
-      expect.objectContaining({
-        method: 'POST',
-        headers: { Authorization: 'Bearer existing-token' },
-      })
+    const [resetUrl, resetInit] = fetchMock.mock.calls[0] as [
+      string,
+      RequestInit,
+    ]
+    expect(resetUrl).toBe('/api/me/reset')
+    expect(resetInit.method).toBe('POST')
+    expect(new Headers(resetInit.headers).get('Authorization')).toBe(
+      'Bearer existing-token'
     )
     expect(storage.get(session.GUEST_TOKEN_KEY)).toBe('existing-token')
   })

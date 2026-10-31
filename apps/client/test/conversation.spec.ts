@@ -62,9 +62,9 @@ describe('guest NPC turns', () => {
       RequestInit,
     ]
     expect(url).toBe('/api/npc/hoa/interact')
-    expect(options.headers).toMatchObject({
-      Authorization: 'Bearer guest-token',
-    })
+    expect(new Headers(options.headers).get('Authorization')).toBe(
+      'Bearer guest-token'
+    )
     expect(JSON.parse(options.body as string)).toMatchObject({
       intent: 'greet',
       events: [{ type: 'talk', npcId: 'hoa' }],

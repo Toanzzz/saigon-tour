@@ -10,12 +10,8 @@ import {
 } from '@saigon/shared'
 import { QueryClient } from '@tanstack/react-query'
 import { type GameState, game } from '@/shared/state/game'
-import {
-  API_BASE,
-  authorizationHeaders,
-  guestToken,
-  initializeSession,
-} from './session'
+import { rpc } from './client'
+import { guestToken, initializeSession } from './session'
 
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
@@ -36,16 +32,15 @@ export async function interactWith(
       await initializeSession()
       if (game.state.guestStatus !== 'online') throw new Error('Offline guest')
     }
-    const response = await fetch(`${API_BASE}/npc/${npc}/interact`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...authorizationHeaders(),
-      },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(14000),
-    })
+    const response = await rpc.npc[':npcId'].interact.$post(
+      { param: { npcId: npc }, json: body },
+      {
+        init: {
+          credentials: 'include',
+          signal: AbortSignal.timeout(14000),
+        },
+      }
+    )
     if (!response.ok) throw new Error(`Guide unavailable (${response.status})`)
     return {
       response: InteractResponseSchema.parse(await response.json()),

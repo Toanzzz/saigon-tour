@@ -202,3 +202,14 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - index.html now loads /src/app/main.tsx. ui/index.tsx split into app/title-screen.tsx, widgets/hud/objective.tsx, and app/game-ui.tsx; main.tsx split into app/app.tsx (App, GameBoundary) and a thin app/main.tsx bootstrap. CSS consolidated under shared/ui with app/styles.css as the ordered aggregator; removed inline css imports from people and hub.
 - Added @/* alias to tsconfig paths and Vite resolve.tsconfigPaths: true. XRGameHud became a widget (widgets/xr-hud) and is no longer re-exported from the shared xr barrel.
 - Runtime behavior, DOM, and wire contracts unchanged. Gate passed: check → check:types → build → test (server 65 passed + 1 skipped; client 45 passed). Headless Playwright desktop and 390px flows loaded and played with zero page/console errors and zero failed requests.
+
+
+## Refactor pass 4: Hono large-app best practices
+
+- Followed hono.dev large-app guidance: split the single `createApp` route body into per-resource sub-apps mounted with chained `app.route()` (`routes/session.ts` public `/health`+`/guest`, `routes/me.ts` under `/me`, `routes/npc.ts` under `/npc`). Handlers stay inline (no RoR controllers).
+- Extracted the repeated bearer-token lookup into `routes/auth.ts` `requireAuth` middleware (hono/factory), setting `c.var.player`; `routes/deps.ts` defines the typed `Env` and per-request `RouteDeps`.
+- Exposed a real RPC contract: `AppType = ReturnType<typeof createRoutes>` (chained tree, excludes the non-RPC `/ws`). Added `AppInstance` for the augmented runtime object.
+- NPC route validates with `@hono/zod-validator` (`zValidator('param'|'json', ...)` pinned `0.9.1`), preserving the original `404 unknown_npc` (before auth) and `400 invalid_request` responses via per-target error hooks.
+- Client consumes the typed client: `shared/api/client.ts` `hc<AppType>`; moved token/transport primitives to `shared/api/transport.ts`; migrated `session.ts` (`/me`,`/guest`,`/me/reset`) and `agent.ts` (`/npc/:npcId/interact`) off raw fetch. Behavior (401→guest, offline fallback, timeouts, credentials) preserved.
+- Cross-package types: client tsconfig now references `apps/server/tsconfig.lib.json` (declaration-only emit into gitignored `dist/`) and `packages/shared`, so the client resolves server `@/*`-aliased source via emitted `.d.ts`.
+- Wire contracts, status codes, CORS, 16KiB body limit, and onError unchanged. Gate passed: check → check:types → build → test (server 65 passed + 1 skipped; client 45 passed). Headless Playwright: desktop reached server-verified quest completion (completed=1, reward) and 390px mobile passed with zero page/console errors and zero failed requests.

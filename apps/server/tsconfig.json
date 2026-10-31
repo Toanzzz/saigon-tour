@@ -7,5 +7,6 @@
     "types": ["node"],
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src", "test", "vitest.config.ts"]
+  "references": [{ "path": "./tsconfig.lib.json" }],
+  "include": ["test", "vitest.config.ts"]
 }

@@ -7,43 +7,18 @@ import { z } from 'zod'
 import { motion } from '@/shared/runtime/motion'
 import { game, update } from '@/shared/state/game'
 import { PLACES } from '@/shared/world/places'
+import { rpc } from './client'
+import { guestToken, saveToken } from './transport'
 
-export const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
-export const GUEST_TOKEN_KEY = 'saigon-tour.guest-token'
+export {
+  API_BASE,
+  authorizationHeaders,
+  GUEST_TOKEN_KEY,
+  guestToken,
+} from './transport'
 export type Guest = GuestPlayer
-let token: string | null = null
 let initialization: Promise<void> | null = null
 
-function readToken() {
-  try {
-    return localStorage.getItem(GUEST_TOKEN_KEY)
-  } catch {
-    return null
-  }
-}
-function saveToken(value: string | null) {
-  token = value
-  try {
-    if (value) localStorage.setItem(GUEST_TOKEN_KEY, value)
-    else localStorage.removeItem(GUEST_TOKEN_KEY)
-  } catch {
-    // Browsers with storage disabled can still play for this session.
-  }
-}
-export function guestToken() {
-  return token ?? readToken()
-}
-export function authorizationHeaders(): Record<string, string> {
-  const value = guestToken()
-  return value ? { Authorization: `Bearer ${value}` } : {}
-}
-async function request(path: string, method = 'GET') {
-  return fetch(`${API_BASE}${path}`, {
-    method,
-    headers: authorizationHeaders(),
-    signal: AbortSignal.timeout(5000),
-  })
-}
 export function guestState(player: Guest) {
   return {
     serverRevision: player.revision,
@@ -63,20 +38,28 @@ export function initializeSession(): Promise<void> {
   initialization = (async () => {
     update({ guestStatus: 'loading' })
     try {
-      token = guestToken()
-      let returningGuest = Boolean(token)
-      let response = token ? await request('/me') : null
+      let returningGuest = Boolean(guestToken())
+      let response = returningGuest
+        ? await rpc.me.$get({}, { init: { signal: AbortSignal.timeout(5000) } })
+        : null
       if (response?.status === 401) {
         saveToken(null)
         returningGuest = false
         response = null
       }
-      if (!response) response = await request('/guest', 'POST')
+      if (!response)
+        response = await rpc.guest.$post(
+          {},
+          { init: { signal: AbortSignal.timeout(5000) } }
+        )
       if (!response.ok) throw new Error('Guest unavailable')
       const body = await response.json()
       const player = GuestPlayerSchema.parse(body.player)
       if (!returningGuest) {
-        const value = z.string().min(1).parse(body.token)
+        const value = z
+          .string()
+          .min(1)
+          .parse((body as { token?: unknown }).token)
         saveToken(value)
       }
       if (game.state.sessionId !== sessionId) return
@@ -118,7 +101,10 @@ export function initializeSession(): Promise<void> {
 /** Keep the guest identity; only the saved journey is reset. */
 export async function resetSession(): Promise<Guest | null> {
   if (!guestToken()) return null
-  const response = await request('/me/reset', 'POST')
+  const response = await rpc.me.reset.$post(
+    {},
+    { init: { signal: AbortSignal.timeout(5000) } }
+  )
   if (!response.ok) throw new Error('Guest reset unavailable')
   return GuestPlayerSchema.parse((await response.json()).player)
 }

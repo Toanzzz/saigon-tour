@@ -5,6 +5,7 @@ import type { NpcHarness } from '@/features/npc'
 import { PartyService } from '@/features/party'
 import { RoomManager, SocketSession } from '@/features/realtime'
 import type { GameDb, ServerConfig } from '@/shared'
+import type { Env } from './routes/deps'
 
 export type {
   NpcBarker,
@@ -15,7 +16,7 @@ export type {
 export { RoomManager } from '@/features/realtime'
 
 export function createRealtime(
-  app: Hono,
+  app: Hono<Env>,
   config: ServerConfig,
   harness: NpcHarness,
   db: GameDb,
