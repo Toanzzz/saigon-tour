@@ -7,10 +7,13 @@ Meet Cô Hoa at Bến Thành, help a neighbor, take a ride, and collect a little
 
 ```sh
 bun install
-cp .env.example .env
-# Set META_MUSE_API_KEY in .env for live NPCs.
 bun run dev
 ```
+
+Runs zero-config against a local Postgres with sensible built-in defaults. For live
+NPCs, set `META_MUSE_API_KEY` (Bun auto-loads a gitignored `.env`); without it the game
+runs with an explicitly labeled offline guide. In production, startup fails fast if
+`DATABASE_URL` or `META_MUSE_API_KEY` is missing.
 
 Open `http://127.0.0.1:58000`. The API runs on port 58001. The game remains playable with
 an explicitly labeled offline guide when the model or API cannot be reached.
