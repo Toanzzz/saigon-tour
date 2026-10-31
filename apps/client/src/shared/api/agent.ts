@@ -1,6 +1,5 @@
 import {
   DEMO_QUEST,
-  type InteractRequest,
   type InteractResponse,
   InteractResponseSchema,
   NPCS,
@@ -9,9 +8,15 @@ import {
   SECRET_QUESTS,
 } from '@saigon/shared'
 import { QueryClient } from '@tanstack/react-query'
+import type { InferRequestType, InferResponseType } from 'hono/client'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
 import { guestToken, initializeSession } from './session'
+
+/** NPC interact endpoint, typed from the shared Hono RPC contract. */
+const interact$post = rpc.npc[':npcId'].interact.$post
+export type InteractBody = InferRequestType<typeof interact$post>['json']
+export type InteractResponsePayload = InferResponseType<typeof interact$post>
 
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
@@ -24,7 +29,7 @@ export interface InteractionResult {
 /** Talk to an NPC. If the backend is unreachable, keep the loop playable offline. */
 export async function interactWith(
   npc: NpcId,
-  body: InteractRequest,
+  body: InteractBody,
   state: GameState
 ): Promise<InteractionResult> {
   try {
@@ -32,7 +37,7 @@ export async function interactWith(
       await initializeSession()
       if (game.state.guestStatus !== 'online') throw new Error('Offline guest')
     }
-    const response = await rpc.npc[':npcId'].interact.$post(
+    const response = await interact$post(
       { param: { npcId: npc }, json: body },
       {
         init: {
@@ -42,10 +47,11 @@ export async function interactWith(
       }
     )
     if (!response.ok) throw new Error(`Guide unavailable (${response.status})`)
-    return {
-      response: InteractResponseSchema.parse(await response.json()),
-      synced: true,
-    }
+    // Validate the untrusted body; the parsed shape must match the RPC payload.
+    const payload: InteractResponsePayload = InteractResponseSchema.parse(
+      await response.json()
+    )
+    return { response: payload, synced: true }
   } catch {
     return { response: offline(npc, body, state), synced: false }
   }
@@ -54,7 +60,7 @@ export async function interactWith(
 /** Client-only fallback: mirrors the server's validated quest rules. */
 function offline(
   npc: NpcId,
-  body: InteractRequest,
+  body: InteractBody,
   state: GameState
 ): InteractResponse {
   const world = structuredClone(state.world)
