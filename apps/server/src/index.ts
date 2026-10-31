@@ -1,9 +1,7 @@
 import { serve } from '@hono/node-server'
 import { PostgresStore } from '@mastra/pg'
 import { createApp } from './app'
-import { isLiveConfigured, readConfig } from './config'
-import { createDb } from './db'
-import { log } from './logger'
+import { createDb, isLiveConfigured, log, readConfig } from './shared'
 
 const config = readConfig()
 const db = await createDb(config.databaseUrl, config.barkDailyLimit)

@@ -3,10 +3,10 @@ import { PGlite } from '@electric-sql/pglite'
 import { InMemoryStore } from '@mastra/core/storage'
 import { drizzle } from 'drizzle-orm/pglite'
 import { migrate } from 'drizzle-orm/pglite/migrator'
-import type { Fetcher } from '../src/app'
-import type { ServerConfig } from '../src/config'
-import { GameDb } from '../src/db'
-import { NpcHarness } from '../src/npc/mastra'
+import type { Fetcher } from '@/app'
+import { NpcHarness } from '@/features/npc'
+import type { ServerConfig } from '@/shared'
+import { GameDb } from '@/shared'
 
 export async function fixture(now?: () => Date, barkLimit = 200) {
   const sql = new PGlite()

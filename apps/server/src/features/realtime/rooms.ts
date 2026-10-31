@@ -7,11 +7,14 @@ import {
   type ServerSocketMessage,
   type TimeOfDay,
 } from '@saigon/shared'
-import type { PlayerSave } from '../db'
-import type { GameService } from '../game/state'
-import type { NpcHarness } from '../npc/mastra'
-import { NpcScheduler } from '../npc/scheduler'
+import type { GameService } from '@/domain/game'
+import type { PlayerSave } from '@/shared/db'
+import { NpcScheduler } from './scheduler'
 
+/** The structural slice of the NPC harness the room manager depends on. */
+export interface NpcBarker {
+  bark(npcId: NpcId, bucket: TimeOfDay): Promise<{ reply: string }>
+}
 export interface RoomSocket {
   send(data: string): void
   close(code?: number, reason?: string): void
@@ -51,7 +54,7 @@ export class RoomManager {
   private tickHooks = new Set<(now: number) => void>()
 
   constructor(
-    private readonly harness: Pick<NpcHarness, 'bark'>,
+    private readonly harness: NpcBarker,
     private readonly now = Date.now
   ) {}
 

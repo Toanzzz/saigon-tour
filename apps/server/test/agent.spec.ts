@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { createApp } from '../src/app'
-import { readConfig, type ServerConfig } from '../src/config'
-import { CostGuard } from '../src/guard'
+import { createApp } from '@/app'
+import { CostGuard } from '@/features/npc'
+import { readConfig, type ServerConfig } from '@/shared'
 import { fixture } from './fixture'
 
 const config: ServerConfig = {

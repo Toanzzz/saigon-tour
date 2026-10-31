@@ -6,8 +6,8 @@ import {
   TEAM_QUEST,
   ZERO_REWARD,
 } from '@saigon/shared'
-import type { GameDb } from '../db'
-import type { CheckResult, OfferResult } from '../game/state'
+import type { CheckResult, OfferResult } from '@/domain/game'
+import type { GameDb } from '@/shared/db'
 import type { PartyService } from './index'
 
 export class TeamErrand {

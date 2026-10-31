@@ -1,15 +1,18 @@
 import { upgradeWebSocket } from '@hono/node-server'
 import type { Hono } from 'hono'
 import { WebSocketServer } from 'ws'
-import type { ServerConfig } from '../config'
-import type { GameDb } from '../db'
-import type { NpcHarness } from '../npc/mastra'
-import { PartyService } from '../party'
-import { RoomManager } from './rooms'
-import { SocketSession } from './session'
+import type { NpcHarness } from '@/features/npc'
+import { PartyService } from '@/features/party'
+import { RoomManager, SocketSession } from '@/features/realtime'
+import type { GameDb, ServerConfig } from '@/shared'
 
-export type { Room, RoomMember, RoomSocket } from './rooms'
-export { RoomManager } from './rooms'
+export type {
+  NpcBarker,
+  Room,
+  RoomMember,
+  RoomSocket,
+} from '@/features/realtime'
+export { RoomManager } from '@/features/realtime'
 
 export function createRealtime(
   app: Hono,

@@ -1,5 +1,5 @@
 import type { InteractRequest, NpcId } from '@saigon/shared'
-import type { ToolOutcome } from '../npc/tools/context'
+import type { ToolOutcome } from './outcome'
 import { secretQuestFor } from './quests'
 import type { GameService } from './state'
 import { runTeamIntent } from './team'

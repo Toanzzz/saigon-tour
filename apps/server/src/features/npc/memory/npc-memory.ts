@@ -1,6 +1,6 @@
 import { Memory } from '@mastra/memory'
 import type { NpcId } from '@saigon/shared'
-import type { GameDb } from '../../db'
+import type { GameDb } from '@/shared/db'
 
 /** Recent conversation per npc+player thread, kept in injected Mastra storage. */
 export const createNpcMemory = () =>

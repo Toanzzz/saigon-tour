@@ -10,7 +10,10 @@
       "!**/node_modules"
     ]
   },
-  "formatter": { "indentStyle": "space", "indentWidth": 2 },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
@@ -18,7 +21,11 @@
       "trailingCommas": "es5"
     }
   },
-  "yaml": { "formatter": { "quoteStyle": "single" } },
+  "yaml": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -27,19 +34,43 @@
         "noConsole": "error",
         "noDeprecatedImports": "error",
         "noImportCycles": "error"
+      },
+      "style": {
+        "noExcessiveLinesPerFile": {
+          "level": "error",
+          "options": {
+            "maxLines": 500
+          }
+        }
       }
     }
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "overrides": [
     {
       "includes": ["**/test/**", "**/tests/**", "scripts/**", "**/logger.ts"],
-      "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
     },
     {
       "includes": ["scripts/**"],
       "linter": {
-        "rules": { "performance": { "useDomNodeTextContent": "off" } }
+        "rules": {
+          "performance": {
+            "useDomNodeTextContent": "off"
+          }
+        }
       }
     }
   ]

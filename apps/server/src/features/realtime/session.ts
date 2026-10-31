@@ -1,11 +1,11 @@
 import {
   type ClientSocketMessage,
   ClientSocketMessageSchema,
+  type PartyClientMessage,
   WORLD_BOUNDS,
 } from '@saigon/shared'
-import type { GameDb } from '../db'
-import type { GameService } from '../game/state'
-import type { PartyMessage } from '../party'
+import type { GameService } from '@/domain/game'
+import type { GameDb } from '@/shared/db'
 import type { RoomManager, RoomSocket } from './rooms'
 
 export class SocketSession {
@@ -23,7 +23,7 @@ export class SocketSession {
     private readonly db: GameDb,
     private readonly game: GameService,
     private readonly hooks?: {
-      onMessage(playerId: string, message: PartyMessage): Promise<void>
+      onMessage(playerId: string, message: PartyClientMessage): Promise<void>
       onConnected(playerId: string): void
     }
   ) {

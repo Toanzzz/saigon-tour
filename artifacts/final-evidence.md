@@ -184,3 +184,12 @@ Validated on October 30, 2026 from the local production previews.
 - `bun run build`: client and server bundles produced; only the pre-existing large-chunk advisory remains.
 - `bun run test`: server 65 passed + 1 skipped (66); client 45 passed (45). Totals match the pre-refactor baseline. The THREE_CJS_DEPRECATED DeprecationWarning no longer prints from the client suite.
 - Installed versions verified from node_modules: Biome 2.6.4, @types/three 0.187.0, @electric-sql/pglite 0.5.13, @ai-sdk/openai-compatible 3.0.82, @mastra/core 1.81.0, @mastra/memory 1.40.0, @mastra/pg 1.34.0.
+
+
+## Refactor pass 2 validation
+
+- `bun run check`: Biome 2.6.4 clean across 206 files with noImportCycles, noDeprecatedImports, and noExcessiveLinesPerFile (500) enabled. No source file exceeds 500 lines.
+- `bun run check:types`: native tsc -b resolves the @/* alias across app, features, domain, and shared; all composite projects build cleanly.
+- `bun run build`: client and server bundles produced. bun build resolved the @/* alias for the server entry; only the pre-existing large-chunk advisory remains.
+- `bun run test`: server 65 passed + 1 skipped (12 files after the splits); client 45 passed. Totals match the pre-refactor baseline.
+- `bun run test:integration`: passed against Compose Postgres 18 on 58002, exercising createDb and the updated `../../../drizzle` source-relative migrations candidate. The cwd-based `drizzle` candidate covers the Docker runtime layout (drizzle copied beside dist).

@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
-import { createApp } from '../src/app'
-import { readConfig } from '../src/config'
+import { createApp } from '@/app'
+import { readConfig } from '@/shared'
 import { fixture } from './fixture'
 
 let fx: Awaited<ReturnType<typeof fixture>>

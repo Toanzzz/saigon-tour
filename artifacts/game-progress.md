@@ -181,3 +181,15 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - Biome migrated to 2.6.4 schema. Enabled suspicious.noDeprecatedImports and suspicious.noImportCycles as errors, set yaml.formatter.quoteStyle to single, and turned off performance.useDomNodeTextContent for scripts/** (Playwright innerText assertions). Applied 2.6 default formatting, including markdown.
 - Deprecated-API migrations in our code: TanStack useStore → useSelector; React FormEvent → SubmitEvent<HTMLFormElement> in the conversation form; <Canvas shadows="percentage"> with the onCreated shadow-type line removed; removed no-op Zod .finite() calls in shared/multiplayer.ts; biome-ignore with reason on the drizzle primaryKey import (object overload in use); broke the places ↔ routes cycle (places stops re-exporting route, consumers import from routes). Client Vite config now uses vitest/config with ssr.resolve.mainFields and test.server.deps.inline, removing the THREE_CJS_DEPRECATED warning.
 - Runtime behavior, DOM, and wire contracts unchanged. Gate passed: check → check:types → build → test. Test totals unchanged (server 65 passed + 1 skipped; client 45 passed).
+
+
+## Refactor pass 2: server feature slices
+
+- Layered the server as app → features → domain → shared. Files inside a slice import siblings directly; code outside a slice (tests included) imports only through the slice index.ts, using the @/* alias.
+- Layout: app/ (index.ts createApp/AppType, realtime.ts createRealtime wiring); features/ (npc, party, realtime); domain/game (GameService, quests, intents, team, ToolOutcome); shared/ (config, logger, http Fetcher, db).
+- Removed same-layer and inverted imports: ToolOutcome moved into domain/game; party depends on a structural PartyRooms interface instead of RoomManager; RoomManager takes a structural NpcBarker instead of NpcHarness; NpcScheduler moved to features/realtime. The party message type is now PartyClientMessage in @saigon/shared, used by both client and server.
+- Path updates: package export → ./src/app/index.ts; drizzle.config schema → ./src/shared/db/schema.ts; the createDb source-relative migrations candidate → ../../../drizzle; docs/meta-api.md GameService path.
+- Added @/* alias to tsconfig paths and a vitest.config.ts with resolve.tsconfigPaths: true (listed in the tsconfig include).
+- Test splits (all under 500 lines): party.spec.ts → party-invites.spec.ts + team-errand.spec.ts + test/support/party.ts; harness.spec.ts → harness.spec.ts + harness-greetings.spec.ts + scheduler.spec.ts + test/support/npc.ts; realtime.spec.ts → realtime.spec.ts + realtime-rooms.spec.ts + test/support/peer.ts.
+- Enabled style.noExcessiveLinesPerFile (maxLines 500) now that every source file is under the cap.
+- Runtime behavior, DOM, and wire contracts unchanged. Gate passed: check → check:types → build → test. Server test total unchanged (65 passed + 1 skipped); client 45 passed. Real-Postgres integration passed with the new migrations path.

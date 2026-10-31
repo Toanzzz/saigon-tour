@@ -1,5 +1,5 @@
-import type { Fetcher } from '../app'
-import type { GameDb } from '../db'
+import type { GameDb } from '@/shared/db'
+import type { Fetcher } from '@/shared/http'
 
 export interface HarnessUsage {
   calls: number

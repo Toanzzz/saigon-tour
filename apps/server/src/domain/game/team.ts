@@ -1,5 +1,5 @@
 import { type NpcId, TEAM_QUEST } from '@saigon/shared'
-import type { ToolOutcome } from '../npc/tools/context'
+import type { ToolOutcome } from './outcome'
 import type { GameService } from './state'
 
 export async function runTeamIntent(

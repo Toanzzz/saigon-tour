@@ -10,7 +10,7 @@ import {
   TEAM_QUEST,
   ZERO_REWARD,
 } from '@saigon/shared'
-import type { GameDb, PlayerSave } from '../db'
+import type { GameDb, PlayerSave } from '@/shared/db'
 import { questTemplate } from './quests'
 
 export type PlayerRecord = PlayerSave

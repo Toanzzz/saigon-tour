@@ -236,8 +236,7 @@ export async function createDb(url: string, barkLimit = 200) {
   const migrationsFolder = [
     'drizzle',
     'apps/server/drizzle',
-    fileURLToPath(new URL('../drizzle', import.meta.url)),
-    fileURLToPath(new URL('../../drizzle', import.meta.url)),
+    fileURLToPath(new URL('../../../drizzle', import.meta.url)),
   ].find((path) => existsSync(`${path}/meta/_journal.json`))
   if (!migrationsFolder) throw new Error('database_migrations_missing')
   await migrate(drizzle(pool), { migrationsFolder })

@@ -9,16 +9,19 @@ import {
   type NpcId,
 } from '@saigon/shared'
 import type { z } from 'zod'
-import type { Fetcher } from '../app'
-import { isLiveConfigured, type ServerConfig } from '../config'
-import type { GameDb } from '../db'
-import { outcomeKind as kind, runIntent } from '../game/intents'
-import { GameService } from '../game/state'
-import { teamReply } from '../game/team'
-import { CostGuard } from '../guard'
-import { log } from '../logger'
+import {
+  GameService,
+  outcomeKind as kind,
+  runIntent,
+  teamReply,
+} from '@/domain/game'
+import { log } from '@/shared'
+import { isLiveConfigured, type ServerConfig } from '@/shared/config'
+import type { GameDb } from '@/shared/db'
+import type { Fetcher } from '@/shared/http'
 import { createNpcAgents } from './agents'
 import { fallbackLine } from './fallbacks'
+import { CostGuard } from './guard'
 import { NpcMemoryService } from './memory/npc-memory'
 import { clearPlayerThreads, recordGreeting } from './memory/threads'
 import { type HarnessUsage, meteredFetch, storageUnavailable } from './meter'

@@ -3,13 +3,18 @@ import { InteractRequestSchema, NpcIdSchema } from '@saigon/shared'
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { cors } from 'hono/cors'
-import { isLiveConfigured, readConfig, type ServerConfig } from './config'
-import type { GameDb } from './db'
-import { log } from './logger'
-import { NpcHarness } from './npc/mastra'
+import { NpcHarness } from '@/features/npc'
+import {
+  type Fetcher,
+  type GameDb,
+  isLiveConfigured,
+  log,
+  readConfig,
+  type ServerConfig,
+} from '@/shared'
 import { createRealtime } from './realtime'
 
-export type Fetcher = typeof fetch
+export type { Fetcher } from '@/shared/http'
 export interface AppServices {
   db: GameDb
   storage?: MastraCompositeStore

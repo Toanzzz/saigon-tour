@@ -1,18 +1,17 @@
 import { randomUUID } from 'node:crypto'
 import type {
-  ClientSocketMessage,
+  PartyClientMessage,
   PartyInvite,
   PartySnapshot,
 } from '@saigon/shared'
-import type { GameDb } from '../db'
-import type { RoomManager } from '../realtime/rooms'
+import type { GameDb } from '@/shared/db'
+import type { PartyRooms } from './rooms'
 import { TeamErrand } from './team'
 
+export type { PartyRooms } from './rooms'
+export { TeamErrand } from './team'
+
 type Invite = PartyInvite & { targetId: string; partyId: string | null }
-export type PartyMessage = Extract<
-  ClientSocketMessage,
-  { type: 'party-invite' | 'party-respond' | 'party-leave' }
->
 
 export class PartyService {
   readonly parties = new Map<string, PartySnapshot>()
@@ -22,7 +21,7 @@ export class PartyService {
   private readonly team: TeamErrand
 
   constructor(
-    readonly rooms: RoomManager,
+    readonly rooms: PartyRooms,
     db: GameDb,
     private readonly now = Date.now
   ) {
@@ -139,7 +138,7 @@ export class PartyService {
     })
   }
 
-  async handle(playerId: string, message: PartyMessage) {
+  async handle(playerId: string, message: PartyClientMessage) {
     if (message.type === 'party-invite')
       await this.invite(playerId, message.targetId)
     else if (message.type === 'party-respond')

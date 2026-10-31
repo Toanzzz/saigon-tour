@@ -1,9 +1,8 @@
 import { DEMO_QUEST } from '@saigon/shared'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { createApp } from '../src/app'
-import { readConfig } from '../src/config'
-import { GameDb } from '../src/db'
-import { GameService } from '../src/game/state'
+import { createApp } from '@/app'
+import { GameService } from '@/domain/game'
+import { GameDb, readConfig } from '@/shared'
 import { fixture } from './fixture'
 
 let fx: Awaited<ReturnType<typeof fixture>>

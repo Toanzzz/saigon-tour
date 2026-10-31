@@ -74,6 +74,10 @@ export const ClientSocketMessageSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('party-leave') }).strict(),
 ])
 export type ClientSocketMessage = z.infer<typeof ClientSocketMessageSchema>
+export type PartyClientMessage = Extract<
+  ClientSocketMessage,
+  { type: 'party-invite' | 'party-respond' | 'party-leave' }
+>
 export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
   z.object({
     type: z.literal('welcome'),

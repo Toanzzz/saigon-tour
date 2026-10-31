@@ -1,6 +1,7 @@
 import {
   type ClientSocketMessage,
   type Emote,
+  type PartyClientMessage,
   ServerSocketMessageSchema,
 } from '@saigon/shared'
 import { motion } from '../core/motion'
@@ -24,12 +25,7 @@ import {
 import { API_BASE, guestToken } from './session'
 import { net, updateNet } from './status'
 
-export function sendParty(
-  message: Extract<
-    ClientSocketMessage,
-    { type: 'party-invite' | 'party-respond' | 'party-leave' }
-  >
-) {
+export function sendParty(message: PartyClientMessage) {
   if (
     net.state.connection !== 'connected' ||
     activeSocket?.readyState !== WebSocket.OPEN

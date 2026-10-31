@@ -1,7 +1,7 @@
 import { DEMO_QUEST, NPCS, SECRET_QUESTS } from '@saigon/shared'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { createApp } from '../src/app'
-import { readConfig } from '../src/config'
+import { createApp } from '@/app'
+import { readConfig } from '@/shared'
 import { fixture } from './fixture'
 
 const offline = { ...readConfig({}), apiKey: undefined, production: true }

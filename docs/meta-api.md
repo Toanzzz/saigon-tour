@@ -18,7 +18,7 @@ the authoritative `world`, the active `quest`, a `questEvent` (`offered`/`comple
 
 ## Authority
 
-- `GameService` (`apps/server/src/game/state.ts`) owns per-player world state, quests,
+- `GameService` (`apps/server/src/domain/game/state.ts`) owns per-player world state, quests,
   coins, inventory, and reputation. Records expire after an hour of inactivity.
 - Agents act only through tools: `offer-quest`, `check-quest`, `remember-player-fact`,
   `get-world-context`. Every tool calls `GameService`, which validates the template, giver,

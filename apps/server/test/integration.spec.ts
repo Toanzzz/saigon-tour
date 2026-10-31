@@ -1,9 +1,8 @@
 import { randomUUID } from 'node:crypto'
 import { InMemoryStore } from '@mastra/core/storage'
 import { afterAll, describe, expect, it } from 'vitest'
-import { createApp } from '../src/app'
-import { readConfig } from '../src/config'
-import { createDb } from '../src/db'
+import { createApp } from '@/app'
+import { createDb, readConfig } from '@/shared'
 
 const enabled = process.env.RUN_POSTGRES_INTEGRATION === '1'
 describe.skipIf(!enabled)('Postgres persistence', () => {
