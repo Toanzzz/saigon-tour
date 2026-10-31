@@ -26,9 +26,9 @@ export function CivicDistrict() {
       <Model
         path={cathedral.model}
         position={cathedral.position}
-        // The GLB's clock-and-entrance façade faces local -Z; Công xã Paris is
-        // south of the model in world +Z, so turn the entrance toward the square.
-        rotation={[0, Math.PI, 0]}
+        // The runtime asset's clock-and-entrance façade faces local +Z;
+        // Công xã Paris is south of the model in world +Z.
+        rotation={[0, 0, 0]}
         scale={cathedral.scale}
       />
       <CongXaParis />
