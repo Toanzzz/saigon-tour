@@ -11,6 +11,7 @@ import {
   WALLS,
 } from './district'
 import { DistrictLife } from './district-life'
+import { DistrictLifeTwo } from './district-life-2'
 import { EveningLighting } from './evening'
 import { MarketStall, ParkFeatures } from './landmarks'
 import { buildingRows } from './layout'
@@ -104,6 +105,7 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
       <CivicDistrict />
       <CulturalLandmarks />
       <DistrictLife />
+      <DistrictLifeTwo />
       <StreetLife />
       <WaterfrontLife />
       <EveningLighting active={evening} />
@@ -125,6 +127,21 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
         name="NHÀ THỜ ĐỨC BÀ"
       />
       <StopSign position={[16, 0, 31]} name="BẾN SÔNG" />
+      <StopSign
+        position={[88, 0, -35]}
+        rotation={[0, Math.PI / 2, 0]}
+        name="NHÀ HÁT THÀNH PHỐ"
+      />
+      <StopSign
+        position={[100, 0, -74]}
+        rotation={[0, Math.PI / 2, 0]}
+        name="BƯU ĐIỆN TRUNG TÂM"
+      />
+      <StopSign
+        position={[-5, 0, 29]}
+        rotation={[0, -Math.PI / 2, 0]}
+        name="HẺM ẨM THỰC"
+      />
       <Sign
         text="SÀI GÒN"
         subtitle="MỘT CHUYẾN ĐI, NHIỀU CÂU CHUYỆN"
