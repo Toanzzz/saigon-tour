@@ -66,29 +66,45 @@ const CITY_TRAIL: {
   title: string
   detail: string
 }[] = [
-  { location: 'market', title: 'Bến Thành Market', detail: 'Taste the city' },
+  {
+    location: 'market',
+    title: 'Bến Thành Market',
+    detail: 'Meet Cô Hoa over a bowl of phở',
+  },
   {
     location: 'park',
     title: 'Neighborhood park',
-    detail: 'Pause under the trees',
+    detail: 'Carry lunch to Chị Linh under the trees',
   },
-  { location: 'cityhall', title: 'City Hall', detail: 'Walk Nguyễn Huệ' },
-  { location: 'opera', title: 'Opera House', detail: 'Hear the cultural core' },
+  {
+    location: 'cityhall',
+    title: 'City Hall',
+    detail: 'Follow Vy’s lanterns along Nguyễn Huệ',
+  },
+  {
+    location: 'opera',
+    title: 'Opera House',
+    detail: 'Hear Thảo practice a note that travels',
+  },
   {
     location: 'cathedral',
     title: 'Nhà thờ Đức Bà',
-    detail: 'Cross Công xã Paris',
+    detail: 'Let the melody find its echo at Công xã Paris',
   },
   {
     location: 'postoffice',
     title: 'Central Post Office',
-    detail: 'Send a story onward',
+    detail: 'Trade a story with Sơn beside the old letters',
   },
-  { location: 'alley', title: 'Food alley', detail: 'Follow the lanterns' },
+  {
+    location: 'alley',
+    title: 'Food alley',
+    detail: 'Find a lantern between the food stalls',
+  },
   {
     location: 'river',
     title: 'Sài Gòn riverside',
-    detail: 'Look back at the skyline',
+    detail: 'Give Sơn a wide horizon for his postcards',
   },
 ]
 
@@ -117,15 +133,16 @@ function storySteps(state: GameState): HubStep[] {
   return CITY_TRAIL.map((stop) => ({
     title: stop.title,
     detail: stop.detail,
-    state: allVisited
-      ? 'done'
-      : stop.location === target && state.quest
+    state:
+      stop.location === target && state.quest
         ? 'now'
-        : !state.quest && stop.location === state.world.locationId
-          ? 'now'
-          : state.world.visitedLocations.includes(stop.location)
-            ? 'done'
-            : 'next',
+        : allVisited
+          ? 'done'
+          : !state.quest && stop.location === state.world.locationId
+            ? 'now'
+            : state.world.visitedLocations.includes(stop.location)
+              ? 'done'
+              : 'next',
   }))
 }
 

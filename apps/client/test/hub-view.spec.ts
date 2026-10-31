@@ -1,5 +1,6 @@
-import { DEMO_QUEST } from '@saigon/shared'
+import { DEMO_QUEST, SECRET_QUESTS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
+import type { GameState } from '../src/state/game'
 import { grantQuest, grantReward, initialState } from '../src/state/game'
 import { greetingFor, hubView } from '../src/ui/hub/view'
 
@@ -94,6 +95,56 @@ describe('city hub view', () => {
     })
     const broke = { ...accepted, world: { ...accepted.world, currency: 2 } }
     expect(hubView(broke, now).ride).toBeNull()
+  })
+  it('keeps an active secret destination current after the city is explored', () => {
+    const state: GameState = {
+      ...initialState(),
+      screen: 'playing' as const,
+      world: {
+        ...initialState().world,
+        locationId: 'river' as const,
+        visitedLocations: [
+          'market',
+          'park',
+          'cityhall',
+          'opera',
+          'cathedral',
+          'postoffice',
+          'alley',
+          'river',
+        ],
+      },
+      quest: SECRET_QUESTS['cityhall-lanterns'],
+    }
+    const view = hubView(state, now)
+    expect(
+      view.story.steps.find((step) => step.title === 'Food alley')?.state
+    ).toBe('now')
+    expect(view.story.done).toBe(false)
+  })
+  it('tracks secret quests as available, active, and completed', () => {
+    const available = hubView(initialState(), now).story.secrets
+    expect(available.every((secret) => secret.state === 'next')).toBe(true)
+    const active = hubView(
+      grantQuest(initialState(), SECRET_QUESTS['postoffice-river-postcard']),
+      now
+    ).story.secrets
+    expect(
+      active.find((secret) => secret.id === 'postoffice-river-postcard')?.state
+    ).toBe('now')
+    const completed = hubView(
+      {
+        ...initialState(),
+        world: {
+          ...initialState().world,
+          completedQuestIds: ['opera-cathedral-note'],
+        },
+      },
+      now
+    ).story.secrets
+    expect(
+      completed.find((secret) => secret.id === 'opera-cathedral-note')?.state
+    ).toBe('done')
   })
   it('shows the last neighbor and their latest line', () => {
     const state = {
