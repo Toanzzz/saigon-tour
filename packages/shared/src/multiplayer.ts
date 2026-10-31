@@ -38,13 +38,6 @@ export type PresencePlayer = z.infer<typeof PresencePlayerSchema>
 export const ClientSocketMessageSchema = z.discriminatedUnion('type', [
   z
     .object({
-      type: z.literal('hello'),
-      token: z.string().min(1).max(256),
-      protocol: z.literal(1),
-    })
-    .strict(),
-  z
-    .object({
       type: z.literal('state'),
       position: PositionSchema,
       heading: z.number(),
@@ -74,6 +67,7 @@ export const ClientSocketMessageSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('party-leave') }).strict(),
 ])
 export type ClientSocketMessage = z.infer<typeof ClientSocketMessageSchema>
+export type ClientMessageType = ClientSocketMessage['type']
 export type PartyClientMessage = Extract<
   ClientSocketMessage,
   { type: 'party-invite' | 'party-respond' | 'party-leave' }
@@ -83,13 +77,6 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     type: z.literal('welcome'),
     selfId: z.uuid(),
     room: z.string(),
-    players: z.array(PresencePlayerSchema),
-  }),
-  z.object({ type: z.literal('player-joined'), player: PresencePlayerSchema }),
-  z.object({ type: z.literal('player-left'), playerId: z.uuid() }),
-  z.object({
-    type: z.literal('players'),
-    players: z.array(PresencePlayerSchema),
   }),
   z.object({
     type: z.literal('emote'),

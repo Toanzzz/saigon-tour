@@ -1,98 +1,10 @@
-import { once } from 'node:events'
-import { serve } from '@hono/node-server'
 import { describe, expect, it } from 'vitest'
-import { WebSocket } from 'ws'
-import { Recorder, required, setupParty } from './support/party'
+import { Recorder, setupParty } from './support/party'
 
 const ctx = setupParty()
 const { ask, guest, invite, join, position, snapshot, team } = ctx
 
 describe('party invitations and membership', () => {
-  it('routes authenticated invite, accept, and leave messages through real Node sockets', async () => {
-    const server = serve({
-      fetch: ctx.app.fetch,
-      port: 0,
-      hostname: '127.0.0.1',
-      websocket: { server: ctx.app.realtime.server },
-    })
-    const sockets: WebSocket[] = []
-    try {
-      if (!server.listening) await once(server, 'listening')
-      const address = server.address()
-      if (!address || typeof address === 'string')
-        throw new Error('Missing port')
-      const connect = async () => {
-        const identity = await ctx.fx.guest()
-        const socket = new WebSocket(`ws://127.0.0.1:${address.port}/ws`, {
-          origin: 'http://localhost:58000',
-        })
-        sockets.push(socket)
-        const recorder = new Recorder()
-        socket.on('message', (data) => recorder.send(String(data)))
-        await once(socket, 'open')
-        socket.send(
-          JSON.stringify({ type: 'hello', token: identity.token, protocol: 1 })
-        )
-        await expect
-          .poll(() => recorder.messages.some((m) => m.type === 'welcome'))
-          .toBe(true)
-        return { ...identity, socket, recorder }
-      }
-      const first = await connect()
-      const second = await connect()
-      first.socket.send(
-        JSON.stringify({ type: 'party-invite', targetId: second.player.id })
-      )
-      await expect
-        .poll(() =>
-          second.recorder.messages.some((m) => m.type === 'party-invited')
-        )
-        .toBe(true)
-      const invitation = required(
-        second.recorder.messages.find((m) => m.type === 'party-invited')
-      )
-      if (invitation.type !== 'party-invited') throw new Error('Missing invite')
-      second.socket.send(
-        JSON.stringify({
-          type: 'party-respond',
-          inviteId: invitation.inviteId,
-          accept: true,
-        })
-      )
-      for (const peer of [first, second])
-        await expect
-          .poll(() =>
-            peer.recorder.messages.some(
-              (m) => m.type === 'party' && m.party?.members.length === 2
-            )
-          )
-          .toBe(true)
-      first.recorder.clear()
-      second.recorder.clear()
-      second.socket.send(JSON.stringify({ type: 'party-leave' }))
-      for (const peer of [first, second])
-        await expect
-          .poll(() =>
-            peer.recorder.messages.some(
-              (m) => m.type === 'party' && m.party === null
-            )
-          )
-          .toBe(true)
-    } finally {
-      await Promise.all(
-        sockets.map(async (socket) => {
-          if (socket.readyState === WebSocket.CLOSED) return
-          const closed = once(socket, 'close')
-          socket.terminate()
-          await closed
-        })
-      )
-      await new Promise<void>((resolve, reject) =>
-        server.close((error) => (error ? reject(error) : resolve()))
-      )
-    }
-  })
-
   it('requires the same room, connected peers, and at most eight units at invite and accept', async () => {
     const first = await guest()
     const second = await guest()
@@ -212,7 +124,7 @@ describe('party invitations and membership', () => {
     })
     await expect.poll(() => snapshot(second)).toBeNull()
     expect(ctx.app.realtime.manager.room(second.player.id)).toBeUndefined()
-    expect(second.socket.closed).toBe(1000)
+    expect(second.socket.closed).toBe(4003)
     await expect.poll(() => snapshot(first)?.quest ?? null).toBeNull()
     expect(
       first.socket.messages.some(

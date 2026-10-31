@@ -1,8 +1,13 @@
+import { Client, type Room } from '@colyseus/sdk'
 import {
   type ClientSocketMessage,
   type Emote,
   type PartyClientMessage,
+  type ServerSocketMessage,
   ServerSocketMessageSchema,
+  toPresence,
+  WORLD_ROOM,
+  type WorldRoomState,
 } from '@saigon/shared'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify } from '@/shared/state/game'
@@ -17,67 +22,90 @@ import {
   clearPresence,
   EMOTE_TEXT,
   npcSpeech,
-  presence,
-  recordPlayer,
   recordPlayers,
   speech,
 } from './presence'
 import { API_BASE, sessionToken } from './session'
 import { net, updateNet } from './status'
 
+/** Colyseus endpoint: the API base, absolute, keeping any path prefix. */
+export function realtimeUrl(base = API_BASE, origin = location.href) {
+  return new URL(base.replace(/\/$/, ''), origin).toString().replace(/\/$/, '')
+}
+let activeRoom: Room<unknown, WorldRoomState> | null = null
+let lastEmote = -Infinity
+
+function sendMessage({ type, ...payload }: ClientSocketMessage) {
+  if (!activeRoom || net.state.connection !== 'connected') return false
+  activeRoom.send(type, payload)
+  return true
+}
 export function sendParty(message: PartyClientMessage) {
-  if (
-    net.state.connection !== 'connected' ||
-    activeSocket?.readyState !== WebSocket.OPEN
-  ) {
-    notify('Connect to the neighborhood to join a team.')
-    return false
-  }
-  activeSocket.send(JSON.stringify(message))
+  if (sendMessage(message)) return true
+  notify('Connect to the neighborhood to join a team.')
+  return false
+}
+export function sendEmote(emote: Emote) {
+  if (performance.now() - lastEmote < 1000) return false
+  if (!sendMessage({ type: 'emote', emote })) return false
+  lastEmote = performance.now()
   return true
 }
 
-export function socketUrl(base = API_BASE, origin = location.href) {
-  const url = new URL(`${base.replace(/\/$/, '')}/ws`, origin)
-  url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:'
-  return url.toString()
-}
-let activeSocket: WebSocket | null = null
-let lastEmote = -Infinity
-export function sendEmote(emote: Emote) {
-  if (
-    net.state.connection !== 'connected' ||
-    performance.now() - lastEmote < 1000
+function handle(message: ServerSocketMessage, room: Room) {
+  if (message.type === 'welcome') {
+    updateNet({
+      connection: 'connected',
+      selfId: message.selfId,
+      room: message.room,
+    })
+    const batch = currentEventBatch()
+    if (batch) room.send('events', batch)
+  } else if (
+    message.type === 'party' ||
+    message.type === 'party-invited' ||
+    message.type === 'quest-completed'
   )
-    return false
-  lastEmote = performance.now()
-  activeSocket?.send(JSON.stringify({ type: 'emote', emote }))
-  return true
+    handlePartyMessage(message)
+  else if (message.type === 'world') acknowledgeWorld(message)
+  else if (message.type === 'emote')
+    speech.set(message.playerId, {
+      text: EMOTE_TEXT[message.emote],
+      until: performance.now() + 4500,
+    })
+  else if (message.type === 'npc-line')
+    npcSpeech.set(message.npcId, {
+      text: message.reply,
+      until: performance.now() + 7000,
+    })
+  else if (message.type === 'error') {
+    notify(message.message)
+    // A stuck event batch is resent after reconnecting.
+    if (currentEventBatch()) void room.leave(false)
+  }
 }
+
+/** Presence lives in Colyseus state; only roster metadata enters the store. */
+function syncRoster(state: WorldRoomState) {
+  const players = [...state.players.values()].map(toPresence)
+  recordPlayers(players, net.state.selfId ?? '')
+  const roster = players.map(({ id, name, color }) => ({ id, name, color }))
+  if (JSON.stringify(roster) !== JSON.stringify(net.state.players))
+    updateNet({ players: roster })
+}
+
 export function installRealtime() {
   let disposed = false
   let guest: string | null = null
-  let socket: WebSocket | null = null
+  let room: Room<unknown, WorldRoomState> | null = null
   let retry: ReturnType<typeof setTimeout> | undefined
-  let handshake: ReturnType<typeof setTimeout> | undefined
   let attempt = 0
-  let ready = false
+  let joining = false
   let batchSentAt = 0
   let sentSequence: number | null = null
-  const send = (message: ClientSocketMessage) => {
-    if (socket?.readyState === WebSocket.OPEN)
-      socket.send(JSON.stringify(message))
-  }
-  const disconnect = () => {
-    clearTimeout(retry)
-    clearTimeout(handshake)
-    if (socket) {
-      socket.onclose = null
-      socket.close(1000)
-    }
-    socket = null
-    activeSocket = null
-    ready = false
+
+  const offline = () => {
+    activeRoom = null
     clearPresence()
     updateNet({
       connection: 'offline',
@@ -87,106 +115,61 @@ export function installRealtime() {
       invite: null,
     })
   }
-  const connect = () => {
-    if (disposed || !guest || game.state.guestStatus !== 'online') return
+  const disconnect = () => {
+    clearTimeout(retry)
+    const current = room
+    room = null
+    if (current) void current.leave()
+    offline()
+  }
+  const schedule = () => {
+    clearTimeout(retry)
+    updateNet({ connection: 'reconnecting', players: [], invite: null })
+    retry = setTimeout(connect, Math.min(10000, 500 * 2 ** attempt++))
+  }
+  const connect = async () => {
+    if (disposed || joining || room || !guest) return
+    if (game.state.guestStatus !== 'online') return
+    joining = true
     updateNet({ connection: attempt ? 'reconnecting' : 'connecting' })
-    socket = new WebSocket(socketUrl())
-    activeSocket = socket
-    const connection = socket
-    handshake = setTimeout(() => connection.close(), 6000)
-    connection.onopen = () => {
-      send({ type: 'hello', token: sessionToken() ?? '', protocol: 1 })
-    }
-    connection.onmessage = (event) => {
-      if (socket !== connection) return
-      let parsed: ReturnType<typeof ServerSocketMessageSchema.safeParse>
-      try {
-        parsed = ServerSocketMessageSchema.safeParse(JSON.parse(event.data))
-      } catch {
+    const client = new Client(realtimeUrl())
+    client.auth.token = sessionToken() ?? ''
+    try {
+      const joined = await client.joinOrCreate<WorldRoomState>(WORLD_ROOM)
+      if (disposed || game.state.guestId !== guest) {
+        void joined.leave()
         return
       }
-      if (!parsed.success) return
-      const message = parsed.data
-      if (message.type === 'welcome') {
-        clearTimeout(handshake)
-        ready = true
-        attempt = 0
-        updateNet({
-          connection: 'connected',
-          selfId: message.selfId,
-          room: message.room,
-          players: message.players.map(({ id, name, color }) => ({
-            id,
-            name,
-            color,
-          })),
-        })
-        recordPlayers(message.players, message.selfId)
+      room = joined
+      activeRoom = joined
+      attempt = 0
+      joined.onMessage('*', (_type, payload) => {
+        const parsed = ServerSocketMessageSchema.safeParse(payload)
+        if (parsed.success && room === joined) handle(parsed.data, joined)
+      })
+      joined.onStateChange((state) => syncRoster(state))
+      joined.onDrop(() => {
+        clearPresence()
+        updateNet({ connection: 'reconnecting', players: [], invite: null })
+      })
+      joined.onReconnect(() => {
+        updateNet({ connection: 'connected' })
         const batch = currentEventBatch()
-        if (batch) {
-          send({ type: 'events', ...batch })
-          batchSentAt = performance.now()
-          sentSequence = batch.sequence
-        }
-      } else if (message.type === 'players') {
-        recordPlayers(message.players, net.state.selfId ?? '')
-        // Only roster metadata enters the store; movement stays in the buffer.
-        const roster = message.players.map(({ id, name, color }) => ({
-          id,
-          name,
-          color,
-        }))
-        if (JSON.stringify(roster) !== JSON.stringify(net.state.players))
-          updateNet({ players: roster })
-      } else if (message.type === 'player-joined') {
-        if (message.player.id !== net.state.selfId) recordPlayer(message.player)
-        updateNet({
-          players: [
-            ...net.state.players.filter((p) => p.id !== message.player.id),
-            {
-              id: message.player.id,
-              name: message.player.name,
-              color: message.player.color,
-            },
-          ],
-        })
-      } else if (message.type === 'player-left') {
-        presence.delete(message.playerId)
-        updateNet({
-          players: net.state.players.filter((p) => p.id !== message.playerId),
-        })
-      } else if (
-        message.type === 'party' ||
-        message.type === 'party-invited' ||
-        message.type === 'quest-completed'
-      )
-        handlePartyMessage(message)
-      else if (message.type === 'world') acknowledgeWorld(message)
-      else if (message.type === 'emote')
-        speech.set(message.playerId, {
-          text: EMOTE_TEXT[message.emote],
-          until: performance.now() + 4500,
-        })
-      else if (message.type === 'npc-line')
-        npcSpeech.set(message.npcId, {
-          text: message.reply,
-          until: performance.now() + 7000,
-        })
-      else if (message.type === 'error') {
-        notify(message.message)
-        if (currentEventBatch()) connection.close()
-      }
+        if (batch) joined.send('events', batch)
+      })
+      joined.onLeave(() => {
+        if (room !== joined) return
+        room = null
+        activeRoom = null
+        clearPresence()
+        if (!disposed && game.state.guestStatus === 'online') schedule()
+        else offline()
+      })
+    } catch {
+      if (!disposed) schedule()
+    } finally {
+      joining = false
     }
-    connection.onclose = () => {
-      if (socket !== connection || disposed) return
-      clearTimeout(handshake)
-      ready = false
-      activeSocket = null
-      clearPresence()
-      updateNet({ connection: 'reconnecting', players: [], invite: null })
-      retry = setTimeout(connect, Math.min(10000, 500 * 2 ** attempt++))
-    }
-    connection.onerror = () => connection.close()
   }
   const sync = () => {
     const next = game.state.guestId
@@ -195,19 +178,17 @@ export function installRealtime() {
       resetEventSequence()
       guest = next
       attempt = 0
-      if (next && game.state.guestStatus === 'online') connect()
+      void connect()
     } else if (game.state.guestStatus !== 'online') disconnect()
-    else if (!socket && guest) connect()
+    else if (!room) void connect()
   }
   const unsubscribe = game.subscribe(sync)
   sync()
   const timer = setInterval(() => {
     clearExpiredInvite()
-    if (!ready) return
-    const position = motion.position.toArray() as [number, number, number]
-    send({
-      type: 'state',
-      position,
+    if (!room || net.state.connection !== 'connected') return
+    room.send('state', {
+      position: motion.position.toArray() as [number, number, number],
       heading: motion.heading,
       ride:
         game.state.screen === 'title'
@@ -216,7 +197,7 @@ export function installRealtime() {
     })
     const batch = nextEventBatch()
     if (batch) {
-      send({ type: 'events', ...batch })
+      room.send('events', batch)
       batchSentAt = performance.now()
       sentSequence = batch.sequence
     }
@@ -226,7 +207,7 @@ export function installRealtime() {
       outstanding.sequence === sentSequence &&
       performance.now() - batchSentAt > 4000
     )
-      socket?.close()
+      void room.leave(false)
   }, 100)
   return () => {
     disposed = true

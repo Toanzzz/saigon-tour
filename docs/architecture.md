@@ -15,7 +15,7 @@
 | ---------- | ---------------------------------------------------------------------------------------- |
 | Client     | Vite, React, three.js, React Three Fiber, drei, Rapier, `@react-three/xr`                |
 | Data/state | TanStack Query (API), TanStack Store (game state)                                        |
-| API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; `ws` realtime           |
+| API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; Colyseus realtime       |
 | Agents     | Mastra (`@mastra/core`, `@mastra/memory`, `@mastra/pg`) via `@ai-sdk/openai-compatible`  |
 | Model      | Meta `muse-spark-1.3-contributor` (`META_MODEL` overrides)                               |
 | Storage    | Postgres 18 with Drizzle migrations                                                      |
@@ -33,13 +33,14 @@ Unity + Meta XR SDK was rejected: two build pipelines and APK sideloading for a 
 ```
 Client (desktop + WebXR) ──HTTPS JSON──▶ API (Hono, Docker) ──▶ Meta Model API
         │                                   │
-        └──────────── /ws realtime ─────────┤
+        └──────── Colyseus realtime ────────┤
                                             ▼
                                          Postgres (auth users, journeys, spend, NPC memory)
 ```
 
 API routes: `GET /health`, `GET /auth/providers`, Better Auth under `/auth/*`, `GET /me`,
-`POST /me/profile`, `POST /me/reset`, `POST /npc/:npcId/interact`, `GET /ws`. Details: `docs/meta-api.md`, `docs/multiplayer.md`.
+`POST /me/profile`, `POST /me/reset`, `POST /npc/:npcId/interact`, `POST /matchmake/:method/world`
+(Colyseus). Details: `docs/meta-api.md`, `docs/multiplayer.md`.
 
 ## 4. Client
 

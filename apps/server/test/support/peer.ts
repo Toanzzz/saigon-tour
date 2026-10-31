@@ -1,12 +1,17 @@
 import { once } from 'node:events'
+import type { Server } from 'node:http'
+import { Client, type Room } from '@colyseus/sdk'
 import { type ServerType, serve } from '@hono/node-server'
 import {
   type ClientSocketMessage,
+  type PresencePlayer,
   type ServerSocketMessage,
   ServerSocketMessageSchema,
+  toPresence,
+  WORLD_ROOM,
+  type WorldRoomState,
 } from '@saigon/shared'
-import { afterAll, afterEach, beforeAll, beforeEach, expect } from 'vitest'
-import { WebSocket } from 'ws'
+import { afterAll, afterEach, beforeAll, beforeEach } from 'vitest'
 import { createApp } from '@/app'
 import { readConfig } from '@/shared'
 import { fixture } from '../fixture'
@@ -16,88 +21,76 @@ export type Message<T extends ServerSocketMessage['type']> = Extract<
   { type: T }
 >
 export const origin = 'http://localhost:58000'
-const clients: WebSocket[] = []
+const peers: Peer[] = []
 
+/** A real Colyseus SDK client joined to the world room. */
 export class Peer {
   readonly messages: ServerSocketMessage[] = []
-  readonly socket: WebSocket
-  readonly closed: Promise<{ code: number; reason: string }>
-  constructor(url: string, allowedOrigin = origin) {
-    this.socket = new WebSocket(url, { origin: allowedOrigin })
-    clients.push(this.socket)
-    this.socket.on('error', () => {})
-    this.socket.on('message', (data) => {
-      this.messages.push(
-        ServerSocketMessageSchema.parse(JSON.parse(String(data)))
-      )
+  readonly closed: Promise<{ code: number; reason?: string }>
+  private resolveClosed!: (value: { code: number; reason?: string }) => void
+  constructor(readonly room: Room<unknown, WorldRoomState>) {
+    peers.push(this)
+    this.closed = new Promise((resolve) => {
+      this.resolveClosed = resolve
     })
-    this.closed = new Promise((resolve) =>
-      this.socket.once('close', (code, reason) =>
-        resolve({ code, reason: reason.toString() })
-      )
-    )
+    room.reconnection.enabled = false
+    room.onLeave((code, reason) => this.resolveClosed({ code, reason }))
+    room.onMessage('*', (_type, payload) => {
+      const parsed = ServerSocketMessageSchema.safeParse(payload)
+      if (parsed.success) this.messages.push(parsed.data)
+    })
   }
-  send(message: ClientSocketMessage) {
-    this.socket.send(JSON.stringify(message))
+  get players(): PresencePlayer[] {
+    return [...(this.room.state?.players?.values() ?? [])].map(toPresence)
+  }
+  send({ type, ...payload }: ClientSocketMessage) {
+    this.room.send(type, payload)
+  }
+  /** Raw payload, bypassing the typed contract (for violation tests). */
+  sendRaw(type: string, payload: unknown) {
+    this.room.send(type, payload)
+  }
+  drop() {
+    return this.room.leave(false)
   }
   async wait<T extends ServerSocketMessage['type']>(
     type: T,
     predicate: (message: Message<T>) => boolean = () => true
   ): Promise<Message<T>> {
-    const find = () =>
-      this.messages.find(
-        (message): message is Message<T> =>
-          message.type === type && predicate(message as Message<T>)
-      )
-    const existing = find()
-    if (existing) return existing
-    return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => finish(new Error(`Missing ${type}`)), 3000)
-      const onMessage = () => {
-        const message = find()
-        if (message) finish(undefined, message)
-      }
-      const finish = (error?: Error, message?: Message<T>) => {
-        clearTimeout(timer)
-        this.socket.off('message', onMessage)
-        if (error) reject(error)
-        else if (message) resolve(message)
-      }
-      this.socket.on('message', onMessage)
-    })
+    return until(
+      () =>
+        this.messages.find(
+          (message): message is Message<T> =>
+            message.type === type && predicate(message as Message<T>)
+        ),
+      `Missing ${type}`
+    )
+  }
+  waitPlayers(predicate: (players: PresencePlayer[]) => boolean) {
+    return until(
+      () => (predicate(this.players) ? this.players : undefined),
+      'Missing players'
+    )
+  }
+}
+
+export async function until<T>(
+  read: () => T | undefined,
+  label = 'timeout',
+  ms = 3000
+) {
+  const end = Date.now() + ms
+  for (;;) {
+    const value = read()
+    if (value !== undefined) return value
+    if (Date.now() > end) throw new Error(label)
+    await new Promise((resolve) => setTimeout(resolve, 10))
   }
 }
 
 export function required<T>(value: T | undefined): T {
   if (value === undefined) throw new Error('Missing test entity')
   return value
-}
-
-async function closeServer(server: ServerType) {
-  await Promise.all(
-    clients.splice(0).map(
-      (socket) =>
-        new Promise<void>((resolve) => {
-          if (socket.readyState === WebSocket.CLOSED) return resolve()
-          socket.once('close', () => resolve())
-          socket.terminate()
-        })
-    )
-  )
-  await new Promise<void>((resolve, reject) =>
-    server.close((error) => (error ? reject(error) : resolve()))
-  )
-}
-
-async function closeServerClients() {
-  await Promise.all(
-    clients.map(async (socket) => {
-      if (socket.readyState === WebSocket.CLOSED) return
-      const closed = once(socket, 'close')
-      socket.terminate()
-      await closed
-    })
-  )
 }
 
 /** Registers the shared realtime fixture hooks and exposes bound helpers. */
@@ -107,29 +100,25 @@ export function setupRealtime() {
   let server: ServerType
   let url: string
 
-  async function open(token?: string) {
-    const peer = new Peer(url)
-    await once(peer.socket, 'open')
-    if (token) peer.send({ type: 'hello', token, protocol: 1 })
-    return peer
+  /** Join with a session token; rejects when matchmaking refuses. */
+  async function open(token?: string, from = origin) {
+    const client = new Client(url, { headers: { Origin: from } })
+    if (token) client.auth.token = token
+    return new Peer(await client.joinOrCreate<WorldRoomState>(WORLD_ROOM))
   }
   async function start(apiKey?: string, fetcher: typeof fetch = fetch) {
     app = createApp({ ...readConfig({}), apiKey }, fetcher, fx)
-    server = serve({
-      fetch: app.fetch,
-      port: 0,
-      hostname: '127.0.0.1',
-      websocket: { server: app.realtime.server },
-    })
+    server = serve({ fetch: app.fetch, port: 0, hostname: '127.0.0.1' })
     if (!server.listening) await once(server, 'listening')
+    await app.realtime.attach(server as Server)
     const address = server.address()
     if (!address || typeof address === 'string') throw new Error('Missing port')
-    url = `ws://127.0.0.1:${address.port}/ws`
+    url = `http://127.0.0.1:${address.port}`
   }
   async function stop() {
-    await closeServerClients()
-    app.realtime.shutdown()
-    await closeServer(server)
+    await Promise.allSettled(peers.splice(0).map((peer) => peer.room.leave()))
+    await app.realtime.shutdown()
+    await new Promise<void>((resolve) => server.close(() => resolve()))
   }
 
   beforeAll(async () => {
@@ -144,7 +133,6 @@ export function setupRealtime() {
   })
 
   return {
-    Peer,
     open,
     start,
     stop,
@@ -165,9 +153,12 @@ export function setupRealtime() {
     },
     async move(peer: Peer, id: string, position: [number, number, number]) {
       peer.send({ type: 'state', position, heading: 0, ride: null })
-      await expect
-        .poll(() => app.realtime.manager.getPlayer(id)?.position)
-        .toEqual(position)
+      await until(() =>
+        JSON.stringify(app.realtime.manager.getPlayer(id)?.position) ===
+        JSON.stringify(position)
+          ? true
+          : undefined
+      )
     },
   }
 }

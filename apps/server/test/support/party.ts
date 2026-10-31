@@ -16,8 +16,8 @@ import { fixture } from '../fixture'
 export class Recorder implements RoomSocket {
   messages: ServerSocketMessage[] = []
   closed: number | undefined
-  send(data: string) {
-    this.messages.push(ServerSocketMessageSchema.parse(JSON.parse(data)))
+  send(message: ServerSocketMessage) {
+    this.messages.push(ServerSocketMessageSchema.parse(message))
   }
   close(code?: number) {
     this.closed = code
@@ -56,7 +56,7 @@ export function setupParty() {
     })
     app.realtime.manager.stop()
   })
-  afterEach(() => app.realtime.shutdown())
+  afterEach(() => app.realtime.manager.shutdown())
   afterAll(() => fx.close())
 
   const context = {
@@ -77,7 +77,7 @@ export function setupParty() {
       fetcher: typeof fetch,
       overrides: Partial<ReturnType<typeof readConfig>> = {}
     ) {
-      app.realtime.shutdown()
+      app.realtime.manager.shutdown()
       app = createApp(
         { ...readConfig({}), production: true, ...overrides },
         fetcher,

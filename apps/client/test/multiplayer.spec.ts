@@ -6,7 +6,7 @@ import {
   nearestPlayers,
   recordPlayer,
 } from '@/shared/api/presence'
-import { socketUrl } from '@/shared/api/socket'
+import { realtimeUrl } from '@/shared/api/socket'
 
 function player(id: string, x = 0, heading = 0): PresencePlayer {
   return {
@@ -20,15 +20,15 @@ function player(id: string, x = 0, heading = 0): PresencePlayer {
 }
 afterEach(clearPresence)
 describe('multiplayer transport and interpolation', () => {
-  it('preserves the API proxy prefix and converts explicit origins to WebSockets', () => {
-    expect(socketUrl('/api', 'http://localhost:58000/')).toBe(
-      'ws://localhost:58000/api/ws'
+  it('keeps the API proxy prefix and resolves explicit API origins', () => {
+    expect(realtimeUrl('/api', 'http://localhost:58000/')).toBe(
+      'http://localhost:58000/api'
     )
     expect(
-      socketUrl('https://api.example.com/', 'https://game.example.com/')
-    ).toBe('wss://api.example.com/ws')
-    expect(socketUrl('/api/', 'https://game.example.com/tour/')).toBe(
-      'wss://game.example.com/api/ws'
+      realtimeUrl('https://api.example.com/', 'https://game.example.com/')
+    ).toBe('https://api.example.com')
+    expect(realtimeUrl('/api/', 'https://game.example.com/tour/')).toBe(
+      'https://game.example.com/api'
     )
   })
   it('renders 150ms behind and interpolates heading across the shortest turn', () => {

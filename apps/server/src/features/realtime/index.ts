@@ -1,5 +1,7 @@
 export {
+  CLOSE,
   type NpcBarker,
+  ROOM_CAPACITY,
   type Room,
   RoomManager,
   type RoomMember,
@@ -10,4 +12,4 @@ export {
   type WakeReason,
   type WakeRequest,
 } from './scheduler'
-export { SocketSession } from './session'
+export { WorldRoom, type WorldRoomDeps } from './world-room'

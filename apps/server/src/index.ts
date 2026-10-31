@@ -28,8 +28,8 @@ const server = serve({
   fetch: app.fetch,
   port: config.port,
   hostname: '0.0.0.0',
-  websocket: { server: app.realtime.server },
 })
+await app.realtime.attach(server as import('node:http').Server)
 log(
   'server_started',
   `Listening on port ${config.port}; NPC mode: ${isLiveConfigured(config) ? 'live' : 'fallback'}`
@@ -37,8 +37,9 @@ log(
 for (const signal of ['SIGTERM', 'SIGINT'] as const)
   process.on(signal, () => {
     clearInterval(retention)
-    app.realtime.shutdown()
-    server.close(() => {
-      void db.close()
-    })
+    void app.realtime.shutdown().finally(() =>
+      server.close(() => {
+        void db.close()
+      })
+    )
   })

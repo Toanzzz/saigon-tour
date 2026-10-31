@@ -1,12 +1,12 @@
 # Shared neighborhood
 
-The API runs as one replica. It auto-assigns guests to public street rooms with up to 20 players. Rooms, parties, connections, and rate limits live in the API process; guest journeys and model spend live in Postgres. A restart ends the live room session and keeps saved progress.
+The API runs as one replica. Realtime uses Colyseus (`@colyseus/core` 0.18.23, `ws-transport` 0.18.4, `schema` 5.0.43, `sdk` 0.18.9) inside the Hono/Node process. Colyseus matchmaking assigns players to public `world` street rooms with up to 20 players. Rooms, parties, connections, and rate limits live in the API process (in-memory matchmaking driver and presence); guest journeys and model spend live in Postgres. A restart ends the live room session and keeps saved progress.
 
 ## Connection
 
-`/ws` accepts only configured `CORS_ORIGINS`. The client sends `hello` with its guest bearer token and protocol `1` within five seconds. Each player has one socket; a newer socket replaces the old. The process accepts up to 400 connections. Messages are capped at 4 KB. The browser reconnects with backoff capped at ten seconds.
+Matchmaking is a Hono route, `POST /matchmake/:method/world`, so the API's CORS allowlist and body limit apply; Colyseus's own permissive CORS is not exposed. Requests and room socket upgrades from origins outside `CORS_ORIGINS` get 403. The room's `static onAuth` verifies the Better Auth bearer session (`client.auth.token`) before a seat is reserved. Room sockets (`/<processId>/<roomId>`) share the HTTP server through `WebSocketTransport.attachToServer`. Each player has one active session; a newer join closes the old one with 4002. The process accepts up to 400 clients. Messages are capped at 4 KB. Rule violations close with 4008 (`rate_limit`, `invalid_message`, `out_of_bounds`).
 
-Clients send position and heading at 10 Hz. Positions are cosmetic, bounded world coordinates; they do not authorize rewards. Shared snapshots arrive at 10 Hz. Disconnected players retain their room slot for 60 seconds. Empty rooms expire after 60 seconds.
+Clients send position and heading at 10 Hz; the server allows 15 state messages per second for timer jitter. Positions are cosmetic, bounded world coordinates; they do not authorize rewards. Presence is Colyseus room state (`WorldRoomState.players`), patched to clients and interpolated 150 ms behind. Dropped clients may reconnect into their seat for 60 seconds (`allowReconnection`); the SDK retries automatically, then the browser rejoins with backoff capped at ten seconds.
 
 Visit, spend, and talk events travel over the live socket. Delivery stays on authenticated NPC interactions. A sequence acknowledges each socket event batch; the browser replays outstanding local events over the server save. Offline NPC fallback remains available when the API cannot be reached.
 

@@ -220,4 +220,11 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - Better Auth 1.7.14 with the Drizzle adapter on the game Postgres. `bearer` and `anonymous` plugins come from one `authPlugins()` list shared by runtime and `auth generate`. `src/shared/db/auth-schema.ts` is generated; migration `0002_better_auth` adds the auth tables and `players.user_id`. `players.token_hash` stays nullable for legacy rows.
 - Starting the game signs in anonymously. The title screen shows an editable random name, a dice button that re-rolls it, and "Continue with Meta" when Meta credentials are configured. `POST /me/profile` validates and saves the name.
 - Meta login is Facebook Login through Better Auth. Linking keeps the existing Meta save; a new Meta account inherits the guest save. After the redirect the client reads `/auth/get-session` and stores the bearer token.
-- `/ws` hello now verifies the Better Auth session. Colyseus replacement follows in the realtime pass.
+
+
+## Realtime pass: Colyseus
+
+- Colyseus replaces the hand-rolled `/ws` layer in the same Hono/Node process. `matchMaker.setup/defineRoomType/accept` boot manually; `WebSocketTransport.attachToServer` takes only room-socket upgrades; matchmaking is a Hono route behind the CORS allowlist.
+- `WorldRoom.static onAuth` verifies the Better Auth bearer session. `RoomManager` keeps the street rules (20-player rooms, 60-second retention, event sequencing, NPC barks) without depending on a transport. Presence syncs as `WorldRoomState` schema; party, emote, world, and NPC messages keep the zod contracts.
+- Client uses `@colyseus/sdk` with `client.auth.token`, state callbacks for the roster and interpolation buffer, SDK reconnection, and the existing event-batch replay.
+- Browser QA found a real bug: a 10 Hz `setInterval` puts 11–12 sends in one window when a tab is backgrounded or catches up, which tripped the 10-per-second state limit. The browser close code was 4008 `rate_limit` (recorded send timestamps). The state limit is now 15 per second, covered by a jitter test.

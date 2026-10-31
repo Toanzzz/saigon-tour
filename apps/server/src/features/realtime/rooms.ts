@@ -15,8 +15,9 @@ import { NpcScheduler } from './scheduler'
 export interface NpcBarker {
   bark(npcId: NpcId, bucket: TimeOfDay): Promise<{ reply: string }>
 }
+/** A connected client, independent of the transport that carries it. */
 export interface RoomSocket {
-  send(data: string): void
+  send(message: ServerSocketMessage): void
   close(code?: number, reason?: string): void
 }
 export interface RoomMember {
@@ -32,7 +33,19 @@ export interface Room {
   scheduler: NpcScheduler
   emptySince: number | null
   ticking: boolean
+  /** Transport hook: publish the connected players (Colyseus state sync). */
+  sync?: (players: PresencePlayer[]) => void
+  /** Rooms owned by a transport are disposed by it, not by the manager. */
+  owned: boolean
 }
+/** Close codes the client distinguishes (4000–4999 are application codes). */
+export const CLOSE = {
+  replaced: 4002,
+  reset: 4003,
+  violation: 4008,
+} as const
+export const ROOM_CAPACITY = 20
+const RETAIN_MS = 60_000
 const streets = ['Nguyễn Huệ', 'Lê Lợi', 'Đồng Khởi', 'Hàm Nghi', 'Pasteur']
 const bucket = (now: number): TimeOfDay => {
   const hour = (new Date(now).getUTCHours() + 7) % 24
@@ -44,7 +57,21 @@ const bucket = (now: number): TimeOfDay => {
         ? 'afternoon'
         : 'evening'
 }
+const near = (player: PresencePlayer, npcId: NpcId) => {
+  const position = NPC_POSITIONS[npcId]
+  return (
+    !player.ride &&
+    Math.hypot(
+      player.position[0] - position[0],
+      player.position[2] - position[2]
+    ) <= 10
+  )
+}
 
+/**
+ * Street-room membership, retention, event sequencing, and NPC barks.
+ * Transport-agnostic: Colyseus rooms attach members through `join`.
+ */
 export class RoomManager {
   readonly rooms = new Map<string, Room>()
   private memberships = new Map<string, Room>()
@@ -76,30 +103,71 @@ export class RoomManager {
     return () => this.tickHooks.delete(hook)
   }
 
+  /** A new street room; `owned` rooms are created and disposed by a transport. */
+  createRoom(owned = false) {
+    const number = this.counter++
+    const room: Room = {
+      id: `${streets[number % streets.length]} ${Math.floor(number / streets.length) + 1}`,
+      members: new Map(),
+      emptySince: null,
+      ticking: false,
+      owned,
+      scheduler: new NpcScheduler(async ({ npcId }) => {
+        if (!this.players(room).some((player) => near(player, npcId))) return
+        const line = await this.harness.bark(npcId, bucket(this.now()))
+        if (this.rooms.get(room.id) === room)
+          this.broadcast(room, { type: 'npc-line', npcId, reply: line.reply })
+      }),
+    }
+    this.rooms.set(room.id, room)
+    return room
+  }
+
+  /** Remove a transport-owned room once its transport disposes it. */
+  dispose(room: Room) {
+    for (const id of room.members.keys()) this.remove(id)
+    this.rooms.delete(room.id)
+  }
+
+  /** Assign to the player's current room, else any room with space. */
   connect(
     guest: Pick<GuestPlayer, 'id' | 'name' | 'color'>,
     socket: RoomSocket
   ) {
-    let room = this.room(guest.id)
-    const existing = room?.members.get(guest.id)
+    const room =
+      this.room(guest.id) ??
+      [...this.rooms.values()].find(
+        (item) => !item.owned && item.members.size < ROOM_CAPACITY
+      ) ??
+      this.createRoom()
+    return this.join(room, guest, socket)
+  }
+
+  /** Attach a socket to a room, replacing the player's previous socket. */
+  join(
+    room: Room,
+    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'>,
+    socket: RoomSocket
+  ) {
+    const current = this.room(guest.id)
+    if (current && current !== room) this.remove(guest.id)
+    const existing = room.members.get(guest.id)
     if (existing) {
       const old = existing.socket
       existing.socket = socket
       existing.disconnectedAt = null
-      old?.close(1000, 'replaced')
+      existing.player.name = guest.name
+      if (old && old !== socket) old.close(CLOSE.replaced, 'replaced')
     } else {
-      room ??= [...this.rooms.values()].find((item) => item.members.size < 20)
-      room ??= this.createRoom()
-      const player: PresencePlayer = {
-        id: guest.id,
-        name: guest.name,
-        color: guest.color,
-        position: [-16, 0, 8],
-        heading: 0,
-        ride: 'loading',
-      }
       room.members.set(guest.id, {
-        player,
+        player: {
+          id: guest.id,
+          name: guest.name,
+          color: guest.color,
+          position: [-16, 0, 8],
+          heading: 0,
+          ride: 'loading',
+        },
         socket,
         disconnectedAt: null,
         acknowledgedSequence: 0,
@@ -107,39 +175,32 @@ export class RoomManager {
       })
       this.memberships.set(guest.id, room)
     }
-    if (!room) throw new Error('room_unavailable')
     room.emptySince = null
-    const player = room.members.get(guest.id)?.player
-    if (!player) throw new Error('player_unavailable')
-    this.send(guest.id, {
-      type: 'welcome',
-      selfId: guest.id,
-      room: room.id,
-      players: this.players(room),
-    })
-    if (!existing?.socket || existing.socket === socket)
-      this.broadcast(room, { type: 'player-joined', player }, guest.id)
+    this.send(guest.id, { type: 'welcome', selfId: guest.id, room: room.id })
+    room.sync?.(this.players(room))
     return room
   }
 
+  /** Keep the slot for 60 seconds after the socket drops. */
   disconnect(playerId: string, socket?: RoomSocket) {
     const room = this.room(playerId)
     const member = room?.members.get(playerId)
     if (!room || !member?.socket || (socket && member.socket !== socket)) return
     member.socket = null
     member.disconnectedAt = this.now()
-    this.broadcast(room, { type: 'player-left', playerId })
+    room.sync?.(this.players(room))
     if (!this.players(room).length) room.emptySince = this.now()
   }
 
-  remove(playerId: string) {
+  remove(playerId: string, socket?: RoomSocket) {
     const room = this.room(playerId)
     const member = room?.members.get(playerId)
     if (!room || !member) return
+    if (socket && member.socket && member.socket !== socket) return
     room.members.delete(playerId)
     this.memberships.delete(playerId)
-    member.socket?.close(1000, 'membership_reset')
-    this.broadcast(room, { type: 'player-left', playerId })
+    if (member.socket !== socket) member.socket?.close(CLOSE.reset, 'reset')
+    room.sync?.(this.players(room))
     for (const hook of this.leaveHooks) hook(playerId)
     if (!this.players(room).length) room.emptySince ??= this.now()
   }
@@ -154,7 +215,7 @@ export class RoomManager {
     const member = this.room(playerId)?.members.get(playerId)
     if (!member?.socket) return
     try {
-      member.socket.send(JSON.stringify(message))
+      member.socket.send(message)
     } catch {
       this.disconnect(playerId, member.socket)
     }
@@ -192,12 +253,13 @@ export class RoomManager {
       for (const [id, member] of room.members)
         if (
           member.disconnectedAt !== null &&
-          now - member.disconnectedAt >= 60_000
+          now - member.disconnectedAt >= RETAIN_MS
         )
           this.remove(id)
       if (
+        !room.owned &&
         room.emptySince !== null &&
-        now - room.emptySince >= 60_000 &&
+        now - room.emptySince >= RETAIN_MS &&
         !room.members.size
       ) {
         this.rooms.delete(room.id)
@@ -205,20 +267,11 @@ export class RoomManager {
       }
       const players = this.players(room)
       if (!players.length) continue
-      this.broadcast(room, { type: 'players', players })
+      room.sync?.(players)
       if (room.ticking) continue
-      for (const [npcId, position] of Object.entries(NPC_POSITIONS))
-        if (
-          players.some(
-            (p) =>
-              !p.ride &&
-              Math.hypot(
-                p.position[0] - position[0],
-                p.position[2] - position[2]
-              ) <= 10
-          )
-        )
-          room.scheduler.notify(npcId as NpcId, 'player-nearby')
+      for (const npcId of Object.keys(NPC_POSITIONS) as NpcId[])
+        if (players.some((player) => near(player, npcId)))
+          room.scheduler.notify(npcId, 'player-nearby')
       room.ticking = true
       void room.scheduler
         .tick(now)
@@ -251,34 +304,5 @@ export class RoomManager {
         member.socket?.close(1012, 'server_restart')
     this.rooms.clear()
     this.memberships.clear()
-  }
-
-  private createRoom() {
-    const number = this.counter++
-    const room: Room = {
-      id: `${streets[number % streets.length]} ${Math.floor(number / streets.length) + 1}`,
-      members: new Map(),
-      emptySince: null,
-      ticking: false,
-      scheduler: new NpcScheduler(async ({ npcId }) => {
-        const position = NPC_POSITIONS[npcId]
-        if (
-          !this.players(room).some(
-            (player) =>
-              !player.ride &&
-              Math.hypot(
-                player.position[0] - position[0],
-                player.position[2] - position[2]
-              ) <= 10
-          )
-        )
-          return
-        const line = await this.harness.bark(npcId, bucket(this.now()))
-        if (this.rooms.get(room.id) === room)
-          this.broadcast(room, { type: 'npc-line', npcId, reply: line.reply })
-      }),
-    }
-    this.rooms.set(room.id, room)
-    return room
   }
 }

@@ -1,10 +1,13 @@
-import { upgradeWebSocket } from '@hono/node-server'
+import type { Server as HttpServer } from 'node:http'
+import { createAuthContext, matchMaker } from '@colyseus/core'
+import { setTransport } from '@colyseus/core/Transport'
+import { WebSocketTransport } from '@colyseus/ws-transport'
+import { WORLD_ROOM } from '@saigon/shared'
 import type { Hono } from 'hono'
-import { WebSocketServer } from 'ws'
 import type { Auth } from '@/features/auth'
 import type { NpcHarness } from '@/features/npc'
 import { PartyService } from '@/features/party'
-import { RoomManager, SocketSession } from '@/features/realtime'
+import { RoomManager, WorldRoom } from '@/features/realtime'
 import type { GameDb, ServerConfig } from '@/shared'
 import type { Env } from './routes/deps'
 
@@ -16,6 +19,15 @@ export type {
 } from '@/features/realtime'
 export { RoomManager } from '@/features/realtime'
 
+/** Colyseus room WebSocket paths: `/<processId>/<roomId>`. */
+const ROOM_PATH = /^\/[\w-]+\/[\w-]+\/?$/
+const MAX_CONNECTIONS = 400
+let booted: Promise<void> | null = null
+
+/**
+ * Wire Colyseus into the existing Hono app: matchmaking is a Hono route
+ * (our CORS and body limits apply) and room sockets share the Node server.
+ */
 export function createRealtime(
   app: Hono<Env>,
   config: ServerConfig,
@@ -27,72 +39,83 @@ export function createRealtime(
   const manager = new RoomManager(harness, now)
   const party = new PartyService(manager, db, now)
   harness.game.team = party
-  const sessions = new Set<SocketSession>()
-  const server = new WebSocketServer({ noServer: true, maxPayload: 4096 })
-  let stopped = false
-  app.get(
-    '/ws',
-    (c, next) => {
-      const origin = c.req.header('Origin')
-      if (!origin || !config.origins.includes(origin))
-        return c.json({ error: 'forbidden_origin' }, 403)
-      if (stopped || sessions.size >= 400)
-        return c.json({ error: 'server_full' }, 503)
-      return next()
+  WorldRoom.deps = {
+    auth,
+    db,
+    game: harness.game,
+    manager,
+    hooks: {
+      onMessage: (id, message) => party.handle(id, message),
+      onConnected: (id) => party.connected(id),
     },
-    upgradeWebSocket(() => {
-      let session: SocketSession | undefined
-      return {
-        onOpen(_event, socket) {
-          if (stopped || sessions.size >= 400) {
-            socket.close(1013, 'server_full')
-            return
-          }
-          session = new SocketSession(socket, manager, auth, db, harness.game, {
-            onMessage: (id, message) => party.handle(id, message),
-            onConnected: (id) => party.connected(id),
-          })
-          sessions.add(session)
-        },
-        onMessage(event) {
-          session?.receive(event.data)
-        },
-        onClose() {
-          if (session) {
-            session.close()
-            sessions.delete(session)
-          }
-        },
-        onError() {
-          if (session) {
-            session.close(1011, 'socket_error')
-            sessions.delete(session)
-          }
-        },
-      }
-    })
-  )
+  }
+  let transport: WebSocketTransport | undefined
+  let stopped = false
+
+  app.post('/matchmake/:method/:room', async (c) => {
+    if (stopped) return c.json({ error: 'server_restart' }, 503)
+    const origin = c.req.header('Origin')
+    if (!origin || !config.origins.includes(origin))
+      return c.json({ error: 'forbidden_origin' }, 403)
+    if (c.req.param('room') !== WORLD_ROOM)
+      return c.json({ code: 4212, error: 'unknown_room' }, 404)
+    if (matchMaker.stats.local.ccu >= MAX_CONNECTIONS)
+      return c.json({ error: 'server_full' }, 503)
+    const body = await c.req.json().catch(() => ({}))
+    try {
+      const reservation = await matchMaker.controller.invokeMethod(
+        c.req.param('method'),
+        WORLD_ROOM,
+        typeof body === 'object' && body ? body : {},
+        createAuthContext({ headers: c.req.raw.headers, req: c.req.raw })
+      )
+      return c.json(reservation)
+    } catch (error) {
+      const { code, message } = error as { code?: number; message?: string }
+      return c.json(
+        { code: code ?? 4211, error: message ?? 'matchmake_failed' },
+        400
+      )
+    }
+  })
+
   manager.start()
   return {
     manager,
     party,
-    server,
     rename(playerId: string, name: string) {
       const player = manager.getPlayer(playerId)
       if (player) player.name = name
     },
-    shutdown() {
+    /** Attach room sockets to the listening HTTP server. */
+    async attach(server: HttpServer) {
+      booted ??= (async () => {
+        await matchMaker.setup()
+        matchMaker.defineRoomType(WORLD_ROOM, WorldRoom)
+        await matchMaker.accept()
+      })()
+      await booted
+      transport = new WebSocketTransport({
+        noServer: true,
+        maxPayload: 4096,
+        beforeUpgrade(_request, context) {
+          const origin = context.headers.get('origin')
+          if (!origin || !config.origins.includes(origin))
+            return new Response('forbidden_origin', { status: 403 })
+        },
+      })
+      transport.attachToServer(server, {
+        filter: (req) =>
+          ROOM_PATH.test(new URL(req.url ?? '/', 'http://x').pathname),
+      })
+      setTransport(transport)
+    },
+    /** Close every room client and stop accepting sockets. */
+    async shutdown() {
       stopped = true
-      for (const session of sessions) session.close(1012, 'server_restart')
-      sessions.clear()
       manager.shutdown()
-      // ws waits for closing handshakes before finishing.
-      for (const client of server.clients) {
-        client.close(1012, 'server_restart')
-        const timer = setTimeout(() => client.terminate(), 1000)
-        timer.unref()
-      }
-      server.close()
+      await Promise.allSettled(matchMaker.disconnectAll(1012))
+      transport?.shutdown()
     },
   }
 }
