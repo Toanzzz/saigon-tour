@@ -52,18 +52,19 @@ Stylized Sài Gòn exploration game from `spec/`, with the compact District 1 ex
 ## Current validation
 
 - Root checks passed: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test`.
-- Desktop production quest flow passed with no page or console errors.
-- Mobile production flow passed at `390×844`; joystick movement and reset passed.
+- Server suite: 65 tests passed and one skipped. Client suite: 40 tests passed.
+- Desktop production flow passed at `1440×900` with no page or console errors.
+- Mobile production flow passed at `390×844`; joystick movement, reset, secret quest, hub, and no-overflow checks passed.
 - Browser XR capability check passed; immersive VR stayed hidden when unsupported.
-- Canvas captures passed for desktop active play, quest dialogue, reward, and mobile active play.
-- Capture budgets stayed within limits: desktop `181 calls / 307,578 triangles / 75 geometries / 47 textures`; mobile `129 calls / 300,612 triangles / 64 geometries / 40 textures`.
+- Canvas captures passed for desktop active play, quest dialogue, reward, cathedral, City Hall, Opera House, Post Office, riverfront, food alley, and hub story views.
+- Complete city-flow renderer observations: desktop `212 calls / 351,713 triangles`; mobile `158 calls / 344,438 triangles`.
 - Audio harness passed unlock, click, pickup, board, arrival, reward, pause/resume, mute, restart, hidden-tab lifecycle, and missing-city fallback behavior.
-- Design hub checks passed with desktop and mobile headless Playwright flows, including navigation, map stop selection, sound toggle, and no page or console errors.
+- Client city-hub checks passed with desktop and mobile headless Playwright flows, including navigation, map stop selection, sound toggle, secret-quest status, and no page or console errors.
 - Docker API image build passed.
 
 ## City hub integration (complete)
 
-The hub (`apps/design`) is a live client screen driven by game state. Tokens, fonts, and the diorama language are already shared.
+The hub (`apps/client/src/ui/hub/`) is a live client screen driven by game state. Tokens, fonts, and the diorama language are shared with the game.
 
 ### Target
 
@@ -96,7 +97,7 @@ The hub (`apps/design`) is a live client screen driven by game state. Tokens, fo
 | Diorama pins | `PLACES.market` | image only shows the market; other stops become chips with visited state |
 | Nav tabs | — | removed; Journal and Map buttons open existing panels |
 
-Story steps: no quest → step 1 current; quest active and `herbs:linh` undelivered → step 2 current; delivered and unverified → step 3 current ("Tell Cô Hoa"); quest in `completed` → all done.
+Story steps: the trail covers all eight authored destinations; an active objective marks its destination current, visited destinations are done, and the wandering secret quests appear with available, active, or completed states.
 
 ### Phases
 
