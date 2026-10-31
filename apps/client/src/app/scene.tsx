@@ -1,0 +1,56 @@
+import { Canvas } from '@react-three/fiber'
+import { Physics } from '@react-three/rapier'
+import { useSelector } from '@tanstack/react-store'
+import { Suspense } from 'react'
+import { ACESFilmicToneMapping } from 'three'
+import { Diagnostics } from '@/app/diagnostics'
+import { Sun } from '@/features/city/sun'
+import { Neighbors } from '@/features/npcs/neighbors'
+import { RemotePlayers } from '@/features/npcs/remote-players'
+import { CameraRig } from '@/features/player/camera'
+import { Player } from '@/features/player/player'
+import { Transport } from '@/features/transport/transport'
+import { game } from '@/shared/state/game'
+import { CityWorld } from '@/shared/world'
+import { XRRuntime, xrStore } from '@/shared/xr'
+import { XRGameHud } from '@/widgets/xr-hud'
+
+export function Scene() {
+  const paused = useSelector(game, (s) => s.screen === 'paused')
+  const generation = useSelector(game, (s) => s.generation)
+  const evening = useSelector(game, (s) => s.timeOfDay === 'evening')
+  return (
+    <Canvas
+      shadows="percentage"
+      camera={{ position: [14, 32, 39], fov: 49, near: 0.1, far: 220 }}
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, powerPreference: 'high-performance' }}
+      onCreated={({ gl }) => {
+        gl.toneMapping = ACESFilmicToneMapping
+        gl.toneMappingExposure = 1.12
+      }}
+    >
+      <color attach="background" args={[evening ? '#2d385f' : '#b1b8cb']} />
+      <fog attach="fog" args={[evening ? '#2d385f' : '#b1b8cb', 75, 150]} />
+      <hemisphereLight
+        args={
+          evening ? ['#a9b9ef', '#33465a', 1.45] : ['#fff3d5', '#7e8976', 2.1]
+        }
+      />
+      <Sun evening={evening} />
+      <Suspense fallback={null}>
+        <XRRuntime store={xrStore} hud={<XRGameHud />}>
+          <Physics gravity={[0, -20, 0]} timeStep={1 / 60} paused={paused}>
+            <CityWorld evening={evening} />
+            <Player key={generation} />
+            <Transport />
+            <Neighbors />
+            <RemotePlayers />
+            <Diagnostics />
+          </Physics>
+          <CameraRig />
+        </XRRuntime>
+      </Suspense>
+    </Canvas>
+  )
+}

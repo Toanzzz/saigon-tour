@@ -1,8 +1,8 @@
 import { type InteractRequest, type NpcId, SECRET_QUESTS } from '@saigon/shared'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { interactWith } from '../src/net/agent'
-import type { GameState } from '../src/state/game'
-import { initialState } from '../src/state/game'
+import { interactWith } from '@/shared/api/agent'
+import type { GameState } from '@/shared/state/game'
+import { initialState } from '@/shared/state/game'
 
 const cases = [
   ['vy', 'cityhall', 'alley', 'cityhall-lanterns', 'coffee'],

@@ -1,17 +1,17 @@
 import { DEMO_QUEST, type PartySnapshot, TEAM_QUEST } from '@saigon/shared'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { Conversation } from '@/features/conversation/conversation'
+import { RewardPanel } from '@/features/postcard/reward'
 import {
   clearExpiredInvite,
   completedQuest,
   handlePartyMessage,
   teamObjective,
-} from '../src/net/party'
-import { net, updateNet } from '../src/net/status'
-import { grantQuest, initialState } from '../src/state/game'
-import { Conversation } from '../src/ui/dialogue'
-import { PartyInviteControls } from '../src/ui/party'
-import { RewardPanel } from '../src/ui/reward'
+} from '@/shared/api/party'
+import { net, updateNet } from '@/shared/api/status'
+import { grantQuest, initialState } from '@/shared/state/game'
+import { PartyInviteControls } from '@/widgets/hud/party'
 
 const self = '11111111-1111-4111-8111-111111111111'
 const other = '22222222-2222-4222-8222-222222222222'

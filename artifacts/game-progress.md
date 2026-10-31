@@ -193,3 +193,12 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - Test splits (all under 500 lines): party.spec.ts → party-invites.spec.ts + team-errand.spec.ts + test/support/party.ts; harness.spec.ts → harness.spec.ts + harness-greetings.spec.ts + scheduler.spec.ts + test/support/npc.ts; realtime.spec.ts → realtime.spec.ts + realtime-rooms.spec.ts + test/support/peer.ts.
 - Enabled style.noExcessiveLinesPerFile (maxLines 500) now that every source file is under the cap.
 - Runtime behavior, DOM, and wire contracts unchanged. Gate passed: check → check:types → build → test. Server test total unchanged (65 passed + 1 skipped); client 45 passed. Real-Postgres integration passed with the new migrations path.
+
+
+## Refactor pass 3: client feature slices
+
+- Layered the client as app → widgets → features → shared, with the shared segments ordered world → runtime → audio → ui → three → xr → state → api. Same-slice files import siblings directly; cross-slice code imports through the @/* alias and, for feature/widget consumers, through each slice index.ts.
+- Layout: app/ (main.tsx entry, app.tsx, scene.tsx, game-ui.tsx, title-screen.tsx, actions.ts, test-hooks.ts, diagnostics.tsx, styles.css ordered aggregator); widgets/ (hud with header, objective, people, party, touch, panels; hub; xr-hud); features/ (city, player, npcs, conversation, transport, market, postcard, journal, map); shared/ (world, runtime, audio, ui, xr, state, api).
+- index.html now loads /src/app/main.tsx. ui/index.tsx split into app/title-screen.tsx, widgets/hud/objective.tsx, and app/game-ui.tsx; main.tsx split into app/app.tsx (App, GameBoundary) and a thin app/main.tsx bootstrap. CSS consolidated under shared/ui with app/styles.css as the ordered aggregator; removed inline css imports from people and hub.
+- Added @/* alias to tsconfig paths and Vite resolve.tsconfigPaths: true. XRGameHud became a widget (widgets/xr-hud) and is no longer re-exported from the shared xr barrel.
+- Runtime behavior, DOM, and wire contracts unchanged. Gate passed: check → check:types → build → test (server 65 passed + 1 skipped; client 45 passed). Headless Playwright desktop and 390px flows loaded and played with zero page/console errors and zero failed requests.

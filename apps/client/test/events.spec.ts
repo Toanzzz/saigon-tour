@@ -8,8 +8,8 @@ import {
   eventDiagnostics,
   nextEventBatch,
   resetEventSequence,
-} from '../src/net/events'
-import { game, initialState, update } from '../src/state/game'
+} from '@/shared/api/events'
+import { game, initialState, update } from '@/shared/state/game'
 
 function world(
   sequence: number,

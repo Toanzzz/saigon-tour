@@ -3,6 +3,7 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react()],
+  resolve: { tsconfigPaths: true },
   base: process.env.CLIENT_BASE_PATH || '/',
   server: {
     port: 58000,

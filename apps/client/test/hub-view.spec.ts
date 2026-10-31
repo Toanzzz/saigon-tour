@@ -1,8 +1,8 @@
 import { DEMO_QUEST, SECRET_QUESTS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
-import type { GameState } from '../src/state/game'
-import { grantQuest, grantReward, initialState } from '../src/state/game'
-import { greetingFor, hubView } from '../src/ui/hub/view'
+import type { GameState } from '@/shared/state/game'
+import { grantQuest, grantReward, initialState } from '@/shared/state/game'
+import { greetingFor, hubView } from '@/widgets/hub'
 
 const now = new Date(2026, 9, 31, 15)
 const states = (view: ReturnType<typeof hubView>) =>

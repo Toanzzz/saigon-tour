@@ -5,8 +5,8 @@ import {
   interpolate,
   nearestPlayers,
   recordPlayer,
-} from '../src/net/presence'
-import { socketUrl } from '../src/net/socket'
+} from '@/shared/api/presence'
+import { socketUrl } from '@/shared/api/socket'
 
 function player(id: string, x = 0, heading = 0): PresencePlayer {
   return {

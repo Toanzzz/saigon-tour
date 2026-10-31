@@ -1,9 +1,9 @@
 import { DEMO_QUEST, objectiveSatisfied } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
-import { PLACES } from '../src/core/places'
-import { route } from '../src/core/routes'
-import { grantQuest, grantReward, initialState } from '../src/state/game'
-import { ROADS } from '../src/world/district'
+import { route } from '@/features/transport/routes'
+import { grantQuest, grantReward, initialState } from '@/shared/state/game'
+import { ROADS } from '@/shared/world/district'
+import { PLACES } from '@/shared/world/places'
 
 describe('the delivery journey', () => {
   it('grants the carried parcel once and keeps its verified reward idempotent', () => {

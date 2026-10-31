@@ -1,10 +1,10 @@
 import { DEMO_QUEST, TEAM_QUEST } from '@saigon/shared'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { converse } from '../src/core/conversation'
-import { acknowledgeWorld, resetEventSequence } from '../src/net/events'
-import { handlePartyMessage } from '../src/net/party'
-import { net, updateNet } from '../src/net/status'
-import { game, initialState, update } from '../src/state/game'
+import { converse } from '@/features/conversation/converse'
+import { acknowledgeWorld, resetEventSequence } from '@/shared/api/events'
+import { handlePartyMessage } from '@/shared/api/party'
+import { net, updateNet } from '@/shared/api/status'
+import { game, initialState, update } from '@/shared/state/game'
 
 const reply = () => ({
   npcId: 'hoa',

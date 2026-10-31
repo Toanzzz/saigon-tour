@@ -3,7 +3,8 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["vite/client", "node", "webxr"]
+    "types": ["vite/client", "node", "webxr"],
+    "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src", "test", "vite.config.ts"]
 }

@@ -193,3 +193,15 @@ Validated on October 30, 2026 from the local production previews.
 - `bun run build`: client and server bundles produced. bun build resolved the @/* alias for the server entry; only the pre-existing large-chunk advisory remains.
 - `bun run test`: server 65 passed + 1 skipped (12 files after the splits); client 45 passed. Totals match the pre-refactor baseline.
 - `bun run test:integration`: passed against Compose Postgres 18 on 58002, exercising createDb and the updated `../../../drizzle` source-relative migrations candidate. The cwd-based `drizzle` candidate covers the Docker runtime layout (drizzle copied beside dist).
+
+
+## Refactor pass 3 validation
+
+- `bun run check`: Biome 2.6.4 clean across 210 files with noImportCycles, noDeprecatedImports, and noExcessiveLinesPerFile (500) enabled.
+- `bun run check:types`: native tsc -b resolves the client @/* alias across app, widgets, features, and shared.
+- `bun run build`: Vite resolved the @/* alias (resolve.tsconfigPaths) and produced the client bundle; server bundle unchanged. Only the pre-existing large-chunk advisory remains.
+- `bun run test`: server 65 passed + 1 skipped; client 45 passed. Totals match the pre-refactor baseline.
+- Headless Playwright (Chromium 1243) against the running client on 58000:
+  - Desktop 1440px: title → Start exploring → walk → NPC dialogue/quest → transport menu → ride → arrive → deliver to Chị Linh → reward all ran. At the post-reward hub the diagnostics showed screen "hub", completed 1, currency 75, with errors: [] and requests: []. The run then stopped on a QA-script expectation that one completed quest equals "Story complete"/three done stops; the current game marks the hub story done only after the full story trail, so this is a script-expectation mismatch, not a refactor regression. Captures: artifacts/pass-refactor/ (title, desktop-active-play, dialogue-quest, transport-menu, riding, at-stop, delivered-to-linh, reward).
+  - Mobile 390px: body fits 390px, the XR button stays hidden, the thumbstick moves the player, the touch interact target exists, and the hub fits 390px with no horizontal overflow; the mute toggle worked. mobile-checkpoint recorded errors: []. Captures: artifacts/pass-refactor-mobile/.
+- No public deployment or physical XR hardware test is claimed.
