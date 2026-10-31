@@ -10,6 +10,7 @@ import {
   MARKET,
   WALLS,
 } from './district'
+import { DistrictLife } from './district-life'
 import { EveningLighting } from './evening'
 import { MarketStall, ParkFeatures } from './landmarks'
 import { buildingRows } from './layout'
@@ -102,6 +103,7 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
       <ParkFeatures />
       <CivicDistrict />
       <CulturalLandmarks />
+      <DistrictLife />
       <StreetLife />
       <WaterfrontLife />
       <EveningLighting active={evening} />
