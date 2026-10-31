@@ -168,6 +168,14 @@
   text-align: center;
   border-radius: 99px;
 }
+.market-prompt {
+  bottom: 140px;
+  background: var(--leaf);
+}
+.postcard-prompt {
+  bottom: 140px;
+  background: var(--bus);
+}
 .desktop-hint {
   display: flex;
   align-items: center;

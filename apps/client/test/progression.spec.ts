@@ -67,4 +67,14 @@ describe('the delivery journey', () => {
       }
     }
   })
+  it('uses an orthogonal metro express between cultural stops and bus branches elsewhere', () => {
+    const metro = route('market', 'postoffice', 'metro')
+    expect(metro[0]).toEqual(PLACES.market.stop)
+    expect(metro.at(-1)).toEqual(PLACES.postoffice.stop)
+    metro.slice(1).forEach((point, index) => {
+      const previous = metro[index]
+      expect(point[0] === previous[0] || point[2] === previous[2]).toBe(true)
+    })
+    expect(route('market', 'river', 'metro')).toEqual(route('market', 'river'))
+  })
 })

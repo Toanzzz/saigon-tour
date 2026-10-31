@@ -17,6 +17,7 @@ import { CityWorld } from './world'
 export function Scene() {
   const paused = useStore(game, (s) => s.screen === 'paused')
   const generation = useStore(game, (s) => s.generation)
+  const evening = useStore(game, (s) => s.timeOfDay === 'evening')
   return (
     <Canvas
       shadows
@@ -29,14 +30,18 @@ export function Scene() {
         gl.shadowMap.type = PCFSoftShadowMap
       }}
     >
-      <color attach="background" args={['#b1b8cb']} />
-      <fog attach="fog" args={['#b1b8cb', 75, 150]} />
-      <hemisphereLight args={['#fff3d5', '#7e8976', 2.1]} />
-      <Sun />
+      <color attach="background" args={[evening ? '#2d385f' : '#b1b8cb']} />
+      <fog attach="fog" args={[evening ? '#2d385f' : '#b1b8cb', 75, 150]} />
+      <hemisphereLight
+        args={
+          evening ? ['#a9b9ef', '#33465a', 1.45] : ['#fff3d5', '#7e8976', 2.1]
+        }
+      />
+      <Sun evening={evening} />
       <Suspense fallback={null}>
         <XRRuntime store={xrStore} hud={<XRGameHud />}>
           <Physics gravity={[0, -20, 0]} timeStep={1 / 60} paused={paused}>
-            <CityWorld />
+            <CityWorld evening={evening} />
             <Player key={generation} />
             <Transport />
             <Neighbors />

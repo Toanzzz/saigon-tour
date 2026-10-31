@@ -1,4 +1,9 @@
-import { NPCS, type NpcId } from '@saigon/shared'
+import {
+  MARKET_ITEMS,
+  type MarketItemId,
+  NPCS,
+  type NpcId,
+} from '@saigon/shared'
 import { audio } from '../audio'
 import { beginHttpTurn, endHttpTurn, resetEventSequence } from '../net/events'
 import { guestState, resetSession } from '../net/session'
@@ -53,6 +58,7 @@ export async function restart() {
     muted: state.muted,
     volume: state.volume,
     reducedMotion: state.reducedMotion,
+    timeOfDay: state.timeOfDay,
   }))
 }
 export function pause() {
@@ -66,7 +72,7 @@ export function close() {
     update({ dialogue: null, panel: 'none', screen: 'hub', hubShown: true })
     return
   }
-  update({ dialogue: null, panel: 'none' })
+  update({ dialogue: null, panel: 'none', viewpoint: null })
 }
 export function canOpenHub(state = game.state) {
   return (
@@ -88,6 +94,36 @@ export function closeHub(panel: 'none' | 'journal' | 'map' = 'none') {
 export function toggleHub() {
   if (game.state.screen === 'hub') closeHub()
   else openHub()
+}
+export function toggleTimeOfDay() {
+  update({ timeOfDay: game.state.timeOfDay === 'day' ? 'evening' : 'day' })
+}
+export function buyMarketItem(itemId: MarketItemId) {
+  const state = game.state
+  const item = MARKET_ITEMS[itemId]
+  if (state.world.locationId !== 'market') return
+  if (state.world.currency < item.price) {
+    notify(`You need ${item.price} coins for ${item.label}.`)
+    return
+  }
+  update({
+    panel: 'market',
+    world: {
+      ...state.world,
+      currency: state.world.currency - item.price,
+      inventory: {
+        ...state.world.inventory,
+        [itemId]: (state.world.inventory[itemId] ?? 0) + 1,
+      },
+    },
+    pending: [...state.pending, { type: 'purchase', itemId }],
+  })
+  audio.play('pickup')
+  notify(`${item.label} added to your bag.`)
+}
+export function openRiverPostcard() {
+  if (game.state.world.locationId !== 'river') return
+  update({ panel: 'postcard', viewpoint: 'river' })
 }
 export function nearby(
   position = game.state.position

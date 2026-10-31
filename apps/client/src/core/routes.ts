@@ -1,4 +1,5 @@
 import type { LocationId } from '@saigon/shared'
+import type { TravelMode } from './places'
 import { PLACES, type Point } from './places'
 
 /**
@@ -29,6 +30,19 @@ const EDGES: [Node, Node][] = [
   ['paris', 'postSpur'],
   ['postSpur', 'postoffice'],
 ]
+const METRO_STOPS = new Set<LocationId>([
+  'market',
+  'cityhall',
+  'opera',
+  'cathedral',
+  'postoffice',
+])
+const METRO_EDGES: [LocationId, LocationId][] = [
+  ['market', 'cityhall'],
+  ['cityhall', 'opera'],
+  ['opera', 'cathedral'],
+  ['cathedral', 'postoffice'],
+]
 const at = (node: Node): Point =>
   node in NODES
     ? NODES[node as keyof typeof NODES]
@@ -54,6 +68,47 @@ function path(from: Node, to: Node): Node[] {
   return result
 }
 
-export function route(from: LocationId, to: LocationId): Point[] {
-  return path(from, to).map(at)
+function metroPath(from: LocationId, to: LocationId): Point[] | null {
+  if (!METRO_STOPS.has(from) || !METRO_STOPS.has(to)) return null
+  const previous = new Map<LocationId, LocationId | null>([[from, null]])
+  const queue: LocationId[] = [from]
+  while (queue.length) {
+    const node = queue.shift() as LocationId
+    if (node === to) break
+    for (const [a, b] of METRO_EDGES) {
+      const next = a === node ? b : b === node ? a : null
+      if (next && !previous.has(next)) {
+        previous.set(next, node)
+        queue.push(next)
+      }
+    }
+  }
+  if (!previous.has(to)) return null
+  const stations: LocationId[] = []
+  for (
+    let node: LocationId | null = to;
+    node;
+    node = previous.get(node) ?? null
+  )
+    stations.unshift(node)
+  const points: Point[] = []
+  for (let index = 1; index < stations.length; index++) {
+    const start = PLACES[stations[index - 1]].stop
+    const end = PLACES[stations[index]].stop
+    if (!points.length) points.push(start)
+    if (start[0] !== end[0] && start[2] !== end[2])
+      points.push([end[0], start[1], start[2]])
+    points.push(end)
+  }
+  return points
+}
+
+export function route(
+  from: LocationId,
+  to: LocationId,
+  mode: TravelMode = 'bus'
+): Point[] {
+  return (
+    (mode === 'metro' ? metroPath(from, to) : null) ?? path(from, to).map(at)
+  )
 }

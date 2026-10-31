@@ -10,6 +10,7 @@ import {
   MARKET,
   WALLS,
 } from './district'
+import { EveningLighting } from './evening'
 import { MarketStall, ParkFeatures } from './landmarks'
 import { buildingRows } from './layout'
 import { Block, Sign } from './primitives'
@@ -72,7 +73,7 @@ const streetLights: Placement[] = [-35, -20, -5, 20, 35, 50, 82, 100].flatMap(
   ]
 )
 
-export function CityWorld() {
+export function CityWorld({ evening = false }: { evening?: boolean }) {
   return (
     <group>
       {GROUND.map((rect) => (
@@ -103,6 +104,7 @@ export function CityWorld() {
       <CulturalLandmarks />
       <StreetLife />
       <WaterfrontLife />
+      <EveningLighting active={evening} />
       <Skyline />
       <ModelInstances
         path="nature/tree_palmDetailedTall"

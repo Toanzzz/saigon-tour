@@ -17,6 +17,8 @@ export type Panel =
   | 'transport'
   | 'reward'
   | 'people'
+  | 'market'
+  | 'postcard'
 export interface Dialogue {
   npc: NpcId
   requestId: string
@@ -60,6 +62,8 @@ export interface GameState {
   reward: number
   rewardQuest: Quest | null
   reputation: number
+  timeOfDay: 'day' | 'evening'
+  viewpoint: 'river' | null
 }
 export function initialState(generation = 0): GameState {
   return {
@@ -99,6 +103,8 @@ export function initialState(generation = 0): GameState {
     reward: 0,
     rewardQuest: null,
     reputation: 0,
+    timeOfDay: 'day',
+    viewpoint: null,
   }
 }
 export const game = new Store<GameState>(initialState())

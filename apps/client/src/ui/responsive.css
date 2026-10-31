@@ -124,6 +124,20 @@
   .ride-banner strong {
     font-size: 19px;
   }
+  .market-prompt,
+  .postcard-prompt {
+    right: 12px;
+    left: auto;
+    bottom: 252px;
+    transform: none;
+    min-height: 42px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .market-prompt:active,
+  .postcard-prompt:active {
+    transform: translateY(3px);
+  }
 }
 @media (max-height: 550px) and (orientation: landscape) {
   .title-content {

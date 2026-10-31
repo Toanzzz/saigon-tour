@@ -2,3 +2,44 @@
 @import "./journal.css";
 @import "./settings.css";
 @import "./panel-responsive.css";
+
+.market-items {
+  display: grid;
+  gap: 10px;
+}
+.market-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  color: var(--ink);
+  text-align: left;
+  background: var(--wall-hi);
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  box-shadow: var(--lift-sm);
+}
+.market-item:disabled {
+  opacity: 0.52;
+}
+.market-item strong,
+.market-item small {
+  display: block;
+}
+.market-item strong {
+  font-family: var(--font-display);
+  font-size: 19px;
+}
+.market-item small {
+  margin-top: 2px;
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+.market-price {
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  white-space: nowrap;
+}

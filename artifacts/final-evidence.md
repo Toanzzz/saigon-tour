@@ -19,6 +19,16 @@
 - Runtime assets: 40 prepared models / 1.48 MiB total prepared collection; fishing boat 237 triangles, rowboat 168 triangles, coffee 108 triangles, banana 104 triangles.
 - Evidence: `artifacts/city-expansion-life/`.
 
+### Time of day, purchases, transport, and postcard view
+
+- Headless Playwright: `scripts/qa-city-complete.mjs`; desktop `1440×900` and mobile `390×844`.
+- Real controls passed at both widths: pause → “Evening city lights”, market → coffee purchase, Metro selection → Opera House arrival, river → postcard view → return.
+- Coffee purchase changed the wallet by 3 coins, added `Cà phê sữa ×1`, and the shared event reducer test verifies the catalog price and insufficient-wallet guard.
+- Metro used the express cultural route and charged 6 coins. Bus/branch route coverage remained green.
+- The river postcard view centered the camera on the waterfront/skyline composition; the dialog and return control restored the normal camera.
+- No page/console errors, failed requests, or mobile horizontal overflow. Active-day metrics: desktop 238 calls / 355,033 triangles; mobile 158 calls / 344,438 triangles. Postcard view: desktop 336 calls / 361k triangles / 128 textures; mobile 176 calls / 189k triangles.
+- Evidence: `artifacts/city-expansion-complete/`.
+
 Validated on October 30, 2026 from the local production previews.
 
 ## Playable loop

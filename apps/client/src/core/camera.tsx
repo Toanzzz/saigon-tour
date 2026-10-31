@@ -42,7 +42,10 @@ export function CameraRig() {
   useFrame((_, delta) => {
     if (gl.xr.isPresenting) return
     const state = game.state
-    if (state.screen === 'title') {
+    if (state.viewpoint === 'river') {
+      eye.set(29, 27, 69)
+      target.set(29, 3.5, 36)
+    } else if (state.screen === 'title') {
       eye.set(14, 32, 39)
       target.set(-17, 0, -10)
     } else {

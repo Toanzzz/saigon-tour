@@ -1,6 +1,14 @@
+import { MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
 import { useStore } from '@tanstack/react-store'
 import { useState } from 'react'
-import { board, close, pause, restart } from '../core/actions'
+import {
+  board,
+  buyMarketItem,
+  close,
+  pause,
+  restart,
+  toggleTimeOfDay,
+} from '../core/actions'
 import { MODES, PLACES, type TravelMode } from '../core/places'
 import { teamObjective } from '../net/party'
 import { net } from '../net/status'
@@ -152,6 +160,18 @@ export function JournalPanel({ state }: { state: GameState }) {
               Group photo × {state.world.inventory.photo}
             </span>
           )}
+          {(state.world.inventory.coffee ?? 0) > 0 && (
+            <span>
+              <Icon name="sound" />
+              Cà phê sữa × {state.world.inventory.coffee}
+            </span>
+          )}
+          {(state.world.inventory.banana ?? 0) > 0 && (
+            <span>
+              <Icon name="leaf" />
+              Chuối chín × {state.world.inventory.banana}
+            </span>
+          )}
         </div>
       </div>
       <div className="journal-section">
@@ -239,6 +259,14 @@ export function PausePanel({ state }: { state: GameState }) {
         />
       </label>
       <label className="setting-checkbox">
+        <span>Evening city lights</span>
+        <input
+          type="checkbox"
+          checked={state.timeOfDay === 'evening'}
+          onChange={toggleTimeOfDay}
+        />
+      </label>
+      <label className="setting-checkbox">
         <span>Reduce camera motion</span>
         <input
           type="checkbox"
@@ -273,6 +301,71 @@ export function PausePanel({ state }: { state: GameState }) {
         onClick={restart}
       >
         Start a new journey
+      </button>
+    </Dialog>
+  )
+}
+
+export function MarketPanel({ state }: { state: GameState }) {
+  return (
+    <Dialog
+      title="A little market break"
+      eyebrow="Bến Thành market"
+      onClose={close}
+      className="market-dialog"
+    >
+      <p className="panel-intro">
+        Pick up a small taste for the road. Purchases stay in your saved bag.
+      </p>
+      <div className="market-items">
+        {(Object.keys(MARKET_ITEMS) as MarketItemId[]).map((id) => {
+          const item = MARKET_ITEMS[id]
+          const count = state.world.inventory[id] ?? 0
+          return (
+            <button
+              type="button"
+              className="market-item"
+              key={id}
+              disabled={state.world.currency < item.price}
+              onClick={() => buyMarketItem(id)}
+            >
+              <span>
+                <strong>{item.label}</strong>
+                <small>
+                  {id === 'coffee'
+                    ? 'A warm cup for the walk'
+                    : 'A bright snack from the stall'}
+                </small>
+              </span>
+              <span className="market-price">
+                {item.price} coins · ×{count}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+      <div className="fare-row">
+        <span>Your wallet</span>
+        <strong>{state.world.currency} coins</strong>
+      </div>
+    </Dialog>
+  )
+}
+
+export function PostcardPanel() {
+  return (
+    <Dialog
+      title="A river postcard"
+      eyebrow="Bạch Đằng waterfront"
+      onClose={close}
+      className="postcard-dialog"
+    >
+      <p className="panel-intro">
+        The river opens the skyline. Pause here, then return to the promenade
+        whenever you are ready.
+      </p>
+      <button type="button" className="primary-button wide" onClick={close}>
+        Return to the riverside
       </button>
     </Dialog>
   )

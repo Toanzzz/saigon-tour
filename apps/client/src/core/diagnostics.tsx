@@ -36,6 +36,8 @@ export function Diagnostics() {
         quest: state.quest?.id,
         completed: state.completed.length,
         ride: state.ride,
+        timeOfDay: state.timeOfDay,
+        viewpoint: state.viewpoint,
         source: state.source,
         animation: motion.moving
           ? motion.sprinting

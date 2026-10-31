@@ -1,4 +1,4 @@
-import type { ServerSocketMessage } from '@saigon/shared'
+import { applyPlayerEvents, type ServerSocketMessage } from '@saigon/shared'
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
   acknowledgeWorld,
@@ -30,6 +30,19 @@ beforeEach(() => {
   resetEventSequence()
 })
 describe('socket event acknowledgement', () => {
+  it('applies market purchases at the shared catalog price', () => {
+    const bought = applyPlayerEvents(initialState().world, [
+      { type: 'purchase', itemId: 'coffee' },
+    ])
+    expect(bought.currency).toBe(27)
+    expect(bought.inventory.coffee).toBe(1)
+    const refused = applyPlayerEvents({ ...bought, currency: 2 }, [
+      { type: 'purchase', itemId: 'coffee' },
+    ])
+    expect(refused.currency).toBe(2)
+    expect(refused.inventory.coffee).toBe(1)
+  })
+
   it('retains one batch until ack, replays unsent events, and ignores duplicate acks', () => {
     update({ pending: [{ type: 'spend', amount: 5 }] })
     const batch = nextEventBatch()

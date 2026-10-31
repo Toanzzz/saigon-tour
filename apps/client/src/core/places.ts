@@ -93,7 +93,8 @@ export const MODES: Record<
     name: 'Metro',
     fare: 6,
     speed: 15,
-    description: 'Glide between the northern stations',
+    description:
+      'Express through the cultural core, from market to Post Office',
   },
 }
 export { route } from './routes'

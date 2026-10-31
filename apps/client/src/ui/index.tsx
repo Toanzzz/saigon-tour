@@ -2,7 +2,13 @@ import { useProgress } from '@react-three/drei'
 import { useStore } from '@tanstack/react-store'
 import { useEffect } from 'react'
 import { audio } from '../audio'
-import { close, interact, nearby, start } from '../core/actions'
+import {
+  close,
+  interact,
+  nearby,
+  openRiverPostcard,
+  start,
+} from '../core/actions'
 import { PLACES } from '../core/places'
 import { teamObjective } from '../net/party'
 import { net } from '../net/status'
@@ -13,7 +19,14 @@ import { GameHeader } from './header'
 import { HubScreen } from './hub'
 import { Icon } from './icons'
 import { NeighborhoodMap } from './map'
-import { JournalPanel, MapPanel, PausePanel, TransportPanel } from './panels'
+import {
+  JournalPanel,
+  MapPanel,
+  MarketPanel,
+  PausePanel,
+  PostcardPanel,
+  TransportPanel,
+} from './panels'
 import { PartyInviteControls } from './party'
 import { EmoteControls, PeoplePanel } from './people'
 import { RewardPanel } from './reward'
@@ -181,6 +194,26 @@ export function GameUI() {
               {target.label}
             </button>
           )}
+          {state.world.locationId === 'market' && (
+            <button
+              type="button"
+              className="interaction-prompt market-prompt"
+              onClick={() => update({ panel: 'market' })}
+            >
+              <Icon name="leaf" size={20} />
+              Browse market goods
+            </button>
+          )}
+          {state.world.locationId === 'river' && (
+            <button
+              type="button"
+              className="interaction-prompt postcard-prompt"
+              onClick={openRiverPostcard}
+            >
+              <Icon name="map" size={20} />
+              See the river postcard view
+            </button>
+          )}
           <div className="desktop-hint desktop-only">
             <span>
               <kbd>WASD</kbd> stroll
@@ -219,6 +252,8 @@ export function GameUI() {
       )}
       {state.dialogue && <Conversation state={state} />}
       {state.panel === 'transport' && <TransportPanel state={state} />}
+      {state.panel === 'market' && <MarketPanel state={state} />}
+      {state.panel === 'postcard' && <PostcardPanel />}
       {state.panel === 'journal' && <JournalPanel state={state} />}
       {state.panel === 'map' && <MapPanel state={state} />}
       {state.panel === 'reward' && <RewardPanel state={state} />}

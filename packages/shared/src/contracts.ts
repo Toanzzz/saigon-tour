@@ -22,8 +22,15 @@ export const ItemIdSchema = z.enum([
   'broth',
   'baguette',
   'coffee',
+  'banana',
 ])
 export type ItemId = z.infer<typeof ItemIdSchema>
+export const MarketItemIdSchema = z.enum(['coffee', 'banana'])
+export type MarketItemId = z.infer<typeof MarketItemIdSchema>
+export const MARKET_ITEMS = {
+  coffee: { label: 'Cà phê sữa', price: 3 },
+  banana: { label: 'Chuối chín', price: 2 },
+} as const satisfies Record<MarketItemId, { label: string; price: number }>
 export const SourceSchema = z.enum(['live', 'fallback'])
 export type AgentSource = z.infer<typeof SourceSchema>
 
@@ -109,6 +116,12 @@ export const PlayerEventSchema = z.discriminatedUnion('type', [
     .object({
       type: z.literal('spend'),
       amount: z.number().int().min(1).max(20),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('purchase'),
+      itemId: MarketItemIdSchema,
     })
     .strict(),
 ])

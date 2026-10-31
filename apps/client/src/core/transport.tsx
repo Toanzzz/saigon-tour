@@ -19,8 +19,10 @@ export function Transport() {
   const path = useMemo(() => {
     progress.current = 0
     if (!from || !to) return []
-    return route(from, to).map((point) => new Vector3(...point))
-  }, [from, to])
+    return route(from, to, ride?.mode === 'metro' ? 'metro' : 'bus').map(
+      (point) => new Vector3(...point)
+    )
+  }, [from, to, ride?.mode])
   useFrame((_, delta) => {
     if (
       isTestPausedForScreenshot() ||

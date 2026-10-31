@@ -6,7 +6,7 @@ import { motion } from './motion'
 const OFFSET = [-22, 38, 23] as const
 
 /** Sun with a shadow frustum that follows the player across the district. */
-export function Sun() {
+export function Sun({ evening = false }: { evening?: boolean }) {
   const light = useRef<DirectionalLight>(null)
   const { scene, size } = useThree()
   const mobile = size.width < 700
@@ -25,8 +25,8 @@ export function Sun() {
     <directionalLight
       ref={light}
       position={[...OFFSET]}
-      intensity={3.2}
-      color="#ffdfaa"
+      intensity={evening ? 1.7 : 3.2}
+      color={evening ? '#aab9ff' : '#ffdfaa'}
       castShadow
       shadow-mapSize={mobile ? [1024, 1024] : [2048, 2048]}
       shadow-camera-left={-40}
