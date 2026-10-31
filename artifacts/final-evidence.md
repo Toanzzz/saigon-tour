@@ -2,7 +2,7 @@
 
 ## Current city completion (October 31, 2026)
 
-- Commits: `5925fd9` (NPC labels and live-guide layout), `b3b65c4` (wandering NPCs, secret quests, city-wide story trail), `872fd06` (landmark plaza and river promenade density), `8ca2b10` (hub completion edge case), `0c07a41` (clock-side cathedral entrance orientation), `f95e0a9` (destination story beats and offline quest parity), and `31f8f32` (second density and transport-sign pass).
+- Commits: `5925fd9` (NPC labels and live-guide layout), `b3b65c4` (wandering NPCs, secret quests, city-wide story trail), `872fd06` (landmark plaza and river promenade density), `8ca2b10` (hub completion edge case), `0c07a41` (clock-side cathedral entrance orientation), `f95e0a9` (destination story beats and offline quest parity), `31f8f32` (second density and transport-sign pass), and `70927ac` (delivery marker target correction).
 - Required gates passed after the final pass: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test`.
 - Server tests: 65 passing and one skipped. Client tests: 40 passing.
 - Headless Playwright on the reused dev server (`58000`/`58001`) passed at `1440×900` and `390×844`:
