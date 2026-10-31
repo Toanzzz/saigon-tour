@@ -141,7 +141,7 @@ Behavior rules:
 - Never invent quest rewards; use the offer_quest tool.
 - If asked about something outside Saigon Tour, gently redirect to city life.
 - If a tool fails, apologize briefly and offer a normal in-character response.
-`;
+`
 ```
 
 ---
@@ -153,12 +153,13 @@ Tools are the only way an NPC can affect the game.
 Create `src/npc/tools/offer-quest.ts`:
 
 ```ts
-import { createTool } from "@mastra/core/tools";
-import { z } from "zod";
+import { createTool } from '@mastra/core/tools'
+import { z } from 'zod'
 
 export const offerQuestTool = createTool({
-  id: "offer-quest",
-  description: "Offer a valid quest to the player. The backend validates and records it.",
+  id: 'offer-quest',
+  description:
+    'Offer a valid quest to the player. The backend validates and records it.',
   inputSchema: z.object({
     questTemplateId: z.string(),
     playerMessage: z.string(),
@@ -181,50 +182,51 @@ export const offerQuestTool = createTool({
     const result = await gameService.offerQuest({
       questTemplateId,
       playerMessage,
-    });
+    })
 
-    return result;
+    return result
   },
-});
+})
 ```
 
 Create `src/npc/tools/check-quest.ts`:
 
 ```ts
-import { createTool } from "@mastra/core/tools";
-import { z } from "zod";
+import { createTool } from '@mastra/core/tools'
+import { z } from 'zod'
 
 export const checkQuestTool = createTool({
-  id: "check-quest",
-  description: "Check whether a player's active quest objective has been completed.",
+  id: 'check-quest',
+  description:
+    "Check whether a player's active quest objective has been completed.",
   inputSchema: z.object({
     questId: z.string(),
   }),
   outputSchema: z.object({
     questId: z.string(),
-    status: z.enum(["active", "completed", "failed", "not_found"]),
+    status: z.enum(['active', 'completed', 'failed', 'not_found']),
     rewardGranted: z.boolean(),
     message: z.string(),
   }),
   execute: async ({ questId }) => {
-    return await gameService.checkQuest({ questId });
+    return await gameService.checkQuest({ questId })
   },
-});
+})
 ```
 
 Create `src/npc/tools/remember-player-fact.ts`:
 
 ```ts
-import { createTool } from "@mastra/core/tools";
-import { z } from "zod";
+import { createTool } from '@mastra/core/tools'
+import { z } from 'zod'
 
 export const rememberPlayerFactTool = createTool({
-  id: "remember-player-fact",
+  id: 'remember-player-fact',
   description:
-    "Store one important, durable fact about the player for future conversations.",
+    'Store one important, durable fact about the player for future conversations.',
   inputSchema: z.object({
     fact: z.string().max(240),
-    importance: z.enum(["low", "medium", "high"]),
+    importance: z.enum(['low', 'medium', 'high']),
   }),
   outputSchema: z.object({
     stored: z.boolean(),
@@ -233,11 +235,11 @@ export const rememberPlayerFactTool = createTool({
     await npcMemoryService.rememberPlayerFact({
       fact,
       importance,
-    });
+    })
 
-    return { stored: true };
+    return { stored: true }
   },
-});
+})
 ```
 
 ---
@@ -249,7 +251,7 @@ Mastra agents can retain conversation history when memory is configured. [18]
 Create `src/npc/memory/npc-memory.ts`:
 
 ```ts
-import { Memory } from "@mastra/memory";
+import { Memory } from '@mastra/memory'
 
 export const npcMemory = new Memory({
   options: {
@@ -259,7 +261,7 @@ export const npcMemory = new Memory({
       messageRange: 2,
     },
   },
-});
+})
 ```
 
 For the hackathon, use SQLite, LibSQL, or JSON file storage. Keep memory scoped by:
@@ -287,19 +289,19 @@ Example memory record:
 Create `src/npc/agents/market-vendor-agent.ts`:
 
 ```ts
-import { Agent } from "@mastra/core/agent";
+import { Agent } from '@mastra/core/agent'
 
-import { marketVendorPersona } from "../personas/market-vendor.ts";
-import { offerQuestTool } from "../tools/offer-quest.ts";
-import { checkQuestTool } from "../tools/check-quest.ts";
-import { rememberPlayerFactTool } from "../tools/remember-player-fact.ts";
-import { getWorldContextTool } from "../tools/get-world-context.ts";
+import { marketVendorPersona } from '../personas/market-vendor.ts'
+import { offerQuestTool } from '../tools/offer-quest.ts'
+import { checkQuestTool } from '../tools/check-quest.ts'
+import { rememberPlayerFactTool } from '../tools/remember-player-fact.ts'
+import { getWorldContextTool } from '../tools/get-world-context.ts'
 
 export const marketVendorAgent = new Agent({
-  id: "market-vendor",
-  name: "Cô Hoa",
+  id: 'market-vendor',
+  name: 'Cô Hoa',
   instructions: marketVendorPersona,
-  model: "openai/gpt-5-mini", // replace with the configured Meta-compatible model ID
+  model: 'openai/gpt-5-mini', // replace with the configured Meta-compatible model ID
   memory: npcMemory,
   tools: {
     offerQuestTool,
@@ -307,7 +309,7 @@ export const marketVendorAgent = new Agent({
     rememberPlayerFactTool,
     getWorldContextTool,
   },
-});
+})
 ```
 
 Mastra expects the model in `provider/model` format, and agents are registered through a
@@ -320,11 +322,11 @@ Mastra instance so they can access shared services such as storage and logging. 
 Create `src/npc/mastra.ts`:
 
 ```ts
-import { Mastra } from "@mastra/core";
+import { Mastra } from '@mastra/core'
 
-import { marketVendorAgent } from "./agents/market-vendor-agent.ts";
-import { xeOmDriverAgent } from "./agents/xe-om-driver-agent.ts";
-import { cafeOwnerAgent } from "./agents/cafe-owner-agent.ts";
+import { marketVendorAgent } from './agents/market-vendor-agent.ts'
+import { xeOmDriverAgent } from './agents/xe-om-driver-agent.ts'
+import { cafeOwnerAgent } from './agents/cafe-owner-agent.ts'
 
 export const mastra = new Mastra({
   agents: {
@@ -332,13 +334,13 @@ export const mastra = new Mastra({
     xeOmDriverAgent,
     cafeOwnerAgent,
   },
-});
+})
 ```
 
 Retrieve agents through the Mastra instance rather than importing them directly:
 
 ```ts
-const agent = mastra.getAgentById("market-vendor");
+const agent = mastra.getAgentById('market-vendor')
 ```
 
 This ensures the agent has access to shared instance-level storage, logging, and the agent
@@ -351,13 +353,13 @@ registry. [18]
 Create `src/routes/npc.ts`:
 
 ```ts
-import { Hono } from "hono";
-import { z } from "zod";
+import { Hono } from 'hono'
+import { z } from 'zod'
 
-import { mastra } from "../npc/mastra.ts";
-import { gameService } from "../game/state.ts";
+import { mastra } from '../npc/mastra.ts'
+import { gameService } from '../game/state.ts'
 
-export const npcRoutes = new Hono();
+export const npcRoutes = new Hono()
 
 const InteractSchema = z.object({
   playerId: z.string(),
@@ -366,25 +368,25 @@ const InteractSchema = z.object({
     playerLocation: z.string(),
     nearbyNpcs: z.array(z.string()).default([]),
     activeQuestIds: z.array(z.string()).default([]),
-    timeOfDay: z.enum(["morning", "afternoon", "evening", "night"]),
+    timeOfDay: z.enum(['morning', 'afternoon', 'evening', 'night']),
   }),
-});
+})
 
-npcRoutes.post("/npc/:npcId/interact", async (c) => {
-  const npcId = c.req.param("npcId");
+npcRoutes.post('/npc/:npcId/interact', async (c) => {
+  const npcId = c.req.param('npcId')
 
-  const parsed = InteractSchema.safeParse(await c.req.json());
+  const parsed = InteractSchema.safeParse(await c.req.json())
 
   if (!parsed.success) {
-    return c.json({ error: "Invalid request" }, 400);
+    return c.json({ error: 'Invalid request' }, 400)
   }
 
-  const { playerId, message, worldContext } = parsed.data;
+  const { playerId, message, worldContext } = parsed.data
 
-  const agent = mastra.getAgentById(npcId);
+  const agent = mastra.getAgentById(npcId)
 
   if (!agent) {
-    return c.json({ error: "Unknown NPC" }, 404);
+    return c.json({ error: 'Unknown NPC' }, 404)
   }
 
   try {
@@ -395,43 +397,44 @@ npcRoutes.post("/npc/:npcId/interact", async (c) => {
       },
       context: [
         {
-          role: "system",
+          role: 'system',
           content: `
 Current world context:
 Player location: ${worldContext.playerLocation}
-Nearby NPCs: ${worldContext.nearbyNpcs.join(", ") || "none"}
-Active quests: ${worldContext.activeQuestIds.join(", ") || "none"}
+Nearby NPCs: ${worldContext.nearbyNpcs.join(', ') || 'none'}
+Active quests: ${worldContext.activeQuestIds.join(', ') || 'none'}
 Time of day: ${worldContext.timeOfDay}
           `,
         },
       ],
-    });
+    })
 
     return c.json({
       npcId,
       reply: response.text,
       toolCalls: response.toolCalls,
       toolResults: response.toolResults,
-    });
+    })
   } catch (error) {
-    console.error("NPC agent failed", error);
+    console.error('NPC agent failed', error)
 
     return c.json({
       npcId,
       reply: getFallbackLine(npcId),
       degraded: true,
-    });
+    })
   }
-});
+})
 
 function getFallbackLine(npcId: string) {
   const fallbacks: Record<string, string> = {
-    "market-vendor": "Ah, the market is busy today. Come back in a moment, okay?",
-    "xe-om-driver": "Where do you want to go? I know a good route.",
-    "cafe-owner": "Sit down, relax. The city can wait a few minutes.",
-  };
+    'market-vendor':
+      'Ah, the market is busy today. Come back in a moment, okay?',
+    'xe-om-driver': 'Where do you want to go? I know a good route.',
+    'cafe-owner': 'Sit down, relax. The city can wait a few minutes.',
+  }
 
-  return fallbacks[npcId] ?? "Sorry, I am a little busy right now.";
+  return fallbacks[npcId] ?? 'Sorry, I am a little busy right now.'
 }
 ```
 
@@ -515,8 +518,8 @@ Use an event scheduler:
 
 ```ts
 setInterval(() => {
-  scheduler.tick();
-}, 30_000);
+  scheduler.tick()
+}, 30_000)
 ```
 
 On each tick, wake an NPC only if:
@@ -534,7 +537,7 @@ await agent.generate(`
 You are waking up for a brief autonomous update.
 Decide whether you need to speak, move, remember something, or do nothing.
 Do not start a new conversation unless appropriate.
-`);
+`)
 ```
 
 For the demo, limit autonomous updates to 3–5 NPCs and avoid model calls during combat,
@@ -563,12 +566,12 @@ If the model is unavailable, the game must remain playable with canned in-charac
 
 Start with these four:
 
-| NPC | Role | Agent behavior |
-|---|---|---|
-| Cô Hoa | Market vendor | Offers fetch/delivery quests; remembers player helpfulness |
-| Minh | Xe ôm driver | Recommends destinations; reacts to reputation |
-| An | Café owner | Social hub; shares rumors and introduces other NPCs |
-| Bảo | Cyclo driver | Slow scenic transport; personal stories and optional side quests |
+| NPC    | Role          | Agent behavior                                                   |
+| ------ | ------------- | ---------------------------------------------------------------- |
+| Cô Hoa | Market vendor | Offers fetch/delivery quests; remembers player helpfulness       |
+| Minh   | Xe ôm driver  | Recommends destinations; reacts to reputation                    |
+| An     | Café owner    | Social hub; shares rumors and introduces other NPCs              |
+| Bảo    | Cyclo driver  | Slow scenic transport; personal stories and optional side quests |
 
 Each NPC should have its own persona file, agent definition, and restricted tool access.
 

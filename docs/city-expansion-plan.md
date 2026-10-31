@@ -38,16 +38,16 @@ This preserves the real spatial logic of central District 1:
 
 Build **6–8 recognizable landmarks** at reduced scale. Do not create full interiors except where needed for gameplay, such as Bến Thành Market.
 
-| Landmark | Gameplay role | Size approach |
-|---|---|---|
-| Bến Thành Market | Transport hub, quest destination, market NPC cluster | Simplified clock-tower façade plus interior stalls |
-| Nguyễn Huệ Walking Street | Main pedestrian spine, events, crowds | Wide plaza, trees, fountains, benches |
-| City Hall / People’s Committee | Northern visual anchor | Façade-only, non-enterable |
-| Saigon River waterfront | Natural boundary and scenic route | Railings, boats, riverbank walk |
-| Opera House | Cultural quest location | Simplified exterior plus plaza |
-| Notre-Dame + Central Post Office | Paired landmark square | Two façades facing a compact plaza |
-| Bùi Viện-style alley | Food, neon, nightlife NPCs | Narrow street, signs, stalls |
-| Tao Đản-like park | Quiet contrast, NPC encounter space | Trees, paths, exercise equipment |
+| Landmark                         | Gameplay role                                        | Size approach                                      |
+| -------------------------------- | ---------------------------------------------------- | -------------------------------------------------- |
+| Bến Thành Market                 | Transport hub, quest destination, market NPC cluster | Simplified clock-tower façade plus interior stalls |
+| Nguyễn Huệ Walking Street        | Main pedestrian spine, events, crowds                | Wide plaza, trees, fountains, benches              |
+| City Hall / People’s Committee   | Northern visual anchor                               | Façade-only, non-enterable                         |
+| Saigon River waterfront          | Natural boundary and scenic route                    | Railings, boats, riverbank walk                    |
+| Opera House                      | Cultural quest location                              | Simplified exterior plus plaza                     |
+| Notre-Dame + Central Post Office | Paired landmark square                               | Two façades facing a compact plaza                 |
+| Bùi Viện-style alley             | Food, neon, nightlife NPCs                           | Narrow street, signs, stalls                       |
+| Tao Đản-like park                | Quiet contrast, NPC encounter space                  | Trees, paths, exercise equipment                   |
 
 ## Street Modules
 
@@ -83,12 +83,12 @@ The city should feel dense because the **street rhythm** is dense, not because t
 
 Keep landmark order and sightlines accurate, but reduce block length so walking between quests remains enjoyable.
 
-| Real-world relationship | In-game distance |
-|---|---|
-| Bến Thành Market to Notre-Dame | 150–250 m |
-| Bến Thành Market to Nguyễn Huệ | 100–180 m |
-| Nguyễn Huệ to riverfront | 50–100 m |
-| Opera House to Notre-Dame square | 80–150 m |
+| Real-world relationship          | In-game distance |
+| -------------------------------- | ---------------- |
+| Bến Thành Market to Notre-Dame   | 150–250 m        |
+| Bến Thành Market to Nguyễn Huệ   | 100–180 m        |
+| Nguyễn Huệ to riverfront         | 50–100 m         |
+| Opera House to Notre-Dame square | 80–150 m         |
 
 A good rule: **a player should reach any major landmark within 60–90 seconds on foot**. The xe ôm, bus, or metro shuttle should make longer trips feel faster and more scenic.
 

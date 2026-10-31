@@ -84,19 +84,19 @@ The hub (`apps/client/src/ui/hub/`) is a live client screen driven by game state
 
 ### Data mapping
 
-| Hub element | Source | Change |
-| --- | --- | --- |
-| Wallet | `world.currency` | none |
-| Greeting | time of day from `Date` | drop "Mai" and the temperature |
-| Story road | `quest`, `world.deliveredItems`, `completed` | step rules in `view.ts` |
-| Story rewards | `quest.reward.currency` + postcard | none |
-| Neighbor card | last NPC in `world.talkedTo` | add `lastLine: Partial<Record<NpcId, string>>`, set in `chat()` |
-| Neighbor status | `source` (`live` / `fallback`) | drop "Remembers 4 chats" and "Voice ready" |
-| Ride card | `stop`, `MODES`, `PLACES` | cheapest affordable ride from the current stop |
-| Pulse card | `world.visitedLocations.length / 4` | becomes "Places discovered" |
-| Sound card | `muted`, `volume` | reuse `update()` |
-| Diorama pins | `PLACES.market` | image only shows the market; other stops become chips with visited state |
-| Nav tabs | — | removed; Journal and Map buttons open existing panels |
+| Hub element     | Source                                       | Change                                                                   |
+| --------------- | -------------------------------------------- | ------------------------------------------------------------------------ |
+| Wallet          | `world.currency`                             | none                                                                     |
+| Greeting        | time of day from `Date`                      | drop "Mai" and the temperature                                           |
+| Story road      | `quest`, `world.deliveredItems`, `completed` | step rules in `view.ts`                                                  |
+| Story rewards   | `quest.reward.currency` + postcard           | none                                                                     |
+| Neighbor card   | last NPC in `world.talkedTo`                 | add `lastLine: Partial<Record<NpcId, string>>`, set in `chat()`          |
+| Neighbor status | `source` (`live` / `fallback`)               | drop "Remembers 4 chats" and "Voice ready"                               |
+| Ride card       | `stop`, `MODES`, `PLACES`                    | cheapest affordable ride from the current stop                           |
+| Pulse card      | `world.visitedLocations.length / 4`          | becomes "Places discovered"                                              |
+| Sound card      | `muted`, `volume`                            | reuse `update()`                                                         |
+| Diorama pins    | `PLACES.market`                              | image only shows the market; other stops become chips with visited state |
+| Nav tabs        | —                                            | removed; Journal and Map buttons open existing panels                    |
 
 Story steps: the trail covers all eight authored destinations; an active objective marks its destination current, visited destinations are done, and the wandering secret quests appear with available, active, or completed states.
 

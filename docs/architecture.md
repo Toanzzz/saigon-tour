@@ -11,16 +11,16 @@
 
 ## 2. Stack
 
-| Layer      | Choice                                                                         |
-| ---------- | ------------------------------------------------------------------------------ |
-| Client     | Vite, React, three.js, React Three Fiber, drei, Rapier, `@react-three/xr`       |
-| Data/state | TanStack Query (API), TanStack Store (game state)                               |
-| API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; `ws` realtime  |
+| Layer      | Choice                                                                                  |
+| ---------- | --------------------------------------------------------------------------------------- |
+| Client     | Vite, React, three.js, React Three Fiber, drei, Rapier, `@react-three/xr`               |
+| Data/state | TanStack Query (API), TanStack Store (game state)                                       |
+| API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; `ws` realtime          |
 | Agents     | Mastra (`@mastra/core`, `@mastra/memory`, `@mastra/pg`) via `@ai-sdk/openai-compatible` |
-| Model      | Meta `muse-spark-1.3-contributor` (`META_MODEL` overrides)                      |
-| Storage    | Postgres 18 with Drizzle migrations                                             |
-| Contracts  | zod 4 in `packages/shared` (raw TS)                                             |
-| Hosting    | Client: Cloudflare asset-only Worker. API: separate HTTPS origin, credentialed CORS |
+| Model      | Meta `muse-spark-1.3-contributor` (`META_MODEL` overrides)                              |
+| Storage    | Postgres 18 with Drizzle migrations                                                     |
+| Contracts  | zod 4 in `packages/shared` (raw TS)                                                     |
+| Hosting    | Client: Cloudflare asset-only Worker. API: separate HTTPS origin, credentialed CORS     |
 
 Toolchain: Bun 1.4.4 workspaces (isolated linker), TypeScript 7 (`tsc -b`, composite project per
 package), Biome 2.6.x, Vitest. Backend logs use the 7-key structured logger.
@@ -70,17 +70,17 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 
 ## 6. NPCs
 
-| NPC      | Role                          | Location   | Quest tools |
-| -------- | ----------------------------- | ---------- | ----------- |
-| Cô Hoa   | Market food vendor            | market     | yes         |
-| Anh Tâm  | Neighborhood xe ôm driver     | market     | no          |
-| Chị Linh | Student and volunteer         | park       | no          |
-| Ông Ba   | Cyclo driver and storyteller  | river      | no          |
-| Mai      | Sidewalk café owner           | market     | no          |
-| Alex     | Visiting photographer         | opera      | no          |
-| Vy       | Lantern maker                 | cityhall   | yes         |
-| Sơn      | Postcard collector            | postoffice | yes         |
-| Thảo     | Opera House music student     | opera      | yes         |
+| NPC      | Role                         | Location   | Quest tools |
+| -------- | ---------------------------- | ---------- | ----------- |
+| Cô Hoa   | Market food vendor           | market     | yes         |
+| Anh Tâm  | Neighborhood xe ôm driver    | market     | no          |
+| Chị Linh | Student and volunteer        | park       | no          |
+| Ông Ba   | Cyclo driver and storyteller | river      | no          |
+| Mai      | Sidewalk café owner          | market     | no          |
+| Alex     | Visiting photographer        | opera      | no          |
+| Vy       | Lantern maker                | cityhall   | yes         |
+| Sơn      | Postcard collector           | postoffice | yes         |
+| Thảo     | Opera House music student    | opera      | yes         |
 
 Source of truth: `packages/shared/src/world.ts` and `apps/server/src/features/npc/agents/`.
 
