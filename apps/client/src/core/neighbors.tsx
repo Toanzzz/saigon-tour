@@ -13,7 +13,10 @@ import { isTestPausedForScreenshot } from './test-hooks'
 
 export function Neighbors() {
   const quest = useStore(game, (s) => s.quest)
-  const active = quest?.giverNpcId ?? 'hoa'
+  const active =
+    quest?.objective.type === 'DELIVER'
+      ? quest.objective.npcId
+      : (quest?.giverNpcId ?? 'hoa')
   return (
     <>
       {(Object.keys(PEOPLE) as NpcId[]).map((id) => (
