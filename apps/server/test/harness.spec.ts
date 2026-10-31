@@ -188,20 +188,20 @@ describe('Mastra NPC harness', () => {
     expect(record.world.deliveredItems).toEqual([])
   })
 
-  it.each([
-    'garbage',
-    'hang',
-  ] as const)('falls back in character when the model returns %s, keeping intent tools', async (failure) => {
-    const harness = fx.harness(live, scripted([failure]))
-    const result = await harness.interact(
-      'hoa',
-      ask('Can I help?', { intent: 'help' }),
-      playerId
-    )
-    expect(result).toMatchObject({ source: 'fallback', degraded: true })
-    expect(result.questEvent?.type).toBe('offered')
-    expect(result.reply).toMatch(/herbs/)
-  })
+  it.each(['garbage', 'hang'] as const)(
+    'falls back in character when the model returns %s, keeping intent tools',
+    async (failure) => {
+      const harness = fx.harness(live, scripted([failure]))
+      const result = await harness.interact(
+        'hoa',
+        ask('Can I help?', { intent: 'help' }),
+        playerId
+      )
+      expect(result).toMatchObject({ source: 'fallback', degraded: true })
+      expect(result.questEvent?.type).toBe('offered')
+      expect(result.reply).toMatch(/herbs/)
+    }
+  )
 
   it('runs the Help intent even when the model forgets the tool', async () => {
     const harness = fx.harness(live, scripted([{ text: 'Lovely weather!' }]))

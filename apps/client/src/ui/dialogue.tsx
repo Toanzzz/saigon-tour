@@ -1,6 +1,6 @@
 import { DEMO_QUEST, NPCS, SECRET_QUESTS } from '@saigon/shared'
-import { useStore } from '@tanstack/react-store'
-import { type FormEvent, useEffect, useRef, useState } from 'react'
+import { useSelector } from '@tanstack/react-store'
+import { type SubmitEvent, useEffect, useRef, useState } from 'react'
 import {
   acceptQuest,
   chat,
@@ -27,7 +27,7 @@ function messageKey(message: object) {
 
 export function Conversation({ state }: { state: GameState }) {
   const dialog = state.dialogue
-  const network = useStore(net, (value) => value)
+  const network = useSelector(net, (value) => value)
   const party = network.party
   const team = party?.quest
   const assignment = team?.assignments.find(
@@ -56,7 +56,7 @@ export function Conversation({ state }: { state: GameState }) {
     secretQuest &&
     !state.quest &&
     !state.world.completedQuestIds.includes(secretQuest.id)
-  async function send(event: FormEvent) {
+  async function send(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!text.trim() || dialog?.thinking) return
     const message = text

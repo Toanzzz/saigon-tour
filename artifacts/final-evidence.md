@@ -175,3 +175,12 @@ Validated on October 30, 2026 from the local production previews.
 - Two headless production contexts (1440px desktop and 390px touch) used People/Invite/Accept, Team errand, assigned delivery, and Check team errand controls. Both saved wallets increased 30→70; both gained one photo and +2 reputation. Reload kept the same names and balances. Existing debug teleports position guests at NPCs; no state injection grants progress/rewards. Results and reward captures: `artifacts/pass-coop/flow.json`, `reward-0.png`, `reward-1.png`.
 - Final solo production regression covers walking, City bus, herbs, Chị Linh, Cô Hoa verification, reward, hub, and restart. Final mobile regression covers joystick, hub, sound, and width. No page/console errors in passing runs.
 - Existing Vite large-chunk and Three.js test CJS-deprecation warnings remain; all gates pass. No public deployment or physical XR hardware test is claimed.
+
+
+## Refactor pass 1 validation
+
+- `bun run check`: Biome 2.6.4 clean across 191 files (no deprecated-import or import-cycle errors).
+- `bun run check:types`: native `tsc -b` (typescript 7.0.2) built all three composite projects cleanly after removing @typescript/native-preview.
+- `bun run build`: client and server bundles produced; only the pre-existing large-chunk advisory remains.
+- `bun run test`: server 65 passed + 1 skipped (66); client 45 passed (45). Totals match the pre-refactor baseline. The THREE_CJS_DEPRECATED DeprecationWarning no longer prints from the client suite.
+- Installed versions verified from node_modules: Biome 2.6.4, @types/three 0.187.0, @electric-sql/pglite 0.5.13, @ai-sdk/openai-compatible 3.0.82, @mastra/core 1.81.0, @mastra/memory 1.40.0, @mastra/pg 1.34.0.

@@ -1,5 +1,5 @@
 import type { Emote } from '@saigon/shared'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { close } from '../core/actions'
 import { sendEmote, sendParty } from '../net/socket'
 import { net, updateNet } from '../net/status'
@@ -10,7 +10,7 @@ import { Icon } from './icons'
 import './people.css'
 
 export function PeopleButton() {
-  const state = useStore(net, (value) => value)
+  const state = useSelector(net, (value) => value)
   const xr = useXRPresenting()
   if (xr) return null
   return (
@@ -28,7 +28,7 @@ export function PeopleButton() {
   )
 }
 export function PeoplePanel() {
-  const state = useStore(net, (value) => value)
+  const state = useSelector(net, (value) => value)
   return (
     <Dialog title={`People on ${state.room ?? 'your street'}`} onClose={close}>
       <p role="status" className="connection-copy">
@@ -107,7 +107,7 @@ const choices: { emote: Emote; label: string }[] = [
   { emote: 'follow-me', label: 'Follow me!' },
 ]
 export function EmoteControls() {
-  const state = useStore(net, (value) => value)
+  const state = useSelector(net, (value) => value)
   const xr = useXRPresenting()
   if (xr) return null
   return (

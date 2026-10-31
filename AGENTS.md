@@ -1,6 +1,6 @@
 # Saigon Tour
 
-- Bun 1.4.2, isolated workspaces. TypeScript 7/tsgo, Biome 2.5.x.
+- Bun 1.4.4, isolated workspaces. TypeScript 7/tsgo, Biome 2.6.x.
 - Client: React Three Fiber, Three.js, Rapier, TanStack Store/Query, WebXR.
 - Server: Node + Hono in a Docker image. Shared contracts: zod 4, raw TypeScript package.
 - Cloudflare serves static client assets. AI traffic goes directly to the backend origin.

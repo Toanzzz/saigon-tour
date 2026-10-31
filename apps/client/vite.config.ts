@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [react()],
@@ -28,4 +28,10 @@ export default defineConfig({
     },
   },
   build: { chunkSizeWarningLimit: 1600 },
+  ssr: { resolve: { mainFields: ['module', 'main'] } },
+  test: {
+    server: {
+      deps: { inline: [/@pmndrs\/xr/, /@react-three\/xr/, /meshline/] },
+    },
+  },
 })

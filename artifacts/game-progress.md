@@ -171,3 +171,13 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - Production preview + Compose API/Postgres: desktop and 390px contexts invited/accepted with real controls, received distinct dishes, delivered via NPC buttons, saw +40 coins/photo/+2 reputation, and reloaded with the same guest names and 70 coins. Existing debug teleport is used only to position the two guests at NPCs; quest/party/reward mutations use real controls. Solo production bus/herb/reward flow and guest reset/reload also passed.
 - Evidence: `artifacts/pass-coop/`, `artifacts/pass-coop-solo/`, `artifacts/pass-coop-mobile/`, and `artifacts/pass-persistence/server-restart.json`.
 - Runtime topology remains one API replica. Rooms and parties end on API restart; saved journeys remain. No deployment or public hosting was performed.
+
+
+## Refactor pass 1: toolchain upgrade and deprecated-API migration
+
+- Pinned latest stable releases: Biome 2.6.4, @types/three 0.187.0, @electric-sql/pglite 0.5.13, @ai-sdk/openai-compatible 3.0.82, @mastra/core 1.81.0, @mastra/memory 1.40.0, @mastra/pg 1.34.0.
+- Bun 1.4.4 across packageManager, mise.toml, the Dockerfile build stage, and AGENTS.md. Runtime image moved to node:26-alpine. Postgres stays on postgres:18-alpine (19 still beta/rc).
+- Dropped @typescript/native-preview; every check:types script now runs the native `tsc -b` shipped with typescript 7.0.2.
+- Biome migrated to 2.6.4 schema. Enabled suspicious.noDeprecatedImports and suspicious.noImportCycles as errors, set yaml.formatter.quoteStyle to single, and turned off performance.useDomNodeTextContent for scripts/** (Playwright innerText assertions). Applied 2.6 default formatting, including markdown.
+- Deprecated-API migrations in our code: TanStack useStore → useSelector; React FormEvent → SubmitEvent<HTMLFormElement> in the conversation form; <Canvas shadows="percentage"> with the onCreated shadow-type line removed; removed no-op Zod .finite() calls in shared/multiplayer.ts; biome-ignore with reason on the drizzle primaryKey import (object overload in use); broke the places ↔ routes cycle (places stops re-exporting route, consumers import from routes). Client Vite config now uses vitest/config with ssr.resolve.mainFields and test.server.deps.inline, removing the THREE_CJS_DEPRECATED warning.
+- Runtime behavior, DOM, and wire contracts unchanged. Gate passed: check → check:types → build → test. Test totals unchanged (server 65 passed + 1 skipped; client 45 passed).

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.1/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
   "files": {
     "includes": [
       "**",
@@ -18,15 +18,29 @@
       "trailingCommas": "es5"
     }
   },
+  "yaml": { "formatter": { "quoteStyle": "single" } },
   "linter": {
     "enabled": true,
-    "rules": { "preset": "recommended", "suspicious": { "noConsole": "error" } }
+    "rules": {
+      "preset": "recommended",
+      "suspicious": {
+        "noConsole": "error",
+        "noDeprecatedImports": "error",
+        "noImportCycles": "error"
+      }
+    }
   },
   "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "overrides": [
     {
       "includes": ["**/test/**", "**/tests/**", "scripts/**", "**/logger.ts"],
       "linter": { "rules": { "suspicious": { "noConsole": "off" } } }
+    },
+    {
+      "includes": ["scripts/**"],
+      "linter": {
+        "rules": { "performance": { "useDomNodeTextContent": "off" } }
+      }
     }
   ]
 }

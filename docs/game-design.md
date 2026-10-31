@@ -23,12 +23,12 @@ The player explores and talks to neighbors to deliver a market parcel while fare
 
 A compressed District 1 loop, about 160 × 160 units, bounded by the Sài Gòn River and outer streets. Landmark order and bearings come from OpenStreetMap with Chợ Bến Thành at the origin; distances are shortened so any stop is a short walk or one bus ride. Game +x follows Lê Lợi, so real north points up and to the right on the map.
 
-| Landmark | Real offset from the market | Game position |
-| --- | --- | --- |
-| Chợ Bến Thành | origin | (−23, −12) |
-| Tòa Thị Chính, head of Nguyễn Huệ | 550 m at 35° | (69, −26) |
-| Nhà thờ Đức Bà, Công xã Paris | 810 m at 7° | (88, −95) |
-| Riverside promenade | 1.1 km at 64° | z = 35 |
+| Landmark                          | Real offset from the market | Game position |
+| --------------------------------- | --------------------------- | ------------- |
+| Chợ Bến Thành                     | origin                      | (−23, −12)    |
+| Tòa Thị Chính, head of Nguyễn Huệ | 550 m at 35°                | (69, −26)     |
+| Nhà thờ Đức Bà, Công xã Paris     | 810 m at 7°                 | (88, −95)     |
+| Riverside promenade               | 1.1 km at 64°               | z = 35        |
 
 Lê Lợi links the market to Nguyễn Huệ, a paved walking street with planters and a fountain that ends at the City Hall forecourt. Đồng Khởi runs north from Lê Lợi to the cathedral square. The bus follows a road tree with Lê Lợi as its trunk. Towers across the river are background only. The camera follows the player from above; dragging changes its heading.
 

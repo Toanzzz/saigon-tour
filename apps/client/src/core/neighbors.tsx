@@ -1,7 +1,7 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { NPCS, type NpcId } from '@saigon/shared'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { useRef } from 'react'
 import type { Group } from 'three'
 import { game } from '../state/game'
@@ -12,7 +12,7 @@ import { PEOPLE } from './places'
 import { isTestPausedForScreenshot } from './test-hooks'
 
 export function Neighbors() {
-  const quest = useStore(game, (s) => s.quest)
+  const quest = useSelector(game, (s) => s.quest)
   const active =
     quest?.objective.type === 'DELIVER'
       ? quest.objective.npcId

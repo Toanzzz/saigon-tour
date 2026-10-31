@@ -2,12 +2,12 @@
 
 ## Event matrix
 
-| Runtime event | File | Group | Level | Loop |
-| --- | --- | --- | --- | --- |
-| Exploration | `city.mp3` | ambience | 0.22 | Yes |
-| Confirm / parcel pickup | `confirm.mp3` | ui / sfx | 0.45 / 0.60 | No |
-| Board / arrive | `bell.mp3` | sfx | 0.55 | No |
-| Verified reward | `reward.mp3` | sfx | 0.70 | No |
+| Runtime event           | File          | Group    | Level       | Loop |
+| ----------------------- | ------------- | -------- | ----------- | ---- |
+| Exploration             | `city.mp3`    | ambience | 0.22        | Yes  |
+| Confirm / parcel pickup | `confirm.mp3` | ui / sfx | 0.45 / 0.60 | No   |
+| Board / arrive          | `bell.mp3`    | sfx      | 0.55        | No   |
+| Verified reward         | `reward.mp3`  | sfx      | 0.70        | No   |
 
 Runtime files live in `apps/client/public/audio/`. No existing audio was present in the asset inventory.
 

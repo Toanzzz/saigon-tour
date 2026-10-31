@@ -1,16 +1,17 @@
 import { useFrame } from '@react-three/fiber'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { useMemo, useRef } from 'react'
 import { type Group, Vector3 } from 'three'
 import { audio } from '../audio'
 import { game, notify, update, visit } from '../state/game'
 import { Character, Vehicle } from '../world'
 import { motion } from './motion'
-import { MODES, PLACES, route } from './places'
+import { MODES, PLACES } from './places'
+import { route } from './routes'
 import { isTestPausedForScreenshot } from './test-hooks'
 
 export function Transport() {
-  const ride = useStore(game, (s) => s.ride)
+  const ride = useSelector(game, (s) => s.ride)
   const vehicle = useRef<Group>(null)
   const progress = useRef(0)
   const lastUpdate = useRef(0)

@@ -100,6 +100,5 @@ export const MODES: Record<
       'Express through the cultural core, from market to Post Office',
   },
 }
-export { route } from './routes'
 export const distance = (a: Point, b: Point) =>
   Math.hypot(a[0] - b[0], a[2] - b[2])

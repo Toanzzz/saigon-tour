@@ -22,16 +22,16 @@ export const NPC_POSITIONS = {
 export const EmoteSchema = z.enum(['wave', 'thanks', 'hello', 'follow-me'])
 export type Emote = z.infer<typeof EmoteSchema>
 export const PositionSchema = z.tuple([
-  z.number().finite().min(-110).max(150),
-  z.number().finite().min(-5).max(20),
-  z.number().finite().min(-120).max(100),
+  z.number().min(-110).max(150),
+  z.number().min(-5).max(20),
+  z.number().min(-120).max(100),
 ])
 export const PresencePlayerSchema = z.object({
   id: z.uuid(),
   name: z.string().max(80),
   color: z.string().max(20),
   position: PositionSchema,
-  heading: z.number().finite(),
+  heading: z.number(),
   ride: z.string().max(20).nullable(),
 })
 export type PresencePlayer = z.infer<typeof PresencePlayerSchema>
@@ -47,7 +47,7 @@ export const ClientSocketMessageSchema = z.discriminatedUnion('type', [
     .object({
       type: z.literal('state'),
       position: PositionSchema,
-      heading: z.number().finite(),
+      heading: z.number(),
       ride: z.string().max(20).nullable(),
     })
     .strict(),

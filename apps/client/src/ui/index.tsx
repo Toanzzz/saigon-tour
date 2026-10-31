@@ -1,5 +1,5 @@
 import { useProgress } from '@react-three/drei'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { useEffect } from 'react'
 import { audio } from '../audio'
 import {
@@ -36,7 +36,7 @@ import './panels.css'
 
 function TitleScreen() {
   const { active, progress } = useProgress()
-  const { guestName, guestStatus, returningGuest } = useStore(game, (s) => s)
+  const { guestName, guestStatus, returningGuest } = useSelector(game, (s) => s)
   return (
     <section className="title-screen" aria-label="Welcome to Sài Gòn">
       <div className="title-content">
@@ -82,7 +82,7 @@ function TitleScreen() {
 }
 
 function Objective({ state }: { state: GameState }) {
-  const network = useStore(net, (value) => value)
+  const network = useSelector(net, (value) => value)
   const team = teamObjective(network.party, network.selfId)
   const quest = state.quest
   const delivered = state.world.deliveredItems.includes('herbs:linh')
@@ -128,7 +128,7 @@ function Objective({ state }: { state: GameState }) {
 }
 
 export function GameUI() {
-  const state = useStore(game, (value) => value)
+  const state = useSelector(game, (value) => value)
   const target = nearby(state.position)
   const xrPresenting = useXRPresenting()
   useEffect(() => {

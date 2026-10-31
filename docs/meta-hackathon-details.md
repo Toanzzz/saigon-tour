@@ -27,18 +27,18 @@ Your project must build towards one of the following:
 
 ## 3. Schedule (all times Eastern Time)
 
-| Date | Event |
-|------|-------|
-| Mon, Oct 26, 12:00 PM | Kickoff — opening remarks, rules, prizes, judging, Meta speaker |
-| Tue, Oct 27, 12:00–1:00 PM | Agents 101: Build a Multimodal AI Agent (Suraj Subramanian) |
-| Wed, Oct 28, 12:00–1:00 PM | Agents 102: Best Practices for Verifiable Agents (Yash Khare) |
-| Fri, Oct 30, 12:00–1:00 PM | Building Specialized Intelligence on Fireworks (Sinan Ozdemir) |
-| Daily (weekdays) 10–11 AM | Discord office hours (text, `#office-hours`) |
-| Tue, Nov 3 | Last full day for submission questions / troubleshooting |
-| **Wed, Nov 4, 9:00 PM** | **Final office hours; SUBMISSIONS DUE via CV platform** |
-| Thu Nov 5 – Sun Nov 8 | Judging period |
-| Mon, Nov 9, 12:00 PM | Closing ceremony; top 10 announced (5 per track); community vote opens |
-| Mon, Nov 16 | Community vote winner announced |
+| Date                       | Event                                                                  |
+| -------------------------- | ---------------------------------------------------------------------- |
+| Mon, Oct 26, 12:00 PM      | Kickoff — opening remarks, rules, prizes, judging, Meta speaker        |
+| Tue, Oct 27, 12:00–1:00 PM | Agents 101: Build a Multimodal AI Agent (Suraj Subramanian)            |
+| Wed, Oct 28, 12:00–1:00 PM | Agents 102: Best Practices for Verifiable Agents (Yash Khare)          |
+| Fri, Oct 30, 12:00–1:00 PM | Building Specialized Intelligence on Fireworks (Sinan Ozdemir)         |
+| Daily (weekdays) 10–11 AM  | Discord office hours (text, `#office-hours`)                           |
+| Tue, Nov 3                 | Last full day for submission questions / troubleshooting               |
+| **Wed, Nov 4, 9:00 PM**    | **Final office hours; SUBMISSIONS DUE via CV platform**                |
+| Thu Nov 5 – Sun Nov 8      | Judging period                                                         |
+| Mon, Nov 9, 12:00 PM       | Closing ceremony; top 10 announced (5 per track); community vote opens |
+| Mon, Nov 16                | Community vote winner announced                                        |
 
 **Building period: Oct 27 – Nov 4.**
 
@@ -91,12 +91,12 @@ statement and reasonably use Meta Model API and/or open-weight models?
 
 **Stage Two (0–10 scale, weighted):**
 
-| Category | Weight | Description |
-|----------|--------|-------------|
-| **Impact** | 30% | Real-world potential. Who benefits? Could people actually use it? Fits a problem statement? |
-| **Use of Meta AI Tooling** | 25% | Creative use beyond basic integration. Did they surface surprising capabilities? |
-| **Technical Depth & Execution** | 20% | Sound, refined engineering. Real craft. |
-| **Demo** | 25% | Working, impressive, holds up live. Is the demo video genuinely cool to watch? |
+| Category                        | Weight | Description                                                                                 |
+| ------------------------------- | ------ | ------------------------------------------------------------------------------------------- |
+| **Impact**                      | 30%    | Real-world potential. Who benefits? Could people actually use it? Fits a problem statement? |
+| **Use of Meta AI Tooling**      | 25%    | Creative use beyond basic integration. Did they surface surprising capabilities?            |
+| **Technical Depth & Execution** | 20%    | Sound, refined engineering. Real craft.                                                     |
+| **Demo**                        | 25%    | Working, impressive, holds up live. Is the demo video genuinely cool to watch?              |
 
 **Stage Three:** Top 5 per track → final round, judges watch video demos live and rank with
 the same rubric.
@@ -108,29 +108,29 @@ the same rubric.
 ### Track: Indie Developer ($400,000)
 
 | Place | Prize |
-|-------|-------|
-| 1st | $150K |
-| 2nd | $100K |
-| 3rd | $75K |
-| 4th | $50K |
-| 5th | $25K |
+| ----- | ----- |
+| 1st   | $150K |
+| 2nd   | $100K |
+| 3rd   | $75K  |
+| 4th   | $50K  |
+| 5th   | $25K  |
 
 ### Track: Startups ($550,000)
 
 | Place | Prize |
-|-------|-------|
-| 1st | $250K |
-| 2nd | $150K |
-| 3rd | $75K |
-| 4th | $50K |
-| 5th | $25K |
+| ----- | ----- |
+| 1st   | $250K |
+| 2nd   | $150K |
+| 3rd   | $75K  |
+| 4th   | $50K  |
+| 5th   | $25K  |
 
 ### Bonus Prizes from Meta ($50K)
 
-| Prize | Amount | Rewards | Judged by |
-|-------|--------|---------|-----------|
-| Most Viral Project | $20,000 | Highest engagement on X after the event | Likes/reposts/comments on submitted X post, until Nov 8 EOD |
+| Prize                                 | Amount  | Rewards                                                                            | Judged by                                                       |
+| ------------------------------------- | ------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Most Viral Project                    | $20,000 | Highest engagement on X after the event                                            | Likes/reposts/comments on submitted X post, until Nov 8 EOD     |
 | Best Build on Meta Open Weight Models | $10,000 | Best project on Muse Glimmer / Muse Spark Open (own hardware or partner inference) | Infra partner verifies it runs on an eligible open-weight model |
-| Community Vote | $10,000 | Most votes in public gallery (announced Nov 16) | One vote per verified account |
-| **Best Agentic Use-Case** | $5,000 | Strongest use of AI agents for meaningful tasks / decisions / multi-step workflows | Autonomy, effectiveness, practical usefulness |
-| Best Creative Build | $5,000 | Most original creative project using Muse Image or Muse Wonder | Creative originality, execution, model use |
+| Community Vote                        | $10,000 | Most votes in public gallery (announced Nov 16)                                    | One vote per verified account                                   |
+| **Best Agentic Use-Case**             | $5,000  | Strongest use of AI agents for meaningful tasks / decisions / multi-step workflows | Autonomy, effectiveness, practical usefulness                   |
+| Best Creative Build                   | $5,000  | Most original creative project using Muse Image or Muse Wonder                     | Creative originality, execution, model use                      |

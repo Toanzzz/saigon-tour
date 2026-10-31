@@ -1,5 +1,5 @@
 import { NPCS, SECRET_QUESTS } from '@saigon/shared'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import {
   acceptQuest,
   board,
@@ -13,7 +13,7 @@ import { game } from '../../state/game'
 import { XRWorldPanel } from './panel'
 
 export function XRGameHud() {
-  const state = useStore(game, (value) => value)
+  const state = useSelector(game, (value) => value)
   const target = nearby(state.position)
   if (state.dialogue) {
     const npc = NPCS[state.dialogue.npc]

@@ -162,6 +162,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 ---
 
 ### Suggested solo/4-day-crunch cut line
+
 If time is tight, ship **Tasks 1–18 only** (full P0 slice: one NPC, one transport mode, the
 agentic quest loop, demo hardening) and record the video on that. Add VR (Task 23) only if
 Phase 4 finishes with ≥ 2 days left.

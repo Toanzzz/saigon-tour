@@ -1,6 +1,7 @@
 import { DEMO_QUEST, objectiveSatisfied } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
-import { PLACES, route } from '../src/core/places'
+import { PLACES } from '../src/core/places'
+import { route } from '../src/core/routes'
 import { grantQuest, grantReward, initialState } from '../src/state/game'
 import { ROADS } from '../src/world/district'
 

@@ -4,6 +4,7 @@ import {
   jsonb,
   numeric,
   pgTable,
+  // biome-ignore lint/suspicious/noDeprecatedImports: we call the current primaryKey({ columns }) object overload, not the deprecated positional one
   primaryKey,
   text,
   timestamp,

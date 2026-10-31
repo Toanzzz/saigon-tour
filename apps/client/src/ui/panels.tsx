@@ -1,5 +1,5 @@
 import { MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { useState } from 'react'
 import {
   board,
@@ -90,7 +90,7 @@ export function TransportPanel({ state }: { state: GameState }) {
 }
 
 export function JournalPanel({ state }: { state: GameState }) {
-  const network = useStore(net, (value) => value)
+  const network = useSelector(net, (value) => value)
   const team = teamObjective(network.party, network.selfId)
   return (
     <Dialog

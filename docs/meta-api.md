@@ -29,12 +29,12 @@ the authoritative `world`, the active `quest`, a `questEvent` (`offered`/`comple
 
 ## Agents
 
-| NPC | Persona | Tools |
-| --- | --- | --- |
-| Cô Hoa | Market vendor; offers and verifies the herb errand | all four |
-| Anh Tâm | Xe ôm driver; routes and fares, reacts to reputation | remember, world context |
-| Chị Linh | Park volunteer; social hub and rumors | remember, world context |
-| Ông Ba | Cyclo driver; river stories | remember |
+| NPC      | Persona                                              | Tools                   |
+| -------- | ---------------------------------------------------- | ----------------------- |
+| Cô Hoa   | Market vendor; offers and verifies the herb errand   | all four                |
+| Anh Tâm  | Xe ôm driver; routes and fares, reacts to reputation | remember, world context |
+| Chị Linh | Park volunteer; social hub and rumors                | remember, world context |
+| Ông Ba   | Cyclo driver; river stories                          | remember                |
 
 Memory: Mastra message history (last 10) per `npcId:playerId` thread in an in-memory store,
 plus up to 12 remembered facts per NPC and player, injected as context. Both reset when the

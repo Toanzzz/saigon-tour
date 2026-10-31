@@ -4,7 +4,7 @@ import {
   type RapierRigidBody,
   RigidBody,
 } from '@react-three/rapier'
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { useEffect, useRef, useState } from 'react'
 import { type Group, Vector3 } from 'three'
 import { game, update, visit } from '../state/game'
@@ -18,7 +18,7 @@ const velocity = new Vector3()
 const up = new Vector3(0, 1, 0)
 export function Player() {
   const { gl } = useThree()
-  const riding = useStore(game, (s) => s.ride !== null)
+  const riding = useSelector(game, (s) => s.ride !== null)
   const body = useRef<RapierRigidBody>(null)
   const avatar = useRef<Group>(null)
   const [animation, setAnimation] = useState('idle')

@@ -238,22 +238,22 @@ describe('real Node WebSocket transport', () => {
     })
   })
 
-  it.each([
-    'state',
-    'emote',
-  ] as const)('closes excessive %s traffic', async (type) => {
-    const { peer } = await guest()
-    for (let i = 0; i < (type === 'state' ? 11 : 2); i++)
-      peer.send(
-        type === 'state'
-          ? { type, position: [50, 0, 50], heading: i, ride: null }
-          : { type, emote: 'wave' }
-      )
-    expect(await peer.closed).toMatchObject({
-      code: 1008,
-      reason: 'rate_limit',
-    })
-  })
+  it.each(['state', 'emote'] as const)(
+    'closes excessive %s traffic',
+    async (type) => {
+      const { peer } = await guest()
+      for (let i = 0; i < (type === 'state' ? 11 : 2); i++)
+        peer.send(
+          type === 'state'
+            ? { type, position: [50, 0, 50], heading: i, ride: null }
+            : { type, emote: 'wave' }
+        )
+      expect(await peer.closed).toMatchObject({
+        code: 1008,
+        reason: 'rate_limit',
+      })
+    }
+  )
 
   it('rejects out-of-bounds positions and oversized messages', async () => {
     const first = await guest()

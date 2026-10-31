@@ -8,7 +8,7 @@
     "./tokens.css": "./tokens.css"
   },
   "scripts": {
-    "check:types": "tsgo -b"
+    "check:types": "tsc -b"
   },
   "dependencies": {
     "zod": "4.6.7"

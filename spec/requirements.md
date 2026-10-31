@@ -28,7 +28,7 @@ support as a differentiator.
   slice takes priority over breadth of features.
 - **R0.5** The Meta model usage SHOULD go beyond a basic chatbot integration — NPCs should
   demonstrate autonomy: deciding quests, tracking state, verifying completion, and
-  reacting to the world (targets the "Use of Meta AI Tooling" 25% and Best Agentic 
+  reacting to the world (targets the "Use of Meta AI Tooling" 25% and Best Agentic
   Use-Case criteria).
 
 ## Priority tiers
@@ -51,6 +51,7 @@ To protect the demo under an 8-day timeline, requirements are tiered:
 that I feel immersed in the setting and have places to discover.
 
 ### Acceptance criteria
+
 1. WHEN the game loads THEN the system SHALL render a navigable 3D environment representing
    a compact Sài Gòn-inspired district (streets, low-rise shophouses, street-food stalls,
    recognizable landmarks such as a Bến Thành-style market, a Notre-Dame-style cathedral,
@@ -70,6 +71,7 @@ that I feel immersed in the setting and have places to discover.
 feels smooth on both desktop and VR.
 
 ### Acceptance criteria
+
 1. WHEN the player uses keyboard/mouse (desktop) or controller/hand input (VR) THEN the
    system SHALL move the avatar and orient the camera accordingly.
 2. WHEN on desktop THEN the system SHALL support WASD movement, mouse-look, sprint, and
@@ -85,6 +87,7 @@ feels smooth on both desktop and VR.
 meaningful quests, so the city feels alive and my actions matter.
 
 ### Acceptance criteria
+
 1. WHEN the player initiates dialogue with an NPC THEN the system SHALL send the NPC's
    persona, world state, and the player's input to a Meta model via the Meta Model API and
    return a natural-language response in character.
@@ -111,6 +114,7 @@ meaningful quests, so the city feels alive and my actions matter.
 traditional — so getting around is part of the fun and the cultural flavor.
 
 ### Acceptance criteria
+
 1. The system SHALL implement at least one fully rideable transport mode end-to-end for the
    demo (P0). The recommended first mode is the **xe ôm (motorbike taxi)** or **city bus**.
 2. WHEN the player boards a transport vehicle at a stop/station THEN the system SHALL
@@ -132,6 +136,7 @@ traditional — so getting around is part of the fun and the cultural flavor.
 goals and a sense of progress.
 
 ### Acceptance criteria
+
 1. The system SHALL track active and completed quests in a quest log visible to the player
    (minimal HUD for P0; full log UI for P1).
 2. WHEN an NPC agent grants a quest THEN it SHALL appear in the quest log with title,
@@ -149,6 +154,7 @@ goals and a sense of progress.
 understand the controls and goals.
 
 ### Acceptance criteria
+
 1. The system SHALL display a HUD with currency, active-quest hint, and interaction prompts.
 2. WHEN the game first starts THEN it SHALL present a brief title/intro screen and a
    one-screen controls reference.
@@ -163,6 +169,7 @@ understand the controls and goals.
 experience is more compelling and demo-worthy.
 
 ### Acceptance criteria
+
 1. The system SHALL run as a WebXR (or native) VR application on Meta Quest 3 with
    stereoscopic rendering and 6-DoF head tracking.
 2. WHEN in VR THEN the system SHALL support controller-based locomotion (teleport and/or
@@ -182,6 +189,7 @@ experience is more compelling and demo-worthy.
 conversation feels natural and hands-free.
 
 ### Acceptance criteria
+
 1. WHEN the player speaks THEN the system SHALL transcribe speech to text via Meta
    Voice/Transcribe and feed it to the NPC agent (Requirement 3).
 2. The NPC's response MAY be spoken aloud via text-to-speech for added immersion.
@@ -193,6 +201,7 @@ conversation feels natural and hands-free.
 AI calls, so keys stay secret and agent logic is centralized and testable.
 
 ### Acceptance criteria
+
 1. The system SHALL provide a backend service that receives NPC-agent requests from the
    client, calls the Meta Model API with the appropriate model and system prompt, and
    returns validated, structured responses.
@@ -213,6 +222,7 @@ AI calls, so keys stay secret and agent logic is centralized and testable.
 so nothing breaks on stage.
 
 ### Acceptance criteria
+
 1. The system SHALL provide a "demo mode" seed/scenario that reliably reproduces a compelling
    path: spawn → meet NPC → receive AI quest → ride transport → complete quest → get reward.
 2. The system SHALL cache or pre-warm AI responses where feasible to reduce live latency

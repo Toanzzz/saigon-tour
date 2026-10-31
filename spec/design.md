@@ -28,22 +28,22 @@ TanStack Store/Query), and `@react-three/xr` wraps WebXR sessions, controllers, 
 teleport. Toolchain and conventions follow the house defaults (see "Toolchain & conventions"
 below).
 
-| Layer | Choice | Rationale |
-|-------|--------|-----------|
-| Renderer | **three.js** via **@react-three/fiber** | Declarative scene graph; huge ecosystem. |
-| Helpers | **@react-three/drei** | Cameras, controls, loaders, HTML/world-space UI, etc. |
-| XR | **@react-three/xr** | WebXR sessions, controllers, hands, teleport, origin. |
-| Language | **TypeScript ^7** (tsgo, `strict`) everywhere | Shared types for structured AI payloads across client/server. |
-| Build | **Vite** (+ `@vitejs/plugin-react`) | Fast HMR; `vite --https` for WebXR on Quest. |
-| Physics | **Rapier** via **@react-three/rapier** | Player collider + walkable surfaces. |
-| UI (desktop) | React DOM overlay | HUD, dialogue text input. |
-| UI (VR) | drei `Html`/world-space meshes + `@react-three/xr` interactions | World-space dialogue panels, ray-select. |
-| Data | **TanStack Query** (`@tanstack/react-query`) | All backend fetching/mutations (AI calls). |
-| State | **TanStack Store** (`@tanstack/store` / `@tanstack/react-store`) | Quests, inventory, NPC memory, world state; React components hold presentation only. |
-| Backend | **Node.js + Hono** (TypeScript), shipped as a **Docker image** | Holds Meta key, brokers agent calls, validates output; `export type AppType` for the `hc<>` client. |
-| Validation | **zod v4** (shared package) | One schema source for client + server structured outputs. |
-| Monorepo | **Bun workspaces** (`bun@1.4.2`, isolated linker, `bun.lock`) | `apps/client`, `apps/server`, `packages/shared`; `workspace:*` deps, raw-TS internal packages. |
-| Assets | Low-poly GLTF (CC-licensed) + optional Muse Image textures | Fast to compose, VR-friendly. |
+| Layer        | Choice                                                           | Rationale                                                                                           |
+| ------------ | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Renderer     | **three.js** via **@react-three/fiber**                          | Declarative scene graph; huge ecosystem.                                                            |
+| Helpers      | **@react-three/drei**                                            | Cameras, controls, loaders, HTML/world-space UI, etc.                                               |
+| XR           | **@react-three/xr**                                              | WebXR sessions, controllers, hands, teleport, origin.                                               |
+| Language     | **TypeScript ^7** (tsgo, `strict`) everywhere                    | Shared types for structured AI payloads across client/server.                                       |
+| Build        | **Vite** (+ `@vitejs/plugin-react`)                              | Fast HMR; `vite --https` for WebXR on Quest.                                                        |
+| Physics      | **Rapier** via **@react-three/rapier**                           | Player collider + walkable surfaces.                                                                |
+| UI (desktop) | React DOM overlay                                                | HUD, dialogue text input.                                                                           |
+| UI (VR)      | drei `Html`/world-space meshes + `@react-three/xr` interactions  | World-space dialogue panels, ray-select.                                                            |
+| Data         | **TanStack Query** (`@tanstack/react-query`)                     | All backend fetching/mutations (AI calls).                                                          |
+| State        | **TanStack Store** (`@tanstack/store` / `@tanstack/react-store`) | Quests, inventory, NPC memory, world state; React components hold presentation only.                |
+| Backend      | **Node.js + Hono** (TypeScript), shipped as a **Docker image**   | Holds Meta key, brokers agent calls, validates output; `export type AppType` for the `hc<>` client. |
+| Validation   | **zod v4** (shared package)                                      | One schema source for client + server structured outputs.                                           |
+| Monorepo     | **Bun workspaces** (`bun@1.4.2`, isolated linker, `bun.lock`)    | `apps/client`, `apps/server`, `packages/shared`; `workspace:*` deps, raw-TS internal packages.      |
+| Assets       | Low-poly GLTF (CC-licensed) + optional Muse Image textures       | Fast to compose, VR-friendly.                                                                       |
 
 ### Toolchain & conventions
 
@@ -101,17 +101,20 @@ favor of the single-codebase WebXR path above.
 ## 4. Client game core (shared modules)
 
 ### 4.1 PlayerController
+
 - Owns the player collider, movement state machine: `WALKING | RIDING | IN_DIALOGUE`.
 - Desktop: WASD + mouse-look + sprint + interact. VR: locomotion (teleport / smooth +
   snap-turn) from XRInput.
 - Raycasts forward for interactables; emits `InteractableFocused` events to drive prompts.
 
 ### 4.2 InteractionSystem
+
 - Detects proximity/aim to NPCs, transport stops, and objects.
 - Shows contextual prompt ("Talk", "Board bus", "Pick up").
 - Routes the interact action to the relevant system.
 
 ### 4.3 NpcAgentClient (the headline feature)
+
 - Each NPC has a **persona record** (see §6) and a short **memory buffer** (recent turns +
   known facts about the player/quests).
 - Three agent operations, all delegated to the backend:
@@ -126,6 +129,7 @@ favor of the single-codebase WebXR path above.
   game state.
 
 ### 4.4 TransportSystem
+
 - Data-driven: a `TransportNetwork` of `Stop`s, `Route`s (ordered waypoints), and
   `Vehicle`s with a `mode` (`XE_OM | CYCLO | BUS | METRO | E_BUS`).
 - Boarding flow: at a stop → choose destination from reachable stops → fare check against
@@ -134,6 +138,7 @@ favor of the single-codebase WebXR path above.
 - First implemented mode (P0): **xe ôm** or **bus** (single route, two+ stops).
 
 ### 4.5 QuestSystem & Inventory
+
 - `QuestLog`: active/completed quests keyed by id; each has objective + reward.
 - Objective types (keep small): `TALK_TO(npcId)`, `GO_TO(locationId)`,
   `DELIVER(itemId, npcId)`, `COLLECT(itemId, count)`.
@@ -141,6 +146,7 @@ favor of the single-codebase WebXR path above.
 - Emits events the HUD subscribes to.
 
 ### 4.6 WorldState & DemoSeed
+
 - Single source of truth the agent calls read from (player location, inventory, quest
   statuses, time-of-day).
 - `DemoSeed` (Requirement 10.1): a deterministic scenario that guarantees the demo path
@@ -154,13 +160,13 @@ connections, which suits a container). The client is a separate static origin on
 (see §10/§11), so the proxy enables **credentialed CORS** for that origin. Hono exposes
 `export type AppType` for the shared `hc<>` client. Endpoints:
 
-| Endpoint | Input | Output | Meta model |
-|----------|-------|--------|-----------|
-| `POST /npc/chat` | personaId, worldState, history, playerText | `{ reply, mayOfferQuest }` | Muse Spark |
-| `POST /npc/quest` | personaId, worldState, context | validated `Quest` JSON | Muse Spark (JSON mode / tool-call) |
-| `POST /npc/verify` | quest, worldState, playerClaim | `{ status, reward, line }` | Muse Spark |
-| `POST /voice/stt` | audio blob | `{ transcript }` | Muse Transcribe (opt) |
-| `GET /health` | — | `{ ok, model }` | — |
+| Endpoint           | Input                                      | Output                     | Meta model                         |
+| ------------------ | ------------------------------------------ | -------------------------- | ---------------------------------- |
+| `POST /npc/chat`   | personaId, worldState, history, playerText | `{ reply, mayOfferQuest }` | Muse Spark                         |
+| `POST /npc/quest`  | personaId, worldState, context             | validated `Quest` JSON     | Muse Spark (JSON mode / tool-call) |
+| `POST /npc/verify` | quest, worldState, playerClaim             | `{ status, reward, line }` | Muse Spark                         |
+| `POST /voice/stt`  | audio blob                                 | `{ transcript }`           | Muse Transcribe (opt)              |
+| `GET /health`      | —                                          | `{ ok, model }`            | —                                  |
 
 Cross-cutting components:
 - **PromptBuilder** — composes system prompt (persona + world rules + output contract) +
@@ -195,14 +201,14 @@ objects.
 
 ```ts
 interface NpcPersona {
-  id: string;
-  name: string;              // e.g., "Cô Hoa"
-  role: string;              // "market food vendor"
-  personality: string;       // "warm, chatty, proud of her phở"
-  speakingStyle: string;     // "mixes Vietnamese phrases, friendly"
-  knowledge: string[];       // facts this NPC may reference
-  questThemes: string[];     // what kinds of quests they tend to give
-  location: string;          // spawn/location id
+  id: string
+  name: string // e.g., "Cô Hoa"
+  role: string // "market food vendor"
+  personality: string // "warm, chatty, proud of her phở"
+  speakingStyle: string // "mixes Vietnamese phrases, friendly"
+  knowledge: string[] // facts this NPC may reference
+  questThemes: string[] // what kinds of quests they tend to give
+  location: string // spawn/location id
 }
 ```
 
@@ -216,11 +222,11 @@ Seed NPCs (P0: 1; P1: 3–4):
 
 ```ts
 interface InputProvider {
-  getMoveVector(): Vec2;
-  getLookDelta(): Vec2;      // desktop mouse / VR head is implicit
-  consumeInteract(): boolean;
-  getTextInput?(): string;   // desktop text entry
-  startVoiceCapture?(): void;// VR / voice path
+  getMoveVector(): Vec2
+  getLookDelta(): Vec2 // desktop mouse / VR head is implicit
+  consumeInteract(): boolean
+  getTextInput?(): string // desktop text entry
+  startVoiceCapture?(): void // VR / voice path
 }
 // DesktopInput implements keyboard/mouse; XRInput implements controllers/hands + voice.
 ```
@@ -311,4 +317,5 @@ so the agent payloads can never drift between the two.
   The client is a static Cloudflare Worker asset deployment on its own HTTPS origin; the two
   origins talk over credentialed CORS. Pin the backend's public hostname before the Task 2
   smoke test.
+```
 ```

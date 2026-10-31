@@ -1,9 +1,9 @@
-import { useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
 import { sendParty } from '../net/socket'
 import { net, updateNet } from '../net/status'
 
 export function PartyInviteControls() {
-  const { invite, connection } = useStore(net, (state) => state)
+  const { invite, connection } = useSelector(net, (state) => state)
   if (!invite || invite.expiresAt <= Date.now()) return null
   const respond = (accept: boolean) => {
     if (sendParty({ type: 'party-respond', inviteId: invite.inviteId, accept }))
