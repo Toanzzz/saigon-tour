@@ -1,0 +1,1613 @@
+{
+  "pass": "complete",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "rideSeconds": 16.80451225,
+  "before": {
+    "renderer": {
+      "render": {
+        "frame": 117,
+        "calls": 160,
+        "triangles": 343825,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 90,
+        "textures": 58
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 93,
+      "position": [
+        -23,
+        0.7987181544303894,
+        9.5
+      ],
+      "currency": 30,
+      "completed": 0,
+      "ride": null,
+      "timeOfDay": "day",
+      "viewpoint": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "world": {
+      "ambientCount": 20,
+      "activeCrowd": 10,
+      "animationRadius": 32
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 109,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 0,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 0,
+        "pickup": 0,
+        "board": 0,
+        "arrive": 0,
+        "reward": 0
+      }
+    },
+    "network": {
+      "connection": "connected",
+      "room": "Nguyễn Huệ 1",
+      "playerCount": 2,
+      "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+      "guestName": "Sen Hồng 17",
+      "serverRevision": 0,
+      "partyVersion": 1,
+      "remotePlayers": 1,
+      "npcLines": [],
+      "emotes": [],
+      "events": {
+        "sequence": 1793410189719,
+        "inFlight": null,
+        "pending": 0,
+        "httpBusy": false
+      },
+      "party": null,
+      "invite": null
+    },
+    "fps": 59.738377875139555,
+    "dpr": 1
+  },
+  "arrived": {
+    "renderer": {
+      "render": {
+        "frame": 1404,
+        "calls": 124,
+        "triangles": 176165,
+        "points": 0,
+        "lines": 0
+      },
+      "memory": {
+        "geometries": 121,
+        "textures": 106
+      }
+    },
+    "state": {
+      "screen": "playing",
+      "panel": "none",
+      "muted": false,
+      "frame": 1380,
+      "position": [
+        89.80000305175781,
+        0.7987179756164551,
+        -58
+      ],
+      "currency": 25,
+      "completed": 0,
+      "ride": null,
+      "timeOfDay": "day",
+      "viewpoint": null,
+      "source": null,
+      "animation": "idle"
+    },
+    "world": {
+      "ambientCount": 20,
+      "activeCrowd": 3,
+      "animationRadius": 32
+    },
+    "physics": {
+      "engine": "rapier",
+      "timestep": 0.016666666666666666,
+      "bodies": 2,
+      "colliders": 109,
+      "ccdBodies": 1
+    },
+    "audio": {
+      "state": "running",
+      "loaded": [
+        "confirm",
+        "bell",
+        "reward",
+        "city"
+      ],
+      "errors": [],
+      "muted": false,
+      "volume": 0.5,
+      "paused": false,
+      "activeEffects": 1,
+      "ambienceLoops": 1,
+      "events": {
+        "click": 1,
+        "pickup": 0,
+        "board": 1,
+        "arrive": 1,
+        "reward": 0
+      }
+    },
+    "network": {
+      "connection": "reconnecting",
+      "room": "Nguyễn Huệ 1",
+      "playerCount": 0,
+      "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+      "guestName": "Sen Hồng 17",
+      "serverRevision": 2,
+      "partyVersion": 6,
+      "remotePlayers": 0,
+      "npcLines": [],
+      "emotes": [],
+      "events": {
+        "sequence": 1793410189721,
+        "inFlight": null,
+        "pending": 0,
+        "httpBusy": false
+      },
+      "party": null,
+      "invite": null
+    },
+    "fps": 60.03744790253777,
+    "dpr": 1
+  },
+  "mapText": "Your neighborhood\n\nA city of small stories\nBẾN THÀNH\nCÔNG VIÊN\nTÒA THỊ CHÍNH\nNHÀ THỜ ĐỨC BÀ\nBẾN SÔNG\nNHÀ HÁT THÀNH PHỐ\nBƯU ĐIỆN TRUNG TÂM\nHẺM ẨM THỰC\nN\nYou\nTransport stops\n1/8 places discovered\n\nTake a ride or follow your curiosity. Every street leads somewhere.",
+  "captures": {
+    "active-play": {
+      "renderer": {
+        "render": {
+          "frame": 245,
+          "calls": 158,
+          "triangles": 344438,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 90,
+          "textures": 58
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 221,
+        "position": [
+          -23,
+          0.7987188696861267,
+          5.5368146896362305
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 0,
+        "partyVersion": 1,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189719,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.9209610151096,
+      "dpr": 1
+    },
+    "map": {
+      "renderer": {
+        "render": {
+          "frame": 294,
+          "calls": 158,
+          "triangles": 344438,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 90,
+          "textures": 58
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "map",
+        "muted": false,
+        "frame": 270,
+        "position": [
+          -23,
+          0.7987188696861267,
+          5.5368146896362305
+        ],
+        "currency": 30,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 0,
+          "pickup": 0,
+          "board": 0,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "reconnecting",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 0,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 0,
+        "partyVersion": 1,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189719,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.96124545154761,
+      "dpr": 1
+    },
+    "riding": {
+      "renderer": {
+        "render": {
+          "frame": 396,
+          "calls": 147,
+          "triangles": 343842,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 95,
+          "textures": 65
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 372,
+        "position": [
+          -3.5010000002384185,
+          0.9,
+          12
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": {
+          "from": "market",
+          "to": "cathedral",
+          "mode": "bus",
+          "progress": 0.03868452380810465
+        },
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 8,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 1,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 0,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 1,
+        "partyVersion": 2,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189720,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 60.02595110309559,
+      "dpr": 1
+    },
+    "cathedral": {
+      "renderer": {
+        "render": {
+          "frame": 1495,
+          "calls": 109,
+          "triangles": 171969,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 121,
+          "textures": 106
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1471,
+        "position": [
+          88,
+          0.7987181544303894,
+          -64
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 2,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 2,
+        "partyVersion": 7,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189721,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.872802202367396,
+      "dpr": 1
+    },
+    "cityhall": {
+      "renderer": {
+        "render": {
+          "frame": 1590,
+          "calls": 109,
+          "triangles": 171811,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 129,
+          "textures": 117
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1566,
+        "position": [
+          69,
+          0.7987181544303894,
+          0
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 2,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "reconnecting",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 0,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 2,
+        "partyVersion": 7,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189721,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.79182612020782,
+      "dpr": 1
+    },
+    "opera": {
+      "renderer": {
+        "render": {
+          "frame": 1697,
+          "calls": 119,
+          "triangles": 174930,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 132,
+          "textures": 117
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1673,
+        "position": [
+          90,
+          0.7987181544303894,
+          -35
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 1,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 3,
+        "partyVersion": 8,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189722,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.9129625749469,
+      "dpr": 1
+    },
+    "postoffice": {
+      "renderer": {
+        "render": {
+          "frame": 1792,
+          "calls": 116,
+          "triangles": 145476,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 132,
+          "textures": 117
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 1768,
+        "position": [
+          99,
+          0.7987181544303894,
+          -84
+        ],
+        "currency": 25,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 2,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 1,
+          "pickup": 0,
+          "board": 1,
+          "arrive": 1,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 4,
+        "partyVersion": 8,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189723,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.88201192835532,
+      "dpr": 1
+    },
+    "opera-stop": {
+      "renderer": {
+        "render": {
+          "frame": 2212,
+          "calls": 127,
+          "triangles": 173332,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 132,
+          "textures": 117
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2188,
+        "position": [
+          89.80000305175781,
+          0.7987181544303894,
+          -35
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 1,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 1,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 6,
+        "partyVersion": 10,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189725,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.960382476498786,
+      "dpr": 1
+    },
+    "alley": {
+      "renderer": {
+        "render": {
+          "frame": 2307,
+          "calls": 186,
+          "triangles": 348524,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 140,
+          "textures": 130
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2283,
+        "position": [
+          -25,
+          0.7987181544303894,
+          25
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 7,
+        "partyVersion": 10,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189726,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.905756915327615,
+      "dpr": 1
+    },
+    "market-crowd": {
+      "renderer": {
+        "render": {
+          "frame": 2402,
+          "calls": 161,
+          "triangles": 345166,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 140,
+          "textures": 130
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2378,
+        "position": [
+          -25,
+          0.7987181544303894,
+          7
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 8,
+        "partyVersion": 11,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189727,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.943792798881624,
+      "dpr": 1
+    },
+    "plaza-crowd": {
+      "renderer": {
+        "render": {
+          "frame": 2497,
+          "calls": 117,
+          "triangles": 171453,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 140,
+          "textures": 130
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2473,
+        "position": [
+          69,
+          0.7987181544303894,
+          8
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 3,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 8,
+        "partyVersion": 11,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189727,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.92525840419101,
+      "dpr": 1
+    },
+    "river-crowd": {
+      "renderer": {
+        "render": {
+          "frame": 2591,
+          "calls": 136,
+          "triangles": 178686,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 153,
+          "textures": 134
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2567,
+        "position": [
+          30,
+          0.7987181544303894,
+          32
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 2,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 9,
+        "partyVersion": 12,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189728,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.98235915667123,
+      "dpr": 1
+    },
+    "alley-crowd": {
+      "renderer": {
+        "render": {
+          "frame": 2685,
+          "calls": 183,
+          "triangles": 348010,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 153,
+          "textures": 134
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 2661,
+        "position": [
+          -25,
+          0.7987181544303894,
+          28
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": null,
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 2,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "reconnecting",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 0,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 10,
+        "partyVersion": 12,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189729,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 60.08812834993059,
+      "dpr": 1
+    },
+    "conversation-mai": {
+      "renderer": {
+        "render": {
+          "frame": 3200,
+          "calls": 167,
+          "triangles": 344925,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 153,
+          "textures": 134
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 3176,
+        "position": [
+          -30,
+          0.7987181544303894,
+          19
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": "live",
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 3,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "connected",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 2,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 13,
+        "partyVersion": 14,
+        "remotePlayers": 1,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189729,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.89713711270343,
+      "dpr": 1
+    },
+    "conversation-alex": {
+      "renderer": {
+        "render": {
+          "frame": 3715,
+          "calls": 130,
+          "triangles": 173458,
+          "points": 0,
+          "lines": 0
+        },
+        "memory": {
+          "geometries": 154,
+          "textures": 135
+        }
+      },
+      "state": {
+        "screen": "playing",
+        "panel": "none",
+        "muted": false,
+        "frame": 3691,
+        "position": [
+          92,
+          0.7987181544303894,
+          -37
+        ],
+        "currency": 20,
+        "completed": 0,
+        "ride": null,
+        "timeOfDay": "day",
+        "viewpoint": null,
+        "source": "live",
+        "animation": "idle"
+      },
+      "world": {
+        "ambientCount": 20,
+        "activeCrowd": 1,
+        "animationRadius": 32
+      },
+      "physics": {
+        "engine": "rapier",
+        "timestep": 0.016666666666666666,
+        "bodies": 2,
+        "colliders": 109,
+        "ccdBodies": 1
+      },
+      "audio": {
+        "state": "running",
+        "loaded": [
+          "confirm",
+          "bell",
+          "reward",
+          "city"
+        ],
+        "errors": [],
+        "muted": false,
+        "volume": 0.5,
+        "paused": false,
+        "activeEffects": 0,
+        "ambienceLoops": 1,
+        "events": {
+          "click": 4,
+          "pickup": 0,
+          "board": 2,
+          "arrive": 2,
+          "reward": 0
+        }
+      },
+      "network": {
+        "connection": "reconnecting",
+        "room": "Nguyễn Huệ 1",
+        "playerCount": 0,
+        "selfId": "b25f2dd4-1377-4f85-8706-069ce04e6349",
+        "guestName": "Sen Hồng 17",
+        "serverRevision": 17,
+        "partyVersion": 16,
+        "remotePlayers": 0,
+        "npcLines": [],
+        "emotes": [],
+        "events": {
+          "sequence": 1793410189730,
+          "inFlight": null,
+          "pending": 0,
+          "httpBusy": false
+        },
+        "party": null,
+        "invite": null
+      },
+      "fps": 59.89125256553849,
+      "dpr": 1
+    }
+  },
+  "life": {
+    "observations": {
+      "market-crowd": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      },
+      "plaza-crowd": {
+        "ambientCount": 20,
+        "activeCrowd": 3,
+        "animationRadius": 32
+      },
+      "river-crowd": {
+        "ambientCount": 20,
+        "activeCrowd": 2,
+        "animationRadius": 32
+      },
+      "alley-crowd": {
+        "ambientCount": 20,
+        "activeCrowd": 10,
+        "animationRadius": 32
+      }
+    },
+    "conversations": [
+      {
+        "id": "mai",
+        "lines": [
+          "MaiChào buổi sáng! Pull",
+          "MaiAh, cà phê and old facades — mời bạn ngồi! From here stroll Lê Lợi to Nguyễn Huệ for City Hall and the Opera House, then Đồng Khởi to Nhà thờ Đức Bà and the Post Office. Cà phê sữa đá in hand makes the details sweeter, phải không?"
+        ],
+        "source": "Live NPC conversation"
+      },
+      {
+        "id": "alex",
+        "lines": [
+          "AlexChào buổi sáng! Beautiful light on the Opera House today, right? Look at how the morning sun hits those columns — what detail catches your eye first?",
+          "AlexNice combo! Notice the arched windows and carved trim on the Opera House façade. Then wander Đồng Khởi shops for a cà phê sữa đá — xin mời!"
+        ],
+        "source": "Live NPC conversation"
+      }
+    ]
+  },
+  "models": {
+    "landmarks/cho-ben-thanh.glb": 200,
+    "food/pot.glb": 200,
+    "food/bowl-broth.glb": 200,
+    "food/loaf-baguette.glb": 200,
+    "city/building-a.glb": 200,
+    "city/building-c.glb": 200,
+    "city/building-e.glb": 200,
+    "city/building-f.glb": 200,
+    "city/building-g.glb": 200,
+    "city/building-j.glb": 200,
+    "city/detail-awning.glb": 200,
+    "city/detail-parasol-a.glb": 200,
+    "roads/electricity-pole.glb": 200,
+    "landmarks/toa-thi-chinh.glb": 200,
+    "nature/plant_bush.glb": 200,
+    "landmarks/toa-thi-chinh-statue.glb": 200,
+    "landmarks/nha-tho-duc-ba.glb": 200,
+    "landmarks/nha-tho-duc-ba-statue.glb": 200,
+    "nature/flower_redA.glb": 200,
+    "nature/flower_yellowA.glb": 200,
+    "food/cup-coffee.glb": 200,
+    "food/banana.glb": 200,
+    "boats/boat-fishing-small.glb": 200,
+    "boats/boat-row-small.glb": 200,
+    "city/building-skyscraper-b.glb": 200,
+    "city/building-skyscraper-a.glb": 200,
+    "city/building-skyscraper-d.glb": 200,
+    "city/building-skyscraper-e.glb": 200,
+    "city/low-detail-building-wide-a.glb": 200,
+    "nature/tree_palmDetailedTall.glb": 200,
+    "roads/light-curved.glb": 200,
+    "nature/tree_fat.glb": 200,
+    "people/player-tourist.glb": 200,
+    "cars/van.glb": 200,
+    "people/character-female-b.glb": 200,
+    "people/character-male-a.glb": 200,
+    "people/character-female-a.glb": 200,
+    "people/character-male-b.glb": 200
+  },
+  "errors": [],
+  "requests": []
+}

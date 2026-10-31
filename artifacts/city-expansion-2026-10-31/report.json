@@ -1,0 +1,716 @@
+[
+  {
+    "pass": "complete",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "rideSeconds": 16.788535334,
+    "captures": {
+      "active-play": {
+        "renderer": {
+          "render": {
+            "frame": 243,
+            "calls": 212,
+            "triangles": 351713,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 97,
+            "textures": 77
+          }
+        },
+        "fps": 59.88897489569883,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "map": {
+        "renderer": {
+          "render": {
+            "frame": 297,
+            "calls": 212,
+            "triangles": 351713,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 97,
+            "textures": 77
+          }
+        },
+        "fps": 59.95138367837796,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "riding": {
+        "renderer": {
+          "render": {
+            "frame": 404,
+            "calls": 219,
+            "triangles": 352128,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 105,
+            "textures": 81
+          }
+        },
+        "fps": 59.90564175666762,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "cathedral": {
+        "renderer": {
+          "render": {
+            "frame": 1503,
+            "calls": 132,
+            "triangles": 175163,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 131,
+            "textures": 117
+          }
+        },
+        "fps": 60.12228515616714,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "cityhall": {
+        "renderer": {
+          "render": {
+            "frame": 1603,
+            "calls": 126,
+            "triangles": 188435,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 150,
+            "textures": 132
+          }
+        },
+        "fps": 59.96403914726541,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "opera": {
+        "renderer": {
+          "render": {
+            "frame": 1715,
+            "calls": 124,
+            "triangles": 175978,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 150,
+            "textures": 132
+          }
+        },
+        "fps": 60.1970309495243,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "postoffice": {
+        "renderer": {
+          "render": {
+            "frame": 1814,
+            "calls": 124,
+            "triangles": 156195,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 150,
+            "textures": 132
+          }
+        },
+        "fps": 60.23134207397404,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "opera-stop": {
+        "renderer": {
+          "render": {
+            "frame": 2238,
+            "calls": 129,
+            "triangles": 175212,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 150,
+            "textures": 132
+          }
+        },
+        "fps": 59.9036263517175,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "alley": {
+        "renderer": {
+          "render": {
+            "frame": 2337,
+            "calls": 237,
+            "triangles": 355338,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 59.89401193400019,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "market-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2436,
+            "calls": 216,
+            "triangles": 353125,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 60.24919714700021,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "plaza-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2535,
+            "calls": 128,
+            "triangles": 187151,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 60.18544187314268,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "river-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2634,
+            "calls": 184,
+            "triangles": 330517,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 59.92791924515589,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "alley-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2732,
+            "calls": 227,
+            "triangles": 353293,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 60.21644365157222,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "conversation-mai": {
+        "renderer": {
+          "render": {
+            "frame": 3310,
+            "calls": 221,
+            "triangles": 353015,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 60.16492015918733,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "conversation-alex": {
+        "renderer": {
+          "render": {
+            "frame": 3739,
+            "calls": 131,
+            "triangles": 175808,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 155,
+            "textures": 136
+          }
+        },
+        "fps": 60.028033777687334,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      }
+    },
+    "errors": [],
+    "requests": []
+  },
+  {
+    "pass": "complete",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "rideSeconds": 16.80451225,
+    "captures": {
+      "active-play": {
+        "renderer": {
+          "render": {
+            "frame": 245,
+            "calls": 158,
+            "triangles": 344438,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 90,
+            "textures": 58
+          }
+        },
+        "fps": 59.9209610151096,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "map": {
+        "renderer": {
+          "render": {
+            "frame": 294,
+            "calls": 158,
+            "triangles": 344438,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 90,
+            "textures": 58
+          }
+        },
+        "fps": 59.96124545154761,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "riding": {
+        "renderer": {
+          "render": {
+            "frame": 396,
+            "calls": 147,
+            "triangles": 343842,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 95,
+            "textures": 65
+          }
+        },
+        "fps": 60.02595110309559,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "cathedral": {
+        "renderer": {
+          "render": {
+            "frame": 1495,
+            "calls": 109,
+            "triangles": 171969,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 121,
+            "textures": 106
+          }
+        },
+        "fps": 59.872802202367396,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "cityhall": {
+        "renderer": {
+          "render": {
+            "frame": 1590,
+            "calls": 109,
+            "triangles": 171811,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 129,
+            "textures": 117
+          }
+        },
+        "fps": 59.79182612020782,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "opera": {
+        "renderer": {
+          "render": {
+            "frame": 1697,
+            "calls": 119,
+            "triangles": 174930,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 132,
+            "textures": 117
+          }
+        },
+        "fps": 59.9129625749469,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "postoffice": {
+        "renderer": {
+          "render": {
+            "frame": 1792,
+            "calls": 116,
+            "triangles": 145476,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 132,
+            "textures": 117
+          }
+        },
+        "fps": 59.88201192835532,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "opera-stop": {
+        "renderer": {
+          "render": {
+            "frame": 2212,
+            "calls": 127,
+            "triangles": 173332,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 132,
+            "textures": 117
+          }
+        },
+        "fps": 59.960382476498786,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "alley": {
+        "renderer": {
+          "render": {
+            "frame": 2307,
+            "calls": 186,
+            "triangles": 348524,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 140,
+            "textures": 130
+          }
+        },
+        "fps": 59.905756915327615,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "market-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2402,
+            "calls": 161,
+            "triangles": 345166,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 140,
+            "textures": 130
+          }
+        },
+        "fps": 59.943792798881624,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "plaza-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2497,
+            "calls": 117,
+            "triangles": 171453,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 140,
+            "textures": 130
+          }
+        },
+        "fps": 59.92525840419101,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "river-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2591,
+            "calls": 136,
+            "triangles": 178686,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 153,
+            "textures": 134
+          }
+        },
+        "fps": 59.98235915667123,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "alley-crowd": {
+        "renderer": {
+          "render": {
+            "frame": 2685,
+            "calls": 183,
+            "triangles": 348010,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 153,
+            "textures": 134
+          }
+        },
+        "fps": 60.08812834993059,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "conversation-mai": {
+        "renderer": {
+          "render": {
+            "frame": 3200,
+            "calls": 167,
+            "triangles": 344925,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 153,
+            "textures": 134
+          }
+        },
+        "fps": 59.89713711270343,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      },
+      "conversation-alex": {
+        "renderer": {
+          "render": {
+            "frame": 3715,
+            "calls": 130,
+            "triangles": 173458,
+            "points": 0,
+            "lines": 0
+          },
+          "memory": {
+            "geometries": 154,
+            "textures": 135
+          }
+        },
+        "fps": 59.89125256553849,
+        "physics": {
+          "engine": "rapier",
+          "timestep": 0.016666666666666666,
+          "bodies": 2,
+          "colliders": 109,
+          "ccdBodies": 1
+        }
+      }
+    },
+    "errors": [],
+    "requests": []
+  }
+]
