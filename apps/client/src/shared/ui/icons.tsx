@@ -19,6 +19,7 @@ const paths = {
     'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 10c0-4 3-6 7-6s7 2 7 6m1-10a3 3 0 1 0 0-6m2 16c0-3-1-5-3-6',
   stamp: 'M9 3h6v5l-2 3v3h7v4H4v-4h7v-3L9 8V3Zm-5 18h16',
   play: 'M7 4v16l13-8L7 4Z',
+  dice: 'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 5h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01',
 } as const
 
 export function Icon({

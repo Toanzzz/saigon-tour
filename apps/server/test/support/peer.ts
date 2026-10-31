@@ -158,7 +158,7 @@ export function setupRealtime() {
       return fx
     },
     async guest() {
-      const identity = await fx.db.createGuest()
+      const identity = await fx.guest()
       const peer = await open(identity.token)
       const welcome = await peer.wait('welcome')
       return { ...identity, peer, welcome }

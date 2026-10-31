@@ -2,6 +2,7 @@ import type { MastraCompositeStore } from '@mastra/core/storage'
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { cors } from 'hono/cors'
+import { type AuthDatabase, createAuth } from '@/features/auth'
 import { NpcHarness } from '@/features/npc'
 import {
   type Fetcher,
@@ -19,6 +20,7 @@ import { sessionRoutes } from './routes/session'
 export type { Fetcher } from '@/shared/http'
 export interface AppServices {
   db: GameDb
+  orm: AuthDatabase
   storage?: MastraCompositeStore
   now?: () => number
 }
@@ -41,6 +43,7 @@ export function createApp(
   services: AppServices
 ) {
   const { db, storage } = services
+  const auth = createAuth(config, services.orm, db)
   const harness = new NpcHarness(config, fetcher, db, storage)
   const app = new Hono<Env>()
   app.use(
@@ -50,6 +53,7 @@ export function createApp(
         config.origins.includes(origin) ? origin : undefined,
       credentials: true,
       allowMethods: ['GET', 'POST', 'OPTIONS'],
+      exposeHeaders: ['set-auth-token'],
       allowHeaders: ['Content-Type', 'Authorization'],
       maxAge: 86400,
     })
@@ -61,11 +65,11 @@ export function createApp(
       onError: (c) => c.json({ error: 'request_too_large' }, 413),
     })
   )
-  const realtime = createRealtime(app, config, harness, db, services.now)
-  app.route('/', createRoutes({ config, db, harness, realtime }))
+  const realtime = createRealtime(app, config, harness, auth, db, services.now)
+  app.route('/', createRoutes({ auth, config, db, harness, realtime }))
   app.onError((_error, c) => {
     log('request_failed', 'Storage or request unavailable', 'warn')
     return c.json({ error: 'service_unavailable' }, 503)
   })
-  return Object.assign(app, { harness, db, realtime })
+  return Object.assign(app, { auth, harness, db, realtime })
 }

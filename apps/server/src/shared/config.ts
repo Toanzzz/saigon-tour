@@ -13,6 +13,11 @@ export interface ServerConfig {
   globalCallLimit: number
   spendLimitUsd: number
   production: boolean
+  authSecret: string
+  /** Browser-visible API base; Better Auth lives at `${publicApiUrl}/auth`. */
+  publicApiUrl: string
+  clientUrl: string
+  meta?: { clientId: string; clientSecret: string }
 }
 
 /**
@@ -45,6 +50,16 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
       )
   }
   if (!apiKey) warnFallback('META_MUSE_API_KEY', 'offline guide')
+  const authSecret = env.BETTER_AUTH_SECRET?.trim()
+  if (production && (!authSecret || authSecret.length < 32))
+    throw new Error('BETTER_AUTH_SECRET must be at least 32 characters')
+  const metaId = env.META_CLIENT_ID?.trim()
+  const metaSecret = env.META_CLIENT_SECRET?.trim()
+  if (Boolean(metaId) !== Boolean(metaSecret))
+    throw new Error(
+      'Set both META_CLIENT_ID and META_CLIENT_SECRET, or neither'
+    )
+  if (!metaId) warnFallback('META_CLIENT_ID', 'Meta login disabled')
 
   const spendLimitUsd = Number(env.META_SPEND_LIMIT_USD ?? 5)
   if (env.META_SPEND_LIMIT_USD === undefined)
@@ -99,6 +114,23 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     globalCallLimit: 500,
     spendLimitUsd,
     production,
+    authSecret:
+      authSecret ??
+      fallback(
+        'BETTER_AUTH_SECRET',
+        undefined,
+        'saigon-tour-local-development-secret'
+      ),
+    publicApiUrl: fallback(
+      'PUBLIC_API_URL',
+      env.PUBLIC_API_URL,
+      'http://127.0.0.1:58000/api'
+    ).replace(/\/+$/, ''),
+    clientUrl: fallback('CLIENT_URL', env.CLIENT_URL, 'http://127.0.0.1:58000'),
+    meta:
+      metaId && metaSecret
+        ? { clientId: metaId, clientSecret: metaSecret }
+        : undefined,
   }
 }
 

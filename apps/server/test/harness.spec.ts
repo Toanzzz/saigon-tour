@@ -200,7 +200,7 @@ describe('Mastra NPC harness', () => {
       await harness.interact(
         npc,
         ask(`hi ${npc}`),
-        (await ctx.fx.db.createGuest()).player.id
+        (await ctx.fx.guest()).player.id
       )
     const names = seen.map((s) =>
       (s.tools ?? []).map((t) => t.function.name).sort()

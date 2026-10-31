@@ -19,7 +19,7 @@ describe('new neighborhood conversations', () => {
   ] as const)(
     '%s has an in-character fallback and cannot give Cô Hoa’s errand',
     async (npc, location, topic) => {
-      const identity = await fx.db.createGuest()
+      const identity = await fx.guest()
       const app = createApp(offline, fetch, fx)
       try {
         const response = await app.request(`/npc/${npc}/interact`, {
@@ -91,7 +91,7 @@ describe('new neighborhood conversations', () => {
           })
         }
       )
-      const identity = await fx.db.createGuest()
+      const identity = await fx.guest()
       const result = await harness.interact(
         npc,
         {
@@ -123,7 +123,7 @@ describe('new neighborhood conversations', () => {
     '%s reveals and verifies a secret city quest',
     async (npc, start, destination, questId, reward) => {
       const harness = fx.harness(offline)
-      const identity = await fx.db.createGuest()
+      const identity = await fx.guest()
       const offered = await harness.interact(
         npc,
         {

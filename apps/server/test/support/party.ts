@@ -87,7 +87,7 @@ export function setupParty() {
       return app
     },
     async guest(): Promise<Guest> {
-      const identity = await fx.db.createGuest()
+      const identity = await fx.guest()
       const socket = new Recorder()
       app.realtime.manager.connect(identity.player, socket)
       return { ...identity, socket }

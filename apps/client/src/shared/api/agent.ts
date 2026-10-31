@@ -11,7 +11,7 @@ import { QueryClient } from '@tanstack/react-query'
 import type { InferRequestType, InferResponseType } from 'hono/client'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
-import { guestToken, initializeSession } from './session'
+import { initializeSession, sessionToken } from './session'
 
 /** NPC interact endpoint, typed from the shared Hono RPC contract. */
 const interact$post = rpc.npc[':npcId'].interact.$post
@@ -33,7 +33,7 @@ export async function interactWith(
   state: GameState
 ): Promise<InteractionResult> {
   try {
-    if (!guestToken() || state.guestStatus !== 'online') {
+    if (!sessionToken() || state.guestStatus !== 'online') {
       await initializeSession()
       if (game.state.guestStatus !== 'online') throw new Error('Offline guest')
     }

@@ -10,7 +10,7 @@ beforeAll(async () => {
 afterAll(() => fx.close())
 describe('storage availability', () => {
   it('returns 503 when model budget storage fails while the save remains readable', async () => {
-    const identity = await fx.db.createGuest()
+    const identity = await fx.guest()
     const app = createApp(
       { ...readConfig({}), apiKey: 'test-key', production: true },
       async () => Response.json({}),

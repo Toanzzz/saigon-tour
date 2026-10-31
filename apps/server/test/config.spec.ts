@@ -31,9 +31,37 @@ describe('config', () => {
       NODE_ENV: 'production',
       DATABASE_URL: 'postgres://user:pass@db:5432/app',
       META_MUSE_API_KEY: 'secret',
+      BETTER_AUTH_SECRET: 'x'.repeat(32),
     })
     expect(config.production).toBe(true)
     expect(isLiveConfigured(config)).toBe(true)
+    expect(config.meta).toBeUndefined()
+  })
+
+  it('requires a strong auth secret and paired Meta credentials', () => {
+    const base = {
+      NODE_ENV: 'production',
+      DATABASE_URL: 'postgres://user:pass@db:5432/app',
+      META_MUSE_API_KEY: 'secret',
+    }
+    expect(() => readConfig({ ...base, BETTER_AUTH_SECRET: 'short' })).toThrow(
+      'BETTER_AUTH_SECRET'
+    )
+    expect(() =>
+      readConfig({
+        ...base,
+        BETTER_AUTH_SECRET: 'x'.repeat(32),
+        META_CLIENT_ID: 'app',
+      })
+    ).toThrow('META_CLIENT_SECRET')
+    expect(
+      readConfig({
+        ...base,
+        BETTER_AUTH_SECRET: 'x'.repeat(32),
+        META_CLIENT_ID: 'app',
+        META_CLIENT_SECRET: 'shh',
+      }).meta
+    ).toEqual({ clientId: 'app', clientSecret: 'shh' })
   })
 
   it('warns for each fallback used when values are unset', () => {

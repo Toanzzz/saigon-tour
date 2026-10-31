@@ -53,6 +53,13 @@ docker run --env-file .env -p 58001:58001 saigon-tour-api
 Terminate TLS at the host proxy and set `CORS_ORIGINS` to the client origin.
 Credentials belong only in the backend runtime environment.
 
+Identity uses Better Auth. Set `BETTER_AUTH_SECRET` (32+ characters, required in
+production), `PUBLIC_API_URL` (the API origin the browser uses), and `CLIENT_URL`.
+Meta login is enabled when both `META_CLIENT_ID` and `META_CLIENT_SECRET` are set; register
+`${PUBLIC_API_URL}/auth/callback/facebook` as the Facebook Login redirect URI. See
+`apps/server/.env.example`. `bun run --filter @saigon/server auth:generate` regenerates the
+auth schema from the plugin list; never edit `src/shared/db/auth-schema.ts` by hand.
+
 ## Project
 
 - [Design and controls](docs/game-design.md)

@@ -1,5 +1,6 @@
 export * from './contracts'
 export * from './events'
 export * from './multiplayer'
+export * from './names'
 export * from './party'
 export * from './world'

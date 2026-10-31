@@ -39,7 +39,7 @@ export const ClientSocketMessageSchema = z.discriminatedUnion('type', [
   z
     .object({
       type: z.literal('hello'),
-      token: z.string().min(1).max(128),
+      token: z.string().min(1).max(256),
       protocol: z.literal(1),
     })
     .strict(),

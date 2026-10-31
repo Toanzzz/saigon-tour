@@ -93,7 +93,7 @@ export function setupNpc() {
     await fx.close()
   })
   beforeEach(async () => {
-    playerId = (await fx.db.createGuest()).player.id
+    playerId = (await fx.guest()).player.id
   })
   return {
     get fx() {

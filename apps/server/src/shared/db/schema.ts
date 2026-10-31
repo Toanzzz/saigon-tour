@@ -10,11 +10,17 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core'
+import { user } from './auth-schema'
+
+export * from './auth-schema'
 
 export const players = pgTable('players', {
   revision: integer().notNull().default(0),
   id: uuid().primaryKey(),
-  tokenHash: text('token_hash').notNull().unique(),
+  tokenHash: text('token_hash').unique(),
+  userId: text('user_id')
+    .unique()
+    .references(() => user.id, { onDelete: 'cascade' }),
   name: text().notNull(),
   color: text().notNull(),
   world: jsonb().$type<WorldState>().notNull(),

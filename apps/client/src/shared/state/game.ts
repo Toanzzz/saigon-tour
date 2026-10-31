@@ -42,6 +42,9 @@ export interface GameState {
   guestColor: string | null
   guestStatus: 'loading' | 'online' | 'offline' | 'resetting'
   returningGuest: boolean
+  /** Anonymous play by default; `meta` once linked to a Meta account. */
+  account: 'anonymous' | 'meta' | null
+  metaAvailable: boolean
   generation: number
   position: Point
   world: WorldState
@@ -77,6 +80,8 @@ export function initialState(generation = 0): GameState {
     guestColor: null,
     guestStatus: 'loading',
     returningGuest: false,
+    account: null,
+    metaAvailable: false,
     position: [...SPAWN],
     world: {
       locationId: 'market',

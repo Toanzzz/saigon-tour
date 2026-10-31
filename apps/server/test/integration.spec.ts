@@ -13,9 +13,18 @@ describe.skipIf(!enabled)('Postgres persistence', () => {
   it('retains guest progress across application instances and grants concurrent reward once', async () => {
     const config = { ...readConfig(), apiKey: undefined }
     db = await createDb(config.databaseUrl)
-    const services = { db, storage: new InMemoryStore({ id: randomUUID() }) }
+    const services = {
+      db,
+      orm: db.orm,
+      storage: new InMemoryStore({ id: randomUUID() }),
+    }
     const app = createApp(config, fetch, services)
-    const guest = await (await app.request('/guest', { method: 'POST' })).json()
+    const guest = await (
+      await app.request('/auth/sign-in/anonymous', {
+        method: 'POST',
+        headers: { Origin: 'http://localhost:58000' },
+      })
+    ).json()
     const headers = {
       Authorization: `Bearer ${guest.token}`,
       'Content-Type': 'application/json',
@@ -40,7 +49,7 @@ describe.skipIf(!enabled)('Postgres persistence', () => {
       { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
     ])
     await Promise.all([interact('check'), interact('check')])
-    const other = createApp(config, fetch, { db, storage: services.storage })
+    const other = createApp(config, fetch, services)
     const { player } = await (await other.request('/me', { headers })).json()
     expect(player.world.currency).toBe(80)
     expect(player.world.completedQuestIds).toEqual(['hoa-herbs-delivery'])

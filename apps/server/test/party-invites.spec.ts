@@ -22,7 +22,7 @@ describe('party invitations and membership', () => {
       if (!address || typeof address === 'string')
         throw new Error('Missing port')
       const connect = async () => {
-        const identity = await ctx.fx.db.createGuest()
+        const identity = await ctx.fx.guest()
         const socket = new WebSocket(`ws://127.0.0.1:${address.port}/ws`, {
           origin: 'http://localhost:58000',
         })

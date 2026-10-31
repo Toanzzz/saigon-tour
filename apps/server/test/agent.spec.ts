@@ -23,7 +23,7 @@ afterAll(async () => {
   await fx.close()
 })
 beforeEach(async () => {
-  token = (await fx.db.createGuest()).token
+  token = (await fx.guest()).token
 })
 const appFor = (cfg = config, fetcher: typeof fetch = fetch) =>
   createApp(cfg, fetcher, fx)

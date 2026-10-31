@@ -11,16 +11,17 @@
 
 ## 2. Stack
 
-| Layer      | Choice                                                                                  |
-| ---------- | --------------------------------------------------------------------------------------- |
-| Client     | Vite, React, three.js, React Three Fiber, drei, Rapier, `@react-three/xr`               |
-| Data/state | TanStack Query (API), TanStack Store (game state)                                       |
-| API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; `ws` realtime          |
-| Agents     | Mastra (`@mastra/core`, `@mastra/memory`, `@mastra/pg`) via `@ai-sdk/openai-compatible` |
-| Model      | Meta `muse-spark-1.3-contributor` (`META_MODEL` overrides)                              |
-| Storage    | Postgres 18 with Drizzle migrations                                                     |
-| Contracts  | zod 4 in `packages/shared` (raw TS)                                                     |
-| Hosting    | Client: Cloudflare asset-only Worker. API: separate HTTPS origin, credentialed CORS     |
+| Layer      | Choice                                                                                   |
+| ---------- | ---------------------------------------------------------------------------------------- |
+| Client     | Vite, React, three.js, React Three Fiber, drei, Rapier, `@react-three/xr`                |
+| Data/state | TanStack Query (API), TanStack Store (game state)                                        |
+| API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; `ws` realtime           |
+| Agents     | Mastra (`@mastra/core`, `@mastra/memory`, `@mastra/pg`) via `@ai-sdk/openai-compatible`  |
+| Model      | Meta `muse-spark-1.3-contributor` (`META_MODEL` overrides)                               |
+| Storage    | Postgres 18 with Drizzle migrations                                                      |
+| Identity   | Better Auth: anonymous sessions, Meta (Facebook Login) linking, bearer + cookie sessions |
+| Contracts  | zod 4 in `packages/shared` (raw TS)                                                      |
+| Hosting    | Client: Cloudflare asset-only Worker. API: separate HTTPS origin, credentialed CORS      |
 
 Toolchain: Bun 1.4.4 workspaces (isolated linker), TypeScript 7 (`tsc -b`, composite project per
 package), Biome 2.6.x, Vitest. Backend logs use the 7-key structured logger.
@@ -34,11 +35,11 @@ Client (desktop + WebXR) ──HTTPS JSON──▶ API (Hono, Docker) ──▶ 
         │                                   │
         └──────────── /ws realtime ─────────┤
                                             ▼
-                                         Postgres (guests, journeys, spend, NPC memory)
+                                         Postgres (auth users, journeys, spend, NPC memory)
 ```
 
-API routes: `GET /health`, `POST /guest`, `GET /me`, `POST /me/reset`,
-`POST /npc/:npcId/interact`, `GET /ws`. Details: `docs/meta-api.md`, `docs/multiplayer.md`.
+API routes: `GET /health`, `GET /auth/providers`, Better Auth under `/auth/*`, `GET /me`,
+`POST /me/profile`, `POST /me/reset`, `POST /npc/:npcId/interact`, `GET /ws`. Details: `docs/meta-api.md`, `docs/multiplayer.md`.
 
 ## 4. Client
 

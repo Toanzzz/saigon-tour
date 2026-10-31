@@ -20,7 +20,7 @@ const url = process.env.GAME_URL || 'http://127.0.0.1:58003/?debug=1'
 const out = process.env.QA_OUTPUT || 'artifacts/pass-multiplayer'
 const guest = async (page) => {
   const token = await page.evaluate(() =>
-    localStorage.getItem('saigon-tour.guest-token')
+    localStorage.getItem('saigon-tour.session-token')
   )
   return (
     await (

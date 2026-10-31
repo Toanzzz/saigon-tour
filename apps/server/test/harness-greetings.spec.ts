@@ -42,7 +42,7 @@ describe('Mastra NPC harness greetings', () => {
     })
     expect(seen).toHaveLength(1)
     expect(seen[0]?.tools ?? []).toEqual([])
-    const other = (await ctx.fx.db.createGuest()).player.id
+    const other = (await ctx.fx.guest()).player.id
     const cached = await harness.interact(
       'hoa',
       ask('Hello again!', {
@@ -116,7 +116,7 @@ describe('Mastra NPC harness greetings', () => {
   })
 
   it('serves the interact route and rejects unknown NPCs or bad input', async () => {
-    const { token } = await ctx.fx.db.createGuest()
+    const { token } = await ctx.fx.guest()
     const app = createApp(offline, fetch, ctx.fx)
     const post = (path: string, body: unknown) =>
       app.request(path, {

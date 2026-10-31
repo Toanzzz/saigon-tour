@@ -22,7 +22,7 @@ import {
   recordPlayers,
   speech,
 } from './presence'
-import { API_BASE, guestToken } from './session'
+import { API_BASE, sessionToken } from './session'
 import { net, updateNet } from './status'
 
 export function sendParty(message: PartyClientMessage) {
@@ -95,7 +95,7 @@ export function installRealtime() {
     const connection = socket
     handshake = setTimeout(() => connection.close(), 6000)
     connection.onopen = () => {
-      send({ type: 'hello', token: guestToken() ?? '', protocol: 1 })
+      send({ type: 'hello', token: sessionToken() ?? '', protocol: 1 })
     }
     connection.onmessage = (event) => {
       if (socket !== connection) return

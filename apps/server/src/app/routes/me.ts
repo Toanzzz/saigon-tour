@@ -1,12 +1,38 @@
+import { zValidator } from '@hono/zod-validator'
+import { PlayerNameSchema } from '@saigon/shared'
 import { Hono } from 'hono'
+import { z } from 'zod'
 import { requireAuth } from './auth'
 import type { Env, RouteDeps } from './deps'
 
+const ProfileSchema = z.object({ name: PlayerNameSchema }).strict()
+
 /** Authenticated player routes, mounted under `/me`. */
-export function meRoutes({ db, harness, realtime }: RouteDeps) {
+export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
   return new Hono<Env>()
-    .use('*', requireAuth(db))
-    .get('/', (c) => c.json({ player: c.var.player }))
+    .use('*', requireAuth(auth, db))
+    .get('/', (c) =>
+      c.json({
+        player: c.var.player,
+        account: { anonymous: Boolean(c.var.user.isAnonymous) },
+      })
+    )
+    .post(
+      '/profile',
+      zValidator('json', ProfileSchema, (result, c) => {
+        if (!result.success) return c.json({ error: 'invalid_name' }, 400)
+      }),
+      async (c) => {
+        const { name } = c.req.valid('json')
+        await auth.api.updateUser({
+          headers: c.req.raw.headers,
+          body: { name },
+        })
+        const player = await db.rename(c.var.player.id, name)
+        realtime.rename(player.id, name)
+        return c.json({ player })
+      }
+    )
     .post('/reset', async (c) => {
       const { id } = c.var.player
       await harness.clearMemory(id)

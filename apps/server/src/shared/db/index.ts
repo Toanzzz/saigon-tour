@@ -1,11 +1,16 @@
-import { createHash, randomBytes, randomUUID } from 'node:crypto'
+import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { GuestPlayer, NpcId, Quest, WorldState } from '@saigon/shared'
-import { GuestPlayerSchema, STARTING_CURRENCY } from '@saigon/shared'
+import {
+  GuestPlayerSchema,
+  randomPlayerColor,
+  STARTING_CURRENCY,
+} from '@saigon/shared'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { Pool } from 'pg'
+import * as schema from './schema'
 
 export interface PlayerSave {
   revision: number
@@ -24,7 +29,6 @@ export interface Reservation {
   day: string
   id: string
 }
-const hash = (token: string) => createHash('sha256').update(token).digest('hex')
 const initial = (): PlayerSave => ({
   revision: 0,
   world: {
@@ -56,26 +60,51 @@ export class GameDb {
     await this.sql.query('SELECT 1')
     return true
   }
-  async createGuest() {
-    const token = randomBytes(32).toString('base64url')
-    const id = randomUUID()
-    const name = `${['Sóc Nắng', 'Mây Xanh', 'Sen Hồng', 'Gió Mát'][Math.floor(Math.random() * 4)]} ${Math.floor(Math.random() * 90) + 10}`
-    const color = ['#f6c568', '#85c7b6', '#ed9d86', '#b6a2dc'][
-      Math.floor(Math.random() * 4)
-    ]
+  /** The player saved for an auth user, created on first sight. */
+  async ensurePlayer(user: { id: string; name: string }) {
     const save = initial()
-    const { rows } = await this.sql.query(
-      'INSERT INTO players(id,token_hash,name,color,world,quest,completed,reputation) VALUES($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *',
-      [id, hash(token), name, color, JSON.stringify(save.world), null, '[]', 0]
+    await this.sql.query(
+      'INSERT INTO players(id,user_id,name,color,world,quest,completed,reputation) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (user_id) DO NOTHING',
+      [
+        randomUUID(),
+        user.id,
+        user.name,
+        randomPlayerColor(),
+        JSON.stringify(save.world),
+        null,
+        '[]',
+        0,
+      ]
     )
-    return { token, player: publicPlayer(rows[0]) }
+    const { rows } = await this.sql.query(
+      'UPDATE players SET seen_at=now() WHERE user_id=$1 RETURNING *',
+      [user.id]
+    )
+    if (!rows[0]) throw new Error('player_not_found')
+    return publicPlayer(rows[0])
   }
-  async authenticate(token: string) {
+  async playerIdForUser(userId: string) {
     const { rows } = await this.sql.query(
-      'UPDATE players SET seen_at=now() WHERE token_hash=$1 RETURNING *',
-      [hash(token)]
+      'SELECT id FROM players WHERE user_id=$1',
+      [userId]
     )
-    return rows[0] ? publicPlayer(rows[0]) : null
+    return (rows[0]?.id as string | undefined) ?? null
+  }
+  /** Move a player's save to another auth user (anonymous account linking). */
+  async transferPlayer(fromUserId: string, toUserId: string) {
+    const { rows } = await this.sql.query(
+      'UPDATE players SET user_id=$2 WHERE user_id=$1 RETURNING id',
+      [fromUserId, toUserId]
+    )
+    return (rows[0]?.id as string | undefined) ?? null
+  }
+  async rename(id: string, name: string) {
+    const { rows } = await this.sql.query(
+      'UPDATE players SET name=$2 WHERE id=$1 RETURNING *',
+      [id, name]
+    )
+    if (!rows[0]) throw new Error('player_not_found')
+    return publicPlayer(rows[0])
   }
   async player(id: string) {
     const { rows } = await this.sql.query('SELECT * FROM players WHERE id=$1', [
@@ -218,13 +247,16 @@ export class GameDb {
       [key, reply, source]
     )
   }
+  /** Remove anonymous and legacy players unseen for 30 days. */
   async sweep() {
+    const stale = `seen_at < now()-interval '30 days' AND (user_id IS NULL OR user_id IN (SELECT id FROM "user" WHERE is_anonymous))`
     const { rows } = await this.sql.query(
-      "SELECT id FROM players WHERE seen_at < now()-interval '30 days'"
+      `SELECT id,user_id FROM players WHERE ${stale}`
     )
-    await this.sql.query(
-      "DELETE FROM players WHERE seen_at < now()-interval '30 days'"
-    )
+    await this.sql.query('DELETE FROM "user" WHERE id = ANY($1::text[])', [
+      rows.map((r) => r.user_id).filter(Boolean),
+    ])
+    await this.sql.query(`DELETE FROM players WHERE ${stale}`)
     return rows.map((r) => r.id as string)
   }
   async close() {
@@ -239,7 +271,11 @@ export async function createDb(url: string, barkLimit = 200) {
     fileURLToPath(new URL('../../../drizzle', import.meta.url)),
   ].find((path) => existsSync(`${path}/meta/_journal.json`))
   if (!migrationsFolder) throw new Error('database_migrations_missing')
-  await migrate(drizzle(pool), { migrationsFolder })
+  const orm = drizzle(pool, { schema })
+  await migrate(orm, { migrationsFolder })
 
-  return Object.assign(new GameDb(pool, pool, undefined, barkLimit), { pool })
+  return Object.assign(new GameDb(pool, pool, undefined, barkLimit), {
+    pool,
+    orm,
+  })
 }

@@ -21,10 +21,10 @@ try {
     page.on('pageerror', (e) => errors.push(e.message))
     await page.goto(process.env.GAME_URL || 'http://127.0.0.1:58003/?debug=1')
     await page.waitForFunction(() =>
-      localStorage.getItem('saigon-tour.guest-token')
+      localStorage.getItem('saigon-tour.session-token')
     )
     const token = await page.evaluate(() =>
-      localStorage.getItem('saigon-tour.guest-token')
+      localStorage.getItem('saigon-tour.session-token')
     )
     const base = process.env.API_URL || 'http://127.0.0.1:58004'
     const headers = {

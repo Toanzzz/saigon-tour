@@ -5,6 +5,7 @@ import {
   WORLD_BOUNDS,
 } from '@saigon/shared'
 import type { GameService } from '@/domain/game'
+import type { Auth } from '@/features/auth'
 import type { GameDb } from '@/shared/db'
 import type { RoomManager, RoomSocket } from './rooms'
 
@@ -20,6 +21,7 @@ export class SocketSession {
   constructor(
     private readonly socket: RoomSocket,
     private readonly rooms: RoomManager,
+    private readonly auth: Auth,
     private readonly db: GameDb,
     private readonly game: GameService,
     private readonly hooks?: {
@@ -151,12 +153,15 @@ export class SocketSession {
 
   private async hello(token: string) {
     try {
-      const player = await this.db.authenticate(token)
+      const session = await this.auth.api.getSession({
+        headers: new Headers({ Authorization: `Bearer ${token}` }),
+      })
       if (this.closed) return
-      if (!player) {
+      if (!session) {
         this.close(1008, 'unauthorized')
         return
       }
+      const player = await this.db.ensurePlayer(session.user)
       this.playerId = player.id
       clearTimeout(this.deadline)
       this.rooms.connect(player, this.socket)

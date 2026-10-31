@@ -1,6 +1,7 @@
 import { upgradeWebSocket } from '@hono/node-server'
 import type { Hono } from 'hono'
 import { WebSocketServer } from 'ws'
+import type { Auth } from '@/features/auth'
 import type { NpcHarness } from '@/features/npc'
 import { PartyService } from '@/features/party'
 import { RoomManager, SocketSession } from '@/features/realtime'
@@ -19,6 +20,7 @@ export function createRealtime(
   app: Hono<Env>,
   config: ServerConfig,
   harness: NpcHarness,
+  auth: Auth,
   db: GameDb,
   now = Date.now
 ) {
@@ -46,7 +48,7 @@ export function createRealtime(
             socket.close(1013, 'server_full')
             return
           }
-          session = new SocketSession(socket, manager, db, harness.game, {
+          session = new SocketSession(socket, manager, auth, db, harness.game, {
             onMessage: (id, message) => party.handle(id, message),
             onConnected: (id) => party.connected(id),
           })
@@ -75,6 +77,10 @@ export function createRealtime(
     manager,
     party,
     server,
+    rename(playerId: string, name: string) {
+      const player = manager.getPlayer(playerId)
+      if (player) player.name = name
+    },
     shutdown() {
       stopped = true
       for (const session of sessions) session.close(1012, 'server_restart')

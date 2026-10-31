@@ -17,7 +17,7 @@ const headers = (token: string) => ({ Authorization: `Bearer ${token}` })
 
 describe('durable guest progress', () => {
   it('advances save revisions across events, rewards, and reset', async () => {
-    const { player } = await fx.db.createGuest()
+    const { player } = await fx.guest()
     const game = new GameService(fx.db)
     expect(player.revision).toBe(0)
     const moved = await game.applyEvents(player.id, [
@@ -30,25 +30,32 @@ describe('durable guest progress', () => {
     expect((await fx.db.player(player.id)).revision).toBe(2)
   })
 
-  it('issues opaque tokens, stores their hash, and authenticates only valid credentials', async () => {
+  it('signs in anonymously and authenticates only valid sessions', async () => {
     const app = createApp(config, fetch, fx)
-    const response = await app.request('/guest', { method: 'POST' })
-    expect(response.status).toBe(201)
-    const { token, player } = await response.json()
-    expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/)
-    expect(player.name).toMatch(/\d{2}$/)
-    const stored = await fx.sql.query<{ token_hash: string }>(
-      'SELECT token_hash FROM players WHERE id=$1',
-      [player.id]
+    const response = await app.request('/auth/sign-in/anonymous', {
+      method: 'POST',
+      headers: { Origin: 'http://localhost:58000' },
+    })
+    expect(response.status).toBe(200)
+    const { token, user } = await response.json()
+    expect(user.isAnonymous).toBe(true)
+    expect(user.name).toMatch(/\d{2}$/)
+    expect(response.headers.get('set-auth-token')).toBeTruthy()
+    const me = await app.request('/me', { headers: headers(token) })
+    const body = await me.json()
+    expect(body).toMatchObject({
+      account: { anonymous: true },
+      player: { name: user.name, world: { currency: 30 } },
+    })
+    const stored = await fx.sql.query<{ user_id: string }>(
+      'SELECT user_id FROM players WHERE id=$1',
+      [body.player.id]
     )
-    expect(stored.rows[0]?.token_hash).toMatch(/^[a-f0-9]{64}$/)
-    expect(stored.rows[0]?.token_hash).not.toBe(token)
+    expect(stored.rows[0]?.user_id).toBe(user.id)
     expect((await app.request('/me')).status).toBe(401)
     expect(
       (await app.request('/me', { headers: headers('invalid') })).status
     ).toBe(401)
-    const me = await app.request('/me', { headers: headers(token) })
-    expect(await me.json()).toEqual({ player })
     expect((await app.request('/me/reset', { method: 'POST' })).status).toBe(
       401
     )
@@ -63,8 +70,46 @@ describe('durable guest progress', () => {
     ).toBe(401)
   })
 
+  it('renames the player and rejects unsafe names', async () => {
+    const app = createApp(config, fetch, fx)
+    const { token, player } = await fx.guest()
+    const rename = (name: string) =>
+      app.request('/me/profile', {
+        method: 'POST',
+        headers: { ...headers(token), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      })
+    const ok = await rename('  Cô   Lan  ')
+    expect(ok.status).toBe(200)
+    expect((await ok.json()).player).toMatchObject({
+      id: player.id,
+      name: 'Cô Lan',
+    })
+    expect((await rename('<b>x</b>')).status).toBe(400)
+    expect((await rename('x')).status).toBe(400)
+    const me = await (
+      await app.request('/me', { headers: headers(token) })
+    ).json()
+    expect(me.player.name).toBe('Cô Lan')
+  })
+
+  it('reports whether Meta login is configured', async () => {
+    const off = createApp(config, fetch, fx)
+    expect(await (await off.request('/auth/providers')).json()).toEqual({
+      meta: false,
+    })
+    const on = createApp(
+      { ...config, meta: { clientId: 'app', clientSecret: 'shh' } },
+      fetch,
+      fx
+    )
+    expect(await (await on.request('/auth/providers')).json()).toEqual({
+      meta: true,
+    })
+  })
+
   it('retains saved progress across app instances and resets the same guest', async () => {
-    const { player, token } = await fx.db.createGuest()
+    const { player, token } = await fx.guest()
     const first = createApp(config, fetch, fx)
     await first.harness.game.offerQuest(player.id, 'hoa', DEMO_QUEST.id)
     await first.harness.memory.remember({
@@ -119,7 +164,7 @@ describe('durable guest progress', () => {
   })
 
   it('serializes concurrent reward checks and persists a single completion', async () => {
-    const { player } = await fx.db.createGuest()
+    const { player } = await fx.guest()
     const game = new GameService(fx.db)
     await game.offerQuest(player.id, 'hoa', DEMO_QUEST.id)
     await game.applyEvents(player.id, [
@@ -143,7 +188,7 @@ describe('durable guest progress', () => {
   })
 
   it('keeps facts scoped, deduplicated, and bounded to twelve', async () => {
-    const { player } = await fx.db.createGuest()
+    const { player } = await fx.guest()
     for (let i = 0; i < 15; i++)
       await fx.db.rememberFact({
         npcId: 'hoa',

@@ -20,7 +20,7 @@ Remote tourists interpolate snapshots with a 150 ms delay. The client draws the 
 
 `bun run dev` starts Postgres before the client and API. Compose binds Postgres to `127.0.0.1:58002`; client and API use 58000 and 58001. `docker compose --profile api up -d --build` runs the API image with migrations applied at startup. `DATABASE_URL` is required in production.
 
-Guest tokens live in browser local storage; the server stores only SHA-256 hashes. Reset retains the guest name and token while clearing saved progress and NPC memory. Guests unseen for 30 days are removed by the startup/daily sweep.
+Identity is Better Auth. Starting the game signs in anonymously; the session token lives in browser local storage and is sent as a bearer credential. Players can rename themselves or roll a random name. Meta login (Facebook Login) links the anonymous identity: a new Meta account inherits the guest save, and an account that already has a save keeps it. Reset keeps the identity and name while clearing saved progress and NPC memory. Anonymous players unseen for 30 days are removed by the startup/daily sweep; Meta accounts are kept.
 
 ## Parties and the lunch errand
 

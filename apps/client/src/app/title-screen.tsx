@@ -1,12 +1,24 @@
 import { useProgress } from '@react-three/drei'
+import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
+import { useState } from 'react'
 import { game } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
+import { commitPlayerName, TitleIdentity } from './title-identity'
 
 export function TitleScreen() {
   const { active, progress } = useProgress()
   const { guestName, guestStatus, returningGuest } = useSelector(game, (s) => s)
+  const [name, setName] = useState('')
+  const [starting, setStarting] = useState(false)
+  const valid = PlayerNameSchema.safeParse(name).success
+  const begin = async () => {
+    setStarting(true)
+    const saved = await commitPlayerName(name)
+    setStarting(false)
+    if (saved) start()
+  }
   return (
     <section className="title-screen" aria-label="Welcome to Sài Gòn">
       <div className="title-content">
@@ -17,12 +29,13 @@ export function TitleScreen() {
             ? `Welcome back, ${guestName}`
             : 'Meet a neighbor, lend a hand, and let the city surprise you.'}
         </p>
+        <TitleIdentity name={name} onName={setName} />
         <div className="title-actions">
           <button
             type="button"
             className="primary-button title-start"
-            disabled={active || guestStatus === 'loading'}
-            onClick={start}
+            disabled={active || guestStatus === 'loading' || !valid || starting}
+            onClick={begin}
           >
             {active
               ? `Opening the neighborhood… ${Math.round(progress)}%`

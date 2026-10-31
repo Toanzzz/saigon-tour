@@ -8,14 +8,14 @@ import type { Env, RouteDeps } from './deps'
 const NpcParamSchema = z.object({ npcId: NpcIdSchema })
 
 /** NPC interaction routes, mounted under `/npc`. */
-export function npcRoutes({ db, harness }: RouteDeps) {
+export function npcRoutes({ auth, db, harness }: RouteDeps) {
   return new Hono<Env>().post(
     '/:npcId/interact',
     // Unknown NPCs are rejected before auth, matching the original contract.
     zValidator('param', NpcParamSchema, (result, c) => {
       if (!result.success) return c.json({ error: 'unknown_npc' }, 404)
     }),
-    requireAuth(db),
+    requireAuth(auth, db),
     zValidator('json', InteractRequestSchema, (result, c) => {
       if (!result.success) return c.json({ error: 'invalid_request' }, 400)
     }),

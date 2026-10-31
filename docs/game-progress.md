@@ -213,3 +213,11 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - Client consumes the typed client: `shared/api/client.ts` `hc<AppType>`; moved token/transport primitives to `shared/api/transport.ts`; migrated `session.ts` (`/me`,`/guest`,`/me/reset`) and `agent.ts` (`/npc/:npcId/interact`) off raw fetch. Behavior (401→guest, offline fallback, timeouts, credentials) preserved.
 - Cross-package types: client tsconfig now references `apps/server/tsconfig.lib.json` (declaration-only emit into gitignored `dist/`) and `packages/shared`, so the client resolves server `@/*`-aliased source via emitted `.d.ts`.
 - Wire contracts, status codes, CORS, 16KiB body limit, and onError unchanged. Gate passed: check → check:types → build → test (server 65 passed + 1 skipped; client 45 passed). Headless Playwright: desktop reached server-verified quest completion (completed=1, reward) and 390px mobile passed with zero page/console errors and zero failed requests.
+
+
+## Identity pass: Better Auth anonymous + Meta login
+
+- Better Auth 1.7.14 with the Drizzle adapter on the game Postgres. `bearer` and `anonymous` plugins come from one `authPlugins()` list shared by runtime and `auth generate`. `src/shared/db/auth-schema.ts` is generated; migration `0002_better_auth` adds the auth tables and `players.user_id`. `players.token_hash` stays nullable for legacy rows.
+- Starting the game signs in anonymously. The title screen shows an editable random name, a dice button that re-rolls it, and "Continue with Meta" when Meta credentials are configured. `POST /me/profile` validates and saves the name.
+- Meta login is Facebook Login through Better Auth. Linking keeps the existing Meta save; a new Meta account inherits the guest save. After the redirect the client reads `/auth/get-session` and stores the bearer token.
+- `/ws` hello now verifies the Better Auth session. Colyseus replacement follows in the realtime pass.

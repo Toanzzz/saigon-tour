@@ -11,7 +11,7 @@ const storage = new PostgresStore({
   schemaName: 'mastra',
 })
 await storage.init()
-const app = createApp(config, fetch, { db, storage })
+const app = createApp(config, fetch, { db, orm: db.orm, storage })
 const sweep = async () => {
   for (const id of await db.sweep()) await app.harness.clearMemory(id)
 }
