@@ -4,7 +4,7 @@
 
 **Saigon Tour** is a 3D exploration game set in a stylized mini-city inspired by Sài Gòn
 (Ho Chi Minh City, Vietnam). The player wanders a compact, hand-authored district, rides
-the city's public transport — both modern (Metro Line 1, electric bus) and traditional
+the city's public transport — both modern (Metro Line 1, bus) and traditional
 (xe ôm motorbike taxi, cyclo, bus) — and meets NPCs whose dialogue, quests, and reward
 decisions are driven live by Meta's AI models. NPCs behave as goal-directed agents: they
 converse naturally, assign context-aware quests, verify completion, and grant rewards.
@@ -120,8 +120,8 @@ traditional — so getting around is part of the fun and the cultural flavor.
 2. WHEN the player boards a transport vehicle at a stop/station THEN the system SHALL
    transition the player into a riding state, move them along a defined route, and set them
    down at the chosen destination stop.
-3. The system SHOULD provide, across tiers, both **modern** (Metro Line 1 train, electric
-   bus) and **traditional** (xe ôm motorbike taxi, cyclo / xích lô, classic bus) options
+3. The system SHOULD provide, across tiers, both **modern** (Metro Line 1 train, city
+   bus) and **traditional** (xe ôm motorbike taxi, cyclo / xích lô) options
    (P1).
 4. WHEN the player selects a destination THEN the system SHALL present reachable stops and
    the associated vehicle, and SHALL optionally charge in-game currency / fare.
@@ -238,14 +238,14 @@ so nothing breaks on stage.
 
 - Large open-world map, full city scale, or accurate geographic replica of HCMC.
 - Real accounts, cross-browser identity, typed public chat, monetization, and XR party controls.
+  Guest rooms, presence, and desktop parties are in scope (`docs/multiplayer.md`).
 - Photorealistic graphics; the art target is a clean stylized/low-poly look.
 - Full traffic simulation; ambient traffic is decorative only.
 
 ## Assumptions
 
 - A1. Meta Model API access and the $150 credit will be claimed and available.
-- A2. Target engine/stack supports both a desktop build and a Quest 3 VR build from one
-  codebase (see design — Web/WebXR + three.js/Babylon, or Unity, to be decided in design).
+- A2. One Web/WebXR codebase (three.js + React Three Fiber) serves desktop and Quest 3.
 - A3. Art assets will be a mix of free/CC low-poly packs (properly licensed per R0.3) and
   possibly AI-generated textures (Muse Image/Wonder), with original composition built during
   the hackathon.

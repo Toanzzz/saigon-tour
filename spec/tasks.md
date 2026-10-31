@@ -8,19 +8,18 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 
 ## Phase 0 — Foundations (P0)
 
-- [ ] 1. **Scaffold the Bun monorepo** (R0.2; Design §2, §10)
+- [x] 1. **Scaffold the Bun monorepo** (R0.2; Design §2, §10)
   - Stack is locked: three.js + React Three Fiber + @react-three/xr, full TypeScript ^7, solo.
-  - Create Bun workspace (`bun@1.4.2`, isolated linker): `apps/client` (Vite + React + TS),
-    `apps/server` (Node + Hono + TS), `packages/shared` (zod v4 schemas + types). Set up
-    `vite --https` for WebXR on Quest.
-  - Add Biome 2.5.x, `tsconfig.base.json` + root solution file + composite project per package,
+  - Create Bun workspace (`bun@1.4.4`, isolated linker): `apps/client` (Vite + React + TS),
+    `apps/server` (Node + Hono + TS), `packages/shared` (zod v4 schemas + types).
+  - Add Biome 2.6.x, `tsconfig.base.json` + root solution file + composite project per package,
     and a root `check` script (`tsc -b`, `biome check`).
   - Add an asset-only `wrangler.jsonc` to serve the built client on Cloudflare.
   - Add root README stating the project is built for the hackathon.
   - Initialize a **public** git repo and push.
   - _Requirements: R0.2, A2, Design §2, §10_
 
-- [ ] 2. **Verify a raw Meta Model API call** (R0.1, R9) — _credits already claimed_
+- [x] 2. **Verify a raw Meta Model API call** (R0.1, R9) — _credits already claimed_
   - From `apps/server/`, make a smoke-test call to Muse Spark and confirm a response; pin the
     exact model IDs in `docs/` (resolves Design D2).
   - Confirm the spend limit is set to protect the $150 budget.
@@ -117,18 +116,22 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 ## Phase 5 — Breadth (P1)
 
 - [x] 19. **Add remaining NPCs (3–4 total)** — Anh Tâm, Chị Linh, Ông Ba. _(R3.2)_
-- [x] 20. **Add transport modes** — modern (Metro Line 1, e-bus) + traditional (cyclo, bus).
+- [x] 20. **Add transport modes** — modern (Metro Line 1, bus) + traditional (xe ôm, cyclo).
   _(R4.3)_
 - [x] 21. **Full quest-log UI + inventory screen.** _(R5.1, R6.1)_
 - [x] 22. **Ambient city life + basic audio** (decorative traffic, pedestrians, street SFX).
   _(Design §4.4, out-of-scope traffic = decorative only)_
 
+- [x] 22a. **Shared neighborhood** — rooms, presence, emotes, parties, team lunch errand.
+  _(docs/multiplayer.md)_
+
 ## Phase 6 — Differentiators (P2)
 
-- [ ] 23. **WebXR VR mode on Quest 3** (R7)
+- [x] 23. **WebXR VR mode on Quest 3** (R7)
   - Immersive session, stereo render, 6-DoF; XRInput locomotion (teleport + smooth +
     snap-turn); world-space dialogue panels; ray-select to talk/board.
   - Share the game core unchanged; only input/rendering differ.
+  - Physical Quest 3 run not yet verified.
   - _Requirements: R7.1, R7.2, R7.3, R7.5_
 
 - [ ] 24. **VR performance pass (≥ 72 FPS)** (R7.4)
@@ -136,7 +139,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - _Requirements: R7.4_
 
 - [ ] 25. **Voice interaction via Muse Transcribe** (R8)
-  - `/voice/stt`; mic capture → transcript → NPC agent; optional TTS reply; graceful
+  - Voice route; mic capture → transcript → NPC agent; optional TTS reply; graceful
     degrade to text.
   - _Requirements: R8.1, R8.2, R8.3_
 
