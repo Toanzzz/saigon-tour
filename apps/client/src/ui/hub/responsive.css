@@ -52,6 +52,13 @@
   .hub-card {
     padding: 18px 18px 20px;
   }
+  .neighbor-card .card-header {
+    align-items: flex-start;
+    row-gap: 8px;
+  }
+  .neighbor-card .status {
+    margin-left: 66px;
+  }
   .hub-card.roofed {
     padding-top: 32px;
   }

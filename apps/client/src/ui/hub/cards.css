@@ -160,10 +160,19 @@
   grid-column: span 5;
   background: var(--pavement);
 }
+.neighbor-card .card-header {
+  align-items: center;
+  flex-wrap: wrap;
+}
 .neighbor-id {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  flex: 1 1 190px;
+}
+.neighbor-id > div {
+  min-width: 0;
 }
 .neighbor-id small {
   font-size: 13px;
@@ -190,6 +199,7 @@
   font-size: 13px;
   font-weight: 700;
   white-space: nowrap;
+  flex: 0 0 auto;
 }
 .hub-card .status::before {
   content: "";

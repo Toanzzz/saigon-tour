@@ -42,14 +42,14 @@ export function Neighbors() {
             distanceFactor={19}
             style={{ pointerEvents: 'none' }}
           >
-            <div className={`world-label ${id === active ? 'active' : ''}`}>
-              {id === active && (
+            {id === active && (
+              <div className="world-label active">
                 <span className="quest-marker" aria-hidden="true">
                   <b>!</b>
                 </span>
-              )}
-              <span className="name-tag">{NPCS[id].name}</span>
-            </div>
+                <span className="name-tag">{NPCS[id].name}</span>
+              </div>
+            )}
           </Html>
         </group>
       ))}
