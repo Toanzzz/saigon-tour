@@ -14,4 +14,5 @@
 - Definition of Done: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.
 - UI verification uses headless Playwright with real controls, desktop and 390px mobile flows.
 - Update `docs/game-progress.md` while working. Record observed results in `docs/final-evidence.md`.
-- Commit each validated pass. Never add AI attribution to commits, docs, or code.
+- Commit each validated pass. Use conventional commit style. Never add AI attribution to commits, docs, or code.
+- Ask user to start or restart local dev server, instead of running one.
