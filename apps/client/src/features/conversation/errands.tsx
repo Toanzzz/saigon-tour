@@ -19,7 +19,10 @@ function Pill({ tone, label }: { tone: string; label: string }) {
 
 function deliveryItem(quest: Quest, npc: NpcId): ItemId | null {
   const step = quest.steps.find((_, index) => !quest.progress[index])
-  return step?.type === 'DELIVER' && step.npcId === npc ? step.itemId : null
+  return (step?.type === 'DELIVER' || step?.type === 'BRING') &&
+    step.npcId === npc
+    ? step.itemId
+    : null
 }
 
 export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
@@ -68,31 +71,46 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
           </div>
         )
       })}
-      {active.map((quest) => (
-        <div className="errand" key={quest.id}>
-          <div className="errand-head">
-            <span className="errand-title">{quest.title}</span>
-            <Pill tone="active" label={m.errands_in_progress()} />
-          </div>
-          <p className="errand-hint">{questHint(quest)}</p>
-          {(() => {
-            const tracking = state.trackedQuestId === quest.id
-            return (
+      {active.map((quest) => {
+        const bringItem = deliveryItem(quest, npc)
+        const bringHeld = bringItem
+          ? (state.world.inventory[bringItem] ?? 0) > 0
+          : false
+        return (
+          <div className="errand" key={quest.id}>
+            <div className="errand-head">
+              <span className="errand-title">{quest.title}</span>
+              <Pill tone="active" label={m.errands_in_progress()} />
+            </div>
+            <p className="errand-hint">{questHint(quest)}</p>
+            {bringItem && bringHeld ? (
               <button
                 type="button"
-                className={`track-button${tracking ? ' track-button-on' : ''}`}
-                aria-pressed={tracking}
-                onClick={() =>
-                  update({ trackedQuestId: tracking ? null : quest.id })
-                }
+                className="primary-button"
+                onClick={() => void giveItem()}
               >
-                <Icon name={tracking ? 'check' : 'compass'} size={16} />
-                {tracking ? m.errands_tracking() : m.errands_track()}
+                {m.errands_give({ item: itemLabel(bringItem) })}
               </button>
-            )
-          })()}
-        </div>
-      ))}
+            ) : null}
+            {(() => {
+              const tracking = state.trackedQuestId === quest.id
+              return (
+                <button
+                  type="button"
+                  className={`track-button${tracking ? ' track-button-on' : ''}`}
+                  aria-pressed={tracking}
+                  onClick={() =>
+                    update({ trackedQuestId: tracking ? null : quest.id })
+                  }
+                >
+                  <Icon name={tracking ? 'check' : 'compass'} size={16} />
+                  {tracking ? m.errands_tracking() : m.errands_track()}
+                </button>
+              )
+            })()}
+          </div>
+        )
+      })}
       {canHelp ? (
         <p>
           {friendlinessOf(state.friendship, npc) <= -3

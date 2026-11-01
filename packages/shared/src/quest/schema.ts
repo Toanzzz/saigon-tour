@@ -3,6 +3,7 @@ import {
   ItemIdSchema,
   LocationIdSchema,
   MarketItemIdSchema,
+  MilestoneIdSchema,
   NpcIdSchema,
   RewardSchema,
 } from '../entities'
@@ -19,6 +20,13 @@ export const QuestStepSchema = z.discriminatedUnion('type', [
     .strict(),
   z
     .object({ type: z.literal('BUY'), marketItemId: MarketItemIdSchema })
+    .strict(),
+  z
+    .object({
+      type: z.literal('BRING'),
+      itemId: ItemIdSchema,
+      npcId: NpcIdSchema,
+    })
     .strict(),
 ])
 export type QuestStep = z.infer<typeof QuestStepSchema>
@@ -53,6 +61,8 @@ export const QuestSpecSchema = z
     payoff: PayoffSchema.optional(),
     twist: TwistSchema.optional(),
     riddle: RiddleSchema.optional(),
+    gift: ItemIdSchema.optional(),
+    milestone: MilestoneIdSchema.optional(),
   })
   .strict()
 export type QuestSpec = z.infer<typeof QuestSpecSchema>
@@ -142,6 +152,7 @@ export const CompletedQuestSchema = z
     giverNpcId: NpcIdSchema,
     reward: RewardSchema,
     completedAt: z.number().int().min(0),
+    milestone: MilestoneIdSchema.optional(),
   })
   .strict()
 export type CompletedQuest = z.infer<typeof CompletedQuestSchema>

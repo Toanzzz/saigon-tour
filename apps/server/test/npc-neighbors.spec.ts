@@ -22,7 +22,7 @@ describe('every neighbor can author an errand', () => {
             return { type: 'visit', locationId: step.locationId }
           if (step.type === 'TALK_TO')
             return { type: 'talk', npcId: step.npcId }
-          if (step.type === 'DELIVER')
+          if (step.type === 'DELIVER' || step.type === 'BRING')
             return { type: 'deliver', itemId: step.itemId, npcId: step.npcId }
           return { type: 'purchase', itemId: step.marketItemId }
         }

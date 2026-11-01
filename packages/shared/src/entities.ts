@@ -59,8 +59,13 @@ export const ItemIdSchema = z.enum([
   'coffee',
   'banana',
   'cake',
+  'coffee-beans',
+  'sheet-music',
+  'lanterns',
 ])
 export type ItemId = z.infer<typeof ItemIdSchema>
+export const MilestoneIdSchema = z.enum(['evening-concert'])
+export type MilestoneId = z.infer<typeof MilestoneIdSchema>
 export const MarketItemIdSchema = z.enum(['coffee', 'banana'])
 export type MarketItemId = z.infer<typeof MarketItemIdSchema>
 export const MARKET_ITEMS = {

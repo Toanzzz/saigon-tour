@@ -52,6 +52,7 @@ export async function grantQuest(
       giverNpcId: quest.giverNpcId,
       reward,
       completedAt: Date.now(),
+      ...(quest.milestone ? { milestone: quest.milestone } : {}),
     },
   ].slice(-32)
   return { type: 'completed', quest: structuredClone(quest), reward }

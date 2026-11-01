@@ -163,3 +163,12 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Engine: `advance` accrues `spent` and reveals a riddle on a cyclo ride; `applyQuestEvents` fronts a BUY only when unaffordable and a quest's next step needs it; new `bonus.ts` (`completionBonus`, `parFare`, `bonusCurrency`). `grantQuest` and offline `offline()` fold the bonus into `reward.currency` (quest currency capped ≤100) and write it back onto the quest.
 - Behavior change: completing a route with no ride spend now earns the thrifty +5 bonus, so several exact-currency assertions were updated to read the final completion reward.
 - Tests: `apps/server/test/quest-spend-bonus.spec.ts` (8); offline thrifty parity in `offline-quests.spec.ts`.
+
+## Phase 0C — BRING, component gifts, and milestone contracts (2026-11-02)
+
+- DoD green: `bun run check` → `check:types` → `build` → `test`. Server 335 passed / 2 skipped; client 147 passed. No snapshot change.
+- Contracts: items `coffee-beans`/`sheet-music`/`lanterns`, `MILESTONE_IDS`/`MilestoneIdSchema`, `QuestStep` BRING, `SeedQuest.gift`/`milestone`, `QuestSpecSchema.gift`/`milestone` (seed-only; `ModelQuestSpecSchema` unchanged), `CompletedQuestSchema.milestone`, `intent` gains `milestone` (empty message allowed), new `packages/shared/src/milestones.ts` (`MILESTONES`, `COMPONENT_ITEM_IDS`, `heldComponents`, `milestoneReady`, `milestoneForGiver`).
+- Engine: BRING validates against `MILESTONES` (host + held item else `missing_item`), component guard blocks components in DELIVER/BUY, gift scope (component only on its giver's milestone seed else a domain gift), BRING advances on `deliver`, `rewardFor` uses `gift ?? gifts[0]`. `QuestPlayer.inventory` added; `proposeQuest` passes it.
+- Seeds: `seedsFor` excludes milestone seeds; new `milestoneSeeds(npcId, locale)`.
+- Client: `stepCopy`/`questTarget`/`dialogueQuests` handle BRING; the giver's active errand shows a Give button when the next step is BRING to this NPC and the item is held. Labels + `step_bring` in EN/VI and the QA item map.
+- Tests: `apps/server/test/quest-bring-milestone.spec.ts` (8), client `quests.test.ts` BRING-to-giver case.

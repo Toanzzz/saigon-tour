@@ -183,6 +183,8 @@ export interface DerivedSeed {
   payoff?: Seed['payoff']
   twist?: Seed['twist']
   riddle?: Seed['riddle']
+  gift?: Seed['gift']
+  milestone?: Seed['milestone']
 }
 
 export const QUEST_SEEDS: DerivedSeed[] = DEFS.flatMap((d) =>
@@ -194,6 +196,8 @@ export const QUEST_SEEDS: DerivedSeed[] = DEFS.flatMap((d) =>
     ...(seed.payoff ? { payoff: seed.payoff } : {}),
     ...(seed.twist ? { twist: seed.twist } : {}),
     ...(seed.riddle ? { riddle: seed.riddle } : {}),
+    ...(seed.gift ? { gift: seed.gift } : {}),
+    ...(seed.milestone ? { milestone: seed.milestone } : {}),
   }))
 )
 

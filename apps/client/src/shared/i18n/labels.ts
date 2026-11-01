@@ -25,6 +25,9 @@ export function itemLabel(itemId: ItemId): string {
     coffee: m.item_coffee,
     banana: m.item_banana,
     cake: m.item_cake,
+    'coffee-beans': m['item_coffee-beans'],
+    'sheet-music': m['item_sheet-music'],
+    lanterns: m.item_lanterns,
   }
   return labels[itemId]()
 }

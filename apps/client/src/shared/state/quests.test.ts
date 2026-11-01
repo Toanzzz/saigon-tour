@@ -71,6 +71,21 @@ describe('dialogueQuests', () => {
     expect(result.forNpc.map((entry) => entry.id)).toEqual(['q_for'])
   })
 
+  it('surfaces a BRING step to the giver as a deliverable when held', () => {
+    const q = quest({
+      id: 'q_bring',
+      giverNpcId: 'vy',
+      steps: [{ type: 'BRING', itemId: 'lanterns', npcId: 'vy' }],
+      progress: [false],
+      milestone: 'evening-concert',
+    })
+    const result = dialogueQuests(withQuests([q], { lanterns: 1 }), 'vy')
+    expect(result.delivery?.type).toBe('BRING')
+    // The giver's own quest shows under fromNpc, not forNpc.
+    expect(result.fromNpc.map((entry) => entry.id)).toEqual(['q_bring'])
+    expect(result.forNpc).toEqual([])
+  })
+
   it('flags a ready quest this NPC gave', () => {
     const q = quest({ id: 'q_ready', giverNpcId: 'hoa', status: 'ready' })
     const result = dialogueQuests(withQuests([q]), 'hoa')

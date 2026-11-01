@@ -33,6 +33,9 @@ const itemLabels = {
   coffee: 'cà phê sữa',
   banana: 'chuối chín',
   cake: 'bánh cưới',
+  'coffee-beans': 'hạt cà phê',
+  'sheet-music': 'bản nhạc',
+  lanterns: 'đèn lồng giấy',
 }
 const locations = {
   market: [-23, 7],

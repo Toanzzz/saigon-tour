@@ -19,6 +19,11 @@ export function stepCopy(step: QuestStep): string {
       })
     case 'BUY':
       return m.step_buy({ item: marketItemLabel(step.marketItemId) })
+    case 'BRING':
+      return m.step_bring({
+        item: itemLabel(step.itemId),
+        name: npcLabel(step.npcId),
+      })
   }
 }
 export function questHint(quest: Quest): string {
@@ -31,14 +36,17 @@ export function questTarget(state: GameState): NpcId | null {
   const quest = trackedQuest(state)
   if (!quest) return null
   const step = nextStep(quest)
-  return step && (step.type === 'DELIVER' || step.type === 'TALK_TO')
+  return step &&
+    (step.type === 'DELIVER' ||
+      step.type === 'TALK_TO' ||
+      step.type === 'BRING')
     ? step.npcId
     : quest.giverNpcId
 }
 export function dialogueQuests(state: GameState, npc: NpcId) {
   const delivery = state.quests.flatMap((quest) => {
     const step = nextStep(quest)
-    return step?.type === 'DELIVER' &&
+    return (step?.type === 'DELIVER' || step?.type === 'BRING') &&
       step.npcId === npc &&
       (state.world.inventory[step.itemId] ?? 0) > 0
       ? [step]

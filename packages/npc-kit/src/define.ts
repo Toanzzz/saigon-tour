@@ -1,4 +1,11 @@
-import type { ItemId, Locale, LocationId, MarketItemId, NpcId } from './ids'
+import type {
+  ItemId,
+  Locale,
+  LocationId,
+  MarketItemId,
+  MilestoneId,
+  NpcId,
+} from './ids'
 
 export type Text = Record<Locale, string>
 
@@ -28,6 +35,7 @@ export type QuestStep =
   | { type: 'TALK_TO'; npcId: NpcId }
   | { type: 'DELIVER'; itemId: ItemId; npcId: NpcId }
   | { type: 'BUY'; marketItemId: MarketItemId }
+  | { type: 'BRING'; itemId: ItemId; npcId: NpcId }
 
 export interface SeedQuest {
   text: Record<Locale, { title: string; description: string }>
@@ -39,6 +47,10 @@ export interface SeedQuest {
   twist?: { step: QuestStep; line: Text }
   /** Hides step 0 behind a riddle until the city reveals it (Phase 3b). */
   riddle?: { text: Text }
+  /** Overrides the reward item (Phase 4 milestone components). */
+  gift?: ItemId
+  /** Marks this as a milestone errand (Phase 4). */
+  milestone?: MilestoneId
 }
 
 export interface QuestDomain {

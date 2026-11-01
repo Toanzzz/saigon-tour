@@ -103,6 +103,7 @@ export class QuestService {
         const checked = validateSpec(input, {
           quests: record.quests,
           inParty: Boolean(party),
+          inventory: record.world.inventory,
         })
         if (!checked.ok) return { accepted: false, reason: checked.reason }
         const counts = new Map<ItemId, number>()

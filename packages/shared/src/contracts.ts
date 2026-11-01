@@ -75,7 +75,9 @@ export const InteractRequestSchema = z
   .object({
     message: z.string().trim().max(500).default(''),
     // Deprecated help/check are accepted as chat for older clients.
-    intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
+    intent: z
+      .enum(['chat', 'help', 'check', 'greet', 'milestone'])
+      .default('chat'),
     locale: LocaleSchema.default('en'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
@@ -88,7 +90,10 @@ export const InteractRequestSchema = z
   })
   .strict()
   .refine(
-    (request) => request.intent === 'greet' || request.message.length > 0,
+    (request) =>
+      request.intent === 'greet' ||
+      request.intent === 'milestone' ||
+      request.message.length > 0,
     {
       path: ['message'],
       message: 'Message is required',
