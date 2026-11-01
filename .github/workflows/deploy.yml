@@ -1,0 +1,154 @@
+name: Deploy
+
+# Every push to main passes the Definition of Done, builds the API image, rolls it
+# onto the host, then deploys the client so it lands on an already-new API.
+# Pull requests run verify only.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Not cancel-in-progress: interrupting a deploy can leave the api half recreated.
+concurrency:
+  group: deploy-production-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile
+      - run: bun run check
+      - run: bun run check:types
+      - run: bun run build
+      - run: bun run test
+
+  image:
+    name: API image
+    needs: verify
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: apps/server/Dockerfile
+          platforms: linux/arm64
+          push: true
+          tags: |
+            ghcr.io/toanzzz/saigon-tour-api:${{ github.sha }}
+            ghcr.io/toanzzz/saigon-tour-api:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  api:
+    name: Deploy API
+    needs: image
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: ${{ vars.API_URL }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Configure SSH
+        env:
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${KEY}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "${KNOWN_HOSTS}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      # DEPLOY_DIR is optional; the relative default resolves under $HOME.
+      - name: Ship compose file
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER_NAME: ${{ secrets.DEPLOY_USER }}
+          DIR: ${{ secrets.DEPLOY_DIR }}
+        run: |
+          set -euo pipefail
+          scp -i ~/.ssh/id_deploy compose.prod.yml \
+            "${USER_NAME}@${HOST}:${DIR:-apps/saigon-tour}/compose.prod.yml"
+
+      # The script runs from a temp file on the host, never `bash -s`: compose
+      # exec would drain the unread script from stdin. See the script header.
+      - name: Recreate API
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          USER_NAME: ${{ secrets.DEPLOY_USER }}
+          DIR: ${{ secrets.DEPLOY_DIR }}
+          TAG: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_deploy \
+            -o ServerAliveInterval=30 -o ServerAliveCountMax=20 \
+            "${USER_NAME}@${HOST}" \
+            "set -eu
+             f=\$(mktemp)
+             trap 'rm -f \"\$f\"' EXIT
+             cat > \"\$f\"
+             SAIGON_TAG='${TAG}' ${DIR:+DEPLOY_DIR='${DIR}'} bash \"\$f\" </dev/null" \
+            < scripts/deploy-remote.sh
+
+      - name: Check public health
+        env:
+          API_URL: ${{ vars.API_URL }}
+        run: curl -fsS --retry 10 --retry-delay 3 --retry-all-errors "${API_URL%/}/health"
+
+  client:
+    name: Deploy client
+    needs: api
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: bun install --frozen-lockfile
+      - name: Build client
+        env:
+          VITE_API_BASE_URL: ${{ vars.API_URL }}
+        run: bun run --filter @saigon/client build
+      - uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          packageManager: bun
+          command: deploy

@@ -20,7 +20,7 @@
 | Storage    | Postgres 18 with Drizzle migrations                                                      |
 | Identity   | Better Auth: anonymous sessions, Meta (Facebook Login) linking, bearer + cookie sessions |
 | Contracts  | zod 4 in `packages/shared` (raw TS)                                                      |
-| Hosting    | Client: Cloudflare asset-only Worker. API: separate HTTPS origin, credentialed CORS      |
+| Hosting    | Client: Cloudflare Worker (workers.dev). API: Docker on t-oracle behind Caddy, CORS      |
 
 Toolchain: Bun 1.4.4 workspaces (isolated linker), TypeScript 7 (`tsc -b`, composite project per
 package), Biome 2.6.x, Vitest. Backend logs use the 7-key structured logger.
@@ -104,10 +104,11 @@ assets/                                        # licensed source models (LICENSE
 docs/                                          # specs, design, progress, evidence
 wrangler.jsonc                                 # asset-only Worker for apps/client/dist
 compose.yaml                                   # Postgres (58002); API profile (58001)
+compose.prod.yml                               # host stack: Postgres + API on the edge network
+.github/workflows/deploy.yml                   # verify → image → api → client on push to main
 ```
 
 ## 9. Open decisions
 
 - **D1.** Voice (Muse Transcribe) only if time remains.
 - **D2.** Open-weight endpoint (Muse Spark Open) not wired; `META_API_URL` can point to one.
-- **D3.** Public API hostname and TLS proxy for deployment.

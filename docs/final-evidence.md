@@ -81,3 +81,11 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Incremental-state investigation: backend PID 26453 sent initial room snapshots without later patches through both direct and Vite-proxied connections; isolated Bun/Node controls passed. A user-managed restart to PID 42450 made the identical direct/proxied probes synchronize joins and movement. The party browser flow then passed. Exact old-process cause remains unproven; no transport workaround was applied.
 - Captures and raw model evidence are local, ignored artifacts; durable commands and observed results are recorded here. No deployment or push performed.
 - Physical Quest 3 hardware, production Facebook OAuth, and zone-specific audio mixing are unverified. Dense mobile views exceed the original 300k-triangle scene target.
+
+## CI deploy pipeline — November 1, 2026
+
+- From a clean export of `a5fd7b7` plus the deploy files: `bun run check` → `check:types` → `build` → `test` passed (server 118 passed / 2 skipped, client 97 passed).
+- `actionlint .github/workflows/deploy.yml`, `shellcheck scripts/deploy-remote.sh scripts/setup-deploy.sh`, and `POSTGRES_PASSWORD=x docker compose -f compose.prod.yml config -q` passed.
+- `docker buildx build --platform linux/arm64 -f apps/server/Dockerfile .` passed.
+- Host t-oracle (`oracle.toan.io`, aarch64): user `toan` is in `docker`, and the `edge` network exists.
+- Not yet observed: GitHub secrets/vars, the host `.env`, a workflow run, `https://saigon-api.toan.io/health`, and the deployed client.

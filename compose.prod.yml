@@ -1,0 +1,61 @@
+# Production stack on the deploy host. .github/workflows/deploy.yml ships this
+# file to ${DEPLOY_DIR} and runs scripts/deploy-remote.sh against it.
+#
+# - The api image is pulled at a commit-SHA tag; nothing is built here.
+# - One api replica only: Colyseus rooms, parties, and rate limits live in
+#   process memory, so a deploy recreates the container and live rooms reset.
+# - The api publishes no host port. Caddy reaches it as `saigon-api` on the
+#   shared `edge` network; the alias is namespaced because `edge` is shared.
+# - Migrations run at api startup (drizzle migrate in createDb).
+#
+# Secrets live in ${DEPLOY_DIR}/.env on the host and are never committed.
+name: saigon-tour
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '3'
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: saigon
+      POSTGRES_DB: saigon
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    # Loopback only: reachable through an SSH tunnel, not from the internet.
+    ports: ['127.0.0.1:58002:5432']
+    volumes: [postgres-data:/var/lib/postgresql]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U saigon -d saigon']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    logging: *logging
+
+  api:
+    image: ghcr.io/toanzzz/saigon-tour-api:${SAIGON_TAG:-latest}
+    restart: unless-stopped
+    stop_grace_period: 30s
+    env_file: .env
+    environment:
+      NODE_ENV: production
+    networks:
+      default: {}
+      edge:
+        aliases: [saigon-api]
+    depends_on:
+      postgres: { condition: service_healthy }
+    logging: *logging
+
+networks:
+  default: {}
+  # Shared with the Caddy stack. Create once: docker network create edge
+  edge:
+    external: true
+    name: edge
+
+volumes:
+  postgres-data:
