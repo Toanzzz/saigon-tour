@@ -20,7 +20,7 @@ export function CityEvents() {
             zIndexRange={[5, 0]}
             style={{ pointerEvents: 'none' }}
           >
-            <span className="name-tag">{event.title}</span>
+            <span className="name-tag event-tag">{event.title}</span>
           </Html>
         </group>
       ))}

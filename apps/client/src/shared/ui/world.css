@@ -24,6 +24,13 @@
   background: var(--wall);
 }
 
+/* Event banners can hold longer titles; keep them on one legible line
+   so the pill radius never collapses the text. */
+.event-tag {
+  white-space: nowrap;
+  text-align: center;
+}
+
 /* Quest marker: a little roof-tile sign that bobs above whoever needs you. */
 .quest-marker {
   position: absolute;
