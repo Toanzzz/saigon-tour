@@ -24,6 +24,7 @@ export function itemLabel(itemId: ItemId): string {
     baguette: m.item_baguette,
     coffee: m.item_coffee,
     banana: m.item_banana,
+    cake: m.item_cake,
   }
   return labels[itemId]()
 }

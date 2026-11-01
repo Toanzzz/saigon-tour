@@ -3,7 +3,14 @@ import { MARKET_ITEMS, type Reward, RewardSchema } from '../entities'
 import { applyPlayerEvents } from '../events'
 import { selectUnlock, type UnlockId } from '../unlocks'
 import { QUEST_DOMAINS, QUEST_LOCATION_POSITIONS } from './domains'
-import { type Quest, type QuestSpec, QuestSpecSchema } from './schema'
+import { isRevealed } from './riddle'
+import {
+  type Quest,
+  type QuestSpec,
+  QuestSpecSchema,
+  type QuestStep,
+} from './schema'
+import { applyTwist } from './twist'
 
 export interface QuestPlayer {
   quests: Quest[]
@@ -12,6 +19,34 @@ export interface QuestPlayer {
 export type SpecValidation =
   | { ok: true; spec: QuestSpec }
   | { ok: false; reason: string }
+
+/** Steps whose structural signatures differ. */
+function stepSignature(step: QuestStep): string {
+  return JSON.stringify(step)
+}
+
+function stepInDomain(
+  step: QuestStep,
+  giverNpcId: QuestSpec['giverNpcId']
+): string | null {
+  const domain = QUEST_DOMAINS[giverNpcId]
+  if (step.type === 'GO_TO' && !domain.locations.includes(step.locationId))
+    return `out_of_domain:location:${step.locationId}`
+  if (step.type === 'TALK_TO' || step.type === 'DELIVER') {
+    if (step.type === 'DELIVER' && step.npcId === giverNpcId)
+      return 'self_delivery'
+    if (!domain.npcs.includes(step.npcId))
+      return `out_of_domain:npc:${step.npcId}`
+  }
+  const item =
+    step.type === 'DELIVER'
+      ? step.itemId
+      : step.type === 'BUY'
+        ? step.marketItemId
+        : null
+  if (item && !domain.items.includes(item)) return `out_of_domain:item:${item}`
+  return null
+}
 
 export function validateSpec(
   input: unknown,
@@ -24,33 +59,46 @@ export function validateSpec(
     return { ok: false, reason: `invalid_spec:${field}:${issue?.message}` }
   }
   const spec = parsed.data
-  const domain = QUEST_DOMAINS[spec.giverNpcId]
   if (player.quests.filter((quest) => quest.status !== 'completed').length >= 3)
     return { ok: false, reason: 'cap_reached:maximum_3_active_quests' }
   if (spec.scope === 'party' && !player.inParty)
     return { ok: false, reason: 'party_required' }
   const stepSignatures = new Set<string>()
   for (const step of spec.steps) {
-    const signature = JSON.stringify(step)
+    const signature = stepSignature(step)
     if (stepSignatures.has(signature))
       return { ok: false, reason: 'duplicate_step' }
     stepSignatures.add(signature)
-    if (step.type === 'GO_TO' && !domain.locations.includes(step.locationId))
-      return { ok: false, reason: `out_of_domain:location:${step.locationId}` }
-    if (step.type === 'TALK_TO' || step.type === 'DELIVER') {
-      if (step.type === 'DELIVER' && step.npcId === spec.giverNpcId)
-        return { ok: false, reason: 'self_delivery' }
-      if (!domain.npcs.includes(step.npcId))
-        return { ok: false, reason: `out_of_domain:npc:${step.npcId}` }
-    }
-    const item =
-      step.type === 'DELIVER'
-        ? step.itemId
-        : step.type === 'BUY'
-          ? step.marketItemId
-          : null
-    if (item && !domain.items.includes(item))
-      return { ok: false, reason: `out_of_domain:item:${item}` }
+    const domainReason = stepInDomain(step, spec.giverNpcId)
+    if (domainReason) return { ok: false, reason: domainReason }
+  }
+  if (spec.twist) {
+    const last = spec.steps[spec.steps.length - 1]
+    if (spec.steps.length < 2)
+      return { ok: false, reason: 'twist_needs_two_steps' }
+    if (!last || spec.twist.step.type !== last.type)
+      return { ok: false, reason: 'twist_type_mismatch' }
+    if (
+      last.type === 'DELIVER' &&
+      spec.twist.step.type === 'DELIVER' &&
+      spec.twist.step.itemId !== last.itemId
+    )
+      return { ok: false, reason: 'twist_item_mismatch' }
+    const twistReason = stepInDomain(spec.twist.step, spec.giverNpcId)
+    if (twistReason) return { ok: false, reason: `twist_${twistReason}` }
+    const twistSignature = stepSignature(spec.twist.step)
+    if (spec.steps.some((step) => stepSignature(step) === twistSignature))
+      return { ok: false, reason: 'twist_duplicate_step' }
+  }
+  if (spec.riddle) {
+    const first = spec.steps[0]
+    if (
+      !first ||
+      (first.type !== 'GO_TO' &&
+        first.type !== 'TALK_TO' &&
+        first.type !== 'DELIVER')
+    )
+      return { ok: false, reason: 'riddle_bad_first_step' }
   }
   const signature = JSON.stringify(spec.steps)
   if (
@@ -84,18 +132,23 @@ const NEIGHBOR_GIVERS = new Set([
   'thao',
 ])
 
+function stepLocation(step: QuestStep): keyof typeof QUEST_LOCATION_POSITIONS {
+  return step.type === 'GO_TO'
+    ? step.locationId
+    : step.type === 'BUY'
+      ? 'market'
+      : QUEST_DOMAINS[step.npcId].home
+}
+
 export function rewardFor(spec: QuestSpec, unlocks?: UnlockContext): Reward {
   const domain = QUEST_DOMAINS[spec.giverNpcId]
   const home = QUEST_LOCATION_POSITIONS[domain.home]
+  const steps: QuestStep[] = [...spec.steps]
+  // The twist can extend the final leg; count the longer of the two.
+  if (spec.twist) steps.push(spec.twist.step)
   let distance = 0
-  for (const step of spec.steps) {
-    const location =
-      step.type === 'GO_TO'
-        ? step.locationId
-        : step.type === 'BUY'
-          ? 'market'
-          : QUEST_DOMAINS[step.npcId].home
-    const target = QUEST_LOCATION_POSITIONS[location]
+  for (const step of steps) {
+    const target = QUEST_LOCATION_POSITIONS[stepLocation(step)]
     distance += Math.hypot(home[0] - target[0], home[1] - target[1])
   }
   const unlockId =
@@ -140,13 +193,8 @@ export function isReady(quest: Quest): boolean {
   )
 }
 
-/** Advance only the next step, using an event the caller has already validated. */
-export function advance(quest: Quest, event: PlayerEvent): Quest {
-  if (quest.status === 'completed') return quest
-  const index = quest.progress.findIndex((done) => !done)
-  const step = quest.steps[index]
-  if (!step) return quest
-  const matches =
+function stepMatches(step: QuestStep, event: PlayerEvent): boolean {
+  return (
     (step.type === 'GO_TO' &&
       event.type === 'visit' &&
       step.locationId === event.locationId) ||
@@ -160,18 +208,55 @@ export function advance(quest: Quest, event: PlayerEvent): Quest {
     (step.type === 'BUY' &&
       event.type === 'purchase' &&
       step.marketItemId === event.itemId)
-  if (!matches) return quest
-  const next = { ...quest, progress: [...quest.progress] }
+  )
+}
+
+/** Step 0's own NPC, used to resolve a `solved` riddle on a direct talk. */
+function stepNpc(step: QuestStep): string | null {
+  if (step.type === 'TALK_TO' || step.type === 'DELIVER') return step.npcId
+  return null
+}
+
+/** Advance only the next step, using an event the caller has already validated. */
+export function advance(
+  quest: Quest,
+  event: PlayerEvent,
+  now = Date.now()
+): Quest {
+  if (quest.status === 'completed') return quest
+  let working = quest
+  // A hidden riddle on step 0 may reveal itself from this event.
+  if (working.riddle && !working.progress[0] && !isRevealed(working, now)) {
+    const first = working.steps[0]
+    const ownNpc = first ? stepNpc(first) : null
+    if (
+      (first && stepMatches(first, event)) ||
+      (event.type === 'talk' && ownNpc && event.npcId === ownNpc)
+    )
+      working = { ...working, revealed: 'solved' }
+    else if (
+      event.type === 'talk' &&
+      event.npcId !== working.giverNpcId &&
+      !working.revealed
+    )
+      working = { ...working, revealed: 'talk' }
+  }
+  const index = working.progress.findIndex((done) => !done)
+  const step = working.steps[index]
+  if (!step) return working
+  if (!stepMatches(step, event)) return working
+  const next = { ...working, progress: [...working.progress] }
   next.progress[index] = true
   next.status = isReady(next) ? 'ready' : 'active'
-  return next
+  return applyTwist(next)
 }
 
 /** World mutations and quest progression share the same accepted event stream. */
 export function applyQuestEvents(
   world: WorldState,
   quests: Quest[],
-  events: PlayerEvent[]
+  events: PlayerEvent[],
+  now = Date.now()
 ): { world: WorldState; quests: Quest[] } {
   let nextWorld = world
   let nextQuests = quests
@@ -184,7 +269,7 @@ export function applyQuestEvents(
     )
       continue
     nextWorld = applyPlayerEvents(nextWorld, [event])
-    nextQuests = nextQuests.map((quest) => advance(quest, event))
+    nextQuests = nextQuests.map((quest) => advance(quest, event, now))
   }
   return { world: nextWorld, quests: nextQuests }
 }

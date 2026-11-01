@@ -130,7 +130,12 @@ export function offline(
     }
   }
   quests = quests.filter((quest) => quest.status !== 'completed')
-  if (questEvents.some((event) => event.type === 'completed'))
+  const completedWithPayoff = questEvents.find(
+    (event) => event.type === 'completed' && event.quest.payoff
+  )
+  if (completedWithPayoff?.quest.payoff)
+    reply = completedWithPayoff.quest.payoff
+  else if (questEvents.some((event) => event.type === 'completed'))
     reply = m.offline_thanks()
   if (wantsErrand(body.message ?? '') && canOfferQuests(friendship, npc)) {
     const spec = seedsFor(npc, getLocale()).find(

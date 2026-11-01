@@ -173,11 +173,16 @@ export const QUEST_DOMAINS: Record<NpcId, QuestDomain> = entries(
   (d) => d.story.domain
 )
 
+type Seed = NpcDefinition['story']['seeds'][number]
+
 export interface DerivedSeed {
   giverNpcId: NpcId
   scope: 'solo' | 'party'
-  steps: NpcDefinition['story']['seeds'][number]['steps']
+  steps: Seed['steps']
   text: Record<Locale, { title: string; description: string }>
+  payoff?: Seed['payoff']
+  twist?: Seed['twist']
+  riddle?: Seed['riddle']
 }
 
 export const QUEST_SEEDS: DerivedSeed[] = DEFS.flatMap((d) =>
@@ -186,6 +191,9 @@ export const QUEST_SEEDS: DerivedSeed[] = DEFS.flatMap((d) =>
     scope: seed.scope,
     steps: seed.steps,
     text: seed.text,
+    ...(seed.payoff ? { payoff: seed.payoff } : {}),
+    ...(seed.twist ? { twist: seed.twist } : {}),
+    ...(seed.riddle ? { riddle: seed.riddle } : {}),
   }))
 )
 

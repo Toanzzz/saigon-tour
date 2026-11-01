@@ -51,6 +51,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","postoffice","river","cityhall"],"npcs":["thao","son","vy","ba"],"items":["photo","postcard","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: camera-strap (neutral), photo-vest (warm), vespa (close)
@@ -94,6 +97,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"alley-diner","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Trang's neighborhood hello","description":"Say hello to Linh in the park for the food enthusiast, then return."}",
@@ -136,6 +142,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"alley-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Mr. Loc's neighborhood hello","description":"Say hello to Linh in the park for the alley cook, then return."}",
@@ -184,6 +193,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: bucket-hat (neutral), ao-ba-ba (warm), basket-bicycle (close)
@@ -227,6 +239,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"bread-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Mr. Binh's neighborhood hello","description":"Say hello to Linh in the park for the sandwich vendor, then return."}",
@@ -269,6 +284,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"coffee-friend","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Duc's neighborhood hello","description":"Say hello to Linh in the park for the coffee regular, then return."}",
@@ -311,6 +329,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"coffee-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Quynh's neighborhood hello","description":"Say hello to Linh in the park for the café reader, then return."}",
@@ -353,6 +374,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"commuter","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Tuan's neighborhood hello","description":"Say hello to Linh in the park for the commuter, then return."}",
@@ -395,6 +419,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"fruit-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ms. Hanh's neighborhood hello","description":"Say hello to Linh in the park for the fruit vendor, then return."}",
@@ -445,6 +472,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","park","alley","cityhall"],"npcs":["linh","mai","tam","vy"],"items":["herbs","noodles","broth","baguette","coffee","banana"],"gifts":["postcard","coffee"]}
 Signature rewards you grant as friendship grows: non-la (neutral), apron (warm), dog (close)
@@ -494,6 +524,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","cathedral","cityhall"],"npcs":["hoa","tam","mai","vy","thao"],"items":["herbs","noodles","broth","baguette","banana","postcard"],"gifts":["postcard","banana"]}
 Signature rewards you grant as friendship grows: volunteer-cap (neutral), bicycle (warm), bunny (close)
@@ -546,6 +579,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","alley","park","postoffice"],"npcs":["hoa","tam","linh","son"],"items":["coffee","banana","baguette","postcard"],"gifts":["coffee","banana"]}
 Signature rewards you grant as friendship grows: scarf (neutral), barista (warm), cat (close)
@@ -589,6 +625,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"market-browse","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ngoc's neighborhood hello","description":"Say hello to Linh in the park for the market regular, then return."}",
@@ -631,6 +670,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"market-family","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Huong's neighborhood hello","description":"Say hello to Linh in the park for the family shopper, then return."}",
@@ -673,6 +715,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"market-walk","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Dat's neighborhood hello","description":"Say hello to Linh in the park for the market courier, then return."}",
@@ -715,6 +760,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"opera-visitor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Diem's neighborhood hello","description":"Say hello to Linh in the park for the opera visitor, then return."}",
@@ -757,6 +805,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"park-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Mr. Phuc's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the park reader, then return."}",
@@ -799,6 +850,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"park-stretch","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Yen's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the morning exerciser, then return."}",
@@ -841,6 +895,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"plaza-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ha's neighborhood hello","description":"Say hello to Linh in the park for the plaza neighbor, then return."}",
@@ -883,6 +940,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"plaza-stroll","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Khai's neighborhood hello","description":"Say hello to Linh in the park for the evening stroller, then return."}",
@@ -925,6 +985,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"postcard-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Bao's neighborhood hello","description":"Say hello to Linh in the park for the postcard reader, then return."}",
@@ -967,6 +1030,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"river-jogger","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Long's neighborhood hello","description":"Say hello to Linh in the park for the riverside runner, then return."}",
@@ -1009,6 +1075,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"riverside-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Nhi's neighborhood hello","description":"Say hello to Linh in the park for the river neighbor, then return."}",
@@ -1058,6 +1127,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","river","cathedral","market","opera"],"npcs":["alex","ba","thao","mai"],"items":["postcard","photo","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: satchel (neutral), beret (warm), parrot (close)
@@ -1101,6 +1173,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cathedral","locations":["cathedral","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"square-tourist","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"An's neighborhood hello","description":"Say hello to Linh in the park for the square visitor, then return."}",
@@ -1143,6 +1218,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"student","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Minh's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the student, then return."}",
@@ -1194,6 +1272,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","park","river","cityhall"],"npcs":["hoa","linh","ba","mai"],"items":["coffee","banana","postcard"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: helmet (neutral), sunglasses (warm), cub (close)
@@ -1244,6 +1325,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","cityhall","park"],"npcs":["alex","vy","son","linh"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: headphones (neutral), ao-dai (warm), chick (close)
@@ -1295,6 +1379,9 @@ Call adjustFriendliness rarely, at most once per turn, for meaningful kindness o
 At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
+Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","alley","market","opera"],"npcs":["hoa","mai","thao","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: lantern-backpack (neutral), evening (warm), lantern-hat (close)

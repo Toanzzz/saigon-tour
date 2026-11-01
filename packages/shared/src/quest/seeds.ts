@@ -14,6 +14,19 @@ export function seedsFor(npcId: NpcId, locale: Locale = 'en'): QuestSpec[] {
   return QUEST_SEEDS.filter((seed) => seed.giverNpcId === npcId).map((seed) => {
     const steps = seed.steps.map((step) => ({ ...step }))
     const { title, description } = seed.text[locale]
+    // Authored fields are optional; project each into the requested locale.
+    const extra = {
+      ...(seed.payoff ? { payoff: seed.payoff[locale] } : {}),
+      ...(seed.twist
+        ? {
+            twist: {
+              step: { ...seed.twist.step },
+              line: seed.twist.line[locale],
+            },
+          }
+        : {}),
+      ...(seed.riddle ? { riddle: { text: seed.riddle.text[locale] } } : {}),
+    }
     // Field order is preserved per kind so embedded JSON stays byte-identical:
     // neighbors emitted steps before scope, residents emitted scope before steps.
     return NPCS[seed.giverNpcId].kind === 'resident'
@@ -23,6 +36,7 @@ export function seedsFor(npcId: NpcId, locale: Locale = 'en'): QuestSpec[] {
           steps,
           title,
           description,
+          ...extra,
         }
       : {
           giverNpcId: seed.giverNpcId,
@@ -30,6 +44,7 @@ export function seedsFor(npcId: NpcId, locale: Locale = 'en'): QuestSpec[] {
           scope: seed.scope,
           title,
           description,
+          ...extra,
         }
   })
 }

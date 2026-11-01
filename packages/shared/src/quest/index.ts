@@ -1,5 +1,7 @@
 export * from './domains'
 export * from './engine'
 export * from './friendship'
+export * from './riddle'
 export * from './schema'
 export * from './seeds'
+export * from './twist'

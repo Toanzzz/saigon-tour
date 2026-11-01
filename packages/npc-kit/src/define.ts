@@ -33,6 +33,12 @@ export interface SeedQuest {
   text: Record<Locale, { title: string; description: string }>
   steps: QuestStep[]
   scope: 'solo' | 'party'
+  /** Giver's completion punchline that resolves the setup (Phase 1a). */
+  payoff?: Text
+  /** Rewrites the final step once every earlier step is done (Phase 2). */
+  twist?: { step: QuestStep; line: Text }
+  /** Hides step 0 behind a riddle until the city reveals it (Phase 3b). */
+  riddle?: { text: Text }
 }
 
 export interface QuestDomain {

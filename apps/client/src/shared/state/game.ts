@@ -146,7 +146,10 @@ export function trackedQuest(state: GameState): Quest | null {
   )
 }
 export function advanceQuests(quests: Quest[], events: PlayerEvent[]) {
-  return quests.map((quest) => events.reduce(advance, quest))
+  // reduce passes the index as the third arg; wrap so it never lands in `now`.
+  return quests.map((quest) =>
+    events.reduce((current, event) => advance(current, event), quest)
+  )
 }
 export function grantQuest(state: GameState, quest: Quest): GameState {
   if (

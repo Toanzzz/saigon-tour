@@ -32,6 +32,7 @@ const itemLabels = {
   baguette: 'bánh mì',
   coffee: 'cà phê sữa',
   banana: 'chuối chín',
+  cake: 'bánh cưới',
 }
 const locations = {
   market: [-23, 7],
