@@ -6,6 +6,7 @@ import { initializeSession } from '@/shared/api/session'
 import { installRealtime } from '@/shared/api/socket'
 import { m, useLocale } from '@/shared/i18n'
 import { installInput } from '@/shared/runtime/input'
+import { installXr } from '@/shared/xr'
 import { GameUI } from './game-ui'
 import { Scene } from './scene'
 import { installTestHooks } from './test-hooks'
@@ -27,9 +28,11 @@ export function App() {
     installTestHooks()
     const stopInput = installInput()
     const stopRealtime = installRealtime()
+    const stopXr = installXr()
     return () => {
       stopInput()
       stopRealtime()
+      stopXr()
     }
   }, [])
   return (

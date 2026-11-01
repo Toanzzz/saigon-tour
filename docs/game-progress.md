@@ -103,3 +103,9 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - `widgets/xr-hud/hud.tsx` keeps the full state but compares the fields its panels read plus the nearest target id, so a walking player no longer redraws the XR panel on every position write.
 - `app/game-ui.tsx` stops re-rendering the whole HUD ~10 Hz while walking: `GameUI` selects the store with a `sameHud` comparator that treats a `position`-only change as equal unless it moves the nearest interact target. Children keep the full `state` prop. `features/map/map.tsx` `NeighborhoodMap` gets its own `position` selector so the "you" marker keeps moving.
 - `?debug` diagnostics expose `state.gameUiRenders` (module counter in `game-ui.tsx`) for the walk perf check.
+
+## Client state → TanStack Store (phase 2: XR store)
+
+- `shared/xr/store.ts`: new `xr = Store<{ presenting, supported }>`. `installXr()` seeds `presenting` from the zustand `xrStore`, subscribes it (write-on-change), and resolves `supportsImmersiveVR()` once; it is installed alongside input/realtime in `app/app.tsx`. `resetXr()` is exported and runs in the test `beforeEach`.
+- The `useSyncExternalStore` bridge is gone: `useXRPresenting` → `useSelector(xr, s => s.presenting)`; `isXRPresenting()` reads `xr.state.presenting`.
+- `shared/xr/button.tsx` reads `supported`/`presenting` from `xr` (shallow) and drives enter/exit through `useMutation` (`isPending` disables the button); the subscribe/`useState` trio is removed.

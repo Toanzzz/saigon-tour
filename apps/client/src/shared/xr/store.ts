@@ -1,5 +1,6 @@
 import { createXRStore, type XRStore } from '@react-three/xr'
-import { useSyncExternalStore } from 'react'
+import { useSelector } from '@tanstack/react-store'
+import { Store } from '@tanstack/store'
 
 function chooseFrameRate(rates: ArrayLike<number>): number | false {
   for (let index = 0; index < rates.length; index += 1) {
@@ -27,12 +28,38 @@ export async function supportsImmersiveVR(): Promise<boolean> {
   }
 }
 
-export const isXRPresenting = () => Boolean(xrStore.getState().session)
+export interface XrState {
+  presenting: boolean
+  supported: boolean
+}
+
+/** React-visible XR facts, fed by `installXr()` from the zustand `xrStore`. */
+export const xr = new Store<XrState>({ presenting: false, supported: false })
+
+export function resetXr() {
+  xr.setState(() => ({ presenting: false, supported: false }))
+}
+
+/** Mirror the zustand session flag into `xr` and resolve VR support once. */
+export function installXr() {
+  xr.setState((state) => ({
+    ...state,
+    presenting: Boolean(xrStore.getState().session),
+  }))
+  const unsubscribe = xrStore.subscribe((state) => {
+    const presenting = Boolean(state.session)
+    if (presenting !== xr.state.presenting)
+      xr.setState((prev) => ({ ...prev, presenting }))
+  })
+  void supportsImmersiveVR().then((supported) => {
+    if (supported !== xr.state.supported)
+      xr.setState((prev) => ({ ...prev, supported }))
+  })
+  return unsubscribe
+}
+
+export const isXRPresenting = () => xr.state.presenting
 
 export function useXRPresenting(): boolean {
-  return useSyncExternalStore(
-    (listener) => xrStore.subscribe(listener),
-    isXRPresenting,
-    () => false
-  )
+  return useSelector(xr, (state) => state.presenting)
 }
