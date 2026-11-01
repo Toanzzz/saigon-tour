@@ -89,6 +89,14 @@ async function collect(page, label) {
   assert.ok(collected, `${label}: currency rose to ${before + COIN.amount}`)
   assert.equal(await isCollected(page), true, `${label}: coin collected`)
 
+  // The HUD wallet shows a floating "+N" pulse on the gain.
+  let gainSeen = false
+  for (let i = 0; i < 25 && !gainSeen; i++) {
+    gainSeen = (await page.locator('.wallet-gain').count()) > 0
+    if (!gainSeen) await page.waitForTimeout(50)
+  }
+  assert.ok(gainSeen, `${label}: wallet gain pulse shown`)
+
   // Grab a frame mid-effect for evidence.
   await page.screenshot({ path: `${outDir}/coin-collect-${label}.png` })
 

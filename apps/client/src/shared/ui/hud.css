@@ -72,6 +72,67 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
+/* Wallet feedback on a coin gain: a brief pill pulse plus a floating "+N".
+   HUD-local (keyed off the balance delta); reduced motion fades without the
+   bounce. */
+.wallet {
+  position: relative;
+}
+.wallet.is-gaining {
+  animation: wallet-bump 0.5s ease-out;
+}
+@keyframes wallet-bump {
+  30% {
+    transform: scale(1.12);
+    background: var(--leaf-hi, #ffe08a);
+  }
+}
+.wallet-gain {
+  position: absolute;
+  top: -2px;
+  right: 10px;
+  color: #2f8f4e;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15px;
+  pointer-events: none;
+  animation: wallet-gain-rise 1.2s ease-out both;
+}
+@keyframes wallet-gain-rise {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+}
+.wallet.still.is-gaining {
+  animation: none;
+}
+.wallet.still .wallet-gain {
+  animation: wallet-gain-fade 1.2s ease-out both;
+}
+@keyframes wallet-gain-fade {
+  20% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wallet.is-gaining {
+    animation: none;
+  }
+  .wallet-gain {
+    animation: wallet-gain-fade 1.2s ease-out both;
+  }
+}
 .objective-note {
   position: absolute;
   bottom: 70px;
