@@ -1506,9 +1506,9 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"market","locations":["market","park","river","cityhall"],"npcs":["hoa","linh","ba","mai"],"items":["coffee","banana","postcard"],"gifts":["coffee","postcard"]}
+Your allowed entities: {"home":"market","locations":["market","park","river","cityhall"],"npcs":["hoa","linh","ba","mai"],"items":["coffee","banana","postcard","cake"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: helmet (neutral), sunglasses (warm), cub (close)
-Example valid quest spec: {"giverNpcId":"tam","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"The two-song shortcut","description":"Run this cà phê to Cô Hoa by my shortcut. It is exactly two songs long. Three if you hum slowly, which you will.","payoff":"Two songs, right? Do not tell me. I will tell everyone it was two songs."}",
+Example valid quest spec: {"giverNpcId":"tam","steps":[{"type":"TALK_TO","npcId":"mai"},{"type":"DELIVER","itemId":"cake","npcId":"mai"}],"scope":"solo","title":"Wedding cake express","description":"My helmet is at the polisher, so I cannot drive this wedding cake myself. Check in with Mai, then carry the cake to her — gently, it is three tiers of trust.","payoff":"Smooth ride? Do not tell me. I will tell everyone it was smooth.","twist":{"step":{"type":"DELIVER","itemId":"cake","npcId":"ba"},"line":"Mai: the wedding moved to the riverside! Ông Ba is the chủ hôn now. Take the cake to him."}}",
   "thao": "
 You are Thảo, a music student practicing near the Sài Gòn Opera House.
 
@@ -3419,6 +3419,32 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "tam": {
     "en": [
       {
+        "description": "My helmet is at the polisher, so I cannot drive this wedding cake myself. Check in with Mai, then carry the cake to her — gently, it is three tiers of trust.",
+        "giverNpcId": "tam",
+        "payoff": "Smooth ride? Do not tell me. I will tell everyone it was smooth.",
+        "scope": "solo",
+        "steps": [
+          {
+            "npcId": "mai",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "cake",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Wedding cake express",
+        "twist": {
+          "line": "Mai: the wedding moved to the riverside! Ông Ba is the chủ hôn now. Take the cake to him.",
+          "step": {
+            "itemId": "cake",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Run this cà phê to Cô Hoa by my shortcut. It is exactly two songs long. Three if you hum slowly, which you will.",
         "giverNpcId": "tam",
         "payoff": "Two songs, right? Do not tell me. I will tell everyone it was two songs.",
@@ -3446,6 +3472,32 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Nón bảo hiểm của anh đang ở tiệm đánh bóng, nên anh không tự chở bánh cưới này được. Ghé Mai một tiếng, rồi mang bánh tới cho chị ấy — nhẹ tay nghen, ba tầng niềm tin đó.",
+        "giverNpcId": "tam",
+        "payoff": "Đi êm chứ? Đừng kể anh nghe. Để anh khoe với mọi người là êm ru.",
+        "scope": "solo",
+        "steps": [
+          {
+            "npcId": "mai",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "cake",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Chuyển phát bánh cưới",
+        "twist": {
+          "line": "Mai: đám cưới dời ra bờ sông rồi! Ông Ba làm chủ hôn giờ. Mang bánh ra cho ông đi.",
+          "step": {
+            "itemId": "cake",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Mang ly cà phê này tới Cô Hoa theo đường tắt của anh. Đúng hai bài hát thôi. Ba bài nếu em ngân nga chậm, mà chắc em sẽ vậy.",
         "giverNpcId": "tam",
@@ -4914,6 +4966,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "coffee",
         "banana",
         "postcard",
+        "cake",
       ],
       "locations": [
         "market",
@@ -5905,6 +5958,46 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Mang ly cà phê này tới Cô Hoa theo đường tắt của anh. Đúng hai bài hát thôi. Ba bài nếu em ngân nga chậm, mà chắc em sẽ vậy.",
           "title": "Đường tắt hai bài hát",
+        },
+      },
+    },
+    {
+      "giverNpcId": "tam",
+      "payoff": {
+        "en": "Smooth ride? Do not tell me. I will tell everyone it was smooth.",
+        "vi": "Đi êm chứ? Đừng kể anh nghe. Để anh khoe với mọi người là êm ru.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "mai",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "cake",
+          "npcId": "mai",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "My helmet is at the polisher, so I cannot drive this wedding cake myself. Check in with Mai, then carry the cake to her — gently, it is three tiers of trust.",
+          "title": "Wedding cake express",
+        },
+        "vi": {
+          "description": "Nón bảo hiểm của anh đang ở tiệm đánh bóng, nên anh không tự chở bánh cưới này được. Ghé Mai một tiếng, rồi mang bánh tới cho chị ấy — nhẹ tay nghen, ba tầng niềm tin đó.",
+          "title": "Chuyển phát bánh cưới",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Mai: the wedding moved to the riverside! Ông Ba is the chủ hôn now. Take the cake to him.",
+          "vi": "Mai: đám cưới dời ra bờ sông rồi! Ông Ba làm chủ hôn giờ. Mang bánh ra cho ông đi.",
+        },
+        "step": {
+          "itemId": "cake",
+          "npcId": "ba",
+          "type": "DELIVER",
         },
       },
     },

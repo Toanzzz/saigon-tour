@@ -92,12 +92,15 @@ describe('offline NPC quests', () => {
       const quest = offered.response.quests[0]
       if (!quest) throw new Error('No offered quest')
       let ready = quest
-      for (const step of quest.steps) {
+      // Read the live step each iteration so a mid-quest twist is followed.
+      for (let i = 0; i < quest.steps.length; i++) {
+        const step = ready.steps[i]
+        if (!step) break
         if (step.type === 'GO_TO')
           ready = advance(ready, { type: 'visit', locationId: step.locationId })
         if (step.type === 'TALK_TO')
           ready = advance(ready, { type: 'talk', npcId: step.npcId })
-        if (step.type === 'DELIVER')
+        if (step.type === 'DELIVER' || step.type === 'BRING')
           ready = advance(ready, {
             type: 'deliver',
             itemId: step.itemId,
