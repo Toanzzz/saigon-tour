@@ -10,6 +10,7 @@ import { currentEventBatch } from './events'
 import { net, updateNet } from './status'
 
 export function rewardCopy(quest: Quest | null) {
+  if (quest?.payoff) return quest.payoff
   return quest ? m.reward_completed({ title: quest.title }) : m.reward_generic()
 }
 

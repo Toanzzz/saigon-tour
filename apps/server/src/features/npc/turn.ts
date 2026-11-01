@@ -61,6 +61,12 @@ export async function buildContext(
     `Player intent: ${request.intent}`,
     `Friendliness: ${friendlinessOf(record.friendship, npcId)}. Be civil below -2, reserved below 1, warm above 1.`,
     `Quests just completed: ${JSON.stringify(outcome.events.filter((event) => event.type === 'completed'))}`,
+    ...outcome.events
+      .filter((event) => event.type === 'completed' && event.quest.payoff)
+      .map(
+        (event) =>
+          `Completed this turn: ${event.quest.title}; payoff: ${event.quest.payoff}. Deliver it in your own words.`
+      ),
     `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
     `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
     `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,

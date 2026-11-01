@@ -97,6 +97,10 @@ export function offline(
     })
   }
   quests = quests.filter((quest) => !isExpired(quest))
+  // Track which quests had already applied their twist, to detect a fresh one.
+  const twistedBefore = new Set(
+    quests.filter((quest) => quest.twist?.replaced).map((quest) => quest.id)
+  )
   // Pending events already changed the local world. Advance quests without charging twice.
   for (const event of [
     { type: 'talk' as const, npcId: npc },
@@ -109,6 +113,11 @@ export function offline(
     name: npcLabel(npc),
     fact: npcDisplay(npc).knowledge[0] ?? '',
   })
+  // A twist that applied during this turn speaks its authored line.
+  const freshTwist = quests.find(
+    (quest) => quest.twist?.replaced && !twistedBefore.has(quest.id)
+  )
+  if (freshTwist?.twist) reply = freshTwist.twist.line
   for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
     if (quest.scope === 'party') {
       continue

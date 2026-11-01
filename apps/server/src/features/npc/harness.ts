@@ -125,6 +125,20 @@ export class NpcHarness {
     const completed = await completeReady(this.game, playerId, npcId)
     progressEvents.push(...record.questEvents, ...completed)
     const current = await this.game.get(playerId)
+    // The completed quest's authored punchline, delivered on return.
+    const completedPayoff = completed
+      .map((event) => event.quest.payoff)
+      .find((payoff): payoff is string => Boolean(payoff))
+    // A twist that applied during this turn's events is spoken by the NPC where
+    // it triggered (the Sho TALK_TO target), which is the NPC being greeted now.
+    const twistedLine = record.quests
+      .map((quest) => {
+        const before = previous.quests.find((entry) => entry.id === quest.id)
+        return quest.twist?.replaced && !before?.twist?.replaced
+          ? quest.twist.line
+          : null
+      })
+      .find((line): line is string => Boolean(line))
     if (request.intent === 'greet') {
       const npcQuests = current.quests.filter(
         (quest) => quest.giverNpcId === npcId
@@ -146,12 +160,11 @@ export class NpcHarness {
         request.locale
       )
       if (completed.length)
-        line.reply = fallbackLine(
-          npcId,
-          current.world,
-          'completed',
-          request.locale
-        )
+        line.reply =
+          completedPayoff ??
+          fallbackLine(npcId, current.world, 'completed', request.locale)
+      // A fresh twist speaks its authored line over the cached greeting.
+      if (twistedLine) line.reply = twistedLine
       await recordTurn(
         this.storage,
         npcId,
@@ -192,13 +205,15 @@ export class NpcHarness {
     if (!reply) await offerSeed(this.game, npcId, request, playerId, outcome)
     const final = await this.game.get(playerId)
     if (!reply) {
-      reply = fallbackLine(
-        npcId,
-        final.world,
-        kind(outcome),
-        request.locale,
-        friendlinessOf(final.friendship, npcId)
-      )
+      reply =
+        (kind(outcome) === 'completed' ? completedPayoff : null) ??
+        fallbackLine(
+          npcId,
+          final.world,
+          kind(outcome),
+          request.locale,
+          friendlinessOf(final.friendship, npcId)
+        )
       source = 'fallback'
     }
     // Record every chat turn exactly once. Mastra memory is read-only, so this

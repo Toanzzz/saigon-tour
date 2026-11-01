@@ -200,6 +200,46 @@ describe('offline NPC quests', () => {
     expect(completed?.quest.reward.bonus?.thrifty).toBe(5)
     expect(result.world.currency).toBe(30 + (completed?.reward.currency ?? 0))
   })
+  it('speaks the twist line on greet offline when a twist applies', () => {
+    const spec = {
+      giverNpcId: 'hoa' as const,
+      title: 'Talk then deliver',
+      description: 'Talk to Mai, then deliver broth to Linh.',
+      scope: 'solo' as const,
+      steps: [
+        { type: 'TALK_TO' as const, npcId: 'mai' as const },
+        {
+          type: 'DELIVER' as const,
+          itemId: 'broth' as const,
+          npcId: 'linh' as const,
+        },
+      ],
+      twist: {
+        step: {
+          type: 'DELIVER' as const,
+          itemId: 'broth' as const,
+          npcId: 'vy' as const,
+        },
+        line: 'Mai says Linh is at the lantern crew; bring it to Vy instead.',
+      },
+    }
+    const quest = createQuest(spec, 'q_twist_greet', Date.now())
+    const state = { ...initialState(), quests: [quest] }
+    // Greeting Mai sends talk->mai, completing the Sho step and firing the twist.
+    const result = offline(
+      'mai',
+      {
+        ...request('mai', 'greet'),
+        worldContext: {
+          playerLocation: 'market',
+          nearbyNpcs: ['mai'],
+          timeOfDay: 'afternoon',
+        },
+      },
+      state
+    )
+    expect(result.reply).toBe(spec.twist.line)
+  })
   it('keeps incomplete quests and refuses duplicate active proposals', () => {
     const start = initialState()
     const offered = offline('hoa', request('hoa', 'help'), start)

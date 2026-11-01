@@ -1,6 +1,7 @@
 import { slotOf } from '@saigon/shared'
 import { close } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
+import { NpcAvatar } from '@/features/conversation/npc-avatar'
 import { rewardCopy } from '@/shared/api/party'
 import { equipUnlock } from '@/shared/api/wardrobe'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
@@ -32,7 +33,14 @@ export function RewardPanel({ state }: { state: GameState }) {
           <Icon name="star" size={28} />
         </i>
       </div>
-      <p className="reward-copy">{rewardCopy(state.rewardQuest)}</p>
+      {state.rewardQuest?.payoff ? (
+        <blockquote className="reward-payoff">
+          <NpcAvatar id={state.rewardQuest.giverNpcId} size="sm" />
+          <span>{state.rewardQuest.payoff}</span>
+        </blockquote>
+      ) : (
+        <p className="reward-copy">{rewardCopy(state.rewardQuest)}</p>
+      )}
       <div className="reward-earned">
         <span className="reward-coin-row">
           <CoinEmblem size={88} />+{m.coins({ count: state.reward })}
