@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { closeHub } from '@/app/actions'
+import { m } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
 import { PartyInviteControls } from '@/widgets/hud/party'
@@ -31,17 +32,17 @@ export function HubScreen({ state }: { state: GameState }) {
         <header className="hub-topbar">
           <span className="hub-brand">
             <strong>Sài Gòn</strong>
-            <small>City hub</small>
+            <small>{m.hub_city_hub()}</small>
           </span>
           <span className="wallet">
-            <span className="sr-only">Coins</span>
+            <span className="sr-only">{m.header_coins()}</span>
             <Icon name="coin" />
             <b>{view.coins}</b>
           </span>
           <button
             type="button"
             className="icon-button"
-            aria-label="Close city hub"
+            aria-label={m.hub_close()}
             onClick={() => closeHub()}
           >
             <Icon name="close" />
@@ -49,7 +50,7 @@ export function HubScreen({ state }: { state: GameState }) {
         </header>
         <PartyInviteControls />
         <HubHero view={view} />
-        <section className="hub-grid" aria-label="Your day in the city">
+        <section className="hub-grid" aria-label={m.hub_your_day()}>
           <StoryCard view={view} />
           <NeighborCard view={view} />
           <RideCard view={view} />

@@ -1,4 +1,5 @@
 import { closeHub } from '@/app/actions'
+import { m } from '@/shared/i18n'
 import { Icon } from '@/shared/ui/icons'
 import type { HubView } from './view'
 
@@ -12,7 +13,7 @@ export function HubHero({ view }: { view: HubView }) {
     <section className="hub-hero" aria-labelledby="hub-title">
       <div className="hub-hero-copy">
         <p className="hub-when">
-          {view.discovered} of {view.total} places discovered
+          {m.hub_discovered({ count: view.discovered, total: view.total })}
         </p>
         <h1 id="hub-title">{view.greeting}</h1>
         <p className="hub-lede">{view.lede}</p>
@@ -22,7 +23,7 @@ export function HubHero({ view }: { view: HubView }) {
             className="primary-button"
             onClick={() => closeHub()}
           >
-            Continue exploring
+            {m.pause_continue()}
           </button>
           <button
             type="button"
@@ -30,7 +31,7 @@ export function HubHero({ view }: { view: HubView }) {
             onClick={() => closeHub('map')}
           >
             <Icon name="map" />
-            Open full map
+            {m.hub_open_map()}
           </button>
         </div>
       </div>
@@ -41,7 +42,7 @@ export function HubHero({ view }: { view: HubView }) {
           sizes="(max-width: 900px) 100vw, 60vw"
           width="1800"
           height="983"
-          alt="Toy model of Chợ Bến Thành with its clock tower and the streets around it"
+          alt={m.hub_diorama_alt()}
         />
         <button
           type="button"
@@ -50,11 +51,9 @@ export function HubHero({ view }: { view: HubView }) {
           onClick={() => closeHub('map')}
         >
           <span>Chợ Bến Thành</span>
-          {market?.here && <small>You are here</small>}
+          {market?.here && <small>{m.hub_you_are_here()}</small>}
         </button>
-        <figcaption className="sr-only">
-          Chợ Bến Thành diorama. Select the pin to open the full map.
-        </figcaption>
+        <figcaption className="sr-only">{m.hub_diorama_caption()}</figcaption>
       </figure>
     </section>
   )

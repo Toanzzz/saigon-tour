@@ -1,5 +1,6 @@
-import { type LocationId, NPCS, type NpcId } from '@saigon/shared'
+import { type LocationId, NPCS, type NpcId, type Quest } from '@saigon/shared'
 import { city } from '@/shared/api/city'
+import { m } from '@/shared/i18n'
 import { type GameState, trackedQuest } from '@/shared/state/game'
 import { nextStep, stepCopy } from '@/shared/state/quests'
 import {
@@ -57,58 +58,53 @@ export interface HubView {
 
 export function greetingFor(date: Date) {
   const hour = date.getHours()
-  if (hour < 11) return 'Chào buổi sáng!'
-  if (hour < 14) return 'Chào buổi trưa!'
-  if (hour < 18) return 'Chào buổi chiều!'
-  return 'Chào buổi tối!'
+  if (hour < 11) return m.greeting_morning()
+  if (hour < 14) return m.greeting_noon()
+  if (hour < 18) return m.greeting_afternoon()
+  return m.greeting_evening()
 }
 
-const CITY_TRAIL: {
+/** The suggested first walk; built per call so it follows the language. */
+function cityTrail(): {
   location: LocationId
   title: string
   detail: string
-}[] = [
-  {
-    location: 'market',
-    title: 'Bến Thành Market',
-    detail: 'Meet Cô Hoa over a bowl of phở',
-  },
-  {
-    location: 'park',
-    title: 'Neighborhood park',
-    detail: 'Carry lunch to Chị Linh under the trees',
-  },
-  {
-    location: 'cityhall',
-    title: 'City Hall',
-    detail: 'Follow Vy’s lanterns along Nguyễn Huệ',
-  },
-  {
-    location: 'opera',
-    title: 'Opera House',
-    detail: 'Hear Thảo practice a note that travels',
-  },
-  {
-    location: 'cathedral',
-    title: 'Nhà thờ Đức Bà',
-    detail: 'Let the melody find its echo at Công xã Paris',
-  },
-  {
-    location: 'postoffice',
-    title: 'Central Post Office',
-    detail: 'Trade a story with Sơn beside the old letters',
-  },
-  {
-    location: 'alley',
-    title: 'Food alley',
-    detail: 'Find a lantern between the food stalls',
-  },
-  {
-    location: 'river',
-    title: 'Sài Gòn riverside',
-    detail: 'Give Sơn a wide horizon for his postcards',
-  },
-]
+}[] {
+  return [
+    {
+      location: 'market',
+      title: placeName('market'),
+      detail: m.trail_market(),
+    },
+    { location: 'park', title: m.trail_park_title(), detail: m.trail_park() },
+    {
+      location: 'cityhall',
+      title: m.trail_cityhall_title(),
+      detail: m.trail_cityhall(),
+    },
+    {
+      location: 'opera',
+      title: m.trail_opera_title(),
+      detail: m.trail_opera(),
+    },
+    {
+      location: 'cathedral',
+      title: placeName('cathedral'),
+      detail: m.trail_cathedral(),
+    },
+    {
+      location: 'postoffice',
+      title: placeName('postoffice'),
+      detail: m.trail_postoffice(),
+    },
+    {
+      location: 'alley',
+      title: m.trail_alley_title(),
+      detail: m.trail_alley(),
+    },
+    { location: 'river', title: placeName('river'), detail: m.trail_river() },
+  ]
+}
 
 function objectiveLocation(state: GameState): LocationId | null {
   const quest = trackedQuest(state)
@@ -126,8 +122,8 @@ function storySteps(state: GameState): HubStep[] {
       ...quest.steps.map((step, index) => ({
         title: stepCopy(step),
         detail: quest.progress[index]
-          ? 'Completed'
-          : 'Your next small kindness',
+          ? m.hub_completed()
+          : m.hub_next_kindness(),
         state: quest.progress[index]
           ? ('done' as const)
           : index === quest.progress.findIndex((done) => !done)
@@ -135,12 +131,12 @@ function storySteps(state: GameState): HubStep[] {
             : ('next' as const),
       })),
       {
-        title: `Return to ${NPCS[quest.giverNpcId].name}`,
-        detail: 'Collect your thank-you',
+        title: m.hub_return_to({ name: NPCS[quest.giverNpcId].name }),
+        detail: m.hub_collect_thanks(),
         state: quest.status === 'ready' ? 'now' : 'next',
       },
     ]
-  return CITY_TRAIL.map((stop) => ({
+  return cityTrail().map((stop) => ({
     title: stop.title,
     detail: stop.detail,
     state: state.world.visitedLocations.includes(stop.location)
@@ -148,18 +144,26 @@ function storySteps(state: GameState): HubStep[] {
       : 'next',
   }))
 }
+function questStatus(status: Quest['status']) {
+  const labels: Record<Quest['status'], () => string> = {
+    active: m.quest_status_active,
+    ready: m.quest_status_ready,
+    completed: m.quest_status_completed,
+  }
+  return labels[status]()
+}
 function secretSteps(state: GameState): HubSecret[] {
   return [
     ...state.quests.map((quest) => ({
       id: quest.id,
       title: quest.title,
-      detail: `${NPCS[quest.giverNpcId].name} · ${quest.status}`,
+      detail: `${NPCS[quest.giverNpcId].name} · ${questStatus(quest.status)}`,
       state: 'now' as const,
     })),
     ...state.completed.map((quest) => ({
       id: quest.id,
       title: quest.title,
-      detail: 'Completed',
+      detail: m.hub_completed(),
       state: 'done' as const,
     })),
   ]
@@ -210,12 +214,15 @@ export function hubView(state: GameState, now = new Date()): HubView {
     lede: active
       ? `${active.title}: ${active.description}`
       : done
-        ? 'The whole city is yours to wander. Look for a neighbor with a secret.'
+        ? m.hub_lede_done()
         : current
-          ? `Next: ${current.title.toLowerCase()}. ${current.detail}.`
+          ? m.hub_lede_next({
+              title: current.title.toLowerCase(),
+              detail: current.detail,
+            })
           : '',
     story: {
-      title: active?.title ?? 'A walk through Sài Gòn',
+      title: active?.title ?? m.hub_story_default(),
       steps,
       secrets,
       coins: active?.reward.currency ?? 0,

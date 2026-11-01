@@ -1,4 +1,5 @@
 import { closeHub } from '@/app/actions'
+import { m } from '@/shared/i18n'
 import { game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
 import { distance, PLACES } from '@/shared/world/places'
@@ -12,8 +13,8 @@ export function RideCard({ view }: { view: HubView }) {
     <section className="hub-card ride-card">
       <div className="card-header">
         <div>
-          <p className="card-kicker">Best value ride</p>
-          <h2 className="card-title">{ride ? ride.name : 'Walk on'}</h2>
+          <p className="card-kicker">{m.hub_best_ride()}</p>
+          <h2 className="card-title">{ride ? ride.name : m.hub_walk_on()}</h2>
         </div>
         <span className="tile-icon bus-red" aria-hidden="true">
           <Icon name="bus" size={22} />
@@ -26,7 +27,9 @@ export function RideCard({ view }: { view: HubView }) {
             <i aria-hidden="true" />
             <span>{PLACES[ride.to].label}</span>
           </p>
-          <p className="ticket-fare">{ride.fare} coins from your wallet</p>
+          <p className="ticket-fare">
+            {m.hub_fare_from_wallet({ coins: m.coins({ count: ride.fare }) })}
+          </p>
           <button
             type="button"
             className="block-button wide"
@@ -37,13 +40,11 @@ export function RideCard({ view }: { view: HubView }) {
               } else closeHub('map')
             }}
           >
-            {atStop ? 'Choose a ride' : 'Find the stop'}
+            {atStop ? m.hud_choose_ride() : m.hub_find_stop()}
           </button>
         </>
       ) : (
-        <p className="ticket-fare">
-          No fare fits your wallet. Walking is always free.
-        </p>
+        <p className="ticket-fare">{m.hub_no_fare()}</p>
       )}
     </section>
   )
@@ -55,9 +56,9 @@ export function PlacesCard({ view }: { view: HubView }) {
     <section className="hub-card places-card">
       <div className="card-header">
         <div>
-          <p className="card-kicker">Places discovered</p>
+          <p className="card-kicker">{m.hub_places_discovered()}</p>
           <h2 className="card-title">
-            {view.discovered} of {view.total}
+            {m.hub_count_of({ count: view.discovered, total: view.total })}
           </h2>
         </div>
         <span className="tile-icon leaf" aria-hidden="true">
@@ -67,7 +68,7 @@ export function PlacesCard({ view }: { view: HubView }) {
       <div
         className="progress-track"
         role="progressbar"
-        aria-label="Places discovered"
+        aria-label={m.hub_places_discovered()}
         aria-valuenow={percent}
         aria-valuemin={0}
         aria-valuemax={100}
@@ -83,7 +84,7 @@ export function PlacesCard({ view }: { view: HubView }) {
             {place.visited && <Icon name="check" size={13} />}
             {place.label}
             <span className="sr-only">
-              {place.visited ? ', visited' : ', not visited yet'}
+              {place.visited ? m.hub_visited() : m.hub_not_visited()}
             </span>
           </li>
         ))}
@@ -102,20 +103,22 @@ export function SoundCard({ view }: { view: HubView }) {
     >
       <div className="card-header">
         <div>
-          <p className="card-kicker">City sounds</p>
-          <h2 className="card-title">{playing ? 'Playing' : 'Muted'}</h2>
+          <p className="card-kicker">{m.pause_city_sounds()}</p>
+          <h2 className="card-title">
+            {playing ? m.hub_playing() : m.hub_muted()}
+          </h2>
         </div>
         <button
           type="button"
           className="sound-button"
-          aria-label={playing ? 'Mute city sounds' : 'Play city sounds'}
+          aria-label={playing ? m.hub_mute_sounds() : m.hub_play_sounds()}
           onClick={() => update({ muted: playing })}
         >
           <Icon name={playing ? 'pause' : 'play'} size={18} />
         </button>
       </div>
       <label className="sound-volume">
-        <span>Volume {Math.round(view.volume * 100)}%</span>
+        <span>{m.hub_volume({ percent: Math.round(view.volume * 100) })}</span>
         <input
           type="range"
           min="0"
