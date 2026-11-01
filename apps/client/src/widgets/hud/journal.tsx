@@ -76,9 +76,16 @@ export function JournalPanel({ state }: { state: GameState }) {
                 type="button"
                 className="text-button"
                 aria-pressed={state.trackedQuestId === quest.id}
-                onClick={() => update({ trackedQuestId: quest.id })}
+                onClick={() =>
+                  update({
+                    trackedQuestId:
+                      state.trackedQuestId === quest.id ? null : quest.id,
+                  })
+                }
               >
-                {m.journal_track()}
+                {state.trackedQuestId === quest.id
+                  ? m.journal_tracking()
+                  : m.journal_track()}
               </button>
               <button
                 type="button"

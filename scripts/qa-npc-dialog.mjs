@@ -87,15 +87,24 @@ try {
     await apply(page, 'available')
     assert.match(
       await page.locator('.errands').innerText(),
-      /Ask .* if they need a hand/
+      /if they need a hand|ask if they need a hand/i
     )
     await page.screenshot({ path: `${out}/available-${width}.png` })
 
     await apply(page, 'active')
     const activeText = await page.locator('.errands').innerText()
     assert.match(activeText, /In progress/)
-    assert.match(activeText, /Track/)
+    assert.match(activeText, /Track on map|Tracking on map/)
     await page.screenshot({ path: `${out}/active-${width}.png` })
+
+    // The track button is a real toggle: clicking flips tracked state.
+    const trackBtn = page.locator('.errands .track-button')
+    assert.equal(await trackBtn.getAttribute('aria-pressed'), 'false')
+    await trackBtn.click()
+    await page.locator('.errands .track-button[aria-pressed="true"]').waitFor()
+    await page.screenshot({ path: `${out}/tracking-${width}.png` })
+    await trackBtn.click()
+    await page.locator('.errands .track-button[aria-pressed="false"]').waitFor()
 
     await apply(page, 'ready')
     const readyText = await page.locator('.errands').innerText()

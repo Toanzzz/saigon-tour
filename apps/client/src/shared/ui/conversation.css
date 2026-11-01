@@ -293,6 +293,39 @@
 .errand-full {
   gap: 6px;
 }
+.track-button {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 7px 14px;
+  border: var(--edge);
+  border-radius: 99px;
+  background: var(--wall-hi);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  box-shadow: var(--lift-sm);
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s,
+    background 0.12s;
+}
+.track-button:hover {
+  background: var(--roof-hi);
+}
+.track-button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+.track-button-on {
+  background: var(--roof);
+}
+.track-button-on:hover {
+  background: var(--roof-hi);
+}
 .errand-pill {
   flex-shrink: 0;
   padding: 3px 10px;

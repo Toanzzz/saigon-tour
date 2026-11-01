@@ -11,6 +11,7 @@ import { city } from '@/shared/api/city'
 import { itemLabel, m, npcLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { dialogueQuests, questHint } from '@/shared/state/quests'
+import { Icon } from '@/shared/ui/icons'
 
 function Pill({ tone, label }: { tone: string; label: string }) {
   return <span className={`errand-pill errand-pill-${tone}`}>{label}</span>
@@ -74,16 +75,22 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
             <Pill tone="active" label={m.errands_in_progress()} />
           </div>
           <p className="errand-hint">{questHint(quest)}</p>
-          <button
-            type="button"
-            className="text-button"
-            aria-pressed={state.trackedQuestId === quest.id}
-            onClick={() => update({ trackedQuestId: quest.id })}
-          >
-            {state.trackedQuestId === quest.id
-              ? m.errands_tracking()
-              : m.errands_track()}
-          </button>
+          {(() => {
+            const tracking = state.trackedQuestId === quest.id
+            return (
+              <button
+                type="button"
+                className={`track-button${tracking ? ' track-button-on' : ''}`}
+                aria-pressed={tracking}
+                onClick={() =>
+                  update({ trackedQuestId: tracking ? null : quest.id })
+                }
+              >
+                <Icon name={tracking ? 'check' : 'compass'} size={16} />
+                {tracking ? m.errands_tracking() : m.errands_track()}
+              </button>
+            )
+          })()}
         </div>
       ))}
       {canHelp ? (
