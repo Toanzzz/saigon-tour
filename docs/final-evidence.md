@@ -147,3 +147,11 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - `docker build -f apps/server/Dockerfile .` succeeded with `COPY packages`.
 - Gates: `bun run check:types`, `bun run build`, server Vitest (311 passed, 2
   skipped) and client Vitest (143 passed) all green.
+
+## Phase 0A — payoff, twist, riddle, cake (2026-11-02)
+
+- DoD green on this tree: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server 319 passed / 2 skipped; client 145 passed.
+- New contracts: `cake`/`FRAGILE_ITEM_IDS` (npc-kit), `ItemIdSchema` + `cake`, `SeedQuest.{payoff,twist,riddle}`, `QuestSpecSchema.{payoff,twist,riddle}`, `QuestSchema.revealed`, new `ModelQuestSpecSchema`, engine `twist.ts`/`riddle.ts`, reward distance includes the twist step. Model tool now uses `ModelQuestSpecSchema`.
+- Engine tests: `apps/server/test/quest-twist-riddle.spec.ts` (8). Offline parity: `apps/client/test/offline-quests.spec.ts` payoff reply + twist-applies-offline.
+- Snapshot: `npc-baseline.spec.ts.snap` updated — diff is only the QUEST_RULES payoff/twist/riddle paragraph.
+- Live spike: BLOCKED. `apps/server/.env` key returns 401 `invalid_api_key` from `https://api.coralhub.cc/v1/chat/completions` (model `google/gemini-3.8-flash`). The spike script is extended (payoff+twist+riddle run, accept-within-3 gate) but could not execute. Decision 1 fallback (drop twist/riddle from the model schema) is NOT applied: no model rejection was observed, only a credential failure. Pending a valid key to confirm model acceptance.
