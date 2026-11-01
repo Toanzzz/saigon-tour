@@ -74,7 +74,7 @@ try {
     {
       maxSteps: 3,
       abortSignal: AbortSignal.timeout(90000),
-      modelSettings: { maxOutputTokens: 800, maxRetries: 0 },
+      modelSettings: { maxOutputTokens: 4000, maxRetries: 0 },
       providerOptions: { meta: { reasoningEffort: 'minimal' } },
     }
   )
@@ -134,7 +134,7 @@ try {
     {
       maxSteps: 3,
       abortSignal: AbortSignal.timeout(90000),
-      modelSettings: { maxOutputTokens: 800, maxRetries: 0 },
+      modelSettings: { maxOutputTokens: 4000, maxRetries: 0 },
       providerOptions: { meta: { reasoningEffort: 'minimal' } },
     }
   )

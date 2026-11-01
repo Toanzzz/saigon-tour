@@ -39,13 +39,19 @@ describe('BRING validation', () => {
   it('rejects a non-component or wrong host', () => {
     expect(
       validateSpec(
-        { ...bringSpec, steps: [{ type: 'BRING', itemId: 'coffee', npcId: 'vy' }] },
+        {
+          ...bringSpec,
+          steps: [{ type: 'BRING', itemId: 'coffee', npcId: 'vy' }],
+        },
         { ...empty, inventory: { coffee: 1 } }
       )
     ).toMatchObject({ ok: false, reason: 'out_of_domain:bring:coffee' })
     expect(
       validateSpec(
-        { ...bringSpec, steps: [{ type: 'BRING', itemId: 'lanterns', npcId: 'mai' }] },
+        {
+          ...bringSpec,
+          steps: [{ type: 'BRING', itemId: 'lanterns', npcId: 'mai' }],
+        },
         { ...empty, inventory: { lanterns: 1 } }
       )
     ).toMatchObject({ ok: false, reason: 'bring_wrong_host' })
