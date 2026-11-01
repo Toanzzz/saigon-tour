@@ -41,14 +41,19 @@
   max-width: 30ch;
   margin: 18px 0 28px;
 }
+.title-form {
+  display: grid;
+  gap: 14px;
+  max-width: 400px;
+}
 .title-actions {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 14px;
+  align-items: stretch;
+  gap: 10px;
 }
 .title-start {
-  min-width: 220px;
+  flex: 1;
+  min-width: 0;
   min-height: 60px;
   font-size: 21px;
 }
@@ -73,7 +78,7 @@
 .title-controls {
   font-size: 13px;
   color: var(--ink);
-  margin-top: 28px;
+  margin-top: 24px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -85,7 +90,9 @@
   gap: 6px;
 }
 .title-legal {
-  margin-top: 18px;
+  position: absolute;
+  left: clamp(28px, 7vw, 112px);
+  bottom: max(16px, env(safe-area-inset-bottom));
   display: flex;
   flex-wrap: wrap;
   gap: 6px 16px;
@@ -99,12 +106,6 @@
 }
 .title-legal a:hover {
   color: var(--ink);
-}
-.title-identity {
-  display: grid;
-  gap: 12px;
-  margin: 0 0 22px;
-  max-width: 360px;
 }
 .title-name {
   display: grid;
@@ -154,20 +155,23 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 8px 12px;
-  font-size: 14px;
+  gap: 6px 10px;
+  font-size: 13px;
   color: var(--ink);
 }
 .meta-button {
-  min-height: 44px;
-  padding: 8px 16px;
-  border: var(--edge);
+  min-height: 36px;
+  padding: 4px 12px;
+  border: 2px solid #0866ff;
   border-radius: var(--round-sm);
-  background: #0866ff;
-  box-shadow: var(--lift-sm);
-  color: #fff;
-  font-size: 14px;
+  background: var(--wall-hi);
+  color: #0866ff;
+  font-size: 13px;
   font-weight: 700;
+}
+.meta-button:hover:not(:disabled) {
+  background: #0866ff;
+  color: #fff;
 }
 .meta-button:disabled {
   opacity: 0.7;

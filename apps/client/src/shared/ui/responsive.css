@@ -16,14 +16,15 @@
   .title-screen {
     background: linear-gradient(
       180deg,
-      var(--sky) 0%,
-      #b1b8cbe0 52%,
-      #b1b8cb40 100%
+      #b1b8cb00 0%,
+      #b1b8cb99 22%,
+      #b1b8cbeb 42%,
+      var(--sky) 100%
     );
   }
   .title-content {
     top: auto;
-    bottom: max(48px, env(safe-area-inset-bottom));
+    bottom: max(52px, calc(env(safe-area-inset-bottom) + 36px));
     left: 24px;
     right: 24px;
     transform: none;
@@ -40,8 +41,11 @@
     font-size: 16px;
     margin: 14px 0 22px;
   }
-  .title-start {
-    flex: 1;
+  .title-form {
+    max-width: none;
+  }
+  .title-legal {
+    left: 24px;
   }
   .title-controls {
     font-size: 14px;
@@ -159,6 +163,13 @@
   }
   .title-controls {
     margin-top: 12px;
+  }
+  .title-legal {
+    left: auto;
+    right: 24px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    background: #fff6d6d9;
   }
   .objective-note {
     top: 90px;

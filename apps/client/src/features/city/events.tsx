@@ -17,6 +17,7 @@ export function CityEvents() {
             center
             position={[0, 4, 0]}
             distanceFactor={24}
+            zIndexRange={[5, 0]}
             style={{ pointerEvents: 'none' }}
           >
             <span className="name-tag">{event.title}</span>

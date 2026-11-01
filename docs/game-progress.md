@@ -30,6 +30,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Bun 1.4.4, React Three Fiber/Three.js, Rapier, TanStack Query/Store, WebXR; Node/Hono, Mastra, Better Auth, Colyseus, Postgres 18; shared Zod contracts.
 - Ports: client 58000, API 58001, Postgres 58002. Ask the user to start/restart local development servers. `bun dev` exits the API on SIGINT/SIGTERM and force-kills it after 3 seconds.
 - Cloudflare serves client assets; the API runs separately in a Docker image. Secrets stay server-side.
+- Title screen order: title, tagline, blurb, then one 400px form (name + dice → Start exploring/Enter VR → guest/Meta account line), controls hint. Legal links pin to the bottom-left; short landscape moves them bottom-right on a pill. Mobile fade darkens toward the bottom, behind the text. City event labels stay below the UI layer.
 - Anonymous guests receive a generated editable name. Facebook login links progress; an existing account save wins. Reset preserves identity; clear saved data drops the persisted query cache.
 - Quest rewards use the durable completion ledger. Room state is ephemeral and isolated; player quest progress persists in Postgres.
 - Meta: `muse-spark-1.3-contributor` at `https://api.meta.ai/v1/chat/completions`; `META_MUSE_API_KEY` stays server-side.

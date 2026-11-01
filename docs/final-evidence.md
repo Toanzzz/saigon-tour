@@ -2,6 +2,11 @@
 
 QA captures referenced below live in `artifacts/`, which is local-only and gitignored.
 
+## Title screen layout — November 1, 2026
+
+- Root gates pass: check → types → build → test. Server 114 passing, two skipped; client 82 passing.
+- Headless Playwright at 1440×900, 1280×720, 390×844 and 844×390: form order is name → Start → account; name row and Start share a width; legal links never overlap the content; no horizontal overflow or page errors. On desktop, fill name → dice → refill → Start exploring removed the title screen. Event name tags render at z-index 3–4, below `.game-ui` (10). Local captures: `artifacts/title-layout/`.
+
 ## Dev server shutdown — November 1, 2026
 
 - Root gates pass: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server 114 passing, two integration cases skipped; client 82 passing.

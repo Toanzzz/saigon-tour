@@ -21,22 +21,49 @@ export async function commitPlayerName(name: string) {
   }
 }
 
-export function TitleIdentity({
+export function TitleName({
   name,
   onName,
 }: {
   name: string
   onName: (name: string) => void
 }) {
-  const { guestName, guestStatus, account, metaAvailable } = useSelector(
-    game,
-    (s) => s
-  )
-  const [signingIn, setSigningIn] = useState(false)
+  const { guestName, guestStatus } = useSelector(game, (s) => s)
   useEffect(() => {
     if (guestName) onName(guestName)
   }, [guestName, onName])
   const valid = PlayerNameSchema.safeParse(name).success
+  return (
+    <label className="title-name" htmlFor="player-name">
+      <span>Your name</span>
+      <span className="title-name-row">
+        <input
+          id="player-name"
+          value={name}
+          maxLength={24}
+          autoComplete="nickname"
+          aria-invalid={!valid}
+          disabled={guestStatus === 'loading'}
+          onChange={(event) => onName(event.target.value)}
+        />
+        <button
+          type="button"
+          className="title-dice"
+          aria-label="Pick another random name"
+          title="Pick another random name"
+          disabled={guestStatus === 'loading'}
+          onClick={() => onName(randomPlayerName())}
+        >
+          <Icon name="dice" size={22} />
+        </button>
+      </span>
+    </label>
+  )
+}
+
+export function TitleAccount() {
+  const { guestStatus, account, metaAvailable } = useSelector(game, (s) => s)
+  const [signingIn, setSigningIn] = useState(false)
   const meta = async () => {
     setSigningIn(true)
     try {
@@ -50,54 +77,28 @@ export function TitleIdentity({
     await signOut().catch(() => {})
     location.reload()
   }
+  if (account === 'meta')
+    return (
+      <p className="title-account">
+        <span>Progress saved to your Meta account.</span>
+        <button type="button" className="text-button" onClick={leave}>
+          Sign out
+        </button>
+      </p>
+    )
   return (
-    <div className="title-identity">
-      <label className="title-name" htmlFor="player-name">
-        <span>Your name</span>
-        <span className="title-name-row">
-          <input
-            id="player-name"
-            value={name}
-            maxLength={24}
-            autoComplete="nickname"
-            aria-invalid={!valid}
-            disabled={guestStatus === 'loading'}
-            onChange={(event) => onName(event.target.value)}
-          />
-          <button
-            type="button"
-            className="title-dice"
-            aria-label="Pick another random name"
-            title="Pick another random name"
-            disabled={guestStatus === 'loading'}
-            onClick={() => onName(randomPlayerName())}
-          >
-            <Icon name="dice" size={22} />
-          </button>
-        </span>
-      </label>
-      {account === 'meta' ? (
-        <p className="title-account">
-          Progress saved to your Meta account.{' '}
-          <button type="button" className="text-button" onClick={leave}>
-            Sign out
-          </button>
-        </p>
-      ) : (
-        <div className="title-account">
-          <span>Playing as a guest on this device.</span>
-          {metaAvailable && guestStatus === 'online' && (
-            <button
-              type="button"
-              className="meta-button"
-              disabled={signingIn}
-              onClick={meta}
-            >
-              {signingIn ? 'Opening Meta…' : 'Continue with Meta'}
-            </button>
-          )}
-        </div>
+    <p className="title-account">
+      <span>Guest progress stays on this device.</span>
+      {metaAvailable && guestStatus === 'online' && (
+        <button
+          type="button"
+          className="meta-button"
+          disabled={signingIn}
+          onClick={meta}
+        >
+          {signingIn ? 'Opening Meta…' : 'Continue with Meta'}
+        </button>
       )}
-    </div>
+    </p>
   )
 }

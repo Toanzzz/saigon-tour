@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { game } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
-import { commitPlayerName, TitleIdentity } from './title-identity'
+import { commitPlayerName, TitleAccount, TitleName } from './title-identity'
 
 export function TitleScreen() {
   const { active, progress } = useProgress()
@@ -29,21 +29,26 @@ export function TitleScreen() {
             ? `Welcome back, ${guestName}`
             : 'Meet a neighbor, lend a hand, and let the city surprise you.'}
         </p>
-        <TitleIdentity name={name} onName={setName} />
-        <div className="title-actions">
-          <button
-            type="button"
-            className="primary-button title-start"
-            disabled={active || guestStatus === 'loading' || !valid || starting}
-            onClick={begin}
-          >
-            {active
-              ? `Opening the neighborhood… ${Math.round(progress)}%`
-              : guestStatus === 'loading'
-                ? 'Finding your journey…'
-                : 'Start exploring'}
-          </button>
-          <XRSessionButton store={xrStore} />
+        <div className="title-form">
+          <TitleName name={name} onName={setName} />
+          <div className="title-actions">
+            <button
+              type="button"
+              className="primary-button title-start"
+              disabled={
+                active || guestStatus === 'loading' || !valid || starting
+              }
+              onClick={begin}
+            >
+              {active
+                ? `Opening the neighborhood… ${Math.round(progress)}%`
+                : guestStatus === 'loading'
+                  ? 'Finding your journey…'
+                  : 'Start exploring'}
+            </button>
+            <XRSessionButton store={xrStore} />
+          </div>
+          <TitleAccount />
         </div>
         <p className="title-controls desktop-only">
           <span>
@@ -59,11 +64,11 @@ export function TitleScreen() {
         <p className="title-controls touch-only">
           Use the thumbstick to move. Drag the city to look around.
         </p>
-        <nav className="title-legal" aria-label="Legal">
-          <a href="/legal/privacy.html">Privacy Policy</a>
-          <a href="/legal/data-deletion.html">User Data Deletion</a>
-        </nav>
       </div>
+      <nav className="title-legal" aria-label="Legal">
+        <a href="/legal/privacy.html">Privacy Policy</a>
+        <a href="/legal/data-deletion.html">User Data Deletion</a>
+      </nav>
     </section>
   )
 }
