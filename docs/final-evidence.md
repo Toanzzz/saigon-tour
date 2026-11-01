@@ -128,3 +128,31 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - `node scripts/qa-avatar.mjs`, unsandboxed headless Chromium at 1440×900 and 390×844: a new journey picking "Young woman" starts with `state.body === 'woman'`; after reload the body persists; a second context (man) and the woman share one room and the man's client receives the woman's body through presence (`network.remoteBodies` includes `woman`). No page errors. Evidence: `artifacts/avatar/results.json` and title/playing/multiplayer screenshots.
 - `node scripts/qa-unlocks.mjs`, same widths: completing Hoa's errand and clicking "Wear now" equips `non-la`; the wardrobe opens with a `<canvas>` inside the dialog; the equipped card's Unequip clears the slot and Equip re-applies it; switching the body to woman updates `state.body`. No page errors. Evidence: `artifacts/unlocks/results.json` and reward/wardrobe screenshots.
 - A stale Vite dev-server module graph briefly served the moved `widgets/hud/wardrobe.tsx`; re-touching `app/game-ui.tsx` forced Vite to re-resolve to `widgets/hud/wardrobe/index.ts`. The production build was unaffected.
+
+## Esc pause menu fix — November 1, 2026
+
+- Bug: pressing Esc from active play only briefly suspended the music and never showed the pause menu. Root cause proven with instrumented headless Chromium: the global keydown handler opened the pause menu (a native modal `<dialog>` via `showModal()`), and the same Esc press then fired the dialog's native `cancel`, whose `onCancel` re-toggled `pause()` back to `playing`. The menu opened and closed within one keypress.
+- Fix: the game store (`screen`/`panel`) is the single source of truth. `Dialog` and `HubScreen` `onCancel` now only `preventDefault()` the browser's native Esc-to-close, so they no longer write state. The Esc branch in `input.ts` runs before the typing early-return, so the global handler is the sole Esc authority and also works when a control inside the pause dialog (e.g. the volume slider) is focused.
+- Gates: `bun run check`, `bun run check:types`, `bun run build`, `bun run test` pass (server 176/2 skipped, client 128).
+- Unsandboxed headless Chromium at 1280×800 and 390×844: six consecutive Esc presses strictly alternate the pause menu open/closed (DOM `.pause-dialog[open]`), and the Resume button closes it. No page errors. Note: the `__THREE_GAME_DIAGNOSTICS__` snapshot updates via R3F `useFrame`, which freezes while physics is paused, so `state.screen` from that global reads stale when paused — the pause() call trace and the DOM confirm the store is correct.
+
+## Gender toggle replaces title avatar preview — November 1, 2026
+
+- Title screen no longer renders the turning avatar preview or the two-button "Your look" panel. Gender is now a single pill toggle inside `.title-name-row`, placed between the name input and the dice, cycling man ↔ woman on click. Reused in the in-play rename panel (`PauseName`).
+- i18n: dropped unused `title_body_label`; added `title_body_toggle` (en "Switch character look", vi "Đổi diện mạo nhân vật"). `body_man`/`body_woman` still supply the short pill labels.
+- Gates: `bun run check`, `bun run check:types`, `bun run build`, `bun run test` (client 128) pass.
+- Unsandboxed headless Chromium at 1440×900 and 390×844: `.title-body`/`.title-avatar` absent; `.title-gender` and `.title-dice` both present in `.title-name-row`; clicking the toggle switches the label Young man → Young woman; `aria-label` = "Switch character look".
+
+## Gender icon toggle + gender-aware dice — November 1, 2026
+
+- Gender toggle now shows a Mars/Venus icon (`male`/`female`) instead of a text label; the man/woman wording stays in the button's `aria-label`/`title` for screen readers.
+- The dice now randomizes gender too: it picks a random body and a matching first name. `randomPlayerName(body, random?)` draws from gender-split tourist first-name pools (`MALE_FIRST`/`FEMALE_FIRST`) plus a shared surname list; added `randomPlayerBody(random?)`. The server's no-arg `randomPlayerName()` still works (defaults to man).
+- Gates: `bun run check`, `bun run check:types`, `bun run build`, `bun run test` (client 128) pass.
+- Unsandboxed headless Chromium at 1440×900 and 390×844: gender button renders a single SVG icon with no text; toggling swaps the icon path; across 40 dice rolls both genders appear and names vary. Sample presets: Kenji Clarke, Sofía Walsh, Nora Kim, Mikkel Novak, Priya Dubois.
+
+## Gender glyphs from @iconify-json/glyphs — November 1, 2026
+
+- Added dev dependency `@iconify-json/glyphs@1.2.0` to the client workspace. `scripts/glyphs-extract.ts` (script `glyphs:extract`) pulls only the used icons (`male`, `female`) into `src/shared/ui/glyphs.generated.ts`, so the full 3,452-icon set never enters the bundle.
+- New `Glyph` component in `shared/ui/icons.tsx` renders the extracted glyph body (80×80 viewBox, stroke `currentColor`). The title/pause gender toggle uses `<Glyph name={body === 'man' ? 'male' : 'female'}>`; the hand-authored Mars/Venus paths were removed.
+- Gates: `bun run check`, `bun run check:types`, `bun run build`, `bun run test` (client 128) pass.
+- Unsandboxed headless Chromium at 1440×900 and 390×844: gender button SVG uses viewBox `0 0 80 80` with the exact glyphs `male`/`female` path data, swapping on toggle.

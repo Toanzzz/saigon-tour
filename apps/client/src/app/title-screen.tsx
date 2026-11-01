@@ -6,12 +6,7 @@ import { LanguageToggle, m } from '@/shared/i18n'
 import { game, update } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
-import {
-  commitProfile,
-  TitleAccount,
-  TitleBody,
-  TitleName,
-} from './title-identity'
+import { commitProfile, TitleAccount, TitleName } from './title-identity'
 import { hasJourney, JourneySummary, NewJourneyButton } from './title-journey'
 
 export function TitleScreen() {
@@ -47,9 +42,13 @@ export function TitleScreen() {
         </p>
         <div className="title-form">
           {!continuing && (
-            <TitleBody body={body} onBody={(next) => update({ body: next })} />
+            <TitleName
+              name={name}
+              onName={setName}
+              body={body}
+              onBody={(next) => update({ body: next })}
+            />
           )}
-          {!continuing && <TitleName name={name} onName={setName} />}
           <div className="title-actions">
             <button
               type="button"

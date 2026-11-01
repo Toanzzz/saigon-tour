@@ -3,11 +3,12 @@ import { useSelector } from '@tanstack/react-store'
 import { useState } from 'react'
 import { commitProfile, TitleName } from '@/app/title-identity'
 import { m } from '@/shared/i18n'
-import { game, notify } from '@/shared/state/game'
+import { game, notify, update } from '@/shared/state/game'
 
 /** Rename during play; Save appears once the name differs from the saved one. */
 export function PauseName() {
   const guestName = useSelector(game, (s) => s.guestName)
+  const body = useSelector(game, (s) => s.body)
   const [name, setName] = useState(guestName ?? '')
   const [saving, setSaving] = useState(false)
   const changed = name.trim() !== (guestName ?? '')
@@ -20,7 +21,12 @@ export function PauseName() {
   }
   return (
     <div className="pause-name">
-      <TitleName name={name} onName={setName} />
+      <TitleName
+        name={name}
+        onName={setName}
+        body={body}
+        onBody={(next) => update({ body: next })}
+      />
       {changed && (
         <button
           type="button"

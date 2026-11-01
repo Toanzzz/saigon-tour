@@ -1,16 +1,15 @@
-import { Canvas } from '@react-three/fiber'
 import {
   type AvatarBody,
   PlayerNameSchema,
+  randomPlayerBody,
   randomPlayerName,
 } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { saveProfile, signInWithMeta, signOut } from '@/shared/api/session'
 import { m } from '@/shared/i18n'
 import { game, notify, update } from '@/shared/state/game'
-import { Icon } from '@/shared/ui/icons'
-import { AvatarLights, AvatarTurntable } from '@/shared/world'
+import { Glyph, Icon } from '@/shared/ui/icons'
 
 /** Saves the chosen name and body before play; offline players keep them locally. */
 export async function commitProfile(name: string, body: AvatarBody) {
@@ -29,72 +28,29 @@ export async function commitProfile(name: string, body: AvatarBody) {
   }
 }
 
-/** A small turning preview of the chosen body and current look. */
-export function AvatarPreview({ body }: { body: AvatarBody }) {
-  const look = useSelector(game, (s) => s.unlocks.equipped)
-  return (
-    <div className="title-avatar" aria-hidden="true">
-      <Canvas
-        dpr={[1, 1.5]}
-        camera={{ position: [0, 0.2, 3.1], fov: 32 }}
-        gl={{ alpha: true }}
-      >
-        <AvatarLights />
-        <Suspense fallback={null}>
-          <AvatarTurntable body={body} look={look} />
-        </Suspense>
-      </Canvas>
-    </div>
-  )
-}
-
-/** Two-button body toggle shown above the name field for new journeys. */
-export function TitleBody({
-  body,
-  onBody,
-}: {
-  body: AvatarBody
-  onBody: (body: AvatarBody) => void
-}) {
-  const { guestStatus } = useSelector(game, (s) => s)
-  const bodies: { id: AvatarBody; label: string }[] = [
-    { id: 'man', label: m.body_man() },
-    { id: 'woman', label: m.body_woman() },
-  ]
-  return (
-    <div className="title-body">
-      <span className="title-body-label">{m.title_body_label()}</span>
-      <AvatarPreview body={body} />
-      <div className="title-body-options">
-        {bodies.map((option) => (
-          <button
-            key={option.id}
-            type="button"
-            className={`title-body-option${body === option.id ? ' is-active' : ''}`}
-            aria-pressed={body === option.id}
-            disabled={guestStatus === 'loading'}
-            onClick={() => onBody(option.id)}
-          >
-            {option.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function TitleName({
   name,
   onName,
+  body,
+  onBody,
 }: {
   name: string
   onName: (name: string) => void
+  body: AvatarBody
+  onBody: (body: AvatarBody) => void
 }) {
   const { guestName, guestStatus } = useSelector(game, (s) => s)
   useEffect(() => {
     if (guestName) onName(guestName)
   }, [guestName, onName])
   const valid = PlayerNameSchema.safeParse(name).success
+  const loading = guestStatus === 'loading'
+  const bodyLabel = body === 'man' ? m.body_man() : m.body_woman()
+  const randomize = () => {
+    const next = randomPlayerBody()
+    onBody(next)
+    onName(randomPlayerName(next))
+  }
   return (
     <label className="title-name" htmlFor="player-name">
       <span>{m.title_your_name()}</span>
@@ -105,16 +61,26 @@ export function TitleName({
           maxLength={24}
           autoComplete="nickname"
           aria-invalid={!valid}
-          disabled={guestStatus === 'loading'}
+          disabled={loading}
           onChange={(event) => onName(event.target.value)}
         />
+        <button
+          type="button"
+          className="title-gender"
+          aria-label={`${m.title_body_toggle()} (${bodyLabel})`}
+          title={`${m.title_body_toggle()} (${bodyLabel})`}
+          disabled={loading}
+          onClick={() => onBody(body === 'man' ? 'woman' : 'man')}
+        >
+          <Glyph name={body === 'man' ? 'male' : 'female'} size={26} />
+        </button>
         <button
           type="button"
           className="title-dice"
           aria-label={m.title_random_name()}
           title={m.title_random_name()}
-          disabled={guestStatus === 'loading'}
-          onClick={() => onName(randomPlayerName())}
+          disabled={loading}
+          onClick={randomize}
         >
           <Icon name="dice" size={22} />
         </button>

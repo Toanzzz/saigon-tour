@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { GLYPHS, type GlyphName } from './glyphs.generated'
 
 const paths = {
   arrow: 'M4 12h15M13 6l6 6-6 6',
@@ -47,5 +48,34 @@ export function Icon({
     >
       <path d={paths[name]} />
     </svg>
+  )
+}
+
+/** Renders a glyph from the generated @iconify-json/glyphs subset. */
+export function Glyph({
+  name,
+  size = 20,
+  strokeWidth = 5.5,
+  style,
+}: {
+  name: GlyphName
+  size?: number
+  strokeWidth?: number
+  style?: CSSProperties
+}) {
+  const icon = GLYPHS[name]
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${icon.width} ${icon.height}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      aria-hidden="true"
+      style={style}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted build-time icon data
+      dangerouslySetInnerHTML={{ __html: icon.body }}
+    />
   )
 }

@@ -1,22 +1,42 @@
 import { z } from 'zod'
+import { AVATAR_BODIES, type AvatarBody } from './unlocks/avatar'
 
-const FIRST = [
-  'Emma',
+/** Visiting-tourist first names, split so a chosen body gets a matching name. */
+const MALE_FIRST = [
   'Liam',
-  'Sofía',
   'Mateo',
-  'Hannah',
   'Lukas',
-  'Chloé',
   'Hugo',
-  'Aiko',
   'Kenji',
+  'Noah',
+  'Marco',
+  'Diego',
+  'Arjun',
+  'Oskar',
+  'Finn',
+  'Rafael',
+  'Theo',
+  'Yusuf',
+  'Mikkel',
+  'Leo',
+] as const
+const FEMALE_FIRST = [
+  'Emma',
+  'Sofía',
+  'Hannah',
+  'Chloé',
+  'Aiko',
   'Ji-woo',
   'Priya',
   'Olivia',
-  'Noah',
   'Freya',
-  'Marco',
+  'Lucía',
+  'Mei',
+  'Amara',
+  'Nora',
+  'Zara',
+  'Elin',
+  'Isla',
 ] as const
 const LAST = [
   'Clarke',
@@ -41,9 +61,22 @@ export const PLAYER_COLORS = ['#f6c568', '#85c7b6', '#ed9d86', '#b6a2dc']
 const pick = <T>(items: readonly T[], random: () => number) =>
   items[Math.floor(random() * items.length)] as T
 
-/** A realistic visiting-tourist name: first name plus surname. */
-export function randomPlayerName(random: () => number = Math.random) {
-  return `${pick(FIRST, random)} ${pick(LAST, random)}`
+const firstNames = (body: AvatarBody) =>
+  body === 'woman' ? FEMALE_FIRST : MALE_FIRST
+
+/** A realistic visiting-tourist name: a body-matched first name plus surname. */
+export function randomPlayerName(
+  body: AvatarBody = 'man',
+  random: () => number = Math.random
+) {
+  return `${pick(firstNames(body), random)} ${pick(LAST, random)}`
+}
+
+/** Picks a body at random; pairs with {@link randomPlayerName} for the dice. */
+export function randomPlayerBody(
+  random: () => number = Math.random
+): AvatarBody {
+  return pick(AVATAR_BODIES, random)
 }
 
 export function randomPlayerColor(random: () => number = Math.random) {
