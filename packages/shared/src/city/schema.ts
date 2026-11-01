@@ -1,0 +1,97 @@
+import { z } from 'zod'
+import { LocationIdSchema, NpcIdSchema } from '../entities'
+
+export const CityWeatherSchema = z.enum(['clear', 'rain'])
+export const CityEventKindSchema = z.enum([
+  'festival',
+  'market-rush',
+  'rain',
+  'street-music',
+  'lost-item',
+])
+export const CityHeadlineSchema = z
+  .object({
+    id: z.string().min(1).max(80),
+    text: z.string().min(1).max(180),
+    createdAt: z.number().int().min(0),
+  })
+  .strict()
+export type CityHeadline = z.infer<typeof CityHeadlineSchema>
+export const CityEventSchema = z
+  .object({
+    id: z.string().min(1).max(80),
+    kind: CityEventKindSchema,
+    locationId: LocationIdSchema,
+    title: z.string().min(1).max(80),
+    description: z.string().min(1).max(180),
+    startedAt: z.number().int().min(0),
+    endsAt: z.number().int().min(0),
+  })
+  .strict()
+export type CityEvent = z.infer<typeof CityEventSchema>
+export const NpcPlacementSchema = z
+  .object({
+    locationId: LocationIdSchema,
+    anchorId: z.string().min(1).max(40),
+    position: z.tuple([z.number(), z.number(), z.number()]),
+  })
+  .strict()
+export type NpcPlacement = z.infer<typeof NpcPlacementSchema>
+export const CitySnapshotSchema = z
+  .object({
+    revision: z.number().int().min(0),
+    npcPlacements: z.record(NpcIdSchema, NpcPlacementSchema),
+    events: z.array(CityEventSchema).max(2),
+    needs: z.partialRecord(NpcIdSchema, z.string().min(1).max(180)),
+    weather: CityWeatherSchema,
+    headlines: z.array(CityHeadlineSchema).max(12),
+  })
+  .strict()
+export type CitySnapshot = z.infer<typeof CitySnapshotSchema>
+
+export const CityActionSchema = z.discriminatedUnion('type', [
+  z
+    .object({
+      type: z.literal('start-event'),
+      kind: CityEventKindSchema,
+      locationId: LocationIdSchema,
+      title: z.string().min(1).max(80),
+      description: z.string().min(1).max(180),
+      durationMs: z.number().int().min(30_000).max(900_000),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('end-event'),
+      eventId: z.string().min(1).max(80),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('move-npc'),
+      npcId: NpcIdSchema,
+      locationId: LocationIdSchema,
+      anchorId: z.string().min(1).max(40),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('set-npc-need'),
+      npcId: NpcIdSchema,
+      need: z.string().min(1).max(180).nullable(),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('post-headline'),
+      text: z.string().min(1).max(180),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('set-weather'),
+      weather: CityWeatherSchema,
+    })
+    .strict(),
+])
+export type CityAction = z.infer<typeof CityActionSchema>

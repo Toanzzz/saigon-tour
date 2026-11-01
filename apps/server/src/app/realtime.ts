@@ -5,6 +5,7 @@ import { WebSocketTransport } from '@colyseus/ws-transport'
 import { WORLD_ROOM } from '@saigon/shared'
 import type { Hono } from 'hono'
 import type { Auth } from '@/features/auth'
+import { CityDirector } from '@/features/director'
 import type { NpcHarness } from '@/features/npc'
 import { PartyService } from '@/features/party'
 import { RoomManager, WorldRoom } from '@/features/realtime'
@@ -34,11 +35,17 @@ export function createRealtime(
   harness: NpcHarness,
   auth: Auth,
   db: GameDb,
-  now = Date.now
+  now = Date.now,
+  fetcher: typeof fetch = fetch
 ) {
-  const manager = new RoomManager(harness, now)
+  const manager = new RoomManager(
+    harness,
+    now,
+    (city) => new CityDirector(city, config, db, fetcher)
+  )
   const party = new PartyService(manager, db, now)
   harness.game.party = party
+  harness.game.city = (id) => manager.room(id)?.city.snapshot() ?? null
   WorldRoom.deps = {
     auth,
     db,

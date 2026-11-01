@@ -8,6 +8,7 @@ import {
   ClientSocketMessageSchema,
   type PartyClientMessage,
   type ServerSocketMessage,
+  syncCity,
   syncPresence,
   WORLD_BOUNDS,
   WorldRoomState,
@@ -83,7 +84,11 @@ export class WorldRoom extends Room<{ state: WorldRoomState }> {
     this.street = manager.createRoom(true)
     this.state = new WorldRoomState()
     this.state.street = this.street.id
-    this.street.sync = (players) => syncPresence(this.state.players, players)
+    this.street.sync = (players, city) => {
+      syncPresence(this.state.players, players)
+      syncCity(this.state, city)
+    }
+    syncCity(this.state, this.street.city.snapshot())
     this.onMessage('*', (client, type, payload) =>
       this.receive(client, String(type), payload)
     )

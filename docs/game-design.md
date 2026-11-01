@@ -39,6 +39,6 @@ Modular shophouses, palms, pavement, stall props, benches, and ambient pedestria
 
 ## Shared neighborhood and co-op
 
-Anonymous guests retain progress in Postgres. The People control (`P`) shows the public room and party invitations; `Q` sends fixed emotes and phrases. Nearby tourists interpolate at a 150 ms delay. NPC room lines run on proximity events and bounded cooldowns.
+Anonymous guests retain progress in Postgres. The People control (`P`) shows the public room and party invitations; `Q` sends fixed emotes and phrases. Nearby tourists interpolate at a 150 ms delay. NPC room lines run on proximity events and bounded cooldowns. A City Director creates shared festivals, market rushes, rain, street music, and lost-item events, moves neighbors between authored anchors, and gives them needs that shape new errands. Event markers and the hub’s City pulse explain what is happening. Rain changes tint and fog.
 
 Parties of two to four support invitations and shared presence. Each player’s quest journal and rewards are saved independently. The shared quest schema carries scope alongside giver and steps; the service currently accepts solo errands. See `docs/multiplayer.md` for protocol, topology, and persistence behavior.

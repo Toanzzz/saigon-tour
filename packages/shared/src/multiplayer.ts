@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { CityHeadlineSchema } from './city/schema'
 import {
   CompletedQuestSchema,
   NpcIdSchema,
@@ -74,6 +75,7 @@ export type PartyClientMessage = Extract<
   { type: 'party-invite' | 'party-respond' | 'party-leave' }
 >
 export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('city-headline'), headline: CityHeadlineSchema }),
   z.object({
     type: z.literal('welcome'),
     selfId: z.uuid(),

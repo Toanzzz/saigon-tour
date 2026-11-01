@@ -53,7 +53,9 @@ export async function teleport(page, x, z) {
   await page.waitForTimeout(300)
 }
 export async function meet(page, npcId) {
-  const [x, z] = anchors[npcId]
+  const position = (await diagnostics(page)).city?.npcPlacements?.[npcId]
+    ?.position
+  const [x, z] = position ? [position[0], position[2]] : anchors[npcId]
   await teleport(page, x, z + 2)
   const touch = page.locator('button.touch-interact')
   if (await touch.isVisible()) await touch.click()

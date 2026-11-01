@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { NPC_POSITIONS, type NpcId, type PresencePlayer } from '@saigon/shared'
 import { useEffect, useRef, useState } from 'react'
 import type { Group } from 'three'
+import { npcPosition } from '@/shared/api/city'
 import {
   interpolate,
   nearestPlayers,
@@ -39,12 +40,26 @@ export function RemotePlayers() {
         <RemotePlayer key={player.id} player={player} />
       ))}
       {(Object.keys(NPC_POSITIONS) as NpcId[]).map((npc) => (
-        <group key={npc} position={NPC_POSITIONS[npc]}>
-          <SpeechLabel npc={npc} />
-        </group>
+        <NpcSpeech key={npc} npc={npc} />
       ))}
       <SelfSpeech />
     </>
+  )
+}
+
+function NpcSpeech({ npc }: { npc: NpcId }) {
+  const ref = useRef<Group>(null)
+  useFrame((_, delta) => {
+    if (!ref.current) return
+    const target = npcPosition(npc)
+    const alpha = 1 - Math.exp(-Math.min(delta, 0.05) * 6)
+    ref.current.position.x += (target[0] - ref.current.position.x) * alpha
+    ref.current.position.z += (target[2] - ref.current.position.z) * alpha
+  })
+  return (
+    <group ref={ref} position={npcPosition(npc)}>
+      <SpeechLabel npc={npc} />
+    </group>
   )
 }
 

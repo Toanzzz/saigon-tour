@@ -1,5 +1,6 @@
 import {
   applyQuestEvents,
+  type CitySnapshot,
   createQuest,
   isReady,
   type NpcId,
@@ -19,6 +20,7 @@ export type OfferResult =
 
 /** Agent proposals become authoritative state only inside a player transaction. */
 export class QuestService {
+  city?: (playerId: string) => CitySnapshot | null
   party?: { snapshot(playerId: string): PartySnapshot | null }
   constructor(private readonly db: GameDb) {}
 

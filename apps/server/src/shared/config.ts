@@ -3,6 +3,8 @@ import { log } from './logger'
 export interface ServerConfig {
   databaseUrl: string
   barkDailyLimit: number
+  directorDailyLimit: number
+  directorMode: 'live' | 'scripted' | 'off'
   port: number
   origins: string[]
   apiUrl?: string
@@ -91,6 +93,17 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   const port = Number(env.PORT ?? 58001)
   if (env.PORT === undefined) warnFallback('PORT', '58001')
 
+  const directorMode = env.DIRECTOR_MODE ?? 'live'
+  if (!['live', 'scripted', 'off'].includes(directorMode))
+    throw new Error('DIRECTOR_MODE must be live, scripted, or off')
+  const directorDailyLimit = Number(env.DIRECTOR_DAILY_LIMIT ?? 200)
+  if (
+    !Number.isInteger(directorDailyLimit) ||
+    directorDailyLimit < 0 ||
+    directorDailyLimit > 10000
+  )
+    throw new Error('DIRECTOR_DAILY_LIMIT must be between 0 and 10000')
+
   return {
     databaseUrl: fallback(
       'DATABASE_URL',
@@ -98,6 +111,8 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
       'postgres://saigon:saigon@127.0.0.1:58002/saigon'
     ),
     barkDailyLimit,
+    directorDailyLimit,
+    directorMode: directorMode as ServerConfig['directorMode'],
     port,
     origins: fallback(
       'CORS_ORIGINS',

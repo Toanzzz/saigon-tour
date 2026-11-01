@@ -19,6 +19,7 @@ World rules:
 `
 
 export const QUEST_RULES = `
+Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
 When asked for help, call proposeQuest with a short, coherent solo errand of 1–3
 steps. Use getContext to read existing quests; avoid duplicates. On a rejection,
 correct the fields named in the reason and try again. When the player returns,

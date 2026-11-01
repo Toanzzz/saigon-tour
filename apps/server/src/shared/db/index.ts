@@ -215,6 +215,18 @@ export class GameDb {
       createdAt: string
     }[]
   }
+  async reserveDirector(limit: number): Promise<boolean> {
+    const day = this.now().toISOString().slice(0, 10)
+    await this.sql.query(
+      'INSERT INTO model_spend(day) VALUES($1) ON CONFLICT DO NOTHING',
+      [day]
+    )
+    const { rows } = await this.sql.query(
+      'UPDATE model_spend SET directors=directors+1 WHERE day=$1 AND directors < $2 RETURNING day',
+      [day, limit]
+    )
+    return rows.length > 0
+  }
   async reserveSpend(limit: number, bark = false): Promise<Reservation | null> {
     const day = this.now().toISOString().slice(0, 10)
     await this.sql.query(

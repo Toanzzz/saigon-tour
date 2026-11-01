@@ -7,6 +7,7 @@ import {
   type TimeOfDay,
 } from '@saigon/shared'
 import { interactWith, queryClient } from '@/shared/api/agent'
+import { npcPosition } from '@/shared/api/city'
 import { beginHttpTurn, endHttpTurn } from '@/shared/api/events'
 import { net, updateNet } from '@/shared/api/status'
 import { audio } from '@/shared/audio'
@@ -89,7 +90,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
     pending: pending.slice(sentEvents.length),
   })
   const nearbyNpcs = (Object.keys(PEOPLE) as NpcId[]).filter(
-    (id) => id !== dialog.npc && distance(PEOPLE[id].at, position) < 12
+    (id) => id !== dialog.npc && distance(npcPosition(id), position) < 12
   )
   const result = await mutate(() =>
     interactWith(

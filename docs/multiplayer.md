@@ -16,6 +16,12 @@ The people control and `P` show the current room and neighbors. `Q` opens fixed 
 
 Remote tourists interpolate snapshots with a 150 ms delay. The client draws the nearest eight within 45 units, or six on mobile. XR shows world presence without party controls.
 
+## Shared city
+
+Each room owns city events, NPC placements and needs, weather, and twelve recent headlines. Colyseus schema patches synchronize them to all room members; `city-headline` messages announce new headlines. NPC movement uses authored anchors and interpolated client positions. Interaction range and NPC speech follow synchronized positions.
+
+The director runs only with players present, at most one live turn per ninety seconds. `DIRECTOR_MODE=scripted` provides deterministic demo beats; `off` disables turns. Live failures or exhausted budgets use scripted actions through the same validator. At most two events are active, each with an expiry. City state ends with the room; player quest progress stays in Postgres.
+
 ## Local operation
 
 `bun run dev` starts Postgres before the client and API. Compose binds Postgres to `127.0.0.1:58002`; client and API use 58000 and 58001. `docker compose --profile api up -d --build` runs the API image with migrations applied at startup. `DATABASE_URL` is required in production.

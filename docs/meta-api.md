@@ -32,3 +32,9 @@ Agents call `propose-quest`, `check-quests`, `get-context`, and `remember-player
 The shared schema permits at most three active quests with one to three enum-based steps. Persona allowlists constrain destinations, recipients, items, and gifts. Invalid proposals return specific rejection reasons. Explicit help and check remain functional when model output omits a tool; seed quests support fallback and offline play.
 
 Each model HTTP request reserves spend before calling the provider and settles reported token usage afterward. Daily spend, per-player/NPC call guards, bounded steps, timeouts, and safe reply validation constrain live generation. Evidence and observed token counts belong in `docs/final-evidence.md`.
+
+## Shared city
+
+A Colyseus room’s city snapshot contains a revision, all NPC placements (`locationId`, `anchorId`, `position`), up to two active events, per-NPC needs, clear/rain weather, and the last twelve headlines. City events carry an enum kind, location, title, description, start time, and expiry. Room state patches synchronize the snapshot; `city-headline` messages deliver new headlines immediately.
+
+The City Director calls validated `start-event`, `end-event`, `move-npc`, `set-npc-need`, `post-headline`, and `set-weather` tools. Live turns run at most once per ninety seconds in occupied rooms, with a daily director count and the shared model-spend guard. NPC `get-context` reads this room snapshot so quest proposals can respond to city needs.

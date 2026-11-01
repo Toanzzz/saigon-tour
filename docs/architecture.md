@@ -52,6 +52,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 - **World state:** location, coins, items, reputation, quests. After each NPC turn the client
   replaces it with the server's authoritative `world`.
 - **Multiplayer:** public street rooms, remote tourists, emotes, parties (2–4) with invitations and presence.
+- **City:** room-authoritative NPC anchors, events, needs, headlines, and weather. The hub exposes City pulse; rain uses tint/fog. NPC proximity follows synchronized positions.
 - **XR:** world-space panels and XR HUD; the DOM hub is hidden in XR.
 
 ## 5. NPC agents
@@ -64,6 +65,12 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 - `packages/shared/src/quest` owns schemas, allowlists, validation, progress, deterministic rewards, and fallback seeds. The offline client uses the same engine.
 - Memory: last ten messages per `npcId:playerId` thread plus up to twelve remembered facts, stored in Postgres.
 - Guards: bounded model steps and timeouts, unsafe-text rejection, per-player/NPC/process call limits, reserved daily spend, and bark counts.
+
+### City Director
+
+Each occupied room runs a director at most once per ninety seconds through the NPC scheduler. `CityWorld` validates event limits, authored anchors, safe text, needs, and weather. Model calls use the shared spend reservation plus a daily director turn count. `DIRECTOR_MODE=scripted` selects deterministic demo beats; `off` disables the loop. Live failures use the validated scripted beat list.
+
+Colyseus patches carry placements, events, needs, headlines, and weather. A `city-headline` message announces each headline. NPC agents see the current snapshot and their own need in context. City state lasts for the room’s lifetime; player quests remain durable in Postgres.
 
 ## 6. NPCs
 

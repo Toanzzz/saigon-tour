@@ -1,8 +1,9 @@
 import { NPCS } from '@saigon/shared'
 import { closeHub, talk } from '@/app/actions'
+import { npcPosition } from '@/shared/api/city'
 import { game } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
-import { distance, PEOPLE } from '@/shared/world/places'
+import { distance } from '@/shared/world/places'
 import type { HubView } from './view'
 
 export function StoryCard({ view }: { view: HubView }) {
@@ -109,7 +110,7 @@ export function NeighborCard({ view }: { view: HubView }) {
         </button>
       </section>
     )
-  const near = distance(game.state.position, PEOPLE[neighbor.id].at) < 4
+  const near = distance(game.state.position, npcPosition(neighbor.id)) < 4
   return (
     <section className="hub-card neighbor-card">
       <div className="card-header">

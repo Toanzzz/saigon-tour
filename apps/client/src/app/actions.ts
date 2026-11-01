@@ -5,6 +5,7 @@ import {
   type NpcId,
 } from '@saigon/shared'
 import { converse, deliver } from '@/features/conversation/converse'
+import { npcPosition } from '@/shared/api/city'
 import {
   beginHttpTurn,
   endHttpTurn,
@@ -151,11 +152,11 @@ export function nearby(
   position = game.state.position
 ): { kind: 'npc' | 'stop'; id: string; label: string; at: Point } | null {
   const targets = [
-    ...Object.entries(PEOPLE).map(([id, value]) => ({
+    ...Object.entries(PEOPLE).map(([id]) => ({
       kind: 'npc' as const,
       id,
       label: `Talk to ${NPCS[id as NpcId].name}`,
-      at: value.at,
+      at: npcPosition(id as NpcId),
     })),
     ...Object.entries(PLACES).map(([id, value]) => ({
       kind: 'stop' as const,
@@ -187,7 +188,7 @@ export function interact() {
 }
 export async function talk(npc: NpcId) {
   const state = game.state
-  if (state.dialogue || distance(state.position, PEOPLE[npc].at) > 4) return
+  if (state.dialogue || distance(state.position, npcPosition(npc)) > 4) return
   game.setState((s) => ({
     ...s,
     dialogue: {

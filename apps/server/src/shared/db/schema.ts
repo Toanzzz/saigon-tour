@@ -64,6 +64,7 @@ export const modelSpend = pgTable('model_spend', {
   inputTokens: integer('input_tokens').notNull().default(0),
   outputTokens: integer('output_tokens').notNull().default(0),
   barks: integer().notNull().default(0),
+  directors: integer().notNull().default(0),
 })
 export const npcGreetings = pgTable('npc_greetings', {
   key: text().primaryKey(),

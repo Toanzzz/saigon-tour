@@ -1,5 +1,5 @@
 import { createTool } from '@mastra/core/tools'
-import { QuestSchema } from '@saigon/shared'
+import { CitySnapshotSchema, QuestSchema } from '@saigon/shared'
 import { z } from 'zod'
 import { type NpcServices, requestValues } from './context'
 
@@ -17,12 +17,16 @@ export const createGetContextTool = ({ game }: NpcServices) =>
       completedQuests: z.number(),
       reputation: z.number(),
       partyMembers: z.array(z.string()),
+      city: CitySnapshotSchema.nullable(),
+      need: z.string().nullable(),
     }),
     execute: async (_input, context) => {
-      const { playerId, outcome } = requestValues(context)
+      const { playerId, npcId, outcome } = requestValues(context)
       outcome.calls.push('get-context')
       const record = await game.get(playerId)
       return {
+        city: game.city?.(playerId) ?? null,
+        need: game.city?.(playerId)?.needs[npcId] ?? null,
         coins: record.world.currency,
         visited: record.world.visitedLocations,
         metNeighbors: record.world.talkedTo,

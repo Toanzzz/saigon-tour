@@ -5,6 +5,7 @@ import { useSelector } from '@tanstack/react-store'
 import { useRef } from 'react'
 import type { Group } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
+import { npcPosition } from '@/shared/api/city'
 import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 import { questTarget } from '@/shared/state/quests'
@@ -34,17 +35,6 @@ export function Neighbors() {
   )
 }
 
-const WANDERERS: Partial<
-  Record<
-    NpcId,
-    { radiusX: number; radiusZ: number; phase: number; speed: number }
-  >
-> = {
-  vy: { radiusX: 2.8, radiusZ: 1.2, phase: 0.3, speed: 0.24 },
-  son: { radiusX: 2.1, radiusZ: 1.4, phase: 1.8, speed: 0.2 },
-  thao: { radiusX: 1.8, radiusZ: 2.2, phase: 2.7, speed: 0.22 },
-}
-
 function Neighbor({
   id,
   highlighted,
@@ -55,21 +45,16 @@ function Neighbor({
   ready: boolean
 }) {
   const ref = useRef<Group>(null)
-  const elapsed = useRef(WANDERERS[id]?.phase ?? 0)
-  const wander = WANDERERS[id]
-  const anchor = PEOPLE[id].at
+  const anchor = npcPosition(id)
   useFrame((_, delta) => {
-    if (!wander || !ref.current || isTestPausedForScreenshot()) return
-    elapsed.current += Math.min(delta, 0.05) * wander.speed
-    ref.current.position.set(
-      anchor[0] + Math.sin(elapsed.current) * wander.radiusX,
-      anchor[1],
-      anchor[2] + Math.cos(elapsed.current * 0.82) * wander.radiusZ
-    )
-    ref.current.rotation.y = Math.atan2(
-      Math.cos(elapsed.current) * wander.radiusX,
-      -Math.sin(elapsed.current * 0.82) * wander.radiusZ
-    )
+    if (!ref.current || isTestPausedForScreenshot()) return
+    const target = npcPosition(id)
+    const alpha = 1 - Math.exp(-Math.min(delta, 0.05) * 6)
+    const dx = target[0] - ref.current.position.x
+    const dz = target[2] - ref.current.position.z
+    ref.current.position.x += dx * alpha
+    ref.current.position.z += dz * alpha
+    if (Math.hypot(dx, dz) > 0.1) ref.current.rotation.y = Math.atan2(dx, dz)
   })
   return (
     <group ref={ref} position={anchor}>

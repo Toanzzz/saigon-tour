@@ -21,7 +21,25 @@ try {
     })
     const page = await context.newPage()
     await openGame(page)
-    const { rewarded } = await completeQuest(page)
+    let result
+    try {
+      result = await completeQuest(page)
+    } catch (error) {
+      await writeFile(
+        `${out}/failure-${width}.json`,
+        JSON.stringify(
+          {
+            diagnostics: await diagnostics(page),
+            text: await page.locator('body').innerText(),
+            error: String(error),
+          },
+          null,
+          2
+        )
+      )
+      throw error
+    }
+    const { rewarded } = result
     const guestName = rewarded.network.guestName
     await page.reload()
     await page.getByText(`Welcome back, ${guestName}`).waitFor()

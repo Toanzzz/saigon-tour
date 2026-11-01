@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useRapier } from '@react-three/rapier'
 import { useEffect } from 'react'
 import { crowdStats } from '@/features/npcs/crowd'
+import { city } from '@/shared/api/city'
 import { eventDiagnostics } from '@/shared/api/events'
 import { npcSpeech, presence, speech } from '@/shared/api/presence'
 import { net } from '@/shared/api/status'
@@ -47,6 +48,7 @@ export function Diagnostics() {
           : 'idle',
       },
       world: crowdStats(),
+      city: city.state,
       physics: {
         engine: 'rapier',
         timestep: 1 / 60,

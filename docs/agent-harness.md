@@ -13,7 +13,7 @@ Step primitives are `GO_TO {locationId}`, `TALK_TO {npcId}`, `DELIVER {itemId,np
 
 ## Tools and memory
 
-Every NPC has `propose-quest`, `check-quests`, `get-context`, and `remember-player-fact`. All use authenticated player identity. The speaker must match the proposed giver. `get-context` returns the player and active quests. Persona prompts include domain limits and example quest specs.
+Every NPC has `propose-quest`, `check-quests`, `get-context`, and `remember-player-fact`. All use authenticated player identity. The speaker must match the proposed giver. `get-context` returns the player, active quests, and the room city snapshot, including current events and the speaker’s need. Persona prompts include domain limits and example quest specs.
 
 Conversation history is scoped to `npcId:playerId`; remembered facts are scoped to the same pair and limited to twelve. Postgres stores journeys, completions, facts, model spend, and persistent Mastra memory. Reset clears the journey and NPC memory while keeping identity.
 
@@ -22,6 +22,16 @@ Conversation history is scoped to `npcId:playerId`; remembered facts are scoped 
 Help and check intents run deterministic validation even if the model omits the tool. If live generation fails or its budget is exhausted, help chooses a validated seed quest. Seed specs use the same schema and engine as live proposals and browser offline play.
 
 The harness allows three model steps, enforces request timeouts and call limits, sanitizes replies, and reserves model spend before every provider request. Failed or unknown-usage calls retain their reservation ceiling. Secrets stay in the server environment.
+
+## City Director
+
+Each occupied street room owns one `CityWorld` and one `CityDirector`. The scheduler wakes the director for world events and schedules, with at most one turn per ninety seconds. Empty rooms generate no model calls. Director context contains the city snapshot and the last twelve headlines; it has no conversation-memory thread.
+
+The agent can start or end a city event, move an NPC to an authored location anchor, set an NPC’s need, post a safe headline, and choose clear or rainy weather. `CityWorld` validates enum values, authored anchors, safe text, event lifetime, and the two-active-event cap. NPCs read these events and their own need when shaping quest proposals; ordinary quest-domain validation still applies.
+
+`DIRECTOR_MODE` selects `live`, `scripted`, or `off`. Scripted beats and live-failure fallback use the same action validator. `DIRECTOR_DAILY_LIMIT` bounds daily live director turns in `model_spend`; each model HTTP step also reserves spend through `meteredFetch`.
+
+Colyseus schema patches carry NPC placements, city events, weather, and snapshot context to every player in the room. Headlines also travel as `city-headline` messages. The client interpolates NPCs toward room placements, uses them for proximity, shows event markers and City pulse, and represents rain with tint and fog.
 
 ## Acceptance
 

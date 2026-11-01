@@ -1,6 +1,7 @@
 import { Client, type Room } from '@colyseus/sdk'
 import {
   type ClientSocketMessage,
+  cityFromRoomState,
   type Emote,
   type PartyClientMessage,
   type ServerSocketMessage,
@@ -11,6 +12,7 @@ import {
 } from '@saigon/shared'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify } from '@/shared/state/game'
+import { applyCity, cityHeadline, resetCity } from './city'
 import {
   acknowledgeWorld,
   currentEventBatch,
@@ -67,6 +69,7 @@ function handle(message: ServerSocketMessage, room: Room) {
     message.type === 'quest-completed'
   )
     handlePartyMessage(message)
+  else if (message.type === 'city-headline') cityHeadline(message.headline)
   else if (message.type === 'world') acknowledgeWorld(message)
   else if (message.type === 'emote')
     speech.set(message.playerId, {
@@ -87,6 +90,7 @@ function handle(message: ServerSocketMessage, room: Room) {
 
 /** Presence lives in Colyseus state; only roster metadata enters the store. */
 function syncRoster(state: WorldRoomState) {
+  applyCity(cityFromRoomState(state))
   const players = [...state.players.values()].map(toPresence)
   recordPlayers(players, net.state.selfId ?? '')
   const roster = players.map(({ id, name, color }) => ({ id, name, color }))
@@ -107,6 +111,7 @@ export function installRealtime() {
   const offline = () => {
     activeRoom = null
     clearPresence()
+    resetCity()
     updateNet({
       connection: 'offline',
       room: null,
@@ -147,18 +152,24 @@ export function installRealtime() {
         const parsed = ServerSocketMessageSchema.safeParse(payload)
         if (parsed.success && room === joined) handle(parsed.data, joined)
       })
-      joined.onStateChange((state) => syncRoster(state))
+      joined.onStateChange((state) => {
+        if (room === joined) syncRoster(state)
+      })
       joined.onDrop(() => {
+        if (room !== joined) return
         clearPresence()
+        resetCity()
         updateNet({ connection: 'reconnecting', players: [], invite: null })
       })
       joined.onReconnect(() => {
+        if (room !== joined) return
         updateNet({ connection: 'connected' })
         const batch = currentEventBatch()
         if (batch) joined.send('events', batch)
       })
       joined.onLeave(() => {
         if (room !== joined) return
+        resetCity()
         room = null
         activeRoom = null
         clearPresence()

@@ -65,7 +65,15 @@ export function createApp(
       onError: (c) => c.json({ error: 'request_too_large' }, 413),
     })
   )
-  const realtime = createRealtime(app, config, harness, auth, db, services.now)
+  const realtime = createRealtime(
+    app,
+    config,
+    harness,
+    auth,
+    db,
+    services.now,
+    fetcher
+  )
   app.route('/', createRoutes({ auth, config, db, harness, realtime }))
   app.onError((_error, c) => {
     log('request_failed', 'Storage or request unavailable', 'warn')

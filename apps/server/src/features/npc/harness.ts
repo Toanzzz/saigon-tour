@@ -193,6 +193,8 @@ export class NpcHarness {
       `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
       `Time of day: ${request.worldContext.timeOfDay}`,
       `Player intent: ${request.intent}`,
+      `Shared city snapshot: ${JSON.stringify(this.game.city?.(playerId) ?? null)}`,
+      `Your current need: ${this.game.city?.(playerId)?.needs[npcId] ?? 'none'}`,
       `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,
       `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,
     ].join('\n')

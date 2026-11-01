@@ -1,4 +1,5 @@
 import { type MapSchema, schema, t } from '@colyseus/schema'
+import type { CitySnapshot } from './city/schema'
 import type { PresencePlayer } from './multiplayer'
 
 /** Room name registered with the Colyseus matchmaker. */
@@ -20,11 +21,49 @@ export const PresenceState = schema(
 )
 export type PresenceState = InstanceType<typeof PresenceState>
 
+export const CityNpcState = schema(
+  {
+    locationId: t.string(),
+    anchorId: t.string(),
+    x: t.float32(),
+    y: t.float32(),
+    z: t.float32(),
+  },
+  'CityNpcState'
+)
+export type CityNpcState = InstanceType<typeof CityNpcState>
+export const CityEventState = schema(
+  {
+    id: t.string(),
+    kind: t.string(),
+    locationId: t.string(),
+    title: t.string(),
+    description: t.string(),
+    startedAt: t.float64(),
+    endsAt: t.float64(),
+  },
+  'CityEventState'
+)
+export const CityHeadlineState = schema(
+  {
+    id: t.string(),
+    text: t.string(),
+    createdAt: t.float64(),
+  },
+  'CityHeadlineState'
+)
+
 /** Colyseus room state: the street name and its connected players. */
 export const WorldRoomState = schema(
   {
     street: t.string(),
     players: t.map(PresenceState),
+    cityRevision: t.uint32().default(0),
+    weather: t.string().default('clear'),
+    npcPlacements: t.map(CityNpcState),
+    events: t.map(CityEventState),
+    needs: t.map('string'),
+    headlines: t.map(CityHeadlineState),
   },
   'WorldRoomState'
 )
@@ -38,6 +77,75 @@ export function toPresence(state: PresenceState): PresencePlayer {
     position: [state.x, state.y, state.z],
     heading: state.heading,
     ride: state.ride ?? null,
+  }
+}
+
+/** Mirror city changes into schema fields so Colyseus sends incremental patches. */
+export function syncCity(state: WorldRoomState, city: CitySnapshot) {
+  state.cityRevision = city.revision
+  state.weather = city.weather
+  const npcIds = new Set(Object.keys(city.npcPlacements))
+  for (const id of [...state.npcPlacements.keys()])
+    if (!npcIds.has(id)) state.npcPlacements.delete(id)
+  for (const [id, placement] of Object.entries(city.npcPlacements)) {
+    const entry = state.npcPlacements.get(id) ?? new CityNpcState()
+    entry.locationId = placement.locationId
+    entry.anchorId = placement.anchorId
+    ;[entry.x, entry.y, entry.z] = placement.position
+    if (!state.npcPlacements.has(id)) state.npcPlacements.set(id, entry)
+  }
+  const eventIds = new Set(city.events.map((event) => event.id))
+  for (const id of [...state.events.keys()])
+    if (!eventIds.has(id)) state.events.delete(id)
+  for (const event of city.events) {
+    const entry = state.events.get(event.id) ?? new CityEventState()
+    Object.assign(entry, event)
+    if (!state.events.has(event.id)) state.events.set(event.id, entry)
+  }
+  for (const npcId of [...state.needs.keys()])
+    if (!(npcId in city.needs)) state.needs.delete(npcId)
+  for (const [npcId, need] of Object.entries(city.needs))
+    if (need !== undefined) state.needs.set(npcId, need)
+  const headlineIds = new Set(city.headlines.map((headline) => headline.id))
+  for (const id of [...state.headlines.keys()])
+    if (!headlineIds.has(id)) state.headlines.delete(id)
+  for (const headline of city.headlines) {
+    const entry = state.headlines.get(headline.id) ?? new CityHeadlineState()
+    Object.assign(entry, headline)
+    if (!state.headlines.has(headline.id))
+      state.headlines.set(headline.id, entry)
+  }
+}
+
+export function cityFromRoomState(state: WorldRoomState): CitySnapshot {
+  const npcPlacements = {} as CitySnapshot['npcPlacements']
+  for (const [id, entry] of state.npcPlacements)
+    npcPlacements[id as keyof typeof npcPlacements] = {
+      locationId:
+        entry.locationId as CitySnapshot['npcPlacements']['hoa']['locationId'],
+      anchorId: entry.anchorId,
+      position: [entry.x, entry.y, entry.z],
+    }
+  return {
+    revision: state.cityRevision,
+    weather: state.weather as CitySnapshot['weather'],
+    npcPlacements,
+    events: [...state.events.values()].map((entry) => ({
+      id: entry.id,
+      kind: entry.kind as CitySnapshot['events'][number]['kind'],
+      locationId:
+        entry.locationId as CitySnapshot['events'][number]['locationId'],
+      title: entry.title,
+      description: entry.description,
+      startedAt: entry.startedAt,
+      endsAt: entry.endsAt,
+    })),
+    needs: Object.fromEntries(state.needs),
+    headlines: [...state.headlines.values()].map((entry) => ({
+      id: entry.id,
+      text: entry.text,
+      createdAt: entry.createdAt,
+    })),
   }
 }
 

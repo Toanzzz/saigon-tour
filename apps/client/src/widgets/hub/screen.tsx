@@ -6,6 +6,7 @@ import { PartyInviteControls } from '@/widgets/hud/party'
 import { NeighborCard, StoryCard } from './cards'
 import { PlacesCard, RideCard, SoundCard } from './city'
 import { HubHero } from './hero'
+import { CityPulse } from './pulse'
 import { hubView } from './view'
 
 export function HubScreen({ state }: { state: GameState }) {
@@ -54,6 +55,7 @@ export function HubScreen({ state }: { state: GameState }) {
           <RideCard view={view} />
           <PlacesCard view={view} />
           <SoundCard view={view} />
+          <CityPulse />
         </section>
       </div>
     </dialog>
