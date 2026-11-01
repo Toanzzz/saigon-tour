@@ -1,5 +1,6 @@
 import {
   GIVER_UNLOCKS,
+  milestoneSeeds,
   NEIGHBOR_IDS,
   type NeighborId,
   NPC_NAMES,
@@ -44,20 +45,37 @@ describe('npc package round-trip', () => {
   it.each(registered)('%s story matches shared quests and domain', (id) => {
     const def = NPC_REGISTRY[id as keyof typeof NPC_REGISTRY]
     expect(def.story.domain).toEqual(QUEST_DOMAINS[id])
+    // seedsFor excludes milestone seeds; milestoneSeeds returns them. Both
+    // preserve registry seed order, so compare each group positionally.
     const en = seedsFor(id, 'en')
     const vi = seedsFor(id, 'vi')
-    expect(def.story.seeds).toHaveLength(en.length)
-    def.story.seeds.forEach((seed, i) => {
-      expect(seed.steps).toEqual(en[i].steps)
-      expect(seed.scope).toBe(en[i].scope)
+    const mEn = milestoneSeeds(id, 'en')
+    const mVi = milestoneSeeds(id, 'vi')
+    const base = def.story.seeds.filter((seed) => !seed.milestone)
+    const milestones = def.story.seeds.filter((seed) => seed.milestone)
+    expect(base).toHaveLength(en.length)
+    expect(milestones).toHaveLength(mEn.length)
+    const match = (
+      seed: (typeof def.story.seeds)[number],
+      e: (typeof en)[number],
+      v: (typeof vi)[number]
+    ) => {
+      expect(seed.steps).toEqual(e.steps)
+      expect(seed.scope).toBe(e.scope)
       expect(seed.text.en).toEqual({
-        title: en[i].title,
-        description: en[i].description,
+        title: e.title,
+        description: e.description,
       })
       expect(seed.text.vi).toEqual({
-        title: vi[i].title,
-        description: vi[i].description,
+        title: v.title,
+        description: v.description,
       })
+    }
+    base.forEach((seed, i) => {
+      match(seed, en[i], vi[i])
+    })
+    milestones.forEach((seed, i) => {
+      match(seed, mEn[i], mVi[i])
     })
   })
 

@@ -1,5 +1,8 @@
 import {
+  canOfferQuests,
   isRevealed,
+  MILESTONES,
+  milestoneForGiver,
   type NpcId,
   type Quest,
   type QuestStep,
@@ -124,4 +127,28 @@ export function dialogueQuests(state: GameState, npc: NpcId) {
     canHelp: state.quests.length < 3,
     full: state.quests.length >= 3,
   }
+}
+
+/**
+ * Would the milestone "Ask about the concert" button apply for this giver?
+ * Mirrors the server's offerMilestone gating from local state.
+ */
+export function canAskMilestone(state: GameState, npc: NpcId): boolean {
+  const milestoneId = milestoneForGiver(npc)
+  if (!milestoneId) return false
+  // Match the server gate: a cold giver offers nothing.
+  if (!canOfferQuests(state.friendship, npc)) return false
+  const component = MILESTONES[milestoneId].components.find(
+    (entry) => entry.giver === npc
+  )
+  if (!component) return false
+  if (state.completed.some((quest) => quest.milestone === milestoneId))
+    return false
+  if ((state.world.inventory[component.itemId] ?? 0) > 0) return false
+  return !state.quests.some(
+    (quest) =>
+      quest.giverNpcId === npc &&
+      quest.milestone === milestoneId &&
+      quest.status !== 'completed'
+  )
 }

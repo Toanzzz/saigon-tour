@@ -6,11 +6,15 @@ import {
   type Quest,
 } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { giveItem, openJournal } from '@/app/actions'
+import { askMilestone, giveItem, openJournal } from '@/app/actions'
 import { city } from '@/shared/api/city'
 import { itemLabel, m, npcLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
-import { dialogueQuests, questHint } from '@/shared/state/quests'
+import {
+  canAskMilestone,
+  dialogueQuests,
+  questHint,
+} from '@/shared/state/quests'
 import { Icon } from '@/shared/ui/icons'
 
 function Pill({ tone, label }: { tone: string; label: string }) {
@@ -32,8 +36,24 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
   const npcName = npcLabel(npc)
   const snapshot = useSelector(city, (s) => s)
   const hosting = hostingEvent(snapshot, npc)
+  const askConcert = canAskMilestone(state, npc)
   return (
     <section className="errands" aria-label={m.errands_label()}>
+      {askConcert ? (
+        <div className="errand errand-milestone">
+          <div className="errand-head">
+            <span className="errand-title">{m.milestone_concert_title()}</span>
+          </div>
+          <p className="errand-hint">{m.milestone_ask_hint()}</p>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={() => void askMilestone()}
+          >
+            {m.milestone_ask_button()}
+          </button>
+        </div>
+      ) : null}
       {ready.map((quest) => (
         <div className="errand" key={quest.id}>
           <div className="errand-head">

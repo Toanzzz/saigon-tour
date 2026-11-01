@@ -49,7 +49,8 @@ export async function buildContext(
   playerId: string,
   outcome: ToolOutcome,
   twistedLine: string | null = null,
-  riddleContext: string | null = null
+  riddleContext: string | null = null,
+  milestoneContext: string | null = null
 ) {
   const facts = await memory.recall(npcId, playerId)
   const record = await game.get(playerId)
@@ -86,6 +87,7 @@ export async function buildContext(
       ? [`Twist just happened: ${twistedLine}. React in character.`]
       : []),
     ...(riddleContext ? [riddleContext] : []),
+    ...(milestoneContext ? [milestoneContext] : []),
     `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
     `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
     `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,

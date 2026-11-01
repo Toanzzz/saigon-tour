@@ -1,6 +1,9 @@
 import {
+  type ItemId,
   isRevealed,
   type LocationId,
+  MILESTONES,
+  type MilestoneId,
   NPCS,
   type NpcId,
   type Quest,
@@ -62,6 +65,7 @@ export interface HubView {
   total: number
   muted: boolean
   volume: number
+  milestone: MilestoneBoard
 }
 
 export function greetingFor(date: Date) {
@@ -223,6 +227,54 @@ export function cheapestRide(state: GameState): HubRide | null {
   }
 }
 
+export interface MilestoneComponentView {
+  itemId: ItemId
+  giver: NpcId
+  giverName: string
+  place: string
+  held: boolean
+}
+export interface MilestoneBoard {
+  id: MilestoneId
+  title: string
+  components: MilestoneComponentView[]
+  /** 'gather' while collecting, 'ready' once all held, 'done' once completed. */
+  state: 'gather' | 'ready' | 'done'
+  /** The next giver to visit, or null when ready or done. */
+  nextGiver: NpcId | null
+  host: NpcId
+  hostName: string
+}
+
+/** The district milestone board, derived from inventory and completed[]. */
+export function milestoneBoard(
+  state: GameState,
+  id: MilestoneId = 'evening-concert'
+): MilestoneBoard {
+  const milestone = MILESTONES[id]
+  const done = state.completed.some((quest) => quest.milestone === id)
+  const components = milestone.components.map((component) => ({
+    itemId: component.itemId,
+    giver: component.giver,
+    giverName: npcLabel(component.giver),
+    place: placeName(NPCS[component.giver].location),
+    held: (state.world.inventory[component.itemId] ?? 0) > 0,
+  }))
+  const allHeld = components.every((component) => component.held)
+  const nextGiver = done
+    ? null
+    : (components.find((component) => !component.held)?.giver ?? null)
+  return {
+    id,
+    title: m.milestone_concert_title(),
+    components,
+    state: done ? 'done' : allHeld ? 'ready' : 'gather',
+    nextGiver,
+    host: milestone.host,
+    hostName: npcLabel(milestone.host),
+  }
+}
+
 export function hubView(state: GameState, now = new Date()): HubView {
   const steps = storySteps(state)
   const done = state.completed.length > 0 && state.quests.length === 0
@@ -272,5 +324,6 @@ export function hubView(state: GameState, now = new Date()): HubView {
     total: ids.length,
     muted: state.muted,
     volume: state.volume,
+    milestone: milestoneBoard(state),
   }
 }

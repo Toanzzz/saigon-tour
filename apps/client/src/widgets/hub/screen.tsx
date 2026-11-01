@@ -8,6 +8,7 @@ import { PartyInviteControls } from '@/widgets/hud/party'
 import { NeighborCard, StoryCard } from './cards'
 import { PlacesCard, RideCard, SoundCard } from './city'
 import { HubHero } from './hero'
+import { MilestoneCard } from './milestone'
 import { CityPulse } from './pulse'
 import { hubView } from './view'
 
@@ -52,6 +53,7 @@ export function HubScreen({ state }: { state: GameState }) {
         <HubHero view={view} />
         <section className="hub-grid" aria-label={m.hub_your_day()}>
           <StoryCard view={view} />
+          <MilestoneCard view={view} />
           <NeighborCard view={view} />
           <RideCard view={view} />
           <PlacesCard view={view} />

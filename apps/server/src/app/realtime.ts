@@ -2,11 +2,18 @@ import type { Server as HttpServer } from 'node:http'
 import { createAuthContext, matchMaker } from '@colyseus/core'
 import { setTransport } from '@colyseus/core/Transport'
 import { WebSocketTransport } from '@colyseus/ws-transport'
-import { type AvatarBody, type Look, WORLD_ROOM } from '@saigon/shared'
+import {
+  type AvatarBody,
+  type Look,
+  type MilestoneId,
+  WORLD_ROOM,
+} from '@saigon/shared'
 import type { Hono } from 'hono'
+import { allowMilestoneEvent, runConcertSequence } from '@/domain/quests'
 import type { Auth } from '@/features/auth'
 import { CityDirector } from '@/features/director'
 import type { NpcHarness } from '@/features/npc'
+import { safeLine } from '@/features/npc/safety'
 import { PartyService } from '@/features/party'
 import { RoomManager, status, WorldRoom } from '@/features/realtime'
 import type { GameDb, ServerConfig } from '@/shared'
@@ -57,6 +64,18 @@ export function createRealtime(
         ...save,
         sequence: manager.room(id)?.members.get(id)?.acknowledgedSequence ?? 0,
       })
+  }
+  // At most one milestone event per room every 10 minutes, tracked in memory.
+  const lastMilestoneAt = new Map<string, number>()
+  harness.game.milestone = (playerId: string, milestoneId: MilestoneId) => {
+    const room = manager.room(playerId)
+    const city = room?.city
+    if (!room || !city) return
+    if (!allowMilestoneEvent(lastMilestoneAt, room.id, now())) return
+    // Name the player only after the shared safety check; else a neutral fallback.
+    const name = manager.getPlayer(playerId)?.name
+    const who = name && safeLine(name) ? name : 'A neighbor'
+    runConcertSequence(city, milestoneId, who)
   }
 
   WorldRoom.deps = {

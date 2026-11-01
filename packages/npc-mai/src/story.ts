@@ -1,6 +1,7 @@
 import type { NpcStory } from '@saigon/npc-kit'
 import { arc } from './seeds/arc'
 import { gag } from './seeds/gag'
+import { milestone } from './seeds/milestone'
 
 export const story: NpcStory = {
   seeds: [
@@ -20,12 +21,13 @@ export const story: NpcStory = {
         },
       },
     },
+    milestone,
   ],
   domain: {
     home: 'market',
     locations: ['market', 'alley', 'park', 'postoffice'],
     npcs: ['hoa', 'tam', 'linh', 'son'],
     items: ['coffee', 'banana', 'baguette', 'postcard'],
-    gifts: ['coffee', 'banana'],
+    gifts: ['coffee', 'banana', 'coffee-beans'],
   },
 }

@@ -458,5 +458,19 @@
   "aside_metro": "Năm nhà ga, không một câu xã giao. Thư thả.",
   "aside_bus": "Xe buýt đi đường vòng ngắm cảnh. Bạn thấy ba con mèo.",
   "reward_thrifty": "Tuyến tiết kiệm +5",
-  "reward_sharp": "Mắt tinh +5"
+  "reward_sharp": "Mắt tinh +5",
+  "milestone_concert_title": "Đêm nhạc",
+  "milestone_state_gather": "Gom đủ ba phần",
+  "milestone_state_ready": "Mang cả ba tới cho {host}",
+  "milestone_state_done": "Đêm nhạc đã diễn ra",
+  "milestone_component": "{giver} · {place}",
+  "milestone_component_held": "Đang trong túi",
+  "milestone_component_wanted": "Còn phải gom",
+  "milestone_next": "Kế tiếp: hỏi {name} về đêm nhạc.",
+  "milestone_next_apex": "Mang ba phần tới cho {host} trước Ủy ban.",
+  "milestone_done_note": "Ủy ban còn nhớ cái đêm bạn thắp sáng cả quảng trường.",
+  "milestone_ask_hint": "Có một đêm nhạc đang chuẩn bị. Hàng xóm này giữ một phần của nó.",
+  "milestone_ask_button": "Hỏi về đêm nhạc",
+  "milestone_reward_banner": "Đêm nhạc trước Ủy ban",
+  "milestone_begins_toast": "Đêm nhạc bắt đầu trước Ủy ban."
 }

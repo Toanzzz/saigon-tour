@@ -489,5 +489,19 @@
   "aside_metro": "Five stations, zero small talk. Restful.",
   "aside_bus": "The bus took the scenic route. You saw three cats.",
   "reward_thrifty": "Thrifty route +5",
-  "reward_sharp": "Sharp eye +5"
+  "reward_sharp": "Sharp eye +5",
+  "milestone_concert_title": "Evening concert",
+  "milestone_state_gather": "Gather the three pieces",
+  "milestone_state_ready": "Bring all three to {host}",
+  "milestone_state_done": "The concert played",
+  "milestone_component": "{giver} · {place}",
+  "milestone_component_held": "In your bag",
+  "milestone_component_wanted": "Still to earn",
+  "milestone_next": "Next: ask {name} about the concert.",
+  "milestone_next_apex": "Bring the three pieces to {host} at City Hall.",
+  "milestone_done_note": "City Hall remembers the night you lit it up.",
+  "milestone_ask_hint": "There is a concert brewing. This neighbor has a piece of it.",
+  "milestone_ask_button": "Ask about the concert",
+  "milestone_reward_banner": "Concert at City Hall",
+  "milestone_begins_toast": "The concert begins at City Hall."
 }

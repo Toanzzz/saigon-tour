@@ -15,7 +15,10 @@ import {
 import type { z } from 'zod'
 import {
   completeReady,
+  hostedMilestone,
   outcomeKind as kind,
+  offerApex,
+  offerMilestone,
   offerSeed,
   QuestService,
 } from '@/domain/quests'
@@ -226,6 +229,40 @@ export class NpcHarness {
       }
     }
     const outcome: ToolOutcome = { calls: [], events: progressEvents }
+    // Milestone offers run before the reply so the LLM can voice them.
+    let milestoneContext: string | null = null
+    let milestoneFallback: string | null = null
+    // The host auto-offers the apex whenever the player holds every component.
+    if (hostedMilestone(npcId)) {
+      const apex = await offerApex(this.game, playerId, npcId, request.locale)
+      if (apex.offered && apex.quest) {
+        outcome.events.push({
+          type: 'offered',
+          quest: apex.quest,
+          reward: apex.quest.reward,
+        })
+        milestoneContext = `You just offered ${apex.title}; set it up in your voice.`
+        milestoneFallback = apex.description ?? null
+      }
+    }
+    // The `milestone` intent asks a component giver for its errand.
+    if (request.intent === 'milestone' && !milestoneContext) {
+      const offer = await offerMilestone(
+        this.game,
+        playerId,
+        npcId,
+        request.locale
+      )
+      if (offer.offered && offer.quest) {
+        outcome.events.push({
+          type: 'offered',
+          quest: offer.quest,
+          reward: offer.quest.reward,
+        })
+        milestoneContext = `You just offered ${offer.title}; set it up in your voice.`
+        milestoneFallback = offer.description ?? null
+      }
+    }
     let reply: string | null = null
     let source: 'live' | 'fallback' = 'fallback'
     const allowed =
@@ -239,15 +276,18 @@ export class NpcHarness {
         playerId,
         outcome,
         twistedLine ?? null,
-        riddleContext
+        riddleContext,
+        milestoneContext
       )
       if (reply) source = 'live'
     }
-    if (!reply) await offerSeed(this.game, npcId, request, playerId, outcome)
+    if (!reply && !milestoneFallback)
+      await offerSeed(this.game, npcId, request, playerId, outcome)
     const final = await this.game.get(playerId)
     if (!reply) {
       reply =
         (kind(outcome) === 'completed' ? completedPayoff : null) ??
+        milestoneFallback ??
         fallbackLine(
           npcId,
           final.world,
@@ -288,7 +328,8 @@ export class NpcHarness {
     playerId: string,
     outcome: ToolOutcome,
     twistedLine: string | null,
-    riddleContext: string | null = null
+    riddleContext: string | null = null,
+    milestoneContext: string | null = null
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
     const context = await buildContext(
@@ -299,7 +340,8 @@ export class NpcHarness {
       playerId,
       outcome,
       twistedLine,
-      riddleContext
+      riddleContext,
+      milestoneContext
     )
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([

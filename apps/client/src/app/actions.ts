@@ -262,6 +262,7 @@ export async function talk(npc: NpcId) {
   await converse('', 'greet', true)
 }
 export const chat = (text: string) => converse(text, 'chat')
+export const askMilestone = () => converse('', 'milestone')
 export async function giveItem() {
   const state = game.state
   const { dialogue } = state

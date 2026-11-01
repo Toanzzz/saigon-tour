@@ -16,7 +16,7 @@ import { noteFriendship } from '@/shared/state/friendship'
 import { type GameState, game, notify, update } from '@/shared/state/game'
 import { nearbyNpcs } from './nearby'
 
-export type Intent = 'chat' | 'greet'
+export type Intent = 'chat' | 'greet' | 'milestone'
 
 const timeOfDay = (hour = new Date().getHours()): TimeOfDay =>
   hour < 11
@@ -67,7 +67,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
   if (
     !dialog ||
     (!opening && dialog.thinking) ||
-    (intent !== 'greet' && !text.trim())
+    (intent !== 'greet' && intent !== 'milestone' && !text.trim())
   )
     return
   update({ dialogue: { ...dialog, thinking: true } })
@@ -158,6 +158,7 @@ function apply(
     updateNet({ party: result.party })
   let offered = false
   let completed = false
+  let milestoneBegan = false
   game.setState((state) => {
     if (result.revision < state.serverRevision) {
       return state.dialogue?.requestId === requestId
@@ -189,6 +190,7 @@ function apply(
     )
     if (rewards.length) {
       completed = true
+      milestoneBegan = rewards.some((entry) => entry.quest.milestone)
       const event = rewards[rewards.length - 1]
       const owned = new Set(state.unlocks.owned)
       for (const entry of rewards)
@@ -204,6 +206,7 @@ function apply(
             giverNpcId: quest.giverNpcId,
             reward,
             completedAt: Date.now(),
+            ...(quest.milestone ? { milestone: quest.milestone } : {}),
           })),
         ],
         reward: rewards.reduce(
@@ -257,4 +260,5 @@ function apply(
     notify(m.toast_errand_added())
   }
   if (completed) audio.play('reward')
+  if (milestoneBegan) notify(m.milestone_begins_toast())
 }

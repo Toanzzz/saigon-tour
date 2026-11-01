@@ -124,3 +124,41 @@ hidden riddle. `widgets/hud/ride-line.tsx` renders the current line (XR toasts).
 Completion bonuses show on the reward card: `reward_thrifty` and `reward_sharp`
 read `reward.bonus`. The hub `cheapestRide` suggests walking when the next leg is
 under 70 units.
+
+## Phase 4 — District milestone: the evening concert
+
+Three parallel errands each earn one component; bringing all three to Vy at City
+Hall starts a room-wide concert. The 0C contract (`packages/shared/src/milestones.ts`)
+holds the host, locations, components, and bilingual event text; `COMPONENT_ITEM_IDS`
+keeps components out of DELIVER/BUY, and BRING validates against `MILESTONES`.
+
+Seeds live in `packages/npc-{mai,thao,ba,vy}/src/seeds/milestone.ts`, each carrying
+`milestone: 'evening-concert'`. The base seeds (mai GO_TO alley → TALK_TO hoa,
+thao riddle → GO_TO cathedral → TALK_TO son, ba GO_TO opera → TALK_TO alex) carry
+`gift: <component>`; each component is appended to the giver's domain `gifts` at
+the end so `gifts[0]` and LLM rewards are unchanged. Vy's apex BRINGs lanterns,
+sheet music, and beans, each to Vy. `seedsFor` excludes milestone seeds;
+`milestoneSeeds` returns them.
+
+`apps/server/src/domain/quests/milestones.ts`: `offerMilestone` proposes the
+giver's seed when the NPC gives a component the player lacks, no milestone quest
+from that NPC is active, and the milestone is not completed; `offerApex` runs on
+every host interaction once all three are held. `harness.ts` calls both, feeds
+the LLM `You just offered <title>; set it up in your voice.`, and falls back to
+the seed description. `QuestService.milestone?(playerId, milestoneId)` fires once
+in `checkQuests` after a granted apex, outside the transaction.
+
+`app/realtime.ts` wires the hook to `manager.room(playerId)?.city`: end the
+soonest-ending event if two are active, `start-event` street-music at cityhall
+for 180 s, `move-npc` Thảo to the cityhall `gathering` anchor, and `post-headline`
+naming the player (safety-checked, neutral "A neighbor" fallback). At most one
+milestone event per room every 10 minutes (`allowMilestoneEvent`); later
+completers still get the reward and a personal toast, with no model call.
+
+Client: `widgets/hub/milestone.tsx` + `milestoneBoard` in `view.ts` derive the
+board from inventory + `completed[].milestone` (no DB column). The errands strip
+shows "Ask about the concert" (`canAskMilestone`) which calls
+`converse('', 'milestone')`; `converse` allows an empty message for this intent.
+`offline()` mirrors the milestone intent and the apex auto-offer; the reward card
+gets a `milestone_reward_banner`, and a `milestone_begins_toast` fires on
+completion. `milestone_*` message keys added in EN + southern VI.

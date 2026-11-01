@@ -33,6 +33,9 @@ export function RewardPanel({ state }: { state: GameState }) {
           <Icon name="star" size={28} />
         </i>
       </div>
+      {state.rewardQuest?.milestone ? (
+        <p className="reward-milestone-banner">{m.milestone_reward_banner()}</p>
+      ) : null}
       {state.rewardQuest?.payoff ? (
         <blockquote className="reward-payoff">
           <NpcAvatar id={state.rewardQuest.giverNpcId} size="sm" />

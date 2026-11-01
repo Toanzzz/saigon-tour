@@ -234,7 +234,7 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
+Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo","lanterns"]}
 Signature rewards you grant as friendship grows: bucket-hat (neutral), ao-ba-ba (warm), basket-bicycle (close)
 Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"GO_TO","locationId":"opera"},{"type":"TALK_TO","npcId":"alex"},{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The photo that wandered","description":"This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.","payoff":"Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"tam"},"line":"Alex: the man in this old photo is Tam’s grandfather. Forget Son — this belongs with Tam."}}",
   "bread-vendor": "
@@ -677,7 +677,7 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"market","locations":["market","alley","park","postoffice"],"npcs":["hoa","tam","linh","son"],"items":["coffee","banana","baguette","postcard"],"gifts":["coffee","banana"]}
+Your allowed entities: {"home":"market","locations":["market","alley","park","postoffice"],"npcs":["hoa","tam","linh","son"],"items":["coffee","banana","baguette","postcard"],"gifts":["coffee","banana","coffee-beans"]}
 Signature rewards you grant as friendship grows: scarf (neutral), barista (warm), cat (close)
 Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"BUY","marketItemId":"banana"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Tasting notes: a palate cleanser","description":"First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.","payoff":"Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.","twist":{"step":{"type":"DELIVER","itemId":"coffee","npcId":"son"},"line":"Hoa: con, I am a pho person, not a coffee person. Give it to Son — he reviews everything."}}",
   "market-browse": "You are Ngọc, Market regular, based at market.
@@ -1568,7 +1568,7 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"opera","locations":["opera","cathedral","cityhall","park"],"npcs":["alex","vy","son","linh"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
+Your allowed entities: {"home":"opera","locations":["opera","cathedral","cityhall","park"],"npcs":["alex","vy","son","linh"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo","sheet-music"]}
 Signature rewards you grant as friendship grows: headphones (neutral), ao-dai (warm), chick (close)
 Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"TALK_TO","npcId":"vy"}],"scope":"solo","title":"The echo across the square","description":"I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.","payoff":"Linh and her megaphone? That explains the melody — and the key change at dinnertime.","twist":{"step":{"type":"TALK_TO","npcId":"linh"},"line":"Son: that was no lantern. The echo was Linh practicing with her megaphone. Go ask her."}}",
   "vy": "
@@ -5129,6 +5129,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "gifts": [
         "postcard",
         "photo",
+        "lanterns",
       ],
       "home": "river",
       "items": [
@@ -5308,6 +5309,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "gifts": [
         "coffee",
         "banana",
+        "coffee-beans",
       ],
       "home": "market",
       "items": [
@@ -5655,6 +5657,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "gifts": [
         "postcard",
         "photo",
+        "sheet-music",
       ],
       "home": "opera",
       "items": [
@@ -5929,6 +5932,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Ghé Nhà hát Thành phố và khám phá một góc khác của thành phố.",
           "title": "Ngắm cảnh dọc sông",
+        },
+      },
+    },
+    {
+      "gift": "lanterns",
+      "giverNpcId": "ba",
+      "milestone": "evening-concert",
+      "payoff": {
+        "en": "Alex returned the frames, still dressed for a photo. See, a lantern always comes home before the show.",
+        "vi": "Alex trả lại mấy khung, còn nguyên dáng chụp hình. Thấy chưa, đèn lồng nào rồi cũng về kịp trước giờ diễn.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "opera",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "alex",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Vy needs my lantern frames for the evening concert, and that reminds me of a story. Walk all the way to the opera, where Alex borrowed them as a backdrop, and ask for them back. The moral, as usual, is about something else.",
+          "title": "Lanterns borrowed for a backdrop",
+        },
+        "vi": {
+          "description": "Vy cần mấy khung đèn lồng của ông cho đêm nhạc, mà nhắc tới là ông nhớ một câu chuyện. Đi một mạch qua nhà hát, chỗ Alex mượn làm phông chụp hình, rồi xin lại giùm. Bài học, như mọi khi, lại nói về chuyện khác.",
+          "title": "Khung đèn lồng cho tấm phông",
         },
       },
     },
@@ -6282,6 +6315,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
           "itemId": "postcard",
           "npcId": "thao",
           "type": "DELIVER",
+        },
+      },
+    },
+    {
+      "gift": "coffee-beans",
+      "giverNpcId": "mai",
+      "milestone": "evening-concert",
+      "payoff": {
+        "en": "Hoa approved the beans in two bowls flat. For the concert, Vy, roasted just right.",
+        "vi": "Cô Hoa duyệt cà phê gọn trong hai tô. Rang vừa đúng độ, để dành cho đêm nhạc của Vy.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "alley",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "hoa",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Vy wants real beans for the evening concert. Walk to the alley roaster, breathe in the smoke, then let Cô Hoa taste and vouch for them. Tasting notes: dusk, a little stage fright, a very big encore.",
+          "title": "Beans worthy of a concert",
+        },
+        "vi": {
+          "description": "Vy muốn có cà phê thiệt cho đêm nhạc. Ghé lò rang trong hẻm, hít chút khói thơm, rồi để Cô Hoa nếm thử và gật đầu giùm. Hương vị: chạng vạng, chút run trước giờ diễn, và một khúc kết thiệt dài.",
+          "title": "Cà phê xứng tầm đêm nhạc",
         },
       },
     },
@@ -7204,6 +7267,42 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "gift": "sheet-music",
+      "giverNpcId": "thao",
+      "milestone": "evening-concert",
+      "payoff": {
+        "en": "Son had the bridge as a postcard to the river. Now the sheet music is whole for the concert.",
+        "vi": "Sơn giữ đoạn cầu trong một tấm bưu thiếp gửi dòng sông. Giờ bản nhạc đã nguyên vẹn cho đêm nhạc.",
+      },
+      "riddle": {
+        "text": {
+          "en": "My melody lost its bridge where two red-brick towers trade an echo. Stand where the square answers, then find the postcard poet who kept my missing bars.",
+          "vi": "Khúc nhạc của mình rớt mất đoạn cầu nơi hai tháp gạch đỏ trao nhau tiếng vọng. Đứng chỗ quảng trường vọng lại, rồi tìm người viết bưu thiếp đang giữ mấy nhịp thất lạc của mình.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "cathedral",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "son",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Vy needs my sheet music for the evening concert, but the bridge is missing. Solve where the melody hides, then ask Son — he kept the bars I lost. A neighbor or a cyclo can whisper the answer.",
+          "title": "The missing bars of the concert",
+        },
+        "vi": {
+          "description": "Vy cần bản nhạc của mình cho đêm nhạc, mà đoạn cầu thì mất tiêu. Đoán xem giai điệu trốn ở đâu, rồi hỏi Sơn — nó giữ mấy nhịp mình làm rớt. Hàng xóm hay bác xích lô có thể mách nhỏ cho.",
+          "title": "Mấy nhịp thất lạc của đêm nhạc",
+        },
+      },
+    },
+    {
       "giverNpcId": "vy",
       "payoff": {
         "en": "Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.",
@@ -7289,6 +7388,42 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Mang ly cà phê này cho Mai cho đội làm đèn lồng. Nói với chị ấy là dành cho "Trăng Phở", chiếc đèn sống sót qua cơn mưa phùn năm ngoái. Anh hùng thì xứng đáng có cà phê.",
           "title": "Cà phê cho đội đèn lồng",
+        },
+      },
+    },
+    {
+      "giverNpcId": "vy",
+      "milestone": "evening-concert",
+      "payoff": {
+        "en": "Lanterns up, coffee poured, the lost melody found. The square is a concert now. Encore Moon shines.",
+        "vi": "Đèn lồng lên, cà phê rót, khúc nhạc thất lạc tìm thấy lại. Cả quảng trường thành đêm nhạc. Trăng Encore tỏa sáng.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "lanterns",
+          "npcId": "vy",
+          "type": "BRING",
+        },
+        {
+          "itemId": "sheet-music",
+          "npcId": "vy",
+          "type": "BRING",
+        },
+        {
+          "itemId": "coffee-beans",
+          "npcId": "vy",
+          "type": "BRING",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "You have the lanterns, the sheet music, and the beans. Bring all three to me at City Hall and we will light the square. I have already named the first lantern "Encore Moon."",
+          "title": "The evening concert at City Hall",
+        },
+        "vi": {
+          "description": "Bạn đã có đèn lồng, bản nhạc và cà phê. Mang cả ba tới cho mình trước Ủy ban, rồi tụi mình thắp sáng cả quảng trường. Mình đặt tên chiếc đèn đầu tiên là "Trăng Encore" rồi đó.",
+          "title": "Đêm nhạc trước Ủy ban",
         },
       },
     },

@@ -203,6 +203,7 @@ export function grantReward(state: GameState, quest: Quest): GameState {
         giverNpcId: quest.giverNpcId,
         reward: quest.reward,
         completedAt: Date.now(),
+        ...(quest.milestone ? { milestone: quest.milestone } : {}),
       },
     ],
     reward: quest.reward.currency,

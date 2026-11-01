@@ -9,6 +9,10 @@ import {
   type InteractResponse,
   InteractResponseSchema,
   isExpired,
+  MILESTONES,
+  milestoneForGiver,
+  milestoneReady,
+  milestoneSeeds,
   type NpcId,
   seedsFor,
   shiftFriendship,
@@ -169,7 +173,73 @@ export function offline(
     reply = completedWithPayoff.quest.payoff
   else if (questEvents.some((event) => event.type === 'completed'))
     reply = m.offline_thanks()
-  if (wantsErrand(body.message ?? '') && canOfferQuests(friendship, npc)) {
+  // Mirror the server milestone offers: the apex auto-offers for the host on
+  // every interaction; the `milestone` intent asks a component giver.
+  let milestoneOffered = false
+  const completedMilestones = new Set(
+    state.completed
+      .map((entry) => entry.milestone)
+      .filter((id): id is NonNullable<typeof id> => Boolean(id))
+  )
+  const offerMilestoneSeed = (giver: NpcId) => {
+    // Mirror the server: a cold giver (friendliness <= -3) offers nothing.
+    if (!canOfferQuests(friendship, giver)) return
+    const spec = milestoneSeeds(giver, getLocale())[0]
+    if (!spec) return
+    const result = validateSpec(spec, { quests, inventory: world.inventory })
+    if (!result.ok) return
+    const quest = createQuest(spec, undefined, undefined, {
+      owned: state.unlocks.owned,
+      promised: quests
+        .filter((entry) => entry.status !== 'completed')
+        .map((entry) => entry.reward.unlockId)
+        .filter((id): id is NonNullable<typeof id> => Boolean(id)),
+      friendship: friendlinessOf(friendship, giver),
+    })
+    quests.push(quest)
+    questEvents.push({ type: 'offered', quest, reward: quest.reward })
+    reply = `${quest.title}. ${quest.description}`
+    milestoneOffered = true
+  }
+  // Apex: the host offers when the player holds every component.
+  for (const [id, milestone] of Object.entries(MILESTONES)) {
+    if (milestone.host !== npc) continue
+    if (completedMilestones.has(id as keyof typeof MILESTONES)) continue
+    if (!milestoneReady(world, id as keyof typeof MILESTONES)) continue
+    const active = quests.some(
+      (quest) =>
+        quest.giverNpcId === npc &&
+        quest.milestone === id &&
+        quest.status !== 'completed'
+    )
+    if (active) continue
+    offerMilestoneSeed(npc)
+  }
+  // Component giver: the `milestone` intent asks for its errand.
+  if (!milestoneOffered && body.intent === 'milestone') {
+    const milestoneId = milestoneForGiver(npc)
+    const component = milestoneId
+      ? MILESTONES[milestoneId].components.find((entry) => entry.giver === npc)
+      : undefined
+    if (
+      milestoneId &&
+      component &&
+      !completedMilestones.has(milestoneId) &&
+      (world.inventory[component.itemId] ?? 0) === 0 &&
+      !quests.some(
+        (quest) =>
+          quest.giverNpcId === npc &&
+          quest.milestone === milestoneId &&
+          quest.status !== 'completed'
+      )
+    )
+      offerMilestoneSeed(npc)
+  }
+  if (
+    !milestoneOffered &&
+    wantsErrand(body.message ?? '') &&
+    canOfferQuests(friendship, npc)
+  ) {
     // Titles this giver completed in its last 3 quests, in either locale, so
     // the deterministic offer rotates past a just-finished seed.
     const recent = new Set(

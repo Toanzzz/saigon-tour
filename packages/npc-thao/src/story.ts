@@ -1,6 +1,7 @@
 import type { NpcStory } from '@saigon/npc-kit'
 import { arc } from './seeds/arc'
 import { gag } from './seeds/gag'
+import { milestone } from './seeds/milestone'
 import { riddle } from './seeds/riddle'
 
 export const story: NpcStory = {
@@ -22,12 +23,13 @@ export const story: NpcStory = {
       },
     },
     riddle,
+    milestone,
   ],
   domain: {
     home: 'opera',
     locations: ['opera', 'cathedral', 'cityhall', 'park'],
     npcs: ['alex', 'vy', 'son', 'linh'],
     items: ['postcard', 'photo', 'coffee'],
-    gifts: ['postcard', 'photo'],
+    gifts: ['postcard', 'photo', 'sheet-music'],
   },
 }

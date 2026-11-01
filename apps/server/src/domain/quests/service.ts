@@ -9,6 +9,7 @@ import {
   type ItemId,
   isReady,
   type Look,
+  type MilestoneId,
   type NpcId,
   type PartySnapshot,
   type PlayerEvent,
@@ -34,6 +35,8 @@ export class QuestService {
   city?: (playerId: string) => CitySnapshot | null
   party?: { snapshot(playerId: string): PartySnapshot | null }
   push?: (playerId: string, save: PlayerSave, completed?: Quest) => void
+  /** Fired once per granted apex, after the completion ledger insert. */
+  milestone?: (playerId: string, milestoneId: MilestoneId) => void
   constructor(private readonly db: GameDb) {}
 
   get(playerId: string) {
@@ -151,6 +154,7 @@ export class QuestService {
     ]
     const capturedQuestIds = new Set(before.quests.map((quest) => quest.id))
     const notifications: { id: string; quest: Quest; save: PlayerSave }[] = []
+    const milestones: { id: string; milestoneId: MilestoneId }[] = []
     const events = await this.db.mutatePlayers(ids, async (saves, client) => {
       const record = saves.get(playerId)
       if (!record) throw new Error('player_not_found')
@@ -191,6 +195,11 @@ export class QuestService {
             if (participant.id === playerId) output.push(event)
             if (quest.party)
               granted.push({ id: participant.id, quest: event.quest })
+            if (event.quest.milestone)
+              milestones.push({
+                id: participant.id,
+                milestoneId: event.quest.milestone,
+              })
           }
         }
       }
@@ -206,6 +215,9 @@ export class QuestService {
     })
     for (const update of notifications)
       this.push?.(update.id, update.save, update.quest)
+    // Outside the transaction: the milestone hook starts the room event once.
+    for (const entry of milestones)
+      this.milestone?.(entry.id, entry.milestoneId)
     return events
   }
 
