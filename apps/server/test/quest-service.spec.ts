@@ -30,7 +30,7 @@ describe('quest transactions', () => {
     })
     await game.proposeQuest(ctx.playerId, 'tam', required(seedsFor('tam')[0]))
     await game.applyEvents(ctx.playerId, [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
       { type: 'visit', locationId: 'park' },
     ])
     expect(
@@ -46,7 +46,7 @@ describe('quest transactions', () => {
     for (let repeat = 0; repeat < 2; repeat++) {
       await game.proposeQuest(ctx.playerId, 'hoa', required(seedsFor('hoa')[0]))
       await game.applyEvents(ctx.playerId, [
-        { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+        { type: 'deliver', itemId: 'broth', npcId: 'linh' },
       ])
       expect((await game.checkQuests(ctx.playerId, 'hoa'))[0]?.type).toBe(
         'completed'
@@ -57,11 +57,18 @@ describe('quest transactions', () => {
 
   it('returns a progress event after a real step and an incomplete event on check', async () => {
     const harness = ctx.fx.harness(offline)
-    await harness.game.proposeQuest(
-      ctx.playerId,
-      'linh',
-      required(seedsFor('linh')[0])
-    )
+    // A two-step errand whose first step a market visit advances.
+    await harness.game.proposeQuest(ctx.playerId, 'linh', {
+      giverNpcId: 'linh',
+      title: 'A community lunch invitation',
+      description:
+        'Visit the market and invite Ms. Hoa to our neighborhood lunch.',
+      scope: 'solo',
+      steps: [
+        { type: 'GO_TO', locationId: 'market' },
+        { type: 'TALK_TO', npcId: 'hoa' },
+      ],
+    })
     const result = await harness.interact(
       'linh',
       {

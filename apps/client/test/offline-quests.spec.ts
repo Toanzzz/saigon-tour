@@ -76,8 +76,8 @@ describe('offline NPC quests', () => {
     changeLocale('vi')
     try {
       const result = offline('hoa', request('hoa', 'help'), initialState())
-      expect(result.quests[0]?.title).toBe('Rau thơm cho hàng xóm')
-      expect(result.reply).toContain('Rau thơm cho hàng xóm')
+      expect(result.quests[0]?.title).toBe('Chuyện cỡ hai tô')
+      expect(result.reply).toContain('Chuyện cỡ hai tô')
     } finally {
       changeLocale('en')
     }
@@ -243,9 +243,13 @@ describe('offline NPC quests', () => {
   it('keeps incomplete quests and refuses duplicate active proposals', () => {
     const start = initialState()
     const offered = offline('hoa', request('hoa', 'help'), start)
+    const first = offered.quests[0]
     const state = { ...start, quests: offered.quests, world: offered.world }
     const duplicate = offline('hoa', request('hoa', 'help'), state)
-    expect(duplicate.quests).toHaveLength(1)
+    // The same errand is never offered twice; a distinct one may be.
+    const signatures = duplicate.quests.map((q) => JSON.stringify(q.steps))
+    expect(new Set(signatures).size).toBe(signatures.length)
+    expect(duplicate.quests.filter((q) => q.id === first?.id)).toHaveLength(1)
     const checked = offline('hoa', request('hoa', 'check'), state)
     expect(checked.questEvents).toEqual([])
     expect(checked.world.currency).toBe(30)

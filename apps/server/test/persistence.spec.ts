@@ -160,7 +160,7 @@ describe('durable guest progress', () => {
         id: player.id,
         name: player.name,
         quests: [{ id: offered.accepted ? offered.quest.id : '' }],
-        world: { inventory: { herbs: 1 } },
+        world: { inventory: { broth: 1 } },
       },
     })
     const reset = await second.request('/me/reset', {
@@ -189,7 +189,7 @@ describe('durable guest progress', () => {
     const game = new QuestService(fx.db)
     await game.proposeQuest(player.id, 'hoa', seed)
     await game.applyEvents(player.id, [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     const checks = await Promise.all(
       Array.from({ length: 12 }, () => game.checkQuests(player.id, 'hoa'))

@@ -15,9 +15,17 @@ describe('rewardCopy', () => {
   })
 
   it('falls back to the completed title without a payoff', () => {
-    const spec = seedsFor('hoa')[0]
-    if (!spec) throw new Error('missing seed')
-    const quest = createQuest(spec, 'q_nopay', 0)
+    const quest = createQuest(
+      {
+        giverNpcId: 'hoa',
+        title: 'Plain errand',
+        description: 'A quest with no payoff.',
+        scope: 'solo',
+        steps: [{ type: 'DELIVER', itemId: 'herbs', npcId: 'linh' }],
+      },
+      'q_nopay',
+      0
+    )
     expect(rewardCopy(quest)).toContain(quest.title)
   })
 

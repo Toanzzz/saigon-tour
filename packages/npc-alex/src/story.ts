@@ -1,7 +1,9 @@
 import type { NpcStory } from '@saigon/npc-kit'
+import { gag } from './seeds/gag'
 
 export const story: NpcStory = {
   seeds: [
+    gag,
     {
       scope: 'solo',
       steps: [{ type: 'GO_TO', locationId: 'cathedral' }],

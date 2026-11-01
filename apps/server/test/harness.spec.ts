@@ -27,7 +27,7 @@ describe('NPC authored errands', () => {
       reward: rewardFor(spec),
     })
     expect(result.quests[0]?.id).toMatch(/^q_/)
-    expect(result.world.inventory.herbs).toBe(1)
+    expect(result.world.inventory.broth).toBe(1)
     expect(result.toolCalls).toEqual(['propose-quest'])
     expect(harness.usage).toMatchObject({
       calls: 2,
@@ -72,7 +72,7 @@ describe('NPC authored errands', () => {
       'incomplete'
     )
     await harness.game.applyEvents(ctx.playerId, [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     const results = await Promise.all(
       Array.from({ length: 12 }, () =>

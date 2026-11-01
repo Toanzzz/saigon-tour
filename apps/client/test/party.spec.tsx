@@ -69,7 +69,8 @@ describe('party controls and authoritative quest rewards', () => {
       reward: finished.reward.currency,
     })
     expect(renderToStaticMarkup(<RewardPanel state={result} />)).toContain(
-      finished.title
+      // The reward card now quotes the giver's payoff when present.
+      finished.payoff ?? finished.title
     )
     expect(
       completedQuest({ ...result, panel: 'none' }, completion()).panel

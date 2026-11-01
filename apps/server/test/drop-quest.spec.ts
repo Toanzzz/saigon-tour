@@ -35,6 +35,6 @@ describe('dropQuest tool', () => {
       reason: 'declined',
     })
     expect(friendlinessOf(response.friendship, 'hoa')).toBe(0)
-    expect(response.world.inventory.herbs).toBe(0)
+    expect(response.world.inventory.broth).toBe(0)
   })
 })

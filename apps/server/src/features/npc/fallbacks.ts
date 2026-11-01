@@ -1,4 +1,10 @@
-import type { Locale, NeighborId, NpcId, WorldState } from '@saigon/shared'
+import {
+  type Locale,
+  type NeighborId,
+  type NpcId,
+  RESIDENT_TEXT,
+  type WorldState,
+} from '@saigon/shared'
 
 type Line = Record<Locale, string>
 const OUTCOMES: Record<
@@ -24,40 +30,40 @@ const OUTCOMES: Record<
 }
 const IDLE: Record<NeighborId, Line> = {
   hoa: {
-    en: 'Hello! The market is busy. Ask me for an errand if you would like to help.',
-    vi: 'Chào con! Chợ đang đông lắm. Muốn giúp cô thì hỏi cô việc nhé.',
+    en: 'Hello, con. The market is a three-bowl kind of busy today. Ask me for an errand if you want to help.',
+    vi: 'Chào con. Chợ hôm nay bận cỡ ba tô lận. Muốn giúp cô thì hỏi cô việc nhé.',
   },
   tam: {
-    en: 'Where do you want to go? The bus is 5 coins, a cyclo 3, and walking is always free.',
-    vi: 'Bạn muốn đi đâu? Xe buýt 5 xu, xích lô 3 xu, còn đi bộ thì luôn miễn phí.',
+    en: 'Where to? I know a shortcut. It is only two songs long, I promise. Bus 5, xích lô 3, walking free.',
+    vi: 'Đi đâu đây? Anh biết đường tắt. Chỉ dài hai bài hát thôi, anh hứa. Xe buýt 5, xích lô 3, đi bộ miễn phí.',
   },
   linh: {
-    en: 'Hello! There is always a neighbor who could use a little help.',
-    vi: 'Chào bạn! Lúc nào cũng có một người hàng xóm cần giúp một tay.',
+    en: 'Hello! I have an opening for a Deputy Herb Logistics Officer. No experience required, badge pending.',
+    vi: 'Chào bạn! Chị đang cần một Phó phòng Hậu cần Rau thơm. Không cần kinh nghiệm, huy hiệu sẽ có sau.',
   },
   ba: {
-    en: 'Sit a moment. The river has seen this city grow. The city can wait a few minutes.',
-    vi: 'Ngồi xuống chút đi cháu. Dòng sông này đã thấy thành phố lớn lên. Thành phố đợi được vài phút mà.',
+    en: 'Sit a moment. This reminds me of a fish I once lost, which taught me patience. Or was the fish patient?',
+    vi: 'Ngồi chút đi cháu. Chuyện này làm ông nhớ con cá ông từng vuột mất, dạy ông kiên nhẫn. Hay con cá mới kiên nhẫn ta?',
   },
   mai: {
-    en: 'Hello! Pull up a stool for iced milk coffee and a sandwich.',
-    vi: 'Chào bạn! Kéo ghế ngồi uống ly cà phê sữa, ăn ổ bánh mì nha.',
+    en: 'Pull up a stool. Today the cà phê has notes of caramel, warm asphalt, and quiet ambition.',
+    vi: 'Kéo ghế ngồi đi. Hôm nay ly cà phê có hương caramel, nhựa đường ấm, và chút hoài bão lặng lẽ.',
   },
   alex: {
-    en: 'The Opera House columns are lovely in this light. Have you seen the view from the river?',
-    vi: 'Hàng cột Nhà hát đẹp quá dưới ánh nắng này. Bạn đã ngắm cảnh từ bờ sông chưa?',
+    en: 'Hold on, do not move, there is a pigeon lining up a perfect photobomb. There. Authentic.',
+    vi: 'Khoan, đừng nhúc nhích, có con bồ câu đang canh một cú phá ảnh hoàn hảo. Đó. Chân thật ghê.',
   },
   vy: {
-    en: 'The evening streets need a little color. Ask me how you can help.',
-    vi: 'Phố tối cần thêm chút màu sắc. Hỏi mình xem bạn giúp được gì nhé.',
+    en: "The evening streets need color. This lantern is called Phở Moon; it survived last year's drizzle.",
+    vi: 'Phố tối cần thêm màu sắc. Chiếc đèn này tên Trăng Phở; nó sống sót qua cơn mưa phùn năm ngoái.',
   },
   son: {
-    en: 'I collect small city stories. There is always another view to find.',
-    vi: 'Mình sưu tầm những câu chuyện nhỏ của thành phố. Lúc nào cũng còn một góc nhìn mới.',
+    en: 'I am mid-postcard. "Dear River, you looked tired today. Rest up." It never writes back, but still.',
+    vi: 'Mình đang viết dở tấm bưu thiếp. "Gửi Dòng Sông, hôm nay trông mệt quá. Nghỉ ngơi nhé." Nó chẳng hồi âm, mà kệ.',
   },
   thao: {
-    en: 'I am practicing a melody that wants to travel. Come walk a little with the music.',
-    vi: 'Mình đang tập một giai điệu muốn bay xa. Đi dạo cùng tiếng nhạc một chút nhé.',
+    en: 'Shh, walk softly, I am turning your footsteps into a little ballad. The chorus is almost there.',
+    vi: 'Suỵt, đi nhẹ thôi, mình đang biến bước chân bạn thành một khúc ballad nhỏ. Điệp khúc sắp xong rồi.',
   },
 }
 
@@ -73,9 +79,12 @@ export function fallbackLine(
     return locale === 'vi'
       ? 'Chào bạn. Hôm nay tôi chưa muốn nhờ việc gì.'
       : 'Hello. I am not ready to ask any favors today.'
-  return (
-    outcome
-      ? OUTCOMES[outcome]
-      : (IDLE[npcId as NeighborId] ?? OUTCOMES.incomplete)
-  )[locale]
+  if (outcome) return OUTCOMES[outcome][locale]
+  const neighbor = IDLE[npcId as NeighborId]
+  if (neighbor) return neighbor[locale]
+  // Residents have no IDLE voice here; use their own idle line, not the
+  // generic "still something to do" outcome.
+  const resident = RESIDENT_TEXT[npcId as Exclude<NpcId, NeighborId>]
+  const idle = resident?.[locale]?.idleLine
+  return idle || OUTCOMES.incomplete[locale]
 }

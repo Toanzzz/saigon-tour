@@ -26,6 +26,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 `
 
 export const QUEST_RULES = `

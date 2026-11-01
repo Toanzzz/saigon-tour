@@ -66,10 +66,10 @@ describe('quest engine', () => {
   it('projects localized seeds to a clean spec', () => {
     const [en] = seedsFor('hoa')
     const [vi] = seedsFor('hoa', 'vi')
-    expect(vi?.title).toBe('Rau thơm cho hàng xóm')
+    expect(vi?.title).toBe('Chuyện cỡ hai tô')
     expect(vi?.title).not.toBe(en?.title)
     expect(Object.keys(vi ?? {}).sort()).toEqual(
-      ['description', 'giverNpcId', 'scope', 'steps', 'title'].sort()
+      ['description', 'giverNpcId', 'payoff', 'scope', 'steps', 'title'].sort()
     )
     expect(vi?.steps).toEqual(en?.steps)
   })
@@ -219,7 +219,7 @@ describe('quest engine', () => {
       [purchase, delivery],
       [
         { type: 'purchase', itemId: 'coffee' },
-        { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+        { type: 'deliver', itemId: 'broth', npcId: 'linh' },
       ]
     )
     expect(rejected.quests.map((quest) => quest.status)).toEqual([

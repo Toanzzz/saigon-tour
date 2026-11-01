@@ -10,7 +10,7 @@ import {
   resetEventSequence,
 } from '@/shared/api/events'
 import { game, initialState, update } from '@/shared/state/game'
-import { questFixture } from './quest-fixture'
+import { visitFixture } from './quest-fixture'
 
 function world(
   sequence: number,
@@ -125,7 +125,7 @@ describe('socket event acknowledgement', () => {
 
 describe('save revisions and socket sequences', () => {
   it('replays pending events into quest progress with a newer save', () => {
-    const quest = questFixture('vy')
+    const quest = visitFixture()
     update({
       quests: [{ ...quest, progress: [true], status: 'ready' }],
       pending: [{ type: 'visit', locationId: 'alley' }],

@@ -1,4 +1,4 @@
-import { completedFixture, questFixture } from './quest-fixture'
+import { completedFixture, questFixture, visitFixture } from './quest-fixture'
 
 const completed = completedFixture(questFixture())
 
@@ -48,7 +48,7 @@ describe('auth sessions', () => {
   it('replays quest progress observed while saved progress loads', async () => {
     const session = await import('@/shared/api/session')
     transport.saveToken('existing-token')
-    const quest = questFixture('vy')
+    const quest = visitFixture()
     fetchMock.mockImplementation(async (url: string) =>
       url.endsWith('/auth/providers')
         ? Response.json({ meta: false })

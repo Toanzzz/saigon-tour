@@ -17,7 +17,7 @@ describe('durable generic party quests', () => {
       expect.objectContaining({ type: 'world', quests: [quest] })
     )
     await ctx.ask(first, 'linh', 'chat', [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     expect(
       (await ctx.ask(first, 'hoa', 'check')).questEvents.some(
@@ -28,7 +28,7 @@ describe('durable generic party quests', () => {
       (await ctx.app.db.player(second.player.id)).quests[0]?.progress
     ).toEqual([false])
     await ctx.ask(second, 'linh', 'chat', [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     const results = await Promise.all(
       Array.from({ length: 8 }, (_, index) =>
@@ -82,7 +82,7 @@ describe('durable generic party quests', () => {
     expect(save.quests).toEqual([])
     expect(save.world.inventory).toEqual({})
     expect(
-      (await ctx.app.db.player(second.player.id)).world.inventory.herbs
+      (await ctx.app.db.player(second.player.id)).world.inventory.broth
     ).toBeUndefined()
   })
 
@@ -93,13 +93,13 @@ describe('durable generic party quests', () => {
     ctx.app.realtime.manager.disconnect(second.player.id, second.socket)
     ctx.app.realtime.manager.connect(second.player, second.socket)
     await ctx.ask(first, 'linh', 'chat', [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     expect(
       (await ctx.app.harness.game.checkQuests(first.player.id, 'hoa'))[0]?.type
     ).toBe('incomplete')
     await ctx.ask(second, 'linh', 'chat', [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     const reconstructed = ctx.fx.harness({
       ...readConfig({}),
@@ -128,10 +128,10 @@ describe('durable generic party quests', () => {
         await ctx.app.harness.game.abandon(second.player.id, offer.quest.id)
       else await ctx.app.db.reset(second.player.id)
       expect(
-        (await ctx.app.db.player(second.player.id)).world.inventory.herbs ?? 0
+        (await ctx.app.db.player(second.player.id)).world.inventory.broth ?? 0
       ).toBe(0)
       await ctx.ask(first, 'linh', 'chat', [
-        { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+        { type: 'deliver', itemId: 'broth', npcId: 'linh' },
       ])
       expect(
         (await ctx.app.harness.game.checkQuests(first.player.id, 'hoa'))[0]
@@ -157,7 +157,7 @@ describe('durable generic party quests', () => {
     })
     expect(response.status).toBe(200)
     expect(await response.json()).toMatchObject({
-      player: { quests: [], world: { inventory: { herbs: 0 } } },
+      player: { quests: [], world: { inventory: { broth: 0 } } },
     })
     expect((await ctx.app.db.player(second.player.id)).quests[0]?.id).toBe(
       offer.quest.id
@@ -175,16 +175,16 @@ describe('durable generic party quests', () => {
   it('rejects full parcel inventory without changing either member inventory', async () => {
     const [first, second] = await ctx.team()
     await ctx.app.db.mutatePlayer(second.player.id, (save) => {
-      save.world.inventory.herbs = 100
+      save.world.inventory.broth = 100
     })
     expect(
       await ctx.app.harness.game.proposeQuest(first.player.id, 'hoa', seed)
-    ).toMatchObject({ accepted: false, reason: 'inventory_full:herbs' })
+    ).toMatchObject({ accepted: false, reason: 'inventory_full:broth' })
     expect(
-      (await ctx.app.db.player(first.player.id)).world.inventory.herbs
+      (await ctx.app.db.player(first.player.id)).world.inventory.broth
     ).toBeUndefined()
     expect(
-      (await ctx.app.db.player(second.player.id)).world.inventory.herbs
+      (await ctx.app.db.player(second.player.id)).world.inventory.broth
     ).toBe(100)
     expect((await ctx.app.db.player(first.player.id)).quests).toEqual([])
   })
@@ -197,7 +197,7 @@ describe('durable generic party quests', () => {
       const before = await original(id)
       await game.proposeQuest(first.player.id, 'hoa', seed)
       await game.applyEvents(first.player.id, [
-        { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+        { type: 'deliver', itemId: 'broth', npcId: 'linh' },
       ])
       return before
     })

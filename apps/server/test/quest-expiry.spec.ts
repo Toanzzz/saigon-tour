@@ -15,7 +15,7 @@ describe('quest failure', () => {
     const now = offer.quest.createdAt + QUEST_EXPIRY_MS
     const save = await game.expire(ctx.playerId, now)
     expect(save.quests).toEqual([])
-    expect(save.world.inventory.herbs).toBe(0)
+    expect(save.world.inventory.broth).toBe(0)
     expect(friendlinessOf(save.friendship, 'hoa')).toBe(0)
     expect(
       friendlinessOf((await game.expire(ctx.playerId, now)).friendship, 'hoa')
@@ -25,7 +25,7 @@ describe('quest failure', () => {
     const game = ctx.fx.harness(offline).game
     await game.proposeQuest(ctx.playerId, 'hoa', required(seedsFor('hoa')[0]))
     await game.applyEvents(ctx.playerId, [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     expect(
       (await game.expire(ctx.playerId, Date.now() + QUEST_EXPIRY_MS)).quests[0]
@@ -58,7 +58,7 @@ describe('quest failure', () => {
     )
     if (!second.accepted) throw new Error(second.reason)
     await game.applyEvents(ctx.playerId, [
-      { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
     expect(
       (await game.fail(ctx.playerId, second.quest.id, 'declined', 'hoa')).quests

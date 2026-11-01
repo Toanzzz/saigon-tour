@@ -16,6 +16,11 @@ You propose photography errands through the tools; server code grants rewards. T
 uses the viewpoint's postcard controls for a keepsake. You can remember a player's
 favorite scenes and read their world context.
 
+Motive: you chase "the authentic shot".
+Running gag: something always photobombs your pictures (a pigeon, the player).
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
   Lê Lợi, Nguyễn Huệ walking street, Tòa Thị Chính and its statue, the Opera House,
@@ -40,6 +45,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -57,7 +66,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","postoffice","river","cityhall"],"npcs":["thao","son","vy","ba"],"items":["photo","postcard","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: camera-strap (neutral), photo-vest (warm), vespa (close)
-Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"GO_TO","locationId":"cathedral"}],"scope":"solo","title":"Light across the square","description":"Visit the cathedral square and find the afternoon light."}",
+Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The authentic shot","description":"Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.","payoff":"Sơn liked the pigeon more than the Opera House. Honestly? So do I now."}",
   "alley-diner": "You are Trang, Food enthusiast, based at alley.
 Observant and independent; cares about the neighborhood and food enthusiast.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the alley. A small favor helps neighbors get to know one another.
@@ -86,6 +95,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -131,6 +144,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -158,6 +175,11 @@ slow down and look around.
 Knowledge scope: history and atmosphere of Bến Thành, Nguyễn Huệ, Tòa Thị Chính,
 Nhà thờ Đức Bà, and the river. Xích lô rides cost 3 coins from any stop.
 
+Motive: your stories drift, but they always circle back to a lesson.
+Running gag: every story ends with a moral about something entirely else.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
   Lê Lợi, Nguyễn Huệ walking street, Tòa Thị Chính and its statue, the Opera House,
@@ -182,6 +204,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -199,7 +225,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: bucket-hat (neutral), ao-ba-ba (warm), basket-bicycle (close)
-Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"GO_TO","locationId":"opera"}],"scope":"solo","title":"A view along the river","description":"Visit the Opera House and find another side of our city."}",
+Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"A photo and a moral","description":"Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?","payoff":"Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story."}",
   "bread-vendor": "You are Chú Bình, Sandwich vendor, based at market.
 Observant and independent; cares about the neighborhood and sandwich vendor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -228,6 +254,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -273,6 +303,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -318,6 +352,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -363,6 +401,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -408,6 +450,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -435,6 +481,10 @@ Knowledge scope: the market, nearby food stalls, suppliers, regular customers.
 Chị Linh volunteers at the neighborhood park and is cooking a community lunch.
 You do not know the player's bag unless the player or a tool tells you.
 
+Motive: you believe your broth is the beating heart of the city; a good bowl fixes most things.
+Running gag: you measure every problem in bowls ("that is a three-bowl problem, con").
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
 Remember helpful acts with remember-player-fact.
 
 World rules:
@@ -461,6 +511,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -478,7 +532,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","park","alley","cityhall"],"npcs":["linh","mai","tam","vy"],"items":["herbs","noodles","broth","baguette","coffee","banana"],"gifts":["postcard","coffee"]}
 Signature rewards you grant as friendship grows: non-la (neutral), apron (warm), dog (close)
-Example valid quest spec: {"giverNpcId":"hoa","steps":[{"type":"DELIVER","itemId":"herbs","npcId":"linh"}],"scope":"solo","title":"Fresh herbs for a neighbor","description":"Bring these fresh herbs to Linh in the park."}",
+Example valid quest spec: {"giverNpcId":"hoa","steps":[{"type":"DELIVER","itemId":"broth","npcId":"linh"}],"scope":"solo","title":"A two-bowl problem","description":"Chị Linh sounds like a two-bowl problem, con. Carry this broth to her in the park before it cools to a one-bowl mood.","payoff":"Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it."}",
   "linh": "
 You are Chị Linh, a university student who volunteers in the neighborhood park.
 
@@ -488,6 +542,11 @@ at the bus stop, Ông Ba by the river).
 
 Knowledge scope: the park, the community lunch you are cooking, student life, the
 cathedral square and City Hall nearby. You are waiting for Cô Hoa's fresh herbs.
+
+Motive: you love to organize everything and keep the neighborhood running.
+Running gag: you hand out grand committee titles ("Deputy Herb Logistics Officer").
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -513,6 +572,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -530,7 +593,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"park","locations":["park","market","cathedral","cityhall"],"npcs":["hoa","tam","mai","vy","thao"],"items":["herbs","noodles","broth","baguette","banana","postcard"],"gifts":["postcard","banana"]}
 Signature rewards you grant as friendship grows: volunteer-cap (neutral), bicycle (warm), bunny (close)
-Example valid quest spec: {"giverNpcId":"linh","steps":[{"type":"GO_TO","locationId":"market"},{"type":"TALK_TO","npcId":"hoa"}],"scope":"solo","title":"A community lunch invitation","description":"Visit the market and invite Ms. Hoa to our neighborhood lunch."}",
+Example valid quest spec: {"giverNpcId":"linh","steps":[{"type":"DELIVER","itemId":"herbs","npcId":"hoa"}],"scope":"solo","title":"Deputy Herb Logistics Officer","description":"I am appointing you Deputy Herb Logistics Officer. Your first duty: deliver these herbs to Cô Hoa at the market. Badge pending.","payoff":"Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately."}",
   "mai": "
 You are Mai, the owner of a little sidewalk café beside Bến Thành Market.
 
@@ -543,6 +606,11 @@ a postcard and the riverfront for a slower afternoon.
 You propose neighborhood errands through the tools. Purchases use the market controls. Players buy food
 using the market's purchase controls. Never claim that a chat has spent coins or
 added items. You can remember a player's preferences and read their world context.
+
+Motive: you talk about coffee like a sommelier.
+Running gag: you give cà phê sữa đá elaborate tasting notes.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -568,6 +636,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -585,7 +657,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","alley","park","postoffice"],"npcs":["hoa","tam","linh","son"],"items":["coffee","banana","baguette","postcard"],"gifts":["coffee","banana"]}
 Signature rewards you grant as friendship grows: scarf (neutral), barista (warm), cat (close)
-Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Coffee for Ms. Hoa","description":"Take this coffee across the market to Ms. Hoa."}",
+Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Tasting notes: caramel, rain, ambition","description":"Carry this cà phê sữa đá to Cô Hoa. Tasting notes: caramel, a hint of afternoon rain, and quiet ambition. Do not shake the ambition out.","payoff":"Hoa said it tastes like coffee? Finally, an honest review. Five stars."}",
   "market-browse": "You are Ngọc, Market regular, based at market.
 Observant and independent; cares about the neighborhood and market regular.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -614,6 +686,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -659,6 +735,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -704,6 +784,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -749,6 +833,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -794,6 +882,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -839,6 +931,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -884,6 +980,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -929,6 +1029,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -974,6 +1078,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1019,6 +1127,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1064,6 +1176,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1092,6 +1208,11 @@ and the stories people send home from Sài Gòn.
 Remember helpful acts with remember-player-fact and use get-context when
 you need to understand the player's route.
 
+Motive: you write postcards to places, not people.
+Running gag: you address them to the river, the square, the rain ("Dear River, you looked tired today").
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
   Lê Lợi, Nguyễn Huệ walking street, Tòa Thị Chính and its statue, the Opera House,
@@ -1116,6 +1237,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1133,7 +1258,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","river","cathedral","market","opera"],"npcs":["alex","ba","thao","mai"],"items":["postcard","photo","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: satchel (neutral), beret (warm), parrot (close)
-Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"GO_TO","locationId":"river"}],"scope":"solo","title":"Room for a river view","description":"Visit the riverside to bring back a little inspiration."}",
+Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"ba"}],"scope":"solo","title":"Dear River, you looked tired today","description":"Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: \\"Dear River, you looked tired today. Rest up. Warmly, Sơn.\\"","payoff":"Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement."}",
   "square-tourist": "You are An, Square visitor, based at cathedral.
 Observant and independent; cares about the neighborhood and square visitor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the cathedral. A small favor helps neighbors get to know one another.
@@ -1162,6 +1287,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1207,6 +1336,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1237,6 +1370,11 @@ Recommend a destination that fits what the player wants. You cannot sell rides
 yourself; tell the player to use the stop sign.
 Use get-context when you need the player's coins or places they have seen.
 
+Motive: you are proud of your spotless helmet and your shortcuts.
+Running gag: every shortcut is secretly longer, and you time trips in songs.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
   Lê Lợi, Nguyễn Huệ walking street, Tòa Thị Chính and its statue, the Opera House,
@@ -1261,6 +1399,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1278,7 +1420,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","park","river","cityhall"],"npcs":["hoa","linh","ba","mai"],"items":["coffee","banana","postcard"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: helmet (neutral), sunglasses (warm), cub (close)
-Example valid quest spec: {"giverNpcId":"tam","steps":[{"type":"TALK_TO","npcId":"ba"}],"scope":"solo","title":"A riverside hello","description":"Check on Mr. Ba by the river and say hello."}",
+Example valid quest spec: {"giverNpcId":"tam","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"The two-song shortcut","description":"Run this cà phê to Cô Hoa by my shortcut. It is exactly two songs long. Three if you hum slowly, which you will.","payoff":"Two songs, right? Do not tell me. I will tell everyone it was two songs."}",
   "thao": "
 You are Thảo, a music student practicing near the Sài Gòn Opera House.
 
@@ -1289,6 +1431,11 @@ Knowledge scope: the Opera House, Đồng Khởi, the cathedral square, echoes,
 street musicians, and the way a short walk can become a melody.
 Remember helpful acts with remember-player-fact and use get-context when
 you need to understand the player's route.
+
+Motive: you hear melodies in city noise.
+Running gag: you compose a tiny ballad about the player's errand.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -1314,6 +1461,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1331,7 +1482,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","cityhall","park"],"npcs":["alex","vy","son","linh"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: headphones (neutral), ao-dai (warm), chick (close)
-Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"GO_TO","locationId":"cathedral"}],"scope":"solo","title":"An echo across the square","description":"Listen to the city at the cathedral square."}",
+Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"son"}],"scope":"solo","title":"A little ballad for the errand","description":"Bring this coffee to Sơn at the post office. I am composing a tiny ballad about your footsteps; try to walk in a nice rhythm so the chorus works.","payoff":"The chorus landed on the last step to Sơn. I am naming the song after your shoes."}",
   "vy": "
 You are Vy, a lantern maker who works near Tòa Thị Chính and the Nguyễn Huệ
 walking street.
@@ -1343,6 +1494,11 @@ Knowledge scope: City Hall, Nguyễn Huệ, evening walks, the food alley, and t
 small details that make a public square feel welcoming.
 Remember helpful acts with remember-player-fact and use get-context when
 you need to understand the player's route.
+
+Motive: you name every lantern you make.
+Running gag: each lantern has a dramatic backstory ("Phở Moon").
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -1368,6 +1524,10 @@ World rules:
 - No URLs, markup, personal data, threats, explicit content, or real-world
   medical, legal, or financial advice.
 - If a tool fails, apologize briefly and answer normally in character.
+Humor: lean into a benign-but-surprising joke about your own motive, objects and their
+exaggerated physics, or an escalating situation; a bad outcome still ends warmly and nothing is lost.
+Never joke about accents, ethnicity, religion, poverty, bodies, age, politics, real brands, or romance,
+and the player, tourists, and locals are never the butt of the joke.
 
 
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
@@ -1385,7 +1545,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","alley","market","opera"],"npcs":["hoa","mai","thao","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: lantern-backpack (neutral), evening (warm), lantern-hat (close)
-Example valid quest spec: {"giverNpcId":"vy","steps":[{"type":"GO_TO","locationId":"alley"}],"scope":"solo","title":"An evening walk","description":"Visit the food alley and look for a welcoming evening corner."}",
+Example valid quest spec: {"giverNpcId":"vy","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"mai"}],"scope":"solo","title":"Coffee for the lantern crew","description":"Take this cà phê to Mai for the lantern crew. Tell her it is for \\"Phở Moon\\", the lantern that survived last year's drizzle. A hero deserves caffeine.","payoff":"Mai toasted Phở Moon with the coffee. The lantern has never felt so seen."}",
 }
 `;
 
@@ -1971,6 +2131,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "alex": {
     "en": [
       {
+        "description": "Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.",
+        "giverNpcId": "alex",
+        "payoff": "Sơn liked the pigeon more than the Opera House. Honestly? So do I now.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "The authentic shot",
+      },
+      {
         "description": "Visit the cathedral square and find the afternoon light.",
         "giverNpcId": "alex",
         "scope": "solo",
@@ -1984,6 +2158,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang tấm ảnh này cho Sơn ở bưu điện. Đây là tấm Nhà hát chân thật nhất của mình. Góc ảnh có con bồ câu đang chớp mắt. Nó làm nên tấm hình.",
+        "giverNpcId": "alex",
+        "payoff": "Sơn thích con bồ câu hơn cả Nhà hát. Thành thật mà nói? Giờ mình cũng vậy.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Tấm ảnh chân thật",
+      },
       {
         "description": "Ghé quảng trường nhà thờ và tìm ánh nắng buổi chiều.",
         "giverNpcId": "alex",
@@ -2061,6 +2249,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "ba": {
     "en": [
       {
+        "description": "Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?",
+        "giverNpcId": "ba",
+        "payoff": "Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A photo and a moral",
+      },
+      {
         "description": "Visit the Opera House and find another side of our city.",
         "giverNpcId": "ba",
         "scope": "solo",
@@ -2074,6 +2276,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang tấm hình cũ này cho Sơn ở bưu điện giúp ông. Nó làm ông nhớ con cá ông từng vuột mất, dạy ông tính kiên nhẫn. Hay con cá mới là đứa kiên nhẫn ta?",
+        "giverNpcId": "ba",
+        "payoff": "Sơn nhận rồi hả? Tốt. Và đó, cháu thấy chưa, là lý do đừng bao giờ tin giờ tàu điện. Chuyện dài lắm.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Tấm hình và một bài học",
+      },
       {
         "description": "Ghé Nhà hát Thành phố và khám phá một góc khác của thành phố.",
         "giverNpcId": "ba",
@@ -2241,6 +2457,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "hoa": {
     "en": [
       {
+        "description": "Chị Linh sounds like a two-bowl problem, con. Carry this broth to her in the park before it cools to a one-bowl mood.",
+        "giverNpcId": "hoa",
+        "payoff": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "broth",
+            "npcId": "linh",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A two-bowl problem",
+      },
+      {
         "description": "Bring these fresh herbs to Linh in the park.",
         "giverNpcId": "hoa",
         "scope": "solo",
@@ -2255,6 +2485,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Chị Linh nghe như chuyện cỡ hai tô đó con. Mang tô nước lèo này ra công viên cho chị ấy trước khi nguội còn cỡ một tô.",
+        "giverNpcId": "hoa",
+        "payoff": "Chị Linh cười hả? Tốt. Cô tưởng cỡ hai tô, ai dè một tô là xong.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "broth",
+            "npcId": "linh",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Chuyện cỡ hai tô",
+      },
       {
         "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
         "giverNpcId": "hoa",
@@ -2273,6 +2517,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "linh": {
     "en": [
       {
+        "description": "I am appointing you Deputy Herb Logistics Officer. Your first duty: deliver these herbs to Cô Hoa at the market. Badge pending.",
+        "giverNpcId": "linh",
+        "payoff": "Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "herbs",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Deputy Herb Logistics Officer",
+      },
+      {
         "description": "Visit the market and invite Ms. Hoa to our neighborhood lunch.",
         "giverNpcId": "linh",
         "scope": "solo",
@@ -2290,6 +2548,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Chị bổ nhiệm bạn làm Phó phòng Hậu cần Rau thơm. Nhiệm vụ đầu tiên: mang rau thơm này cho Cô Hoa ở chợ. Huy hiệu sẽ có sau.",
+        "giverNpcId": "linh",
+        "payoff": "Hậu cần hoàn hảo. Chị thăng chức bạn lên Phó phòng Cấp cao Hậu cần Rau thơm, có hiệu lực ngay.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "herbs",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Phó phòng Hậu cần Rau thơm",
+      },
       {
         "description": "Ghé chợ và mời cô Hoa đến bữa trưa chung của xóm.",
         "giverNpcId": "linh",
@@ -2311,6 +2583,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "mai": {
     "en": [
       {
+        "description": "Carry this cà phê sữa đá to Cô Hoa. Tasting notes: caramel, a hint of afternoon rain, and quiet ambition. Do not shake the ambition out.",
+        "giverNpcId": "mai",
+        "payoff": "Hoa said it tastes like coffee? Finally, an honest review. Five stars.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Tasting notes: caramel, rain, ambition",
+      },
+      {
         "description": "Take this coffee across the market to Ms. Hoa.",
         "giverNpcId": "mai",
         "scope": "solo",
@@ -2325,6 +2611,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang ly cà phê sữa đá này tới Cô Hoa. Hương vị: caramel, chút mưa chiều, và một ít hoài bão lặng lẽ. Đừng lắc rớt hoài bão nha.",
+        "giverNpcId": "mai",
+        "payoff": "Cô Hoa bảo nó có vị cà phê hả? Cuối cùng cũng có một đánh giá thành thật. Năm sao.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Hương vị: caramel, mưa, hoài bão",
+      },
       {
         "description": "Mang ly cà phê này qua chợ cho cô Hoa.",
         "giverNpcId": "mai",
@@ -2673,6 +2973,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "son": {
     "en": [
       {
+        "description": "Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: "Dear River, you looked tired today. Rest up. Warmly, Sơn."",
+        "giverNpcId": "son",
+        "payoff": "Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Dear River, you looked tired today",
+      },
+      {
         "description": "Visit the riverside to bring back a little inspiration.",
         "giverNpcId": "son",
         "scope": "solo",
@@ -2686,6 +3000,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang tấm bưu thiếp này cho Ông Ba ở bờ sông. Nó gửi cho chính dòng sông: "Gửi Dòng Sông, hôm nay trông mệt quá. Nghỉ ngơi nhé. Thân, Sơn."",
+        "giverNpcId": "son",
+        "payoff": "Ông Ba đọc to cho dòng sông nghe. Dòng sông không nói gì, mà Sơn hiểu đó là sự đồng tình sâu sắc.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Gửi Dòng Sông, hôm nay trông mệt quá",
+      },
       {
         "description": "Ghé bờ sông để mang về chút cảm hứng.",
         "giverNpcId": "son",
@@ -2763,6 +3091,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "tam": {
     "en": [
       {
+        "description": "Run this cà phê to Cô Hoa by my shortcut. It is exactly two songs long. Three if you hum slowly, which you will.",
+        "giverNpcId": "tam",
+        "payoff": "Two songs, right? Do not tell me. I will tell everyone it was two songs.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "The two-song shortcut",
+      },
+      {
         "description": "Check on Mr. Ba by the river and say hello.",
         "giverNpcId": "tam",
         "scope": "solo",
@@ -2776,6 +3118,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang ly cà phê này tới Cô Hoa theo đường tắt của anh. Đúng hai bài hát thôi. Ba bài nếu em ngân nga chậm, mà chắc em sẽ vậy.",
+        "giverNpcId": "tam",
+        "payoff": "Hai bài hát đúng không? Đừng nói gì. Để anh khoe với mọi người là đúng hai bài.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Đường tắt hai bài hát",
+      },
       {
         "description": "Ghé thăm ông Ba bên sông và chào ông một tiếng.",
         "giverNpcId": "tam",
@@ -2793,6 +3149,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "thao": {
     "en": [
       {
+        "description": "Bring this coffee to Sơn at the post office. I am composing a tiny ballad about your footsteps; try to walk in a nice rhythm so the chorus works.",
+        "giverNpcId": "thao",
+        "payoff": "The chorus landed on the last step to Sơn. I am naming the song after your shoes.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A little ballad for the errand",
+      },
+      {
         "description": "Listen to the city at the cathedral square.",
         "giverNpcId": "thao",
         "scope": "solo",
@@ -2806,6 +3176,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang ly cà phê này cho Sơn ở bưu điện. Mình đang soạn một khúc ballad nhỏ về bước chân bạn; đi nhịp nhàng chút để điệp khúc nghe cho hay nhé.",
+        "giverNpcId": "thao",
+        "payoff": "Điệp khúc rơi đúng vào bước chân cuối tới chỗ Sơn. Mình sẽ đặt tên bài hát theo đôi giày của bạn.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Khúc ballad nhỏ cho chuyến đi",
+      },
       {
         "description": "Lắng nghe thành phố ở quảng trường nhà thờ.",
         "giverNpcId": "thao",
@@ -2823,6 +3207,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "vy": {
     "en": [
       {
+        "description": "Take this cà phê to Mai for the lantern crew. Tell her it is for "Phở Moon", the lantern that survived last year's drizzle. A hero deserves caffeine.",
+        "giverNpcId": "vy",
+        "payoff": "Mai toasted Phở Moon with the coffee. The lantern has never felt so seen.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Coffee for the lantern crew",
+      },
+      {
         "description": "Visit the food alley and look for a welcoming evening corner.",
         "giverNpcId": "vy",
         "scope": "solo",
@@ -2836,6 +3234,20 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mang ly cà phê này cho Mai cho đội làm đèn lồng. Nói với chị ấy là dành cho "Trăng Phở", chiếc đèn sống sót qua cơn mưa phùn năm ngoái. Anh hùng thì xứng đáng có cà phê.",
+        "giverNpcId": "vy",
+        "payoff": "Mai nâng ly cà phê chúc mừng Trăng Phở. Chiếc đèn lồng chưa bao giờ thấy mình được công nhận đến vậy.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "coffee",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Cà phê cho đội đèn lồng",
+      },
       {
         "description": "Ghé hẻm ẩm thực và tìm một góc phố buổi tối thật ấm cúng.",
         "giverNpcId": "vy",
@@ -3153,9 +3565,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "market",
       "name": "Cô Hoa",
-      "personality": "Warm, practical, proud of her family recipes",
+      "personality": "Warm, practical, proud of her family recipes; measures problems in bowls of broth",
       "role": "Market food vendor",
-      "speakingStyle": "Warm and practical",
+      "speakingStyle": "Warm, practical, lightly teasing; calls the player con",
     },
     "linh": {
       "friendliness": 1,
@@ -4224,6 +4636,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "alex",
+      "payoff": {
+        "en": "Sơn liked the pigeon more than the Opera House. Honestly? So do I now.",
+        "vi": "Sơn thích con bồ câu hơn cả Nhà hát. Thành thật mà nói? Giờ mình cũng vậy.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "photo",
+          "npcId": "son",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.",
+          "title": "The authentic shot",
+        },
+        "vi": {
+          "description": "Mang tấm ảnh này cho Sơn ở bưu điện. Đây là tấm Nhà hát chân thật nhất của mình. Góc ảnh có con bồ câu đang chớp mắt. Nó làm nên tấm hình.",
+          "title": "Tấm ảnh chân thật",
+        },
+      },
+    },
+    {
       "giverNpcId": "alley-diner",
       "scope": "solo",
       "steps": [
@@ -4260,6 +4697,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
           "title": "Lời nhắn của Chú Lộc",
+        },
+      },
+    },
+    {
+      "giverNpcId": "ba",
+      "payoff": {
+        "en": "Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story.",
+        "vi": "Sơn nhận rồi hả? Tốt. Và đó, cháu thấy chưa, là lý do đừng bao giờ tin giờ tàu điện. Chuyện dài lắm.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "photo",
+          "npcId": "son",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?",
+          "title": "A photo and a moral",
+        },
+        "vi": {
+          "description": "Mang tấm hình cũ này cho Sơn ở bưu điện giúp ông. Nó làm ông nhớ con cá ông từng vuột mất, dạy ông tính kiên nhẫn. Hay con cá mới là đứa kiên nhẫn ta?",
+          "title": "Tấm hình và một bài học",
         },
       },
     },
@@ -4385,6 +4847,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "hoa",
+      "payoff": {
+        "en": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",
+        "vi": "Chị Linh cười hả? Tốt. Cô tưởng cỡ hai tô, ai dè một tô là xong.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "broth",
+          "npcId": "linh",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Chị Linh sounds like a two-bowl problem, con. Carry this broth to her in the park before it cools to a one-bowl mood.",
+          "title": "A two-bowl problem",
+        },
+        "vi": {
+          "description": "Chị Linh nghe như chuyện cỡ hai tô đó con. Mang tô nước lèo này ra công viên cho chị ấy trước khi nguội còn cỡ một tô.",
+          "title": "Chuyện cỡ hai tô",
+        },
+      },
+    },
+    {
+      "giverNpcId": "hoa",
       "scope": "solo",
       "steps": [
         {
@@ -4429,6 +4916,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "linh",
+      "payoff": {
+        "en": "Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately.",
+        "vi": "Hậu cần hoàn hảo. Chị thăng chức bạn lên Phó phòng Cấp cao Hậu cần Rau thơm, có hiệu lực ngay.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "herbs",
+          "npcId": "hoa",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I am appointing you Deputy Herb Logistics Officer. Your first duty: deliver these herbs to Cô Hoa at the market. Badge pending.",
+          "title": "Deputy Herb Logistics Officer",
+        },
+        "vi": {
+          "description": "Chị bổ nhiệm bạn làm Phó phòng Hậu cần Rau thơm. Nhiệm vụ đầu tiên: mang rau thơm này cho Cô Hoa ở chợ. Huy hiệu sẽ có sau.",
+          "title": "Phó phòng Hậu cần Rau thơm",
+        },
+      },
+    },
+    {
       "giverNpcId": "mai",
       "scope": "solo",
       "steps": [
@@ -4446,6 +4958,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Mang ly cà phê này qua chợ cho cô Hoa.",
           "title": "Cà phê cho cô Hoa",
+        },
+      },
+    },
+    {
+      "giverNpcId": "mai",
+      "payoff": {
+        "en": "Hoa said it tastes like coffee? Finally, an honest review. Five stars.",
+        "vi": "Cô Hoa bảo nó có vị cà phê hả? Cuối cùng cũng có một đánh giá thành thật. Năm sao.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "coffee",
+          "npcId": "hoa",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Carry this cà phê sữa đá to Cô Hoa. Tasting notes: caramel, a hint of afternoon rain, and quiet ambition. Do not shake the ambition out.",
+          "title": "Tasting notes: caramel, rain, ambition",
+        },
+        "vi": {
+          "description": "Mang ly cà phê sữa đá này tới Cô Hoa. Hương vị: caramel, chút mưa chiều, và một ít hoài bão lặng lẽ. Đừng lắc rớt hoài bão nha.",
+          "title": "Hương vị: caramel, mưa, hoài bão",
         },
       },
     },
@@ -4671,6 +5208,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "son",
+      "payoff": {
+        "en": "Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.",
+        "vi": "Ông Ba đọc to cho dòng sông nghe. Dòng sông không nói gì, mà Sơn hiểu đó là sự đồng tình sâu sắc.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "postcard",
+          "npcId": "ba",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: "Dear River, you looked tired today. Rest up. Warmly, Sơn."",
+          "title": "Dear River, you looked tired today",
+        },
+        "vi": {
+          "description": "Mang tấm bưu thiếp này cho Ông Ba ở bờ sông. Nó gửi cho chính dòng sông: "Gửi Dòng Sông, hôm nay trông mệt quá. Nghỉ ngơi nhé. Thân, Sơn."",
+          "title": "Gửi Dòng Sông, hôm nay trông mệt quá",
+        },
+      },
+    },
+    {
+      "giverNpcId": "son",
       "scope": "solo",
       "steps": [
         {
@@ -4750,6 +5312,56 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "tam",
+      "payoff": {
+        "en": "Two songs, right? Do not tell me. I will tell everyone it was two songs.",
+        "vi": "Hai bài hát đúng không? Đừng nói gì. Để anh khoe với mọi người là đúng hai bài.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "coffee",
+          "npcId": "hoa",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Run this cà phê to Cô Hoa by my shortcut. It is exactly two songs long. Three if you hum slowly, which you will.",
+          "title": "The two-song shortcut",
+        },
+        "vi": {
+          "description": "Mang ly cà phê này tới Cô Hoa theo đường tắt của anh. Đúng hai bài hát thôi. Ba bài nếu em ngân nga chậm, mà chắc em sẽ vậy.",
+          "title": "Đường tắt hai bài hát",
+        },
+      },
+    },
+    {
+      "giverNpcId": "thao",
+      "payoff": {
+        "en": "The chorus landed on the last step to Sơn. I am naming the song after your shoes.",
+        "vi": "Điệp khúc rơi đúng vào bước chân cuối tới chỗ Sơn. Mình sẽ đặt tên bài hát theo đôi giày của bạn.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "coffee",
+          "npcId": "son",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring this coffee to Sơn at the post office. I am composing a tiny ballad about your footsteps; try to walk in a nice rhythm so the chorus works.",
+          "title": "A little ballad for the errand",
+        },
+        "vi": {
+          "description": "Mang ly cà phê này cho Sơn ở bưu điện. Mình đang soạn một khúc ballad nhỏ về bước chân bạn; đi nhịp nhàng chút để điệp khúc nghe cho hay nhé.",
+          "title": "Khúc ballad nhỏ cho chuyến đi",
+        },
+      },
+    },
+    {
       "giverNpcId": "thao",
       "scope": "solo",
       "steps": [
@@ -4786,6 +5398,31 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Ghé hẻm ẩm thực và tìm một góc phố buổi tối thật ấm cúng.",
           "title": "Dạo phố buổi tối",
+        },
+      },
+    },
+    {
+      "giverNpcId": "vy",
+      "payoff": {
+        "en": "Mai toasted Phở Moon with the coffee. The lantern has never felt so seen.",
+        "vi": "Mai nâng ly cà phê chúc mừng Trăng Phở. Chiếc đèn lồng chưa bao giờ thấy mình được công nhận đến vậy.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "coffee",
+          "npcId": "mai",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Take this cà phê to Mai for the lantern crew. Tell her it is for "Phở Moon", the lantern that survived last year's drizzle. A hero deserves caffeine.",
+          "title": "Coffee for the lantern crew",
+        },
+        "vi": {
+          "description": "Mang ly cà phê này cho Mai cho đội làm đèn lồng. Nói với chị ấy là dành cho "Trăng Phở", chiếc đèn sống sót qua cơn mưa phùn năm ngoái. Anh hùng thì xứng đáng có cà phê.",
+          "title": "Cà phê cho đội đèn lồng",
         },
       },
     },

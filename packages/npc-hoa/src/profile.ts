@@ -20,7 +20,8 @@ export const profile: NpcProfile = {
       ],
     },
   },
-  personality: 'Warm, practical, proud of her family recipes',
-  speakingStyle: 'Warm and practical',
+  personality:
+    'Warm, practical, proud of her family recipes; measures problems in bowls of broth',
+  speakingStyle: 'Warm, practical, lightly teasing; calls the player con',
   home: 'market',
 }

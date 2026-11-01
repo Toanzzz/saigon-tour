@@ -8,7 +8,7 @@ import {
 import { abandonQuest, applyQuestSave } from '@/shared/api/quests'
 import { saveToken } from '@/shared/api/transport'
 import { game, grantQuest, initialState, update } from '@/shared/state/game'
-import { questFixture } from './quest-fixture'
+import { questFixture, visitFixture } from './quest-fixture'
 
 const quest = questFixture()
 const player = (revision = 2): GuestPlayer => ({
@@ -109,7 +109,7 @@ describe('abandoning generic quests', () => {
     expect(game.state.serverRevision).toBe(8)
   })
   it('preserves events and quest progress observed during the request', () => {
-    const visiting = questFixture('vy')
+    const visiting = visitFixture()
     update({
       quests: [visiting],
       trackedQuestId: visiting.id,
