@@ -109,3 +109,8 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - `shared/xr/store.ts`: new `xr = Store<{ presenting, supported }>`. `installXr()` seeds `presenting` from the zustand `xrStore`, subscribes it (write-on-change), and resolves `supportsImmersiveVR()` once; it is installed alongside input/realtime in `app/app.tsx`. `resetXr()` is exported and runs in the test `beforeEach`.
 - The `useSyncExternalStore` bridge is gone: `useXRPresenting` → `useSelector(xr, s => s.presenting)`; `isXRPresenting()` reads `xr.state.presenting`.
 - `shared/xr/button.tsx` reads `supported`/`presenting` from `xr` (shallow) and drives enter/exit through `useMutation` (`isPending` disables the button); the subscribe/`useState` trio is removed.
+
+## Client state → TanStack Store (phase 3a: effects → subscriptions)
+
+- `shared/audio` gains `installAudioSync()`: seeds the engine from `game.muted`/`game.volume` and subscribes the store (write-on-change, tracking previous values since 0.11 `subscribe` passes only the new one). Installed in `app/app.tsx`; the `useEffect` that mirrored audio in `GameUI` is gone.
+- XR fonts: `shared/xr/panel.tsx` replaces the per-component `useFontsReady` `useState` with a module-level `fontsReady` store set once by `loadFonts()`; `useFontsReady` now kicks the one-time load and reads the store via `useSelector`.

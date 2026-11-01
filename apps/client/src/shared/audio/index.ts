@@ -1,3 +1,5 @@
+import { game } from '@/shared/state/game'
+
 export type AudioEvent = 'click' | 'pickup' | 'board' | 'arrive' | 'reward'
 
 type SoundId = 'confirm' | 'bell' | 'reward' | 'city'
@@ -260,3 +262,23 @@ class GameAudio {
 }
 
 export const audio = new GameAudio()
+
+/** Push `game.muted`/`game.volume` into the audio engine whenever they change. */
+export function installAudioSync() {
+  // Imported lazily so the audio module stays free of game-state imports at
+  // the top; `game` is a sibling shared store.
+  let muted = game.state.muted
+  let volume = game.state.volume
+  audio.setMuted(muted)
+  audio.setVolume(volume)
+  return game.subscribe((state) => {
+    if (state.muted !== muted) {
+      muted = state.muted
+      audio.setMuted(muted)
+    }
+    if (state.volume !== volume) {
+      volume = state.volume
+      audio.setVolume(volume)
+    }
+  }).unsubscribe
+}

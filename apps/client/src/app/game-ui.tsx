@@ -1,9 +1,7 @@
 import { useSelector } from '@tanstack/react-store'
-import { useEffect } from 'react'
 import { Conversation } from '@/features/conversation/conversation'
 import { NeighborhoodMap } from '@/features/map/map'
 import { RewardPanel } from '@/features/postcard/reward'
-import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
@@ -52,10 +50,6 @@ export function GameUI() {
   const state = useSelector(game, (value) => value, { compare: sameHud })
   const target = nearby(state.position)
   const xrPresenting = useXRPresenting()
-  useEffect(() => {
-    audio.setMuted(state.muted)
-    audio.setVolume(state.volume)
-  }, [state.muted, state.volume])
   if (state.screen === 'title')
     return (
       <div className="game-ui">

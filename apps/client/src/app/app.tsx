@@ -4,6 +4,7 @@ import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react'
 import { queryClient } from '@/shared/api/agent'
 import { initializeSession } from '@/shared/api/session'
 import { installRealtime } from '@/shared/api/socket'
+import { installAudioSync } from '@/shared/audio'
 import { m, useLocale } from '@/shared/i18n'
 import { installInput } from '@/shared/runtime/input'
 import { installXr } from '@/shared/xr'
@@ -29,10 +30,12 @@ export function App() {
     const stopInput = installInput()
     const stopRealtime = installRealtime()
     const stopXr = installXr()
+    const stopAudioSync = installAudioSync()
     return () => {
       stopInput()
       stopRealtime()
       stopXr()
+      stopAudioSync()
     }
   }, [])
   return (

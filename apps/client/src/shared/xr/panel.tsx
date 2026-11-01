@@ -1,5 +1,7 @@
 import { useXR } from '@react-three/xr'
-import { useEffect, useMemo, useState } from 'react'
+import { useSelector } from '@tanstack/react-store'
+import { Store } from '@tanstack/store'
+import { useEffect, useMemo } from 'react'
 import { CanvasTexture, SRGBColorSpace } from 'three'
 import type { Vec3 } from '@/shared/world/assets'
 
@@ -51,28 +53,26 @@ const BODY = '"Be Vietnam Pro", system-ui, sans-serif'
 // Canvas text does not trigger webfont loads; fetch the Vietnamese glyph
 // subsets up front so diacritics never fall back to a system font.
 const SAMPLE = 'Sài Gòn ạ ầ ữ đ'
+/** Flips to true once the canvas webfonts are ready, so textures redraw with
+ * them. Module-level so the fetch happens once and every panel shares it. */
+const fontsReady = new Store(false)
 let fontsLoaded: Promise<unknown> | null = null
 function loadFonts() {
   if (typeof document === 'undefined' || !document.fonts) return null
   fontsLoaded ??= Promise.all([
     document.fonts.load(`800 54px ${DISPLAY}`, SAMPLE),
     document.fonts.load(`30px ${BODY}`, SAMPLE),
-  ]).catch(() => {})
+  ])
+    .then(() => fontsReady.setState(() => true))
+    .catch(() => {})
   return fontsLoaded
 }
-/** Bumps once the canvas fonts are ready, so textures redraw with them. */
 function useFontsReady() {
-  const [ready, setReady] = useState(false)
+  // Kick the one-time load the first time a panel mounts, then track the store.
   useEffect(() => {
-    let mounted = true
-    void loadFonts()?.then(() => {
-      if (mounted) setReady(true)
-    })
-    return () => {
-      mounted = false
-    }
+    void loadFonts()
   }, [])
-  return ready
+  return useSelector(fontsReady, (ready) => ready)
 }
 
 function panelTexture(title: string, lines: string[]): CanvasTexture {
