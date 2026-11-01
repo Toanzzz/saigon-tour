@@ -1,7 +1,7 @@
 import { defineResident, type NpcLook } from '@saigon/npc-kit'
 
 const look: NpcLook = {
-  body: 'female-a',
+  body: 'own',
   color: '#baddc1',
   portraitBg: 'var(--avatar-color)',
   animation: 'sit',
