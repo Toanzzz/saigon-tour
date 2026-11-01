@@ -309,6 +309,19 @@
   z-index: 0;
   pointer-events: none;
 }
+/* Reward-popup 3D coin: a small transparent, modal-only Canvas chip. */
+.reward-coin-stage {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  margin: -8px -2px -8px -6px;
+}
+.reward-coin-canvas {
+  position: absolute !important;
+  inset: 0;
+  pointer-events: none;
+}
 .wardrobe-stage,
 .wardrobe-main {
   position: relative;

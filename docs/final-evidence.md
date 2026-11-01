@@ -30,6 +30,12 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Opening a conversation sends `intent: greet` with an empty message. Headless Playwright at 1440×900 and 390×900 showed one NPC line, no player line, and no `What is happening in the neighborhood?` text. The next typed message included the greeting in the model context; asked what it had just said, the NPC repeated its greeting.
 - That run exposed a provider greeting stopped by the output limit (`finish_reason: length`). Greeting generation allows 300 output tokens, skips caching truncated replies, and versions the cache key.
 
+## Reward popup coin emblem
+
+- The reward popup renders a spinning 3D `collectibles/coin` in a small transparent, modal-only `<Canvas>` beside the earned amount; `reward.tsx` keeps the flat 2D `Icon` as the `typeof window === 'undefined'` SSR/test fallback, so `party.spec.tsx` (`renderToStaticMarkup(<RewardPanel/>)`) still passes.
+- `node scripts/qa-coin-emblem.mjs`, unsandboxed headless Chromium at 1280×800 and 390×844: the `reward` test state opens the popup, one `.reward-coin-stage` sits in the coin row, the WebGL canvas backing store is 56×56, `models/collectibles/coin.glb` serves 200 (5,744 bytes), and `+50 coins` stays visible. The gold coin is visible in both captures. Local evidence: `/tmp/saigon-tour-qa/coin-emblem-desktop.png`, `coin-emblem-mobile.png`.
+- Economy untouched: no change to amounts, fares, rewards, or persistence; no server or `packages/shared` edits. Pure presentation.
+
 ## Conversation UI
 
 - The errands strip sits between the header and history; `dialogueQuests` returns `fromNpc`/`forNpc`/`ready`/`delivery`/`canHelp`/`full`, and the journal and dialog share it. Six unit cases cover none/from/for/ready/delivery/full.

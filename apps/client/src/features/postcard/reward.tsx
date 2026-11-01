@@ -7,6 +7,7 @@ import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
+import { CoinStage } from './coin-stage'
 
 export function RewardPanel({ state }: { state: GameState }) {
   return (
@@ -33,8 +34,9 @@ export function RewardPanel({ state }: { state: GameState }) {
       </div>
       <p className="reward-copy">{rewardCopy(state.rewardQuest)}</p>
       <div className="reward-earned">
-        <span>
-          <Icon name="coin" />+{m.coins({ count: state.reward })}
+        <span className="reward-coin-row">
+          {typeof window === 'undefined' ? <Icon name="coin" /> : <CoinStage />}
+          +{m.coins({ count: state.reward })}
         </span>
         <span>
           <Icon name="star" />
