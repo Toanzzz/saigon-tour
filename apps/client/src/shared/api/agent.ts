@@ -49,7 +49,8 @@ export async function interactWith(
       {
         init: {
           credentials: 'include',
-          signal: AbortSignal.timeout(14000),
+          // Outlasts the server: two live attempts of up to 17s each, then fallback.
+          signal: AbortSignal.timeout(40000),
         },
       }
     )

@@ -124,7 +124,8 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     apiUrl,
     apiKey,
     model: fallback('META_MODEL', env.META_MODEL, 'muse-spark-1.3-contributor'),
-    timeoutMs: 8000,
+    // Per model call; the current provider needs ~8–9s for a tool-enabled NPC turn.
+    timeoutMs: 15000,
     sessionCallLimit: 24,
     globalCallLimit: 500,
     spendLimitUsd,
