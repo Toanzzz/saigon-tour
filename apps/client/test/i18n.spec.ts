@@ -19,7 +19,7 @@ afterEach(() => {
 describe('i18n', () => {
   it('runs tests in English', () => {
     expect(getLocale()).toBe('en')
-    expect(m.app_title()).toBe('Sài Gòn, a little journey')
+    expect(m.app_title()).toBe('Saigon, a little journey')
   })
 
   it('shares one locale list with the contracts', () => {

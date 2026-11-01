@@ -66,4 +66,6 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 
 - Opening an NPC conversation shows a cached assistant greeting without sending an automatic player line. The greeting is stored in that NPC/player thread for later model context.
 
-- Chat header affinity: tier chip (❄ Reserved / • Getting acquainted / ♥ Warm), 10 centre-out pips (cool left, warm right, centre tick), and a next-tier hint. A friendship change pops the changed pip (outline only with reduced motion). A screen-reader-only `<meter>` keeps the numeric value.
+- Greetings use all 11 affinity levels, room time, weather, active city events, and neighbor need. Revisiting without speaking keeps one unanswered greeting; the Earlier divider renders separately.
+
+- Chat header affinity: a compact heart-badge icon (five authored tiers: Cold, Wary, Getting acquainted, Warm, Close friend). The badge opens an `affinity-info` popover with the tier ladder, current level, next-tier distance, and a tip. A friendship change bumps/dips the badge (no motion under reduced-motion). A screen-reader-only `<meter>` keeps the numeric value.

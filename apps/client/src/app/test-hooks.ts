@@ -74,8 +74,7 @@ function setTestState(name: string) {
         history: [
           {
             role: 'assistant',
-            content:
-              'Chào bạn! I have fresh herbs for Chị Linh’s community lunch.',
+            content: 'Hello! I have fresh herbs for Linh’s community lunch.',
           },
           {
             role: 'assistant',

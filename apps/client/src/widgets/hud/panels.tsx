@@ -10,7 +10,7 @@ import {
 } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { NeighborhoodMap } from '@/features/map/map'
-import { LanguageSelect, m } from '@/shared/i18n'
+import { LanguageSelect, m, marketItemLabel } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -234,7 +234,7 @@ export function MarketPanel({ state }: { state: GameState }) {
               onClick={() => buyMarketItem(id)}
             >
               <span>
-                <strong>{item.label}</strong>
+                <strong>{marketItemLabel(id)}</strong>
                 <small>
                   {id === 'coffee' ? m.market_coffee() : m.market_banana()}
                 </small>

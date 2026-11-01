@@ -26,7 +26,7 @@ Mastra Observational Memory compacts each thread using the same explicit metered
 
 Deprecated `help` and `check` intent values normalize to chat. Ready completion runs deterministically. A missing live reply permits a validated seed offer only when the player’s message asks for help; a live reply is preserved. The browser offline mirror expires stale errands, completes solo ready errands, applies friendship, and offers seeds through the same shared rules. Party rewards require server authority.
 
-The harness allows three model steps, sanitizes replies, enforces timeouts and call limits, and reserves spend before every provider request, including Observer and Reflector requests. Unknown usage retains the reservation ceiling. Secrets stay in server environment variables. Greetings cache by NPC, time, locale, model/persona hash, and friendliness band. Prewarm covers all 29 NPCs; barks cover neighbors only.
+The harness allows three model steps, sanitizes replies, enforces timeouts and call limits, and reserves spend before every provider request, including Observer and Reflector requests. Unknown usage retains the reservation ceiling. Secrets stay in server environment variables. Greetings cache by NPC, locale, model/persona hash, all 11 affinity levels, room time, weather, active city events, and neighbor need. A miss returns a deterministic contextual line immediately and generates the shared greeting in the background. Unanswered greetings are not appended twice; a changed greeting replaces the latest unanswered greeting. Cached greetings expire after seven days. Prewarm covers all 29 NPCs at preset affinity; barks cover neighbors only.
 
 ## Journal and party errands
 

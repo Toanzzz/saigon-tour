@@ -87,7 +87,7 @@ describe('party controls and authoritative quest rewards', () => {
       },
     }
     expect(renderToStaticMarkup(<Conversation state={state} />)).toContain(
-      'Ask Cô Hoa if they need a hand.'
+      'Ask Ms. Hoa if they need a hand.'
     )
   })
   it('handles invites, expiry, and presence membership', () => {

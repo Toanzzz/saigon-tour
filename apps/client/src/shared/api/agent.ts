@@ -7,7 +7,6 @@ import {
   InteractResponseSchema,
   isExpired,
   looksLikeHelpRequest,
-  NPCS,
   type NpcId,
   seedsFor,
   shiftFriendship,
@@ -15,7 +14,7 @@ import {
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { InferRequestType, InferResponseType } from 'hono/client'
-import { getLocale, m } from '@/shared/i18n'
+import { getLocale, m, npcDisplay, npcLabel } from '@/shared/i18n'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
 
@@ -104,8 +103,8 @@ export function offline(
   }
   world = applyPlayerEvents(world, [{ type: 'talk', npcId: npc }])
   let reply: string = m.offline_greeting({
-    name: NPCS[npc].name,
-    fact: NPCS[npc].knowledge[0] ?? '',
+    name: npcLabel(npc),
+    fact: npcDisplay(npc).knowledge[0] ?? '',
   })
   for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
     if (quest.scope === 'party') {

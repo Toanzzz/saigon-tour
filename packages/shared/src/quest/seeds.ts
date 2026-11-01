@@ -15,7 +15,7 @@ export const QUEST_SEEDS: SeedCatalog[] = [
     text: {
       en: {
         title: 'Fresh herbs for a neighbor',
-        description: 'Bring these fresh herbs to Chị Linh in the park.',
+        description: 'Bring these fresh herbs to Linh in the park.',
       },
       vi: {
         title: 'Rau thơm cho hàng xóm',
@@ -30,7 +30,7 @@ export const QUEST_SEEDS: SeedCatalog[] = [
     text: {
       en: {
         title: 'A riverside hello',
-        description: 'Check on Ông Ba by the river and say hello.',
+        description: 'Check on Mr. Ba by the river and say hello.',
       },
       vi: {
         title: 'Lời chào bên sông',
@@ -46,7 +46,7 @@ export const QUEST_SEEDS: SeedCatalog[] = [
       en: {
         title: 'A community lunch invitation',
         description:
-          'Visit the market and invite Cô Hoa to our neighborhood lunch.',
+          'Visit the market and invite Ms. Hoa to our neighborhood lunch.',
       },
       vi: {
         title: 'Lời mời ăn trưa của xóm',
@@ -79,8 +79,8 @@ export const QUEST_SEEDS: SeedCatalog[] = [
     giverNpcId: 'mai',
     text: {
       en: {
-        title: 'Coffee for Cô Hoa',
-        description: 'Take this coffee across the market to Cô Hoa.',
+        title: 'Coffee for Ms. Hoa',
+        description: 'Take this coffee across the market to Ms. Hoa.',
       },
       vi: {
         title: 'Cà phê cho cô Hoa',

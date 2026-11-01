@@ -91,7 +91,7 @@ describe('guest NPC turns', () => {
     expect(game.state.source).toBe('fallback')
     expect(game.state.dialogue?.thinking).toBe(false)
     expect(game.state.pending).toEqual([{ type: 'talk', npcId: 'hoa' }])
-    expect(game.state.lastLine.hoa).toContain('Chào bạn')
+    expect(game.state.lastLine.hoa).toContain('Ms. Hoa')
   })
 })
 

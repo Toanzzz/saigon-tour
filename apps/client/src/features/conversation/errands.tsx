@@ -1,12 +1,11 @@
 import {
   friendlinessOf,
   type ItemId,
-  NPCS,
   type NpcId,
   type Quest,
 } from '@saigon/shared'
 import { giveItem, openJournal } from '@/app/actions'
-import { itemLabel, m } from '@/shared/i18n'
+import { itemLabel, m, npcLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { dialogueQuests, questHint } from '@/shared/state/quests'
 
@@ -23,7 +22,7 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
   const { fromNpc, forNpc, canHelp, full } = dialogueQuests(state, npc)
   const ready = fromNpc.filter((quest) => quest.status === 'ready')
   const active = fromNpc.filter((quest) => quest.status === 'active')
-  const npcName = NPCS[npc].name
+  const npcName = npcLabel(npc)
   return (
     <section className="errands" aria-label={m.errands_label()}>
       {ready.map((quest) => (

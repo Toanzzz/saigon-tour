@@ -1,6 +1,6 @@
 import { type LocationId, NPCS, type NpcId, type Quest } from '@saigon/shared'
 import { city } from '@/shared/api/city'
-import { m } from '@/shared/i18n'
+import { m, npcDisplay, npcLabel } from '@/shared/i18n'
 import { type GameState, trackedQuest } from '@/shared/state/game'
 import { nextStep, stepCopy } from '@/shared/state/quests'
 import {
@@ -139,7 +139,7 @@ function storySteps(state: GameState): HubStep[] {
             : ('next' as const),
       })),
       {
-        title: m.hub_return_to({ name: NPCS[quest.giverNpcId].name }),
+        title: m.hub_return_to({ name: npcLabel(quest.giverNpcId) }),
         detail: m.hub_collect_thanks(),
         state: quest.status === 'ready' ? 'now' : 'next',
       },
@@ -165,7 +165,7 @@ function secretSteps(state: GameState): HubSecret[] {
     ...state.quests.map((quest) => ({
       id: quest.id,
       title: quest.title,
-      detail: `${NPCS[quest.giverNpcId].name} · ${questStatus(quest.status)}`,
+      detail: `${npcLabel(quest.giverNpcId)} · ${questStatus(quest.status)}`,
       state: 'now' as const,
     })),
     ...state.completed.map((quest) => ({
@@ -239,9 +239,9 @@ export function hubView(state: GameState, now = new Date()): HubView {
     neighbor: last
       ? {
           id: last,
-          name: NPCS[last].name,
-          role: NPCS[last].role,
-          line: state.lastLine[last] ?? NPCS[last].knowledge[0],
+          name: npcLabel(last),
+          role: npcDisplay(last).role,
+          line: state.lastLine[last] ?? npcDisplay(last).knowledge[0],
           source: state.source,
         }
       : null,

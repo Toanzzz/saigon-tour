@@ -1,10 +1,13 @@
 import type { NpcId, Reward } from './contracts'
+import type { Locale } from './locale'
+import { NPC_NAMES } from './localized-names'
+import { NEIGHBOR_TEXT } from './neighbor-text'
+import { RESIDENT_TEXT } from './resident-text'
 import { RESIDENTS } from './residents'
 
 export interface NpcPersona {
   kind: 'neighbor' | 'resident'
   friendliness: number
-  idleLine?: Record<'en' | 'vi', string>
   id: NpcId
   name: string
   role: string
@@ -23,11 +26,11 @@ export const NPCS: Record<NpcId, NpcPersona> = {
     name: 'Cô Hoa',
     role: 'Market food vendor',
     personality: 'Warm, practical, proud of her family recipes',
-    speakingStyle: 'Friendly English with brief Vietnamese greetings',
+    speakingStyle: 'Warm and practical',
     location: 'market',
     knowledge: [
-      'Fresh herbs make a good bowl of phở.',
-      'Chị Linh is waiting in the park.',
+      'Fresh herbs make a good bowl of pho.',
+      'Linh is waiting in the park.',
     ],
   },
   tam: {
@@ -54,7 +57,7 @@ export const NPCS: Record<NpcId, NpcPersona> = {
     speakingStyle: 'Bright, welcoming, conversational',
     location: 'park',
     knowledge: [
-      'Cô Hoa sends fresh herbs for the community lunch.',
+      'Ms. Hoa sends fresh herbs for the community lunch.',
       'The cathedral is nearby.',
     ],
   },
@@ -69,7 +72,7 @@ export const NPCS: Record<NpcId, NpcPersona> = {
     location: 'river',
     knowledge: [
       'The river is a lovely place to slow down.',
-      'Bến Thành is the heart of the neighborhood.',
+      'Ben Thanh is the heart of the neighborhood.',
     ],
   },
   mai: {
@@ -79,11 +82,11 @@ export const NPCS: Record<NpcId, NpcPersona> = {
     name: 'Mai',
     role: 'Sidewalk café owner',
     personality: 'Warm, observant, quietly witty, remembers regulars',
-    speakingStyle: 'Easy conversation with short Vietnamese food phrases',
+    speakingStyle: 'Easy conversation about food and favorite places',
     location: 'market',
     knowledge: [
-      'A cà phê sữa and a little shade make a lovely market break.',
-      'Follow Lê Lợi to Nguyễn Huệ, or find the food alley beside the market.',
+      'An iced milk coffee and a little shade make a lovely market break.',
+      'Follow Le Loi to Nguyen Hue, or find the food alley beside the market.',
       'The Central Post Office is a lovely place to send a postcard.',
     ],
   },
@@ -109,10 +112,11 @@ export const NPCS: Record<NpcId, NpcPersona> = {
     name: 'Vy',
     role: 'Lantern maker near City Hall',
     personality: 'Patient, inventive, and quietly proud of the evening streets',
-    speakingStyle: 'Gentle English with vivid details about light and color',
+    speakingStyle:
+      'Gentle conversation with vivid details about light and color',
     location: 'cityhall',
     knowledge: [
-      'The lanterns make Nguyễn Huệ glow after sunset.',
+      'The lanterns make Nguyen Hue glow after sunset.',
       'The food alley has a quiet corner where a missing lantern might turn up.',
       'The City Hall gardens are brightest when families gather for an evening walk.',
     ],
@@ -144,10 +148,18 @@ export const NPCS: Record<NpcId, NpcPersona> = {
     location: 'opera',
     knowledge: [
       'The Opera House steps are a lovely place to hear the city breathe.',
-      'The cathedral square carries a clear echo between its façades.',
+      'The cathedral square carries a clear echo between its facades.',
       'A short walk can turn a melody into a memory.',
     ],
   },
+}
+
+export function npcText(id: NpcId, locale: Locale = 'en') {
+  const text =
+    id in NEIGHBOR_TEXT
+      ? NEIGHBOR_TEXT[id as keyof typeof NEIGHBOR_TEXT][locale]
+      : RESIDENT_TEXT[id as keyof typeof RESIDENT_TEXT][locale]
+  return { name: NPC_NAMES[id][locale], ...text }
 }
 
 export const STARTING_CURRENCY = 30

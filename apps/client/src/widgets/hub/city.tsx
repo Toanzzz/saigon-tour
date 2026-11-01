@@ -2,7 +2,7 @@ import { closeHub } from '@/app/actions'
 import { m } from '@/shared/i18n'
 import { game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
-import { distance, PLACES } from '@/shared/world/places'
+import { distance, PLACES, placeName } from '@/shared/world/places'
 import type { HubView } from './view'
 
 export function RideCard({ view }: { view: HubView }) {
@@ -23,9 +23,9 @@ export function RideCard({ view }: { view: HubView }) {
       {ride ? (
         <>
           <p className="ticket-route">
-            <span>{PLACES[ride.from].label}</span>
+            <span>{placeName(ride.from)}</span>
             <i aria-hidden="true" />
-            <span>{PLACES[ride.to].label}</span>
+            <span>{placeName(ride.to)}</span>
           </p>
           <p className="ticket-fare">
             {m.hub_fare_from_wallet({ coins: m.coins({ count: ride.fare }) })}

@@ -1,7 +1,6 @@
-import { NPCS } from '@saigon/shared'
 import { closeHub, talk } from '@/app/actions'
 import { npcPosition } from '@/shared/api/city'
-import { m } from '@/shared/i18n'
+import { m, npcLabel } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
 import { distance } from '@/shared/world/places'
@@ -99,13 +98,13 @@ export function NeighborCard({ view }: { view: HubView }) {
             </div>
           </div>
         </div>
-        <p className="bubble">{m.hub_hoa_waiting({ name: NPCS.hoa.name })}</p>
+        <p className="bubble">{m.hub_hoa_waiting({ name: npcLabel('hoa') })}</p>
         <button
           type="button"
           className="primary-button wide"
           onClick={() => closeHub('map')}
         >
-          {m.hub_find({ name: NPCS.hoa.name })}
+          {m.hub_find({ name: npcLabel('hoa') })}
         </button>
       </section>
     )

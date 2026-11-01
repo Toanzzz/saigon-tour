@@ -1,10 +1,4 @@
-import {
-  type Locale,
-  type NeighborId,
-  NPCS,
-  type NpcId,
-  type WorldState,
-} from '@saigon/shared'
+import type { Locale, NeighborId, NpcId, WorldState } from '@saigon/shared'
 
 type Line = Record<Locale, string>
 const OUTCOMES: Record<
@@ -16,11 +10,11 @@ const OUTCOMES: Record<
     vi: 'Ừ, việc đó kết thúc rồi. Mình đã mong bạn giúp được.',
   },
   offered: {
-    en: 'Cảm ơn! Your errand is in the journal. Follow its steps, then come back to me.',
+    en: 'Thank you! Your errand is in the journal. Follow its steps, then come back to me.',
     vi: 'Cảm ơn nha! Việc đã ghi vào nhật ký rồi. Làm theo từng bước rồi quay lại gặp mình nhé.',
   },
   completed: {
-    en: 'Cảm ơn! You finished the errand. Your thank-you is in your bag.',
+    en: 'Thank you! You finished the errand. Your thank-you is in your bag.',
     vi: 'Cảm ơn nhiều! Bạn làm xong việc rồi. Quà cảm ơn đã nằm trong túi của bạn.',
   },
   incomplete: {
@@ -30,23 +24,23 @@ const OUTCOMES: Record<
 }
 const IDLE: Record<NeighborId, Line> = {
   hoa: {
-    en: 'Chào con! The market is busy. Ask me for an errand if you would like to help.',
+    en: 'Hello! The market is busy. Ask me for an errand if you would like to help.',
     vi: 'Chào con! Chợ đang đông lắm. Muốn giúp cô thì hỏi cô việc nhé.',
   },
   tam: {
-    en: 'Where do you want to go? The bus is 5 coins, xích lô 3, and walking is always free.',
+    en: 'Where do you want to go? The bus is 5 coins, a cyclo 3, and walking is always free.',
     vi: 'Bạn muốn đi đâu? Xe buýt 5 xu, xích lô 3 xu, còn đi bộ thì luôn miễn phí.',
   },
   linh: {
-    en: 'Chào bạn! There is always a neighbor who could use a little help.',
+    en: 'Hello! There is always a neighbor who could use a little help.',
     vi: 'Chào bạn! Lúc nào cũng có một người hàng xóm cần giúp một tay.',
   },
   ba: {
-    en: 'Sit a moment, cháu. The river has seen this city grow. The city can wait a few minutes.',
+    en: 'Sit a moment. The river has seen this city grow. The city can wait a few minutes.',
     vi: 'Ngồi xuống chút đi cháu. Dòng sông này đã thấy thành phố lớn lên. Thành phố đợi được vài phút mà.',
   },
   mai: {
-    en: 'Chào bạn! Pull up a stool for cà phê sữa and bánh mì.',
+    en: 'Hello! Pull up a stool for iced milk coffee and a sandwich.',
     vi: 'Chào bạn! Kéo ghế ngồi uống ly cà phê sữa, ăn ổ bánh mì nha.',
   },
   alex: {
@@ -82,6 +76,6 @@ export function fallbackLine(
   return (
     outcome
       ? OUTCOMES[outcome]
-      : (NPCS[npcId].idleLine ?? IDLE[npcId as NeighborId])
+      : (IDLE[npcId as NeighborId] ?? OUTCOMES.incomplete)
   )[locale]
 }

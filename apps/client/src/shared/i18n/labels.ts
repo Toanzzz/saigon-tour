@@ -1,4 +1,12 @@
-import type { ItemId } from '@saigon/shared'
+import {
+  type ItemId,
+  type LocationId,
+  type MarketItemId,
+  marketItemName,
+  type NpcId,
+  npcText,
+  placeLabel,
+} from '@saigon/shared'
 import { m } from '@/paraglide/messages'
 import { getLocale } from '@/paraglide/runtime'
 
@@ -16,6 +24,13 @@ export function itemLabel(itemId: ItemId): string {
   }
   return labels[itemId]()
 }
+
+export const npcDisplay = (npcId: NpcId) => npcText(npcId, getLocale())
+export const npcLabel = (npcId: NpcId) => npcDisplay(npcId).name
+export const marketItemLabel = (itemId: MarketItemId) =>
+  marketItemName(itemId, getLocale())
+export const placeSign = (locationId: LocationId) =>
+  placeLabel(locationId, getLocale()).toLocaleUpperCase(getLocale())
 
 export function formatNumber(value: number) {
   return new Intl.NumberFormat(getLocale()).format(value)

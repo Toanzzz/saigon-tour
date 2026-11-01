@@ -31,11 +31,19 @@ describe('friendship feedback and local history', () => {
   it('diffs effective presets, emits only changed levels, avoids duplicate pulses', () => {
     noteFriendship({}, { hoa: { level: 2 } })
     expect(pulses.state.hoa?.delta).toBe(1)
-    expect(game.state.toast).toContain('Cô Hoa')
+    expect(game.state.toast).toContain('Ms. Hoa')
     const at = pulses.state.hoa?.at
     noteFriendship({ hoa: { level: 2 } }, { hoa: { level: 2 } })
     expect(pulses.state.hoa?.at).toBe(at)
     expect(pulses.state.tam).toBeUndefined()
+  })
+  it('keeps one unanswered greeting in local history', () => {
+    appendHistory('hoa', '', 'Chào bạn!')
+    appendHistory('hoa', '', 'Chào bạn!')
+    appendHistory('hoa', '', 'Rainy evening, friend.')
+    expect(cachedHistory('hoa')).toEqual([
+      { role: 'assistant', content: 'Rainy evening, friend.' },
+    ])
   })
   it('retains offline conversation in the persisted history query and clears it', () => {
     appendHistory('market-walk', 'Any errands?', 'Say hello to Linh.')

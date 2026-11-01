@@ -1,7 +1,7 @@
 import { NPCS } from '@saigon/shared'
-import { type SubmitEvent, useEffect, useRef, useState } from 'react'
+import { Fragment, type SubmitEvent, useEffect, useRef, useState } from 'react'
 import { chat, close } from '@/app/actions'
-import { m } from '@/shared/i18n'
+import { m, npcDisplay } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -31,7 +31,7 @@ export function Conversation({ state }: { state: GameState }) {
       historyRef.current.scrollTop = historyRef.current.scrollHeight
   }, [historyLength, thinking])
   if (!dialog) return null
-  const npc = NPCS[dialog.npc]
+  const npc = { ...NPCS[dialog.npc], ...npcDisplay(dialog.npc) }
   async function send(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!text.trim() || dialog?.thinking) return
@@ -59,15 +59,17 @@ export function Conversation({ state }: { state: GameState }) {
         aria-live="polite"
       >
         {dialog.history.map((line, index) => (
-          <p className={`speech ${line.role}`} key={messageKey(line)}>
-            {line.role === 'user' && (
-              <span className="speaker">{m.map_you()}</span>
-            )}
+          <Fragment key={messageKey(line)}>
             {index === dialog.earlierCount && index > 0 && (
-              <span className="history-divider">{m.history_earlier()}</span>
+              <p className="history-divider">{m.history_earlier()}</p>
             )}
-            {line.content}
-          </p>
+            <p className={`speech ${line.role}`}>
+              {line.role === 'user' && (
+                <span className="speaker">{m.map_you()}</span>
+              )}
+              {line.content}
+            </p>
+          </Fragment>
         ))}
         {dialog.thinking && (
           <p className="thinking" role="status">

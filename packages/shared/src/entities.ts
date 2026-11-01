@@ -62,8 +62,8 @@ export type ItemId = z.infer<typeof ItemIdSchema>
 export const MarketItemIdSchema = z.enum(['coffee', 'banana'])
 export type MarketItemId = z.infer<typeof MarketItemIdSchema>
 export const MARKET_ITEMS = {
-  coffee: { label: 'Cà phê sữa', price: 3 },
-  banana: { label: 'Chuối chín', price: 2 },
+  coffee: { label: 'iced milk coffee', price: 3 },
+  banana: { label: 'ripe banana', price: 2 },
 } as const satisfies Record<MarketItemId, { label: string; price: number }>
 export const SourceSchema = z.enum(['live', 'fallback'])
 export type AgentSource = z.infer<typeof SourceSchema>

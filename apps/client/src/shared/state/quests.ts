@@ -1,11 +1,5 @@
-import {
-  MARKET_ITEMS,
-  NPCS,
-  type NpcId,
-  type Quest,
-  type QuestStep,
-} from '@saigon/shared'
-import { itemLabel, m } from '@/shared/i18n'
+import type { NpcId, Quest, QuestStep } from '@saigon/shared'
+import { itemLabel, m, marketItemLabel, npcLabel } from '@/shared/i18n'
 import { placeName } from '@/shared/world/places'
 import { type GameState, trackedQuest } from './game'
 
@@ -17,21 +11,21 @@ export function stepCopy(step: QuestStep): string {
     case 'GO_TO':
       return m.step_visit({ place: placeName(step.locationId) })
     case 'TALK_TO':
-      return m.step_talk({ name: NPCS[step.npcId].name })
+      return m.step_talk({ name: npcLabel(step.npcId) })
     case 'DELIVER':
       return m.step_give({
         item: itemLabel(step.itemId),
-        name: NPCS[step.npcId].name,
+        name: npcLabel(step.npcId),
       })
     case 'BUY':
-      return m.step_buy({ item: MARKET_ITEMS[step.marketItemId].label })
+      return m.step_buy({ item: marketItemLabel(step.marketItemId) })
   }
 }
 export function questHint(quest: Quest): string {
   const step = nextStep(quest)
   return step
     ? stepCopy(step)
-    : m.step_return({ name: NPCS[quest.giverNpcId].name })
+    : m.step_return({ name: npcLabel(quest.giverNpcId) })
 }
 export function questTarget(state: GameState): NpcId | null {
   const quest = trackedQuest(state)

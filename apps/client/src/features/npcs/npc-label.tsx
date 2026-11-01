@@ -1,8 +1,9 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { NPCS, type NpcId } from '@saigon/shared'
+import type { NpcId } from '@saigon/shared'
 import { useState } from 'react'
 import { npcPosition } from '@/shared/api/city'
+import { npcLabel } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { pulses } from '@/shared/state/friendship'
 import { game } from '@/shared/state/game'
@@ -61,7 +62,7 @@ export function NpcLabel({ id }: { id: NpcId }) {
     >
       <div className="world-label">
         <span className="quest-marker">{view.marker}</span>
-        <span className="name-tag">{NPCS[id].name}</span>
+        <span className="name-tag">{npcLabel(id)}</span>
         {view.pulse && (
           <span
             key={view.at}

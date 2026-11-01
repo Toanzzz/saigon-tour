@@ -33,8 +33,8 @@ Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 `
 
 const LANGUAGE_RULES: Record<Locale, string> = {
-  en: 'Language rule: use welcoming English with a few short Vietnamese phrases.',
-  vi: 'Language rule: reply in natural, friendly southern Vietnamese; this overrides any speaking-style language.',
+  en: 'Language rule: reply only in natural, welcoming English. Do not mix in Vietnamese words. Vietnamese proper names of people and places may appear as names.',
+  vi: 'Language rule: reply only in natural, friendly southern Vietnamese. Do not mix in English words. This overrides any speaking-style language.',
 }
 /** Per-turn, so one agent serves both languages. */
 export function languageRule(locale: Locale) {

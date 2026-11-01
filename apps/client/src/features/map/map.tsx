@@ -2,7 +2,7 @@ import { NPCS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { city, npcPosition } from '@/shared/api/city'
-import { m } from '@/shared/i18n'
+import { m, npcLabel, placeSign } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import {
   BOUNDS,
@@ -154,7 +154,7 @@ export function NeighborhoodMap({
               size={4}
               anchor={place.stop[0] > 85 ? 'end' : 'middle'}
             >
-              {place.label}
+              {placeSign(id as keyof typeof PLACES)}
             </MapLabel>
           )}
         </g>
@@ -169,7 +169,7 @@ export function NeighborhoodMap({
               r={NPCS[id as NpcId].kind === 'resident' ? 1.5 : 2.6}
               fill={person.color}
             />
-            <title>{NPCS[id as NpcId].name}</title>
+            <title>{npcLabel(id as NpcId)}</title>
           </g>
         ))}
       {state.quests.map((quest) => {

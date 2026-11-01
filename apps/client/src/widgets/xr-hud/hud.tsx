@@ -1,7 +1,7 @@
 import { friendlinessOf, NPCS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { board, close, giveItem, interact, nearby } from '@/app/actions'
-import { itemLabel, m, useLocale } from '@/shared/i18n'
+import { itemLabel, m, npcDisplay, useLocale } from '@/shared/i18n'
 import { game, trackedQuest } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
 import { MODES, PLACES, placeName } from '@/shared/world/places'
@@ -13,7 +13,10 @@ export function XRGameHud() {
   const state = useSelector(game, (value) => value)
   const target = nearby(state.position)
   if (state.dialogue) {
-    const npc = NPCS[state.dialogue.npc]
+    const npc = {
+      ...NPCS[state.dialogue.npc],
+      ...npcDisplay(state.dialogue.npc),
+    }
     const lines = state.dialogue.history
       .slice(-3)
       .map(

@@ -7,7 +7,7 @@ import {
   type Quest,
 } from '@saigon/shared'
 import { Store } from '@tanstack/store'
-import { m } from '@/shared/i18n'
+import { m, npcLabel } from '@/shared/i18n'
 import { game, notify } from './game'
 export const pulses = new Store<
   Partial<Record<NpcId, { delta: number; at: number }>>
@@ -25,7 +25,7 @@ export function noteFriendship(
     pulses.setState((old) => ({ ...old, [npcId]: { delta, at: Date.now() } }))
     notify(
       m.friendship_changed({
-        name: NPCS[npcId].name,
+        name: npcLabel(npcId),
         delta: `${delta > 0 ? '+' : ''}${delta}`,
       })
     )

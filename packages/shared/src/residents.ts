@@ -6,21 +6,17 @@ export const RESIDENTS = {
   'bread-vendor': {
     id: 'bread-vendor',
     name: 'Chú Bình',
-    role: 'Bánh mì vendor',
+    role: 'Sandwich vendor',
     kind: 'resident',
     friendliness: 0,
     location: 'market',
     personality:
-      'Observant and independent; cares about the neighborhood and bánh mì vendor.',
+      'Observant and independent; cares about the neighborhood and sandwich vendor.',
     speakingStyle: 'Brief, civil conversation with local detail',
     knowledge: [
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the bánh mì vendor. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'fruit-vendor': {
     id: 'fruit-vendor',
@@ -36,10 +32,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the fruit vendor. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'market-browse': {
     id: 'market-browse',
@@ -55,10 +47,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the market regular. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'market-walk': {
     id: 'market-walk',
@@ -74,10 +62,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the market courier. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'market-family': {
     id: 'market-family',
@@ -93,10 +77,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the family shopper. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'coffee-friend': {
     id: 'coffee-friend',
@@ -112,10 +92,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the coffee regular. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'coffee-reader': {
     id: 'coffee-reader',
@@ -131,10 +107,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the café reader. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   commuter: {
     id: 'commuter',
@@ -150,10 +122,6 @@ export const RESIDENTS = {
       'I spend my days around the market.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the commuter. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   student: {
     id: 'student',
@@ -169,10 +137,6 @@ export const RESIDENTS = {
       'I spend my days around the park.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the student. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'park-reader': {
     id: 'park-reader',
@@ -188,10 +152,6 @@ export const RESIDENTS = {
       'I spend my days around the park.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the park reader. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
   'park-stretch': {
     id: 'park-stretch',
@@ -207,10 +167,6 @@ export const RESIDENTS = {
       'I spend my days around the park.',
       'A small favor helps neighbors get to know one another.',
     ],
-    idleLine: {
-      en: 'Hello! I am the morning exerciser. How is your walk?',
-      vi: 'Chào bạn! Hôm nay bạn đi dạo thế nào?',
-    },
   },
 } satisfies Partial<Record<NpcId, NpcPersona>>
 

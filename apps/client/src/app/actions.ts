@@ -1,9 +1,4 @@
-import {
-  MARKET_ITEMS,
-  type MarketItemId,
-  NPCS,
-  type NpcId,
-} from '@saigon/shared'
+import { MARKET_ITEMS, type MarketItemId, type NpcId } from '@saigon/shared'
 import { converse, deliver } from '@/features/conversation/converse'
 import { npcPosition } from '@/shared/api/city'
 import {
@@ -15,7 +10,7 @@ import { cachedHistory, fetchHistory } from '@/shared/api/history'
 import { clearPersistedQueries, queryClient } from '@/shared/api/query'
 import { guestState, resetSession, signOut } from '@/shared/api/session'
 import { audio } from '@/shared/audio'
-import { itemLabel, m } from '@/shared/i18n'
+import { itemLabel, m, marketItemLabel, npcLabel } from '@/shared/i18n'
 import {
   advanceQuests,
   game,
@@ -130,7 +125,9 @@ export function buyMarketItem(itemId: MarketItemId) {
   )
     return
   if (state.world.currency < item.price) {
-    notify(m.toast_need_coins({ count: item.price, item: item.label }))
+    notify(
+      m.toast_need_coins({ count: item.price, item: marketItemLabel(itemId) })
+    )
     return
   }
   update({
@@ -147,7 +144,7 @@ export function buyMarketItem(itemId: MarketItemId) {
     pending: [...state.pending, { type: 'purchase', itemId }],
   })
   audio.play('pickup')
-  notify(m.toast_added_to_bag({ item: item.label }))
+  notify(m.toast_added_to_bag({ item: marketItemLabel(itemId) }))
 }
 export function openRiverPostcard() {
   if (game.state.world.locationId !== 'river') return
@@ -160,7 +157,7 @@ export function nearby(
     ...Object.entries(PEOPLE).map(([id]) => ({
       kind: 'npc' as const,
       id,
-      label: m.hud_talk_to({ name: NPCS[id as NpcId].name }),
+      label: m.hud_talk_to({ name: npcLabel(id as NpcId) }),
       at: npcPosition(id as NpcId),
     })),
     ...Object.entries(PLACES).map(([id, value]) => ({

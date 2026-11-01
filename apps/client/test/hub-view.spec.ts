@@ -66,13 +66,13 @@ describe('city hub quest view', () => {
       lastLine: { tam: 'Bus is 5 coins!' },
     }
     expect(hubView(state, now).neighbor).toMatchObject({
-      name: 'Anh Tâm',
+      name: 'Tam',
       line: 'Bus is 5 coins!',
     })
     expect(hubView(initialState(), now).neighbor).toBeNull()
   })
   it('greets by time of day', () => {
-    expect(greetingFor(new Date(2026, 0, 1, 8))).toBe('Chào buổi sáng!')
-    expect(greetingFor(new Date(2026, 0, 1, 20))).toBe('Chào buổi tối!')
+    expect(greetingFor(new Date(2026, 0, 1, 8))).toBe('Good morning!')
+    expect(greetingFor(new Date(2026, 0, 1, 20))).toBe('Good evening!')
   })
 })

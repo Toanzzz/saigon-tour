@@ -3,35 +3,18 @@ import {
   FRIENDSHIP_MIN,
   type FriendshipMap,
   friendlinessOf,
+  NPCS,
   type NpcId,
 } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { m } from '@/shared/i18n'
 import { pulses } from '@/shared/state/friendship'
 import { game } from '@/shared/state/game'
-
-const COLD_AT = -3
-const WARM_AT = 2
-const PIPS = Array.from({ length: FRIENDSHIP_MAX - FRIENDSHIP_MIN }, (_, i) =>
-  i < -FRIENDSHIP_MIN ? i + FRIENDSHIP_MIN : i + FRIENDSHIP_MIN + 1
-)
-const tierOf = (level: number) =>
-  level <= COLD_AT ? 'cold' : level >= WARM_AT ? 'warm' : 'neutral'
-const TIER = {
-  cold: { glyph: '❄', label: m.friendship_cold },
-  neutral: { glyph: '•', label: m.friendship_neutral },
-  warm: { glyph: '♥', label: m.friendship_warm },
-}
-
-const isFilled = (pip: number, level: number) =>
-  pip < 0 ? level <= pip : level >= pip
-
-function hint(level: number) {
-  if (level <= COLD_AT)
-    return m.friendship_to_neutral({ points: COLD_AT + 1 - level })
-  if (level < WARM_AT) return m.friendship_to_warm({ points: WARM_AT - level })
-  return level >= FRIENDSHIP_MAX ? m.friendship_max() : ''
-}
+import {
+  AFFINITY_TIERS,
+  AffinityIcon,
+  affinityTier,
+} from '@/shared/ui/affinity'
 
 export function FriendshipMeter({
   npcId,
@@ -44,15 +27,12 @@ export function FriendshipMeter({
   const pulse = useSelector(pulses, (state) => state[npcId])
   const still = useSelector(game, (state) => state.reducedMotion)
   const recent = pulse && Date.now() - pulse.at < 2200 ? pulse : undefined
-  const tier = tierOf(level)
-  const label = TIER[tier].label()
-  const next = hint(level)
+  const { index, tier } = affinityTier(level)
+  const label = tier.label()
+  const next = AFFINITY_TIERS[index + 1]
   const signed = `${level > 0 ? '+' : ''}${level}`
   return (
-    <div className={`friendship-summary tier-${tier}${still ? ' still' : ''}`}>
-      <span className="friendship-tier">
-        <span aria-hidden="true">{TIER[tier].glyph}</span> {label}
-      </span>
+    <div className={`affinity${still ? ' still' : ''}`}>
       <meter
         className="sr-only"
         min={FRIENDSHIP_MIN}
@@ -63,24 +43,52 @@ export function FriendshipMeter({
       >
         {signed}
       </meter>
-      <div
-        className="friendship-pips"
-        aria-hidden="true"
-        title={`${m.friendship_label()}: ${signed}`}
+      <button
+        type="button"
+        key={recent?.at ?? 0}
+        className={`affinity-badge${recent ? (recent.delta > 0 ? ' up' : ' down') : ''}`}
+        popoverTarget="affinity-info"
+        aria-label={m.friendship_badge({ tier: label })}
       >
-        {PIPS.map((pip) => {
-          const filled = isFilled(pip, level)
-          const changed =
-            recent && filled !== isFilled(pip, level - recent.delta)
-          return (
-            <span
-              key={`${pip}-${changed ? recent.at : 0}`}
-              className={`pip ${pip < 0 ? 'cool' : 'warm'}${filled ? ' on' : ''}${changed ? ' changed' : ''}${pip === 1 ? ' after-center' : ''}`}
-            />
-          )
-        })}
+        <AffinityIcon tier={tier.id} />
+      </button>
+      <div id="affinity-info" className="affinity-info" popover="auto">
+        <div className="affinity-info-head">
+          <AffinityIcon tier={tier.id} size={34} />
+          <div>
+            <strong>{label}</strong>
+            <span>
+              {m.friendship_label()} {signed}
+            </span>
+          </div>
+        </div>
+        <ol className="affinity-ladder">
+          {AFFINITY_TIERS.map((step, i) => (
+            <li
+              key={step.id}
+              className={i === index ? 'current' : i < index ? 'passed' : ''}
+              title={step.label()}
+              aria-current={i === index ? 'step' : undefined}
+            >
+              <AffinityIcon tier={step.id} size={i === index ? 24 : 18} />
+              <span className="sr-only">{step.label()}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="affinity-next">
+          {next
+            ? m.friendship_next({
+                points: next.min - level,
+                tier: next.label(),
+              })
+            : m.friendship_top()}
+        </p>
+        <p className="affinity-tip">
+          {tier.id === 'cold'
+            ? m.errands_cold({ name: NPCS[npcId].name })
+            : m.friendship_tip()}
+        </p>
       </div>
-      {next && <span className="friendship-hint">{next}</span>}
     </div>
   )
 }
