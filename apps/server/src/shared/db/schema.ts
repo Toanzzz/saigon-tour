@@ -1,4 +1,4 @@
-import type { Quest, WorldState } from '@saigon/shared'
+import type { CompletedQuest, Quest, WorldState } from '@saigon/shared'
 import {
   integer,
   jsonb,
@@ -24,8 +24,8 @@ export const players = pgTable('players', {
   name: text().notNull(),
   color: text().notNull(),
   world: jsonb().$type<WorldState>().notNull(),
-  quest: jsonb().$type<Quest | null>(),
-  completed: jsonb().$type<Quest[]>().notNull(),
+  quests: jsonb().$type<Quest[]>().notNull().default([]),
+  completed: jsonb().$type<CompletedQuest[]>().notNull(),
   reputation: integer().notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()

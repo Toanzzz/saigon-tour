@@ -1,4 +1,8 @@
-import { DEMO_QUEST, objectiveSatisfied } from '@saigon/shared'
+import { advance, isReady } from '@saigon/shared'
+import { questFixture } from './quest-fixture'
+
+const quest = questFixture()
+
 import { describe, expect, it } from 'vitest'
 import { route } from '@/features/transport/routes'
 import { grantQuest, grantReward, initialState } from '@/shared/state/game'
@@ -8,31 +12,34 @@ import { PLACES } from '@/shared/world/places'
 describe('the delivery journey', () => {
   it('grants the carried parcel once and keeps its verified reward idempotent', () => {
     const start = initialState()
-    const accepted = grantQuest(start, DEMO_QUEST)
+    const accepted = grantQuest(start, quest)
     expect(accepted.world.inventory.herbs).toBe(1)
-    expect(grantQuest(accepted, DEMO_QUEST)).toBe(accepted)
-    expect(objectiveSatisfied(DEMO_QUEST, accepted.world)).toBe(false)
+    expect(grantQuest(accepted, quest)).toBe(accepted)
+    expect(isReady(accepted.quests[0])).toBe(false)
     const delivered = {
       ...accepted,
+      quests: [
+        advance(quest, { type: 'deliver', itemId: 'herbs', npcId: 'linh' }),
+      ],
       world: {
         ...accepted.world,
         inventory: { herbs: 0 },
-        deliveredItems: ['herbs:linh'],
+        deliveredItems: ['herbs:linh' as const],
       },
     }
-    expect(objectiveSatisfied(DEMO_QUEST, delivered.world)).toBe(true)
-    const complete = grantReward(delivered, DEMO_QUEST)
-    expect(complete.world.currency).toBe(80)
+    expect(isReady(delivered.quests[0])).toBe(true)
+    const complete = grantReward(delivered, delivered.quests[0])
+    expect(complete.world.currency).toBe(30 + quest.reward.currency)
     expect(complete.world.inventory.postcard).toBe(1)
     expect(complete.completed).toHaveLength(1)
-    expect(grantReward(complete, DEMO_QUEST)).toBe(complete)
-    expect(grantQuest(complete, DEMO_QUEST)).toBe(complete)
+    expect(grantReward(complete, quest)).toBe(complete)
+    expect(grantQuest(complete, quest)).toBe(complete)
   })
   it('ignores stale completion after a restart or for another quest', () => {
     const state = initialState(2)
-    expect(grantReward(state, DEMO_QUEST)).toBe(state)
-    const accepted = grantQuest(state, DEMO_QUEST)
-    expect(grantReward(accepted, { ...DEMO_QUEST, id: 'other-quest' })).toBe(
+    expect(grantReward(state, quest)).toBe(state)
+    const accepted = grantQuest(state, quest)
+    expect(grantReward(accepted, { ...quest, id: 'other-quest' })).toBe(
       accepted
     )
   })

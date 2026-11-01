@@ -1,5 +1,13 @@
 # Game progress
 
+## Quest overhaul — active work
+
+- Scope: NPC-authored quests through deterministic shared validation; shared-room City Director; party quests and polish.
+- Pass 1 implemented and validated: shared contracts/engine, preserving Postgres migration, nine NPC tools, generic client quest journal and dialogue.
+- Live prerequisite: Muse discriminated-step tool acceptance and rejection/correction spike, before UI edits.
+- Pass 1 proof: all root gates; 87 server / 61 client tests; desktop/mobile offline real-control reward flow; live Muse schema correction and full authored quest/reward through the real harness.
+- Unrelated ignore-file edits preserved. Escape-key debug logs removed at user request.
+
 ## Intent
 
 Stylized Sài Gòn exploration game from `docs/requirements.md`, with the compact District 1 expansion defined in `docs/city-expansion-plan.md`. The city uses the existing licensed asset collection, authored modular façades, and the supplied landmark statues. The city hub is an in-game overlay.

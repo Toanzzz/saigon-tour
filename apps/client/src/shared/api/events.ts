@@ -1,5 +1,5 @@
 import {
-  applyPlayerEvents,
+  applyQuestEvents,
   type PlayerEvent,
   type ServerSocketMessage,
 } from '@saigon/shared'
@@ -60,11 +60,15 @@ export function acknowledgeWorld(
       : {
           ...state,
           serverRevision: message.revision,
-          world: applyPlayerEvents(message.world, [
+          ...applyQuestEvents(message.world, message.quests, [
             ...(inFlight?.events ?? []),
             ...state.pending,
           ]),
-          quest: message.quest,
+          trackedQuestId: message.quests.some(
+            (q) => q.id === state.trackedQuestId
+          )
+            ? state.trackedQuestId
+            : (message.quests[0]?.id ?? null),
           completed: message.completed,
           reputation: message.reputation,
         }

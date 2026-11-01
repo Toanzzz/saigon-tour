@@ -1,4 +1,4 @@
-import type { NpcId, Quest, Reward } from './contracts'
+import type { NpcId, Reward } from './contracts'
 
 export interface NpcPersona {
   id: NpcId
@@ -130,71 +130,3 @@ export const NPCS: Record<NpcId, NpcPersona> = {
 export const STARTING_CURRENCY = 30
 export const BUS_FARE = 5
 export const ZERO_REWARD: Reward = { currency: 0, itemId: null, reputation: 0 }
-export const DEMO_QUEST: Quest = {
-  id: 'hoa-herbs-delivery',
-  title: 'A little taste of home',
-  description:
-    'Take Cô Hoa’s fresh herbs to Chị Linh in the park. Catch a bus across the neighborhood, or enjoy the walk.',
-  objective: { type: 'DELIVER', itemId: 'herbs', npcId: 'linh' },
-  reward: { currency: 50, itemId: 'postcard', reputation: 1 },
-  giverNpcId: 'hoa',
-}
-
-export const SECRET_QUESTS = {
-  'cityhall-lanterns': {
-    id: 'cityhall-lanterns',
-    title: 'A lantern for the evening walk',
-    description:
-      'Find the quiet food-alley corner where Vy’s missing lantern is waiting, then return to City Hall.',
-    objective: { type: 'GO_TO', locationId: 'alley' },
-    reward: { currency: 20, itemId: 'coffee', reputation: 1 },
-    giverNpcId: 'vy',
-  },
-  'postoffice-river-postcard': {
-    id: 'postoffice-river-postcard',
-    title: 'A postcard with room to breathe',
-    description:
-      'Visit the riverfront and bring Sơn one wide view for his growing postcard collection.',
-    objective: { type: 'GO_TO', locationId: 'river' },
-    reward: { currency: 25, itemId: 'photo', reputation: 1 },
-    giverNpcId: 'son',
-  },
-  'opera-cathedral-note': {
-    id: 'opera-cathedral-note',
-    title: 'A note across the square',
-    description:
-      'Carry Thảo’s melody from the Opera House to the cathedral square and listen for its echo.',
-    objective: { type: 'GO_TO', locationId: 'cathedral' },
-    reward: { currency: 30, itemId: 'postcard', reputation: 1 },
-    giverNpcId: 'thao',
-  },
-} as const satisfies Record<string, Quest>
-
-export function objectiveSatisfied(
-  quest: Quest,
-  world: import('./contracts').WorldState
-): boolean {
-  const objective = quest.objective
-  switch (objective.type) {
-    case 'GO_TO':
-      return world.visitedLocations.includes(objective.locationId)
-    case 'TALK_TO':
-      return world.talkedTo.includes(objective.npcId)
-    case 'COLLECT':
-      return (world.inventory[objective.itemId] ?? 0) >= objective.count
-    case 'DELIVER':
-      return world.deliveredItems.includes(
-        `${objective.itemId}:${objective.npcId}`
-      )
-  }
-}
-
-export const TEAM_QUEST: Quest = {
-  id: 'hoa-team-lunch',
-  title: 'Lunch tastes better together',
-  description:
-    'Bring your assigned dishes to Chị Linh in the park, then check with Cô Hoa together.',
-  objective: { type: 'TALK_TO', npcId: 'hoa' },
-  reward: { currency: 40, itemId: 'photo', reputation: 2 },
-  giverNpcId: 'hoa',
-}

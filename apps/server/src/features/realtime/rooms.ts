@@ -7,7 +7,7 @@ import {
   type ServerSocketMessage,
   type TimeOfDay,
 } from '@saigon/shared'
-import type { GameService } from '@/domain/game'
+import type { QuestService } from '@/domain/quests'
 import type { PlayerSave } from '@/shared/db'
 import { NpcScheduler } from './scheduler'
 
@@ -230,7 +230,7 @@ export class RoomManager {
     playerId: string,
     sequence: number,
     events: PlayerEvent[],
-    game: Pick<GameService, 'get' | 'applyEvents'>
+    game: Pick<QuestService, 'get' | 'applyEvents'>
   ): Promise<PlayerSave> {
     const member = this.room(playerId)?.members.get(playerId)
     if (!member) return Promise.reject(new Error('player_not_in_room'))

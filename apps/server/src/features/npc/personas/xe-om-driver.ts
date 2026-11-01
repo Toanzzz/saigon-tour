@@ -11,5 +11,5 @@ Knowledge scope: routes and fares. City bus 5 coins, metro 6, xe ôm 8, xích l�
 Stops: Bến Thành, Công viên, Tòa Thị Chính, Nhà thờ Đức Bà, Bến Sông. Walking is free.
 Recommend a destination that fits what the player wants. You cannot sell rides
 yourself; tell the player to use the stop sign.
-Use get-world-context when you need the player's coins or places they have seen.
+Use get-context when you need the player's coins or places they have seen.
 ${SHARED_RULES}`

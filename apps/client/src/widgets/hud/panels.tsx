@@ -1,5 +1,4 @@
 import { MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
-import { useSelector } from '@tanstack/react-store'
 import { useState } from 'react'
 import {
   board,
@@ -11,9 +10,8 @@ import {
   toggleTimeOfDay,
 } from '@/app/actions'
 import { NeighborhoodMap } from '@/features/map/map'
-import { teamObjective } from '@/shared/api/party'
-import { net } from '@/shared/api/status'
 import { type GameState, game, update } from '@/shared/state/game'
+import { questHint, stepCopy } from '@/shared/state/quests'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 import { MODES, PLACES, type TravelMode } from '@/shared/world/places'
@@ -91,49 +89,51 @@ export function TransportPanel({ state }: { state: GameState }) {
 }
 
 export function JournalPanel({ state }: { state: GameState }) {
-  const network = useSelector(net, (value) => value)
-  const team = teamObjective(network.party, network.selfId)
   return (
     <Dialog
       title="Your little journey"
       eyebrow="Travel journal"
       onClose={close}
     >
-      {team && (
-        <section className="journal-section" aria-label="Team errand progress">
-          <h3>{team.title}</h3>
-          <p>{team.hint}</p>
-          <p>{team.progress}</p>
-          <ul>
-            {network.party?.quest?.assignments.map((assignment) => (
-              <li key={assignment.playerId}>
-                {assignment.name}: {assignment.dish} ·{' '}
-                {assignment.delivered ? 'delivered' : 'on the way'}
-              </li>
-            ))}
-          </ul>
-          <span className="journal-reward">
-            40 coins · a group photo · +2 reputation each
-          </span>
-        </section>
-      )}
       <div className="journal-section">
-        <h3>On your mind</h3>
-        {state.quest ? (
-          <>
-            <h4>{state.quest.title}</h4>
-            <p>{state.quest.description}</p>
+        <h3>On your mind · {state.quests.length}/3</h3>
+        {state.quests.map((quest) => (
+          <section key={quest.id} aria-label={quest.title}>
+            <h4>{quest.title}</h4>
+            <p>{quest.description}</p>
+            <ol>
+              {quest.steps.map((step, index) => (
+                <li
+                  key={`${quest.id}-${JSON.stringify(step)}-${quest.steps.slice(0, index).filter((entry) => JSON.stringify(entry) === JSON.stringify(step)).length}`}
+                >
+                  <span
+                    role="img"
+                    aria-label={quest.progress[index] ? 'Done' : 'Pending'}
+                  >
+                    {quest.progress[index] ? '✓ ' : '○ '}
+                  </span>
+                  {stepCopy(step)}
+                </li>
+              ))}
+            </ol>
+            <p>{questHint(quest)}</p>
             <span className="journal-reward">
-              <Icon name="coin" size={16} />
-              {state.quest.reward.currency} coins · a Sài Gòn postcard
+              {quest.reward.currency} coins ·{' '}
+              {quest.reward.itemId ?? 'a thank-you'} · +
+              {quest.reward.reputation} reputation
             </span>
-          </>
-        ) : (
-          <p>
-            {state.completed.length
-              ? 'A kind errand, a new friend. There is still a whole neighborhood to enjoy.'
-              : 'Cô Hoa is at the market stall. Say hello and see if she could use a hand.'}
-          </p>
+            <button
+              type="button"
+              className="text-button"
+              aria-pressed={state.trackedQuestId === quest.id}
+              onClick={() => update({ trackedQuestId: quest.id })}
+            >
+              Track errand
+            </button>
+          </section>
+        ))}
+        {!state.quests.length && (
+          <p>Say hello to a neighbor and see who could use a hand.</p>
         )}
       </div>
       <div className="journal-section">

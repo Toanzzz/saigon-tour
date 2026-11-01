@@ -12,9 +12,15 @@ import {
 } from '@/shared/api/events'
 import { clearPersistedQueries } from '@/shared/api/query'
 import { guestState, resetSession, signOut } from '@/shared/api/session'
-import { net } from '@/shared/api/status'
 import { audio } from '@/shared/audio'
-import { game, initialState, notify, update } from '@/shared/state/game'
+import {
+  advanceQuests,
+  game,
+  initialState,
+  notify,
+  update,
+} from '@/shared/state/game'
+import { dialogueQuests } from '@/shared/state/quests'
 import {
   distance,
   MODES,
@@ -112,7 +118,11 @@ export function toggleTimeOfDay() {
 export function buyMarketItem(itemId: MarketItemId) {
   const state = game.state
   const item = MARKET_ITEMS[itemId]
-  if (state.world.locationId !== 'market') return
+  if (
+    state.world.locationId !== 'market' ||
+    (state.world.inventory[itemId] ?? 0) >= 100
+  )
+    return
   if (state.world.currency < item.price) {
     notify(`You need ${item.price} coins for ${item.label}.`)
     return
@@ -127,6 +137,7 @@ export function buyMarketItem(itemId: MarketItemId) {
         [itemId]: (state.world.inventory[itemId] ?? 0) + 1,
       },
     },
+    quests: advanceQuests(state.quests, [{ type: 'purchase', itemId }]),
     pending: [...state.pending, { type: 'purchase', itemId }],
   })
   audio.play('pickup')
@@ -196,49 +207,21 @@ export async function talk(npc: NpcId) {
   )
 }
 export const chat = (text: string) => converse(text, 'chat')
-export async function teamErrand() {
-  if (net.state.connection !== 'connected') return
-  await converse('Can you offer or check our team lunch errand?', 'team')
-}
-export async function deliverTeamDish() {
-  const { dialogue } = game.state
-  const assignment = net.state.party?.quest?.assignments.find(
-    (entry) => entry.playerId === net.state.selfId
-  )
-  if (
-    dialogue?.npc !== 'linh' ||
-    dialogue.thinking ||
-    !assignment ||
-    assignment.delivered ||
-    net.state.connection !== 'connected'
-  )
-    return
-  game.setState((state) => ({
-    ...state,
-    pending: [
-      ...state.pending,
-      { type: 'deliver', itemId: assignment.dish, npcId: 'linh' },
-    ],
-  }))
-  await converse(`Here is the ${assignment.dish} for the team lunch!`, 'chat')
-}
 export async function acceptQuest() {
   const state = game.state
-  if (!state.dialogue || state.dialogue.thinking || state.quest) return
+  if (!state.dialogue || state.dialogue.thinking || state.quests.length >= 3)
+    return
   await converse('I would love to help. Do you have an errand for me?', 'help')
 }
 export async function deliverOrVerify() {
-  const { quest, dialogue, world } = game.state
-  if (!quest || !dialogue || dialogue.thinking) return
-  const objective = quest.objective
-  if (
-    objective.type === 'DELIVER' &&
-    objective.npcId === dialogue.npc &&
-    (world.inventory[objective.itemId] ?? 0) > 0
-  ) {
-    game.setState((state) => deliver(state, objective.itemId, dialogue.npc))
+  const state = game.state
+  const { dialogue } = state
+  if (!dialogue || dialogue.thinking) return
+  const { delivery } = dialogueQuests(state, dialogue.npc)
+  if (delivery) {
+    game.setState((current) => deliver(current, delivery.itemId, dialogue.npc))
     audio.play('pickup')
-    await converse(`Here are the ${objective.itemId} from Cô Hoa!`, 'chat')
+    await converse(`Here is the ${delivery.itemId} for your errand!`, 'chat')
     return
   }
   await converse('I finished your errand. Can you check?', 'check')

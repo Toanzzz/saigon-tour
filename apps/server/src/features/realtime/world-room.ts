@@ -12,7 +12,7 @@ import {
   WORLD_BOUNDS,
   WorldRoomState,
 } from '@saigon/shared'
-import type { GameService } from '@/domain/game'
+import type { QuestService } from '@/domain/quests'
 import type { Auth } from '@/features/auth'
 import type { GameDb } from '@/shared/db'
 import {
@@ -26,7 +26,7 @@ import {
 export interface WorldRoomDeps {
   auth: Auth
   db: GameDb
-  game: GameService
+  game: QuestService
   manager: RoomManager
   hooks: {
     onMessage(playerId: string, message: PartyClientMessage): Promise<void>

@@ -5,8 +5,7 @@
 1. **Demo-first.** A reliable vertical slice beats broad, unfinished features.
 2. **One codebase, two targets.** Desktop and Quest 3 WebXR share game logic; input and UI differ.
 3. **Secrets stay server-side.** The Meta key lives only in the API's environment.
-4. **Agentic, server-authoritative.** NPCs act through validated tools; rewards come from quest
-   templates, never from model text.
+4. **Agentic, server-authoritative.** NPCs act through validated tools; rewards come from the deterministic quest engine.
 5. **Fail soft.** Every AI path has a deterministic in-character fallback.
 
 ## 2. Stack
@@ -52,39 +51,35 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
   ride with the camera on the vehicle → arrive.
 - **World state:** location, coins, items, reputation, quests. After each NPC turn the client
   replaces it with the server's authoritative `world`.
-- **Multiplayer:** public street rooms, remote tourists, emotes, parties (2–4) and the team lunch errand.
+- **Multiplayer:** public street rooms, remote tourists, emotes, parties (2–4) with invitations and presence.
 - **XR:** world-space panels and XR HUD; the DOM hub is hidden in XR.
 
 ## 5. NPC agents
 
-`POST /npc/:npcId/interact` takes `{ playerId, message, intent, events, worldContext }`.
-`intent`: `chat | help | check | greet | team`. `events`: `visit | talk | deliver | spend`.
+`POST /npc/:npcId/interact` takes `{ message, intent, events, worldContext }` and derives player identity from the authenticated session. Intents are `chat | help | check | greet`; events are `visit | talk | deliver | purchase | spend`.
 
-- Each NPC is a Mastra agent with a persona and only the tools its role needs:
-  `offer-quest`, `check-quest`, `remember-player-fact`, `get-world-context`.
-- `GameService` validates every tool call (template, giver, objective) and owns rewards.
-- Objectives: `GO_TO(locationId)`, `TALK_TO(npcId)`, `DELIVER(itemId, npcId)`; completion
-  checks are deterministic.
-- Memory: last 10 messages per `npcId:playerId` thread plus up to 12 remembered facts, stored in Postgres.
-- Guards: per-step/turn timeouts, unsafe-text rejection, per-player/NPC/process rate limits,
-  `META_SPEND_LIMIT_USD` (default $5, max $150), daily bark limit.
-- Pre-warm: `bun run --filter @saigon/server prewarm` caches greetings.
+- All nine NPCs have `propose-quest`, `check-quests`, `get-context`, and `remember-player-fact`.
+- `QuestService` owns player mutations, validates proposals against shared persona domains, and grants rewards once through durable completion records.
+- Quests contain one to three sequential `GO_TO`, `TALK_TO`, `DELIVER`, or `BUY` steps. Each player has at most three active quests; an accepted offer activates immediately and supplies delivery items.
+- `packages/shared/src/quest` owns schemas, allowlists, validation, progress, deterministic rewards, and fallback seeds. The offline client uses the same engine.
+- Memory: last ten messages per `npcId:playerId` thread plus up to twelve remembered facts, stored in Postgres.
+- Guards: bounded model steps and timeouts, unsafe-text rejection, per-player/NPC/process call limits, reserved daily spend, and bark counts.
 
 ## 6. NPCs
 
-| NPC      | Role                         | Location   | Quest tools |
-| -------- | ---------------------------- | ---------- | ----------- |
-| Cô Hoa   | Market food vendor           | market     | yes         |
-| Anh Tâm  | Neighborhood xe ôm driver    | market     | no          |
-| Chị Linh | Student and volunteer        | park       | no          |
-| Ông Ba   | Cyclo driver and storyteller | river      | no          |
-| Mai      | Sidewalk café owner          | market     | no          |
-| Alex     | Visiting photographer        | opera      | no          |
-| Vy       | Lantern maker                | cityhall   | yes         |
-| Sơn      | Postcard collector           | postoffice | yes         |
-| Thảo     | Opera House music student    | opera      | yes         |
+| NPC      | Role                         | Home       |
+| -------- | ---------------------------- | ---------- |
+| Cô Hoa   | Market food vendor           | market     |
+| Anh Tâm  | Xe ôm driver                 | market     |
+| Chị Linh | Volunteer                    | park       |
+| Ông Ba   | Cyclo driver and storyteller | river      |
+| Mai      | Café owner                   | market     |
+| Alex     | Photographer                 | opera      |
+| Vy       | Lantern maker                | cityhall   |
+| Sơn      | Postcard collector           | postoffice |
+| Thảo     | Music student                | opera      |
 
-Source of truth: `packages/shared/src/world.ts` and `apps/server/src/features/npc/agents/`.
+Every NPC can author and verify quests. Server-enforced domains and seed examples define each persona’s reach. Source: `packages/shared/src/world.ts`, `packages/shared/src/quest`, and `apps/server/src/features/npc`.
 
 ## 7. Performance
 

@@ -1,11 +1,6 @@
-import {
-  DEMO_QUEST,
-  type LocationId,
-  NPCS,
-  type NpcId,
-  SECRET_QUESTS,
-} from '@saigon/shared'
-import type { GameState } from '@/shared/state/game'
+import { type LocationId, NPCS, type NpcId } from '@saigon/shared'
+import { type GameState, trackedQuest } from '@/shared/state/game'
+import { nextStep, stepCopy } from '@/shared/state/quests'
 import { MODES, PLACES, type TravelMode } from '@/shared/world/places'
 
 export type StepState = 'done' | 'now' | 'next'
@@ -109,58 +104,58 @@ const CITY_TRAIL: {
 ]
 
 function objectiveLocation(state: GameState): LocationId | null {
-  const objective = state.quest?.objective
-  if (!objective) return null
-  if (objective.type === 'GO_TO') return objective.locationId
-  if (objective.type === 'TALK_TO') return NPCS[objective.npcId].location
-  if (objective.type === 'DELIVER') {
-    const delivered = state.world.deliveredItems.includes(
-      `${objective.itemId}:${objective.npcId}`
-    )
-    const target = delivered
-      ? (state.quest?.giverNpcId ?? objective.npcId)
-      : objective.npcId
-    return NPCS[target].location
-  }
-  return null
+  const quest = trackedQuest(state)
+  if (!quest) return null
+  const step = nextStep(quest)
+  if (!step) return NPCS[quest.giverNpcId].location
+  if (step.type === 'GO_TO') return step.locationId
+  if (step.type === 'BUY') return 'market'
+  return NPCS[step.npcId].location
 }
-
 function storySteps(state: GameState): HubStep[] {
-  const target = objectiveLocation(state) ?? state.world.locationId
-  const allVisited = CITY_TRAIL.every((stop) =>
-    state.world.visitedLocations.includes(stop.location)
-  )
+  const quest = trackedQuest(state)
+  if (quest)
+    return [
+      ...quest.steps.map((step, index) => ({
+        title: stepCopy(step),
+        detail: quest.progress[index]
+          ? 'Completed'
+          : 'Your next small kindness',
+        state: quest.progress[index]
+          ? ('done' as const)
+          : index === quest.progress.findIndex((done) => !done)
+            ? ('now' as const)
+            : ('next' as const),
+      })),
+      {
+        title: `Return to ${NPCS[quest.giverNpcId].name}`,
+        detail: 'Collect your thank-you',
+        state: quest.status === 'ready' ? 'now' : 'next',
+      },
+    ]
   return CITY_TRAIL.map((stop) => ({
     title: stop.title,
     detail: stop.detail,
-    state:
-      stop.location === target && state.quest
-        ? 'now'
-        : allVisited
-          ? 'done'
-          : !state.quest && stop.location === state.world.locationId
-            ? 'now'
-            : state.world.visitedLocations.includes(stop.location)
-              ? 'done'
-              : 'next',
+    state: state.world.visitedLocations.includes(stop.location)
+      ? 'done'
+      : 'next',
   }))
 }
-
-function secretSteps(state: GameState) {
-  return Object.values(SECRET_QUESTS).map((quest) => {
-    const completed = state.world.completedQuestIds.includes(quest.id)
-    const active = state.quest?.id === quest.id
-    return {
+function secretSteps(state: GameState): HubSecret[] {
+  return [
+    ...state.quests.map((quest) => ({
       id: quest.id,
       title: quest.title,
-      detail: completed
-        ? 'Completed'
-        : active
-          ? `Active · ${NPCS[quest.giverNpcId].name}`
-          : `Ask ${NPCS[quest.giverNpcId].name} for the secret`,
-      state: completed ? 'done' : active ? 'now' : 'next',
-    } satisfies HubSecret
-  })
+      detail: `${NPCS[quest.giverNpcId].name} · ${quest.status}`,
+      state: 'now' as const,
+    })),
+    ...state.completed.map((quest) => ({
+      id: quest.id,
+      title: quest.title,
+      detail: 'Completed',
+      state: 'done' as const,
+    })),
+  ]
 }
 
 /** Next useful destination: the quest target first, then somewhere new. */
@@ -196,16 +191,12 @@ export function cheapestRide(state: GameState): HubRide | null {
 
 export function hubView(state: GameState, now = new Date()): HubView {
   const steps = storySteps(state)
-  const demoComplete = state.world.completedQuestIds.includes(DEMO_QUEST.id)
-  const done =
-    demoComplete &&
-    steps.every((step) => step.state === 'done') &&
-    state.quest === null
+  const done = state.completed.length > 0 && state.quests.length === 0
   const secrets = secretSteps(state)
   const last = state.world.talkedTo.at(-1)
   const ids = Object.keys(PLACES) as LocationId[]
   const current = steps.find((step) => step.state === 'now')
-  const active = state.quest
+  const active = trackedQuest(state)
   return {
     coins: state.world.currency,
     greeting: greetingFor(now),
@@ -217,14 +208,10 @@ export function hubView(state: GameState, now = new Date()): HubView {
           ? `Next: ${current.title.toLowerCase()}. ${current.detail}.`
           : '',
     story: {
-      title:
-        state.quest?.title ??
-        (state.world.completedQuestIds.includes(DEMO_QUEST.id)
-          ? 'A walk through Sài Gòn'
-          : DEMO_QUEST.title),
+      title: active?.title ?? 'A walk through Sài Gòn',
       steps,
       secrets,
-      coins: state.quest?.reward.currency ?? DEMO_QUEST.reward.currency,
+      coins: active?.reward.currency ?? 0,
       done,
     },
     neighbor: last

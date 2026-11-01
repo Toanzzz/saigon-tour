@@ -1,16 +1,16 @@
 import type { RequestContext } from '@mastra/core/request-context'
 import type { NpcId } from '@saigon/shared'
-import type { GameService, ToolOutcome } from '@/domain/game'
+import type { QuestService, ToolOutcome } from '@/domain/quests'
 import type { NpcMemoryService } from '../memory/npc-memory'
 
-export type { ToolOutcome } from '@/domain/game'
+export type { ToolOutcome } from '@/domain/quests'
 export interface NpcRequestValues {
   playerId: string
   npcId: NpcId
   outcome: ToolOutcome
 }
 export interface NpcServices {
-  game: GameService
+  game: QuestService
   memory: NpcMemoryService
 }
 export type NpcRequestContext = RequestContext<NpcRequestValues>

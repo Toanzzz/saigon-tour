@@ -104,3 +104,8 @@ export function setupNpc() {
     },
   }
 }
+
+export function required<T>(value: T | undefined | null): T {
+  if (value == null) throw new Error('Missing test entity')
+  return value
+}

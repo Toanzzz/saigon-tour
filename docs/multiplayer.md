@@ -22,10 +22,10 @@ Remote tourists interpolate snapshots with a 150 ms delay. The client draws the 
 
 Identity is Better Auth. Starting the game signs in anonymously; the session token lives in browser local storage and is sent as a bearer credential. Players can rename themselves or roll a random name. Meta login (Facebook Login) links the anonymous identity: a new Meta account inherits the guest save, and an account that already has a save keeps it. Reset keeps the identity and name while clearing saved progress and NPC memory. Anonymous players unseen for 30 days are removed by the startup/daily sweep; Meta accounts are kept.
 
-## Parties and the lunch errand
+## Parties and quests
 
 The People panel invites a connected neighbor within eight units. Invites expire after 30 seconds. A party holds two to four guests; every member can invite, accept, decline, or leave. Acceptance checks room, proximity, and available space again. Invitations remain accessible while a modal or city hub is open.
 
-Any member can ask Cô Hoa for the team lunch while every member is eligible. Dishes are assigned in party join order: noodles, broth, baguette, coffee. The assignment belongs to the party rather than the saved inventory. Each assigned member hands their own dish to Chị Linh. Once all remaining assignments are delivered, any member checks with Cô Hoa. Every assigned member receives 40 coins, a photo, and two reputation, once. Leaving removes the assignment; fewer than two assignments cancels the errand. The solo herb errand is independent.
+Quests are authored by NPC agents and saved per player. Party snapshots contain membership and invitations. Quest specs carry a scope; the current service accepts solo quests and rejects party proposals with `party_quests_not_available`. Quest progress uses the shared deterministic step engine.
 
 Save snapshots carry an increasing database revision. The client uses it to reject stale HTTP/socket saves, while party snapshot updates have their own ordering fence. Quest rewards have a separate socket push so a teammate sees the reward immediately.

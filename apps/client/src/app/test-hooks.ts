@@ -1,4 +1,7 @@
-import { DEMO_QUEST } from '@saigon/shared'
+import { createQuest, seedsFor } from '@saigon/shared'
+
+const seedQuest = () => createQuest(seedsFor('hoa')[0], 'q_demo')
+
 import { clearInput } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, initialState, update } from '@/shared/state/game'
@@ -63,7 +66,8 @@ function setTestState(name: string) {
         talkedTo: ['hoa'],
         inventory: { herbs: 1 },
       },
-      quest: DEMO_QUEST,
+      quests: [seedQuest()],
+      trackedQuestId: 'q_demo',
       dialogue: {
         npc: 'hoa',
         requestId,
@@ -93,11 +97,12 @@ function setTestState(name: string) {
         locationId: 'park',
         visitedLocations: ['market', 'park'],
         deliveredItems: ['herbs:linh'],
-        completedQuestIds: [DEMO_QUEST.id],
+        completedQuestIds: ['q_demo'],
         inventory: { postcard: 1 },
         currency: 80,
       },
-      completed: [DEMO_QUEST],
+      completed: [{ ...seedQuest(), completedAt: Date.now() }],
+      rewardQuest: seedQuest(),
       reward: 50,
       reputation: 1,
       source: 'live',

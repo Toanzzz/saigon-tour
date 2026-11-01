@@ -1,8 +1,10 @@
 import { randomUUID } from 'node:crypto'
 import { InMemoryStore } from '@mastra/core/storage'
+import { rewardFor, seedsFor } from '@saigon/shared'
 import { afterAll, describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
 import { createDb, readConfig } from '@/shared'
+import { required } from './support/npc'
 
 const enabled = process.env.RUN_POSTGRES_INTEGRATION === '1'
 describe.skipIf(!enabled)('Postgres persistence', () => {
@@ -51,8 +53,11 @@ describe.skipIf(!enabled)('Postgres persistence', () => {
     await Promise.all([interact('check'), interact('check')])
     const other = createApp(config, fetch, services)
     const { player } = await (await other.request('/me', { headers })).json()
-    expect(player.world.currency).toBe(80)
-    expect(player.world.completedQuestIds).toEqual(['hoa-herbs-delivery'])
+    expect(player.world.currency).toBe(
+      30 + rewardFor(required(seedsFor('hoa')[0])).currency
+    )
+    expect(player.world.completedQuestIds).toHaveLength(1)
+    expect(player.world.completedQuestIds[0]).toMatch(/^q_/)
     const count = await db.sql.query(
       'SELECT count(*)::int AS count FROM quest_completions WHERE player_id=$1',
       [player.id]

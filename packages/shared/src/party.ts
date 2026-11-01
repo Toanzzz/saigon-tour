@@ -6,22 +6,6 @@ export const PartySnapshotSchema = z.object({
   members: z
     .array(z.object({ id: z.uuid(), name: z.string(), color: z.string() }))
     .max(4),
-  quest: z
-    .object({
-      id: z.literal('hoa-team-lunch'),
-      assignments: z
-        .array(
-          z.object({
-            playerId: z.uuid(),
-            name: z.string(),
-            dish: DishSchema,
-            delivered: z.boolean(),
-          })
-        )
-        .max(4),
-      completed: z.boolean(),
-    })
-    .nullable(),
 })
 export type PartySnapshot = z.infer<typeof PartySnapshotSchema>
 export const PartyInviteSchema = z.object({

@@ -38,7 +38,7 @@ export function createRealtime(
 ) {
   const manager = new RoomManager(harness, now)
   const party = new PartyService(manager, db, now)
-  harness.game.team = party
+  harness.game.party = party
   WorldRoom.deps = {
     auth,
     db,

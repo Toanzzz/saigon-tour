@@ -1,7 +1,12 @@
-import { DEMO_QUEST } from '@saigon/shared'
+import { rewardFor, seedsFor } from '@saigon/shared'
+import { required } from './support/npc'
+
+const seed = required(seedsFor('hoa')[0])
+const reward = rewardFor(seed)
+
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
-import { GameService } from '@/domain/game'
+import { QuestService } from '@/domain/quests'
 import { GameDb, readConfig } from '@/shared'
 import { fixture } from './fixture'
 
@@ -18,7 +23,7 @@ const headers = (token: string) => ({ Authorization: `Bearer ${token}` })
 describe('durable guest progress', () => {
   it('advances save revisions across events, rewards, and reset', async () => {
     const { player } = await fx.guest()
-    const game = new GameService(fx.db)
+    const game = new QuestService(fx.db)
     expect(player.revision).toBe(0)
     const moved = await game.applyEvents(player.id, [
       { type: 'visit', locationId: 'park' },
@@ -111,7 +116,11 @@ describe('durable guest progress', () => {
   it('retains saved progress across app instances and resets the same guest', async () => {
     const { player, token } = await fx.guest()
     const first = createApp(config, fetch, fx)
-    await first.harness.game.offerQuest(player.id, 'hoa', DEMO_QUEST.id)
+    const offered = await first.harness.game.proposeQuest(
+      player.id,
+      'hoa',
+      seed
+    )
     await first.harness.memory.remember({
       npcId: 'hoa',
       playerId: player.id,
@@ -138,7 +147,7 @@ describe('durable guest progress', () => {
       player: {
         id: player.id,
         name: player.name,
-        quest: { id: DEMO_QUEST.id },
+        quests: [{ id: offered.accepted ? offered.quest.id : '' }],
         world: { inventory: { herbs: 1 } },
       },
     })
@@ -150,7 +159,7 @@ describe('durable guest progress', () => {
       player: {
         id: player.id,
         name: player.name,
-        quest: null,
+        quests: [],
         reputation: 0,
         completed: [],
         world: { currency: 30, inventory: {} },
@@ -165,19 +174,19 @@ describe('durable guest progress', () => {
 
   it('serializes concurrent reward checks and persists a single completion', async () => {
     const { player } = await fx.guest()
-    const game = new GameService(fx.db)
-    await game.offerQuest(player.id, 'hoa', DEMO_QUEST.id)
+    const game = new QuestService(fx.db)
+    await game.proposeQuest(player.id, 'hoa', seed)
     await game.applyEvents(player.id, [
       { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
     ])
     const checks = await Promise.all(
-      Array.from({ length: 12 }, () =>
-        game.checkQuest(player.id, 'hoa', DEMO_QUEST.id)
-      )
+      Array.from({ length: 12 }, () => game.checkQuests(player.id, 'hoa'))
     )
-    expect(checks.filter((result) => result.rewardGranted)).toHaveLength(1)
+    expect(
+      checks.flat().filter((result) => result.type === 'completed')
+    ).toHaveLength(1)
     expect(await game.get(player.id)).toMatchObject({
-      world: { currency: 80, inventory: { postcard: 1 } },
+      world: { currency: 30 + reward.currency, inventory: { postcard: 1 } },
       reputation: 1,
     })
     const completed = await fx.sql.query(

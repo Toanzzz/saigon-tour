@@ -1,5 +1,5 @@
 import {
-  applyPlayerEvents,
+  applyQuestEvents,
   type GuestPlayer,
   GuestPlayerSchema,
 } from '@saigon/shared'
@@ -33,7 +33,8 @@ export function guestState(player: Guest) {
     guestName: player.name,
     guestColor: player.color,
     world: player.world,
-    quest: player.quest,
+    quests: player.quests,
+    trackedQuestId: player.quests[0]?.id ?? null,
     completed: player.completed,
     reputation: player.reputation,
   }
@@ -130,7 +131,7 @@ export function initializeSession(): Promise<void> {
               ...state,
               ...guestState(player),
               ...identity,
-              world: applyPlayerEvents(player.world, state.pending),
+              ...applyQuestEvents(player.world, player.quests, state.pending),
               stop: player.world.locationId,
               position:
                 state.screen === 'title'

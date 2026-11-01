@@ -1,9 +1,9 @@
 import {
-  applyPlayerEvents,
+  advance,
+  applyQuestEvents,
   type InteractResponse,
   type ItemId,
   type NpcId,
-  TEAM_QUEST,
   type TimeOfDay,
 } from '@saigon/shared'
 import { interactWith, queryClient } from '@/shared/api/agent'
@@ -13,7 +13,7 @@ import { audio } from '@/shared/audio'
 import { type GameState, game, notify, update } from '@/shared/state/game'
 import { distance, PEOPLE } from '@/shared/world/places'
 
-export type Intent = 'chat' | 'help' | 'check' | 'greet' | 'team'
+export type Intent = 'chat' | 'help' | 'check' | 'greet'
 
 const timeOfDay = (hour = new Date().getHours()): TimeOfDay =>
   hour < 11
@@ -38,9 +38,15 @@ export function deliver(
       ...state.world,
       inventory: { ...state.world.inventory, [itemId]: held - 1 },
       deliveredItems: [
-        ...new Set([...state.world.deliveredItems, `${itemId}:${npc}`]),
+        ...new Set([
+          ...state.world.deliveredItems,
+          `${itemId}:${npc}` as const,
+        ]),
       ],
     },
+    quests: state.quests.map((quest) =>
+      advance(quest, { type: 'deliver', itemId, npcId: npc })
+    ),
     pending: [...state.pending, { type: 'deliver', itemId, npcId: npc }],
   }
 }
@@ -126,12 +132,11 @@ function apply(
   synced: boolean,
   partyVersion: number
 ) {
-  const event = result.questEvent
+  const events = result.questEvents
   if (synced && net.state.partyVersion === partyVersion)
     updateNet({ party: result.party })
   let offered = false
   let completed = false
-  const teamEvent = event?.quest.id === TEAM_QUEST.id
   game.setState((state) => {
     if (result.revision < state.serverRevision) {
       return state.dialogue?.requestId === requestId
@@ -141,34 +146,50 @@ function apply(
     let next: GameState = {
       ...state,
       serverRevision: synced ? result.revision : state.serverRevision,
-      world: applyPlayerEvents(result.world, state.pending),
-      quest: result.quest,
+      ...applyQuestEvents(result.world, result.quests, state.pending),
+      trackedQuestId: result.quests.some(
+        (quest) => quest.id === state.trackedQuestId
+      )
+        ? state.trackedQuestId
+        : (result.quests[0]?.id ?? null),
       source: result.source,
       lastLine: { ...state.lastLine, [npc]: result.reply },
     }
-    offered =
-      event?.type === 'offered' &&
-      !state.quest &&
-      !state.completed.some((quest) => quest.id === event.quest.id)
-    if (offered && event && !teamEvent) next.quest = event.quest
-    if (
-      event?.type === 'completed' &&
-      !state.completed.some((quest) => quest.id === event.quest.id)
-    ) {
+    offered = events.some(
+      (event) =>
+        event.type === 'offered' &&
+        !state.quests.some((quest) => quest.id === event.quest.id)
+    )
+    const rewards = events.filter(
+      (event) =>
+        event.type === 'completed' &&
+        !state.completed.some((quest) => quest.id === event.quest.id)
+    )
+    if (rewards.length) {
       completed = true
-      const rewarded = {
-        completed: [...state.completed, event.quest],
-        reputation: state.reputation + event.reward.reputation,
-      }
+      const event = rewards[rewards.length - 1]
       next = {
         ...next,
-        completed: rewarded.completed,
-        reward: event.reward.currency,
+        completed: [
+          ...state.completed,
+          ...rewards.map(({ quest, reward }) => ({
+            id: quest.id,
+            title: quest.title,
+            giverNpcId: quest.giverNpcId,
+            reward,
+            completedAt: Date.now(),
+          })),
+        ],
+        reward: rewards.reduce(
+          (total, entry) => total + entry.reward.currency,
+          0
+        ),
         rewardQuest: event.quest,
-        reputation: rewarded.reputation,
+        reputation:
+          state.reputation +
+          rewards.reduce((total, entry) => total + entry.reward.reputation, 0),
         panel: 'reward',
         dialogue: null,
-        quest: teamEvent ? result.quest : null,
         screen: 'playing',
       }
       return next
@@ -191,11 +212,7 @@ function apply(
   })
   if (offered) {
     audio.play('pickup')
-    notify(
-      teamEvent
-        ? 'Team dishes assigned. See your travel journal.'
-        : 'Fresh herbs tucked into your bag'
-    )
+    notify('An errand was added to your journal.')
   }
   if (completed) audio.play('reward')
 }

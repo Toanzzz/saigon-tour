@@ -7,20 +7,27 @@ import type { Group } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
 import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
+import { questTarget } from '@/shared/state/quests'
 import { Character } from '@/shared/world'
 import { PEOPLE } from '@/shared/world/places'
 import { Crowd } from './crowd'
 
 export function Neighbors() {
-  const quest = useSelector(game, (s) => s.quest)
-  const active =
-    quest?.objective.type === 'DELIVER'
-      ? quest.objective.npcId
-      : (quest?.giverNpcId ?? 'hoa')
+  const state = useSelector(game, (s) => s)
+  const active = questTarget(state)
   return (
     <>
       {(Object.keys(PEOPLE) as NpcId[]).map((id) => (
-        <Neighbor key={id} id={id} highlighted={id === active} />
+        <Neighbor
+          key={id}
+          id={id}
+          highlighted={
+            id === active || state.quests.some((q) => q.giverNpcId === id)
+          }
+          ready={state.quests.some(
+            (q) => q.giverNpcId === id && q.status === 'ready'
+          )}
+        />
       ))}
       <Crowd />
     </>
@@ -38,7 +45,15 @@ const WANDERERS: Partial<
   thao: { radiusX: 1.8, radiusZ: 2.2, phase: 2.7, speed: 0.22 },
 }
 
-function Neighbor({ id, highlighted }: { id: NpcId; highlighted: boolean }) {
+function Neighbor({
+  id,
+  highlighted,
+  ready,
+}: {
+  id: NpcId
+  highlighted: boolean
+  ready: boolean
+}) {
   const ref = useRef<Group>(null)
   const elapsed = useRef(WANDERERS[id]?.phase ?? 0)
   const wander = WANDERERS[id]
@@ -83,7 +98,7 @@ function Neighbor({ id, highlighted }: { id: NpcId; highlighted: boolean }) {
         {highlighted && (
           <div className="world-label active">
             <span className="quest-marker" aria-hidden="true">
-              <b>!</b>
+              <b>{ready ? '?' : '!'}</b>
             </span>
             <span className="name-tag">{NPCS[id].name}</span>
           </div>

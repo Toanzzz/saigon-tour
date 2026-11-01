@@ -1,4 +1,4 @@
-import { NPCS, SECRET_QUESTS } from '@saigon/shared'
+import { NPCS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import {
   acceptQuest,
@@ -8,7 +8,8 @@ import {
   interact,
   nearby,
 } from '@/app/actions'
-import { game } from '@/shared/state/game'
+import { game, trackedQuest } from '@/shared/state/game'
+import { dialogueQuests } from '@/shared/state/quests'
 import { MODES, PLACES } from '@/shared/world/places'
 import { XRWorldPanel } from '@/shared/xr'
 
@@ -23,17 +24,10 @@ export function XRGameHud() {
         (line) => `${line.role === 'user' ? 'You' : npc.name}: ${line.content}`
       )
     if (state.dialogue.thinking) lines.push(`${npc.name} is thinking…`)
-    const delivery =
-      state.quest?.objective.type === 'DELIVER' &&
-      state.quest.objective.npcId === state.dialogue.npc &&
-      (state.world.inventory[state.quest.objective.itemId] ?? 0) > 0
-    const secretQuest = Object.values(SECRET_QUESTS).find(
-      (quest) => quest.giverNpcId === state.dialogue?.npc
+    const { delivery, ready, canHelp } = dialogueQuests(
+      state,
+      state.dialogue.npc
     )
-    const canHearSecret =
-      secretQuest &&
-      !state.quest &&
-      !state.world.completedQuestIds.includes(secretQuest.id)
     return (
       <XRWorldPanel
         title={npc.name}
@@ -44,18 +38,33 @@ export function XRGameHud() {
           state.dialogue.thinking
             ? []
             : [
-                {
-                  id: delivery ? 'deliver' : 'quest',
-                  label: delivery
-                    ? 'Deliver herbs'
-                    : canHearSecret
-                      ? 'Hear secret quest'
-                      : state.dialogue.npc === 'hoa' && !state.quest
-                        ? 'Help Hoa'
-                        : 'Check progress',
-                  onClick:
-                    delivery || state.quest ? deliverOrVerify : acceptQuest,
-                },
+                ...(canHelp
+                  ? [
+                      {
+                        id: 'help',
+                        label: 'Any errands?',
+                        onClick: acceptQuest,
+                      },
+                    ]
+                  : []),
+                ...(delivery
+                  ? [
+                      {
+                        id: 'deliver',
+                        label: `Give ${delivery.itemId}`,
+                        onClick: deliverOrVerify,
+                      },
+                    ]
+                  : []),
+                ...(ready
+                  ? [
+                      {
+                        id: 'check',
+                        label: "I'm back",
+                        onClick: deliverOrVerify,
+                      },
+                    ]
+                  : []),
                 { id: 'close', label: 'Continue', onClick: close },
               ]
         }
@@ -86,7 +95,9 @@ export function XRGameHud() {
     return (
       <XRWorldPanel
         title="A little kindness goes far."
-        lines={['You earned a Sài Gòn postcard and 50 coins.']}
+        lines={[
+          `You earned ${state.reward} coins and ${state.rewardQuest?.reward.itemId ?? 'a neighbor’s thanks'}.`,
+        ]}
         buttons={[{ id: 'close', label: 'Continue', onClick: close }]}
       />
     )
@@ -118,7 +129,7 @@ export function XRGameHud() {
     <XRWorldPanel
       title="Sài Gòn"
       lines={[
-        state.quest?.description ??
+        trackedQuest(state)?.description ??
           'Explore the neighborhood and meet a neighbor.',
       ]}
     />

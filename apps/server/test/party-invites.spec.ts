@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { Recorder, setupParty } from './support/party'
 
 const ctx = setupParty()
-const { ask, guest, invite, join, position, snapshot, team } = ctx
+const { guest, invite, join, position, snapshot, team } = ctx
 
 describe('party invitations and membership', () => {
   it('requires the same room, connected peers, and at most eight units at invite and accept', async () => {
@@ -106,8 +106,7 @@ describe('party invitations and membership', () => {
         type: 'party',
         party: snapshot(first),
       })
-    await ask(first, 'hoa', 'team')
-    expect(snapshot(first)?.quest?.assignments).toHaveLength(2)
+    expect(snapshot(first)?.members).toHaveLength(2)
     first.socket.clear()
     second.socket.clear()
     const response = await ctx.app.request('/me/reset', {
@@ -125,21 +124,20 @@ describe('party invitations and membership', () => {
     await expect.poll(() => snapshot(second)).toBeNull()
     expect(ctx.app.realtime.manager.room(second.player.id)).toBeUndefined()
     expect(second.socket.closed).toBe(4003)
-    await expect.poll(() => snapshot(first)?.quest ?? null).toBeNull()
+    await expect.poll(() => snapshot(first)).toBeNull()
     expect(
       first.socket.messages.some(
-        (message) => message.type === 'party' && !message.party?.quest
+        (message) => message.type === 'party' && message.party === null
       )
     ).toBe(true)
   })
 
   it('retains a disconnected party for sixty seconds, restores its snapshot, and cancels on expiry', async () => {
     const [first, second] = await team()
-    await ask(first, 'hoa', 'team')
     ctx.app.realtime.manager.disconnect(second.player.id, second.socket)
     ctx.advance(59_999)
     ctx.app.realtime.manager.tick(ctx.now)
-    expect(snapshot(second)?.quest?.assignments).toHaveLength(2)
+    expect(snapshot(second)?.members).toHaveLength(2)
     const replacement = new Recorder()
     ctx.app.realtime.manager.connect(second.player, replacement)
     ctx.app.realtime.party.connected(second.player.id)

@@ -1,7 +1,13 @@
 import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import type { GuestPlayer, NpcId, Quest, WorldState } from '@saigon/shared'
+import type {
+  CompletedQuest,
+  GuestPlayer,
+  NpcId,
+  Quest,
+  WorldState,
+} from '@saigon/shared'
 import {
   GuestPlayerSchema,
   randomPlayerColor,
@@ -15,8 +21,8 @@ import * as schema from './schema'
 export interface PlayerSave {
   revision: number
   world: WorldState
-  quest: Quest | null
-  completed: Quest[]
+  quests: Quest[]
+  completed: CompletedQuest[]
   reputation: number
 }
 interface SqlClient {
@@ -40,7 +46,7 @@ const initial = (): PlayerSave => ({
     completedQuestIds: [],
     currency: STARTING_CURRENCY,
   },
-  quest: null,
+  quests: [],
   completed: [],
   reputation: 0,
 })
@@ -64,14 +70,14 @@ export class GameDb {
   async ensurePlayer(user: { id: string; name: string }) {
     const save = initial()
     await this.sql.query(
-      'INSERT INTO players(id,user_id,name,color,world,quest,completed,reputation) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (user_id) DO NOTHING',
+      'INSERT INTO players(id,user_id,name,color,world,quests,completed,reputation) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (user_id) DO NOTHING',
       [
         randomUUID(),
         user.id,
         user.name,
         randomPlayerColor(),
         JSON.stringify(save.world),
-        null,
+        '[]',
         '[]',
         0,
       ]
@@ -141,11 +147,11 @@ export class GameDb {
               [id, quest.id]
             )
           await client.query(
-            'UPDATE players SET world=$2,quest=$3,completed=$4,reputation=$5,revision=$6,seen_at=now() WHERE id=$1',
+            'UPDATE players SET world=$2,quests=$3,completed=$4,reputation=$5,revision=$6,seen_at=now() WHERE id=$1',
             [
               id,
               JSON.stringify(save.world),
-              JSON.stringify(save.quest),
+              JSON.stringify(save.quests),
               JSON.stringify(save.completed),
               save.reputation,
               save.revision,

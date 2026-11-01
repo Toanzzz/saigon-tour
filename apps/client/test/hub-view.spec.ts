@@ -1,152 +1,62 @@
-import { DEMO_QUEST, SECRET_QUESTS } from '@saigon/shared'
+import { advance } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
-import type { GameState } from '@/shared/state/game'
 import { grantQuest, grantReward, initialState } from '@/shared/state/game'
 import { greetingFor, hubView } from '@/widgets/hub'
+import { questFixture } from './quest-fixture'
 
 const now = new Date(2026, 9, 31, 15)
-const states = (view: ReturnType<typeof hubView>) =>
-  view.story.steps.map((step) => step.state)
-
-describe('city hub view', () => {
-  it('follows the story road through the herb delivery', () => {
-    const start = { ...initialState(), screen: 'playing' as const }
-    expect(states(hubView(start, now))).toEqual([
-      'now',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-    ])
-    const accepted = grantQuest(start, DEMO_QUEST)
-    expect(states(hubView(accepted, now))).toEqual([
-      'done',
-      'now',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-    ])
-    const delivered = {
-      ...accepted,
-      world: {
-        ...accepted.world,
-        locationId: 'park' as const,
-        visitedLocations: ['market' as const, 'park' as const],
-        deliveredItems: ['herbs:linh'],
-      },
-    }
-    expect(states(hubView(delivered, now))).toEqual([
-      'now',
-      'done',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-      'next',
-    ])
-    const complete = grantReward(
-      {
-        ...delivered,
-        world: {
-          ...delivered.world,
-          locationId: 'river',
-          visitedLocations: [
-            'market',
-            'park',
-            'cityhall',
-            'opera',
-            'cathedral',
-            'postoffice',
-            'alley',
-            'river',
-          ],
-        },
-      },
-      DEMO_QUEST
-    )
-    const view = hubView(complete, now)
-    expect(states(view)).toEqual([
-      'done',
-      'done',
-      'done',
-      'done',
-      'done',
-      'done',
-      'done',
-      'done',
-    ])
-    expect(view.story.done).toBe(true)
-    expect(view.coins).toBe(80)
+describe('city hub quest view', () => {
+  it('derives active title, step and reward from the tracked quest', () => {
+    const quest = questFixture()
+    const state = grantQuest(initialState(), quest)
+    const view = hubView(state, now)
+    expect(view.story.title).toBe(quest.title)
+    expect(view.lede).toContain(quest.title)
+    expect(view.story.coins).toBe(quest.reward.currency)
+    expect(view.story.steps.some((step) => step.state === 'now')).toBe(true)
+    expect(view.story.done).toBe(false)
   })
-  it('suggests the cheapest affordable ride toward the next goal', () => {
-    const accepted = grantQuest(initialState(), DEMO_QUEST)
-    expect(hubView(accepted, now).ride).toMatchObject({
+  it('offers the cheapest affordable ride toward the current step', () => {
+    const state = grantQuest(initialState(), questFixture())
+    expect(hubView(state, now).ride).toMatchObject({
       mode: 'cyclo',
       fare: 3,
       from: 'market',
       to: 'park',
     })
-    const broke = { ...accepted, world: { ...accepted.world, currency: 2 } }
-    expect(hubView(broke, now).ride).toBeNull()
+    expect(
+      hubView({ ...state, world: { ...state.world, currency: 2 } }, now).ride
+    ).toBeNull()
   })
-  it('keeps an active secret destination current after the city is explored', () => {
-    const state: GameState = {
-      ...initialState(),
-      screen: 'playing' as const,
+  it('keeps an uncompleted visit current after its location was explored', () => {
+    const quest = questFixture('vy')
+    const state = {
+      ...grantQuest(initialState(), quest),
       world: {
         ...initialState().world,
-        locationId: 'river' as const,
-        visitedLocations: [
-          'market',
-          'park',
-          'cityhall',
-          'opera',
-          'cathedral',
-          'postoffice',
-          'alley',
-          'river',
-        ],
+        visitedLocations: ['market' as const, 'alley' as const],
       },
-      quest: SECRET_QUESTS['cityhall-lanterns'],
     }
     const view = hubView(state, now)
-    expect(
-      view.story.steps.find((step) => step.title === 'Food alley')?.state
-    ).toBe('now')
+    expect(view.story.title).toBe(quest.title)
     expect(view.story.done).toBe(false)
+    expect(view.story.steps.some((step) => step.state === 'now')).toBe(true)
   })
-  it('tracks secret quests as available, active, and completed', () => {
-    const available = hubView(initialState(), now).story.secrets
-    expect(available.every((secret) => secret.state === 'next')).toBe(true)
-    const active = hubView(
-      grantQuest(initialState(), SECRET_QUESTS['postoffice-river-postcard']),
-      now
-    ).story.secrets
-    expect(
-      active.find((secret) => secret.id === 'postoffice-river-postcard')?.state
-    ).toBe('now')
-    const completed = hubView(
-      {
-        ...initialState(),
-        world: {
-          ...initialState().world,
-          completedQuestIds: ['opera-cathedral-note'],
-        },
-      },
-      now
-    ).story.secrets
-    expect(
-      completed.find((secret) => secret.id === 'opera-cathedral-note')?.state
-    ).toBe('done')
+  it('directs a ready errand back to its giver', () => {
+    const quest = advance(questFixture(), {
+      type: 'deliver',
+      itemId: 'herbs',
+      npcId: 'linh',
+    })
+    const state = {
+      ...grantQuest(initialState(), quest),
+      stop: 'park' as const,
+    }
+    expect(hubView(state, now).ride?.to).toBe('market')
+    const complete = grantReward(state, quest)
+    expect(hubView(complete, now).coins).toBe(30 + quest.reward.currency)
   })
-  it('shows the last neighbor and their latest line', () => {
+  it('shows the last neighbor and latest line', () => {
     const state = {
       ...initialState(),
       world: {

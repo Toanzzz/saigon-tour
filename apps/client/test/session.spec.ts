@@ -1,4 +1,7 @@
-import { DEMO_QUEST } from '@saigon/shared'
+import { completedFixture, questFixture } from './quest-fixture'
+
+const completed = completedFixture(questFixture())
+
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { initialState } from '@/shared/state/game'
 
@@ -8,8 +11,8 @@ const saved = {
   name: 'Emma Clarke',
   color: '#ddaa77',
   world: { ...initialState().world, currency: 80 },
-  quest: null,
-  completed: [DEMO_QUEST],
+  quests: [],
+  completed: [completed],
   reputation: 1,
 }
 let storage: Map<string, string>
@@ -39,6 +42,23 @@ const anonymous = { player: saved, account: { anonymous: true } }
 const urlOf = (call: unknown[]) => String(call[0])
 
 describe('auth sessions', () => {
+  it('replays quest progress observed while saved progress loads', async () => {
+    const session = await import('@/shared/api/session')
+    transport.saveToken('existing-token')
+    const quest = questFixture('vy')
+    fetchMock.mockImplementation(async (url: string) =>
+      url.endsWith('/auth/providers')
+        ? Response.json({ meta: false })
+        : Response.json({
+            player: { ...saved, quests: [quest] },
+            account: { anonymous: true },
+          })
+    )
+    update({ pending: [{ type: 'visit', locationId: 'alley' }] })
+    await session.initializeSession()
+    expect(game.state.world.locationId).toBe('alley')
+    expect(game.state.quests[0]?.status).toBe('ready')
+  })
   it('signs in anonymously and stores the session token for authorized requests', async () => {
     const session = await import('@/shared/api/session')
     fetchMock.mockImplementation(async (url: string) => {
@@ -88,7 +108,7 @@ describe('auth sessions', () => {
     )
     expect(game.state.serverRevision).toBe(7)
     expect(game.state.world.currency).toBe(75)
-    expect(game.state.completed).toEqual([DEMO_QUEST])
+    expect(game.state.completed).toEqual([completed])
     expect(game.state.guestName).toBe(saved.name)
     expect(game.state.account).toBe('meta')
     expect(game.state.returningGuest).toBe(true)

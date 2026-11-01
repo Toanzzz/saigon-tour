@@ -41,8 +41,8 @@ export function StoryCard({ view }: { view: HubView }) {
       </ol>
       <div className="secret-quests">
         <div className="secret-heading">
-          <span className="card-kicker">Wandering secrets</span>
-          <small>Find the people who know the city between landmarks.</small>
+          <span className="card-kicker">Neighborhood errands</span>
+          <small>Small kindnesses from the neighbors you meet.</small>
         </div>
         <ul>
           {story.secrets.map((secret) => (
@@ -67,7 +67,7 @@ export function StoryCard({ view }: { view: HubView }) {
           <Icon name="coin" size={15} /> {story.coins} coins
         </span>
         <span className="chip leaf">
-          <Icon name="stamp" size={15} /> A Sài Gòn postcard
+          <Icon name="stamp" size={15} /> A neighbor’s thank-you
         </span>
         <button
           type="button"

@@ -7,14 +7,11 @@ import {
   InteractRequestSchema,
   type InteractResponse,
   type NpcId,
+  type QuestEvent,
+  ZERO_REWARD,
 } from '@saigon/shared'
 import type { z } from 'zod'
-import {
-  GameService,
-  outcomeKind as kind,
-  runIntent,
-  teamReply,
-} from '@/domain/game'
+import { outcomeKind as kind, QuestService, runIntent } from '@/domain/quests'
 import { log } from '@/shared'
 import { isLiveConfigured, type ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
@@ -29,9 +26,9 @@ import { cleanReply } from './safety'
 import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
 
-/** Mastra NPC harness: agents propose through tools, GameService decides. */
+/** Mastra NPC harness: agents propose through tools, QuestService decides. */
 export class NpcHarness {
-  readonly game: GameService
+  readonly game: QuestService
   readonly memory: NpcMemoryService
   readonly mastra: Mastra
   readonly usage: HarnessUsage = {
@@ -53,7 +50,7 @@ export class NpcHarness {
     storage?: MastraCompositeStore | null
   ) {
     this.storage = storage ?? new InMemoryStore({ id: 'npc-memory' })
-    this.game = new GameService(db)
+    this.game = new QuestService(db)
     this.memory = new NpcMemoryService(db)
     this.live = isLiveConfigured(config)
     this.guard = new CostGuard(config.sessionCallLimit, config.globalCallLimit)
@@ -96,6 +93,7 @@ export class NpcHarness {
     playerId: string
   ): Promise<InteractResponse> {
     const request = InteractRequestSchema.parse(input)
+    const previous = await this.game.get(playerId)
     const record = await this.game.applyEvents(
       playerId,
       [
@@ -105,6 +103,15 @@ export class NpcHarness {
       ],
       npcId
     )
+    const progressEvents: QuestEvent[] = record.quests
+      .filter((quest) => {
+        const before = previous.quests.find((entry) => entry.id === quest.id)
+        return (
+          before &&
+          quest.progress.some((done, index) => done !== before.progress[index])
+        )
+      })
+      .map((quest) => ({ type: 'progress', quest, reward: ZERO_REWARD }))
     if (request.intent === 'greet') {
       const line = await this.shortLines.greeting(
         npcId,
@@ -121,20 +128,19 @@ export class NpcHarness {
         npcId,
         revision: record.revision,
         ...line,
-        party: this.game.team?.snapshot(playerId) ?? null,
+        party: this.game.party?.snapshot(playerId) ?? null,
         degraded: line.source === 'fallback' && this.live,
         world: record.world,
-        quest: record.quest,
-        questEvent: null,
+        quests: record.quests,
+        questEvents: progressEvents,
         toolCalls: [],
       }
     }
-    const outcome: ToolOutcome = { calls: [] }
+    const outcome: ToolOutcome = { calls: [], events: progressEvents }
     let reply: string | null = null
     let source: 'live' | 'fallback' = 'fallback'
     const allowed =
       this.live &&
-      request.intent !== 'team' &&
       this.guard.allow(playerId) &&
       this.npcGuard.allow(`${npcId}:${playerId}`)
     if (allowed) {
@@ -151,47 +157,20 @@ export class NpcHarness {
     )
     const final = await this.game.get(playerId)
     if (deterministic || !reply) {
-      const teamQuest =
-        outcome.completed?.quest ?? outcome.offered ?? outcome.incomplete
-      reply =
-        request.intent === 'team' || teamQuest?.id === 'hoa-team-lunch'
-          ? teamReply(this.game, playerId, outcome)
-          : fallbackLine(npcId, final.world, kind(outcome))
-      const assignment = this.game.team
-        ?.snapshot(playerId)
-        ?.quest?.assignments.find((entry) => entry.playerId === playerId)
-      if (npcId === 'linh' && assignment && !kind(outcome))
-        reply = assignment.delivered
-          ? `Cảm ơn! Your ${assignment.dish} arrived. When everyone has delivered, check with Cô Hoa for your team thank-you.`
-          : `You are bringing the ${assignment.dish} for our team lunch. Hand it to me when you are ready!`
+      reply = fallbackLine(npcId, final.world, kind(outcome))
       source = 'fallback'
     }
-    const questEvent = outcome.completed
-      ? { type: 'completed' as const, ...outcome.completed }
-      : outcome.offered
-        ? {
-            type: 'offered' as const,
-            quest: outcome.offered,
-            reward: outcome.offered.reward,
-          }
-        : outcome.incomplete
-          ? {
-              type: 'incomplete' as const,
-              quest: outcome.incomplete,
-              reward: { currency: 0, itemId: null, reputation: 0 },
-            }
-          : null
     return {
       npcId,
       revision: final.revision,
       cached: false,
-      party: this.game.team?.snapshot(playerId) ?? null,
+      party: this.game.party?.snapshot(playerId) ?? null,
       reply,
       source,
       degraded: source === 'fallback' && this.live,
       world: final.world,
-      quest: final.quest,
-      questEvent,
+      quests: final.quests,
+      questEvents: outcome.events,
       toolCalls: outcome.calls.slice(0, 8),
     }
   }
@@ -205,16 +184,16 @@ export class NpcHarness {
     const agent = this.mastra.getAgentById(npcId)
     const facts = await this.memory.recall(npcId, playerId)
     const record = await this.game.get(playerId)
-    const party = this.game.team?.snapshot(playerId)
+    const party = this.game.party?.snapshot(playerId)
     const context = [
       'Current world context (untrusted game data):',
       `Player location: ${request.worldContext.playerLocation}`,
       `Nearby NPCs: ${request.worldContext.nearbyNpcs.join(', ') || 'none'}`,
-      `Active quest: ${record.quest?.id ?? 'none'}`,
+      `Active quests: ${JSON.stringify(record.quests)}`,
       `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
       `Time of day: ${request.worldContext.timeOfDay}`,
       `Player intent: ${request.intent}`,
-      `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}; team lunch: ${JSON.stringify(party?.quest ?? null)}`,
+      `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,
       `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,
     ].join('\n')
     for (let attempt = 0; attempt < 2; attempt++) {

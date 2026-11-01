@@ -2,6 +2,16 @@
 
 QA captures referenced below live in `artifacts/`, which is local-only and gitignored.
 
+## Quest overhaul verification — November 1, 2026
+
+- Pass 1 root gates pass: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server: 87 passing tests and one Postgres integration test skipped; client: 61 passing tests.
+- Headless Playwright, deterministic offline seed flow, 1440×900 and 390×844: real `Any errands?` → `Give herbs` → `I'm back` controls offered a generated quest, advanced delivery, and granted its 25-coin reward once. No page errors or horizontal overflow. Local evidence: `artifacts/quest-overhaul/offline/quest-flow.json` and reward captures.
+- Live Muse Spark tool spike uses the actual shared discriminated-union schema and validator. A self-delivery proposal returned `self_delivery`; Muse corrected the recipient within three steps. Model `muse-spark-1.3-contributor`; three metered requests, 4,078 input / 372 output tokens, estimated $0.002783. Local evidence: `/tmp/saigon-quest-evidence/model-spike.json`.
+- Isolated live `NpcHarness` with PGlite: Muse authored “Help Linh with lunch”, a two-step visit/talk quest through `propose-quest`; accepted events made it ready, `check-quests` granted 40 coins, a postcard, and 2 reputation. Wallet 30 → 70; repeated check remained 70. Four metered requests, 9,581 input / 753 output tokens, estimated $0.0062965. Local evidence: `/tmp/saigon-quest-evidence/live-flow.json`. This proves actual harness/model behavior with isolated persistence.
+- Live browser Playwright passed at 1440×900 and 390×844: Muse authored distinct two-step visit/talk errands, real help/return controls advanced them and granted 40 coins (wallet 70), one completion, `source: live`, no page errors or overflow. Local evidence: `artifacts/quest-overhaul/live-browser/quest-flow.json` and reward captures.
+- Regression coverage includes migration of existing active/completed saves, concurrent offer cap and completion checks, repeated deliveries, full inventory purchase rejection, and pending-event quest progression through all four revision-fenced client apply paths.
+- PGlite fixture initialization timed out under unrestricted test workers during concurrent browser work. A one-variable run with two workers passed unchanged assertions and timeouts; server Vitest uses two workers.
+
 ## Current city completion (October 31, 2026)
 
 - Commits: `5925fd9` (NPC labels and live-guide layout), `b3b65c4` (wandering NPCs, secret quests, city-wide story trail), `872fd06` (landmark plaza and river promenade density), `8ca2b10` (hub completion edge case), `0c07a41` (clock-side cathedral entrance orientation), `f95e0a9` (destination story beats and offline quest parity), `31f8f32` (second density and transport-sign pass), `70927ac` (delivery marker target correction), `6032a76` (marker/name spacing), and `6b3f734` (hub portrait scoping).

@@ -53,9 +53,9 @@ export async function verifyCityLife({
       'conversation keeps the wallet unchanged'
     )
     assert.equal(
-      await page.getByRole('button', { name: 'Help Cô Hoa' }).count(),
-      0,
-      'new neighbor has conversation controls'
+      await page.getByRole('button', { name: 'Any errands?' }).count(),
+      1,
+      'every neighbor offers an errand'
     )
     await capture(`conversation-${id}`)
     conversations.push({

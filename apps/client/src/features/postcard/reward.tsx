@@ -5,7 +5,6 @@ import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 
 export function RewardPanel({ state }: { state: GameState }) {
-  const team = state.rewardQuest?.id === 'hoa-team-lunch'
   return (
     <Dialog
       title="A little kindness goes far."
@@ -16,9 +15,7 @@ export function RewardPanel({ state }: { state: GameState }) {
       <div
         className="postcard"
         role="img"
-        aria-label={
-          team ? 'Sài Gòn group photo earned' : 'Sài Gòn postcard earned'
-        }
+        aria-label={`${state.rewardQuest?.reward.itemId ?? 'Neighborhood keepsake'} earned`}
       >
         <span className="postcard-mark">Sài Gòn</span>
         <span>with love, from the neighborhood</span>
@@ -33,7 +30,8 @@ export function RewardPanel({ state }: { state: GameState }) {
         </span>
         <span>
           <Icon name="star" />
-          {team ? 'A group photo · +2 reputation' : 'A new friend'}
+          {state.rewardQuest?.reward.itemId ?? 'A new friend'} · +
+          {state.rewardQuest?.reward.reputation ?? 0} reputation
         </span>
       </div>
       <button type="button" className="primary-button wide" onClick={close}>

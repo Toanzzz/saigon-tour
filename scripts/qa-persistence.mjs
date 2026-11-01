@@ -1,75 +1,40 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
-import { createRequire } from 'node:module'
+import {
+  chromium,
+  completeQuest,
+  diagnostics,
+  executablePath,
+  openGame,
+} from './qa-quest-flow.mjs'
 
-const require = createRequire('/private/tmp/saigon-tour-qa/package.json')
-const { chromium } = require('playwright')
-const browser = await chromium.launch({
-  headless: true,
-  executablePath:
-    '/Users/toan/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing',
-})
+const browser = await chromium.launch({ headless: true, executablePath })
 const results = []
+const out = process.env.QA_OUTPUT || 'artifacts/quest-persistence'
+await mkdir(out, { recursive: true })
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({
-      viewport: { width, height: 900 },
+      viewport: { width, height: width === 390 ? 844 : 900 },
+      isMobile: width === 390,
+      hasTouch: width === 390,
     })
     const page = await context.newPage()
-    await page.bringToFront()
-    const errors = []
-    page.on('pageerror', (e) => errors.push(e.message))
-    await page.goto(process.env.GAME_URL || 'http://127.0.0.1:58003/?debug=1')
-    await page.waitForFunction(
-      () =>
-        JSON.parse(
-          localStorage.getItem('saigon-tour.query-cache') ?? 'null'
-        )?.clientState.queries.find(
-          (q) => q.queryKey.join('/') === 'session/token'
-        )?.state.data
-    )
-    const token = await page.evaluate(
-      () =>
-        JSON.parse(
-          localStorage.getItem('saigon-tour.query-cache') ?? 'null'
-        )?.clientState.queries.find(
-          (q) => q.queryKey.join('/') === 'session/token'
-        )?.state.data
-    )
-    const base = process.env.API_URL || 'http://127.0.0.1:58004'
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    }
-    const before = (await (await fetch(`${base}/me`, { headers })).json())
-      .player
-    const post = (intent, events = []) =>
-      fetch(`${base}/npc/hoa/interact`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          intent,
-          message: intent,
-          events,
-          worldContext: { playerLocation: 'market', timeOfDay: 'morning' },
-        }),
-      })
-    await post('help')
-    await post('chat', [{ type: 'deliver', itemId: 'herbs', npcId: 'linh' }])
-    await post('check')
+    await openGame(page)
+    const { rewarded } = await completeQuest(page)
+    const guestName = rewarded.network.guestName
     await page.reload()
-    await page.getByText(`Welcome back, ${before.name}`).waitFor()
-    await page.waitForFunction(
-      () => window.__THREE_GAME_DIAGNOSTICS__?.state.frame > 30
-    )
+    await page.getByText(`Welcome back, ${guestName}`).waitFor()
     await page
       .getByRole('button', { name: 'Start exploring', exact: true })
       .click()
-    await page
-      .getByRole('button', { name: 'Pause game', exact: true })
-      .waitFor()
     await page.waitForFunction(
-      () => window.__THREE_GAME_DIAGNOSTICS__?.state.currency === 80
+      (coins) => window.__THREE_GAME_DIAGNOSTICS__?.state.currency === coins,
+      rewarded.state.currency
+    )
+    assert.equal(
+      (await diagnostics(page)).state.completed,
+      rewarded.state.completed
     )
     await page.getByRole('button', { name: 'Pause game', exact: true }).click()
     await page
@@ -78,28 +43,14 @@ try {
     await page.waitForFunction(
       () => window.__THREE_GAME_DIAGNOSTICS__?.state.currency === 30
     )
-    const after = (await (await fetch(`${base}/me`, { headers })).json()).player
-    assert.equal(after.name, before.name)
-    assert.equal(after.world.currency, 30)
-    assert.equal(
-      await page.evaluate(() => document.body.scrollWidth > innerWidth),
-      false
-    )
-    assert.deepEqual(errors, [])
-    results.push({
-      width,
-      guestName: after.name,
-      reloadCurrency: 80,
-      resetCurrency: 30,
-      errors,
-    })
+    const reset = await diagnostics(page)
+    assert.equal(reset.network.guestName, guestName)
+    assert.equal(reset.state.completed, 0)
+    assert.deepEqual(reset.state.quests, [])
+    results.push({ width, rewarded, reset })
     await context.close()
   }
-  await mkdir('artifacts/pass-persistence', { recursive: true })
-  await writeFile(
-    'artifacts/pass-persistence/session-flow.json',
-    JSON.stringify(results, null, 2)
-  )
+  await writeFile(`${out}/flow.json`, JSON.stringify(results, null, 2))
 } finally {
   await browser.close()
 }

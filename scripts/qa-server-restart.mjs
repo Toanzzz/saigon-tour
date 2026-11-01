@@ -1,55 +1,31 @@
 import assert from 'node:assert/strict'
-import { execFileSync } from 'node:child_process'
-import { writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 
-const base = process.env.API_URL || 'http://127.0.0.1:58005'
-const identity = await (await fetch(`${base}/guest`, { method: 'POST' })).json()
-const headers = {
-  Authorization: `Bearer ${identity.token}`,
-  'Content-Type': 'application/json',
-}
-async function turn(intent, events = []) {
-  const response = await fetch(`${base}/npc/hoa/interact`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      message: intent,
-      intent,
-      events,
-      worldContext: { playerLocation: 'market', timeOfDay: 'afternoon' },
-    }),
-  })
-  assert.equal(response.status, 200)
-}
-await turn('help')
-await turn('chat', [{ type: 'deliver', itemId: 'herbs', npcId: 'linh' }])
-await turn('check')
-execFileSync('docker', ['compose', 'restart', 'api'], { stdio: 'pipe' })
-let player
-for (let attempt = 0; attempt < 30; attempt++) {
-  try {
-    const response = await fetch(`${base}/me`, { headers })
-    if (response.ok) {
-      player = (await response.json()).player
-      break
-    }
-  } catch {}
-  await new Promise((resolve) => setTimeout(resolve, 500))
-}
-assert.equal(player?.id, identity.player.id)
-assert.equal(player?.name, identity.player.name)
-assert.equal(player?.world.currency, 80)
-await writeFile(
-  'artifacts/pass-persistence/server-restart.json',
-  JSON.stringify(
-    {
-      id: player.id,
-      name: player.name,
-      currency: player.world.currency,
-      completedQuestIds: player.world.completedQuestIds,
-      dockerRestart: true,
-    },
-    null,
-    2
+// Capture before a user-managed restart, then verify without restarting the server here.
+const base = process.env.API_URL || 'http://127.0.0.1:58001'
+const token = process.env.QA_SESSION_TOKEN
+assert(token, 'QA_SESSION_TOKEN must identify the saved journey')
+const out = process.env.QA_OUTPUT || 'artifacts/quest-persistence'
+const checkpoint = `${out}/restart-checkpoint.json`
+const response = await fetch(`${base}/me`, {
+  headers: { Authorization: `Bearer ${token}` },
+})
+assert.equal(response.status, 200)
+const { player } = await response.json()
+await mkdir(out, { recursive: true })
+if (process.env.QA_RESTART_PHASE === 'capture') {
+  assert(player.completed.length > 0, 'complete a generic quest before capture')
+  await writeFile(checkpoint, JSON.stringify(player, null, 2))
+} else {
+  const before = JSON.parse(await readFile(checkpoint, 'utf8'))
+  assert.equal(player.id, before.id)
+  assert.equal(player.name, before.name)
+  assert.deepEqual(player.world, before.world)
+  assert.deepEqual(player.quests, before.quests)
+  assert.deepEqual(player.completed, before.completed)
+  assert.equal(player.reputation, before.reputation)
+  await writeFile(
+    `${out}/server-restart.json`,
+    JSON.stringify({ player, userManagedRestart: true }, null, 2)
   )
-)
+}

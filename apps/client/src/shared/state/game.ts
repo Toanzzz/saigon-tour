@@ -1,5 +1,7 @@
 import {
   type AgentSource,
+  advance,
+  type CompletedQuest,
   type NpcId,
   type PlayerEvent,
   type Quest,
@@ -48,8 +50,9 @@ export interface GameState {
   generation: number
   position: Point
   world: WorldState
-  quest: Quest | null
-  completed: Quest[]
+  quests: Quest[]
+  trackedQuestId: string | null
+  completed: CompletedQuest[]
   dialogue: Dialogue | null
   lastLine: Partial<Record<NpcId, string>>
   hubShown: boolean
@@ -92,7 +95,8 @@ export function initialState(generation = 0): GameState {
       completedQuestIds: [],
       currency: STARTING_CURRENCY,
     },
-    quest: null,
+    quests: [],
+    trackedQuestId: null,
     completed: [],
     dialogue: null,
     lastLine: {},
@@ -121,36 +125,61 @@ export function notify(toast: string) {
   update({ toast })
   toastTimer = setTimeout(() => update({ toast: '' }), 4500)
 }
+export function trackedQuest(state: GameState): Quest | null {
+  return (
+    state.quests.find((quest) => quest.id === state.trackedQuestId) ??
+    state.quests[0] ??
+    null
+  )
+}
+export function advanceQuests(quests: Quest[], events: PlayerEvent[]) {
+  return quests.map((quest) => events.reduce(advance, quest))
+}
 export function grantQuest(state: GameState, quest: Quest): GameState {
-  if (state.quest || state.world.completedQuestIds.includes(quest.id))
+  if (
+    state.quests.length >= 3 ||
+    state.quests.some((entry) => entry.id === quest.id) ||
+    state.world.completedQuestIds.includes(quest.id)
+  )
     return state
-  const item =
-    quest.objective.type === 'DELIVER' ? quest.objective.itemId : null
+  const inventory = { ...state.world.inventory }
+  for (const step of quest.steps) {
+    if (step.type === 'DELIVER')
+      inventory[step.itemId] = Math.min(100, (inventory[step.itemId] ?? 0) + 1)
+  }
   return {
     ...state,
-    quest,
-    world: {
-      ...state.world,
-      inventory: item
-        ? {
-            ...state.world.inventory,
-            [item]: (state.world.inventory[item] ?? 0) + 1,
-          }
-        : state.world.inventory,
-    },
+    quests: [...state.quests, quest],
+    trackedQuestId: state.trackedQuestId ?? quest.id,
+    world: { ...state.world, inventory },
   }
 }
 export function grantReward(state: GameState, quest: Quest): GameState {
   if (
-    !state.quest ||
-    state.quest.id !== quest.id ||
+    !state.quests.some(
+      (entry) => entry.id === quest.id && entry.status === 'ready'
+    ) ||
     state.world.completedQuestIds.includes(quest.id)
   )
     return state
+  const quests = state.quests.filter((entry) => entry.id !== quest.id)
   return {
     ...state,
-    quest: null,
-    completed: [...state.completed, quest],
+    quests,
+    trackedQuestId:
+      state.trackedQuestId === quest.id
+        ? (quests[0]?.id ?? null)
+        : state.trackedQuestId,
+    completed: [
+      ...state.completed,
+      {
+        id: quest.id,
+        title: quest.title,
+        giverNpcId: quest.giverNpcId,
+        reward: quest.reward,
+        completedAt: Date.now(),
+      },
+    ],
     reward: quest.reward.currency,
     rewardQuest: quest,
     reputation: state.reputation + quest.reward.reputation,
@@ -158,13 +187,17 @@ export function grantReward(state: GameState, quest: Quest): GameState {
     dialogue: null,
     world: {
       ...state.world,
-      currency: state.world.currency + quest.reward.currency,
-      completedQuestIds: [...state.world.completedQuestIds, quest.id],
+      currency: Math.min(100000, state.world.currency + quest.reward.currency),
+      completedQuestIds: [...state.world.completedQuestIds, quest.id].slice(
+        -32
+      ),
       inventory: quest.reward.itemId
         ? {
             ...state.world.inventory,
-            [quest.reward.itemId]:
-              (state.world.inventory[quest.reward.itemId] ?? 0) + 1,
+            [quest.reward.itemId]: Math.min(
+              100,
+              (state.world.inventory[quest.reward.itemId] ?? 0) + 1
+            ),
           }
         : state.world.inventory,
     },
@@ -186,6 +219,7 @@ export function visit(
         ? state.world.visitedLocations
         : [...state.world.visitedLocations, place],
     },
+    quests: advanceQuests(state.quests, [{ type: 'visit', locationId: place }]),
     pending: [...state.pending, { type: 'visit', locationId: place }],
   }
 }

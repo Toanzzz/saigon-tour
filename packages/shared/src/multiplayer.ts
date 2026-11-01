@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import {
+  CompletedQuestSchema,
   NpcIdSchema,
   PlayerEventSchema,
   QuestSchema,
@@ -93,8 +94,8 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     revision: z.number().int().min(0).default(0),
     sequence: z.number().int().min(0),
     world: WorldStateSchema,
-    quest: QuestSchema.nullable(),
-    completed: z.array(QuestSchema),
+    quests: z.array(QuestSchema).max(3),
+    completed: z.array(CompletedQuestSchema),
     reputation: z.number(),
   }),
   z.object({ type: z.literal('error'), message: z.string() }),
@@ -104,8 +105,9 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     type: z.literal('quest-completed'),
     revision: z.number().int().min(0).default(0),
     quest: QuestSchema,
+    quests: z.array(QuestSchema).max(3),
     world: WorldStateSchema,
-    completed: z.array(QuestSchema),
+    completed: z.array(CompletedQuestSchema),
     reputation: z.number(),
   }),
 ])

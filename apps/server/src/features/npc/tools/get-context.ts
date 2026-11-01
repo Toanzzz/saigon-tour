@@ -1,39 +1,38 @@
 import { createTool } from '@mastra/core/tools'
+import { QuestSchema } from '@saigon/shared'
 import { z } from 'zod'
 import { type NpcServices, requestValues } from './context'
 
-export const createGetWorldContextTool = ({ game }: NpcServices) =>
+export const createGetContextTool = ({ game }: NpcServices) =>
   createTool({
-    id: 'get-world-context',
+    id: 'get-context',
     description:
-      "Read the player's public game state: coins, places visited, neighbors met, and active errand.",
+      'Read player coins, places visited, active errands, completed errands and party members.',
     inputSchema: z.object({}),
     outputSchema: z.object({
       coins: z.number(),
       visited: z.array(z.string()),
       metNeighbors: z.array(z.string()),
-      activeQuest: z.string().nullable(),
+      quests: z.array(QuestSchema),
       completedQuests: z.number(),
       reputation: z.number(),
-      partySize: z.number(),
       partyMembers: z.array(z.string()),
-      teamQuest: z.string().nullable(),
     }),
     execute: async (_input, context) => {
       const { playerId, outcome } = requestValues(context)
-      outcome.calls.push('get-world-context')
+      outcome.calls.push('get-context')
       const record = await game.get(playerId)
-      const party = game.team?.snapshot(playerId)
       return {
         coins: record.world.currency,
         visited: record.world.visitedLocations,
         metNeighbors: record.world.talkedTo,
-        activeQuest: record.quest?.title ?? null,
+        quests: record.quests,
         completedQuests: record.completed.length,
         reputation: record.reputation,
-        partySize: party?.members.length ?? 0,
-        partyMembers: party?.members.map((member) => member.name) ?? [],
-        teamQuest: party?.quest?.id ?? null,
+        partyMembers:
+          game.party
+            ?.snapshot(playerId)
+            ?.members.map((member) => member.name) ?? [],
       }
     },
   })

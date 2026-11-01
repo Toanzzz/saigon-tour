@@ -6,10 +6,8 @@ import type {
 } from '@saigon/shared'
 import type { GameDb } from '@/shared/db'
 import type { PartyRooms } from './rooms'
-import { TeamErrand } from './team'
 
 export type { PartyRooms } from './rooms'
-export { TeamErrand } from './team'
 
 type Invite = PartyInvite & { targetId: string; partyId: string | null }
 
@@ -18,14 +16,12 @@ export class PartyService {
   readonly invites = new Map<string, Invite>()
   private memberships = new Map<string, string>()
   private queue: Promise<unknown> = Promise.resolve()
-  private readonly team: TeamErrand
 
   constructor(
     readonly rooms: PartyRooms,
-    db: GameDb,
+    _db: GameDb,
     private readonly now = Date.now
   ) {
-    this.team = new TeamErrand(this, db)
     rooms.onTick((time) => this.tick(time))
     rooms.onLeave((id) => {
       void this.leave(id).catch(() => {
@@ -97,7 +93,6 @@ export class PartyService {
         party = {
           id: randomUUID(),
           members: [{ id: from.id, name: from.name, color: from.color }],
-          quest: null,
         }
         this.parties.set(party.id, party)
         this.memberships.set(from.id, party.id)
@@ -122,12 +117,6 @@ export class PartyService {
       this.rooms.send(playerId, { type: 'party', party: null })
       if (!party) return
       party.members = party.members.filter((member) => member.id !== playerId)
-      if (party.quest) {
-        party.quest.assignments = party.quest.assignments.filter(
-          (assignment) => assignment.playerId !== playerId
-        )
-        if (party.quest.assignments.length < 2) party.quest = null
-      }
       if (party.members.length < 2) {
         for (const member of party.members) {
           this.memberships.delete(member.id)
@@ -171,18 +160,6 @@ export class PartyService {
         type: 'party',
         party: structuredClone(party),
       })
-  }
-
-  offerQuest(...args: Parameters<TeamErrand['offerQuest']>) {
-    return this.serialize(() => this.team.offerQuest(...args))
-  }
-
-  checkQuest(...args: Parameters<TeamErrand['checkQuest']>) {
-    return this.serialize(() => this.team.checkQuest(...args))
-  }
-
-  deliver(...args: Parameters<TeamErrand['deliver']>) {
-    return this.serialize(() => this.team.deliver(...args))
   }
 
   private validateInvite(fromId: string, targetId: string) {

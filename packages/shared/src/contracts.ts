@@ -1,87 +1,20 @@
 import { z } from 'zod'
+import {
+  ItemIdSchema,
+  LocationIdSchema,
+  MarketItemIdSchema,
+  NpcIdSchema,
+  SourceSchema,
+} from './entities'
 import { PartySnapshotSchema } from './party'
+import {
+  CompletedQuestSchema,
+  QuestEventSchema,
+  QuestSchema,
+} from './quest/schema'
 
-export const NpcIdSchema = z.enum([
-  'hoa',
-  'tam',
-  'linh',
-  'ba',
-  'mai',
-  'alex',
-  'vy',
-  'son',
-  'thao',
-])
-export type NpcId = z.infer<typeof NpcIdSchema>
-export const LocationIdSchema = z.enum([
-  'market',
-  'park',
-  'cathedral',
-  'cityhall',
-  'river',
-  'opera',
-  'postoffice',
-  'alley',
-])
-export type LocationId = z.infer<typeof LocationIdSchema>
-export const ItemIdSchema = z.enum([
-  'herbs',
-  'postcard',
-  'photo',
-  'noodles',
-  'broth',
-  'baguette',
-  'coffee',
-  'banana',
-])
-export type ItemId = z.infer<typeof ItemIdSchema>
-export const MarketItemIdSchema = z.enum(['coffee', 'banana'])
-export type MarketItemId = z.infer<typeof MarketItemIdSchema>
-export const MARKET_ITEMS = {
-  coffee: { label: 'Cà phê sữa', price: 3 },
-  banana: { label: 'Chuối chín', price: 2 },
-} as const satisfies Record<MarketItemId, { label: string; price: number }>
-export const SourceSchema = z.enum(['live', 'fallback'])
-export type AgentSource = z.infer<typeof SourceSchema>
-
-export const RewardSchema = z
-  .object({
-    currency: z.number().int().min(0).max(100),
-    itemId: ItemIdSchema.nullable(),
-    reputation: z.number().int().min(0).max(5),
-  })
-  .strict()
-export type Reward = z.infer<typeof RewardSchema>
-
-export const ObjectiveSchema = z.discriminatedUnion('type', [
-  z.object({ type: z.literal('GO_TO'), locationId: LocationIdSchema }).strict(),
-  z.object({ type: z.literal('TALK_TO'), npcId: NpcIdSchema }).strict(),
-  z
-    .object({
-      type: z.literal('COLLECT'),
-      itemId: ItemIdSchema,
-      count: z.number().int().min(1).max(3),
-    })
-    .strict(),
-  z
-    .object({
-      type: z.literal('DELIVER'),
-      itemId: ItemIdSchema,
-      npcId: NpcIdSchema,
-    })
-    .strict(),
-])
-export const QuestSchema = z
-  .object({
-    id: z.string().regex(/^[a-z0-9_-]{1,64}$/),
-    title: z.string().min(1).max(80),
-    description: z.string().min(1).max(360),
-    objective: ObjectiveSchema,
-    reward: RewardSchema,
-    giverNpcId: NpcIdSchema,
-  })
-  .strict()
-export type Quest = z.infer<typeof QuestSchema>
+export * from './entities'
+export * from './quest/schema'
 
 export const WorldStateSchema = z
   .object({
@@ -90,13 +23,7 @@ export const WorldStateSchema = z
     visitedLocations: z.array(LocationIdSchema).max(16),
     talkedTo: z.array(NpcIdSchema).max(32),
     deliveredItems: z
-      .array(
-        z
-          .string()
-          .regex(
-            /^(herbs|postcard|photo|noodles|broth|baguette|coffee):(hoa|tam|linh|ba|mai|alex|vy|son|thao)$/
-          )
-      )
+      .array(z.templateLiteral([ItemIdSchema, ':', NpcIdSchema]))
       .max(32),
     completedQuestIds: z.array(z.string().max(64)).max(32),
     currency: z.number().int().min(0).max(100000),
@@ -139,7 +66,7 @@ export type PlayerEvent = z.infer<typeof PlayerEventSchema>
 export const InteractRequestSchema = z
   .object({
     message: z.string().trim().min(1).max(500),
-    intent: z.enum(['chat', 'help', 'check', 'greet', 'team']).default('chat'),
+    intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
       .object({
@@ -151,7 +78,12 @@ export const InteractRequestSchema = z
   })
   .strict()
 export type InteractRequest = z.infer<typeof InteractRequestSchema>
-export const QuestOutcomeSchema = z.enum(['offered', 'completed', 'incomplete'])
+export const QuestOutcomeSchema = z.enum([
+  'offered',
+  'progress',
+  'completed',
+  'incomplete',
+])
 export const InteractResponseSchema = z
   .object({
     revision: z.number().int().min(0).default(0),
@@ -162,15 +94,8 @@ export const InteractResponseSchema = z
     source: SourceSchema,
     degraded: z.boolean(),
     world: WorldStateSchema,
-    quest: QuestSchema.nullable(),
-    questEvent: z
-      .object({
-        type: QuestOutcomeSchema,
-        quest: QuestSchema,
-        reward: RewardSchema,
-      })
-      .strict()
-      .nullable(),
+    quests: z.array(QuestSchema).max(3),
+    questEvents: z.array(QuestEventSchema).max(16),
     toolCalls: z.array(z.string().max(40)).max(8),
   })
   .strict()
@@ -182,8 +107,8 @@ export const GuestPlayerSchema = z.object({
   name: z.string(),
   color: z.string(),
   world: WorldStateSchema,
-  quest: QuestSchema.nullable(),
-  completed: z.array(QuestSchema),
+  quests: z.array(QuestSchema).max(3),
+  completed: z.array(CompletedQuestSchema),
   reputation: z.number(),
 })
 export type GuestPlayer = z.infer<typeof GuestPlayerSchema>

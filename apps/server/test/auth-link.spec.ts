@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { GameService } from '@/domain/game'
+import { QuestService } from '@/domain/quests'
 import { linkGuestSave } from '@/features/auth'
 import { fixture } from './fixture'
 
@@ -23,7 +23,7 @@ async function metaUser(name: string) {
 describe('anonymous to Meta account linking', () => {
   it('moves the guest save onto a new Meta account', async () => {
     const guest = await fx.guest()
-    await new GameService(fx.db).applyEvents(guest.player.id, [
+    await new QuestService(fx.db).applyEvents(guest.player.id, [
       { type: 'visit', locationId: 'park' },
     ])
     const account = await metaUser('Lan')
@@ -44,7 +44,7 @@ describe('anonymous to Meta account linking', () => {
   it('keeps the existing Meta save and drops the guest journey', async () => {
     const account = await metaUser('Bảo')
     const saved = await fx.db.ensurePlayer(account)
-    await new GameService(fx.db).applyEvents(saved.id, [
+    await new QuestService(fx.db).applyEvents(saved.id, [
       { type: 'visit', locationId: 'river' },
     ])
     const guest = await fx.guest()

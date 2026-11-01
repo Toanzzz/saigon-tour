@@ -120,7 +120,7 @@ export function setupParty() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: 'Help with the team lunch',
+          message: 'Can I help with an errand?',
           intent,
           events,
           worldContext: {
@@ -142,19 +142,6 @@ export function setupParty() {
         members.push(member)
       }
       return members
-    },
-    async deliverAll(members: Guest[]) {
-      const assignments = required(
-        context.snapshot(required(members[0]))?.quest
-      ).assignments
-      for (const member of members) {
-        const assignment = required(
-          assignments.find((a) => a.playerId === member.player.id)
-        )
-        await context.ask(member, 'linh', 'chat', [
-          { type: 'deliver', npcId: 'linh', itemId: assignment.dish },
-        ])
-      }
     },
   }
   return context

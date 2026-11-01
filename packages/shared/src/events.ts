@@ -24,16 +24,19 @@ export function applyPlayerEvents(
       world.currency = Math.max(0, world.currency - event.amount)
     } else if (event.type === 'purchase') {
       const item = MARKET_ITEMS[event.itemId]
-      if (world.currency >= item.price) {
+      if (
+        world.currency >= item.price &&
+        (world.inventory[event.itemId] ?? 0) < 100
+      ) {
         world.currency -= item.price
         world.inventory[event.itemId] = (world.inventory[event.itemId] ?? 0) + 1
       }
     } else {
       const held = world.inventory[event.itemId] ?? 0
-      const key = `${event.itemId}:${event.npcId}`
-      if (held > 0 && !world.deliveredItems.includes(key)) {
+      const key = `${event.itemId}:${event.npcId}` as const
+      if (held > 0) {
         world.inventory[event.itemId] = held - 1
-        world.deliveredItems.push(key)
+        if (!world.deliveredItems.includes(key)) world.deliveredItems.push(key)
       }
     }
   }
