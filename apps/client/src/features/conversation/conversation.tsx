@@ -1,10 +1,11 @@
 import { NPCS } from '@saigon/shared'
 import { type SubmitEvent, useEffect, useRef, useState } from 'react'
-import { acceptQuest, chat, close, deliverOrVerify } from '@/app/actions'
+import { chat, close } from '@/app/actions'
 import type { GameState } from '@/shared/state/game'
-import { dialogueQuests } from '@/shared/state/quests'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
+import { PLACES } from '@/shared/world/places'
+import { NpcErrands } from './errands'
 
 const messageKeys = new WeakMap<object, string>()
 let nextMessageKey = 0
@@ -29,7 +30,6 @@ export function Conversation({ state }: { state: GameState }) {
   }, [historyLength, thinking])
   if (!dialog) return null
   const npc = NPCS[dialog.npc]
-  const { delivery, ready, canHelp } = dialogueQuests(state, dialog.npc)
   async function send(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!text.trim() || dialog?.thinking) return
@@ -40,13 +40,14 @@ export function Conversation({ state }: { state: GameState }) {
   return (
     <Dialog
       title={npc.name}
-      eyebrow={npc.role}
+      eyebrow={`${npc.role} · ${PLACES[npc.location].name}`}
       onClose={close}
       className="conversation"
     >
       <div className={`portrait portrait-${dialog.npc}`} aria-hidden="true">
         <span>{npc.name.split(' ').at(-1)?.slice(0, 1)}</span>
       </div>
+      {!dialog.thinking && <NpcErrands state={state} npc={dialog.npc} />}
       <div
         className="conversation-history"
         ref={historyRef}
@@ -56,9 +57,7 @@ export function Conversation({ state }: { state: GameState }) {
       >
         {dialog.history.map((line) => (
           <p className={`speech ${line.role}`} key={messageKey(line)}>
-            <span className="speaker">
-              {line.role === 'user' ? 'You' : npc.name}
-            </span>
+            {line.role === 'user' && <span className="speaker">You</span>}
             {line.content}
           </p>
         ))}
@@ -69,39 +68,6 @@ export function Conversation({ state }: { state: GameState }) {
           </p>
         )}
       </div>
-      {!dialog.thinking && (
-        <div className="conversation-actions">
-          {canHelp && (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => void acceptQuest()}
-            >
-              <Icon name="leaf" />
-              Any errands?
-            </button>
-          )}
-          {delivery && (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => void deliverOrVerify()}
-            >
-              Give {delivery.itemId}
-            </button>
-          )}
-          {ready && (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={() => void deliverOrVerify()}
-            >
-              <Icon name="check" />
-              I'm back
-            </button>
-          )}
-        </div>
-      )}
       <form
         className="conversation-input"
         onSubmit={(event) => {
@@ -130,12 +96,17 @@ export function Conversation({ state }: { state: GameState }) {
         </button>
       </form>
       <div className="conversation-footer">
-        <span className={`source-label ${dialog.source ?? ''}`}>
-          {dialog.source === 'live'
-            ? 'Live NPC conversation'
-            : dialog.source === 'fallback'
-              ? 'Offline conversation'
-              : 'Connecting with your neighbor…'}
+        <span
+          className={`source-label ${dialog.source ?? ''}`}
+          title={
+            dialog.source === 'live'
+              ? 'Live NPC conversation'
+              : dialog.source === 'fallback'
+                ? 'Offline conversation'
+                : 'Connecting with your neighbor…'
+          }
+        >
+          {dialog.source === 'fallback' && 'Offline conversation'}
         </span>
         <button type="button" className="text-button" onClick={close}>
           Continue exploring

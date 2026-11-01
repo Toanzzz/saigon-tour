@@ -2,6 +2,16 @@
 
 QA captures referenced below live in `artifacts/`, which is local-only and gitignored.
 
+## NPC dialog clarity — November 1, 2026
+
+- Errands strip added between the conversation header and history. `dialogueQuests` now returns `fromNpc`/`forNpc`/`ready`/`delivery`/`canHelp`/`full`; the journal and dialog share one source.
+- NPC lines render as left-aligned bubbles mirroring the player bubble; the NPC speaker label is dropped (header names them), eyebrow shows `role · location`, and per-NPC portrait colors were added.
+- Footer source-label shows text only in the offline/fallback state; a dot with a tooltip otherwise.
+- Gates pass: `bun run check` (only unrelated `plan/*.md` markdown-format findings remain), `bun run check:types`, `bun run build`, `bun run test` (server 114 passing/2 skipped, client 88 passing including 6 new `dialogueQuests` cases: none/from/for/ready/delivery/full).
+- Headless Playwright (dev server user-started, run unsandboxed), desktop 1440×900 and mobile 390×844:
+  - Offline full quest cycle via new copy: "Ask for an errand" → "Give fresh herbs" → "Turn in" granted the 25-coin reward once; currency 55, 1 completed; no page errors or horizontal overflow. Evidence: `artifacts/npc-dialog-clarity/quest-flow.json`.
+  - Errands-strip states asserted: 0 quests shows "Ask for an errand"; active quest shows "In progress" + "Track"; ready quest shows "Ready" + "Turn in"; 3/3 shows "Journal full (3/3)". Evidence: `artifacts/npc-dialog-clarity/{available,active,ready,full}-{1440,390}.png`.
+
 ## Title screen layout — November 1, 2026
 
 - Root gates pass: check → types → build → test. Server 114 passing, two skipped; client 82 passing.

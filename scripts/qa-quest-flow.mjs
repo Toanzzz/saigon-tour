@@ -23,6 +23,16 @@ const anchors = {
   son: [103, -78],
   thao: [94, -31],
 }
+const itemLabels = {
+  herbs: 'fresh herbs',
+  postcard: 'postcard',
+  photo: 'group photo',
+  noodles: 'noodles',
+  broth: 'broth',
+  baguette: 'bánh mì',
+  coffee: 'cà phê sữa',
+  banana: 'chuối chín',
+}
 const locations = {
   market: [-23, 7],
   park: [24, -2],
@@ -108,7 +118,9 @@ export async function enterPlay(page) {
 }
 export async function offerQuest(page, giver = 'hoa') {
   await meet(page, giver)
-  await page.getByRole('button', { name: 'Any errands?', exact: true }).click()
+  await page
+    .getByRole('button', { name: 'Ask for an errand', exact: true })
+    .click()
   await page.waitForFunction(
     (giver) =>
       window.__THREE_GAME_DIAGNOSTICS__?.state.quests?.some(
@@ -143,7 +155,10 @@ export async function followQuest(page, offered) {
       await meet(page, step.npcId)
       if (step.type === 'DELIVER')
         await page
-          .getByRole('button', { name: `Give ${step.itemId}`, exact: true })
+          .getByRole('button', {
+            name: `Give ${itemLabels[step.itemId]}`,
+            exact: true,
+          })
           .click()
     }
     await page.waitForFunction(
@@ -162,7 +177,7 @@ export async function completeQuest(page, giver = 'hoa') {
   await meet(page, giver)
   const before = (await diagnostics(page)).state.currency
   const completed = (await diagnostics(page)).state.completed
-  await page.getByRole('button', { name: "I'm back", exact: true }).click()
+  await page.getByRole('button', { name: 'Turn in', exact: true }).click()
   await page.waitForFunction(
     (completed) =>
       window.__THREE_GAME_DIAGNOSTICS__?.state.completed > completed,

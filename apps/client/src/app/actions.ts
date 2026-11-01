@@ -84,6 +84,9 @@ export function pause() {
   update({ screen: paused ? 'paused' : 'playing' })
   audio.setPaused(paused)
 }
+export function openJournal() {
+  update({ dialogue: null, panel: 'journal' })
+}
 export function close() {
   const { panel, hubShown } = game.state
   if (panel === 'reward' && !hubShown && !isXRPresenting()) {

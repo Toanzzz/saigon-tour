@@ -39,11 +39,27 @@ export function dialogueQuests(state: GameState, npc: NpcId) {
       ? [step]
       : []
   })[0]
+  const fromNpc = state.quests.filter(
+    (quest) =>
+      quest.giverNpcId === npc &&
+      (quest.status === 'active' || quest.status === 'ready')
+  )
+  const forNpc = state.quests.filter((quest) => {
+    if (quest.giverNpcId === npc) return false
+    const step = nextStep(quest)
+    return (
+      (step?.type === 'DELIVER' || step?.type === 'TALK_TO') &&
+      step.npcId === npc
+    )
+  })
   return {
     delivery,
+    fromNpc,
+    forNpc,
     ready: state.quests.some(
       (quest) => quest.giverNpcId === npc && quest.status === 'ready'
     ),
     canHelp: state.quests.length < 3,
+    full: state.quests.length >= 3,
   }
 }

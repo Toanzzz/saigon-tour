@@ -25,6 +25,8 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Persistence Playwright passed at both widths: live quest completion, reload preserving wallet/completion/name, and reset preserving identity/name while restoring 30 coins and clearing quests/completions.
 - Development state sync: a stale process sent initial snapshots without later patches. The identical direct/proxied probes pass after a user-managed full restart. Dev API shutdown closes room sockets, the HTTP server, and the database pool, then exits on SIGINT/SIGTERM. `bun dev` sends SIGKILL after 3 seconds if that process is still running.
 
+- NPC dialog clarity: an Errands strip (ready/needs-you/in-progress/available states from a shared `dialogueQuests`) sits between the header and history; NPC lines are bubbles, the header eyebrow shows role · location, portraits are per-NPC, and the footer source-label is text-on-offline only. Verified by gates, 6 new `dialogueQuests` unit cases, and headless Playwright (desktop + 390px) for the full quest cycle and all four strip states.
+
 ## Runtime and contracts
 
 - Bun 1.4.4, React Three Fiber/Three.js, Rapier, TanStack Query/Store, WebXR; Node/Hono, Mastra, Better Auth, Colyseus, Postgres 18; shared Zod contracts.

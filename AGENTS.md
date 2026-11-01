@@ -12,7 +12,7 @@
 - Each package owns its composite TypeScript project; no cross-package relative imports.
 - Target ≤300 lines per source file.
 - Definition of Done: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.
-- UI verification uses headless Playwright with real controls, desktop and 390px mobile flows.
+- UI verification uses headless Playwright with real controls, desktop and 390px mobile flows. Launching Chromium is killed inside the sandbox (EPERM/SIGABRT); run the Playwright script unsandboxed (escalated).
 - Update `docs/game-progress.md` while working. Record observed results in `docs/final-evidence.md`.
 - Commit each validated pass. Use conventional commit style. Never add AI attribution to commits, docs, or code.
 - Ask user to start or restart local dev server, instead of running one.

@@ -86,7 +86,7 @@ describe('party controls and authoritative quest rewards', () => {
       },
     }
     expect(renderToStaticMarkup(<Conversation state={state} />)).toContain(
-      'Any errands?'
+      'Ask for an errand'
     )
   })
   it('handles invites, expiry, and presence membership', () => {
