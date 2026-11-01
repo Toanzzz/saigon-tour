@@ -1,5 +1,6 @@
 import type { XRStore } from '@react-three/xr'
 import { useEffect, useState } from 'react'
+import { m } from '@/shared/i18n'
 import { supportsImmersiveVR } from './store'
 
 export function XRSessionButton({ store }: { store: XRStore }) {
@@ -36,11 +37,11 @@ export function XRSessionButton({ store }: { store: XRStore }) {
     <button
       type="button"
       className="xr-session-button"
-      aria-label={active ? 'Exit virtual reality' : 'Enter virtual reality'}
+      aria-label={active ? m.xr_exit_label() : m.xr_enter_label()}
       onClick={() => void toggle()}
       disabled={busy}
     >
-      {busy ? 'Connecting…' : active ? 'Exit VR' : 'Enter VR'}
+      {busy ? m.xr_connecting() : active ? m.xr_exit() : m.xr_enter()}
     </button>
   )
 }

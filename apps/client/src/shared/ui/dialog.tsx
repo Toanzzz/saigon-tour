@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useId, useRef } from 'react'
+import { m } from '@/shared/i18n'
 import { PartyInviteControls } from '@/widgets/hud/party'
 import { Icon } from './icons'
 
@@ -40,7 +41,7 @@ export function Dialog({
         <button
           type="button"
           className="icon-button"
-          aria-label="Close panel"
+          aria-label={m.dialog_close()}
           onClick={onClose}
         >
           <Icon name="close" />

@@ -8,12 +8,15 @@ import {
   interact,
   nearby,
 } from '@/app/actions'
+import { itemLabel, m, useLocale } from '@/shared/i18n'
 import { game, trackedQuest } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
 import { MODES, PLACES, placeName } from '@/shared/world/places'
 import { XRWorldPanel } from '@/shared/xr'
 
 export function XRGameHud() {
+  // Lives inside the scene, which never remounts; redraw panels on language change.
+  useLocale()
   const state = useSelector(game, (value) => value)
   const target = nearby(state.position)
   if (state.dialogue) {
@@ -21,9 +24,10 @@ export function XRGameHud() {
     const lines = state.dialogue.history
       .slice(-3)
       .map(
-        (line) => `${line.role === 'user' ? 'You' : npc.name}: ${line.content}`
+        (line) =>
+          `${line.role === 'user' ? m.map_you() : npc.name}: ${line.content}`
       )
-    if (state.dialogue.thinking) lines.push(`${npc.name} is thinking…`)
+    if (state.dialogue.thinking) lines.push(m.chat_thinking({ name: npc.name }))
     const { delivery, ready, canHelp } = dialogueQuests(
       state,
       state.dialogue.npc
@@ -31,9 +35,7 @@ export function XRGameHud() {
     return (
       <XRWorldPanel
         title={npc.name}
-        lines={
-          lines.length ? lines : [`${npc.role}. Say hello to your neighbor.`]
-        }
+        lines={lines.length ? lines : [m.xr_say_hello({ role: npc.role })]}
         buttons={
           state.dialogue.thinking
             ? []
@@ -42,7 +44,7 @@ export function XRGameHud() {
                   ? [
                       {
                         id: 'help',
-                        label: 'Any errands?',
+                        label: m.xr_any_errands(),
                         onClick: acceptQuest,
                       },
                     ]
@@ -51,7 +53,9 @@ export function XRGameHud() {
                   ? [
                       {
                         id: 'deliver',
-                        label: `Give ${delivery.itemId}`,
+                        label: m.errands_give({
+                          item: itemLabel(delivery.itemId),
+                        }),
                         onClick: deliverOrVerify,
                       },
                     ]
@@ -60,12 +64,12 @@ export function XRGameHud() {
                   ? [
                       {
                         id: 'check',
-                        label: "I'm back",
+                        label: m.xr_im_back(),
                         onClick: deliverOrVerify,
                       },
                     ]
                   : []),
-                { id: 'close', label: 'Continue', onClick: close },
+                { id: 'close', label: m.xr_continue(), onClick: close },
               ]
         }
       />
@@ -74,19 +78,22 @@ export function XRGameHud() {
   if (state.panel === 'transport') {
     return (
       <XRWorldPanel
-        title="Choose a ride"
+        title={m.hud_choose_ride()}
         lines={[
-          `${state.world.currency} coins in your wallet. Every bus ride costs ${MODES.bus.fare}.`,
+          m.xr_wallet({
+            coins: m.coins({ count: state.world.currency }),
+            fare: MODES.bus.fare,
+          }),
         ]}
         buttons={[
           ...(Object.keys(PLACES) as (keyof typeof PLACES)[])
             .filter((id) => id !== state.stop)
             .map((id) => ({
               id,
-              label: `Bus → ${placeName(id)}`,
+              label: m.xr_bus_to({ place: placeName(id) }),
               onClick: () => board(id, 'bus'),
             })),
-          { id: 'close', label: 'Continue', onClick: close },
+          { id: 'close', label: m.xr_continue(), onClick: close },
         ]}
       />
     )
@@ -94,11 +101,16 @@ export function XRGameHud() {
   if (state.panel === 'reward') {
     return (
       <XRWorldPanel
-        title="A little kindness goes far."
+        title={m.reward_title()}
         lines={[
-          `You earned ${state.reward} coins and ${state.rewardQuest?.reward.itemId ?? 'a neighbor’s thanks'}.`,
+          m.xr_earned({
+            coins: m.coins({ count: state.reward }),
+            item: state.rewardQuest?.reward.itemId
+              ? itemLabel(state.rewardQuest.reward.itemId)
+              : m.xr_neighbor_thanks(),
+          }),
         ]}
-        buttons={[{ id: 'close', label: 'Continue', onClick: close }]}
+        buttons={[{ id: 'close', label: m.xr_continue(), onClick: close }]}
       />
     )
   }
@@ -112,13 +124,14 @@ export function XRGameHud() {
         title={title}
         lines={[
           target.kind === 'npc'
-            ? 'Point and tap to start a conversation.'
-            : 'Choose a destination and ride across the neighborhood.',
+            ? m.xr_point_to_talk()
+            : m.xr_choose_destination(),
         ]}
         buttons={[
           {
             id: 'interact',
-            label: target.kind === 'npc' ? 'Say hello' : 'Choose a ride',
+            label:
+              target.kind === 'npc' ? m.emote_say_hello() : m.hud_choose_ride(),
             onClick: interact,
           },
         ]}
@@ -128,10 +141,7 @@ export function XRGameHud() {
   return (
     <XRWorldPanel
       title="Sài Gòn"
-      lines={[
-        trackedQuest(state)?.description ??
-          'Explore the neighborhood and meet a neighbor.',
-      ]}
+      lines={[trackedQuest(state)?.description ?? m.xr_explore()]}
     />
   )
 }

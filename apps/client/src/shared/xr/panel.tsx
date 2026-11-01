@@ -1,5 +1,5 @@
 import { useXR } from '@react-three/xr'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CanvasTexture, SRGBColorSpace } from 'three'
 import type { Vec3 } from '@/shared/world/assets'
 
@@ -48,6 +48,32 @@ const TONE = {
 }
 const DISPLAY = '"Baloo 2 Variable", system-ui, sans-serif'
 const BODY = '"Be Vietnam Pro", system-ui, sans-serif'
+// Canvas text does not trigger webfont loads; fetch the Vietnamese glyph
+// subsets up front so diacritics never fall back to a system font.
+const SAMPLE = 'Sài Gòn ạ ầ ữ đ'
+let fontsLoaded: Promise<unknown> | null = null
+function loadFonts() {
+  if (typeof document === 'undefined' || !document.fonts) return null
+  fontsLoaded ??= Promise.all([
+    document.fonts.load(`800 54px ${DISPLAY}`, SAMPLE),
+    document.fonts.load(`30px ${BODY}`, SAMPLE),
+  ]).catch(() => {})
+  return fontsLoaded
+}
+/** Bumps once the canvas fonts are ready, so textures redraw with them. */
+function useFontsReady() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => {
+    let mounted = true
+    void loadFonts()?.then(() => {
+      if (mounted) setReady(true)
+    })
+    return () => {
+      mounted = false
+    }
+  }, [])
+  return ready
+}
 
 function panelTexture(title: string, lines: string[]): CanvasTexture {
   const canvas = document.createElement('canvas')
@@ -87,7 +113,12 @@ export function XRWorldPanel({
   position = [0, 1.6, -2],
 }: XRWorldPanelProps) {
   const active = useXR((state) => Boolean(state.session))
-  const texture = useMemo(() => panelTexture(title, lines), [title, lines])
+  const fonts = useFontsReady()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: redraw once fonts load.
+  const texture = useMemo(
+    () => panelTexture(title, lines),
+    [title, lines, fonts]
+  )
   useEffect(() => () => texture.dispose(), [texture])
   if (!active) return null
   return (
@@ -121,6 +152,8 @@ function XRWorldButton({
   position: Vec3
   onClick: () => void
 }) {
+  const fonts = useFontsReady()
+  // biome-ignore lint/correctness/useExhaustiveDependencies: redraw once fonts load.
   const texture = useMemo(() => {
     const canvas = document.createElement('canvas')
     canvas.width = 512
@@ -143,7 +176,7 @@ function XRWorldButton({
     const result = new CanvasTexture(canvas)
     result.colorSpace = SRGBColorSpace
     return result
-  }, [label])
+  }, [label, fonts])
   useEffect(() => () => texture.dispose(), [texture])
   return (
     // biome-ignore lint/a11y/noStaticElementInteractions: XR ray pointers target this mesh.

@@ -11,6 +11,7 @@ import { npcPosition } from '@/shared/api/city'
 import { beginHttpTurn, endHttpTurn } from '@/shared/api/events'
 import { net, updateNet } from '@/shared/api/status'
 import { audio } from '@/shared/audio'
+import { m } from '@/shared/i18n'
 import { type GameState, game, notify, update } from '@/shared/state/game'
 import { distance, PEOPLE } from '@/shared/world/places'
 
@@ -213,7 +214,7 @@ function apply(
   })
   if (offered) {
     audio.play('pickup')
-    notify('An errand was added to your journal.')
+    notify(m.toast_errand_added())
   }
   if (completed) audio.play('reward')
 }
