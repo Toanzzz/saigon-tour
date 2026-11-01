@@ -59,6 +59,10 @@ export function TitleScreen() {
         <p className="title-controls touch-only">
           Use the thumbstick to move. Drag the city to look around.
         </p>
+        <nav className="title-legal" aria-label="Legal">
+          <a href="/legal/privacy.html">Privacy Policy</a>
+          <a href="/legal/data-deletion.html">User Data Deletion</a>
+        </nav>
       </div>
     </section>
   )

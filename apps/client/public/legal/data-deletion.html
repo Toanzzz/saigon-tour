@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#b1b8cb" />
+    <meta name="robots" content="index,follow" />
+    <meta
+      name="description"
+      content="How to delete your Sài Gòn, a little journey data — from inside the game or by request."
+    />
+    <title>User Data Deletion — Sài Gòn, a little journey</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M6 26 32 8l26 18v4H6z' fill='%23ee7448' stroke='%23262835' stroke-width='4' stroke-linejoin='round'/%3E%3Crect x='12' y='30' width='40' height='26' rx='3' fill='%23f6e5aa' stroke='%23262835' stroke-width='4'/%3E%3Cpath d='M26 56V44a6 6 0 0 1 12 0v12' fill='%23262835'/%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --sky: #b1b8cb;
+        --sky-deep: #959dba;
+        --wall: #f6e5aa;
+        --wall-hi: #fff6d6;
+        --wall-side: #d9c27f;
+        --roof: #ee7448;
+        --roof-side: #c2532f;
+        --leaf: #47b08c;
+        --ink: #262835;
+        --ink-soft: #545870;
+        --round: 14px;
+        --round-sm: 10px;
+        --edge: 2px solid var(--ink);
+        --lift-sm: 0 3px 0 var(--ink);
+        --font-display: "Baloo 2", system-ui, sans-serif;
+        --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        background:
+          radial-gradient(120% 90% at 50% -10%, var(--sky) 0%, var(--sky-deep) 70%);
+        color: var(--ink);
+        font: 16px/1.6 var(--font-body);
+        padding: 32px 18px 64px;
+      }
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        background: var(--wall-hi);
+        border: var(--edge);
+        border-radius: var(--round);
+        box-shadow: 0 14px 24px -10px #4a4f6e80;
+        padding: 28px clamp(20px, 5vw, 44px) 40px;
+      }
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 18px;
+        padding: 8px 14px;
+        border: var(--edge);
+        border-radius: var(--round-sm);
+        background: var(--wall);
+        box-shadow: var(--lift-sm);
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 13px;
+        text-decoration: none;
+      }
+      .back:hover {
+        filter: brightness(1.03);
+      }
+      h1 {
+        font-family: var(--font-display);
+        font-size: clamp(28px, 6vw, 40px);
+        margin: 0 0 4px;
+        line-height: 1.1;
+      }
+      .updated {
+        color: var(--ink-soft);
+        font-size: 14px;
+        margin: 0 0 24px;
+      }
+      h2 {
+        font-family: var(--font-display);
+        font-size: 22px;
+        margin: 28px 0 8px;
+        padding-top: 14px;
+        border-top: 1px dashed var(--wall-side);
+      }
+      h2:first-of-type {
+        border-top: 0;
+        padding-top: 0;
+      }
+      ol,
+      ul {
+        margin: 8px 0;
+        padding-left: 22px;
+      }
+      li {
+        margin: 8px 0;
+      }
+      a {
+        color: var(--roof-side);
+        font-weight: 600;
+      }
+      .card {
+        margin: 16px 0;
+        padding: 16px 18px;
+        background: var(--wall);
+        border: var(--edge);
+        border-radius: var(--round-sm);
+        box-shadow: var(--lift-sm);
+      }
+      .card h3 {
+        margin: 0 0 6px;
+        font-family: var(--font-display);
+        font-size: 18px;
+      }
+      code {
+        background: var(--wall);
+        border: 1px solid var(--wall-side);
+        border-radius: 6px;
+        padding: 1px 6px;
+        font-size: 0.9em;
+      }
+      footer {
+        margin-top: 32px;
+        color: var(--ink-soft);
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="/">← Back to the game</a>
+      <h1>User Data Deletion</h1>
+      <p class="updated">Sài Gòn, a little journey · Last updated 1 November 2026</p>
+
+      <p>
+        You can remove everything Sài Gòn, a little journey stores about you. The
+        fastest way is right inside the game; you can also ask us to delete it for
+        you. Both options remove your guest profile, journey progress, and the
+        conversation memories neighbors keep. For a reminder of what we store, see
+        the <a href="/legal/privacy.html">Privacy Policy</a>.
+      </p>
+
+      <h2>Delete it yourself (fastest)</h2>
+      <div class="card">
+        <h3>Clear saved data</h3>
+        <ol>
+          <li>Start the game and open the menu (the <strong>Journal</strong> / pause panel).</li>
+          <li>Choose <strong>Clear saved data</strong>.</li>
+        </ol>
+        <p>
+          This removes the session token from this browser and detaches this
+          device from your save, so nothing identifies you here anymore.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Start a new journey</h3>
+        <p>
+          Choose <strong>Start a new journey</strong> from the same menu to wipe
+          your current progress and conversation memories and begin fresh.
+        </p>
+      </div>
+
+      <h2>If you signed in with Meta (Facebook)</h2>
+      <p>
+        You can disconnect the game from your Meta account at any time from your
+        Facebook settings, under <strong>Apps and Websites</strong>. Removing the
+        app there revokes our access. To also delete the save tied to that
+        account, send a deletion request below and include the account you used.
+      </p>
+
+      <h2>Request deletion by email</h2>
+      <p>
+        Prefer us to handle it, or lost access to your save? Email
+        <a href="mailto:privacy@saigon-journey.example?subject=Data%20deletion%20request">privacy@saigon-journey.example</a>
+        with the subject <code>Data deletion request</code>. Include your in-game
+        name (and, if you used Meta sign-in, the account) so we can find the right
+        save.
+      </p>
+      <ul>
+        <li>We confirm the request and delete your data within 30 days.</li>
+        <li>
+          Deletion removes your guest profile, progress, completed errands, and
+          conversation memories. It cannot be undone.
+        </li>
+      </ul>
+
+      <footer>
+        <a href="/legal/privacy.html">Privacy Policy</a> ·
+        <a href="/">Home</a>
+      </footer>
+    </main>
+  </body>
+</html>
