@@ -1,6 +1,7 @@
 import { type MapSchema, schema, t } from '@colyseus/schema'
 import type { CitySnapshot } from './city/schema'
 import type { PresencePlayer } from './multiplayer'
+import { type Look, LookSchema } from './unlocks'
 
 /** Room name registered with the Colyseus matchmaker. */
 export const WORLD_ROOM = 'world'
@@ -16,6 +17,7 @@ export const PresenceState = schema(
     z: t.float32(),
     heading: t.float32(),
     ride: t.string().optional(),
+    look: t.string().optional(),
   },
   'PresenceState'
 )
@@ -69,6 +71,16 @@ export const WorldRoomState = schema(
 )
 export type WorldRoomState = InstanceType<typeof WorldRoomState>
 
+function decodeLook(raw: string | undefined): Look | null {
+  if (!raw) return null
+  try {
+    const parsed = LookSchema.safeParse(JSON.parse(raw))
+    return parsed.success ? parsed.data : null
+  } catch {
+    return null
+  }
+}
+
 export function toPresence(state: PresenceState): PresencePlayer {
   return {
     id: state.id,
@@ -77,6 +89,7 @@ export function toPresence(state: PresenceState): PresencePlayer {
     position: [state.x, state.y, state.z],
     heading: state.heading,
     ride: state.ride ?? null,
+    look: decodeLook(state.look),
   }
 }
 
@@ -166,6 +179,10 @@ export function syncPresence(
     entry.z = player.position[2]
     entry.heading = player.heading
     entry.ride = player.ride ?? undefined
+    entry.look =
+      player.look && Object.keys(player.look).length
+        ? JSON.stringify(player.look)
+        : undefined
     if (!players.has(player.id)) players.set(player.id, entry)
   }
 }

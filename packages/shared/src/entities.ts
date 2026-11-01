@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { UnlockIdSchema } from './unlocks'
 
 export const NEIGHBOR_IDS = [
   'hoa',
@@ -73,6 +74,8 @@ export const RewardSchema = z
     currency: z.number().int().min(0).max(100),
     itemId: ItemIdSchema.nullable(),
     reputation: z.number().int().min(0).max(5),
+    // Optional so legacy jsonb quest/completed rows still parse under strict zod.
+    unlockId: UnlockIdSchema.optional(),
   })
   .strict()
 export type Reward = z.infer<typeof RewardSchema>

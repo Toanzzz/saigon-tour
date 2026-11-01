@@ -9,6 +9,7 @@ import {
 } from './contracts'
 import { PartyInviteSchema, PartySnapshotSchema } from './party'
 import { FriendshipMapSchema } from './quest/friendship'
+import { LookSchema } from './unlocks'
 
 export const WORLD_BOUNDS = { x: [-110, 150], z: [-120, 100] } as const
 export const NPC_POSITIONS = {
@@ -36,6 +37,7 @@ export const PresencePlayerSchema = z.object({
   position: PositionSchema,
   heading: z.number(),
   ride: z.string().max(20).nullable(),
+  look: LookSchema.nullable().default(null),
 })
 export type PresencePlayer = z.infer<typeof PresencePlayerSchema>
 export const ClientSocketMessageSchema = z.discriminatedUnion('type', [

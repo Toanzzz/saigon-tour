@@ -136,6 +136,7 @@ export class RoomManager {
           position: [-16, 0, 8],
           heading: 0,
           ride: 'loading',
+          look: null,
         },
         socket,
         disconnectedAt: null,

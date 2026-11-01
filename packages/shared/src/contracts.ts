@@ -14,6 +14,7 @@ import {
   QuestEventSchema,
   QuestSchema,
 } from './quest/schema'
+import { UnlocksSchema } from './unlocks'
 
 export * from './entities'
 export * from './quest/schema'
@@ -124,6 +125,7 @@ export const GuestPlayerSchema = z.object({
   quests: z.array(QuestSchema).max(3),
   completed: z.array(CompletedQuestSchema),
   reputation: z.number(),
+  unlocks: UnlocksSchema.default({ owned: [], equipped: {} }),
 })
 export type GuestPlayer = z.infer<typeof GuestPlayerSchema>
 

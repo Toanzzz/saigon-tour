@@ -18,6 +18,7 @@ function player(id: string, x = 0, heading = 0): PresencePlayer {
     position: [x, 0, 0],
     heading,
     ride: null,
+    look: null,
   }
 }
 afterEach(clearPresence)

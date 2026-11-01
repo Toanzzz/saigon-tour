@@ -21,6 +21,7 @@ const player = (revision = 2): GuestPlayer => ({
   quests: [],
   completed: [],
   reputation: 0,
+  unlocks: { owned: [], equipped: {} },
 })
 beforeEach(() => {
   resetEventSequence()
