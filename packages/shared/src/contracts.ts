@@ -6,6 +6,7 @@ import {
   NpcIdSchema,
   SourceSchema,
 } from './entities'
+import { LocaleSchema } from './locale'
 import { PartySnapshotSchema } from './party'
 import {
   CompletedQuestSchema,
@@ -67,6 +68,7 @@ export const InteractRequestSchema = z
   .object({
     message: z.string().trim().min(1).max(500),
     intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
+    locale: LocaleSchema.default('en'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
       .object({

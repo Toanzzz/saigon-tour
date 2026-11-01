@@ -3,6 +3,9 @@ import {
   applyQuestEvents,
   createQuest,
   isReady,
+  LocaleSchema,
+  NPCS,
+  type NpcId,
   QUEST_DOMAINS,
   QUEST_SEEDS,
   QuestSchema,
@@ -52,8 +55,21 @@ describe('quest engine', () => {
   })
   it('validates an offline seed for every persona', () => {
     expect(new Set(QUEST_SEEDS.map((spec) => spec.giverNpcId)).size).toBe(9)
-    for (const spec of QUEST_SEEDS)
-      expect(validateSpec(spec, { quests: [] })).toEqual({ ok: true, spec })
+    for (const locale of LocaleSchema.options)
+      for (const npc of Object.keys(NPCS) as NpcId[])
+        for (const spec of seedsFor(npc, locale))
+          expect(validateSpec(spec, { quests: [] })).toEqual({ ok: true, spec })
+  })
+
+  it('projects localized seeds to a clean spec', () => {
+    const [en] = seedsFor('hoa')
+    const [vi] = seedsFor('hoa', 'vi')
+    expect(vi?.title).toBe('Rau thơm cho hàng xóm')
+    expect(vi?.title).not.toBe(en?.title)
+    expect(Object.keys(vi ?? {}).sort()).toEqual(
+      ['description', 'giverNpcId', 'scope', 'steps', 'title'].sort()
+    )
+    expect(vi?.steps).toEqual(en?.steps)
   })
 
   it('rejects unknown entities, extra fields, empty and oversized steps', () => {
@@ -155,13 +171,14 @@ describe('quest engine', () => {
   })
 
   it('computes bounded rewards and uses only persona gifts', () => {
-    for (const spec of QUEST_SEEDS) {
-      const reward = rewardFor(spec)
-      expect(reward.currency).toBeLessThanOrEqual(100)
-      expect(reward.currency).toBeGreaterThanOrEqual(0)
-      expect(QUEST_DOMAINS[spec.giverNpcId].gifts).toContain(reward.itemId)
-      expect([1, 2]).toContain(reward.reputation)
-    }
+    for (const npc of Object.keys(NPCS) as NpcId[])
+      for (const spec of seedsFor(npc)) {
+        const reward = rewardFor(spec)
+        expect(reward.currency).toBeLessThanOrEqual(100)
+        expect(reward.currency).toBeGreaterThanOrEqual(0)
+        expect(QUEST_DOMAINS[spec.giverNpcId].gifts).toContain(reward.itemId)
+        expect([1, 2]).toContain(reward.reputation)
+      }
     const long = {
       ...seed(),
       steps: Array(10).fill({ type: 'GO_TO', locationId: 'postoffice' }),

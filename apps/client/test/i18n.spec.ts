@@ -1,4 +1,4 @@
-import { LocaleSchema } from '@saigon/shared'
+import { InteractRequestSchema, LocaleSchema } from '@saigon/shared'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { m } from '@/paraglide/messages'
 import {
@@ -28,6 +28,20 @@ describe('i18n', () => {
 
   it('keeps both catalogs on the same keys', () => {
     expect(Object.keys(viMessages).sort()).toEqual(Object.keys(en).sort())
+  })
+
+  it('sends the language with NPC requests, defaulting to English', () => {
+    const base = {
+      message: 'Xin chào',
+      worldContext: { playerLocation: 'market', timeOfDay: 'afternoon' },
+    }
+    expect(InteractRequestSchema.parse(base).locale).toBe('en')
+    expect(InteractRequestSchema.parse({ ...base, locale: 'vi' }).locale).toBe(
+      'vi'
+    )
+    expect(
+      InteractRequestSchema.safeParse({ ...base, locale: 'fr' }).success
+    ).toBe(false)
   })
 
   it('maps a Vietnamese browser to vi', () => {

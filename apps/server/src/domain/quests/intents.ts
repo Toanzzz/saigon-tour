@@ -14,7 +14,7 @@ export async function runIntent(
     request.intent === 'help' &&
     !outcome.events.some((e) => e.type === 'offered')
   ) {
-    for (const spec of seedsFor(npcId)) {
+    for (const spec of seedsFor(npcId, request.locale)) {
       outcome.calls.push('propose-quest')
       const scope =
         (game.party?.snapshot(playerId)?.members.length ?? 0) >= 2

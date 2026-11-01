@@ -11,7 +11,7 @@ import {
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { InferRequestType, InferResponseType } from 'hono/client'
-import { m } from '@/shared/i18n'
+import { getLocale, m } from '@/shared/i18n'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
 
@@ -21,7 +21,11 @@ import { initializeSession, sessionToken } from './session'
 
 /** NPC interact endpoint, typed from the shared Hono RPC contract. */
 const interact$post = rpc.npc[':npcId'].interact.$post
-export type InteractBody = InferRequestType<typeof interact$post>['json']
+/** The client adds the current language itself. */
+export type InteractBody = Omit<
+  InferRequestType<typeof interact$post>['json'],
+  'locale'
+>
 export type InteractResponsePayload = InferResponseType<typeof interact$post>
 
 export interface InteractionResult {
@@ -41,7 +45,7 @@ export async function interactWith(
       if (game.state.guestStatus !== 'online') throw new Error('Offline guest')
     }
     const response = await interact$post(
-      { param: { npcId: npc }, json: body },
+      { param: { npcId: npc }, json: { ...body, locale: getLocale() } },
       {
         init: {
           credentials: 'include',
@@ -82,7 +86,7 @@ export function offline(
     fact: NPCS[npc].knowledge[0] ?? '',
   })
   if (body.intent === 'help') {
-    const spec = seedsFor(npc).find(
+    const spec = seedsFor(npc, getLocale()).find(
       (candidate) =>
         validateSpec(candidate, { quests }).ok &&
         candidate.steps.every(

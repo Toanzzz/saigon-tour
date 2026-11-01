@@ -22,6 +22,7 @@ import { CostGuard } from './guard'
 import { NpcMemoryService } from './memory/npc-memory'
 import { clearPlayerThreads, recordGreeting } from './memory/threads'
 import { type HarnessUsage, meteredFetch, storageUnavailable } from './meter'
+import { languageRule } from './personas/shared'
 import { cleanReply } from './safety'
 import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
@@ -115,7 +116,8 @@ export class NpcHarness {
     if (request.intent === 'greet') {
       const line = await this.shortLines.greeting(
         npcId,
-        request.worldContext.timeOfDay
+        request.worldContext.timeOfDay,
+        request.locale
       )
       await recordGreeting(
         this.storage,
@@ -157,7 +159,7 @@ export class NpcHarness {
     )
     const final = await this.game.get(playerId)
     if (deterministic || !reply) {
-      reply = fallbackLine(npcId, final.world, kind(outcome))
+      reply = fallbackLine(npcId, final.world, kind(outcome), request.locale)
       source = 'fallback'
     }
     return {
@@ -197,6 +199,7 @@ export class NpcHarness {
       `Your current need: ${this.game.city?.(playerId)?.needs[npcId] ?? 'none'}`,
       `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,
       `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,
+      languageRule(request.locale),
     ].join('\n')
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([

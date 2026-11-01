@@ -1,10 +1,17 @@
 import { createHash } from 'node:crypto'
 import { Agent } from '@mastra/core/agent'
 import type { MastraModelConfig } from '@mastra/core/llm'
-import { NPCS, type NpcId, type TimeOfDay } from '@saigon/shared'
+import {
+  type Locale,
+  LocaleSchema,
+  NPCS,
+  type NpcId,
+  type TimeOfDay,
+} from '@saigon/shared'
 import type { GameDb } from '@/shared/db'
 import { NPC_PERSONAS } from './agents'
 import { storageUnavailable } from './meter'
+import { languageRule } from './personas/shared'
 import { cleanReply } from './safety'
 
 export interface ShortLine {
@@ -17,8 +24,21 @@ export const GREETING_BUCKETS: TimeOfDay[] = [
   'evening',
   'night',
 ]
-const fallback = (npc: NpcId, bucket: TimeOfDay): ShortLine => ({
-  reply: `Chào bạn! A lovely ${bucket} in Sài Gòn. ${NPCS[npc].knowledge[0]}`,
+const BUCKETS_VI: Record<TimeOfDay, string> = {
+  morning: 'buổi sáng',
+  afternoon: 'buổi chiều',
+  evening: 'buổi tối',
+  night: 'buổi đêm',
+}
+const fallback = (
+  npc: NpcId,
+  bucket: TimeOfDay,
+  locale: Locale = 'en'
+): ShortLine => ({
+  reply:
+    locale === 'vi'
+      ? `Chào bạn! Một ${BUCKETS_VI[bucket]} thật dễ chịu ở Sài Gòn.`
+      : `Chào bạn! A lovely ${bucket} in Sài Gòn. ${NPCS[npc].knowledge[0]}`,
   source: 'fallback',
 })
 
@@ -52,24 +72,25 @@ export class ShortLines {
     this.barkAgents = agents(barkModel)
   }
 
-  key(npc: NpcId, bucket: TimeOfDay) {
+  key(npc: NpcId, bucket: TimeOfDay, locale: Locale = 'en') {
     const hash = createHash('sha256')
       .update(`${NPC_PERSONAS[npc]}\0${this.modelId}`)
       .digest('hex')
-    return `${npc}:${bucket}:${hash}`
+    return `${npc}:${bucket}:${locale}:${hash}`
   }
 
   async greeting(
     npc: NpcId,
-    bucket: TimeOfDay
+    bucket: TimeOfDay,
+    locale: Locale = 'en'
   ): Promise<ShortLine & { cached: boolean }> {
-    const key = this.key(npc, bucket)
+    const key = this.key(npc, bucket, locale)
     const existing = await this.db.getGreeting(key)
     if (existing) return { ...existing, cached: true }
     let pending = this.pending.get(key)
     const shared = Boolean(pending)
     if (!pending) {
-      pending = this.fill(npc, bucket, key)
+      pending = this.fill(npc, bucket, locale, key)
       this.pending.set(key, pending)
     }
     try {
@@ -79,8 +100,13 @@ export class ShortLines {
     }
   }
 
-  private async fill(npc: NpcId, bucket: TimeOfDay, key: string) {
-    const line = await this.generate(npc, bucket, false)
+  private async fill(
+    npc: NpcId,
+    bucket: TimeOfDay,
+    locale: Locale,
+    key: string
+  ) {
+    const line = await this.generate(npc, bucket, false, locale)
     await this.db.putGreeting(key, line.reply, line.source)
     return line
   }
@@ -91,28 +117,31 @@ export class ShortLines {
 
   async prewarm() {
     const results = []
-    for (const npc of Object.keys(NPCS) as NpcId[])
-      for (const bucket of GREETING_BUCKETS)
-        results.push({
-          npcId: npc,
-          bucket,
-          ...(await this.greeting(npc, bucket)),
-        })
+    for (const locale of LocaleSchema.options)
+      for (const npc of Object.keys(NPCS) as NpcId[])
+        for (const bucket of GREETING_BUCKETS)
+          results.push({
+            npcId: npc,
+            bucket,
+            locale,
+            ...(await this.greeting(npc, bucket, locale)),
+          })
     return results
   }
 
   private async generate(
     npc: NpcId,
     bucket: TimeOfDay,
-    bark: boolean
+    bark: boolean,
+    locale: Locale = 'en'
   ): Promise<ShortLine> {
-    if (!this.live) return fallback(npc, bucket)
+    if (!this.live) return fallback(npc, bucket, locale)
     try {
       const agent = (bark ? this.barkAgents : this.agents)[npc]
       const result = await agent.generate(
         bark
           ? `It is ${bucket}. Say one short atmospheric neighborhood line for passersby. Do not offer an errand.`
-          : `It is ${bucket}. Give one short welcoming greeting to a new visitor. Do not offer or claim to start an errand.`,
+          : `It is ${bucket}. Give one short welcoming greeting to a new visitor. Do not offer or claim to start an errand. ${languageRule(locale)}`,
         {
           activeTools: [],
           maxSteps: 1,
@@ -127,6 +156,6 @@ export class ShortLines {
       if (storageUnavailable(error)) throw error
       /* Deterministic neighborhood life continues without the model. */
     }
-    return fallback(npc, bucket)
+    return fallback(npc, bucket, locale)
   }
 }

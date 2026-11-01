@@ -7,6 +7,7 @@ import {
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { interactWith, offline } from '@/shared/api/agent'
 import { saveToken } from '@/shared/api/transport'
+import { changeLocale } from '@/shared/i18n'
 import { initialState } from '@/shared/state/game'
 import { questFixture } from './quest-fixture'
 
@@ -16,6 +17,7 @@ const request = (
 ): InteractRequest => ({
   message: intent === 'help' ? 'Any errands?' : "I'm back",
   intent,
+  locale: 'en',
   events: [],
   worldContext: {
     playerLocation: 'market',
@@ -74,6 +76,16 @@ describe('offline NPC quests', () => {
     )
     expect(result.quests[0]?.progress).toEqual([true, false])
     expect(result.quests[0]?.status).toBe('active')
+  })
+  it('offers Vietnamese seed text when playing in Vietnamese', () => {
+    changeLocale('vi')
+    try {
+      const result = offline('hoa', request('hoa', 'help'), initialState())
+      expect(result.quests[0]?.title).toBe('Rau thơm cho hàng xóm')
+      expect(result.reply).toContain('Rau thơm cho hàng xóm')
+    } finally {
+      changeLocale('en')
+    }
   })
   it.each(QUEST_SEEDS.map((spec) => spec.giverNpcId))(
     '%s offers a seed and grants its verified reward once',

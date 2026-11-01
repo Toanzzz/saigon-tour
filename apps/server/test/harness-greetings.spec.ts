@@ -1,4 +1,4 @@
-import { NPCS } from '@saigon/shared'
+import { LocaleSchema, NPCS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
 import { GREETING_BUCKETS, NPC_PERSONAS } from '@/features/npc'
@@ -61,6 +61,71 @@ describe('Mastra NPC harness greetings', () => {
     expect(messages).not.toContain('Hello again!')
   })
 
+  it('caches greetings per language and asks for Vietnamese', async () => {
+    const seen: { messages: unknown[] }[] = []
+    const harness = ctx.fx.harness(
+      live,
+      scripted(
+        [{ text: 'Chào buổi sáng!' }, { text: 'Good morning, neighbor!' }],
+        seen
+      )
+    )
+    const greet = (locale: 'en' | 'vi') =>
+      ask('Hello!', {
+        intent: 'greet',
+        locale,
+        worldContext: { ...worldContext, timeOfDay: 'morning' },
+      })
+    const vi = await harness.interact('mai', greet('vi'), ctx.playerId)
+    const en = await harness.interact('mai', greet('en'), ctx.playerId)
+    expect(vi.cached).toBe(false)
+    expect(en.cached).toBe(false)
+    expect(seen).toHaveLength(2)
+    expect(JSON.stringify(seen[0]?.messages)).toContain('southern Vietnamese')
+    expect(JSON.stringify(seen[1]?.messages)).not.toContain(
+      'southern Vietnamese'
+    )
+    expect(
+      (await harness.interact('mai', greet('vi'), ctx.playerId)).reply
+    ).toBe(vi.reply)
+  })
+
+  it('adds the language rule to each live chat turn', async () => {
+    const seen: { messages: unknown[] }[] = []
+    const harness = ctx.fx.harness(
+      live,
+      scripted([{ text: 'Chợ hôm nay đông lắm con.' }], seen)
+    )
+    await harness.interact(
+      'hoa',
+      ask('Chợ hôm nay sao rồi?', { locale: 'vi' }),
+      ctx.playerId
+    )
+    expect(JSON.stringify(seen.at(-1)?.messages)).toContain(
+      'southern Vietnamese'
+    )
+  })
+
+  it('uses Vietnamese fallbacks without a model', async () => {
+    const harness = ctx.fx.harness(offline, async () => {
+      throw new Error('should not call the provider')
+    })
+    const greeting = await harness.interact(
+      'hoa',
+      ask('Xin chào', { intent: 'greet', locale: 'vi' }),
+      ctx.playerId
+    )
+    expect(greeting.reply).toContain('Sài Gòn')
+    expect(greeting.reply).not.toContain('lovely')
+    const help = await harness.interact(
+      'hoa',
+      ask('Cô có việc gì không?', { intent: 'help', locale: 'vi' }),
+      ctx.playerId
+    )
+    expect(help.quests[0]?.title).toBe('Rau thơm cho hàng xóm')
+    expect(help.reply).toContain('nhật ký')
+  })
+
   it('invalidates cached greetings when the persona changes', async () => {
     const seen: unknown[] = []
     const harness = ctx.fx.harness(
@@ -90,8 +155,11 @@ describe('Mastra NPC harness greetings', () => {
       { ...live, model: 'prewarm-test-model' },
       scripted([{ text: 'Chào! Enjoy the neighborhood.' }], seen)
     )
-    const bucketCount = Object.keys(NPCS).length * GREETING_BUCKETS.length
-    expect(bucketCount).toBe(36)
+    const bucketCount =
+      Object.keys(NPCS).length *
+      GREETING_BUCKETS.length *
+      LocaleSchema.options.length
+    expect(bucketCount).toBe(72)
     const first = await harness.prewarm()
     expect(first).toHaveLength(bucketCount)
     expect(first.every((line) => !line.cached && line.source === 'live')).toBe(

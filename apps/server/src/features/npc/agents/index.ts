@@ -51,7 +51,7 @@ export function createNpcAgents(
         instructions: `${instructions}
 ${QUEST_RULES}
 Your allowed entities: ${JSON.stringify(QUEST_DOMAINS[id as NpcId])}
-Example valid quest spec: ${JSON.stringify(seedsFor(id as NpcId)[0])}`,
+Example valid quest spec: ${JSON.stringify(seedsFor(id as NpcId, 'en')[0])}`,
         model,
         memory,
         tools,
