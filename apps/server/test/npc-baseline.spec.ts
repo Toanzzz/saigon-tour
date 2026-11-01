@@ -41,7 +41,9 @@ function canon(value: unknown): unknown {
 /** Seeds carry no stable id of their own; sort by giver then title for determinism. */
 function sortedSeeds() {
   return [...QUEST_SEEDS]
-    .map((s) => canon(s) as { giverNpcId: string; text: { en: { title: string } } })
+    .map(
+      (s) => canon(s) as { giverNpcId: string; text: { en: { title: string } } }
+    )
     .sort((a, b) =>
       `${a.giverNpcId}:${a.text.en.title}`.localeCompare(
         `${b.giverNpcId}:${b.text.en.title}`

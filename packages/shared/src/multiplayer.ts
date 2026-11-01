@@ -12,17 +12,7 @@ import { FriendshipMapSchema } from './quest/friendship'
 import { AvatarBodySchema, LookSchema, UnlocksSchema } from './unlocks'
 
 export const WORLD_BOUNDS = { x: [-110, 150], z: [-120, 100] } as const
-export const NPC_POSITIONS = {
-  hoa: [-23, 0, 3.5],
-  tam: [-12, 0, 10],
-  linh: [24, 0, -5],
-  ba: [23, 0, 29],
-  mai: [-30, 0, 8],
-  alex: [92, 0, -38],
-  vy: [64, 0, -18],
-  son: [103, 0, -78],
-  thao: [94, 0, -31],
-} satisfies Record<z.infer<typeof NeighborIdSchema>, [number, number, number]>
+export { NPC_POSITIONS } from './npcs/derive'
 export const EmoteSchema = z.enum(['wave', 'thanks', 'hello', 'follow-me'])
 export type Emote = z.infer<typeof EmoteSchema>
 export const PositionSchema = z.tuple([

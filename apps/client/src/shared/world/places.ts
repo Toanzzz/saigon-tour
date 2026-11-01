@@ -1,10 +1,4 @@
-import {
-  type LocationId,
-  NPC_POSITIONS,
-  type NpcId,
-  RESIDENT_ANCHORS,
-  RESIDENTS,
-} from '@saigon/shared'
+import { type LocationId, NPC_LOOKS, type NpcId } from '@saigon/shared'
 import { m } from '@/shared/i18n'
 
 export type Point = [number, number, number]
@@ -12,34 +6,21 @@ export const SPAWN: Point = [-23, 0.9, 10]
 export const PEOPLE: Record<
   NpcId,
   { at: Point; model: string; color: string }
-> = {
-  ...(Object.fromEntries(
-    Object.values(RESIDENTS).map((npc) => [
-      npc.id,
-      {
-        at: [
-          RESIDENT_ANCHORS[npc.id].at[0],
-          0.12,
-          RESIDENT_ANCHORS[npc.id].at[1],
-        ] as Point,
-        model: 'male-a',
-        color: '#baddc1',
-      },
-    ])
-  ) as Record<
-    keyof typeof RESIDENTS,
-    { at: Point; model: string; color: string }
-  >),
-  hoa: { at: NPC_POSITIONS.hoa, model: 'female-b', color: '#f6c568' },
-  tam: { at: NPC_POSITIONS.tam, model: 'male-a', color: '#85c7b6' },
-  linh: { at: NPC_POSITIONS.linh, model: 'female-a', color: '#ed9d86' },
-  ba: { at: NPC_POSITIONS.ba, model: 'male-b', color: '#eddca7' },
-  mai: { at: NPC_POSITIONS.mai, model: 'female-b', color: '#baddc1' },
-  alex: { at: NPC_POSITIONS.alex, model: 'male-a', color: '#c6b5e5' },
-  vy: { at: NPC_POSITIONS.vy, model: 'female-a', color: '#e6a56e' },
-  son: { at: NPC_POSITIONS.son, model: 'male-b', color: '#8fc2d1' },
-  thao: { at: NPC_POSITIONS.thao, model: 'female-b', color: '#d5a8c9' },
-}
+> = Object.fromEntries(
+  Object.values(NPC_LOOKS).map((look) => [
+    look.id,
+    {
+      at: [
+        look.at[0],
+        look.kind === 'neighbor' ? 0 : 0.12,
+        look.at[1],
+      ] as Point,
+      model: look.body === 'own' ? 'female-b' : look.body,
+      color: look.color,
+    },
+  ])
+) as Record<NpcId, { at: Point; model: string; color: string }>
+
 export const PLACES: Record<
   LocationId,
   { at: Point; stop: Point; label: string }

@@ -11,10 +11,10 @@ import {
   QUEST_DOMAINS,
   RESIDENT_ANCHORS,
   RESIDENT_IDS,
-  residentPrompt,
   seedsFor,
   UNLOCKS,
 } from '@saigon/shared'
+import { residentPrompt } from '@saigon/shared/personas'
 import { describe, expect, it } from 'vitest'
 
 /** Every packaged NPC must reconstruct exactly what the shared tables hold today. */

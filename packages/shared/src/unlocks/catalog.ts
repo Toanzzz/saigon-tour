@@ -1,14 +1,7 @@
-/** Neighbour ids that grant unlocks. Mirrors NEIGHBOR_IDS without importing entities (avoids a cycle). */
-export type UnlockGiver =
-  | 'hoa'
-  | 'tam'
-  | 'linh'
-  | 'ba'
-  | 'mai'
-  | 'alex'
-  | 'vy'
-  | 'son'
-  | 'thao'
+import type { NeighborId } from '@saigon/npc-kit'
+
+/** Neighbour ids that grant unlocks. */
+export type UnlockGiver = NeighborId
 
 /** Permanent reward slots a player can equip. One item per slot at a time. */
 export const UNLOCK_SLOTS = [

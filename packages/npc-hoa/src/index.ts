@@ -1,6 +1,5 @@
 import { defineNpc } from '@saigon/npc-kit'
 import { look } from './look'
-import { persona } from './persona'
 import { place } from './place'
 import { profile } from './profile'
 import { story } from './story'
@@ -13,5 +12,4 @@ export default defineNpc({
   unlocks,
   look,
   place,
-  persona,
 })

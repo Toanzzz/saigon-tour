@@ -77,15 +77,6 @@
   font-size: 28px;
   line-height: 1;
 }
-.portrait-linh {
-  background: var(--leaf-hi);
-}
-.portrait-tam {
-  background: var(--pool);
-}
-.portrait-ba {
-  background: var(--bus);
-}
 .conversation-history {
   max-height: min(320px, 38dvh);
   min-height: 85px;
@@ -219,26 +210,6 @@
   border: var(--edge);
   border-radius: 14px 14px 14px 4px;
   font-size: 14px;
-}
-
-/* Per-NPC portrait colors */
-.portrait-hoa {
-  background: var(--roof-hi);
-}
-.portrait-mai {
-  background: var(--leaf-hi);
-}
-.portrait-alex {
-  background: var(--pool);
-}
-.portrait-vy {
-  background: var(--bus);
-}
-.portrait-son {
-  background: var(--leaf-hi);
-}
-.portrait-thao {
-  background: var(--roof-hi);
 }
 
 /* Errands strip between header and history */

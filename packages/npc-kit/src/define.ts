@@ -91,8 +91,6 @@ export interface NpcDefinition {
   unlocks: UnlockSpec[]
   look: NpcLook
   place: NpcPlace
-  /** AI prompt body, server-only. No SHARED_RULES. */
-  persona: string
 }
 
 /** Identity helper: validates the id at the type level and returns the definition. */
@@ -195,6 +193,5 @@ export function defineResident(input: ResidentInput): NpcDefinition {
       ...(input.walk ? { walk: input.walk } : {}),
       ...(input.phase !== undefined ? { phase: input.phase } : {}),
     },
-    persona: '',
   }
 }
