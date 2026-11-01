@@ -26,7 +26,7 @@ export async function recordTurn(
       },
     })
   const messages: MastraDBMessage[] = [
-    { role: 'user' as const, text: message },
+    ...(message.trim() ? [{ role: 'user' as const, text: message }] : []),
     { role: 'assistant' as const, text: reply },
   ].map(({ role, text }, index) => ({
     id: randomUUID(),

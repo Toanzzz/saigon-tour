@@ -53,7 +53,7 @@ describe('guest NPC turns', () => {
         })
     )
     vi.stubGlobal('fetch', fetchMock)
-    const turn = converse('Hello!', 'greet', true)
+    const turn = converse('', 'greet', true)
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
     update({
       pending: [
@@ -73,6 +73,7 @@ describe('guest NPC turns', () => {
     )
     expect(JSON.parse(options.body as string)).toMatchObject({
       intent: 'greet',
+      message: '',
       events: [{ type: 'talk', npcId: 'hoa' }],
     })
     expect(JSON.parse(options.body as string)).not.toHaveProperty('playerId')
@@ -86,7 +87,7 @@ describe('guest NPC turns', () => {
       'fetch',
       vi.fn().mockResolvedValue(new Response(null, { status: 503 }))
     )
-    await converse('Hello!', 'greet', true)
+    await converse('', 'greet', true)
     expect(game.state.source).toBe('fallback')
     expect(game.state.dialogue?.thinking).toBe(false)
     expect(game.state.pending).toEqual([{ type: 'talk', npcId: 'hoa' }])

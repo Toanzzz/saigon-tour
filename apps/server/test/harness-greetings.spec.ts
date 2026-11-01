@@ -1,4 +1,4 @@
-import { LocaleSchema, NEIGHBOR_IDS } from '@saigon/shared'
+import { LocaleSchema, NPCS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
 import { GREETING_BUCKETS, NPC_PERSONAS } from '@/features/npc'
@@ -14,7 +14,7 @@ import {
 const ctx = setupNpc()
 
 describe('Mastra NPC harness greetings', () => {
-  it('caches tool-free greetings and includes the opening in the next live turn', async () => {
+  it('caches assistant-only greetings and includes the opening in the next live turn', async () => {
     const seen: { messages: unknown[]; tools?: unknown[] }[] = []
     const harness = ctx.fx.harness(
       live,
@@ -28,7 +28,7 @@ describe('Mastra NPC harness greetings', () => {
     )
     const first = await harness.interact(
       'hoa',
-      ask('Hello, neighbor!', {
+      ask('', {
         intent: 'greet',
         worldContext: { ...worldContext, timeOfDay: 'morning' },
       }),
@@ -45,7 +45,7 @@ describe('Mastra NPC harness greetings', () => {
     const other = (await ctx.fx.guest()).player.id
     const cached = await harness.interact(
       'hoa',
-      ask('Hello again!', {
+      ask('', {
         intent: 'greet',
         worldContext: { ...worldContext, timeOfDay: 'morning' },
       }),
@@ -56,9 +56,9 @@ describe('Mastra NPC harness greetings', () => {
     expect(seen).toHaveLength(1)
     await harness.interact('hoa', ask('Tell me about breakfast'), ctx.playerId)
     const messages = JSON.stringify(seen.at(-1)?.messages)
-    expect(messages).toContain('Hello, neighbor!')
+    expect(messages).toContain('Tell me about breakfast')
     expect(messages).toContain(first.reply)
-    expect(messages).not.toContain('Hello again!')
+    expect(messages).not.toContain('Hello, neighbor!')
   })
 
   it('caches greetings per language and asks for Vietnamese', async () => {
@@ -71,7 +71,7 @@ describe('Mastra NPC harness greetings', () => {
       )
     )
     const greet = (locale: 'en' | 'vi') =>
-      ask('Hello!', {
+      ask('', {
         intent: 'greet',
         locale,
         worldContext: { ...worldContext, timeOfDay: 'morning' },
@@ -112,7 +112,7 @@ describe('Mastra NPC harness greetings', () => {
     })
     const greeting = await harness.interact(
       'hoa',
-      ask('Xin chào', { intent: 'greet', locale: 'vi' }),
+      ask('', { intent: 'greet', locale: 'vi' }),
       ctx.playerId
     )
     expect(greeting.reply).toContain('Sài Gòn')
@@ -126,13 +126,34 @@ describe('Mastra NPC harness greetings', () => {
     expect(help.reply).toContain('nhật ký')
   })
 
+  it('does not cache a greeting cut off by the output limit', async () => {
+    const harness = ctx.fx.harness(live, (async () =>
+      Response.json({
+        choices: [
+          {
+            index: 0,
+            message: { role: 'assistant', content: 'Chào con! Good' },
+            finish_reason: 'length',
+          },
+        ],
+        usage: { prompt_tokens: 10, completion_tokens: 4 },
+      })) as typeof fetch)
+    const greeting = await harness.interact(
+      'hoa',
+      ask('', { intent: 'greet' }),
+      ctx.playerId
+    )
+    expect(greeting.source).toBe('fallback')
+    expect(greeting.reply).not.toBe('Chào con! Good')
+  })
+
   it('invalidates cached greetings when the persona changes', async () => {
     const seen: unknown[] = []
     const harness = ctx.fx.harness(
       live,
       scripted([{ text: 'Welcome by the river.' }], seen)
     )
-    const input = ask('Hello!', {
+    const input = ask('', {
       intent: 'greet',
       worldContext: { ...worldContext, timeOfDay: 'night' },
     })
@@ -156,10 +177,10 @@ describe('Mastra NPC harness greetings', () => {
       scripted([{ text: 'Chào! Enjoy the neighborhood.' }], seen)
     )
     const bucketCount =
-      NEIGHBOR_IDS.length *
+      Object.keys(NPCS).length *
       GREETING_BUCKETS.length *
       LocaleSchema.options.length
-    expect(bucketCount).toBe(72)
+    expect(bucketCount).toBe(232)
     const first = await harness.prewarm()
     expect(first).toHaveLength(bucketCount)
     expect(first.every((line) => !line.cached && line.source === 'live')).toBe(

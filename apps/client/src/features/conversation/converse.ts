@@ -64,7 +64,12 @@ async function mutate<T>(fn: () => Promise<T>) {
 /** One turn with an NPC through POST /npc/:npcId/interact. */
 export async function converse(text: string, intent: Intent, opening = false) {
   const dialog = game.state.dialogue
-  if (!dialog || (!opening && dialog.thinking) || !text.trim()) return
+  if (
+    !dialog ||
+    (!opening && dialog.thinking) ||
+    (intent !== 'greet' && !text.trim())
+  )
+    return
   update({ dialogue: { ...dialog, thinking: true } })
   const session = game.state.sessionId
   const canSend = await beginHttpTurn()

@@ -18,7 +18,7 @@ Every agent has `proposeQuest`, `dropQuest`, `adjustFriendliness`, `getContext`,
 
 Friendship lives on the locked player row as JSON. Levels range from −5 to +5 and start from authored presets. The model may request one ±1 adjustment per turn, subject to a three-minute per-player/NPC cooldown. Chat can raise friendship only to +3; completed quests can reach +5. Socket saves carry friendship with the normal revision.
 
-Postgres stores every server conversation under `npcId:playerId`, including greetings and fallback replies. `GET /npc/:npcId/history?limit=30` authenticates the caller and returns only user/assistant text parts from that caller’s thread. The client persists history in TanStack Query, includes offline turns locally, and clears it on journey reset or sign-out. Tool payloads and system context are excluded from the history response.
+Opening a conversation sends no player message. The server records the cached NPC greeting as an assistant message in the `npcId:playerId` thread, so the next player message includes it in model context. Postgres also stores fallback replies. `GET /npc/:npcId/history?limit=30` authenticates the caller and returns only user/assistant text parts from that caller’s thread. The client persists history in TanStack Query, includes offline turns locally, and clears it on journey reset or sign-out. Tool payloads and system context are excluded from the history response.
 
 Mastra Observational Memory compacts each thread using the same explicit metered model as the NPC. The Observer threshold is 3,000 message tokens; the Reflector threshold is 2,000 observation tokens. Both have 600 output-token limits and minimal reasoning. Async buffering keeps compaction off the ordinary request path. Hooks log token usage. Observations preserve promises, preferences, gifts, errands, and tone. A bounded context wrapper limits raw messages to forty because OM ignores `lastMessages`. Twelve durable facts per NPC/player remain available alongside observations. Reset waits for memory work, clears OM records explicitly, and deletes all 29 threads.
 
@@ -26,7 +26,7 @@ Mastra Observational Memory compacts each thread using the same explicit metered
 
 Deprecated `help` and `check` intent values normalize to chat. Ready completion runs deterministically. A missing live reply permits a validated seed offer only when the player’s message asks for help; a live reply is preserved. The browser offline mirror expires stale errands, completes solo ready errands, applies friendship, and offers seeds through the same shared rules. Party rewards require server authority.
 
-The harness allows three model steps, sanitizes replies, enforces timeouts and call limits, and reserves spend before every provider request, including Observer and Reflector requests. Unknown usage retains the reservation ceiling. Secrets stay in server environment variables. Greetings cache by NPC, time, locale, model/persona hash, and friendliness band; prewarm and barks cover neighbors only.
+The harness allows three model steps, sanitizes replies, enforces timeouts and call limits, and reserves spend before every provider request, including Observer and Reflector requests. Unknown usage retains the reservation ceiling. Secrets stay in server environment variables. Greetings cache by NPC, time, locale, model/persona hash, and friendliness band. Prewarm covers all 29 NPCs; barks cover neighbors only.
 
 ## Journal and party errands
 

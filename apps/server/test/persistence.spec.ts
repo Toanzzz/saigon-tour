@@ -130,7 +130,7 @@ describe('durable guest progress', () => {
     await first.harness.interact(
       'hoa',
       {
-        message: 'Hello!',
+        message: '',
         intent: 'greet',
         events: [],
         worldContext: {

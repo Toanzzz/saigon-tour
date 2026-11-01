@@ -4,7 +4,6 @@ import type { MastraModelConfig } from '@mastra/core/llm'
 import {
   type Locale,
   LocaleSchema,
-  NEIGHBOR_IDS,
   NPCS,
   type NpcId,
   type TimeOfDay,
@@ -75,7 +74,7 @@ export class ShortLines {
 
   key(npc: NpcId, bucket: TimeOfDay, locale: Locale = 'en', band = 'neutral') {
     const hash = createHash('sha256')
-      .update(`${NPC_PERSONAS[npc]}\0${this.modelId}`)
+      .update(`greeting-v2\0${NPC_PERSONAS[npc]}\0${this.modelId}`)
       .digest('hex')
     return `${npc}:${bucket}:${locale}:${band}:${hash}`
   }
@@ -121,7 +120,7 @@ export class ShortLines {
   async prewarm() {
     const results = []
     for (const locale of LocaleSchema.options)
-      for (const npc of NEIGHBOR_IDS)
+      for (const npc of Object.keys(NPCS) as NpcId[])
         for (const bucket of GREETING_BUCKETS)
           results.push({
             npcId: npc,
@@ -159,12 +158,13 @@ export class ShortLines {
           activeTools: [],
           maxSteps: 1,
           abortSignal: AbortSignal.timeout(this.timeoutMs),
-          modelSettings: { maxOutputTokens: 120, maxRetries: 0 },
+          modelSettings: { maxOutputTokens: 300, maxRetries: 0 },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         }
       )
       const reply = cleanReply(result.text)
-      if (reply) return { reply, source: 'live' }
+      if (reply && result.finishReason !== 'length')
+        return { reply, source: 'live' }
     } catch (error) {
       if (storageUnavailable(error)) throw error
       /* Deterministic neighborhood life continues without the model. */

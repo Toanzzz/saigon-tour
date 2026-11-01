@@ -218,7 +218,7 @@ export async function talk(npc: NpcId) {
       },
     })
   }
-  await converse(m.prompt_greet(), 'greet', true)
+  await converse('', 'greet', true)
 }
 export const chat = (text: string) => converse(text, 'chat')
 export async function giveItem() {

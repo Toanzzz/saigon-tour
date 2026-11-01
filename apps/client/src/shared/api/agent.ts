@@ -132,7 +132,10 @@ export function offline(
   quests = quests.filter((quest) => quest.status !== 'completed')
   if (questEvents.some((event) => event.type === 'completed'))
     reply = m.offline_thanks()
-  if (looksLikeHelpRequest(body.message) && canOfferQuests(friendship, npc)) {
+  if (
+    looksLikeHelpRequest(body.message ?? '') &&
+    canOfferQuests(friendship, npc)
+  ) {
     const spec = seedsFor(npc, getLocale()).find(
       (candidate) =>
         validateSpec(candidate, { quests }).ok &&

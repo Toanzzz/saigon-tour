@@ -67,7 +67,7 @@ export const PlayerEventSchema = z.discriminatedUnion('type', [
 export type PlayerEvent = z.infer<typeof PlayerEventSchema>
 export const InteractRequestSchema = z
   .object({
-    message: z.string().trim().min(1).max(500),
+    message: z.string().trim().max(500).default(''),
     // Deprecated help/check are accepted as chat for older clients.
     intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
     locale: LocaleSchema.default('en'),
@@ -81,6 +81,13 @@ export const InteractRequestSchema = z
       .strict(),
   })
   .strict()
+  .refine(
+    (request) => request.intent === 'greet' || request.message.length > 0,
+    {
+      path: ['message'],
+      message: 'Message is required',
+    }
+  )
 export type InteractRequest = z.infer<typeof InteractRequestSchema>
 export const QuestOutcomeSchema = z.enum([
   'offered',

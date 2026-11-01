@@ -27,7 +27,7 @@ describe('storage availability', () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: 'hello',
+          message: '',
           intent: 'greet',
           worldContext: { playerLocation: 'market', timeOfDay: 'morning' },
         }),

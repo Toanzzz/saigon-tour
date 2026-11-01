@@ -15,7 +15,7 @@ describe('NPC history', () => {
     const other = await ctx.fx.guest()
     await app.harness.interact(
       'bread-vendor',
-      ask('Hello!', { intent: 'greet' }),
+      ask('', { intent: 'greet' }),
       guest.player.id
     )
     await app.harness.interact(
@@ -32,7 +32,8 @@ describe('NPC history', () => {
     }
     expect((await app.request('/npc/bread-vendor/history')).status).toBe(401)
     const saved = await history(guest.token)
-    expect(saved.messages).toHaveLength(4)
+    expect(saved.messages).toHaveLength(3)
+    expect(saved.messages[0]).toMatchObject({ role: 'assistant' })
     expect(saved.messages.map((line: { text: string }) => line.text)).toContain(
       'Any errands?'
     )

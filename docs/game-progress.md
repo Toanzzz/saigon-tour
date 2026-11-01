@@ -63,3 +63,5 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Scripted compaction spike and 25-turn live Postgres memory flow pass. Live prompt tokens fall from 4,181 to 2,871 after compaction; turn-two lotus tea preference is recalled.
 - Desktop and 390px Playwright: walker pause, chat offer, automatic completion, +1 friendship, abandonment −1, reopened/reloaded history, authenticated reset clearing history, reduced-motion fade, and no page errors or overflow pass.
 - Live model-authored herb delivery and greet completion pass: propose-quest, 55 coins, once-only reward.
+
+- Opening an NPC conversation shows a cached assistant greeting without sending an automatic player line. The greeting is stored in that NPC/player thread for later model context.

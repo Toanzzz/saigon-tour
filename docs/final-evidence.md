@@ -100,3 +100,8 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Live quest script with `google/gemini-3.8-flash`: model calls `propose-quest`, delivery advances, giver greet completes, wallet reaches 55, repeated completion does not grant again. Recorded usage: 4,284 input / 128 output tokens, estimated $0.002398.
 - Live memory script: 25 turns using Postgres storage, explicit metered compatible model, minimal reasoning, asynchronous observation. Observations exist; prompt input falls from 4,181 at turn 19 to 2,871 at turn 20; turn-two lotus tea preference is recalled on turn 26. Raw context is bounded to forty messages through `getContext`, since Mastra OM ignores `lastMessages`. Reset explicitly clears the OM record because the installed Postgres adapter's `deleteThread` removes only messages, vectors, and thread metadata.
 - Verification commands using `.env` unset inherited `META_MUSE_API_KEY`: the inherited old key returned provider HTTP 401 while the updated file credential succeeded. No secret values are recorded.
+
+## NPC opening greetings
+
+- Opening a conversation sends `intent: greet` with an empty message. Headless Playwright at 1440×900 and 390×900 showed one NPC line, no player line, and no `What is happening in the neighborhood?` text. The next typed message included the greeting in the model context. Asked what the NPC had just said, the NPC repeated its greeting.
+- The run exposed a provider greeting stopped by the output limit (`finish_reason: length`). Greeting generation now allows 300 output tokens, skips caching truncated replies, and versions the cache key.

@@ -27,7 +27,15 @@ export function appendHistory(npcId: NpcId, message: string, reply: string) {
   queryClient.setQueryData<NpcHistory>(historyKey(npcId), (old) => ({
     messages: [
       ...(old?.messages ?? []),
-      { role: 'user' as const, text: message, at: new Date().toISOString() },
+      ...(message.trim()
+        ? [
+            {
+              role: 'user' as const,
+              text: message,
+              at: new Date().toISOString(),
+            },
+          ]
+        : []),
       { role: 'assistant' as const, text: reply, at: new Date().toISOString() },
     ].slice(-30),
   }))

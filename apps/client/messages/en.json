@@ -96,7 +96,6 @@
   "toast_added_to_bag": "{item} added to your bag.",
   "hud_talk_to": "Talk to {name}",
   "hud_choose_ride": "Choose a ride",
-  "prompt_greet": "Chào bạn! What is happening in the neighborhood?",
   "prompt_help": "I would love to help. Do you have an errand for me?",
   "prompt_deliver": "Here is the {item} for your errand!",
   "prompt_check": "I finished your errand. Can you check?",
