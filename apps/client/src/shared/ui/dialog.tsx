@@ -28,10 +28,10 @@ export function Dialog({
       ref={ref}
       className={`journal-dialog ${className}`}
       aria-labelledby={id}
-      onCancel={(event) => {
-        event.preventDefault()
-        onClose()
-      }}
+      // Visibility is driven by the game store, not the browser's native
+      // Escape-to-close. Suppress the native `cancel` default; the global key
+      // handler is the single source of truth for Escape.
+      onCancel={(event) => event.preventDefault()}
     >
       <div className="dialog-heading">
         <div>

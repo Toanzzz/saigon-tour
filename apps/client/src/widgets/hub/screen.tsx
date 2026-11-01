@@ -23,10 +23,9 @@ export function HubScreen({ state }: { state: GameState }) {
       ref={ref}
       className="hub-screen"
       aria-labelledby="hub-title"
-      onCancel={(event) => {
-        event.preventDefault()
-        closeHub()
-      }}
+      // Visibility is driven by the game store; the global key handler owns
+      // Escape. Suppress the native cancel so it cannot double-close.
+      onCancel={(event) => event.preventDefault()}
     >
       <div className="hub-inner">
         <header className="hub-topbar">
