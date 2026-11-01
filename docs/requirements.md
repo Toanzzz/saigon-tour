@@ -237,8 +237,8 @@ so nothing breaks on stage.
 ## Out of scope (for the hackathon window)
 
 - Large open-world map, full city scale, or accurate geographic replica of HCMC.
-- Real accounts, cross-browser identity, typed public chat, monetization, and XR party controls.
-  Guest rooms, presence, and desktop parties are in scope (`docs/multiplayer.md`).
+- Typed public chat, monetization, and XR party controls. Guest rooms, presence, desktop
+  parties, and optional Meta login are in scope (`docs/multiplayer.md`).
 - Photorealistic graphics; the art target is a clean stylized/low-poly look.
 - Full traffic simulation; ambient traffic is decorative only.
 

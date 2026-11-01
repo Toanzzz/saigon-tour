@@ -6,7 +6,7 @@ Be the neighbor who brings a small kindness across a lively city. Wander, talk, 
 
 Every 5–30 seconds the player chooses a direction, meets someone, boards a ride, or checks a landmark. Neighbors author small errands with one to three steps. Players choose which errands to follow, visit places, talk, deliver, or buy, then return to the giver for coins, reputation, and a persona-appropriate gift.
 
-Fares make route choice matter: walking is free, the bus costs 5 coins. A premature claim earns clear directions rather than a reward. Restart resets the saved journey while keeping the guest identity. Better players read the map, use nearby stops, and spend fewer fares. No combat, health bar, or imposed deadline.
+Fares make route choice matter: walking is free; rides cost 3–8 coins (cyclo 3, bus 5, metro 6, xe ôm 8). A premature claim earns clear directions rather than a reward. Restart resets the saved journey while keeping the guest identity. Better players read the map, use nearby stops, and spend fewer fares. No combat, health bar, or imposed deadline.
 
 ## Core loop contract
 
@@ -36,10 +36,11 @@ The player starts in front of the market, facing Cô Hoa. The first decision is 
 
 Modular shophouses, palms, pavement, stall props, benches, and ambient pedestrians form the surrounding city. Static building colliders use simple Rapier proxies; detailed meshes do not drive collision.
 
+Scope guardrails: a stylized, hand-authored District 1, not a full-scale or geographically exact city; no Chợ Lớn or District 5, no visitable tower interiors, no full metro network or traffic simulation, and no photorealistic assets. Landmarks are façades except where gameplay needs a space. Props are instanced, and ambient agents animate near the player. Targets are ≥ 60 FPS on desktop and ≥ 72 FPS on Quest 3.
 
 ## Shared neighborhood and co-op
 
-Anonymous guests retain progress in Postgres. The People control (`P`) shows the public room and party invitations; `Q` sends fixed emotes and phrases. Nearby tourists interpolate at a 150 ms delay. NPC room lines run on proximity events and bounded cooldowns. A City Director creates shared festivals, market rushes, rain, street music, and lost-item events, moves neighbors between authored anchors, and gives them needs that shape new errands. Event markers and the hub’s City pulse explain what is happening. Rain changes tint and fog.
+Everyone shares one street room of twenty. When it is full, a waiting notice names the longest stroller, the game retries every ten seconds, and solo play continues. Anonymous guests retain progress in Postgres. The People control (`P`) shows the public room and party invitations; `Q` sends fixed emotes and phrases. Nearby tourists interpolate at a 150 ms delay. NPC room lines run on proximity events and bounded cooldowns. A City Director creates shared festivals, market rushes, rain, street music, and lost-item events, moves neighbors between authored anchors, and gives them needs that shape new errands. Event markers and the hub’s City pulse explain what is happening. Rain changes tint and fog.
 
 Parties of two to four support invitations and shared presence. Each player’s quest journal and rewards are saved independently. A party speaker can receive a shared errand. Each recipient follows their own steps, then one return visit rewards all ready recipients once. The journal supports tracking and abandoning errands, and the minimap marks the tracked target. See `docs/multiplayer.md` for protocol, topology, and persistence behavior.
 
@@ -53,6 +54,6 @@ Players request errands in chat, give carried items through the conversation, an
 
 ## Avatar and wardrobe
 
-Players pick a plain young man or young woman on the title screen. The body is identity, like the name: it can be changed later from the wardrobe and survives a new journey. Both bodies are Kenney mini-characters whose shirt and trouser faces are split into recolourable `outfit-top` and `outfit-bottom` materials, so earned outfits recolour the clothing without touching skin or face.
+Players pick a plain young man or young woman with the gender toggle beside the name on the title screen; the dice rolls a body and a matching name. The body is identity, like the name: it can be changed later from the wardrobe or the Pause menu and survives a new journey. Both bodies are Kenney mini-characters whose shirt and trouser faces are split into recolourable `outfit-top` and `outfit-bottom` materials, so earned outfits recolour the clothing without touching skin or face.
 
 Neighbor gifts land in the wardrobe as hats, outfits, accessories, rides, and follower pets, one equipped per slot. The wardrobe is a 3D fitting room: a turning avatar stage on one side and slot tabs with spinning item previews on the other. Earned items equip and unequip at any time — from the wardrobe (key `I`) while walking, riding, paused, or in the hub, or straight from the reward popup with "Wear now". Locked items show who grants them and at which friendship tier.

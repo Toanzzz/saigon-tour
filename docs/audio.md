@@ -9,7 +9,7 @@
 | Board / arrive          | `bell.mp3`    | sfx      | 0.55        | No   |
 | Verified reward         | `reward.mp3`  | sfx      | 0.70        | No   |
 
-Runtime files live in `apps/client/public/audio/`. No existing audio was present in the asset inventory.
+Runtime files live in `apps/client/public/audio/`; the manager is `apps/client/src/shared/audio/index.ts`.
 
 ## Prompts
 
@@ -22,7 +22,7 @@ Runtime files live in `apps/client/public/audio/`. No existing audio was present
 
 The first player gesture creates and resumes Web Audio, then fetches and decodes the four files. Mute and volume apply through one master gain. Ambience has one loop source; pause and hidden tabs suspend playback. Restart cleanup stops and disconnects every source. Failed loads stay visible in `audio.stats().errors`, while gameplay continues.
 
-Five event names map to four files. UI events have an 80 ms cooldown, other events 120 ms. The manager limits simultaneous effects to eight.
+Five events (`click`, `pickup`, `board`, `arrive`, `reward`) map to four files. UI events have an 80 ms cooldown, other events 120 ms. The manager limits simultaneous effects to eight.
 
 ## Validation
 
@@ -40,4 +40,4 @@ Run the isolated lifecycle check with a scratch Playwright installation:
 PLAYWRIGHT_MODULE=/tmp/saigon-tour-qa/node_modules/playwright/index.mjs node scripts/qa-audio.mjs
 ```
 
-Set `PLAYWRIGHT_CHROMIUM` to override the local cached browser executable. Results are written to `artifacts/audio-check.json`; the harness serves on port 58009.
+Set `PLAYWRIGHT_CHROMIUM` to override the local cached browser executable. Results are written to `artifacts/audio-check.json`; the harness serves on port 58009. The script still imports the old `apps/client/src/audio/index.ts` path, so it fails until that path is updated.

@@ -8,7 +8,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 
 ## Phase 0 — Foundations (P0)
 
-- [x] 1. **Scaffold the Bun monorepo** (R0.2; Design §2, §10)
+- [x] 1. **Scaffold the Bun monorepo** (R0.2; Design §2, §8)
   - Stack is locked: three.js + React Three Fiber + @react-three/xr, full TypeScript ^7, solo.
   - Create Bun workspace (`bun@1.4.4`, isolated linker): `apps/client` (Vite + React + TS),
     `apps/server` (Node + Hono + TS), `packages/shared` (zod v4 schemas + types).
@@ -17,20 +17,20 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - Add an asset-only `wrangler.jsonc` to serve the built client on Cloudflare.
   - Add root README stating the project is built for the hackathon.
   - Initialize a **public** git repo and push.
-  - _Requirements: R0.2, A2, Design §2, §10_
+  - _Requirements: R0.2, A2, Design §2, §8_
 
 - [x] 2. **Verify a raw Meta Model API call** (R0.1, R9) — _credits already claimed_
   - From `apps/server/`, make a smoke-test call to Muse Spark and confirm a response; pin the
-    exact model IDs in `docs/` (resolves Design D2).
+    model ID in `docs/meta-api.md`.
   - Confirm the spend limit is set to protect the $150 budget.
-  - _Requirements: R0.1, R9.2, Design D2_
+  - _Requirements: R0.1, R9.2_
 
 - [x] 3. **Backend AI proxy skeleton** (R9)
   - Hono server (TS) with `/health`, env-based Meta key, credentialed CORS for the Cloudflare
     client origin, 7-key structured logger, and `export type AppType` for the `hc<>` client.
   - `MetaClient` wrapper + model selector (hosted vs open-weight) behind config.
   - Add a `Dockerfile` for `apps/server`; the proxy ships as a Docker image to a small host
-    behind a TLS-terminating reverse proxy (Design §5, §11 D5).
+    behind a TLS-terminating reverse proxy.
   - _Requirements: R9.1, R9.2, R9.4, R9.5_
 
 ## Phase 1 — Explorable city + movement (P0)
@@ -46,7 +46,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - _Requirements: R1.1, R1.5, A3, R0.3_
 
 - [x] 6. **PlayerController + physics (desktop)** (R2, R1.2)
-  - WASD + mouse-look + sprint + interact; capsule collider; walkable-surface constraint;
+  - WASD + drag-to-look + sprint + interact; capsule collider; walkable-surface constraint;
     movement state machine `WALKING | RIDING | IN_DIALOGUE`.
   - _Requirements: R2.1, R2.2, R1.2_
 
@@ -60,26 +60,27 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - Define `NpcPersona` records; place **Cô Hoa** in the market with an idle presence.
   - _Requirements: R3.2, Design §6_
 
-- [x] 9. **`/npc/chat` dialogue turn end-to-end** (R3.1, R3.5, R3.7, R9.3)
+- [x] 9. **NPC dialogue turn end-to-end (`POST /npc/:npcId/interact`)** (R3.1, R3.5, R3.7, R9.3)
   - PromptBuilder (persona + world rules + output contract); call Muse Spark; thinking
     indicator; timeout + unreachable fallback lines; dev logging.
   - Desktop dialogue UI: NPC name, history, text input.
   - _Requirements: R3.1, R3.5, R3.6, R3.7, R6.3, R9.3, R10.3_
 
-- [x] 10. **`/npc/quest` structured quest proposal** (R3.3, R5.2)
-  - Model returns a schema-validated `Quest` (Zod); OutputValidator repair/reject path.
+- [x] 10. **Structured quest proposal (`propose-quest` tool)** (R3.3, R5.2)
+  - The agent proposes through a Zod-validated tool; `QuestService` rejects with specific
+    reasons and the model corrects within its step budget.
   - NPC autonomously decides when to offer; quest enters the QuestSystem.
   - _Requirements: R3.3, R5.2, R9.3, Design §5_
 
 - [x] 11. **QuestSystem + Inventory + HUD** (R5, R6.1)
-  - Quest log (active/completed), objective types (`TALK_TO/GO_TO/DELIVER/COLLECT`),
+  - Quest log (active/completed), step types (`GO_TO/TALK_TO/DELIVER/BUY`),
     currency + items; minimal HUD (currency, active-quest hint, prompts).
   - _Requirements: R5.1, R5.2, R5.4, R5.5, R6.1_
 
-- [x] 12. **`/npc/verify` completion + reward grant** (R3.4, R5.3)
-  - Deterministic checks for `GO_TO/COLLECT`; model-assisted judgment for fuzzy claims;
-    grant reward, mark quest complete, reward feedback in UI.
-  - _Requirements: R3.4, R5.3, Design D3_
+- [x] 12. **Completion + reward grant** (R3.4, R5.3)
+  - Deterministic step checks; any interaction with the giver completes ready quests, grants
+    the reward once, and shows reward feedback in the UI.
+  - _Requirements: R3.4, R5.3_
 
 - [x] 13. **Output safety + cost guard** (R3.6, R9.3)
   - System-prompt scoping, output sanitation, per-session rate/cost ceiling → fallback.
@@ -101,6 +102,8 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 - [ ] 16. **Demo seed + pre-warm/cache** (R10.1, R10.2, R10.4)
   - One-key `DemoSeed` scenario reproducing spawn → NPC → AI quest → ride → complete →
     reward; pre-warm/cache the demo path's AI responses; verify every fallback path.
+  - Exists: greeting prewarm for all NPCs, cached greetings, `DIRECTOR_MODE=scripted`, and
+    deterministic offline seeds. Missing: the one-key demo scenario.
   - _Requirements: R10.1, R10.2, R10.4_
 
 - [x] 17. **Title/intro + controls screen** (R6.2)
@@ -115,15 +118,23 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 
 ## Phase 5 — Breadth (P1)
 
-- [x] 19. **Add remaining NPCs (3–4 total)** — Anh Tâm, Chị Linh, Ông Ba. _(R3.2)_
+- [x] 19. **Add more NPCs** — nine neighbors and twenty walking residents. _(R3.2)_
 - [x] 20. **Add transport modes** — modern (Metro Line 1, bus) + traditional (xe ôm, cyclo).
   _(R4.3)_
 - [x] 21. **Full quest-log UI + inventory screen.** _(R5.1, R6.1)_
 - [x] 22. **Ambient city life + basic audio** (decorative traffic, pedestrians, street SFX).
-  _(Design §4.4, out-of-scope traffic = decorative only)_
+  _(Traffic stays decorative; `docs/audio.md`)_
 
-- [x] 22a. **Shared neighborhood** — rooms, presence, emotes, parties, team lunch errand.
+- [x] 22a. **Shared neighborhood** — one world room, presence, emotes, parties, party errands.
   _(docs/multiplayer.md)_
+- [x] 22b. **City Director** — shared events, weather, NPC moves and needs, headlines.
+  _(docs/agent-harness.md)_
+- [x] 22c. **NPC friendship and memory** — affinity, observational memory, history, greetings.
+  _(docs/agent-harness.md)_
+- [x] 22d. **Quest reward unlocks and 3D wardrobe** — cosmetics, rides, pets, plain bodies.
+  _(docs/game-design.md)_
+- [x] 22e. **English + Vietnamese** — Paraglide client catalogs and per-locale NPC replies.
+- [x] 22f. **CI deploy** — API image to t-oracle, client to Cloudflare on push to `main`.
 
 ## Phase 6 — Differentiators (P2)
 
@@ -153,7 +164,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 
 ## Phase 7 — Submission (required before Nov 4, 9:00 PM ET)
 
-- [ ] 28. **Record the 3-minute demo video** following `docs/demo-script.md` (R0.4)
+- [ ] 28. **Record the 3-minute demo video** (R0.4)
   - Narrate the agentic NPC loop + transport + VR; show what was built during the hackathon.
   - _Requirements: R0.4_
 

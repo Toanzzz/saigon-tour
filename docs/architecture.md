@@ -13,6 +13,7 @@
 | Layer      | Choice                                                                                   |
 | ---------- | ---------------------------------------------------------------------------------------- |
 | Client     | Vite, React, three.js, React Three Fiber, drei, Rapier, `@react-three/xr`                |
+| i18n       | Paraglide JS 2 catalogs (`apps/client/messages`): English and Vietnamese                 |
 | Data/state | TanStack Query (API), TanStack Store (game state)                                        |
 | API        | Node + Hono in a Docker image; `export type AppType` for `hc<>`; Colyseus realtime       |
 | Agents     | Mastra (`@mastra/core`, `@mastra/memory`, `@mastra/pg`) via `@ai-sdk/openai-compatible`  |
@@ -38,57 +39,63 @@ Client (desktop + WebXR) ──HTTPS JSON──▶ API (Hono, Docker) ──▶ 
 ```
 
 API routes: `GET /health`, `GET /auth/providers`, Better Auth under `/auth/*`, `GET /me`,
-`POST /me/profile`, `POST /me/reset`, `POST /me/quests/:questId/abandon`, `POST /npc/:npcId/interact`, `POST /matchmake/:method/world`
-(Colyseus). Details: `docs/meta-api.md`, `docs/multiplayer.md`.
+`POST /me/profile` (`{ name, body }`), `POST /me/equip`, `POST /me/reset`,
+`POST /me/quests/:questId/abandon`, `POST /npc/:npcId/interact`, `GET /npc/:npcId/history`,
+`POST /matchmake/:method/world` (Colyseus), and `GET /realtime/status`. Details:
+`docs/meta-api.md`, `docs/multiplayer.md`.
 
 ## 4. Client
 
 Layers flow `app → widgets → features → shared`; each slice exposes `index.ts`.
 
-- **Player:** WASD, mouse-look, sprint, interact; mobile joystick; XR locomotion and snap turn.
+- **Player:** WASD/arrows, drag-to-look, sprint, interact; mobile joystick; XR locomotion and snap turn.
 - **Conversation:** NPC dialogue with thinking state, timeout, and offline fallback lines.
 - **Transport:** `TravelMode = 'bus' | 'metro' | 'xeom' | 'cyclo'`; pick destination → fare →
   ride with the camera on the vehicle → arrive.
 - **World state:** location, coins, items, reputation, quests. After each NPC turn the client
   replaces it with the server's authoritative `world`.
-- **Multiplayer:** public street rooms, remote tourists, emotes, parties (2–4) with invitations and presence.
-- **Avatar and wardrobe:** a plain man or woman body chosen on the title screen and carried in presence as `body`; split `outfit-top`/`outfit-bottom` clothing materials recoloured by earned outfits; a 3D wardrobe (one shared drei `View` canvas) equips hats, outfits, accessories, rides, and pets at any time.
+- **Multiplayer:** one shared world room (20 players) with a waiting notice when full, remote tourists, emotes, parties (2–4) with invitations and presence.
+- **Avatar and wardrobe:** a plain man or woman body chosen with the title gender toggle and carried in presence as `body`; split `outfit-top`/`outfit-bottom` clothing materials recoloured by earned outfits; a 3D wardrobe (one shared drei `View` canvas) equips hats, outfits, accessories, rides, and pets at any time.
 - **City:** room-authoritative NPC anchors, events, needs, headlines, and weather. The hub exposes City pulse; rain uses tint/fog. NPC proximity follows synchronized positions.
 - **XR:** world-space panels and XR HUD; the DOM hub is hidden in XR.
+- **i18n:** locale comes from the saved choice, then a `vi*` browser, then `en`. Switching remounts only the DOM UI; NPC requests carry `locale`.
+- **Client state:** module-level TanStack Stores with explicit resets. `shared/state/game.ts` holds the game; `shared/state/ui.ts` holds UI drafts (name, journey confirm, transport form, chat, wardrobe tab, clock), seeded and cleared on game transitions by `installUiResets()`; `shared/state/view.ts` and `shared/api/presence-view.ts` hold frame-derived values (player animation, touch knob, NPC labels, remote presence) that one ticker writes only on change. Per-frame simulation data stays mutable. Pending flags come from `useMutation`. `GameUI` ignores position-only changes unless the nearest interact target moves. Rules: `apps/client/AGENTS.md`.
 
 ## 5. NPC agents
 
-`POST /npc/:npcId/interact` takes `{ message, intent, events, worldContext }` and derives player identity from the authenticated session. Intents are `chat | help | check | greet`; events are `visit | talk | deliver | purchase | spend`.
+`POST /npc/:npcId/interact` takes `{ message, intent, locale, events, worldContext }` and derives player identity from the authenticated session. Intents are `chat | greet` (`help` and `check` are accepted as chat); events are `visit | talk | deliver | purchase | spend`.
 
-- All nine NPCs have `propose-quest`, `check-quests`, `get-context`, and `remember-player-fact`.
-- `QuestService` owns player mutations, validates proposals against shared persona domains, and grants rewards once through durable completion records.
+- All 29 NPCs (nine neighbors, twenty residents) have `propose-quest`, `drop-quest`, `adjust-friendliness`, `get-context`, and `remember-player-fact`.
+- `QuestService` owns player mutations, validates proposals against shared persona domains, completes ready quests on any interaction with the giver, and grants rewards once through durable completion records.
 - Party quests share an id and original recipient list, with separate per-player progress. Completion locks recipient saves together and grants/pushes rewards once per member. Abandon removes the player’s copy and reclaims remaining supplied deliveries.
 - Quests contain one to three sequential `GO_TO`, `TALK_TO`, `DELIVER`, or `BUY` steps. Each player has at most three active quests; an accepted offer activates immediately and supplies delivery items.
 - `packages/shared/src/quest` owns schemas, allowlists, validation, progress, deterministic rewards, and fallback seeds. The offline client uses the same engine.
-- Memory: last ten messages per `npcId:playerId` thread plus up to twelve remembered facts, stored in Postgres.
+- Memory: Mastra Observational Memory per `npcId:playerId` thread, at most forty raw messages, and up to twelve remembered facts, stored in Postgres. Details: `docs/agent-harness.md`.
 - Guards: bounded model steps and timeouts, unsafe-text rejection, per-player/NPC/process call limits, reserved daily spend, and bark counts.
 
 ### City Director
 
-Each occupied room runs a director at most once per ninety seconds through the NPC scheduler. `CityWorld` validates event limits, authored anchors, safe text, needs, and weather. Model calls use the shared spend reservation plus a daily director turn count. `DIRECTOR_MODE=scripted` selects deterministic demo beats; `off` disables the loop. Live failures use the validated scripted beat list.
+The world room runs a director, while occupied, at most once per ninety seconds through the NPC scheduler. `CityWorld` validates event limits, authored anchors, safe text, needs, and weather. Model calls use the shared spend reservation plus a daily director turn count. `DIRECTOR_MODE=scripted` selects deterministic demo beats; `off` disables the loop. Live failures use the validated scripted beat list.
 
 Colyseus patches carry placements, events, needs, headlines, and weather. A `city-headline` message announces each headline. NPC agents see the current snapshot and their own need in context. City state lasts for the room’s lifetime; player quests remain durable in Postgres.
 
 ## 6. NPCs
 
-| NPC      | Role                         | Home       |
-| -------- | ---------------------------- | ---------- |
-| Cô Hoa   | Market food vendor           | market     |
-| Anh Tâm  | Xe ôm driver                 | market     |
-| Chị Linh | Volunteer                    | park       |
-| Ông Ba   | Cyclo driver and storyteller | river      |
-| Mai      | Café owner                   | market     |
-| Alex     | Photographer                 | opera      |
-| Vy       | Lantern maker                | cityhall   |
-| Sơn      | Postcard collector           | postoffice |
-| Thảo     | Music student                | opera      |
+Nine neighbors:
 
-Every NPC can author and verify quests. Server-enforced domains and seed examples define each persona’s reach. Source: `packages/shared/src/world.ts`, `packages/shared/src/quest`, and `apps/server/src/features/npc`.
+| NPC      | Role                               | Home       |
+| -------- | ---------------------------------- | ---------- |
+| Cô Hoa   | Market food vendor                 | market     |
+| Anh Tâm  | Neighborhood driver                | market     |
+| Chị Linh | Student and neighborhood volunteer | park       |
+| Ông Ba   | Cyclo driver and storyteller       | river      |
+| Mai      | Sidewalk café owner                | market     |
+| Alex     | Visiting photographer              | opera      |
+| Vy       | Lantern maker near City Hall       | cityhall   |
+| Sơn      | Postcard collector                 | postoffice |
+| Thảo     | Opera House music student          | opera      |
+
+Twenty residents walk the district (`packages/shared/src/residents*.ts`). Every NPC can author and complete quests. Server-enforced domains and seed examples define each persona’s reach. Source: `packages/shared/src/world.ts`, `packages/shared/src/quest`, and `apps/server/src/features/npc`.
 
 ## 7. Performance
 
@@ -102,6 +109,7 @@ apps/client/src/{app,widgets,features,shared}
 apps/server/src/{app,domain,features,shared}   # + Dockerfile, drizzle/, test/
 packages/shared/src                            # zod contracts and world data
 assets/                                        # licensed source models (LICENSES.md)
+scripts/                                       # asset prep, Blender builds, QA, credentials
 docs/                                          # specs, design, progress, evidence
 wrangler.jsonc                                 # asset-only Worker for apps/client/dist
 compose.yaml                                   # Postgres (58002); API profile (58001)

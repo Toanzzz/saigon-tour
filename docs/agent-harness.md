@@ -14,7 +14,7 @@ Steps are `GO_TO {locationId}`, `TALK_TO {npcId}`, `DELIVER {itemId,npcId}`, and
 
 ## Tools and memory
 
-Every agent has `proposeQuest`, `dropQuest`, `adjustFriendliness`, `getContext`, and `rememberPlayerFact`. Tools use authenticated identity. Only the giver can decline its own active errand before progress. Context includes the shared city, party, current errands, completed errands for this turn, remembered facts, and friendliness with tone guidance. Resident personas include their role, local knowledge, home, and shared safety rules.
+Every agent has `propose-quest`, `drop-quest`, `adjust-friendliness`, `get-context`, and `remember-player-fact` (registered as camelCase keys such as `proposeQuest`). Tools use authenticated identity. Only the giver can decline its own active errand before progress. Context includes the shared city, party, current errands, completed errands for this turn, remembered facts, and friendliness with tone guidance. Resident personas include their role, local knowledge, home, and shared safety rules.
 
 Friendship lives on the locked player row as JSON. Levels range from −5 to +5 and start from authored presets. The model may request one ±1 adjustment per turn, subject to a three-minute per-player/NPC cooldown. Chat can raise friendship only to +3; completed quests can reach +5. Socket saves carry friendship with the normal revision.
 
@@ -36,7 +36,7 @@ Party assignment validates every recipient before mutation. Original recipient o
 
 ## City Director
 
-Each occupied street room owns one `CityWorld` and one `CityDirector`. The scheduler wakes the director for world events and schedules, with at most one turn per ninety seconds. Empty rooms generate no model calls. Director context contains the city snapshot and the last twelve headlines; it has no conversation-memory thread.
+The single world room owns one `CityWorld` and one `CityDirector`. The scheduler wakes the director for world events and schedules, with at most one turn per ninety seconds. An empty room generates no model calls. Director context contains the city snapshot and the last twelve headlines; it has no conversation-memory thread.
 
 The agent can start or end a city event, move an NPC to an authored location anchor, set an NPC’s need, post a safe headline, and choose clear or rainy weather. `CityWorld` validates enum values, authored anchors, safe text, event lifetime, and the two-active-event cap. NPCs read these events and their own need when shaping quest proposals; ordinary quest-domain validation still applies.
 
@@ -46,7 +46,7 @@ Colyseus schema patches carry NPC placements, city events, weather, and snapshot
 
 ## Acceptance
 
-Run `bun run check`, `bun run check:types`, `bun run build`, and `bun run test`. Browser QA drives help, generic quest steps, return verification, reward, reload, and reset on desktop and 390px mobile. Live schema acceptance can be repeated with:
+Run `bun run check`, `bun run check:types`, `bun run build`, and `bun run test`. Browser QA drives an errand request in chat, quest steps, return completion, reward, reload, and reset on desktop and 390px mobile. Live schema acceptance can be repeated with:
 
 ```sh
 bun --env-file=apps/server/.env apps/server/scripts/quest-model-spike.ts
