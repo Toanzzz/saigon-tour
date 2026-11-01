@@ -228,13 +228,13 @@ export class NpcHarness {
         const last = result.steps?.at(-1)?.text
         const reply = cleanReply(last?.trim() ? last : result.text)
         if (reply) {
-          this.report('npc_live', npcId, outcome.calls)
+          this.report('npc_turn_completed', npcId, outcome.calls)
           return reply
         }
         if (outcome.calls.length) return null
       } catch (error) {
         if (storageUnavailable(error)) throw error
-        this.report('npc_error', npcId, outcome.calls)
+        this.report('npc_turn_failed', npcId, outcome.calls, 'error')
         if (outcome.calls.length) return null
       }
     }
@@ -253,11 +253,17 @@ export class NpcHarness {
     return clearPlayerThreads(this.storage, playerId)
   }
 
-  private report(event: string, npcId: NpcId, calls: string[]) {
+  private report(
+    event: string,
+    npcId: NpcId,
+    calls: string[],
+    level: 'info' | 'warn' | 'error' = 'info'
+  ) {
     if (!this.config.production)
       log(
         event,
-        `NPC ${npcId} tools=[${calls.join(',')}] usd=${this.usage.estimatedUsd.toFixed(4)}`
+        `NPC ${npcId} tools=[${calls.join(',')}] usd=${this.usage.estimatedUsd.toFixed(4)}`,
+        level
       )
   }
 }

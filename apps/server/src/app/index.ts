@@ -76,7 +76,7 @@ export function createApp(
   )
   app.route('/', createRoutes({ auth, config, db, harness, realtime }))
   app.onError((_error, c) => {
-    log('request_failed', 'Storage or request unavailable', 'warn')
+    log('request_failed', 'Storage or request unavailable', 'error')
     return c.json({ error: 'service_unavailable' }, 503)
   })
   return Object.assign(app, { auth, harness, db, realtime })
