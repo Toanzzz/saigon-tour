@@ -108,3 +108,8 @@ export function modeDescription(mode: TravelMode) {
   }
   return descriptions[mode]()
 }
+
+/** Runtime model path for an NPC that ships its own model, else null (use the base body). */
+export function ownModelPath(id: NpcId): string | null {
+  return NPC_LOOKS[id]?.body === 'own' ? `npcs/${id}` : null
+}

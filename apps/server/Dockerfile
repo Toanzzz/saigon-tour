@@ -1,7 +1,7 @@
 FROM oven/bun:1.4.4 AS build
 WORKDIR /app
 COPY package.json bun.lock tsconfig.base.json ./
-COPY packages/shared ./packages/shared
+COPY packages ./packages
 COPY apps/server ./apps/server
 COPY apps/client/package.json ./apps/client/package.json
 RUN bun install --frozen-lockfile

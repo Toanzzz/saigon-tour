@@ -1,4 +1,4 @@
-import { copyFile, mkdir, stat, writeFile } from 'node:fs/promises'
+import { copyFile, mkdir, readdir, stat, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { dirname, resolve } from 'node:path'
 import { NodeIO } from '@gltf-transform/core'
@@ -83,6 +83,23 @@ const io = new NodeIO()
     'draco3d.decoder': await draco3d.createDecoderModule(),
     'draco3d.encoder': await draco3d.createEncoderModule(),
   })
+/** True when a file exists. */
+async function exists(path: string) {
+  try {
+    await stat(path)
+    return true
+  } catch {
+    return false
+  }
+}
+/** List a directory, or empty when it is missing. */
+async function listSafe(path: string) {
+  try {
+    return await readdir(path)
+  } catch {
+    return []
+  }
+}
 /** Read a source and drop Draco so runtime copies load without a decoder. */
 async function readSource(path: string) {
   const document = await io.read(resolve(root, 'assets', path))
@@ -219,6 +236,45 @@ for (const body of ['man', 'woman']) {
   )
   await bodyDoc.transform(dedup(), prune())
   await writeRuntime(bodyTarget, bodyDoc)
+}
+// Per-NPC package assets. Each `packages/npc-<id>/assets` may ship its own
+// world model (`model/<id>.glb`) and a square portrait (`avatar/portrait.*`).
+// With no package assets this loop writes nothing, so the runtime output is
+// unchanged. Declared-but-missing files are validated by the client at load.
+const packagesDir = resolve(root, 'packages')
+const npcDirs = (await readdir(packagesDir, { withFileTypes: true }))
+  .filter((entry) => entry.isDirectory() && entry.name.startsWith('npc-'))
+  .map((entry) => entry.name)
+for (const dir of npcDirs) {
+  const id = dir.replace(/^npc-/, '')
+  if (id === 'kit') continue
+  const assets = resolve(packagesDir, dir, 'assets')
+  const modelSource = resolve(assets, 'model', `${id}.glb`)
+  if (await exists(modelSource)) {
+    const target = resolve(output, 'npcs', `${id}.glb`)
+    await mkdir(dirname(target), { recursive: true })
+    const document = await io.read(modelSource)
+    await document.transform(dedup(), prune())
+    await writeRuntime(target, document)
+  }
+  const avatarDir = resolve(assets, 'avatar')
+  const portrait = (await listSafe(avatarDir)).find((f) =>
+    /^portrait\.(png|webp|jpg|jpeg)$/i.test(f)
+  )
+  if (portrait) {
+    const portraitSource = resolve(avatarDir, portrait)
+    const outDir = resolve(root, 'apps/client/public/npcs', id)
+    await mkdir(outDir, { recursive: true })
+    // 52 px slot at 3x and 30 px slot at 3x.
+    await sharp(portraitSource)
+      .resize(160, 160, { fit: 'cover' })
+      .webp({ quality: 90 })
+      .toFile(resolve(outDir, 'avatar-lg.webp'))
+    await sharp(portraitSource)
+      .resize(96, 96, { fit: 'cover' })
+      .webp({ quality: 90 })
+      .toFile(resolve(outDir, 'avatar-sm.webp'))
+  }
 }
 const decoderSource = resolve(
   dirname(

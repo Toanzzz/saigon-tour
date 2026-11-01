@@ -24,6 +24,7 @@ remain in their source folders.
 | Pet followers (dog, bunny, cat, parrot, chick) | `cube-pets` | Kenney | `cube-pets/License.txt`, CC0 |
 | Cosmetic unlocks (hats, accessories) | `cosmetics` | Project artwork | Built by `scripts/blender/build-cosmetics.py`; original low-poly meshes |
 | Vehicle unlocks (Cub, Vespa) | `vehicles` | Project artwork | Built by `scripts/blender/build-vehicles.py`; original low-poly meshes |
+| Per-NPC package assets | `packages/npc-<id>/assets` | See each package | `packages/npc-<id>/assets/CREDITS.md` |
 
 Kenney packs permit personal, educational, and commercial use under Creative Commons Zero.
 The full license text is retained beside each source pack. The UI sprite sheets are excluded

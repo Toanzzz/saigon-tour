@@ -10,7 +10,7 @@ import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 import { questTarget } from '@/shared/state/quests'
 import { Character } from '@/shared/world'
-import { PEOPLE } from '@/shared/world/places'
+import { ownModelPath, PEOPLE } from '@/shared/world/places'
 import { NpcLabel, NpcLabelsTicker } from './npc-label'
 import { Crowd } from './residents'
 
@@ -62,6 +62,7 @@ function Neighbor({
     <group ref={ref} position={anchor}>
       <Character
         model={PEOPLE[id].model as 'female-a'}
+        path={ownModelPath(id) ?? undefined}
         animation="idle"
         active={() =>
           game.state.screen === 'playing' &&

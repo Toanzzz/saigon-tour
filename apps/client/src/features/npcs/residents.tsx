@@ -6,6 +6,7 @@ import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 import { Character } from '@/shared/world'
 import { npcPoses } from '@/shared/world/npc-pose'
+import { ownModelPath } from '@/shared/world/places'
 import { RESIDENT_VISUALS as RESIDENTS } from '@/shared/world/residents'
 import { NpcLabel } from './npc-label'
 
@@ -99,6 +100,7 @@ function AmbientResident({
       <NpcLabel id={resident.id} />
       <Character
         model={resident.model}
+        path={ownModelPath(resident.id) ?? undefined}
         animation={resident.animation}
         scale={2.25}
         active={() => active.current}
