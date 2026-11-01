@@ -54,6 +54,31 @@ async function apply(page, kind) {
         quests: [quest({ progress: [true], status: 'ready' })],
         dialogue,
       })
+    } else if (kind === 'collapse') {
+      update({
+        quests: [quest()],
+        trackedQuestId: null,
+        dialogue: {
+          npc: 'hoa',
+          requestId: 'qa-collapse',
+          earlierCount: 3,
+          history: [
+            { role: 'assistant', content: 'Chào bạn! Welcome back.' },
+            { role: 'user', content: 'let me help' },
+            {
+              role: 'assistant',
+              content: 'Thank you! Your errand is in the journal.',
+            },
+            {
+              role: 'assistant',
+              content: 'Here again — come back when it is done.',
+              greeting: true,
+            },
+          ],
+          thinking: false,
+          source: 'fallback',
+        },
+      })
     } else if (kind === 'full') {
       const quests = ['q_a', 'q_b', 'q_c'].map((id) =>
         quest({
@@ -116,6 +141,20 @@ try {
     const fullText = await page.locator('.errands').innerText()
     assert.match(fullText, /Journal full \(3\/3\)/)
     await page.screenshot({ path: `${out}/full-${width}.png` })
+
+    await apply(page, 'collapse')
+    const log = page.locator('.conversation-history')
+    // Earlier turns are collapsed behind a toggle; the accepted-errand reply and
+    // the latest greeting stay visible.
+    assert.match(await log.innerText(), /Show earlier messages \(3\)/)
+    assert.doesNotMatch(await log.innerText(), /let me help/)
+    assert.match(await log.innerText(), /come back when it is done/i)
+    await page.screenshot({ path: `${out}/collapse-closed-${width}.png` })
+    await page.locator('.history-toggle').click()
+    await page.locator('.history-toggle[aria-expanded="true"]').waitFor()
+    assert.match(await log.innerText(), /let me help/)
+    assert.match(await log.innerText(), /errand is in the journal/i)
+    await page.screenshot({ path: `${out}/collapse-open-${width}.png` })
 
     assert.equal(
       await page.evaluate(() => document.body.scrollWidth > innerWidth),

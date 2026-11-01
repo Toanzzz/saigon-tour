@@ -42,12 +42,19 @@ export async function recordTurn(
         .map((part) => part.text)
         .join('\n')
       if (text === reply) return false
-      if (replaceGreeting) {
+      // Only collapse a stale greeting into the new one. A substantive reply
+      // (e.g. accepting an errand) is preserved, and the fresh state-aware
+      // greeting is appended after it.
+      if (replaceGreeting && latest.content.metadata?.greeting === true) {
         await memory.updateMessages({
           messages: [
             {
               id: latest.id,
-              content: { format: 2, parts: [{ type: 'text', text: reply }] },
+              content: {
+                format: 2,
+                parts: [{ type: 'text', text: reply }],
+                metadata: { greeting: true },
+              },
             },
           ],
         })
@@ -64,7 +71,14 @@ export async function recordTurn(
     resourceId: playerId,
     role,
     createdAt: new Date(createdAt.getTime() + index),
-    content: { format: 2, parts: [{ type: 'text', text }] },
+    content: {
+      format: 2,
+      parts: [{ type: 'text', text }],
+      // Tag greeting-only turns so a later revisit replaces rather than stacks.
+      ...(role === 'assistant' && replaceGreeting && !message.trim()
+        ? { metadata: { greeting: true } }
+        : {}),
+    },
   }))
   await memory.saveMessages({ messages })
   return true
@@ -105,7 +119,16 @@ export async function readHistory(
         .map((part) => part.text)
         .join('\n')
       return text.trim()
-        ? [{ role: message.role, text, at: message.createdAt.toISOString() }]
+        ? [
+            {
+              role: message.role,
+              text,
+              at: message.createdAt.toISOString(),
+              ...(message.content.metadata?.greeting === true
+                ? { greeting: true }
+                : {}),
+            },
+          ]
         : []
     }),
   }

@@ -382,11 +382,19 @@
   }
 }
 
-.history-divider {
+.history-toggle {
   align-self: center;
-  margin: 4px 0;
+  margin: 2px 0 6px;
+  padding: 5px 14px;
+  border: var(--edge);
+  border-radius: 99px;
+  background: var(--wall-hi);
   color: var(--ink-soft, rgba(38, 40, 53, 0.72));
   font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase;
+  box-shadow: var(--lift-sm);
+}
+.history-toggle:hover {
+  background: var(--roof-hi);
+  color: var(--ink);
 }

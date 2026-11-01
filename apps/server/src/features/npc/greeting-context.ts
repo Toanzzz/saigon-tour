@@ -16,13 +16,16 @@ export interface GreetingContext {
   events: CitySnapshot['events']
   need: string | null
   hosting: CityEvent | null
+  /** This player's errand status with the NPC, so the opener can acknowledge it. */
+  errand: 'active' | 'ready' | null
 }
 
 export function greetingContext(
   npc: NpcId,
   level: number,
   timeOfDay: TimeOfDay,
-  city: CitySnapshot | null | undefined
+  city: CitySnapshot | null | undefined,
+  errand: 'active' | 'ready' | null = null
 ): GreetingContext {
   return {
     level,
@@ -34,6 +37,7 @@ export function greetingContext(
         ? (city?.needs[npc as NeighborId] ?? null)
         : null,
     hosting: hostingEvent(city, npc),
+    errand,
   }
 }
 
@@ -50,6 +54,7 @@ export function greetingSignature(context: GreetingContext) {
     })),
     need: context.need,
     hosting: context.hosting?.id ?? null,
+    errand: context.errand,
   })
 }
 
@@ -62,7 +67,7 @@ export function greetingPrompt(context: GreetingContext) {
         )
         .join('; ')
     : 'none'
-  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. ${context.hosting ? ` You are busy hosting ${context.hosting.title} right here (${context.hosting.description}); greet warmly but make clear you are caught up in it and could use a hand, without starting an errand yet.` : ' Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment.'} Do not offer or claim to start an errand.`
+  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. ${context.errand === 'active' ? ' This visitor is already helping you with an errand; greet them warmly, thank them for taking it on, and gently encourage them to finish it. Do not offer a new errand.' : context.errand === 'ready' ? ' This visitor has finished what you asked; greet them warmly and welcome them back to settle up. Do not offer a new errand.' : context.hosting ? ` You are busy hosting ${context.hosting.title} right here (${context.hosting.description}); greet warmly but make clear you are caught up in it and could use a hand, without starting an errand yet.` : ' Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment.'} Do not offer or claim to start an errand.`
 }
 
 const TIME_VI: Record<TimeOfDay, string> = {
@@ -91,11 +96,16 @@ export function fallbackGreeting(
       context.weather === 'rain'
         ? ` Trời đang mưa ${TIME_VI[context.timeOfDay]}.`
         : ` Một ${TIME_VI[context.timeOfDay]} dễ chịu.`
-    const tail = context.hosting
-      ? ` Mình đang bận lo ${context.hosting.title}, ghé phụ một tay nhé.`
-      : event
-        ? ` ${event.title} đang diễn ra.`
-        : ''
+    const tail =
+      context.errand === 'active'
+        ? ' Cảm ơn bạn đã nhận giúp nha, xong thì quay lại gặp mình.'
+        : context.errand === 'ready'
+          ? ' Bạn xong việc rồi hả? Ghé lại để mình cảm ơn nhé.'
+          : context.hosting
+            ? ` Mình đang bận lo ${context.hosting.title}, ghé phụ một tay nhé.`
+            : event
+              ? ` ${event.title} đang diễn ra.`
+              : ''
     return `${tone}${weather}${tail}`
   }
   const tone =
@@ -110,10 +120,15 @@ export function fallbackGreeting(
     context.weather === 'rain'
       ? ` A rainy ${context.timeOfDay} in Sài Gòn.`
       : ` A lovely ${context.timeOfDay} in Sài Gòn.`
-  const tail = context.hosting
-    ? ` I'm caught up hosting ${context.hosting.title} right now, but I could use a hand.`
-    : event
-      ? ` ${event.title} is happening.`
-      : ` ${NPCS[npc].knowledge[0] ?? ''}`
+  const tail =
+    context.errand === 'active'
+      ? ' Thank you for taking this on — come back when it is done.'
+      : context.errand === 'ready'
+        ? ' You are back — let us settle up when you are ready.'
+        : context.hosting
+          ? ` I'm caught up hosting ${context.hosting.title} right now, but I could use a hand.`
+          : event
+            ? ` ${event.title} is happening.`
+            : ` ${NPCS[npc].knowledge[0] ?? ''}`
   return `${tone}${weather}${tail}`.trim()
 }

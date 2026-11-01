@@ -365,6 +365,8 @@
   "friendship_label": "Friendliness",
   "friendship_changed": "{name}: friendliness {delta}",
   "history_earlier": "Earlier",
+  "history_show_earlier": "Show earlier messages ({count})",
+  "history_hide_earlier": "Hide earlier messages",
   "errands_cold": "{name} isn't ready to ask favors.",
   "quest_expires": "Expires in {minutes} min",
   "quest_failed": "Errand closed: {title}",

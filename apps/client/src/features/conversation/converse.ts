@@ -114,7 +114,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
   )
   endHttpTurn()
   if (game.state.sessionId !== sessionId) return
-  appendHistory(dialog.npc, text, result.response.reply)
+  appendHistory(dialog.npc, text, result.response.reply, intent === 'greet')
   apply(
     intent,
     result.response,
@@ -135,7 +135,11 @@ function apply(
   intent: Intent,
   result: InteractResponse,
   npc: NpcId,
-  history: { role: 'user' | 'assistant'; content: string }[],
+  history: {
+    role: 'user' | 'assistant'
+    content: string
+    greeting?: boolean
+  }[],
   requestId: string,
   synced: boolean,
   partyVersion: number
@@ -225,14 +229,24 @@ function apply(
               thinking: false,
               source: result.source,
               history:
-                intent === 'greet' && history.at(-1)?.role === 'assistant'
+                intent === 'greet' &&
+                history.at(-1)?.role === 'assistant' &&
+                history.at(-1)?.greeting
                   ? [
                       ...history.slice(0, -1),
-                      { role: 'assistant' as const, content: result.reply },
+                      {
+                        role: 'assistant' as const,
+                        content: result.reply,
+                        greeting: true,
+                      },
                     ]
                   : [
                       ...history,
-                      { role: 'assistant' as const, content: result.reply },
+                      {
+                        role: 'assistant' as const,
+                        content: result.reply,
+                        ...(intent === 'greet' ? { greeting: true } : {}),
+                      },
                     ].slice(-30),
             }
           : state.dialogue,

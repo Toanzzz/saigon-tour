@@ -6,7 +6,11 @@ export function cachedHistory(npcId: NpcId) {
   return (
     queryClient
       .getQueryData<NpcHistory>(historyKey(npcId))
-      ?.messages.map(({ role, text }) => ({ role, content: text })) ?? []
+      ?.messages.map(({ role, text, greeting }) => ({
+        role,
+        content: text,
+        ...(greeting ? { greeting: true } : {}),
+      })) ?? []
   )
 }
 export async function fetchHistory(npcId: NpcId) {
@@ -23,16 +27,28 @@ export async function fetchHistory(npcId: NpcId) {
     },
   })
 }
-export function appendHistory(npcId: NpcId, message: string, reply: string) {
+export function appendHistory(
+  npcId: NpcId,
+  message: string,
+  reply: string,
+  isGreeting = false
+) {
   queryClient.setQueryData<NpcHistory>(historyKey(npcId), (old) => {
     const messages = old?.messages ?? []
     const latest = messages.at(-1)
-    if (!message.trim() && latest?.role === 'assistant') {
+    // Collapse a greeting only into a previous greeting. A real reply (e.g.
+    // accepting an errand) stays, and the fresh greeting is appended after it.
+    if (!message.trim() && latest?.role === 'assistant' && latest.greeting) {
       if (latest.text === reply) return old
       return {
         messages: [
           ...messages.slice(0, -1),
-          { ...latest, text: reply, at: new Date().toISOString() },
+          {
+            ...latest,
+            text: reply,
+            at: new Date().toISOString(),
+            greeting: true,
+          },
         ],
       }
     }
@@ -52,6 +68,7 @@ export function appendHistory(npcId: NpcId, message: string, reply: string) {
           role: 'assistant' as const,
           text: reply,
           at: new Date().toISOString(),
+          ...(isGreeting ? { greeting: true } : {}),
         },
       ].slice(-30),
     }

@@ -25,9 +25,16 @@ function messageKey(message: object) {
 export function Conversation({ state }: { state: GameState }) {
   const dialog = state.dialogue
   const [text, setText] = useState('')
+  const [showEarlier, setShowEarlier] = useState(false)
   const historyRef = useRef<HTMLDivElement>(null)
+  const shownNpc = useRef(dialog?.npc)
   const historyLength = dialog?.history.length
   const thinking = dialog?.thinking
+  // Reset the collapse when switching to a different NPC, during render.
+  if (dialog && shownNpc.current !== dialog.npc) {
+    shownNpc.current = dialog.npc
+    if (showEarlier) setShowEarlier(false)
+  }
   useEffect(() => {
     if ((historyLength || thinking) && historyRef.current)
       historyRef.current.scrollTop = historyRef.current.scrollHeight
@@ -57,24 +64,49 @@ export function Conversation({ state }: { state: GameState }) {
         aria-label={m.chat_log()}
         aria-live="polite"
       >
-        {dialog.history.map((line, index) => (
-          <Fragment key={messageKey(line)}>
-            {index === dialog.earlierCount && index > 0 && (
-              <p className="history-divider">{m.history_earlier()}</p>
-            )}
-            {line.role === 'assistant' ? (
-              <div className="speech-row">
-                <NpcAvatar id={dialog.npc} size="sm" />
-                <p className="speech assistant">{line.content}</p>
-              </div>
-            ) : (
-              <p className="speech user">
-                <span className="speaker">{m.map_you()}</span>
-                {line.content}
-              </p>
-            )}
-          </Fragment>
-        ))}
+        {(() => {
+          const earlierCount = Math.min(
+            dialog.earlierCount ?? 0,
+            dialog.history.length
+          )
+          const row = (line: {
+            role: 'user' | 'assistant'
+            content: string
+          }) => (
+            <Fragment key={messageKey(line)}>
+              {line.role === 'assistant' ? (
+                <div className="speech-row">
+                  <NpcAvatar id={dialog.npc} size="sm" />
+                  <p className="speech assistant">{line.content}</p>
+                </div>
+              ) : (
+                <p className="speech user">
+                  <span className="speaker">{m.map_you()}</span>
+                  {line.content}
+                </p>
+              )}
+            </Fragment>
+          )
+          return (
+            <>
+              {earlierCount > 0 && (
+                <button
+                  type="button"
+                  className="history-toggle"
+                  aria-expanded={showEarlier}
+                  onClick={() => setShowEarlier((open) => !open)}
+                >
+                  {showEarlier
+                    ? m.history_hide_earlier()
+                    : m.history_show_earlier({ count: earlierCount })}
+                </button>
+              )}
+              {showEarlier &&
+                dialog.history.slice(0, earlierCount).map((line) => row(line))}
+              {dialog.history.slice(earlierCount).map((line) => row(line))}
+            </>
+          )
+        })()}
         {dialog.thinking && (
           <p className="thinking" role="status">
             <span />

@@ -334,6 +334,8 @@
   "friendship_label": "Độ thân thiện",
   "friendship_changed": "{name}: độ thân thiện {delta}",
   "history_earlier": "Trước đó",
+  "history_show_earlier": "Xem tin nhắn trước ({count})",
+  "history_hide_earlier": "Ẩn tin nhắn trước",
   "errands_cold": "{name} chưa muốn nhờ bạn giúp.",
   "quest_expires": "Hết hạn sau {minutes} phút",
   "quest_failed": "Việc đã kết thúc: {title}",

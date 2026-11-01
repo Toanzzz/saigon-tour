@@ -126,13 +126,22 @@ export class NpcHarness {
     progressEvents.push(...record.questEvents, ...completed)
     const current = await this.game.get(playerId)
     if (request.intent === 'greet') {
+      const npcQuests = current.quests.filter(
+        (quest) => quest.giverNpcId === npcId
+      )
+      const errand = npcQuests.some((quest) => quest.status === 'ready')
+        ? 'ready'
+        : npcQuests.some((quest) => quest.status === 'active')
+          ? 'active'
+          : null
       const line = await this.shortLines.greeting(
         npcId,
         greetingContext(
           npcId,
           friendlinessOf(current.friendship, npcId),
           request.worldContext.timeOfDay,
-          this.game.city?.(playerId)
+          this.game.city?.(playerId),
+          errand
         ),
         request.locale
       )

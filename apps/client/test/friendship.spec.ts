@@ -37,12 +37,21 @@ describe('friendship feedback and local history', () => {
     expect(pulses.state.hoa?.at).toBe(at)
     expect(pulses.state.tam).toBeUndefined()
   })
-  it('keeps one unanswered greeting in local history', () => {
-    appendHistory('hoa', '', 'Chào bạn!')
-    appendHistory('hoa', '', 'Chào bạn!')
-    appendHistory('hoa', '', 'Rainy evening, friend.')
+  it('collapses an unanswered greeting but keeps a real reply', () => {
+    appendHistory('hoa', '', 'Chào bạn!', true)
+    appendHistory('hoa', '', 'Chào bạn!', true)
+    appendHistory('hoa', '', 'Rainy evening, friend.', true)
     expect(cachedHistory('hoa')).toEqual([
-      { role: 'assistant', content: 'Rainy evening, friend.' },
+      { role: 'assistant', content: 'Rainy evening, friend.', greeting: true },
+    ])
+    // A substantive reply is never overwritten by a later greeting.
+    appendHistory('hoa', 'Can I help?', 'Take these herbs to Linh.')
+    appendHistory('hoa', '', 'Welcome back, friend.', true)
+    expect(cachedHistory('hoa')).toEqual([
+      { role: 'assistant', content: 'Rainy evening, friend.', greeting: true },
+      { role: 'user', content: 'Can I help?' },
+      { role: 'assistant', content: 'Take these herbs to Linh.' },
+      { role: 'assistant', content: 'Welcome back, friend.', greeting: true },
     ])
   })
   it('retains offline conversation in the persisted history query and clears it', () => {

@@ -136,6 +136,7 @@ export const NpcHistorySchema = z.object({
         role: z.enum(['user', 'assistant']),
         text: z.string(),
         at: z.string(),
+        greeting: z.boolean().optional(),
       })
     )
     .max(60),

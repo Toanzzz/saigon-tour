@@ -28,7 +28,7 @@ export type Panel =
 export interface Dialogue {
   npc: NpcId
   requestId: string
-  history: { role: 'user' | 'assistant'; content: string }[]
+  history: { role: 'user' | 'assistant'; content: string; greeting?: boolean }[]
   earlierCount?: number
   thinking: boolean
   source: AgentSource | null

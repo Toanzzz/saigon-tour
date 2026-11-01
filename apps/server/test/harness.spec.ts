@@ -175,6 +175,48 @@ describe('NPC authored errands', () => {
     expect(seen).toHaveLength(Object.keys(NPCS).length)
   })
 
+  it('acknowledges an accepted errand and keeps the confirmation on revisit', async () => {
+    const harness = ctx.fx.harness(offline)
+    harness.game.city = () => ({
+      revision: 1,
+      npcPlacements: {
+        vy: { locationId: 'cityhall', anchorId: 'vy', position: [64, 0, -18] },
+      } as never,
+      events: [
+        {
+          id: 'evening-gathering',
+          kind: 'festival',
+          locationId: 'cityhall',
+          title: 'An evening gathering',
+          description: 'Neighbors bring color to the City Hall walk.',
+          startedAt: 0,
+          endsAt: Date.now() + 60_000,
+        },
+      ],
+      needs: { vy: 'Welcome walkers through the food alley.' },
+      weather: 'clear',
+      headlines: [],
+    })
+    await harness.interact('vy', ask('', { intent: 'greet' }), ctx.playerId)
+    const accept = await harness.interact(
+      'vy',
+      ask('let me join'),
+      ctx.playerId
+    )
+    const revisit = await harness.interact(
+      'vy',
+      ask('', { intent: 'greet' }),
+      ctx.playerId
+    )
+    // The revisit greeting reflects the accepted errand, not the host pitch.
+    expect(revisit.reply.toLowerCase()).toContain('taking this on')
+    expect(revisit.reply.toLowerCase()).not.toContain('hosting')
+    // The acceptance line survives: the greeting is appended, not overwritten.
+    const { messages } = await harness.history('vy', ctx.playerId, 30)
+    expect(messages.map((line) => line.text)).toContain(accept.reply)
+    expect(messages.at(-1)?.text).toBe(revisit.reply)
+  })
+
   it('greets as busy hosting when an event sits at the NPC location', async () => {
     const harness = ctx.fx.harness(offline)
     harness.game.city = () => ({
