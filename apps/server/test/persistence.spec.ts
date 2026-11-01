@@ -39,7 +39,7 @@ describe('durable guest progress', () => {
     expect(response.status).toBe(200)
     const { token, user } = await response.json()
     expect(user.isAnonymous).toBe(true)
-    expect(user.name).toMatch(/\d{2}$/)
+    expect(user.name).toMatch(/^\S+ \S+$/)
     expect(response.headers.get('set-auth-token')).toBeTruthy()
     const me = await app.request('/me', { headers: headers(token) })
     const body = await me.json()

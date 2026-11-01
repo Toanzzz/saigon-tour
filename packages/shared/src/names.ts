@@ -1,38 +1,49 @@
 import { z } from 'zod'
 
 const FIRST = [
-  'Sóc',
-  'Mây',
-  'Sen',
-  'Gió',
-  'Bông',
-  'Cá',
-  'Mèo',
-  'Chim',
-  'Lá',
-  'Sao',
+  'Emma',
+  'Liam',
+  'Sofía',
+  'Mateo',
+  'Hannah',
+  'Lukas',
+  'Chloé',
+  'Hugo',
+  'Aiko',
+  'Kenji',
+  'Ji-woo',
+  'Priya',
+  'Olivia',
+  'Noah',
+  'Freya',
+  'Marco',
 ] as const
-const SECOND = [
-  'Nắng',
-  'Xanh',
-  'Hồng',
-  'Mát',
-  'Vàng',
-  'Nhỏ',
-  'Vui',
-  'Bạc',
-  'Biển',
-  'Phố',
+const LAST = [
+  'Clarke',
+  'Müller',
+  'García',
+  'Rossi',
+  'Dubois',
+  'Tanaka',
+  'Kim',
+  'Patel',
+  'Johansson',
+  'Novak',
+  'Walsh',
+  'Silva',
+  'Jensen',
+  'Becker',
+  'Moreau',
+  'Brooks',
 ] as const
 export const PLAYER_COLORS = ['#f6c568', '#85c7b6', '#ed9d86', '#b6a2dc']
 
 const pick = <T>(items: readonly T[], random: () => number) =>
   items[Math.floor(random() * items.length)] as T
 
-/** A friendly two-word Vietnamese name with a two-digit suffix. */
+/** A realistic visiting-tourist name: first name plus surname. */
 export function randomPlayerName(random: () => number = Math.random) {
-  const number = Math.floor(random() * 90) + 10
-  return `${pick(FIRST, random)} ${pick(SECOND, random)} ${number}`
+  return `${pick(FIRST, random)} ${pick(LAST, random)}`
 }
 
 export function randomPlayerColor(random: () => number = Math.random) {

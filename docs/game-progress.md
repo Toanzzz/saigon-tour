@@ -228,3 +228,8 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 - `WorldRoom.static onAuth` verifies the Better Auth bearer session. `RoomManager` keeps the street rules (20-player rooms, 60-second retention, event sequencing, NPC barks) without depending on a transport. Presence syncs as `WorldRoomState` schema; party, emote, world, and NPC messages keep the zod contracts.
 - Client uses `@colyseus/sdk` with `client.auth.token`, state callbacks for the roster and interpolation buffer, SDK reconnection, and the existing event-batch replay.
 - Browser QA found a real bug: a 10 Hz `setInterval` puts 11–12 sends in one window when a tab is backgrounded or catches up, which tripped the 10-per-second state limit. The browser close code was 4008 `rate_limit` (recorded send timestamps). The state limit is now 15 per second, covered by a jitter test.
+
+
+## Tourist names
+
+- Preset player names are a realistic tourist first name plus surname (`packages/shared/src/names.ts`), for example "Emma Clarke" or "Kenji Tanaka". Anonymous sign-in and the title-screen dice both use `randomPlayerName()`.

@@ -5,7 +5,7 @@ import { initialState } from '@/shared/state/game'
 const saved = {
   revision: 7,
   id: 'b258d475-4914-409d-bc43-e38d6137dc92',
-  name: 'Sóc Nắng 27',
+  name: 'Emma Clarke',
   color: '#ddaa77',
   world: { ...initialState().world, currency: 80 },
   quest: null,
