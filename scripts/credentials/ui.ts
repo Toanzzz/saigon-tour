@@ -1,4 +1,5 @@
 /** Terminal helpers for the credentials walkthrough: color, spinner, prompts. */
+import { readSync } from 'node:fs'
 import { run } from './shell'
 
 const interactive = Boolean(process.stdout.isTTY) && !process.env.CI
@@ -118,10 +119,33 @@ function cooked() {
   if (process.stdin.isTTY) process.stdin.setRawMode(false)
 }
 
+/**
+ * Reads one line from fd 0. Bun's `prompt()` returns null for both a blank
+ * line and EOF, so it cannot tell "accept default" from "input closed".
+ */
+function readLine(): string | null {
+  const byte = Buffer.alloc(1)
+  const bytes: number[] = []
+  for (;;) {
+    let n: number
+    try {
+      n = readSync(0, byte, 0, 1, null)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'EAGAIN') continue
+      throw error
+    }
+    if (n === 0)
+      return bytes.length ? Buffer.from(bytes).toString('utf8') : null
+    if (byte[0] === 0x0a) return Buffer.from(bytes).toString('utf8')
+    bytes.push(byte[0] as number)
+  }
+}
+
 function line(label: string): string {
   cooked()
-  const answer = prompt(label)
-  // Bun returns null on EOF; never treat that as an accepted default.
+  process.stdout.write(`${label} `)
+  const answer = readLine()
+  // EOF must never count as an accepted default.
   if (answer === null) fail('Input closed; nothing further was changed.')
   return answer.trim()
 }
