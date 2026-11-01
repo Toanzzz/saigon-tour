@@ -1,5 +1,6 @@
 import {
   type AgentSource,
+  type AvatarBody,
   advance,
   type CompletedQuest,
   EMPTY_UNLOCKS,
@@ -47,6 +48,8 @@ export interface GameState {
   sessionId: string
   guestId: string | null
   guestName: string | null
+  /** Chosen body is identity, persisted locally and server-side; survives New journey. */
+  body: AvatarBody
   guestColor: string | null
   guestStatus: 'loading' | 'online' | 'offline' | 'resetting'
   returningGuest: boolean
@@ -88,6 +91,7 @@ export function initialState(generation = 0): GameState {
     sessionId: crypto.randomUUID(),
     guestId: null,
     guestName: null,
+    body: 'man',
     guestColor: null,
     guestStatus: 'loading',
     returningGuest: false,

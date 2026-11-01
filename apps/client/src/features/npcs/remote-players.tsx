@@ -14,7 +14,7 @@ import {
 } from '@/shared/api/presence'
 import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
-import { Character, PersonalVehicle, Vehicle } from '@/shared/world'
+import { Avatar, PersonalVehicle, Vehicle } from '@/shared/world'
 import { useXRPresenting } from '@/shared/xr'
 
 export function RemotePlayers() {
@@ -108,8 +108,8 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
             <Vehicle mode={mode} />
           </group>
         )}
-        <Character
-          path="people/player-tourist"
+        <Avatar
+          body={player.body}
           color={player.color}
           position={[0, mode ? 0.3 : -0.8, 0]}
           animation={mode ? 'sit' : moving ? 'walk' : 'idle'}

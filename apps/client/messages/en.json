@@ -432,5 +432,17 @@
   "reward_unlock": "{item} unlocked",
   "reward_unlock_reputation": "{item} unlocked · +{reputation} reputation",
   "tier_unlocks_hint": "{tier} → unlocks {item}",
-  "toast_equip_failed": "Could not equip that right now."
+  "toast_equip_failed": "Could not equip that right now.",
+  "title_body_label": "Your look",
+  "body_man": "Young man",
+  "body_woman": "Young woman",
+  "wardrobe_equip": "Equip",
+  "wardrobe_unequip": "Unequip",
+  "wardrobe_wear_now": "Wear now",
+  "wardrobe_body": "Body",
+  "wardrobe_tab_hat": "Hats",
+  "wardrobe_tab_outfit": "Outfits",
+  "wardrobe_tab_accessory": "Accessories",
+  "wardrobe_tab_vehicle": "Rides",
+  "wardrobe_tab_pet": "Pets"
 }

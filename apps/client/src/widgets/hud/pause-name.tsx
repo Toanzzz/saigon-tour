@@ -1,7 +1,7 @@
 import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useState } from 'react'
-import { commitPlayerName, TitleName } from '@/app/title-identity'
+import { commitProfile, TitleName } from '@/app/title-identity'
 import { m } from '@/shared/i18n'
 import { game, notify } from '@/shared/state/game'
 
@@ -14,7 +14,7 @@ export function PauseName() {
   const valid = PlayerNameSchema.safeParse(name).success
   const save = async () => {
     setSaving(true)
-    const saved = await commitPlayerName(name)
+    const saved = await commitProfile(name, game.state.body)
     setSaving(false)
     if (saved) notify(m.toast_renamed({ name: name.trim() }))
   }

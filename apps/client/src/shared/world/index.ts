@@ -1,5 +1,7 @@
 export type { Placement, Vec3 } from './assets'
-export { Character, Model, ModelInstances, modelUrl } from './assets'
+export { Model, ModelInstances, modelUrl } from './assets'
+export { AvatarLights, AvatarTurntable } from './avatar-stage'
+export { Avatar, Character } from './character'
 export { CityWorld } from './city'
 export { CulturalLandmarks } from './cultural'
 export { EveningLighting } from './evening'

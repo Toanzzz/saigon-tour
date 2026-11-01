@@ -10,6 +10,7 @@ const saved = {
   revision: 7,
   id: 'b258d475-4914-409d-bc43-e38d6137dc92',
   name: 'Emma Clarke',
+  body: 'man',
   color: '#ddaa77',
   world: { ...initialState().world, currency: 80 },
   quests: [],
@@ -157,16 +158,21 @@ describe('auth sessions', () => {
     expect(transport.sessionToken()).toBe('replacement')
     expect(game.state.returningGuest).toBe(false)
   })
-  it('renames through the authenticated profile endpoint', async () => {
+  it('saves the profile through the authenticated endpoint', async () => {
     const session = await import('@/shared/api/session')
     transport.saveToken('existing-token')
     fetchMock.mockResolvedValue(
-      Response.json({ player: { ...saved, name: 'Cô Lan' } })
+      Response.json({ player: { ...saved, name: 'Cô Lan', body: 'woman' } })
     )
-    expect((await session.renamePlayer('Cô Lan')).name).toBe('Cô Lan')
+    const result = await session.saveProfile('Cô Lan', 'woman')
+    expect(result.name).toBe('Cô Lan')
+    expect(result.body).toBe('woman')
     const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit]
     expect(url).toBe('/api/me/profile')
-    expect(JSON.parse(String(init.body))).toEqual({ name: 'Cô Lan' })
+    expect(JSON.parse(String(init.body))).toEqual({
+      name: 'Cô Lan',
+      body: 'woman',
+    })
   })
   it('resets through the authenticated endpoint without replacing the token', async () => {
     const session = await import('@/shared/api/session')

@@ -401,5 +401,17 @@
   "reward_unlock": "Mở khóa {item}",
   "reward_unlock_reputation": "Mở khóa {item} · +{reputation} uy tín",
   "tier_unlocks_hint": "{tier} → mở khóa {item}",
-  "toast_equip_failed": "Chưa thể trang bị lúc này."
+  "toast_equip_failed": "Chưa thể trang bị lúc này.",
+  "title_body_label": "Diện mạo của bạn",
+  "body_man": "Chàng trai",
+  "body_woman": "Cô gái",
+  "wardrobe_equip": "Mặc",
+  "wardrobe_unequip": "Cởi ra",
+  "wardrobe_wear_now": "Mặc ngay",
+  "wardrobe_body": "Hình dáng",
+  "wardrobe_tab_hat": "Nón",
+  "wardrobe_tab_outfit": "Trang phục",
+  "wardrobe_tab_accessory": "Phụ kiện",
+  "wardrobe_tab_vehicle": "Xe",
+  "wardrobe_tab_pet": "Thú cưng"
 }

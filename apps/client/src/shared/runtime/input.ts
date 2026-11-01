@@ -23,6 +23,18 @@ export function installInput() {
     input.sprint = keys.has('ShiftLeft') || keys.has('ShiftRight')
   }
   const down = (event: KeyboardEvent) => {
+    // Escape is the single source of truth for closing overlays and toggling
+    // pause. It must run even when a form control inside a dialog is focused,
+    // so handle it before the typing early-return below.
+    if (event.code === 'Escape') {
+      if (event.repeat) return
+      clearInput()
+      if (net.state.emotesOpen) updateNet({ emotesOpen: false })
+      else if (game.state.screen === 'hub') closeHub()
+      else if (game.state.panel !== 'none' || game.state.dialogue) close()
+      else if (game.state.screen !== 'title') pause()
+      return
+    }
     if ((event.target as HTMLElement).matches('input,textarea,select')) return
     if (
       ['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(
@@ -34,17 +46,16 @@ export function installInput() {
     keys.add(event.code)
     sync()
     if (event.code === 'KeyE') interact()
-    if (event.code === 'Escape') {
-      clearInput()
-      if (net.state.emotesOpen) updateNet({ emotesOpen: false })
-      else if (game.state.screen === 'hub') closeHub()
-      else if (game.state.panel !== 'none' || game.state.dialogue) close()
-      else if (game.state.screen !== 'title') pause()
-    }
     const canOpen =
       game.state.screen === 'playing' &&
       !game.state.dialogue &&
       !game.state.ride
+    // The wardrobe is always reachable: riding, paused, and in the hub included.
+    const canWardrobe =
+      !game.state.dialogue &&
+      (game.state.screen === 'playing' ||
+        game.state.screen === 'paused' ||
+        game.state.screen === 'hub')
     if (
       event.code === 'KeyH' &&
       (game.state.screen === 'hub' || (canOpen && game.state.panel === 'none'))
@@ -54,7 +65,7 @@ export function installInput() {
       update({ panel: game.state.panel === 'journal' ? 'none' : 'journal' })
     if (event.code === 'KeyM' && canOpen)
       update({ panel: game.state.panel === 'map' ? 'none' : 'map' })
-    if (event.code === 'KeyI' && canOpen)
+    if (event.code === 'KeyI' && canWardrobe)
       update({ panel: game.state.panel === 'wardrobe' ? 'none' : 'wardrobe' })
     if (event.code === 'KeyP' && canOpen && !isXRPresenting())
       update({ panel: game.state.panel === 'people' ? 'none' : 'people' })

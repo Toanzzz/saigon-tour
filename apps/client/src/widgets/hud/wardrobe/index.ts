@@ -1,0 +1,1 @@
+export { WardrobePanel } from './panel'

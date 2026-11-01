@@ -13,7 +13,7 @@ import { Pet } from '@/features/pets'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, update, visit } from '@/shared/state/game'
-import { Character, PersonalVehicle } from '@/shared/world'
+import { Avatar, PersonalVehicle } from '@/shared/world'
 import { distance, PLACES, type Point, SPAWN } from '@/shared/world/places'
 
 const velocity = new Vector3()
@@ -22,6 +22,7 @@ export function Player() {
   const { gl } = useThree()
   const riding = useSelector(game, (s) => s.ride !== null)
   const equipped = useSelector(game, (s) => s.unlocks.equipped)
+  const avatarBody = useSelector(game, (s) => s.body)
   const vehicle = equipped.vehicle ?? null
   const pet = equipped.pet ?? null
   const body = useRef<RapierRigidBody>(null)
@@ -116,11 +117,7 @@ export function Player() {
       >
         <CapsuleCollider args={[0.45, 0.35]} />
         <group ref={avatar} visible={!riding} position={[0, -0.8, 0]}>
-          <Character
-            path="people/player-tourist"
-            animation={animation}
-            look={equipped}
-          />
+          <Avatar body={avatarBody} animation={animation} look={equipped} />
           {vehicle && !riding && <PersonalVehicle id={vehicle} />}
         </group>
       </RigidBody>

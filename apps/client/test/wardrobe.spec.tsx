@@ -13,17 +13,17 @@ beforeEach(() => {
 })
 
 describe('wardrobe panel', () => {
-  it('shows owned unlocks as equippable and others as locked', () => {
+  it('renders owned hats as cards and locked hats without 3D', () => {
     game.setState((state) => ({
       ...state,
       unlocks: { owned: [hatId], equipped: {} },
     }))
     const html = renderToStaticMarkup(<WardrobePanel />)
     expect(html).toContain(unlockLabel(hatId))
-    expect(html).toContain('is-locked')
-    // An owned hat renders an enabled chip, not a locked span.
-    const lockedId = GIVER_UNLOCKS.tam[0]
-    expect(html).toContain(unlockLabel(lockedId))
+    // The default Hat tab shows the owned hat as an equip card and others locked.
+    expect(html).toContain('wardrobe-card is-locked')
+    const lockedHatId = GIVER_UNLOCKS.ba[0]
+    expect(html).toContain(unlockLabel(lockedHatId))
   })
 
   it('equips an owned unlock optimistically for an offline guest', async () => {

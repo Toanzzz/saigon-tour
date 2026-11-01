@@ -1,4 +1,5 @@
 import {
+  type AvatarBody,
   applyQuestEvents,
   type GuestPlayer,
   GuestPlayerSchema,
@@ -33,6 +34,7 @@ export function guestState(player: Guest) {
     serverRevision: player.revision,
     guestId: player.id,
     guestName: player.name,
+    body: player.body,
     guestColor: player.color,
     world: player.world,
     quests: player.quests,
@@ -157,13 +159,16 @@ export function initializeSession(): Promise<void> {
   return initialization
 }
 
-/** Save a new display name for the current player. */
-export async function renamePlayer(name: string): Promise<Guest> {
+/** Save the display name and chosen body for the current player. */
+export async function saveProfile(
+  name: string,
+  body: AvatarBody
+): Promise<Guest> {
   const response = await rpc.me.profile.$post(
-    { json: { name } },
+    { json: { name, body } },
     { init: { signal: timeout() } }
   )
-  if (!response.ok) throw new Error('invalid_name')
+  if (!response.ok) throw new Error('invalid_profile')
   return GuestPlayerSchema.parse((await response.json()).player)
 }
 

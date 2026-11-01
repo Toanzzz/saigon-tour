@@ -1,10 +1,6 @@
 import { useGLTF } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import type { Look } from '@saigon/shared'
-import { UNLOCKS } from '@saigon/shared'
 import { useEffect, useMemo, useRef } from 'react'
 import {
-  AnimationMixer,
   Color,
   type InstancedMesh,
   type Material,
@@ -12,8 +8,6 @@ import {
   Mesh,
   Object3D,
 } from 'three'
-import { clone } from 'three/addons/utils/SkeletonUtils.js'
-import { applyOutfitPalette, attachCosmetic, hideReplacedMeshes } from './look'
 
 export type Vec3 = [number, number, number]
 export type Placement = {
@@ -169,133 +163,4 @@ function Instances({
       dispose={null}
     />
   )
-}
-
-export function Character({
-  model = 'female-b',
-  path,
-  position = [0, 0, 0],
-  rotation,
-  animation = 'idle',
-  scale = 2.35,
-  color,
-  active,
-  shadow = true,
-  look,
-}: {
-  model?: 'female-a' | 'female-b' | 'male-a' | 'male-b'
-  /** Runtime model path override, e.g. the tourist player. */
-  path?: string
-  position?: Vec3
-  rotation?: Vec3
-  animation?: string
-  scale?: number
-  color?: string
-  /** Nearby actors can suspend their mixer without removing their pose. */
-  active?: () => boolean
-  shadow?: boolean
-  /** Equipped cosmetics/outfit to render on the avatar. */
-  look?: Look | null
-}) {
-  const { scene, animations } = loadModel(path ?? `people/character-${model}`)
-  const object = useMemo(() => {
-    const result = clone(scene)
-    result.traverse((child) => {
-      if (child instanceof Mesh) {
-        child.castShadow = shadow
-        child.receiveShadow = true
-        if (color) {
-          const tint = (source: Material) => {
-            const material = source.clone()
-            if ('color' in material)
-              (material as Material & { color: Color }).color.lerp(
-                new Color(color),
-                0.45
-              )
-            return material
-          }
-          child.material = Array.isArray(child.material)
-            ? child.material.map(tint)
-            : tint(child.material)
-        }
-      }
-    })
-    hideReplacedMeshes(result, look)
-    applyOutfitPalette(result, look)
-    return result
-  }, [scene, color, shadow, look])
-  useEffect(
-    () => () => {
-      if (!color) return
-      object.traverse((child) => {
-        if (child instanceof Mesh) {
-          const materials = Array.isArray(child.material)
-            ? child.material
-            : [child.material]
-          for (const material of materials) material.dispose()
-        }
-      })
-    },
-    [object, color]
-  )
-  const mixer = useMemo(() => new AnimationMixer(object), [object])
-  useEffect(() => {
-    const clip =
-      animations.find((candidate) => candidate.name === animation) ??
-      animations.find((candidate) => candidate.name === 'idle')
-    if (!clip) return
-    const action = mixer.clipAction(clip).reset().fadeIn(0.2).play()
-    return () => {
-      action.fadeOut(0.2)
-    }
-  }, [animation, animations, mixer])
-  useEffect(
-    () => () => {
-      mixer.stopAllAction()
-      mixer.uncacheRoot(object)
-    },
-    [mixer, object]
-  )
-  useFrame((_, delta) => {
-    if (!active || active()) mixer.update(Math.min(delta, 0.05))
-  })
-  const cosmetics = look
-    ? ([look.hat, look.accessory].filter(Boolean) as string[]).filter(
-        (id) => UNLOCKS[id]?.model
-      )
-    : []
-  return (
-    <primitive
-      object={object}
-      position={position}
-      rotation={rotation}
-      scale={scale}
-      dispose={null}
-    >
-      {cosmetics.map((id) => (
-        <Cosmetic key={id} id={id} root={object} />
-      ))}
-    </primitive>
-  )
-}
-
-/** Load one cosmetic GLB and attach it to the avatar's bone. */
-function Cosmetic({ id, root }: { id: string; root: Object3D }) {
-  const path = UNLOCKS[id]?.model
-  const { scene } = loadModel(path ?? 'cosmetics/non-la')
-  useEffect(() => {
-    if (!path) return
-    const piece = clone(scene)
-    piece.traverse((child) => {
-      if (child instanceof Mesh) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-    })
-    attachCosmetic(root, id, piece)
-    return () => {
-      piece.removeFromParent()
-    }
-  }, [id, path, root, scene])
-  return null
 }

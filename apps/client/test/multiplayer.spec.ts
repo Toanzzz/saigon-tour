@@ -14,6 +14,7 @@ function player(id: string, x = 0, heading = 0): PresencePlayer {
   return {
     id,
     name: id,
+    body: 'man',
     color: '#ffeeaa',
     position: [x, 0, 0],
     heading,

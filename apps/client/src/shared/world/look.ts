@@ -1,11 +1,8 @@
 import { type Look, slotOf, UNLOCKS } from '@saigon/shared'
 import { type Color, type Material, Mesh, type Object3D } from 'three'
 
-/** Default avatar nodes a slot replaces, hidden while a matching unlock is worn. */
-const HIDDEN_BY_SLOT: Record<string, (name: string) => boolean> = {
-  hat: (name) => name.startsWith('hat-'),
-  accessory: (name) => name.startsWith('backpack') || name.startsWith('strap'),
-}
+/** Materials the remote-player `color` tint and outfit palettes may recolour. */
+export const CLOTHING = new Set(['outfit-top', 'outfit-bottom'])
 
 /** Models attached to a bone, keyed by unlock id, resolved lazily by the caller. */
 export type LookModels = Partial<Record<string, Object3D>>
@@ -20,21 +17,6 @@ export function lookModelPaths(look: Look | null | undefined): string[] {
     if (model) paths.push(model)
   }
   return paths
-}
-
-/** Hide default meshes replaced by the worn slots. */
-export function hideReplacedMeshes(
-  root: Object3D,
-  look: Look | null | undefined
-) {
-  const active = new Set<string>()
-  if (look?.hat && UNLOCKS[look.hat]?.model) active.add('hat')
-  if (look?.accessory && UNLOCKS[look.accessory]?.model) active.add('accessory')
-  root.traverse((child) => {
-    for (const slot of active) {
-      if (HIDDEN_BY_SLOT[slot]?.(child.name)) child.visible = false
-    }
-  })
 }
 
 /** Recolour outfit materials by name. Returns the materials it cloned to restore later. */

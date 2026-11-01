@@ -30,6 +30,7 @@ export function Diagnostics() {
       state: {
         screen: state.screen,
         panel: state.panel,
+        body: state.body,
         muted: state.muted,
         frame: motion.frames,
         position: state.position,
@@ -68,6 +69,9 @@ export function Diagnostics() {
         serverRevision: state.serverRevision,
         partyVersion: net.state.partyVersion,
         remotePlayers: presence.size,
+        remoteBodies: [...presence.values()]
+          .map((entry) => entry.samples.at(-1)?.player.body)
+          .filter(Boolean),
         npcLines: [...npcSpeech.entries()].filter(
           ([, value]) => value.until > performance.now()
         ),

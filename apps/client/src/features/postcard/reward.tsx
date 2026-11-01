@@ -1,6 +1,8 @@
+import { slotOf } from '@saigon/shared'
 import { close } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { rewardCopy } from '@/shared/api/party'
+import { equipUnlock } from '@/shared/api/wardrobe'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
@@ -53,6 +55,19 @@ export function RewardPanel({ state }: { state: GameState }) {
             })}
           </span>
         </div>
+      )}
+      {state.rewardQuest?.reward.unlockId && (
+        <button
+          type="button"
+          className="primary-button wide reward-wear-now"
+          onClick={() => {
+            const id = state.rewardQuest?.reward.unlockId
+            if (id) equipUnlock(slotOf(id), id)
+            close()
+          }}
+        >
+          {m.wardrobe_wear_now()}
+        </button>
       )}
       <button type="button" className="primary-button wide" onClick={close}>
         {m.pause_continue()}

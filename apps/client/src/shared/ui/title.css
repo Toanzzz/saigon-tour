@@ -246,3 +246,37 @@
   background: var(--ink);
   color: var(--wall-hi);
 }
+
+.title-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.title-body-label {
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.title-avatar {
+  width: 150px;
+  height: 190px;
+}
+.title-body-options {
+  display: flex;
+  gap: 8px;
+}
+.title-body-option {
+  padding: 8px 14px;
+  border: var(--edge);
+  border-radius: 999px;
+  background: var(--wall-hi);
+  font-size: 14px;
+  cursor: pointer;
+}
+.title-body-option.is-active {
+  background: var(--roof-hi);
+  font-weight: 600;
+}

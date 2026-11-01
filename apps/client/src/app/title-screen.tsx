@@ -3,15 +3,23 @@ import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useEffect, useState } from 'react'
 import { LanguageToggle, m } from '@/shared/i18n'
-import { game } from '@/shared/state/game'
+import { game, update } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
-import { commitPlayerName, TitleAccount, TitleName } from './title-identity'
+import {
+  commitProfile,
+  TitleAccount,
+  TitleBody,
+  TitleName,
+} from './title-identity'
 import { hasJourney, JourneySummary, NewJourneyButton } from './title-journey'
 
 export function TitleScreen() {
   const { active, progress } = useProgress()
-  const { guestName, guestStatus, returningGuest } = useSelector(game, (s) => s)
+  const { guestName, guestStatus, returningGuest, body } = useSelector(
+    game,
+    (s) => s
+  )
   const continuing = useSelector(game, hasJourney)
   const [name, setName] = useState('')
   const [starting, setStarting] = useState(false)
@@ -21,7 +29,7 @@ export function TitleScreen() {
   const valid = PlayerNameSchema.safeParse(name).success
   const begin = async () => {
     setStarting(true)
-    const saved = await commitPlayerName(name)
+    const saved = await commitProfile(name, body)
     setStarting(false)
     if (saved) start()
   }
@@ -38,6 +46,9 @@ export function TitleScreen() {
           {continuing && <JourneySummary />}
         </p>
         <div className="title-form">
+          {!continuing && (
+            <TitleBody body={body} onBody={(next) => update({ body: next })} />
+          )}
           {!continuing && <TitleName name={name} onName={setName} />}
           <div className="title-actions">
             <button
