@@ -2,10 +2,34 @@
   "files": [],
   "references": [
     {
+      "path": "./packages/npc-alex"
+    },
+    {
+      "path": "./packages/npc-ba"
+    },
+    {
       "path": "./packages/npc-hoa"
     },
     {
       "path": "./packages/npc-kit"
+    },
+    {
+      "path": "./packages/npc-linh"
+    },
+    {
+      "path": "./packages/npc-mai"
+    },
+    {
+      "path": "./packages/npc-son"
+    },
+    {
+      "path": "./packages/npc-tam"
+    },
+    {
+      "path": "./packages/npc-thao"
+    },
+    {
+      "path": "./packages/npc-vy"
     },
     {
       "path": "./packages/shared"

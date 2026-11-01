@@ -7,19 +7,39 @@
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "rootDir": "src",
-    "lib": [
-      "ES2023"
-    ]
+    "lib": ["ES2023"]
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "references": [
+    {
+      "path": "../npc-alex"
+    },
+    {
+      "path": "../npc-ba"
+    },
+    {
+      "path": "../npc-hoa"
+    },
     {
       "path": "../npc-kit"
     },
     {
-      "path": "../npc-hoa"
+      "path": "../npc-linh"
+    },
+    {
+      "path": "../npc-mai"
+    },
+    {
+      "path": "../npc-son"
+    },
+    {
+      "path": "../npc-tam"
+    },
+    {
+      "path": "../npc-thao"
+    },
+    {
+      "path": "../npc-vy"
     }
   ]
 }

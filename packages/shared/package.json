@@ -12,8 +12,16 @@
   },
   "dependencies": {
     "@colyseus/schema": "5.0.43",
+    "@saigon/npc-alex": "workspace:*",
+    "@saigon/npc-ba": "workspace:*",
     "@saigon/npc-hoa": "workspace:*",
     "@saigon/npc-kit": "workspace:*",
+    "@saigon/npc-linh": "workspace:*",
+    "@saigon/npc-mai": "workspace:*",
+    "@saigon/npc-son": "workspace:*",
+    "@saigon/npc-tam": "workspace:*",
+    "@saigon/npc-thao": "workspace:*",
+    "@saigon/npc-vy": "workspace:*",
     "zod": "4.6.7"
   }
 }

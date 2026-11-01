@@ -86,6 +86,20 @@
         "vitest": "5.0.5",
       },
     },
+    "packages/npc-alex": {
+      "name": "@saigon/npc-alex",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-ba": {
+      "name": "@saigon/npc-ba",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
     "packages/npc-hoa": {
       "name": "@saigon/npc-hoa",
       "version": "0.1.0",
@@ -97,13 +111,63 @@
       "name": "@saigon/npc-kit",
       "version": "0.1.0",
     },
+    "packages/npc-linh": {
+      "name": "@saigon/npc-linh",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-mai": {
+      "name": "@saigon/npc-mai",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-son": {
+      "name": "@saigon/npc-son",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-tam": {
+      "name": "@saigon/npc-tam",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-thao": {
+      "name": "@saigon/npc-thao",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-vy": {
+      "name": "@saigon/npc-vy",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
     "packages/shared": {
       "name": "@saigon/shared",
       "version": "0.1.0",
       "dependencies": {
         "@colyseus/schema": "5.0.43",
+        "@saigon/npc-alex": "workspace:*",
+        "@saigon/npc-ba": "workspace:*",
         "@saigon/npc-hoa": "workspace:*",
         "@saigon/npc-kit": "workspace:*",
+        "@saigon/npc-linh": "workspace:*",
+        "@saigon/npc-mai": "workspace:*",
+        "@saigon/npc-son": "workspace:*",
+        "@saigon/npc-tam": "workspace:*",
+        "@saigon/npc-thao": "workspace:*",
+        "@saigon/npc-vy": "workspace:*",
         "zod": "4.6.7",
       },
     },
@@ -605,9 +669,25 @@
 
     "@saigon/client": ["@saigon/client@workspace:apps/client"],
 
+    "@saigon/npc-alex": ["@saigon/npc-alex@workspace:packages/npc-alex"],
+
+    "@saigon/npc-ba": ["@saigon/npc-ba@workspace:packages/npc-ba"],
+
     "@saigon/npc-hoa": ["@saigon/npc-hoa@workspace:packages/npc-hoa"],
 
     "@saigon/npc-kit": ["@saigon/npc-kit@workspace:packages/npc-kit"],
+
+    "@saigon/npc-linh": ["@saigon/npc-linh@workspace:packages/npc-linh"],
+
+    "@saigon/npc-mai": ["@saigon/npc-mai@workspace:packages/npc-mai"],
+
+    "@saigon/npc-son": ["@saigon/npc-son@workspace:packages/npc-son"],
+
+    "@saigon/npc-tam": ["@saigon/npc-tam@workspace:packages/npc-tam"],
+
+    "@saigon/npc-thao": ["@saigon/npc-thao@workspace:packages/npc-thao"],
+
+    "@saigon/npc-vy": ["@saigon/npc-vy@workspace:packages/npc-vy"],
 
     "@saigon/server": ["@saigon/server@workspace:apps/server"],
 
