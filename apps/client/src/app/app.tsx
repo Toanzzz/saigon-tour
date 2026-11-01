@@ -7,6 +7,7 @@ import { installRealtime } from '@/shared/api/socket'
 import { installAudioSync } from '@/shared/audio'
 import { m, useLocale } from '@/shared/i18n'
 import { installInput } from '@/shared/runtime/input'
+import { installTwists } from '@/shared/state/twists'
 import { installUiResets, installWaitingClock } from '@/shared/state/ui-resets'
 import { installXr } from '@/shared/xr'
 import { GameUI } from './game-ui'
@@ -34,6 +35,7 @@ export function App() {
     const stopAudioSync = installAudioSync()
     const stopUiResets = installUiResets()
     const stopWaitingClock = installWaitingClock()
+    const stopTwists = installTwists()
     return () => {
       stopInput()
       stopRealtime()
@@ -41,6 +43,7 @@ export function App() {
       stopAudioSync()
       stopUiResets()
       stopWaitingClock()
+      stopTwists()
     }
   }, [])
   return (

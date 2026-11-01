@@ -429,5 +429,9 @@
   "carry_prompt_deliver_care": "Đây là {item} cho công việc của bạn. Tôi mang nó {care}.",
   "carry_care_pristine": "êm ru không rung một cái",
   "carry_care_wobbly": "hơi lắc một chút",
-  "carry_care_landscape": "qua mấy cú quẹo gắt"
+  "carry_care_landscape": "qua mấy cú quẹo gắt",
+  "twist_toast": "Có biến! {line}",
+  "twist_eyebrow": "Có biến",
+  "twist_journal_mark": "Biến",
+  "twist_journal_was": "trước đó: "
 }

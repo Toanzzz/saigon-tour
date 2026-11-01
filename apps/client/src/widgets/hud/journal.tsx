@@ -37,23 +37,46 @@ export function JournalPanel({ state }: { state: GameState }) {
             )}
             {quest.scope === 'party' && <p>{m.journal_shared()}</p>}
             <ol>
-              {quest.steps.map((step, index) => (
-                <li
-                  key={`${quest.id}-${JSON.stringify(step)}-${quest.steps.slice(0, index).filter((entry) => JSON.stringify(entry) === JSON.stringify(step)).length}`}
-                >
-                  <span
-                    role="img"
-                    aria-label={
-                      quest.progress[index]
-                        ? m.journal_done()
-                        : m.journal_pending()
-                    }
+              {quest.steps.map((step, index) => {
+                const twisted =
+                  quest.twist?.replaced !== undefined &&
+                  index === quest.steps.length - 1
+                return (
+                  <li
+                    key={`${quest.id}-${JSON.stringify(step)}-${quest.steps.slice(0, index).filter((entry) => JSON.stringify(entry) === JSON.stringify(step)).length}`}
                   >
-                    {quest.progress[index] ? '✓ ' : '○ '}
-                  </span>
-                  {stepCopy(step)}
-                </li>
-              ))}
+                    <span
+                      role="img"
+                      aria-label={
+                        quest.progress[index]
+                          ? m.journal_done()
+                          : m.journal_pending()
+                      }
+                    >
+                      {quest.progress[index] ? '✓ ' : '○ '}
+                    </span>
+                    {twisted && quest.twist?.replaced ? (
+                      <span className="journal-twist">
+                        <s className="journal-twist-old">
+                          {m.twist_journal_was()}
+                          {stepCopy(quest.twist.replaced)}
+                        </s>
+                        <span className="journal-twist-new">
+                          <span className="journal-twist-mark">
+                            {m.twist_journal_mark()}
+                          </span>{' '}
+                          {stepCopy(step)}
+                        </span>
+                        <span className="journal-twist-line">
+                          {quest.twist.line}
+                        </span>
+                      </span>
+                    ) : (
+                      stepCopy(step)
+                    )}
+                  </li>
+                )
+              })}
             </ol>
             <p>{questHint(quest)}</p>
             <span className="journal-reward">

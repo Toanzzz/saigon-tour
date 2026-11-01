@@ -460,5 +460,9 @@
   "carry_prompt_deliver_care": "Here is the {item} for your errand. I carried it {care}.",
   "carry_care_pristine": "without a single wobble",
   "carry_care_wobbly": "with a little wobble",
-  "carry_care_landscape": "through a few sharp turns"
+  "carry_care_landscape": "through a few sharp turns",
+  "twist_toast": "Plot twist! {line}",
+  "twist_eyebrow": "Plot twist",
+  "twist_journal_mark": "Twist",
+  "twist_journal_was": "was: "
 }

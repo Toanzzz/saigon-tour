@@ -31,6 +31,7 @@ import {
   update,
 } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
+import { resetTwists } from '@/shared/state/twists'
 import {
   resetChatDraft,
   resetJourneyConfirm,
@@ -93,6 +94,7 @@ export async function restart() {
   resetJourneyConfirm()
   resetCollectedCoins()
   resetCarry()
+  resetTwists()
 }
 /** Drop this device's saved session; reload as a brand-new guest. */
 export async function forgetDevice() {
