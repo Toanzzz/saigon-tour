@@ -3,6 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { NPCS, type NpcId, type PresencePlayer } from '@saigon/shared'
 import { useEffect, useRef, useState } from 'react'
 import type { Group } from 'three'
+import { Pet } from '@/features/pets'
 import { npcPosition } from '@/shared/api/city'
 import {
   interpolate,
@@ -13,7 +14,7 @@ import {
 } from '@/shared/api/presence'
 import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
-import { Character, Vehicle } from '@/shared/world'
+import { Character, PersonalVehicle, Vehicle } from '@/shared/world'
 import { useXRPresenting } from '@/shared/xr'
 
 export function RemotePlayers() {
@@ -100,24 +101,50 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
       ? ride
       : null
   return (
-    <group ref={ref} position={player.position}>
-      {mode && (
-        <group position={[0, -0.9, 0]}>
-          <Vehicle mode={mode} />
-        </group>
+    <>
+      <group ref={ref} position={player.position}>
+        {mode && (
+          <group position={[0, -0.9, 0]}>
+            <Vehicle mode={mode} />
+          </group>
+        )}
+        <Character
+          path="people/player-tourist"
+          color={player.color}
+          position={[0, mode ? 0.3 : -0.8, 0]}
+          animation={mode ? 'sit' : moving ? 'walk' : 'idle'}
+          look={player.look}
+        />
+        {!mode && player.look?.vehicle && (
+          <group position={[0, -0.8, 0]}>
+            <PersonalVehicle id={player.look.vehicle} />
+          </group>
+        )}
+        {!xr && (
+          <group ref={label}>
+            <SpeechLabel playerId={player.id} name={player.name} />
+          </group>
+        )}
+      </group>
+      {!mode && player.look?.pet && (
+        <Pet
+          id={player.look.pet}
+          target={() => {
+            const sample = interpolate(
+              presence.get(player.id)?.samples ?? [],
+              performance.now()
+            )
+            return sample?.position ?? player.position
+          }}
+          heading={() =>
+            interpolate(
+              presence.get(player.id)?.samples ?? [],
+              performance.now()
+            )?.heading ?? 0
+          }
+        />
       )}
-      <Character
-        path="people/player-tourist"
-        color={player.color}
-        position={[0, mode ? 0.3 : -0.8, 0]}
-        animation={mode ? 'sit' : moving ? 'walk' : 'idle'}
-      />
-      {!xr && (
-        <group ref={label}>
-          <SpeechLabel playerId={player.id} name={player.name} />
-        </group>
-      )}
-    </group>
+    </>
   )
 }
 function SelfSpeech() {

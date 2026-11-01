@@ -50,7 +50,8 @@ export function CameraRig() {
       target.set(-17, 0, -10)
     } else {
       const mobile = size.width < 700
-      const distance = mobile ? 18 : 16
+      const mounted = state.unlocks.equipped.vehicle ? 3 : 0
+      const distance = (mobile ? 18 : 16) + mounted
       target.copy(motion.position).add(new Vector3(0, 0.7, 0))
       eye
         .set(

@@ -1,3 +1,4 @@
+import { UNLOCKS } from '@saigon/shared'
 import { Model, type Vec3 } from './assets'
 import { Block, Blocks, Sign } from './primitives'
 
@@ -18,6 +19,28 @@ export function Vehicle({
         <Metro />
       ) : (
         <Bike cyclo={mode === 'cyclo'} />
+      )}
+    </group>
+  )
+}
+
+/** The player's unlocked personal ride: a bicycle variant or a Tripo/Blender GLB. */
+export function PersonalVehicle({
+  id,
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+}: {
+  id: string
+  position?: Vec3
+  rotation?: Vec3
+}) {
+  const def = UNLOCKS[id]
+  return (
+    <group position={position} rotation={rotation}>
+      {def?.model ? (
+        <Model path={def.model} scale={(def.scale ?? 1) * 1.4} />
+      ) : (
+        <Bike cyclo={id === 'basket-bicycle'} />
       )}
     </group>
   )

@@ -4,14 +4,16 @@ import {
   type RapierRigidBody,
   RigidBody,
 } from '@react-three/rapier'
+import { UNLOCKS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useEffect, useRef, useState } from 'react'
 import { type Group, Vector3 } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
+import { Pet } from '@/features/pets'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, update, visit } from '@/shared/state/game'
-import { Character } from '@/shared/world'
+import { Character, PersonalVehicle } from '@/shared/world'
 import { distance, PLACES, type Point, SPAWN } from '@/shared/world/places'
 
 const velocity = new Vector3()
@@ -19,6 +21,9 @@ const up = new Vector3(0, 1, 0)
 export function Player() {
   const { gl } = useThree()
   const riding = useSelector(game, (s) => s.ride !== null)
+  const equipped = useSelector(game, (s) => s.unlocks.equipped)
+  const vehicle = equipped.vehicle ?? null
+  const pet = equipped.pet ?? null
   const body = useRef<RapierRigidBody>(null)
   const avatar = useRef<Group>(null)
   const [animation, setAnimation] = useState('idle')
@@ -58,7 +63,11 @@ export function Player() {
     const x = enabled ? input.x : 0
     const z = enabled ? input.z : 0
     const moving = Math.hypot(x, z) > 0.1
-    const speed = input.sprint ? 6.5 : 4
+    const speed = vehicle
+      ? (UNLOCKS[vehicle]?.speed ?? 4)
+      : input.sprint
+        ? 6.5
+        : 4
     velocity
       .set(x, 0, z)
       .clampLength(0, 1)
@@ -93,21 +102,35 @@ export function Player() {
     }
   })
   return (
-    <RigidBody
-      ref={body}
-      position={SPAWN}
-      colliders={false}
-      enabledRotations={[false, false, false]}
-      friction={0}
-      restitution={0}
-      linearDamping={0}
-      canSleep={false}
-      ccd
-    >
-      <CapsuleCollider args={[0.45, 0.35]} />
-      <group ref={avatar} visible={!riding} position={[0, -0.8, 0]}>
-        <Character path="people/player-tourist" animation={animation} />
-      </group>
-    </RigidBody>
+    <>
+      <RigidBody
+        ref={body}
+        position={SPAWN}
+        colliders={false}
+        enabledRotations={[false, false, false]}
+        friction={0}
+        restitution={0}
+        linearDamping={0}
+        canSleep={false}
+        ccd
+      >
+        <CapsuleCollider args={[0.45, 0.35]} />
+        <group ref={avatar} visible={!riding} position={[0, -0.8, 0]}>
+          <Character
+            path="people/player-tourist"
+            animation={animation}
+            look={equipped}
+          />
+          {vehicle && !riding && <PersonalVehicle id={vehicle} />}
+        </group>
+      </RigidBody>
+      {pet && !riding && (
+        <Pet
+          id={pet}
+          target={() => [motion.position.x, 0, motion.position.z]}
+          heading={() => motion.heading}
+        />
+      )}
+    </>
   )
 }

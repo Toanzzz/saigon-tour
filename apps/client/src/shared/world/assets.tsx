@@ -1,5 +1,7 @@
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
+import type { Look } from '@saigon/shared'
+import { UNLOCKS } from '@saigon/shared'
 import { useEffect, useMemo, useRef } from 'react'
 import {
   AnimationMixer,
@@ -11,6 +13,7 @@ import {
   Object3D,
 } from 'three'
 import { clone } from 'three/addons/utils/SkeletonUtils.js'
+import { applyOutfitPalette, attachCosmetic, hideReplacedMeshes } from './look'
 
 export type Vec3 = [number, number, number]
 export type Placement = {
@@ -178,6 +181,7 @@ export function Character({
   color,
   active,
   shadow = true,
+  look,
 }: {
   model?: 'female-a' | 'female-b' | 'male-a' | 'male-b'
   /** Runtime model path override, e.g. the tourist player. */
@@ -190,6 +194,8 @@ export function Character({
   /** Nearby actors can suspend their mixer without removing their pose. */
   active?: () => boolean
   shadow?: boolean
+  /** Equipped cosmetics/outfit to render on the avatar. */
+  look?: Look | null
 }) {
   const { scene, animations } = loadModel(path ?? `people/character-${model}`)
   const object = useMemo(() => {
@@ -214,8 +220,10 @@ export function Character({
         }
       }
     })
+    hideReplacedMeshes(result, look)
+    applyOutfitPalette(result, look)
     return result
-  }, [scene, color, shadow])
+  }, [scene, color, shadow, look])
   useEffect(
     () => () => {
       if (!color) return
@@ -251,6 +259,11 @@ export function Character({
   useFrame((_, delta) => {
     if (!active || active()) mixer.update(Math.min(delta, 0.05))
   })
+  const cosmetics = look
+    ? ([look.hat, look.accessory].filter(Boolean) as string[]).filter(
+        (id) => UNLOCKS[id]?.model
+      )
+    : []
   return (
     <primitive
       object={object}
@@ -258,6 +271,31 @@ export function Character({
       rotation={rotation}
       scale={scale}
       dispose={null}
-    />
+    >
+      {cosmetics.map((id) => (
+        <Cosmetic key={id} id={id} root={object} />
+      ))}
+    </primitive>
   )
+}
+
+/** Load one cosmetic GLB and attach it to the avatar's bone. */
+function Cosmetic({ id, root }: { id: string; root: Object3D }) {
+  const path = UNLOCKS[id]?.model
+  const { scene } = loadModel(path ?? 'cosmetics/non-la')
+  useEffect(() => {
+    if (!path) return
+    const piece = clone(scene)
+    piece.traverse((child) => {
+      if (child instanceof Mesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+    })
+    attachCosmetic(root, id, piece)
+    return () => {
+      piece.removeFromParent()
+    }
+  }, [id, path, root, scene])
+  return null
 }
