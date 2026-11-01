@@ -125,3 +125,9 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 ## Client state → TanStack Store (phase 5: pending flags → useMutation)
 
 - Title start (`commitProfile`) and pause rename (`commitProfile`), Meta sign-in (`signInWithMeta`), journal abandon (`abandonQuest`), and XR enter/exit now drive their pending/disabled state from `useMutation` `isPending` instead of a `saving`/`starting`/`signingIn`/`abandoning`/`busy` `useState`; the existing functions are the `mutationFn`.
+
+## Client state → TanStack Store (phase 6: frame-derived view stores)
+
+- New `shared/state/view.ts` holds the discrete, React-visible values derived each frame (the per-frame simulation data — motion, input, presence sample Maps — stays mutable). Each store writes only on change and exposes a reset; `resetViewStores()` runs in the test `beforeEach`.
+- `playerView.animation` is written by the `player.tsx` frame loop via `setPlayerAnimation` (idle/walk/sprint) and read with `useSelector`, replacing the local `useState`.
+- `touchView.knob` is written by the `touch.tsx` pointer handlers via `setTouchKnob`; the stick reads it with `useSelector`. The blur/visibility recenter moved into `installInput()` (`clearInput()` now also resets the knob), so it fires even when the stick is unmounted.

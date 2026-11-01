@@ -1,6 +1,7 @@
 import { close, closeHub, interact, pause, toggleHub } from '@/app/actions'
 import { net, updateNet } from '@/shared/api/status'
 import { game, update } from '@/shared/state/game'
+import { resetTouchKnob } from '@/shared/state/view'
 import { isXRPresenting } from '@/shared/xr/store'
 
 export const input = { x: 0, z: 0, sprint: false, yaw: 0, dragging: false }
@@ -11,6 +12,8 @@ export function clearInput() {
   input.z = 0
   input.sprint = false
   input.dragging = false
+  // Recenter the touch stick knob (installed blur/visibility handlers call this).
+  resetTouchKnob()
 }
 export function installInput() {
   const sync = () => {

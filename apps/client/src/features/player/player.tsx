@@ -6,13 +6,14 @@ import {
 } from '@react-three/rapier'
 import { UNLOCKS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { type Group, Vector3 } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
 import { Pet } from '@/features/pets'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, update, visit } from '@/shared/state/game'
+import { playerView, setPlayerAnimation } from '@/shared/state/view'
 import { Avatar, PersonalVehicle } from '@/shared/world'
 import { distance, PLACES, type Point, SPAWN } from '@/shared/world/places'
 
@@ -27,7 +28,7 @@ export function Player() {
   const pet = equipped.pet ?? null
   const body = useRef<RapierRigidBody>(null)
   const avatar = useRef<Group>(null)
-  const [animation, setAnimation] = useState('idle')
+  const animation = useSelector(playerView, (v) => v.animation)
   const timer = useRef(0)
   useEffect(() => {
     const position = game.state.position
@@ -91,7 +92,7 @@ export function Player() {
     if (moving) motion.heading = Math.atan2(velocity.x, velocity.z)
     if (avatar.current) avatar.current.rotation.y = motion.heading
     const next = moving ? (input.sprint ? 'sprint' : 'walk') : 'idle'
-    if (next !== animation) setAnimation(next)
+    setPlayerAnimation(next)
     timer.current += delta
     if (timer.current > 0.1) {
       timer.current = 0
