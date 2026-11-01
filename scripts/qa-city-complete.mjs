@@ -116,10 +116,10 @@ async function verify(viewport) {
     await page.getByRole('heading', { name: 'A little market break' }).waitFor()
     const walletBefore = (await diag()).state.currency
     const coffee = page.locator('button.market-item').filter({
-      hasText: 'Cà phê sữa',
+      hasText: 'iced milk coffee',
     })
     await coffee.click()
-    await page.getByText('Cà phê sữa added to your bag.').waitFor()
+    await page.getByText('iced milk coffee added to your bag.').waitFor()
     await page.waitForFunction(
       (expected) =>
         window.__THREE_GAME_DIAGNOSTICS__?.state?.currency === expected,
@@ -131,7 +131,7 @@ async function verify(viewport) {
         await page
           .locator('button.market-item')
           .filter({
-            hasText: 'Cà phê sữa',
+            hasText: 'iced milk coffee',
           })
           .innerText()
       ).includes('×1'),
