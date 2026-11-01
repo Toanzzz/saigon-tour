@@ -4,6 +4,7 @@ import {
   GuestPlayerSchema,
   type Quest,
 } from '@saigon/shared'
+import { m } from '@/shared/i18n'
 import { game, notify } from '@/shared/state/game'
 import { rpc } from './client'
 import { beginHttpTurn, endHttpTurn } from './events'
@@ -49,14 +50,14 @@ export async function abandonQuest(questId: string) {
   if (!quest) return
   const sessionId = game.state.sessionId
   if (!(await beginHttpTurn())) {
-    notify('Finish the current conversation, then try again.')
+    notify(m.toast_finish_conversation())
     return
   }
   try {
     if (game.state.sessionId !== sessionId) return
     if (game.state.guestStatus !== 'online') {
       if (quest.scope === 'party') {
-        notify('Reconnect to abandon a shared errand.')
+        notify(m.toast_reconnect_abandon())
         return
       }
       removeQuestLocally(quest)
@@ -70,9 +71,9 @@ export async function abandonQuest(questId: string) {
       if (game.state.sessionId !== sessionId) return
       applyQuestSave(player)
     }
-    notify('The errand was removed from your journal.')
+    notify(m.toast_errand_removed())
   } catch {
-    notify('The errand could not be abandoned. Try again when connected.')
+    notify(m.toast_abandon_failed())
   } finally {
     endHttpTurn()
   }

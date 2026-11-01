@@ -1,6 +1,6 @@
 export { m } from '@/paraglide/messages'
 export { getLocale } from '@/paraglide/runtime'
-export { formatNumber, itemLabel } from './labels'
+export { errorMessage, formatNumber, itemLabel } from './labels'
 export {
   changeLocale,
   type Locale,

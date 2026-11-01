@@ -8,6 +8,7 @@ import {
 } from '@saigon/shared'
 import { Store } from '@tanstack/store'
 import { notify } from '@/shared/state/game'
+import { placeName } from '@/shared/world/places'
 
 export const city = new Store<CitySnapshot>(initialCity())
 export function resetCity() {
@@ -21,7 +22,7 @@ export function applyCity(input: CitySnapshot) {
   const started = snapshot.events.find(
     (event) => !city.state.events.some((entry) => entry.id === event.id)
   )
-  if (started) notify(`${started.title} · ${started.locationId}`)
+  if (started) notify(`${started.title} · ${placeName(started.locationId)}`)
   city.setState((state) =>
     snapshot.revision < state.revision ? state : snapshot
   )

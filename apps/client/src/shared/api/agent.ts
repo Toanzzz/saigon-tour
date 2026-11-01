@@ -11,6 +11,7 @@ import {
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { InferRequestType, InferResponseType } from 'hono/client'
+import { m } from '@/shared/i18n'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
 
@@ -76,7 +77,10 @@ export function offline(
     quests = quests.map((quest) => advance(quest, event))
   }
   world = applyPlayerEvents(world, [{ type: 'talk', npcId: npc }])
-  let reply = `Chào bạn! I'm ${NPCS[npc].name}. ${NPCS[npc].knowledge[0]}`
+  let reply: string = m.offline_greeting({
+    name: NPCS[npc].name,
+    fact: NPCS[npc].knowledge[0] ?? '',
+  })
   if (body.intent === 'help') {
     const spec = seedsFor(npc).find(
       (candidate) =>
@@ -103,9 +107,7 @@ export function offline(
           )
       questEvents.push({ type: 'offered', quest, reward: quest.reward })
       reply = `${quest.title}. ${quest.description}`
-    } else
-      reply =
-        'You already have my errand, or your journal is full. Finish an errand and come back.'
+    } else reply = m.offline_no_errand()
   }
   if (body.intent === 'check') {
     for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
@@ -136,8 +138,8 @@ export function offline(
     }
     quests = quests.filter((quest) => quest.status !== 'completed')
     reply = questEvents.some((event) => event.type === 'completed')
-      ? 'Cảm ơn! Your help means a lot. Here is your thank-you.'
-      : 'There is still a little to do. Your journal shows the next step.'
+      ? m.offline_thanks()
+      : m.offline_not_done()
   }
   return {
     revision: state.serverRevision,

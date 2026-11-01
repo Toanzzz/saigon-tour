@@ -10,6 +10,7 @@ import {
   WORLD_ROOM,
   type WorldRoomState,
 } from '@saigon/shared'
+import { errorMessage, m } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify } from '@/shared/state/game'
 import { applyCity, cityHeadline, resetCity } from './city'
@@ -44,7 +45,7 @@ function sendMessage({ type, ...payload }: ClientSocketMessage) {
 }
 export function sendParty(message: PartyClientMessage) {
   if (sendMessage(message)) return true
-  notify('Connect to the neighborhood to join a team.')
+  notify(m.toast_connect_to_team())
   return false
 }
 export function sendEmote(emote: Emote) {
@@ -82,7 +83,7 @@ function handle(message: ServerSocketMessage, room: Room) {
       until: performance.now() + 7000,
     })
   else if (message.type === 'error') {
-    notify(message.message)
+    notify(errorMessage(message.message))
     // A stuck event batch is resent after reconnecting.
     if (currentEventBatch()) void room.leave(false)
   }

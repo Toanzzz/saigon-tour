@@ -4,6 +4,7 @@ import {
   GuestPlayerSchema,
 } from '@saigon/shared'
 import { z } from 'zod'
+import { m } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { game, update } from '@/shared/state/game'
 import { PLACES } from '@/shared/world/places'
@@ -102,7 +103,7 @@ export function initializeSession(): Promise<void> {
       await queryCacheRestored
       const marker = takeReturnMarker()
       if (marker === 'meta') await adoptCookieSession()
-      if (marker === 'error') update({ toast: 'Meta sign-in was cancelled.' })
+      if (marker === 'error') update({ toast: m.toast_meta_cancelled() })
       let returningGuest = Boolean(sessionToken())
       let response = returningGuest
         ? await rpc.me.$get({}, { init: { signal: timeout() } })
