@@ -93,3 +93,5 @@ export const RewardSchema = z
   })
   .strict()
 export type Reward = z.infer<typeof RewardSchema>
+
+export { FRAGILE_ITEM_IDS, type FragileItemId } from '@saigon/npc-kit'

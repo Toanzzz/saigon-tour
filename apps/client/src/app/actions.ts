@@ -1,4 +1,15 @@
-import { MARKET_ITEMS, type MarketItemId, type NpcId } from '@saigon/shared'
+import {
+  FRAGILE_ITEM_IDS,
+  MARKET_ITEMS,
+  type MarketItemId,
+  type NpcId,
+} from '@saigon/shared'
+import {
+  carePhrase,
+  carryStore,
+  reactionFor,
+  resetCarry,
+} from '@/features/carry'
 import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
 import { npcPosition } from '@/shared/api/city'
@@ -81,6 +92,7 @@ export async function restart() {
   resetWardrobeTab()
   resetJourneyConfirm()
   resetCollectedCoins()
+  resetCarry()
 }
 /** Drop this device's saved session; reload as a brand-new guest. */
 export async function forgetDevice() {
@@ -238,6 +250,24 @@ export async function giveItem() {
   if (delivery) {
     game.setState((current) => deliver(current, delivery.itemId, dialogue.npc))
     audio.play('pickup')
+    const fragile = (FRAGILE_ITEM_IDS as readonly string[]).includes(
+      delivery.itemId
+    )
+    if (fragile) {
+      const { care } = carryStore.state
+      // Show the authored reaction immediately so it lands offline too, then
+      // let a live NPC react to the care level through the prompt.
+      notify(reactionFor(care))
+      resetCarry()
+      await converse(
+        m.carry_prompt_deliver_care({
+          item: itemLabel(delivery.itemId),
+          care: carePhrase(care),
+        }),
+        'chat'
+      )
+      return
+    }
     await converse(
       m.prompt_deliver({ item: itemLabel(delivery.itemId) }),
       'chat'

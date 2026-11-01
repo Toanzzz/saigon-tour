@@ -3,12 +3,20 @@ import { useSelector } from '@tanstack/react-store'
 import { useMemo, useRef } from 'react'
 import { type Group, Vector3 } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
+import {
+  CarriedCake,
+  carriedFragile,
+  impulseFrom,
+  resetCarryRuntime,
+  stepRideCarry,
+} from '@/features/carry'
 import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify, update, visit } from '@/shared/state/game'
 import { Character, Vehicle } from '@/shared/world'
 import { MODES, PLACES, placeName } from '@/shared/world/places'
+import { isXRPresenting } from '@/shared/xr/store'
 import { route } from './routes'
 
 export function Transport() {
@@ -16,10 +24,14 @@ export function Transport() {
   const vehicle = useRef<Group>(null)
   const progress = useRef(0)
   const lastUpdate = useRef(0)
+  const segment = useRef(0)
+  const carrying = useSelector(game, (s) => carriedFragile(s) !== null)
+  const wasCarrying = useRef(false)
   const from = ride?.from
   const to = ride?.to
   const path = useMemo(() => {
     progress.current = 0
+    segment.current = 0
     if (!from || !to) return []
     return route(from, to, ride?.mode === 'metro' ? 'metro' : 'bus').map(
       (point) => new Vector3(...point)
@@ -41,6 +53,7 @@ export function Transport() {
       progress.current + Math.min(delta, 0.05) * MODES[ride.mode].speed
     )
     let remaining = progress.current
+    let active = 1
     for (let index = 1; index < path.length; index++) {
       const start = path[index - 1]
       const end = path[index]
@@ -57,10 +70,33 @@ export function Transport() {
           .copy(vehicle.current.position)
           .add(new Vector3(0, 0.9, 0))
         motion.heading = vehicle.current.rotation.y
+        active = index
         break
       }
       remaining -= part
     }
+    // Fragile carry: xe ôm corners jolt the cake; other rides stay smooth. A
+    // corner is a new path segment with a heading change from the last one.
+    if (carrying !== wasCarrying.current) {
+      wasCarrying.current = carrying
+      if (carrying) resetCarryRuntime()
+    }
+    let corner = 0
+    if (active > segment.current) {
+      if (ride.mode === 'xeom' && active >= 2) {
+        const a = path[active - 2]
+        const b = path[active - 1]
+        const c = path[active]
+        const h1 = Math.atan2(b.x - a.x, b.z - a.z)
+        const h2 = Math.atan2(c.x - b.x, c.z - b.z)
+        let turn = h2 - h1
+        while (turn > Math.PI) turn -= Math.PI * 2
+        while (turn < -Math.PI) turn += Math.PI * 2
+        if (Math.abs(turn) > 0.25) corner = impulseFrom(0, turn)
+      }
+      segment.current = active
+    }
+    stepRideCarry(delta, carrying, corner)
     lastUpdate.current += delta
     if (lastUpdate.current > 0.1) {
       lastUpdate.current = 0
@@ -103,6 +139,9 @@ export function Transport() {
               animation="sit"
               scale={2.2}
             />
+          )}
+          {carrying && !isXRPresenting() && (
+            <CarriedCake position={[0, 1.15, -0.3]} />
           )}
         </group>
       )}

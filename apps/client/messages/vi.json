@@ -418,5 +418,16 @@
   "wardrobe_tab_outfit": "Trang phục",
   "wardrobe_tab_accessory": "Phụ kiện",
   "wardrobe_tab_vehicle": "Xe",
-  "wardrobe_tab_pet": "Thú cưng"
+  "wardrobe_tab_pet": "Thú cưng",
+  "carry_aside_sprint": "Bạn bắt đầu chạy nước rút. Cái bánh phản đối liền.",
+  "carry_aside_stop": "Bạn thắng gấp. Cái bánh còn trớn chạy thêm một chút.",
+  "carry_aside_turn": "Bạn quẹo cua gắt. Tầng trên cùng nghiêng theo coi cho rõ.",
+  "carry_aside_corner": "Xe ôm lượn một đường rộng. Ba tầng bánh nín thở.",
+  "carry_react_pristine": "Không rớt một mẩu nào. Cái bánh đi êm như ông hoàng.",
+  "carry_react_wobbly": "Tầng trên hơi nghiêng chút — thôi kêu là nét mộc mạc đi.",
+  "carry_react_landscape": "Giờ nó thành bức tranh phong cảnh rồi. Vẫn ngon, vẫn là bánh.",
+  "carry_prompt_deliver_care": "Đây là {item} cho công việc của bạn. Tôi mang nó {care}.",
+  "carry_care_pristine": "êm ru không rung một cái",
+  "carry_care_wobbly": "hơi lắc một chút",
+  "carry_care_landscape": "qua mấy cú quẹo gắt"
 }

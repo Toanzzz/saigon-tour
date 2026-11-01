@@ -9,6 +9,12 @@ import { useSelector } from '@tanstack/react-store'
 import { useEffect, useRef } from 'react'
 import { type Group, Vector3 } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
+import {
+  CarriedCake,
+  carriedFragile,
+  resetCarryRuntime,
+  stepFootCarry,
+} from '@/features/carry'
 import { Pet } from '@/features/pets'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
@@ -29,7 +35,9 @@ export function Player() {
   const body = useRef<RapierRigidBody>(null)
   const avatar = useRef<Group>(null)
   const animation = useSelector(playerView, (v) => v.animation)
+  const carrying = useSelector(game, (s) => carriedFragile(s) !== null)
   const timer = useRef(0)
+  const wasCarrying = useRef(carrying)
   useEffect(() => {
     const position = game.state.position
     motion.position.set(...position)
@@ -91,6 +99,12 @@ export function Player() {
     motion.sprinting = moving && input.sprint
     if (moving) motion.heading = Math.atan2(velocity.x, velocity.z)
     if (avatar.current) avatar.current.rotation.y = motion.heading
+    const holding = carriedFragile(state) !== null
+    if (holding !== wasCarrying.current) {
+      wasCarrying.current = holding
+      if (holding) resetCarryRuntime()
+    }
+    stepFootCarry(delta, holding && moving)
     const next = moving ? (input.sprint ? 'sprint' : 'walk') : 'idle'
     setPlayerAnimation(next)
     timer.current += delta
@@ -119,6 +133,7 @@ export function Player() {
         <CapsuleCollider args={[0.45, 0.35]} />
         <group ref={avatar} visible={!riding} position={[0, -0.8, 0]}>
           <Avatar body={avatarBody} animation={animation} look={equipped} />
+          {carrying && !riding && !gl.xr.isPresenting && <CarriedCake />}
           {vehicle && !riding && <PersonalVehicle id={vehicle} />}
         </group>
       </RigidBody>

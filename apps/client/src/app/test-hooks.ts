@@ -2,6 +2,7 @@ import { createQuest, seedsFor } from '@saigon/shared'
 
 const seedQuest = () => createQuest(seedsFor('hoa')[0], 'q_demo')
 
+import { carryStore } from '@/features/carry'
 import { clearInput } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, initialState, update } from '@/shared/state/game'
@@ -31,6 +32,7 @@ declare global {
       setReducedMotion: (reduced: boolean) => void
       hideDebugUi: (hidden: boolean) => void
       teleport: (x: number, z: number) => void
+      carry: () => { care: string; aside: string | null; peak: number }
     }
   }
 }
@@ -186,6 +188,10 @@ export function installTestHooks() {
     teleport(x, z) {
       clearInput()
       motion.teleport = [x, z]
+    },
+    carry() {
+      const { care, aside, peak } = carryStore.state
+      return { care, aside, peak }
     },
   }
 }

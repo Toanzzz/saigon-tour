@@ -449,5 +449,16 @@
   "wardrobe_tab_outfit": "Outfits",
   "wardrobe_tab_accessory": "Accessories",
   "wardrobe_tab_vehicle": "Rides",
-  "wardrobe_tab_pet": "Pets"
+  "wardrobe_tab_pet": "Pets",
+  "carry_aside_sprint": "You start sprinting. The cake files a complaint.",
+  "carry_aside_stop": "You stop short. The cake keeps going for a moment.",
+  "carry_aside_turn": "You cut the corner. The top tier leans in to watch.",
+  "carry_aside_corner": "The xe ôm swings wide. Three tiers hold their breath.",
+  "carry_react_pristine": "Not a crumb out of place. This cake rode like royalty.",
+  "carry_react_wobbly": "A little lean on the top tier — we will call it rustic charm.",
+  "carry_react_landscape": "It is more of a landscape now. Still delicious, still a cake.",
+  "carry_prompt_deliver_care": "Here is the {item} for your errand. I carried it {care}.",
+  "carry_care_pristine": "without a single wobble",
+  "carry_care_wobbly": "with a little wobble",
+  "carry_care_landscape": "through a few sharp turns"
 }

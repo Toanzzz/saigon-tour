@@ -1,4 +1,5 @@
 import { beforeEach } from 'vitest'
+import { resetCarry } from '@/features/carry'
 import { setLocale } from '@/paraglide/runtime'
 import { resetPresenceView } from '@/shared/api/presence-view'
 import { resetUiStores } from '@/shared/state/ui'
@@ -11,6 +12,7 @@ void setLocale('en', { reload: false })
 beforeEach(() => {
   resetUiStores()
   resetViewStores()
+  resetCarry()
   resetPresenceView()
   resetXr()
 })
