@@ -1,10 +1,23 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+.tsbuildinfo
+
+# Secrets
 .env
 .env.*
 !.env.example
-.tsbuildinfo
-.DS_Store
-*.blend1
 
+# QA and render artifacts
 artifacts/
+
+# Local agent plans
+/plan/
+
+# Editor and OS
+.DS_Store
+
+# Blender backups
+*.blend1
