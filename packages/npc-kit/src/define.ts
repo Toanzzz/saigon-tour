@@ -1,0 +1,200 @@
+import type { ItemId, Locale, LocationId, MarketItemId, NpcId } from './ids'
+
+export type Text = Record<Locale, string>
+
+/** Per-locale role and local knowledge shown in conversation and prompts. */
+export interface LocalizedProfile {
+  role: string
+  knowledge: string[]
+}
+
+export interface NpcProfile {
+  kind: 'neighbor' | 'resident'
+  friendliness: number
+  /** Localized display names. The world uses the Vietnamese name as its label. */
+  names: Text
+  /** Per-locale role and knowledge. */
+  text: Record<Locale, LocalizedProfile>
+  personality: string
+  speakingStyle: string
+  home: LocationId
+  /** Residents expose one idle line per locale. */
+  idle?: Text
+}
+
+/** A quest step. Mirrors the shared QuestSpec step union structurally. */
+export type QuestStep =
+  | { type: 'GO_TO'; locationId: LocationId }
+  | { type: 'TALK_TO'; npcId: NpcId }
+  | { type: 'DELIVER'; itemId: ItemId; npcId: NpcId }
+  | { type: 'BUY'; marketItemId: MarketItemId }
+
+export interface SeedQuest {
+  text: Record<Locale, { title: string; description: string }>
+  steps: QuestStep[]
+  scope: 'solo' | 'party'
+}
+
+export interface QuestDomain {
+  home: LocationId
+  locations: LocationId[]
+  npcs: NpcId[]
+  items: ItemId[]
+  gifts: ItemId[]
+}
+
+export interface NpcStory {
+  seeds: SeedQuest[]
+  domain: QuestDomain
+}
+
+/** Signature cosmetic/vehicle/pet unlocks a neighbor grants. */
+export interface UnlockSpec {
+  id: string
+  kind: 'cosmetic' | 'vehicle' | 'pet'
+  slot: 'hat' | 'outfit' | 'accessory' | 'vehicle' | 'pet'
+  tier: 'neutral' | 'warm' | 'close'
+  model?: string
+  scale?: number
+  speed?: number
+  palette?: Record<string, string>
+}
+
+/** How the NPC renders in the world and in its portrait. */
+export interface NpcLook {
+  /** Base body key, or 'own' to load the package's own model. */
+  body: 'male-a' | 'male-b' | 'female-a' | 'female-b' | 'own'
+  /** World marker / portrait tint. */
+  color: string
+  /** Portrait background CSS value (var or color). */
+  portraitBg?: string
+  animation: string
+  yaw?: number
+  scale?: number
+  /** Declares a packaged avatar portrait exists. */
+  avatar?: boolean
+}
+
+export interface NpcPlace {
+  /** World position [x, z]. */
+  at: [number, number]
+  /** Optional 3D anchor [x, y, z] used by the city snapshot (neighbors). */
+  anchor?: [number, number, number]
+  walk?: [number, number]
+  phase?: number
+}
+
+export interface NpcDefinition {
+  id: NpcId
+  profile: NpcProfile
+  story: NpcStory
+  unlocks: UnlockSpec[]
+  look: NpcLook
+  place: NpcPlace
+  /** AI prompt body, server-only. No SHARED_RULES. */
+  persona: string
+}
+
+/** Identity helper: validates the id at the type level and returns the definition. */
+export function defineNpc<const T extends NpcDefinition>(def: T): T {
+  return def
+}
+
+/** Resident defaults: fills the repetitive role/knowledge/idle text from today's resident() template. */
+export interface ResidentInput {
+  id: NpcId
+  name: Text
+  roles: { en: string; vi: string }
+  place: { en: string; vi: string }
+  home: LocationId
+  friendliness?: number
+  look: NpcLook
+  at: [number, number]
+  walk?: [number, number]
+  phase?: number
+  yaw?: number
+}
+
+function residentText(
+  roles: { en: string; vi: string },
+  place: { en: string; vi: string }
+): Record<Locale, LocalizedProfile & { idleLine: string }> {
+  return {
+    en: {
+      role: roles.en,
+      knowledge: [
+        `I spend my days around ${place.en}.`,
+        'A small favor helps neighbors get to know one another.',
+      ],
+      idleLine: `Hello! I'm the ${roles.en.toLowerCase()}. How is your walk today?`,
+    },
+    vi: {
+      role: roles.vi,
+      knowledge: [
+        `Mình hay ở quanh ${place.vi}.`,
+        'Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.',
+      ],
+      idleLine: `Chào bạn! Mình là ${roles.vi.toLowerCase()}. Hôm nay bạn đi dạo thế nào?`,
+    },
+  }
+}
+
+/** Build a resident definition from today's resident() defaults. */
+export function defineResident(input: ResidentInput): NpcDefinition {
+  const rt = residentText(input.roles, input.place)
+  const friendliness = input.friendliness ?? 0
+  const home = input.home
+  const seedTarget = home === 'park' ? 'hoa' : 'linh'
+  const seedPlaceEn =
+    home === 'park' ? 'Ms. Hoa at the market' : 'Linh in the park'
+  const seedPlaceVi = home === 'park' ? 'cô Hoa ở chợ' : 'chị Linh ở công viên'
+  return {
+    id: input.id,
+    profile: {
+      kind: 'resident',
+      friendliness,
+      names: input.name,
+      text: {
+        en: { role: rt.en.role, knowledge: rt.en.knowledge },
+        vi: { role: rt.vi.role, knowledge: rt.vi.knowledge },
+      },
+      personality: `Observant and independent; cares about the neighborhood and ${input.roles.en.toLowerCase()}.`,
+      speakingStyle: 'Brief, civil conversation with local detail',
+      home,
+      idle: { en: rt.en.idleLine, vi: rt.vi.idleLine },
+    },
+    story: {
+      seeds: [
+        {
+          scope: 'solo',
+          steps: [{ type: 'TALK_TO', npcId: seedTarget }],
+          text: {
+            en: {
+              title: `${input.name.en}'s neighborhood hello`,
+              description: `Say hello to ${seedPlaceEn} for the ${input.roles.en.toLowerCase()}, then return.`,
+            },
+            vi: {
+              title: `Lời nhắn của ${input.name.vi}`,
+              description: `Gửi lời chào đến ${seedPlaceVi} rồi quay lại nhé.`,
+            },
+          },
+        },
+      ],
+      domain: {
+        home,
+        locations: [home, 'market', 'park'],
+        npcs: ['hoa', 'linh'],
+        items: ['coffee', 'banana'],
+        gifts: ['postcard'],
+      },
+    },
+    unlocks: [],
+    look: input.look,
+    place: {
+      at: input.at,
+      ...(input.walk ? { walk: input.walk } : {}),
+      ...(input.phase !== undefined ? { phase: input.phase } : {}),
+    },
+    persona: '',
+  }
+}

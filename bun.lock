@@ -86,11 +86,24 @@
         "vitest": "5.0.5",
       },
     },
+    "packages/npc-hoa": {
+      "name": "@saigon/npc-hoa",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-kit": {
+      "name": "@saigon/npc-kit",
+      "version": "0.1.0",
+    },
     "packages/shared": {
       "name": "@saigon/shared",
       "version": "0.1.0",
       "dependencies": {
         "@colyseus/schema": "5.0.43",
+        "@saigon/npc-hoa": "workspace:*",
+        "@saigon/npc-kit": "workspace:*",
         "zod": "4.6.7",
       },
     },
@@ -591,6 +604,10 @@
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.1", "", {}, "sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw=="],
 
     "@saigon/client": ["@saigon/client@workspace:apps/client"],
+
+    "@saigon/npc-hoa": ["@saigon/npc-hoa@workspace:packages/npc-hoa"],
+
+    "@saigon/npc-kit": ["@saigon/npc-kit@workspace:packages/npc-kit"],
 
     "@saigon/server": ["@saigon/server@workspace:apps/server"],
 

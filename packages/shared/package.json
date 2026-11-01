@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@colyseus/schema": "5.0.43",
+    "@saigon/npc-hoa": "workspace:*",
+    "@saigon/npc-kit": "workspace:*",
     "zod": "4.6.7"
   }
 }

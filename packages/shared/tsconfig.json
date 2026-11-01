@@ -7,7 +7,19 @@
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "rootDir": "src",
-    "lib": ["ES2023"]
+    "lib": [
+      "ES2023"
+    ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ],
+  "references": [
+    {
+      "path": "../npc-kit"
+    },
+    {
+      "path": "../npc-hoa"
+    }
+  ]
 }
