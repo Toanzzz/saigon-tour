@@ -261,7 +261,7 @@ export class NpcHarness {
           maxSteps: 3,
           abortSignal: AbortSignal.timeout(this.config.timeoutMs + 2000),
           modelSettings: {
-            maxOutputTokens: 800,
+            maxOutputTokens: 4000,
             maxRetries: 0,
             timeout: {
               totalMs: this.config.timeoutMs + 2000,

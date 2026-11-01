@@ -28,14 +28,14 @@ export const createNpcMemory = (
           messageTokens,
           maxRetries: 0,
           failurePolicy: 'continue',
-          modelSettings: { maxOutputTokens: 600 },
+          modelSettings: { maxOutputTokens: 2000 },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
           instruction:
             'Keep promises, preferences, gifts, errands given, completed or declined, and the player tone. Drop small talk.',
         },
         reflection: {
           observationTokens: 2000,
-          modelSettings: { maxOutputTokens: 600 },
+          modelSettings: { maxOutputTokens: 2000 },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         },
       },

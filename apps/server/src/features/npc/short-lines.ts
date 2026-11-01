@@ -168,7 +168,7 @@ export class ShortLines {
           activeTools: [],
           maxSteps: 1,
           abortSignal: AbortSignal.timeout(this.timeoutMs),
-          modelSettings: { maxOutputTokens: 300, maxRetries: 0 },
+          modelSettings: { maxOutputTokens: 2000, maxRetries: 0 },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         }
       )
@@ -196,7 +196,7 @@ export class ShortLines {
           activeTools: [],
           maxSteps: 1,
           abortSignal: AbortSignal.timeout(this.timeoutMs),
-          modelSettings: { maxOutputTokens: 300, maxRetries: 0 },
+          modelSettings: { maxOutputTokens: 2000, maxRetries: 0 },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         }
       )
