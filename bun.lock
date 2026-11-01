@@ -93,8 +93,57 @@
         "@saigon/npc-kit": "workspace:*",
       },
     },
+    "packages/npc-alley-diner": {
+      "name": "@saigon/npc-alley-diner",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-alley-vendor": {
+      "name": "@saigon/npc-alley-vendor",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
     "packages/npc-ba": {
       "name": "@saigon/npc-ba",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-bread-vendor": {
+      "name": "@saigon/npc-bread-vendor",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-coffee-friend": {
+      "name": "@saigon/npc-coffee-friend",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-coffee-reader": {
+      "name": "@saigon/npc-coffee-reader",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-commuter": {
+      "name": "@saigon/npc-commuter",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-fruit-vendor": {
+      "name": "@saigon/npc-fruit-vendor",
       "version": "0.1.0",
       "dependencies": {
         "@saigon/npc-kit": "workspace:*",
@@ -125,8 +174,99 @@
         "@saigon/npc-kit": "workspace:*",
       },
     },
+    "packages/npc-market-browse": {
+      "name": "@saigon/npc-market-browse",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-market-family": {
+      "name": "@saigon/npc-market-family",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-market-walk": {
+      "name": "@saigon/npc-market-walk",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-opera-visitor": {
+      "name": "@saigon/npc-opera-visitor",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-park-reader": {
+      "name": "@saigon/npc-park-reader",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-park-stretch": {
+      "name": "@saigon/npc-park-stretch",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-plaza-friends": {
+      "name": "@saigon/npc-plaza-friends",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-plaza-stroll": {
+      "name": "@saigon/npc-plaza-stroll",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-postcard-reader": {
+      "name": "@saigon/npc-postcard-reader",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-river-jogger": {
+      "name": "@saigon/npc-river-jogger",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-riverside-friends": {
+      "name": "@saigon/npc-riverside-friends",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
     "packages/npc-son": {
       "name": "@saigon/npc-son",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-square-tourist": {
+      "name": "@saigon/npc-square-tourist",
+      "version": "0.1.0",
+      "dependencies": {
+        "@saigon/npc-kit": "workspace:*",
+      },
+    },
+    "packages/npc-student": {
+      "name": "@saigon/npc-student",
       "version": "0.1.0",
       "dependencies": {
         "@saigon/npc-kit": "workspace:*",
@@ -159,12 +299,32 @@
       "dependencies": {
         "@colyseus/schema": "5.0.43",
         "@saigon/npc-alex": "workspace:*",
+        "@saigon/npc-alley-diner": "workspace:*",
+        "@saigon/npc-alley-vendor": "workspace:*",
         "@saigon/npc-ba": "workspace:*",
+        "@saigon/npc-bread-vendor": "workspace:*",
+        "@saigon/npc-coffee-friend": "workspace:*",
+        "@saigon/npc-coffee-reader": "workspace:*",
+        "@saigon/npc-commuter": "workspace:*",
+        "@saigon/npc-fruit-vendor": "workspace:*",
         "@saigon/npc-hoa": "workspace:*",
         "@saigon/npc-kit": "workspace:*",
         "@saigon/npc-linh": "workspace:*",
         "@saigon/npc-mai": "workspace:*",
+        "@saigon/npc-market-browse": "workspace:*",
+        "@saigon/npc-market-family": "workspace:*",
+        "@saigon/npc-market-walk": "workspace:*",
+        "@saigon/npc-opera-visitor": "workspace:*",
+        "@saigon/npc-park-reader": "workspace:*",
+        "@saigon/npc-park-stretch": "workspace:*",
+        "@saigon/npc-plaza-friends": "workspace:*",
+        "@saigon/npc-plaza-stroll": "workspace:*",
+        "@saigon/npc-postcard-reader": "workspace:*",
+        "@saigon/npc-river-jogger": "workspace:*",
+        "@saigon/npc-riverside-friends": "workspace:*",
         "@saigon/npc-son": "workspace:*",
+        "@saigon/npc-square-tourist": "workspace:*",
+        "@saigon/npc-student": "workspace:*",
         "@saigon/npc-tam": "workspace:*",
         "@saigon/npc-thao": "workspace:*",
         "@saigon/npc-vy": "workspace:*",
@@ -671,7 +831,21 @@
 
     "@saigon/npc-alex": ["@saigon/npc-alex@workspace:packages/npc-alex"],
 
+    "@saigon/npc-alley-diner": ["@saigon/npc-alley-diner@workspace:packages/npc-alley-diner"],
+
+    "@saigon/npc-alley-vendor": ["@saigon/npc-alley-vendor@workspace:packages/npc-alley-vendor"],
+
     "@saigon/npc-ba": ["@saigon/npc-ba@workspace:packages/npc-ba"],
+
+    "@saigon/npc-bread-vendor": ["@saigon/npc-bread-vendor@workspace:packages/npc-bread-vendor"],
+
+    "@saigon/npc-coffee-friend": ["@saigon/npc-coffee-friend@workspace:packages/npc-coffee-friend"],
+
+    "@saigon/npc-coffee-reader": ["@saigon/npc-coffee-reader@workspace:packages/npc-coffee-reader"],
+
+    "@saigon/npc-commuter": ["@saigon/npc-commuter@workspace:packages/npc-commuter"],
+
+    "@saigon/npc-fruit-vendor": ["@saigon/npc-fruit-vendor@workspace:packages/npc-fruit-vendor"],
 
     "@saigon/npc-hoa": ["@saigon/npc-hoa@workspace:packages/npc-hoa"],
 
@@ -681,7 +855,33 @@
 
     "@saigon/npc-mai": ["@saigon/npc-mai@workspace:packages/npc-mai"],
 
+    "@saigon/npc-market-browse": ["@saigon/npc-market-browse@workspace:packages/npc-market-browse"],
+
+    "@saigon/npc-market-family": ["@saigon/npc-market-family@workspace:packages/npc-market-family"],
+
+    "@saigon/npc-market-walk": ["@saigon/npc-market-walk@workspace:packages/npc-market-walk"],
+
+    "@saigon/npc-opera-visitor": ["@saigon/npc-opera-visitor@workspace:packages/npc-opera-visitor"],
+
+    "@saigon/npc-park-reader": ["@saigon/npc-park-reader@workspace:packages/npc-park-reader"],
+
+    "@saigon/npc-park-stretch": ["@saigon/npc-park-stretch@workspace:packages/npc-park-stretch"],
+
+    "@saigon/npc-plaza-friends": ["@saigon/npc-plaza-friends@workspace:packages/npc-plaza-friends"],
+
+    "@saigon/npc-plaza-stroll": ["@saigon/npc-plaza-stroll@workspace:packages/npc-plaza-stroll"],
+
+    "@saigon/npc-postcard-reader": ["@saigon/npc-postcard-reader@workspace:packages/npc-postcard-reader"],
+
+    "@saigon/npc-river-jogger": ["@saigon/npc-river-jogger@workspace:packages/npc-river-jogger"],
+
+    "@saigon/npc-riverside-friends": ["@saigon/npc-riverside-friends@workspace:packages/npc-riverside-friends"],
+
     "@saigon/npc-son": ["@saigon/npc-son@workspace:packages/npc-son"],
+
+    "@saigon/npc-square-tourist": ["@saigon/npc-square-tourist@workspace:packages/npc-square-tourist"],
+
+    "@saigon/npc-student": ["@saigon/npc-student@workspace:packages/npc-student"],
 
     "@saigon/npc-tam": ["@saigon/npc-tam@workspace:packages/npc-tam"],
 

@@ -1,0 +1,16 @@
+{
+  "name": "@saigon/npc-riverside-friends",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./persona": "./src/persona.ts"
+  },
+  "scripts": {
+    "check:types": "tsc -b"
+  },
+  "dependencies": {
+    "@saigon/npc-kit": "workspace:*"
+  }
+}

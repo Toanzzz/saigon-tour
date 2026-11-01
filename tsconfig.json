@@ -5,7 +5,28 @@
       "path": "./packages/npc-alex"
     },
     {
+      "path": "./packages/npc-alley-diner"
+    },
+    {
+      "path": "./packages/npc-alley-vendor"
+    },
+    {
       "path": "./packages/npc-ba"
+    },
+    {
+      "path": "./packages/npc-bread-vendor"
+    },
+    {
+      "path": "./packages/npc-coffee-friend"
+    },
+    {
+      "path": "./packages/npc-coffee-reader"
+    },
+    {
+      "path": "./packages/npc-commuter"
+    },
+    {
+      "path": "./packages/npc-fruit-vendor"
     },
     {
       "path": "./packages/npc-hoa"
@@ -20,7 +41,46 @@
       "path": "./packages/npc-mai"
     },
     {
+      "path": "./packages/npc-market-browse"
+    },
+    {
+      "path": "./packages/npc-market-family"
+    },
+    {
+      "path": "./packages/npc-market-walk"
+    },
+    {
+      "path": "./packages/npc-opera-visitor"
+    },
+    {
+      "path": "./packages/npc-park-reader"
+    },
+    {
+      "path": "./packages/npc-park-stretch"
+    },
+    {
+      "path": "./packages/npc-plaza-friends"
+    },
+    {
+      "path": "./packages/npc-plaza-stroll"
+    },
+    {
+      "path": "./packages/npc-postcard-reader"
+    },
+    {
+      "path": "./packages/npc-river-jogger"
+    },
+    {
+      "path": "./packages/npc-riverside-friends"
+    },
+    {
       "path": "./packages/npc-son"
+    },
+    {
+      "path": "./packages/npc-square-tourist"
+    },
+    {
+      "path": "./packages/npc-student"
     },
     {
       "path": "./packages/npc-tam"

@@ -7,15 +7,40 @@
     "emitDeclarationOnly": true,
     "outDir": "dist",
     "rootDir": "src",
-    "lib": ["ES2023"]
+    "lib": [
+      "ES2023"
+    ]
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "references": [
     {
       "path": "../npc-alex"
     },
     {
+      "path": "../npc-alley-diner"
+    },
+    {
+      "path": "../npc-alley-vendor"
+    },
+    {
       "path": "../npc-ba"
+    },
+    {
+      "path": "../npc-bread-vendor"
+    },
+    {
+      "path": "../npc-coffee-friend"
+    },
+    {
+      "path": "../npc-coffee-reader"
+    },
+    {
+      "path": "../npc-commuter"
+    },
+    {
+      "path": "../npc-fruit-vendor"
     },
     {
       "path": "../npc-hoa"
@@ -30,7 +55,46 @@
       "path": "../npc-mai"
     },
     {
+      "path": "../npc-market-browse"
+    },
+    {
+      "path": "../npc-market-family"
+    },
+    {
+      "path": "../npc-market-walk"
+    },
+    {
+      "path": "../npc-opera-visitor"
+    },
+    {
+      "path": "../npc-park-reader"
+    },
+    {
+      "path": "../npc-park-stretch"
+    },
+    {
+      "path": "../npc-plaza-friends"
+    },
+    {
+      "path": "../npc-plaza-stroll"
+    },
+    {
+      "path": "../npc-postcard-reader"
+    },
+    {
+      "path": "../npc-river-jogger"
+    },
+    {
+      "path": "../npc-riverside-friends"
+    },
+    {
       "path": "../npc-son"
+    },
+    {
+      "path": "../npc-square-tourist"
+    },
+    {
+      "path": "../npc-student"
     },
     {
       "path": "../npc-tam"

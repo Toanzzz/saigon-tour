@@ -9,6 +9,8 @@ import {
   type NpcId,
   npcText,
   QUEST_DOMAINS,
+  RESIDENT_ANCHORS,
+  RESIDENT_IDS,
   residentPrompt,
   seedsFor,
   UNLOCKS,
@@ -95,5 +97,14 @@ describe('npc package round-trip', () => {
       ],
     })
     expect(body).toContain('You are Minh, Student, based at park.')
+  })
+})
+
+describe('resident look and placement round-trip', () => {
+  it.each(RESIDENT_IDS)('%s placement matches the shared anchor', (id) => {
+    const def = NPC_REGISTRY[id as keyof typeof NPC_REGISTRY]
+    const anchor = RESIDENT_ANCHORS[id as keyof typeof RESIDENT_ANCHORS]
+    expect(def.place.at).toEqual(anchor.at)
+    if ('walk' in anchor) expect(def.place.walk).toEqual(anchor.walk)
   })
 })
