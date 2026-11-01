@@ -2,6 +2,12 @@
 
 QA captures referenced below live in `artifacts/`, which is local-only and gitignored.
 
+## Dev server shutdown — November 1, 2026
+
+- Root gates pass: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server 114 passing, two integration cases skipped; client 82 passing.
+- `onStop` releases once, exits on the first SIGINT/SIGTERM, and still exits when release stays pending. `closeHttpServer` finishes while a client holds the socket.
+- `bun --watch` using that helper stayed up across a file reload, then exited on an external SIGTERM while a socket was connected. Port 58994 was free afterward.
+
 ## Final quest and party verification — November 1, 2026
 
 - Required root gates pass: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server: 111 passing, two integration cases skipped in the unit gate; client: 82 passing. Two real Postgres integration cases pass separately.

@@ -1,7 +1,9 @@
+import type { Server } from 'node:http'
 import { serve } from '@hono/node-server'
 import { PostgresStore } from '@mastra/pg'
 import { createApp } from './app'
 import { createDb, isLiveConfigured, log, readConfig } from './shared'
+import { closeHttpServer, onStop } from './shared/stop'
 
 const config = readConfig()
 const db = await createDb(config.databaseUrl, config.barkDailyLimit)
@@ -29,17 +31,14 @@ const server = serve({
   port: config.port,
   hostname: '0.0.0.0',
 })
-await app.realtime.attach(server as import('node:http').Server)
+await app.realtime.attach(server as Server)
 log(
   'server_started',
   `Listening on port ${config.port}; NPC mode: ${isLiveConfigured(config) ? 'live' : 'fallback'}`
 )
-for (const signal of ['SIGTERM', 'SIGINT'] as const)
-  process.on(signal, () => {
-    clearInterval(retention)
-    void app.realtime.shutdown().finally(() =>
-      server.close(() => {
-        void db.close()
-      })
-    )
-  })
+onStop(process, async () => {
+  clearInterval(retention)
+  await app.realtime.shutdown().catch(() => undefined)
+  await closeHttpServer(server as Server)
+  await db.close().catch(() => undefined)
+})

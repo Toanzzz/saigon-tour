@@ -23,12 +23,12 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Pass 3 proof: root gates, 111 server / 82 client tests, two real Postgres integration cases including cross-instance concurrent group completion, isolated live Muse party completion and socket pushes, desktop/mobile live and offline journal controls, and final offline completion flow.
 - Live party browser proof: real invite/accept, independent three-step progress, return verification, and 61-coin rewards pushed to both desktop/mobile clients; no page errors.
 - Persistence Playwright passed at both widths: live quest completion, reload preserving wallet/completion/name, and reset preserving identity/name while restoring 30 coins and clearing quests/completions.
-- Development state sync: a stale process sent initial snapshots without later patches. The identical direct/proxied probes pass after a user-managed full restart. Exact old-process cause remains unproven; no transport workaround was applied.
+- Development state sync: a stale process sent initial snapshots without later patches. The identical direct/proxied probes pass after a user-managed full restart. Dev API shutdown closes room sockets, the HTTP server, and the database pool, then exits on SIGINT/SIGTERM. `bun dev` sends SIGKILL after 3 seconds if that process is still running.
 
 ## Runtime and contracts
 
 - Bun 1.4.4, React Three Fiber/Three.js, Rapier, TanStack Query/Store, WebXR; Node/Hono, Mastra, Better Auth, Colyseus, Postgres 18; shared Zod contracts.
-- Ports: client 58000, API 58001, Postgres 58002. Ask the user to start/restart local development servers.
+- Ports: client 58000, API 58001, Postgres 58002. Ask the user to start/restart local development servers. `bun dev` exits the API on SIGINT/SIGTERM and force-kills it after 3 seconds.
 - Cloudflare serves client assets; the API runs separately in a Docker image. Secrets stay server-side.
 - Anonymous guests receive a generated editable name. Facebook login links progress; an existing account save wins. Reset preserves identity; clear saved data drops the persisted query cache.
 - Quest rewards use the durable completion ledger. Room state is ephemeral and isolated; player quest progress persists in Postgres.
