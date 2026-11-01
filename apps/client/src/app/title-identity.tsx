@@ -5,6 +5,7 @@ import {
   randomPlayerName,
 } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
+import { shallow } from '@tanstack/store'
 import { useEffect, useState } from 'react'
 import { saveProfile, signInWithMeta, signOut } from '@/shared/api/session'
 import { m } from '@/shared/i18n'
@@ -39,7 +40,11 @@ export function TitleName({
   body: AvatarBody
   onBody: (body: AvatarBody) => void
 }) {
-  const { guestName, guestStatus } = useSelector(game, (s) => s)
+  const { guestName, guestStatus } = useSelector(
+    game,
+    (s) => ({ guestName: s.guestName, guestStatus: s.guestStatus }),
+    { compare: shallow }
+  )
   useEffect(() => {
     if (guestName) onName(guestName)
   }, [guestName, onName])
@@ -90,7 +95,15 @@ export function TitleName({
 }
 
 export function TitleAccount() {
-  const { guestStatus, account, metaAvailable } = useSelector(game, (s) => s)
+  const { guestStatus, account, metaAvailable } = useSelector(
+    game,
+    (s) => ({
+      guestStatus: s.guestStatus,
+      account: s.account,
+      metaAvailable: s.metaAvailable,
+    }),
+    { compare: shallow }
+  )
   const [signingIn, setSigningIn] = useState(false)
   const meta = async () => {
     setSigningIn(true)

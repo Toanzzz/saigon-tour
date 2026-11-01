@@ -1,9 +1,10 @@
 import { NPCS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
+import { shallow } from '@tanstack/store'
 import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { city, npcPosition } from '@/shared/api/city'
 import { m, npcLabel, placeSign } from '@/shared/i18n'
-import type { GameState } from '@/shared/state/game'
+import { type GameState, game } from '@/shared/state/game'
 import {
   BOUNDS,
   CULTURAL_FOOTPRINTS,
@@ -95,6 +96,9 @@ export function NeighborhoodMap({
   large?: boolean
 }) {
   useSelector(city, (snapshot) => snapshot.revision)
+  // Own `position` subscription so the "you" marker keeps moving even when the
+  // parent HUD skips re-rendering on position-only changes (app/game-ui.tsx).
+  const position = useSelector(game, (s) => s.position, { compare: shallow })
   const { cityhall, cathedral } = LANDMARKS
   return (
     <svg
@@ -190,15 +194,15 @@ export function NeighborhoodMap({
         )
       })}
       <circle
-        cx={x(state.position[0])}
-        cy={z(state.position[2])}
+        cx={x(position[0])}
+        cy={z(position[2])}
         r="5.5"
         fill="#ffd84d"
         fillOpacity=".5"
       />
       <circle
-        cx={x(state.position[0])}
-        cy={z(state.position[2])}
+        cx={x(position[0])}
+        cy={z(position[2])}
         r="3"
         fill="#fff6d6"
         stroke="#262835"

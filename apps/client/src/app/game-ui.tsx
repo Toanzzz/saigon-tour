@@ -5,7 +5,7 @@ import { NeighborhoodMap } from '@/features/map/map'
 import { RewardPanel } from '@/features/postcard/reward'
 import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
-import { game, update } from '@/shared/state/game'
+import { type GameState, game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
 import { placeName } from '@/shared/world/places'
 import { useXRPresenting } from '@/shared/xr'
@@ -28,8 +28,28 @@ import { WardrobePanel } from '@/widgets/hud/wardrobe'
 import { close, interact, nearby, openRiverPostcard } from './actions'
 import { TitleScreen } from './title-screen'
 
+/** True when two states render the same HUD: identical save a `position` move
+ * that does not change the nearest interact target. */
+function sameHud(a: GameState, b: GameState): boolean {
+  if (a === b) return true
+  for (const key of Object.keys(a) as (keyof GameState)[]) {
+    if (key === 'position') continue
+    if (a[key] !== b[key]) return false
+  }
+  return nearby(a.position)?.id === nearby(b.position)?.id
+}
+
+/** Render tally for the `?debug` perf check (surfaced in Diagnostics). */
+export let gameUiRenders = 0
+
 export function GameUI() {
-  const state = useSelector(game, (value) => value)
+  gameUiRenders += 1
+  // `position` is written ~10 Hz while walking. Re-rendering the whole HUD on it
+  // is wasteful, so treat a position-only change as equal unless it moves the
+  // nearest interact target. Children keep the full `state` prop; the minimap
+  // reads `position` through its own selector (features/map/map.tsx) so the
+  // "you" marker keeps moving.
+  const state = useSelector(game, (value) => value, { compare: sameHud })
   const target = nearby(state.position)
   const xrPresenting = useXRPresenting()
   useEffect(() => {

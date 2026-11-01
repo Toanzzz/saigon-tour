@@ -95,3 +95,11 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - The wardrobe is a 3D fitting room under one shared drei `View` canvas (`widgets/hud/wardrobe/`): an auto-rotating avatar stage with the equipped ride and pet, slot tabs, and spinning per-item cards with equip/unequip toggles. Locked cards load no 3D. Equip works anywhere — the key `I` opens it while walking, riding, paused, or in the hub, and the reward popup gains "Wear now".
 - The two bicycle unlocks dropped their missing `vehicles/bicycle*` GLB paths so `PersonalVehicle` renders the procedural `Bike`.
 - Gates: `bun run check`, `check:types`, `build`, and `test` pass (server 186 passed / 2 skipped, client 128 passed).
+
+## Client state → TanStack Store (phase 1: mechanical)
+
+- `useStore` → `useSelector`: `features/conversation/errands.tsx` (city snapshot) and `features/conversation/avatar-render.tsx` (`useAvatar`, render queue). `avatar-render` now imports `Store` from `@tanstack/store` directly.
+- Whole-store `useSelector(game, (s) => s)` reads narrowed to `shallow` picks in `app/title-screen.tsx`, `app/title-identity.tsx` (`TitleName`, `TitleAccount`), and `features/npcs/neighbors.tsx` (`active`, `quests`).
+- `widgets/xr-hud/hud.tsx` keeps the full state but compares the fields its panels read plus the nearest target id, so a walking player no longer redraws the XR panel on every position write.
+- `app/game-ui.tsx` stops re-rendering the whole HUD ~10 Hz while walking: `GameUI` selects the store with a `sameHud` comparator that treats a `position`-only change as equal unless it moves the nearest interact target. Children keep the full `state` prop. `features/map/map.tsx` `NeighborhoodMap` gets its own `position` selector so the "you" marker keeps moving.
+- `?debug` diagnostics expose `state.gameUiRenders` (module counter in `game-ui.tsx`) for the walk perf check.

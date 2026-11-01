@@ -10,8 +10,25 @@ import { XRWorldPanel } from '@/shared/xr'
 export function XRGameHud() {
   // Lives inside the scene, which never remounts; redraw panels on language change.
   useLocale()
-  const state = useSelector(game, (value) => value)
-  const target = nearby(state.position)
+  // Select the fields the panels read; collapse the frame-rate `position` into
+  // just the nearest target id so a walking player does not redraw the panel.
+  const { state, target } = useSelector(
+    game,
+    (value) => ({ state: value, target: nearby(value.position) }),
+    {
+      compare: (a, b) =>
+        a.state.dialogue === b.state.dialogue &&
+        a.state.panel === b.state.panel &&
+        a.state.world === b.state.world &&
+        a.state.stop === b.state.stop &&
+        a.state.reward === b.state.reward &&
+        a.state.rewardQuest === b.state.rewardQuest &&
+        a.state.friendship === b.state.friendship &&
+        a.state.quests === b.state.quests &&
+        a.state.trackedQuestId === b.state.trackedQuestId &&
+        a.target?.id === b.target?.id,
+    }
+  )
   if (state.dialogue) {
     const npc = {
       ...NPCS[state.dialogue.npc],

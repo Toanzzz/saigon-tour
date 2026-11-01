@@ -1,6 +1,7 @@
 import { useGLTF } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
-import { Store, useStore } from '@tanstack/react-store'
+import { useSelector } from '@tanstack/react-store'
+import { Store } from '@tanstack/store'
 import { Suspense, useEffect, useMemo } from 'react'
 import { Box3, Color, type Material, Mesh, Vector3 } from 'three'
 import { clone } from 'three/addons/utils/SkeletonUtils.js'
@@ -13,7 +14,8 @@ const cache = new Store<Record<string, string>>({})
 const queue = new Store<Job[]>([])
 
 export const avatarKey = (model: string, color: string) => `${model}|${color}`
-export const useAvatar = (key: string) => useStore(cache, (state) => state[key])
+export const useAvatar = (key: string) =>
+  useSelector(cache, (state) => state[key])
 
 /** Ask the offscreen renderer for one head portrait; cached after the first draw. */
 export function requestAvatar(model: string, color: string) {
@@ -77,7 +79,7 @@ function Head({ job, onDone }: { job: Job; onDone: (url: string) => void }) {
 
 /** Single hidden WebGL context that bakes NPC head portraits to data URLs. */
 export function AvatarRenderer() {
-  const jobs = useStore(queue, (state) => state)
+  const jobs = useSelector(queue, (state) => state)
   const job = jobs[0]
   if (!job) return null
   return (

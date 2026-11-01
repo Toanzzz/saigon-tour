@@ -1,6 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRapier } from '@react-three/rapier'
 import { useEffect } from 'react'
+import { gameUiRenders } from '@/app/game-ui'
 import { crowdStats } from '@/features/npcs/residents'
 import { city } from '@/shared/api/city'
 import { eventDiagnostics } from '@/shared/api/events'
@@ -33,6 +34,7 @@ export function Diagnostics() {
         body: state.body,
         muted: state.muted,
         frame: motion.frames,
+        gameUiRenders,
         position: state.position,
         currency: state.world.currency,
         quests: state.quests,

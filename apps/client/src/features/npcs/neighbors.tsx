@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber'
 import { NEIGHBOR_IDS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
+import { shallow } from '@tanstack/store'
 import { useRef } from 'react'
 import type { Group } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
@@ -14,18 +15,19 @@ import { NpcLabel } from './npc-label'
 import { Crowd } from './residents'
 
 export function Neighbors() {
-  const state = useSelector(game, (s) => s)
-  const active = questTarget(state)
+  const { active, quests } = useSelector(
+    game,
+    (s) => ({ active: questTarget(s), quests: s.quests }),
+    { compare: shallow }
+  )
   return (
     <>
       {NEIGHBOR_IDS.map((id) => (
         <Neighbor
           key={id}
           id={id}
-          highlighted={
-            id === active || state.quests.some((q) => q.giverNpcId === id)
-          }
-          ready={state.quests.some(
+          highlighted={id === active || quests.some((q) => q.giverNpcId === id)}
+          ready={quests.some(
             (q) => q.giverNpcId === id && q.status === 'ready'
           )}
         />

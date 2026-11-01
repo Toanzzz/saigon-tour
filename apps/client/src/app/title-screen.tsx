@@ -1,6 +1,7 @@
 import { useProgress } from '@react-three/drei'
 import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
+import { shallow } from '@tanstack/store'
 import { useEffect, useState } from 'react'
 import { LanguageToggle, m } from '@/shared/i18n'
 import { game, update } from '@/shared/state/game'
@@ -13,7 +14,13 @@ export function TitleScreen() {
   const { active, progress } = useProgress()
   const { guestName, guestStatus, returningGuest, body } = useSelector(
     game,
-    (s) => s
+    (s) => ({
+      guestName: s.guestName,
+      guestStatus: s.guestStatus,
+      returningGuest: s.returningGuest,
+      body: s.body,
+    }),
+    { compare: shallow }
   )
   const continuing = useSelector(game, hasJourney)
   const [name, setName] = useState('')
