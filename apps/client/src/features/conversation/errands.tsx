@@ -1,10 +1,13 @@
 import {
   friendlinessOf,
+  hostingEvent,
   type ItemId,
   type NpcId,
   type Quest,
 } from '@saigon/shared'
+import { useStore } from '@tanstack/react-store'
 import { giveItem, openJournal } from '@/app/actions'
+import { city } from '@/shared/api/city'
 import { itemLabel, m, npcLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { dialogueQuests, questHint } from '@/shared/state/quests'
@@ -23,6 +26,8 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
   const ready = fromNpc.filter((quest) => quest.status === 'ready')
   const active = fromNpc.filter((quest) => quest.status === 'active')
   const npcName = npcLabel(npc)
+  const snapshot = useStore(city)
+  const hosting = hostingEvent(snapshot, npc)
   return (
     <section className="errands" aria-label={m.errands_label()}>
       {ready.map((quest) => (
@@ -85,7 +90,9 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
         <p>
           {friendlinessOf(state.friendship, npc) <= -3
             ? m.errands_cold({ name: npcName })
-            : m.errands_chat_hint({ name: npcName })}
+            : hosting
+              ? m.errands_busy_hint({ name: npcName, event: hosting.title })
+              : m.errands_chat_hint({ name: npcName })}
         </p>
       ) : (
         full && (

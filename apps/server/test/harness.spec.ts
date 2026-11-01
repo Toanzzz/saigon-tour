@@ -175,6 +175,37 @@ describe('NPC authored errands', () => {
     expect(seen).toHaveLength(Object.keys(NPCS).length)
   })
 
+  it('greets as busy hosting when an event sits at the NPC location', async () => {
+    const harness = ctx.fx.harness(offline)
+    harness.game.city = () => ({
+      revision: 1,
+      npcPlacements: {
+        vy: { locationId: 'cityhall', anchorId: 'vy', position: [64, 0, -18] },
+      } as never,
+      events: [
+        {
+          id: 'evening-gathering',
+          kind: 'festival',
+          locationId: 'cityhall',
+          title: 'An evening gathering',
+          description: 'Neighbors bring color to the City Hall walk.',
+          startedAt: 0,
+          endsAt: Date.now() + 60_000,
+        },
+      ],
+      needs: { vy: 'Welcome walkers through the food alley.' },
+      weather: 'clear',
+      headlines: [],
+    })
+    const greeting = await harness.interact(
+      'vy',
+      ask('', { intent: 'greet' }),
+      ctx.playerId
+    )
+    expect(greeting.reply).toContain('An evening gathering')
+    expect(greeting.reply.toLowerCase()).toContain('hosting')
+  })
+
   it('offers an errand when the player asks to join an active event', async () => {
     const harness = ctx.fx.harness(offline)
     await harness.interact('vy', ask('', { intent: 'greet' }), ctx.playerId)

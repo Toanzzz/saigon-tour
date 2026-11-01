@@ -1,5 +1,7 @@
 import {
+  type CityEvent,
   type CitySnapshot,
+  hostingEvent,
   type Locale,
   type NeighborId,
   NPCS,
@@ -13,6 +15,7 @@ export interface GreetingContext {
   weather: CitySnapshot['weather']
   events: CitySnapshot['events']
   need: string | null
+  hosting: CityEvent | null
 }
 
 export function greetingContext(
@@ -30,6 +33,7 @@ export function greetingContext(
       NPCS[npc].kind === 'neighbor'
         ? (city?.needs[npc as NeighborId] ?? null)
         : null,
+    hosting: hostingEvent(city, npc),
   }
 }
 
@@ -45,6 +49,7 @@ export function greetingSignature(context: GreetingContext) {
       title,
     })),
     need: context.need,
+    hosting: context.hosting?.id ?? null,
   })
 }
 
@@ -57,7 +62,7 @@ export function greetingPrompt(context: GreetingContext) {
         )
         .join('; ')
     : 'none'
-  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment. Do not offer or claim to start an errand.`
+  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. ${context.hosting ? ` You are busy hosting ${context.hosting.title} right here (${context.hosting.description}); greet warmly but make clear you are caught up in it and could use a hand, without starting an errand yet.` : ' Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment.'} Do not offer or claim to start an errand.`
 }
 
 const TIME_VI: Record<TimeOfDay, string> = {
@@ -72,7 +77,7 @@ export function fallbackGreeting(
   context: GreetingContext,
   locale: Locale
 ) {
-  const event = context.events[0]
+  const event = context.hosting ?? context.events[0]
   if (locale === 'vi') {
     const tone =
       context.level <= -3
@@ -86,7 +91,12 @@ export function fallbackGreeting(
       context.weather === 'rain'
         ? ` Trời đang mưa ${TIME_VI[context.timeOfDay]}.`
         : ` Một ${TIME_VI[context.timeOfDay]} dễ chịu.`
-    return `${tone}${weather}${event ? ` ${event.title} đang diễn ra.` : ''}`
+    const tail = context.hosting
+      ? ` Mình đang bận lo ${context.hosting.title}, ghé phụ một tay nhé.`
+      : event
+        ? ` ${event.title} đang diễn ra.`
+        : ''
+    return `${tone}${weather}${tail}`
   }
   const tone =
     context.level <= -3
@@ -100,5 +110,10 @@ export function fallbackGreeting(
     context.weather === 'rain'
       ? ` A rainy ${context.timeOfDay} in Sài Gòn.`
       : ` A lovely ${context.timeOfDay} in Sài Gòn.`
-  return `${tone}${weather}${event ? ` ${event.title} is happening.` : ` ${NPCS[npc].knowledge[0] ?? ''}`}`.trim()
+  const tail = context.hosting
+    ? ` I'm caught up hosting ${context.hosting.title} right now, but I could use a hand.`
+    : event
+      ? ` ${event.title} is happening.`
+      : ` ${NPCS[npc].knowledge[0] ?? ''}`
+  return `${tone}${weather}${tail}`.trim()
 }

@@ -1,7 +1,7 @@
-import type { LocationId, NeighborId } from '../entities'
+import type { LocationId, NeighborId, NpcId } from '../entities'
 import { NPC_POSITIONS } from '../multiplayer'
 import { NPCS } from '../world'
-import type { CitySnapshot } from './schema'
+import type { CityEvent, CitySnapshot } from './schema'
 
 export type CityPosition = [number, number, number]
 
@@ -45,3 +45,20 @@ export function initialCitySnapshot(): CitySnapshot {
   }
 }
 export const initialCity = initialCitySnapshot
+
+/**
+ * The event this NPC is currently hosting or tied up with: an active event at
+ * the NPC's current location while the NPC also has a city need. Used to make
+ * greetings and hints reflect that the NPC is busy with that event.
+ */
+export function hostingEvent(
+  city: CitySnapshot | null | undefined,
+  npcId: NpcId
+): CityEvent | null {
+  if (!city || NPCS[npcId].kind !== 'neighbor') return null
+  const neighbor = npcId as NeighborId
+  if (!city.needs[neighbor]) return null
+  const location =
+    city.npcPlacements[neighbor]?.locationId ?? NPCS[npcId].location
+  return city.events.find((event) => event.locationId === location) ?? null
+}
