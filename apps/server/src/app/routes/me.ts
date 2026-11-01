@@ -1,11 +1,18 @@
 import { zValidator } from '@hono/zod-validator'
-import { PlayerNameSchema, UNLOCK_SLOTS, UnlockIdSchema } from '@saigon/shared'
+import {
+  AvatarBodySchema,
+  PlayerNameSchema,
+  UNLOCK_SLOTS,
+  UnlockIdSchema,
+} from '@saigon/shared'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { requireAuth } from './auth'
 import type { Env, RouteDeps } from './deps'
 
-const ProfileSchema = z.object({ name: PlayerNameSchema }).strict()
+const ProfileSchema = z
+  .object({ name: PlayerNameSchema, body: AvatarBodySchema })
+  .strict()
 const EquipSchema = z
   .object({ slot: z.enum(UNLOCK_SLOTS), id: UnlockIdSchema.nullable() })
   .strict()
@@ -26,13 +33,13 @@ export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
         if (!result.success) return c.json({ error: 'invalid_name' }, 400)
       }),
       async (c) => {
-        const { name } = c.req.valid('json')
+        const { name, body } = c.req.valid('json')
         await auth.api.updateUser({
           headers: c.req.raw.headers,
           body: { name },
         })
-        const player = await db.rename(c.var.player.id, name)
-        realtime.rename(player.id, name)
+        const player = await db.updateProfile(c.var.player.id, { name, body })
+        realtime.updateProfile(player.id, { name, body })
         return c.json({ player })
       }
     )

@@ -108,7 +108,9 @@ export class RoomManager {
 
   /** Assign to the player's current room, else any room with space. */
   connect(
-    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'> & { look?: Look | null },
+    guest: Pick<GuestPlayer, 'id' | 'name' | 'body' | 'color'> & {
+      look?: Look | null
+    },
     socket: RoomSocket
   ) {
     const room =
@@ -123,7 +125,9 @@ export class RoomManager {
   /** Attach a socket to a room, replacing the player's previous socket. */
   join(
     room: Room,
-    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'> & { look?: Look | null },
+    guest: Pick<GuestPlayer, 'id' | 'name' | 'body' | 'color'> & {
+      look?: Look | null
+    },
     socket: RoomSocket
   ) {
     const current = this.room(guest.id)
@@ -134,12 +138,14 @@ export class RoomManager {
       existing.socket = socket
       existing.disconnectedAt = null
       existing.player.name = guest.name
+      existing.player.body = guest.body
       if (old && old !== socket) old.close(CLOSE.replaced, 'replaced')
     } else {
       room.members.set(guest.id, {
         player: {
           id: guest.id,
           name: guest.name,
+          body: guest.body,
           color: guest.color,
           position: [-16, 0, 8],
           heading: 0,

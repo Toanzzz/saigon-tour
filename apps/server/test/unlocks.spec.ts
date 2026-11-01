@@ -1,4 +1,7 @@
 import {
+  AVATAR_BODIES,
+  AvatarBodySchema,
+  bodyModel,
   createQuest,
   EMPTY_UNLOCKS,
   FRIENDSHIP_TIERS,
@@ -111,5 +114,32 @@ describe('schema compatibility', () => {
 
   it('defaults empty unlocks', () => {
     expect(UnlocksSchema.parse({})).toEqual(EMPTY_UNLOCKS)
+  })
+})
+
+describe('avatar bodies', () => {
+  it('defaults an unset body to man', () => {
+    expect(AvatarBodySchema.parse(undefined)).toBe('man')
+  })
+
+  it('accepts every known body and rejects others', () => {
+    for (const body of AVATAR_BODIES)
+      expect(AvatarBodySchema.parse(body)).toBe(body)
+    expect(AvatarBodySchema.safeParse('alien').success).toBe(false)
+  })
+
+  it('maps each body to its runtime model path', () => {
+    expect(bodyModel('man')).toBe('people/player-man')
+    expect(bodyModel('woman')).toBe('people/player-woman')
+  })
+})
+
+describe('outfit palettes', () => {
+  it('only recolours the split clothing materials', () => {
+    for (const entry of Object.values(UNLOCKS)) {
+      if (!entry.palette) continue
+      for (const key of Object.keys(entry.palette))
+        expect(['outfit-top', 'outfit-bottom']).toContain(key)
+    }
   })
 })

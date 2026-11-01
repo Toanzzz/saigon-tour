@@ -57,6 +57,13 @@
       "when": 1793524066880,
       "tag": "0007_clean_thor",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793531039613,
+      "tag": "0008_sparkling_songbird",
+      "breakpoints": true
     }
   ]
 }

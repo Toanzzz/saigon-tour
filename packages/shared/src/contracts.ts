@@ -14,7 +14,7 @@ import {
   QuestEventSchema,
   QuestSchema,
 } from './quest/schema'
-import { UnlocksSchema } from './unlocks'
+import { AvatarBodySchema, UnlocksSchema } from './unlocks'
 
 export * from './entities'
 export * from './quest/schema'
@@ -120,6 +120,7 @@ export const GuestPlayerSchema = z.object({
   friendship: FriendshipMapSchema.default({}),
   id: z.uuid(),
   name: z.string(),
+  body: AvatarBodySchema,
   color: z.string(),
   world: WorldStateSchema,
   quests: z.array(QuestSchema).max(3),

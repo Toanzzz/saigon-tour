@@ -3,6 +3,7 @@ import { COSMETIC_UNLOCKS } from './cosmetics'
 import { PET_UNLOCKS } from './pets'
 import { VEHICLE_UNLOCKS } from './vehicles'
 
+export * from './avatar'
 export * from './catalog'
 
 import {

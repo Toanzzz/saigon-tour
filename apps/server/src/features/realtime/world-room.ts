@@ -5,6 +5,7 @@ import {
   Room,
 } from '@colyseus/core'
 import {
+  type AvatarBody,
   ClientSocketMessageSchema,
   type Look,
   type PartyClientMessage,
@@ -39,6 +40,7 @@ export interface WorldRoomDeps {
 interface Identity {
   id: string
   name: string
+  body: AvatarBody
   color: string
   look: Look | null
 }
@@ -77,7 +79,13 @@ export class WorldRoom extends Room<{ state: WorldRoomState }> {
     if (!admit(WorldRoom.deps.manager, player.id)) throw new Error('room_full')
     const equipped = player.unlocks.equipped
     const look = Object.keys(equipped).length ? equipped : null
-    return { id: player.id, name: player.name, color: player.color, look }
+    return {
+      id: player.id,
+      name: player.name,
+      body: player.body,
+      color: player.color,
+      look,
+    }
   }
 
   /** Headroom so Colyseus never auto-locks or spills into a second room. */

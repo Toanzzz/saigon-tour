@@ -96,10 +96,10 @@ export class GameDb {
     )
     return (rows[0]?.id as string | undefined) ?? null
   }
-  async rename(id: string, name: string) {
+  async updateProfile(id: string, profile: { name: string; body: string }) {
     const { rows } = await this.sql.query(
-      'UPDATE players SET name=$2 WHERE id=$1 RETURNING *',
-      [id, name]
+      'UPDATE players SET name=$2,body=$3 WHERE id=$1 RETURNING *',
+      [id, profile.name, profile.body]
     )
     if (!rows[0]) throw new Error('player_not_found')
     return publicPlayer(rows[0])

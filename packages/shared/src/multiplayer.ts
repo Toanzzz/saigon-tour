@@ -9,7 +9,7 @@ import {
 } from './contracts'
 import { PartyInviteSchema, PartySnapshotSchema } from './party'
 import { FriendshipMapSchema } from './quest/friendship'
-import { LookSchema, UnlocksSchema } from './unlocks'
+import { AvatarBodySchema, LookSchema, UnlocksSchema } from './unlocks'
 
 export const WORLD_BOUNDS = { x: [-110, 150], z: [-120, 100] } as const
 export const NPC_POSITIONS = {
@@ -33,6 +33,7 @@ export const PositionSchema = z.tuple([
 export const PresencePlayerSchema = z.object({
   id: z.uuid(),
   name: z.string().max(80),
+  body: AvatarBodySchema,
   color: z.string().max(20),
   position: PositionSchema,
   heading: z.number(),

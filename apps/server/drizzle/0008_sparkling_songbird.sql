@@ -1,0 +1,1 @@
+ALTER TABLE "players" ADD COLUMN "body" text DEFAULT 'man' NOT NULL;

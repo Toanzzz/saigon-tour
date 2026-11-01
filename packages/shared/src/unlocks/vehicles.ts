@@ -18,7 +18,7 @@ export const VEHICLE_UNLOCKS: UnlockDef[] = [
     slot: 'vehicle',
     giver: 'linh',
     tier: 'warm',
-    model: 'vehicles/bicycle',
+    // No bicycle GLB ships; PersonalVehicle renders the procedural Bike.
     scale: 1,
     speed: 5.5,
   },
@@ -28,7 +28,7 @@ export const VEHICLE_UNLOCKS: UnlockDef[] = [
     slot: 'vehicle',
     giver: 'ba',
     tier: 'close',
-    model: 'vehicles/basket-bicycle',
+    // No basket-bicycle GLB ships; PersonalVehicle renders the procedural Bike (cyclo).
     scale: 1,
     speed: 5.5,
   },

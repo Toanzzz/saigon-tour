@@ -1,6 +1,6 @@
 import type { UnlockDef } from './catalog'
 
-/** Hats, outfits and accessories. Outfits are palette recolours of the tourist model. */
+/** Hats, outfits and accessories. Outfits recolour the plain body's `outfit-top` and `outfit-bottom` materials. */
 export const COSMETIC_UNLOCKS: UnlockDef[] = [
   // hoa (food vendor)
   {
@@ -18,7 +18,7 @@ export const COSMETIC_UNLOCKS: UnlockDef[] = [
     slot: 'outfit',
     giver: 'hoa',
     tier: 'warm',
-    palette: { 'tourist-pack': '#d94f45', 'tourist-pack-dark': '#a8382f' },
+    palette: { 'outfit-top': '#d94f45', 'outfit-bottom': '#a8382f' },
   },
   // tam (driver)
   {
@@ -65,7 +65,7 @@ export const COSMETIC_UNLOCKS: UnlockDef[] = [
     slot: 'outfit',
     giver: 'ba',
     tier: 'warm',
-    palette: { 'tourist-pack': '#5a4a7a', 'tourist-pack-dark': '#3f3357' },
+    palette: { 'outfit-top': '#5a4a7a', 'outfit-bottom': '#3f3357' },
   },
   // mai (café)
   {
@@ -83,7 +83,7 @@ export const COSMETIC_UNLOCKS: UnlockDef[] = [
     slot: 'outfit',
     giver: 'mai',
     tier: 'warm',
-    palette: { 'tourist-pack': '#3b2f2a', 'tourist-pack-dark': '#241c19' },
+    palette: { 'outfit-top': '#3b2f2a', 'outfit-bottom': '#241c19' },
   },
   // alex (photographer)
   {
@@ -101,7 +101,7 @@ export const COSMETIC_UNLOCKS: UnlockDef[] = [
     slot: 'outfit',
     giver: 'alex',
     tier: 'warm',
-    palette: { 'tourist-pack': '#6b7d53', 'tourist-pack-dark': '#4b5a39' },
+    palette: { 'outfit-top': '#6b7d53', 'outfit-bottom': '#4b5a39' },
   },
   // vy (lanterns)
   {
@@ -119,7 +119,7 @@ export const COSMETIC_UNLOCKS: UnlockDef[] = [
     slot: 'outfit',
     giver: 'vy',
     tier: 'warm',
-    palette: { 'tourist-pack': '#2b3566', 'tourist-pack-dark': '#1b2244' },
+    palette: { 'outfit-top': '#2b3566', 'outfit-bottom': '#1b2244' },
   },
   {
     id: 'lantern-hat',
@@ -165,6 +165,6 @@ export const COSMETIC_UNLOCKS: UnlockDef[] = [
     slot: 'outfit',
     giver: 'thao',
     tier: 'warm',
-    palette: { 'tourist-pack': '#c53b6b', 'tourist-pack-dark': '#8f2a4c' },
+    palette: { 'outfit-top': '#e86a9b', 'outfit-bottom': '#f3ead6' },
   },
 ]

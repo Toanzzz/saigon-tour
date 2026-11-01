@@ -2,7 +2,7 @@ import type { Server as HttpServer } from 'node:http'
 import { createAuthContext, matchMaker } from '@colyseus/core'
 import { setTransport } from '@colyseus/core/Transport'
 import { WebSocketTransport } from '@colyseus/ws-transport'
-import { type Look, WORLD_ROOM } from '@saigon/shared'
+import { type AvatarBody, type Look, WORLD_ROOM } from '@saigon/shared'
 import type { Hono } from 'hono'
 import type { Auth } from '@/features/auth'
 import { CityDirector } from '@/features/director'
@@ -122,9 +122,15 @@ export function createRealtime(
   return {
     manager,
     party,
-    rename(playerId: string, name: string) {
+    updateProfile(
+      playerId: string,
+      profile: { name: string; body: AvatarBody }
+    ) {
       const player = manager.getPlayer(playerId)
-      if (player) player.name = name
+      if (player) {
+        player.name = profile.name
+        player.body = profile.body
+      }
     },
     /** Push a freshly equipped look onto the player's live presence, if connected. */
     updateLook(playerId: string, look: Look | null) {

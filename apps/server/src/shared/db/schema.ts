@@ -29,6 +29,7 @@ export const players = pgTable('players', {
     .unique()
     .references(() => user.id, { onDelete: 'cascade' }),
   name: text().notNull(),
+  body: text().notNull().default('man'),
   color: text().notNull(),
   world: jsonb().$type<WorldState>().notNull(),
   quests: jsonb().$type<Quest[]>().notNull().default([]),
