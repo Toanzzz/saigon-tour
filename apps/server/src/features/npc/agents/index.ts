@@ -57,6 +57,14 @@ export const NPC_PERSONAS = Object.fromEntries(
   ])
 ) as Record<NpcId, string>
 
+/** Compose an NPC's full agent instructions: persona, quest rules, allowed entities, unlocks, and an example quest. */
+export function npcInstructions(id: NpcId): string {
+  return `${NPC_PERSONAS[id]}
+${QUEST_RULES}
+Your allowed entities: ${JSON.stringify(QUEST_DOMAINS[id])}${unlockHint(id)}
+Example valid quest spec: ${JSON.stringify(seedsFor(id, 'en')[0])}`
+}
+
 /** Each NPC gets its own persona and only the tools its role needs. */
 export function createNpcAgents(
   model: MastraModelConfig,
@@ -71,15 +79,12 @@ export function createNpcAgents(
   }
   const memory = createNpcMemory(model)
   return Object.fromEntries(
-    Object.entries(NPC_PERSONAS).map(([id, instructions]) => [
+    Object.keys(NPC_PERSONAS).map((id) => [
       id,
       new Agent({
         id,
         name: id,
-        instructions: `${instructions}
-${QUEST_RULES}
-Your allowed entities: ${JSON.stringify(QUEST_DOMAINS[id as NpcId])}${unlockHint(id as NpcId)}
-Example valid quest spec: ${JSON.stringify(seedsFor(id as NpcId, 'en')[0])}`,
+        instructions: npcInstructions(id as NpcId),
         model,
         memory,
         tools,

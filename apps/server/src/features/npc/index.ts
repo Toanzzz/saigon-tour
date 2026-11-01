@@ -1,4 +1,4 @@
-export { NPC_PERSONAS } from './agents'
+export { NPC_PERSONAS, npcInstructions } from './agents'
 export { BoundedCache, CostGuard } from './guard'
 export { NpcHarness } from './harness'
 export { GREETING_BUCKETS } from './short-lines'
