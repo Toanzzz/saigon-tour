@@ -21,7 +21,7 @@ import * as ui from './credentials/ui'
 const ROOT = join(import.meta.dirname, '..')
 const DEFAULT_REPO = 'Toanzzz/saigon-tour'
 const DEFAULT_DIR = 'apps/saigon-tour'
-const DEFAULT_API_URL = 'https://saigon-api.toan.io'
+const DEFAULT_API_URL = 'https://saigon-tour-api.toan.io'
 const TOTAL = 8
 
 const args = process.argv.slice(2)

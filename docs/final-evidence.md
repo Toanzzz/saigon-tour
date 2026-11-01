@@ -88,7 +88,7 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - `actionlint .github/workflows/deploy.yml`, `shellcheck scripts/deploy-remote.sh scripts/setup-deploy.sh`, and `POSTGRES_PASSWORD=x docker compose -f compose.prod.yml config -q` passed.
 - `docker buildx build --platform linux/arm64 -f apps/server/Dockerfile .` passed.
 - Host t-oracle (`oracle.toan.io`, aarch64): user `toan` is in `docker`, and the `edge` network exists.
-- Not yet observed: GitHub secrets/vars, the host `.env`, a workflow run, `https://saigon-api.toan.io/health`, and the deployed client.
+- Not yet observed: GitHub secrets/vars, the host `.env`, a workflow run, `https://saigon-tour-api.toan.io/health`, and the deployed client.
 
 ## NPC friendliness harness
 
