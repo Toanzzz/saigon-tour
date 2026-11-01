@@ -116,6 +116,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
   if (game.state.sessionId !== sessionId) return
   appendHistory(dialog.npc, text, result.response.reply)
   apply(
+    intent,
     result.response,
     dialog.npc,
     history,
@@ -131,6 +132,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
 }
 
 function apply(
+  intent: Intent,
   result: InteractResponse,
   npc: NpcId,
   history: { role: 'user' | 'assistant'; content: string }[],
@@ -218,10 +220,16 @@ function apply(
               ...state.dialogue,
               thinking: false,
               source: result.source,
-              history: [
-                ...history,
-                { role: 'assistant' as const, content: result.reply },
-              ].slice(-30),
+              history:
+                intent === 'greet' && history.at(-1)?.role === 'assistant'
+                  ? [
+                      ...history.slice(0, -1),
+                      { role: 'assistant' as const, content: result.reply },
+                    ]
+                  : [
+                      ...history,
+                      { role: 'assistant' as const, content: result.reply },
+                    ].slice(-30),
             }
           : state.dialogue,
     }

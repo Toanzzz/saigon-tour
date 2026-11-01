@@ -229,6 +229,9 @@ export class GameDb {
       rows.map((r) => r.user_id).filter(Boolean),
     ])
     await this.sql.query(`DELETE FROM players WHERE ${stale}`)
+    await this.sql.query(
+      "DELETE FROM npc_greetings WHERE created_at < now()-interval '7 days'"
+    )
     return rows.map((r) => r.id as string)
   }
   async close() {

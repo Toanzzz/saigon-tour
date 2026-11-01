@@ -348,3 +348,12 @@
     animation: friendship-fade 2.2s ease-out both;
   }
 }
+
+.history-divider {
+  align-self: center;
+  margin: 4px 0;
+  color: var(--ink-soft, rgba(38, 40, 53, 0.72));
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}

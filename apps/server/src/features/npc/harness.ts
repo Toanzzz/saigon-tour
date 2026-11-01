@@ -24,6 +24,7 @@ import type { GameDb } from '@/shared/db'
 import type { Fetcher } from '@/shared/http'
 import { createNpcAgents } from './agents'
 import { fallbackLine } from './fallbacks'
+import { greetingContext } from './greeting-context'
 import { CostGuard } from './guard'
 import { NpcMemoryService } from './memory/npc-memory'
 import { clearPlayerThreads, readHistory, recordTurn } from './memory/threads'
@@ -127,13 +128,13 @@ export class NpcHarness {
     if (request.intent === 'greet') {
       const line = await this.shortLines.greeting(
         npcId,
-        request.worldContext.timeOfDay,
-        request.locale,
-        friendlinessOf(current.friendship, npcId) <= -3
-          ? 'cold'
-          : friendlinessOf(current.friendship, npcId) >= 2
-            ? 'warm'
-            : 'neutral'
+        greetingContext(
+          npcId,
+          friendlinessOf(current.friendship, npcId),
+          request.worldContext.timeOfDay,
+          this.game.city?.(playerId)
+        ),
+        request.locale
       )
       if (completed.length)
         line.reply = fallbackLine(
@@ -147,7 +148,8 @@ export class NpcHarness {
         npcId,
         playerId,
         request.message,
-        line.reply
+        line.reply,
+        true
       )
       return {
         npcId,
@@ -275,6 +277,9 @@ export class NpcHarness {
   }
   prewarm() {
     return this.shortLines.prewarm()
+  }
+  settleGreetings() {
+    return this.shortLines.settled()
   }
   history(npcId: NpcId, playerId: string, limit = 30) {
     return readHistory(this.storage, npcId, playerId, limit)

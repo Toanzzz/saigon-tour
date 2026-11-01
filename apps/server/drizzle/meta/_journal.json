@@ -43,6 +43,13 @@
       "when": 1793516098700,
       "tag": "0005_npc_friendship",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793520218417,
+      "tag": "0006_contextual_greetings",
+      "breakpoints": true
     }
   ]
 }

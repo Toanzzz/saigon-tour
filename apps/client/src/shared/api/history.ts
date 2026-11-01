@@ -24,19 +24,36 @@ export async function fetchHistory(npcId: NpcId) {
   })
 }
 export function appendHistory(npcId: NpcId, message: string, reply: string) {
-  queryClient.setQueryData<NpcHistory>(historyKey(npcId), (old) => ({
-    messages: [
-      ...(old?.messages ?? []),
-      ...(message.trim()
-        ? [
-            {
-              role: 'user' as const,
-              text: message,
-              at: new Date().toISOString(),
-            },
-          ]
-        : []),
-      { role: 'assistant' as const, text: reply, at: new Date().toISOString() },
-    ].slice(-30),
-  }))
+  queryClient.setQueryData<NpcHistory>(historyKey(npcId), (old) => {
+    const messages = old?.messages ?? []
+    const latest = messages.at(-1)
+    if (!message.trim() && latest?.role === 'assistant') {
+      if (latest.text === reply) return old
+      return {
+        messages: [
+          ...messages.slice(0, -1),
+          { ...latest, text: reply, at: new Date().toISOString() },
+        ],
+      }
+    }
+    return {
+      messages: [
+        ...messages,
+        ...(message.trim()
+          ? [
+              {
+                role: 'user' as const,
+                text: message,
+                at: new Date().toISOString(),
+              },
+            ]
+          : []),
+        {
+          role: 'assistant' as const,
+          text: reply,
+          at: new Date().toISOString(),
+        },
+      ].slice(-30),
+    }
+  })
 }

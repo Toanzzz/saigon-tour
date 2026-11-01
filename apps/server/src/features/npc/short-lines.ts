@@ -10,6 +10,13 @@ import {
 } from '@saigon/shared'
 import type { GameDb } from '@/shared/db'
 import { NPC_PERSONAS } from './agents'
+import {
+  fallbackGreeting,
+  type GreetingContext,
+  greetingContext,
+  greetingPrompt,
+  greetingSignature,
+} from './greeting-context'
 import { storageUnavailable } from './meter'
 import { languageRule } from './personas/shared'
 import { cleanReply } from './safety'
@@ -24,21 +31,16 @@ export const GREETING_BUCKETS: TimeOfDay[] = [
   'evening',
   'night',
 ]
-const BUCKETS_VI: Record<TimeOfDay, string> = {
-  morning: 'buổi sáng',
-  afternoon: 'buổi chiều',
-  evening: 'buổi tối',
-  night: 'buổi đêm',
-}
 const fallback = (
   npc: NpcId,
   bucket: TimeOfDay,
   locale: Locale = 'en'
 ): ShortLine => ({
-  reply:
-    locale === 'vi'
-      ? `Chào bạn! Một ${BUCKETS_VI[bucket]} thật dễ chịu ở Sài Gòn.`
-      : `Chào bạn! A lovely ${bucket} in Sài Gòn. ${NPCS[npc].knowledge[0]}`,
+  reply: fallbackGreeting(
+    npc,
+    greetingContext(npc, NPCS[npc].friendliness, bucket, null),
+    locale
+  ),
   source: 'fallback',
 })
 
@@ -72,49 +74,62 @@ export class ShortLines {
     this.barkAgents = agents(barkModel)
   }
 
-  key(npc: NpcId, bucket: TimeOfDay, locale: Locale = 'en', band = 'neutral') {
+  key(npc: NpcId, context: GreetingContext, locale: Locale = 'en') {
     const hash = createHash('sha256')
-      .update(`greeting-v2\0${NPC_PERSONAS[npc]}\0${this.modelId}`)
+      .update(
+        `greeting-v3\0${NPC_PERSONAS[npc]}\0${this.modelId}\0${greetingSignature(context)}`
+      )
       .digest('hex')
-    return `${npc}:${bucket}:${locale}:${band}:${hash}`
+    return `${npc}:${locale}:${hash}`
   }
 
   async greeting(
     npc: NpcId,
-    bucket: TimeOfDay,
+    context: GreetingContext,
     locale: Locale = 'en',
-    band: 'cold' | 'neutral' | 'warm' = 'neutral'
+    wait = false
   ): Promise<ShortLine & { cached: boolean }> {
-    const key = this.key(npc, bucket, locale, band)
+    const key = this.key(npc, context, locale)
     const existing = await this.db.getGreeting(key)
     if (existing) return { ...existing, cached: true }
     let pending = this.pending.get(key)
     const shared = Boolean(pending)
     if (!pending) {
-      pending = this.fill(npc, bucket, locale, key, band)
+      pending = this.fill(npc, context, locale, key)
       this.pending.set(key, pending)
+      void pending
+        .catch(() => {})
+        .finally(() => {
+          if (this.pending.get(key) === pending) this.pending.delete(key)
+        })
     }
-    try {
-      return { ...(await pending), cached: shared }
-    } finally {
-      if (this.pending.get(key) === pending) this.pending.delete(key)
-    }
+    if (!wait && this.live)
+      return {
+        reply: fallbackGreeting(npc, context, locale),
+        source: 'fallback',
+        cached: false,
+      }
+    return { ...(await pending), cached: shared }
   }
 
   private async fill(
     npc: NpcId,
-    bucket: TimeOfDay,
+    context: GreetingContext,
     locale: Locale,
-    key: string,
-    band: string
+    key: string
   ) {
-    const line = await this.generate(npc, bucket, false, locale, band)
-    await this.db.putGreeting(key, line.reply, line.source)
+    const line = await this.generateGreeting(npc, context, locale)
+    if (line.source === 'live')
+      await this.db.putGreeting(key, line.reply, line.source)
     return line
   }
 
   async bark(npc: NpcId, bucket: TimeOfDay): Promise<ShortLine> {
     return this.generate(npc, bucket, true)
+  }
+
+  async settled() {
+    await Promise.allSettled(this.pending.values())
   }
 
   async prewarm() {
@@ -126,34 +141,29 @@ export class ShortLines {
             npcId: npc,
             bucket,
             locale,
-            ...(await this.greeting(npc, bucket, locale)),
+            ...(await this.greeting(
+              npc,
+              greetingContext(npc, NPCS[npc].friendliness, bucket, null),
+              locale,
+              true
+            )),
           })
     return results
   }
 
-  private async generate(
+  private async generateGreeting(
     npc: NpcId,
-    bucket: TimeOfDay,
-    bark: boolean,
-    locale: Locale = 'en',
-    band = 'neutral'
+    context: GreetingContext,
+    locale: Locale
   ): Promise<ShortLine> {
     if (!this.live)
-      return band === 'cold'
-        ? {
-            reply:
-              locale === 'vi'
-                ? 'Chào bạn. Hôm nay tôi chưa muốn nhờ việc gì.'
-                : 'Hello. I am keeping to myself today.',
-            source: 'fallback',
-          }
-        : fallback(npc, bucket, locale)
+      return {
+        reply: fallbackGreeting(npc, context, locale),
+        source: 'fallback',
+      }
     try {
-      const agent = (bark ? this.barkAgents : this.agents)[npc]
-      const result = await agent.generate(
-        bark
-          ? `It is ${bucket}. Say one short atmospheric neighborhood line for passersby. Do not offer an errand.`
-          : `It is ${bucket}. Give one short ${band} greeting to this visitor. Do not offer or claim to start an errand. ${languageRule(locale)}`,
+      const result = await this.agents[npc].generate(
+        `${greetingPrompt(context)} ${languageRule(locale)}`,
         {
           activeTools: [],
           maxSteps: 1,
@@ -167,7 +177,34 @@ export class ShortLines {
         return { reply, source: 'live' }
     } catch (error) {
       if (storageUnavailable(error)) throw error
-      /* Deterministic neighborhood life continues without the model. */
+    }
+    return { reply: fallbackGreeting(npc, context, locale), source: 'fallback' }
+  }
+
+  private async generate(
+    npc: NpcId,
+    bucket: TimeOfDay,
+    bark: boolean,
+    locale: Locale = 'en'
+  ): Promise<ShortLine> {
+    if (!this.live) return fallback(npc, bucket, locale)
+    try {
+      const agent = (bark ? this.barkAgents : this.agents)[npc]
+      const result = await agent.generate(
+        `It is ${bucket}. Say one short atmospheric neighborhood line for passersby. Do not offer an errand.`,
+        {
+          activeTools: [],
+          maxSteps: 1,
+          abortSignal: AbortSignal.timeout(this.timeoutMs),
+          modelSettings: { maxOutputTokens: 300, maxRetries: 0 },
+          providerOptions: { meta: { reasoningEffort: 'minimal' } },
+        }
+      )
+      const reply = cleanReply(result.text)
+      if (reply && result.finishReason !== 'length')
+        return { reply, source: 'live' }
+    } catch (error) {
+      if (storageUnavailable(error)) throw error
     }
     return fallback(npc, bucket, locale)
   }

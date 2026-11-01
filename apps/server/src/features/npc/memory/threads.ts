@@ -8,7 +8,8 @@ export async function recordTurn(
   npcId: NpcId,
   playerId: string,
   message: string,
-  reply: string
+  reply: string,
+  replaceGreeting = false
 ) {
   const memory = await storage.getStore('memory')
   if (!memory) throw new Error('npc_memory_store_unavailable')
@@ -25,6 +26,35 @@ export async function recordTurn(
         updatedAt: createdAt,
       },
     })
+  if (!message.trim()) {
+    const latest = (
+      await memory.listMessages({
+        threadId,
+        resourceId: playerId,
+        perPage: 1,
+        page: 0,
+        orderBy: { field: 'createdAt', direction: 'DESC' },
+      })
+    ).messages[0]
+    if (latest?.role === 'assistant') {
+      const text = latest.content.parts
+        .filter((part) => part.type === 'text')
+        .map((part) => part.text)
+        .join('\n')
+      if (text === reply) return false
+      if (replaceGreeting) {
+        await memory.updateMessages({
+          messages: [
+            {
+              id: latest.id,
+              content: { format: 2, parts: [{ type: 'text', text: reply }] },
+            },
+          ],
+        })
+        return true
+      }
+    }
+  }
   const messages: MastraDBMessage[] = [
     ...(message.trim() ? [{ role: 'user' as const, text: message }] : []),
     { role: 'assistant' as const, text: reply },
@@ -37,6 +67,7 @@ export async function recordTurn(
     content: { format: 2, parts: [{ type: 'text', text }] },
   }))
   await memory.saveMessages({ messages })
+  return true
 }
 
 export async function clearPlayerThreads(

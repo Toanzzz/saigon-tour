@@ -35,11 +35,12 @@ describe('Mastra NPC harness greetings', () => {
       ctx.playerId
     )
     expect(first).toMatchObject({
-      source: 'live',
+      source: 'fallback',
       cached: false,
       party: null,
       toolCalls: [],
     })
+    await harness.settleGreetings()
     expect(seen).toHaveLength(1)
     expect(seen[0]?.tools ?? []).toEqual([])
     const other = (await ctx.fx.guest()).player.id
@@ -52,7 +53,7 @@ describe('Mastra NPC harness greetings', () => {
       other
     )
     expect(cached.cached).toBe(true)
-    expect(cached.reply).toBe(first.reply)
+    expect(cached.reply).toBe('Chào! Welcome to the warm market morning.')
     expect(seen).toHaveLength(1)
     await harness.interact('hoa', ask('Tell me about breakfast'), ctx.playerId)
     const messages = JSON.stringify(seen.at(-1)?.messages)
@@ -78,6 +79,7 @@ describe('Mastra NPC harness greetings', () => {
       })
     const vi = await harness.interact('mai', greet('vi'), ctx.playerId)
     const en = await harness.interact('mai', greet('en'), ctx.playerId)
+    await harness.settleGreetings()
     expect(vi.cached).toBe(false)
     expect(en.cached).toBe(false)
     expect(seen).toHaveLength(2)
@@ -87,7 +89,7 @@ describe('Mastra NPC harness greetings', () => {
     )
     expect(
       (await harness.interact('mai', greet('vi'), ctx.playerId)).reply
-    ).toBe(vi.reply)
+    ).toBe('Chào buổi sáng!')
   })
 
   it('adds the language rule to each live chat turn', async () => {
@@ -115,7 +117,7 @@ describe('Mastra NPC harness greetings', () => {
       ask('', { intent: 'greet', locale: 'vi' }),
       ctx.playerId
     )
-    expect(greeting.reply).toContain('Sài Gòn')
+    expect(greeting.reply).toContain('buổi chiều')
     expect(greeting.reply).not.toContain('lovely')
     const help = await harness.interact(
       'hoa',
@@ -147,6 +149,43 @@ describe('Mastra NPC harness greetings', () => {
     expect(greeting.reply).not.toBe('Chào con! Good')
   })
 
+  it('uses each affinity level and active city state in greeting keys', async () => {
+    const harness = ctx.fx.harness(offline)
+    harness.game.city = () => ({
+      revision: 1,
+      npcPlacements: {} as never,
+      events: [
+        {
+          id: 'lantern-walk',
+          kind: 'festival',
+          locationId: 'cityhall',
+          title: 'Lantern walk',
+          description: 'Lanterns glow along the plaza.',
+          startedAt: 0,
+          endsAt: Date.now() + 60_000,
+        },
+      ],
+      needs: {},
+      weather: 'rain',
+      headlines: [],
+    })
+    const before = await harness.interact(
+      'hoa',
+      ask('', { intent: 'greet' }),
+      ctx.playerId
+    )
+    expect(before.reply).toContain('rainy')
+    expect(before.reply).toContain('Lantern walk')
+    await harness.game.adjustFriendship(ctx.playerId, 'hoa', 'warmer', 0)
+    const after = await harness.interact(
+      'hoa',
+      ask('', { intent: 'greet' }),
+      ctx.playerId
+    )
+    expect(after.friendship.hoa?.level).toBe(2)
+    expect(after.reply).toContain('rainy')
+  })
+
   it('invalidates cached greetings when the persona changes', async () => {
     const seen: unknown[] = []
     const harness = ctx.fx.harness(
@@ -158,12 +197,14 @@ describe('Mastra NPC harness greetings', () => {
       worldContext: { ...worldContext, timeOfDay: 'night' },
     })
     await harness.interact('ba', input, ctx.playerId)
+    await harness.settleGreetings()
     const persona = NPC_PERSONAS.ba
     try {
       NPC_PERSONAS.ba += '\nTonight the river festival begins.'
       expect((await harness.interact('ba', input, ctx.playerId)).cached).toBe(
         false
       )
+      await harness.settleGreetings()
       expect(seen).toHaveLength(2)
     } finally {
       NPC_PERSONAS.ba = persona

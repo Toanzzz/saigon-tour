@@ -55,6 +55,24 @@ describe('NPC history', () => {
     ).toBeNull()
     app.realtime.manager.shutdown()
   })
+  it('does not duplicate an unanswered greeting on revisit', async () => {
+    const app = createApp(offline, fetch, ctx.fx)
+    const guest = await ctx.fx.guest()
+    for (let visit = 0; visit < 3; visit++)
+      await app.harness.interact(
+        'hoa',
+        ask('', { intent: 'greet' }),
+        guest.player.id
+      )
+    const response = await app.request('/npc/hoa/history?limit=30', {
+      headers: { Authorization: `Bearer ${guest.token}` },
+    })
+    const saved = await response.json()
+    expect(saved.messages).toHaveLength(1)
+    expect(saved.messages[0]).toMatchObject({ role: 'assistant' })
+    app.realtime.manager.shutdown()
+  })
+
   it('runs the Observer with an explicit compatible model and recalls observations', async () => {
     const seen: unknown[] = []
     const model = createOpenAICompatible({

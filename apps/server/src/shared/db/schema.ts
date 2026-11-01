@@ -76,4 +76,7 @@ export const npcGreetings = pgTable('npc_greetings', {
   key: text().primaryKey(),
   reply: text().notNull(),
   source: text().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 })
