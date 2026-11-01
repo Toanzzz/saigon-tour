@@ -24,10 +24,11 @@ export function applyPlayerEvents(
       world.currency = Math.max(0, world.currency - event.amount)
     } else if (event.type === 'purchase') {
       const item = MARKET_ITEMS[event.itemId]
-      if (
-        world.currency >= item.price &&
-        (world.inventory[event.itemId] ?? 0) < 100
-      ) {
+      if ((world.inventory[event.itemId] ?? 0) >= 100) continue
+      if (event.credit) {
+        // Fronted by the market: the player gets the item without paying.
+        world.inventory[event.itemId] = (world.inventory[event.itemId] ?? 0) + 1
+      } else if (world.currency >= item.price) {
         world.currency -= item.price
         world.inventory[event.itemId] = (world.inventory[event.itemId] ?? 0) + 1
       }

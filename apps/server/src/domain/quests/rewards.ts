@@ -1,4 +1,9 @@
-import type { Quest, QuestEvent } from '@saigon/shared'
+import {
+  bonusCurrency,
+  completionBonus,
+  type Quest,
+  type QuestEvent,
+} from '@saigon/shared'
 import type { PlayerSave, SqlClient } from '@/shared/db'
 
 /** The completion ledger and reward update share the same transaction. */
@@ -14,7 +19,15 @@ export async function grantQuest(
   )
   quest.status = 'completed'
   if (!inserted.rows.length) return null
-  const reward = quest.reward
+  const bonus = completionBonus(quest)
+  const extra = bonusCurrency(bonus)
+  const reward = {
+    ...quest.reward,
+    currency: Math.min(100, quest.reward.currency + extra),
+    ...(extra ? { bonus } : {}),
+  }
+  // The reward card reads event.quest.reward via rewardQuest; keep them aligned.
+  quest.reward = reward
   record.world.currency = Math.min(
     100000,
     record.world.currency + reward.currency

@@ -77,6 +77,14 @@ export const RewardSchema = z
     reputation: z.number().int().min(0).max(5),
     // Optional so legacy jsonb quest/completed rows still parse under strict zod.
     unlockId: UnlockIdSchema.optional(),
+    // Completion bonuses folded into currency; recorded for the reward card.
+    bonus: z
+      .object({
+        thrifty: z.number().int().min(0).max(100).optional(),
+        sharp: z.number().int().min(0).max(100).optional(),
+      })
+      .strict()
+      .optional(),
   })
   .strict()
 export type Reward = z.infer<typeof RewardSchema>

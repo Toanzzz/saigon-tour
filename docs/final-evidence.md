@@ -155,3 +155,11 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Engine tests: `apps/server/test/quest-twist-riddle.spec.ts` (8). Offline parity: `apps/client/test/offline-quests.spec.ts` payoff reply + twist-applies-offline.
 - Snapshot: `npc-baseline.spec.ts.snap` updated — diff is only the QUEST_RULES payoff/twist/riddle paragraph.
 - Live spike: BLOCKED. `apps/server/.env` key returns 401 `invalid_api_key` from `https://api.coralhub.cc/v1/chat/completions` (model `google/gemini-3.8-flash`). The spike script is extended (payoff+twist+riddle run, accept-within-3 gate) but could not execute. Decision 1 fallback (drop twist/riddle from the model schema) is NOT applied: no model rejection was observed, only a credential failure. Pending a valid key to confirm model acceptance.
+
+## Phase 0B — ride spend, bonuses, credit (2026-11-02)
+
+- DoD green: `bun run check` → `check:types` → `build` → `test`. Server 327 passed / 2 skipped; client 146 passed.
+- Contracts: shared `TravelModeSchema`/`TravelMode` (client `places.ts` re-exports it), `spend.mode?`, `purchase.credit?`, `QuestSchema.spent?`, `RewardSchema.bonus?`.
+- Engine: `advance` accrues `spent` and reveals a riddle on a cyclo ride; `applyQuestEvents` fronts a BUY only when unaffordable and a quest's next step needs it; new `bonus.ts` (`completionBonus`, `parFare`, `bonusCurrency`). `grantQuest` and offline `offline()` fold the bonus into `reward.currency` (quest currency capped ≤100) and write it back onto the quest.
+- Behavior change: completing a route with no ride spend now earns the thrifty +5 bonus, so several exact-currency assertions were updated to read the final completion reward.
+- Tests: `apps/server/test/quest-spend-bonus.spec.ts` (8); offline thrifty parity in `offline-quests.spec.ts`.

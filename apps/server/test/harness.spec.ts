@@ -81,7 +81,10 @@ describe('NPC authored errands', () => {
     )
     expect(results.flat().filter((e) => e.type === 'completed')).toHaveLength(1)
     const save = await harness.game.get(ctx.playerId)
-    expect(save.world.currency).toBe(30 + rewardFor(seed).currency)
+    // Final reward folds in the thrifty bonus (no spend on this route).
+    expect(save.world.currency).toBe(
+      30 + required(save.completed[0]).reward.currency
+    )
     expect(save.quests).toEqual([])
     expect(save.completed).toHaveLength(1)
   })

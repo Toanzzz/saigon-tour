@@ -1,3 +1,4 @@
+export * from './bonus'
 export * from './domains'
 export * from './engine'
 export * from './friendship'

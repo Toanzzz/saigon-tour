@@ -1,4 +1,9 @@
-import { type LocationId, NPC_LOOKS, type NpcId } from '@saigon/shared'
+import {
+  type LocationId,
+  NPC_LOOKS,
+  type NpcId,
+  type TravelMode,
+} from '@saigon/shared'
 import { m } from '@/shared/i18n'
 
 export type Point = [number, number, number]
@@ -66,7 +71,7 @@ export const PLACES: Record<
     label: 'HẺM ẨM THỰC',
   },
 }
-export type TravelMode = 'bus' | 'metro' | 'xeom' | 'cyclo'
+export type { TravelMode }
 export const MODES: Record<TravelMode, { fare: number; speed: number }> = {
   bus: { fare: 5, speed: 10 },
   xeom: { fare: 8, speed: 13 },

@@ -111,9 +111,11 @@ describe('offline NPC quests', () => {
       }
       const state = { ...start, world: offered.response.world, quests: [ready] }
       const completed = offline(npc, request(npc, 'check'), state)
-      expect(completed.questEvents[0]?.type).toBe('completed')
+      const event = completed.questEvents[0]
+      expect(event?.type).toBe('completed')
       expect(completed.quests).toEqual([])
-      expect(completed.world.currency).toBe(30 + quest.reward.currency)
+      // Final reward folds in any thrifty/sharp bonus; use the event's reward.
+      expect(completed.world.currency).toBe(30 + (event?.reward.currency ?? 0))
       const repeated = offline(npc, request(npc, 'check'), {
         ...state,
         quests: [],
@@ -183,6 +185,20 @@ describe('offline NPC quests', () => {
       itemId: 'broth',
       npcId: 'linh',
     })
+  })
+  it('grants the thrifty bonus offline', () => {
+    // A short hoa errand with no spend: par is 0, thrifty applies.
+    const quest = {
+      ...questFixture('hoa'),
+      status: 'ready' as const,
+      progress: [true],
+    }
+    const state = { ...initialState(), quests: [quest] }
+    const result = offline('hoa', request('hoa', 'check'), state)
+    const completed = result.questEvents.find((e) => e.type === 'completed')
+    expect(completed?.reward.bonus?.thrifty).toBe(5)
+    expect(completed?.quest.reward.bonus?.thrifty).toBe(5)
+    expect(result.world.currency).toBe(30 + (completed?.reward.currency ?? 0))
   })
   it('keeps incomplete quests and refuses duplicate active proposals', () => {
     const start = initialState()

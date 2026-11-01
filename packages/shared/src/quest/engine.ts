@@ -224,6 +224,19 @@ export function advance(
   now = Date.now()
 ): Quest {
   if (quest.status === 'completed') return quest
+  // Spend events never match a step; they accrue spend and may reveal a riddle.
+  if (event.type === 'spend') {
+    // Return-leg coins count for active and ready quests alike.
+    let next: Quest = { ...quest, spent: (quest.spent ?? 0) + event.amount }
+    if (
+      event.mode === 'cyclo' &&
+      next.riddle &&
+      !next.progress[0] &&
+      !isRevealed(next, now)
+    )
+      next = { ...next, revealed: 'cyclo' }
+    return next
+  }
   let working = quest
   // A hidden riddle on step 0 may reveal itself from this event.
   if (working.riddle && !working.progress[0] && !isRevealed(working, now)) {
@@ -251,6 +264,16 @@ export function advance(
   return applyTwist(next)
 }
 
+/** Does an active quest's next step BUY this market item? Gates market credit. */
+function creditEligible(quests: Quest[], itemId: string): boolean {
+  return quests.some((quest) => {
+    if (quest.status === 'completed') return false
+    const index = quest.progress.findIndex((done) => !done)
+    const step = quest.steps[index]
+    return step?.type === 'BUY' && step.marketItemId === itemId
+  })
+}
+
 /** World mutations and quest progression share the same accepted event stream. */
 export function applyQuestEvents(
   world: WorldState,
@@ -260,12 +283,25 @@ export function applyQuestEvents(
 ): { world: WorldState; quests: Quest[] } {
   let nextWorld = world
   let nextQuests = quests
-  for (const event of events) {
+  for (const rawEvent of events) {
+    let event = rawEvent
+    if (event.type === 'purchase') {
+      const affordable = nextWorld.currency >= MARKET_ITEMS[event.itemId].price
+      // Credit only applies when the player can't pay and a quest's next BUY needs it.
+      const credited =
+        event.credit && !affordable && creditEligible(nextQuests, event.itemId)
+      if (credited) event = { ...event, credit: true }
+      else if (event.credit) event = { type: 'purchase', itemId: event.itemId }
+      if (
+        !credited &&
+        (!affordable || (nextWorld.inventory[event.itemId] ?? 0) >= 100)
+      )
+        continue
+      if ((nextWorld.inventory[event.itemId] ?? 0) >= 100) continue
+    }
     if (
-      (event.type === 'purchase' &&
-        (nextWorld.currency < MARKET_ITEMS[event.itemId].price ||
-          (nextWorld.inventory[event.itemId] ?? 0) >= 100)) ||
-      (event.type === 'deliver' && (nextWorld.inventory[event.itemId] ?? 0) < 1)
+      event.type === 'deliver' &&
+      (nextWorld.inventory[event.itemId] ?? 0) < 1
     )
       continue
     nextWorld = applyPlayerEvents(nextWorld, [event])

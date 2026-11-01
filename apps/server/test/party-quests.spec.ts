@@ -44,7 +44,9 @@ describe('durable generic party quests', () => {
     for (const member of [first, second]) {
       const save = await ctx.app.db.player(member.player.id)
       expect(save.quests).toEqual([])
-      expect(save.world.currency).toBe(30 + quest.reward.currency)
+      // Final reward folds in the thrifty bonus (no spend on this route).
+      const finalReward = required(save.completed[0]).reward.currency
+      expect(save.world.currency).toBe(30 + finalReward)
       expect(save.completed.map((entry) => entry.id)).toEqual([quest.id])
       expect(
         member.socket.messages.filter(

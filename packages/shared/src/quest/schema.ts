@@ -120,6 +120,8 @@ export const QuestSchema = QuestSpecSchema.extend({
   party: QuestPartySchema.optional(),
   /** How a riddle's step 0 was revealed (Phase 3b). */
   revealed: z.enum(['talk', 'cyclo', 'solved']).optional(),
+  /** Coins spent on rides while this quest was unfinished (Phase 3d thrift). */
+  spent: z.number().int().min(0).optional(),
 }).strict()
 export type Quest = z.infer<typeof QuestSchema>
 

@@ -33,10 +33,10 @@ describe('every neighbor can author an errand', () => {
         ask("I'm back", { intent: 'check' }),
         ctx.playerId
       )
-      expect(
-        completed.questEvents.find((e) => e.type === 'completed')?.quest.id
-      ).toBe(quest.id)
-      expect(completed.world.currency).toBe(30 + quest.reward.currency)
+      const event = completed.questEvents.find((e) => e.type === 'completed')
+      expect(event?.quest.id).toBe(quest.id)
+      // Final reward folds in the thrifty bonus when no coins were spent.
+      expect(completed.world.currency).toBe(30 + (event?.reward.currency ?? 0))
       expect(completed.quests).toEqual([])
     }
   )

@@ -1,8 +1,20 @@
-import { rewardFor, seedsFor } from '@saigon/shared'
+import {
+  bonusCurrency,
+  completionBonus,
+  createQuest,
+  rewardFor,
+  seedsFor,
+} from '@saigon/shared'
 import { required } from './support/npc'
 
 const seed = required(seedsFor('hoa')[0])
 const reward = rewardFor(seed)
+// Completing this route with no spend earns the thrifty bonus.
+const finalReward =
+  reward.currency +
+  bonusCurrency(
+    completionBonus({ ...createQuest(seed, 'q_fixture'), status: 'ready' })
+  )
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
@@ -186,7 +198,7 @@ describe('durable guest progress', () => {
       checks.flat().filter((result) => result.type === 'completed')
     ).toHaveLength(1)
     expect(await game.get(player.id)).toMatchObject({
-      world: { currency: 30 + reward.currency, inventory: { postcard: 1 } },
+      world: { currency: 30 + finalReward, inventory: { postcard: 1 } },
       reputation: 1,
     })
     const completed = await fx.sql.query(

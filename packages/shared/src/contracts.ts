@@ -42,6 +42,9 @@ export const TimeOfDaySchema = z.enum([
   'night',
 ])
 export type TimeOfDay = z.infer<typeof TimeOfDaySchema>
+/** Ride modes. Moved from the client so spend events can carry one. */
+export const TravelModeSchema = z.enum(['bus', 'metro', 'xeom', 'cyclo'])
+export type TravelMode = z.infer<typeof TravelModeSchema>
 export const PlayerEventSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('visit'), locationId: LocationIdSchema }).strict(),
   z.object({ type: z.literal('talk'), npcId: NpcIdSchema }).strict(),
@@ -56,12 +59,14 @@ export const PlayerEventSchema = z.discriminatedUnion('type', [
     .object({
       type: z.literal('spend'),
       amount: z.number().int().min(1).max(20),
+      mode: TravelModeSchema.optional(),
     })
     .strict(),
   z
     .object({
       type: z.literal('purchase'),
       itemId: MarketItemIdSchema,
+      credit: z.literal(true).optional(),
     })
     .strict(),
 ])

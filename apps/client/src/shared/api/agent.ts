@@ -1,7 +1,9 @@
 import {
   advance,
   applyPlayerEvents,
+  bonusCurrency,
   canOfferQuests,
+  completionBonus,
   createQuest,
   friendlinessOf,
   type InteractResponse,
@@ -117,16 +119,24 @@ export function offline(
     ) {
       quest.status = 'completed'
       friendship = shiftFriendship(friendship, quest.giverNpcId, 1)
-      world.currency = Math.min(100000, world.currency + quest.reward.currency)
+      const bonus = completionBonus(quest)
+      const extra = bonusCurrency(bonus)
+      const reward = {
+        ...quest.reward,
+        currency: Math.min(100, quest.reward.currency + extra),
+        ...(extra ? { bonus } : {}),
+      }
+      quest.reward = reward
+      world.currency = Math.min(100000, world.currency + reward.currency)
       world.completedQuestIds = [...world.completedQuestIds, quest.id].slice(
         -32
       )
-      if (quest.reward.itemId)
-        world.inventory[quest.reward.itemId] = Math.min(
+      if (reward.itemId)
+        world.inventory[reward.itemId] = Math.min(
           100,
-          (world.inventory[quest.reward.itemId] ?? 0) + 1
+          (world.inventory[reward.itemId] ?? 0) + 1
         )
-      questEvents.push({ type: 'completed', quest, reward: quest.reward })
+      questEvents.push({ type: 'completed', quest, reward })
     }
   }
   quests = quests.filter((quest) => quest.status !== 'completed')
