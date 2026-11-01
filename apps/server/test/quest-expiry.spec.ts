@@ -1,16 +1,12 @@
-import { friendlinessOf, QUEST_EXPIRY_MS, seedsFor } from '@saigon/shared'
+import { friendlinessOf, QUEST_EXPIRY_MS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
-import { offline, required, setupNpc } from './support/npc'
+import { hoaDelivery, offline, setupNpc } from './support/npc'
 
 const ctx = setupNpc()
 describe('quest failure', () => {
   it('expires active quests, reclaims unused deliveries, penalizes once', async () => {
     const game = ctx.fx.harness(offline).game
-    const offer = await game.proposeQuest(
-      ctx.playerId,
-      'hoa',
-      required(seedsFor('hoa')[0])
-    )
+    const offer = await game.proposeQuest(ctx.playerId, 'hoa', hoaDelivery())
     if (!offer.accepted) throw new Error(offer.reason)
     const now = offer.quest.createdAt + QUEST_EXPIRY_MS
     const save = await game.expire(ctx.playerId, now)
@@ -23,7 +19,7 @@ describe('quest failure', () => {
   })
   it('never expires ready quests', async () => {
     const game = ctx.fx.harness(offline).game
-    await game.proposeQuest(ctx.playerId, 'hoa', required(seedsFor('hoa')[0]))
+    await game.proposeQuest(ctx.playerId, 'hoa', hoaDelivery())
     await game.applyEvents(ctx.playerId, [
       { type: 'deliver', itemId: 'broth', npcId: 'linh' },
     ])
@@ -34,11 +30,7 @@ describe('quest failure', () => {
   })
   it('checks decline ownership and progress; abandonment penalizes', async () => {
     const game = ctx.fx.harness(offline).game
-    const offer = await game.proposeQuest(
-      ctx.playerId,
-      'hoa',
-      required(seedsFor('hoa')[0])
-    )
+    const offer = await game.proposeQuest(ctx.playerId, 'hoa', hoaDelivery())
     if (!offer.accepted) throw new Error(offer.reason)
     expect(
       (await game.fail(ctx.playerId, offer.quest.id, 'declined', 'tam')).quests
@@ -51,11 +43,7 @@ describe('quest failure', () => {
     )
     expect(declined.quests).toEqual([])
     expect(friendlinessOf(declined.friendship, 'hoa')).toBe(0)
-    const second = await game.proposeQuest(
-      ctx.playerId,
-      'hoa',
-      required(seedsFor('hoa')[0])
-    )
+    const second = await game.proposeQuest(ctx.playerId, 'hoa', hoaDelivery())
     if (!second.accepted) throw new Error(second.reason)
     await game.applyEvents(ctx.playerId, [
       { type: 'deliver', itemId: 'broth', npcId: 'linh' },

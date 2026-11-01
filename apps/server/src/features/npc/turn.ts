@@ -46,7 +46,8 @@ export async function buildContext(
   npcId: NpcId,
   request: InteractRequest,
   playerId: string,
-  outcome: ToolOutcome
+  outcome: ToolOutcome,
+  twistedLine: string | null = null
 ) {
   const facts = await memory.recall(npcId, playerId)
   const record = await game.get(playerId)
@@ -67,6 +68,9 @@ export async function buildContext(
         (event) =>
           `Completed this turn: ${event.quest.title}; payoff: ${event.quest.payoff}. Deliver it in your own words.`
       ),
+    ...(twistedLine
+      ? [`Twist just happened: ${twistedLine}. React in character.`]
+      : []),
     `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
     `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
     `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,

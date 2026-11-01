@@ -1,8 +1,10 @@
 import type { NpcStory } from '@saigon/npc-kit'
+import { arc } from './seeds/arc'
 import { gag } from './seeds/gag'
 
 export const story: NpcStory = {
   seeds: [
+    arc,
     gag,
     {
       scope: 'solo',

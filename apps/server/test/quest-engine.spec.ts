@@ -19,7 +19,15 @@ import {
 } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 
-const seed = () => seedsFor('hoa')[0] as QuestSpec
+// A content-stable hoa spec so engine tests do not depend on which seed is
+// first in the catalog (the first seed is now a twist arc).
+const seed = (): QuestSpec => ({
+  giverNpcId: 'hoa',
+  steps: [{ type: 'DELIVER', itemId: 'broth', npcId: 'linh' }],
+  scope: 'solo',
+  title: 'Fresh broth for a neighbor',
+  description: 'Bring this broth to Linh in the park.',
+})
 const world = (): WorldState => ({
   locationId: 'market',
   inventory: {},
@@ -66,10 +74,18 @@ describe('quest engine', () => {
   it('projects localized seeds to a clean spec', () => {
     const [en] = seedsFor('hoa')
     const [vi] = seedsFor('hoa', 'vi')
-    expect(vi?.title).toBe('Chuyện cỡ hai tô')
+    expect(vi?.title).toBe('Chuyện giao cỡ ba tô, con')
     expect(vi?.title).not.toBe(en?.title)
     expect(Object.keys(vi ?? {}).sort()).toEqual(
-      ['description', 'giverNpcId', 'payoff', 'scope', 'steps', 'title'].sort()
+      [
+        'description',
+        'giverNpcId',
+        'payoff',
+        'scope',
+        'steps',
+        'title',
+        'twist',
+      ].sort()
     )
     expect(vi?.steps).toEqual(en?.steps)
   })

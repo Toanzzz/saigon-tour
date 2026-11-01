@@ -3,11 +3,10 @@ import {
   completionBonus,
   createQuest,
   rewardFor,
-  seedsFor,
 } from '@saigon/shared'
-import { required } from './support/npc'
+import { hoaDelivery } from './support/npc'
 
-const seed = required(seedsFor('hoa')[0])
+const seed = hoaDelivery()
 const reward = rewardFor(seed)
 // Completing this route with no spend earns the thrifty bonus.
 const finalReward =

@@ -53,6 +53,25 @@ seed (composed first in `story.ts`) whose single step lands a payoff. Residents
 address the player as "bạn"; personas.ts prefers a non-empty package persona
 over the shared resident template.
 
+## Kishotenketsu twist arcs
+
+Each of the eight neighbors has a first seed (`packages/npc-<id>/src/seeds/arc.ts`,
+imported first in `story.ts`) that is a Ki -> Sho -> Final arc. A `twist` rewrites
+the final step once every earlier step is done, keeping the step type (a DELIVER
+twist keeps its item) and staying inside the giver's domain. The twist `line` is
+the in-world reason, spoken by the Sho TALK_TO target: on greet the harness
+speaks it over the cached greeting, and on a chat turn `buildContext` adds
+`Twist just happened: <line>. React in character.`
+
+The client announces a twist through `shared/state/twists.ts`: it watches `game`
+quests and, when a quest gains `twist.replaced`, shows `m.twist_toast` and plays
+the pickup sound once per quest id (reset by `resetTwists()` in `restart()` and
+test setup). The journal strikes through the replaced step and shows the new
+step with a twist mark and line; the objective shows a "Plot twist" eyebrow for
+six seconds. Deterministic seed rotation (`domain/quests/auto.ts` and the client
+`offline()`) offers the first valid seed whose title, in either locale, is not
+among the giver's last three completed quests.
+
 ## Verification
 
 - Required gates: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.

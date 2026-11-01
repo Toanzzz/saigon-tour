@@ -157,20 +157,39 @@ export function offline(
   else if (questEvents.some((event) => event.type === 'completed'))
     reply = m.offline_thanks()
   if (wantsErrand(body.message ?? '') && canOfferQuests(friendship, npc)) {
-    const spec = seedsFor(npc, getLocale()).find(
-      (candidate) =>
-        validateSpec(candidate, { quests }).ok &&
-        candidate.steps.every(
-          (step) =>
-            step.type !== 'DELIVER' ||
-            (world.inventory[step.itemId] ?? 0) +
-              candidate.steps.filter(
-                (entry) =>
-                  entry.type === 'DELIVER' && entry.itemId === step.itemId
-              ).length <=
-              100
-        )
+    // Titles this giver completed in its last 3 quests, in either locale, so
+    // the deterministic offer rotates past a just-finished seed.
+    const recent = new Set(
+      state.completed
+        .filter((entry) => entry.giverNpcId === npc)
+        .slice(-3)
+        .map((entry) => entry.title)
     )
+    const isRecentSeed = (candidate: ReturnType<typeof seedsFor>[number]) => {
+      if (recent.has(candidate.title)) return true
+      const signature = JSON.stringify(candidate.steps)
+      const vi = seedsFor(npc, 'vi').find(
+        (other) =>
+          JSON.stringify(other.steps) === signature &&
+          other.scope === candidate.scope
+      )
+      return vi ? recent.has(vi.title) : false
+    }
+    const offerable = (candidate: ReturnType<typeof seedsFor>[number]) =>
+      validateSpec(candidate, { quests }).ok &&
+      candidate.steps.every(
+        (step) =>
+          step.type !== 'DELIVER' ||
+          (world.inventory[step.itemId] ?? 0) +
+            candidate.steps.filter(
+              (entry) =>
+                entry.type === 'DELIVER' && entry.itemId === step.itemId
+            ).length <=
+            100
+      )
+    const candidates = seedsFor(npc, getLocale()).filter(offerable)
+    const spec =
+      candidates.find((candidate) => !isRecentSeed(candidate)) ?? candidates[0]
     if (spec) {
       const promised = quests
         .filter((entry) => entry.status !== 'completed')

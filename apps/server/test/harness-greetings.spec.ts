@@ -124,7 +124,7 @@ describe('Mastra NPC harness greetings', () => {
       ask('Cô có việc gì không?', { intent: 'help', locale: 'vi' }),
       ctx.playerId
     )
-    expect(help.quests[0]?.title).toBe('Chuyện cỡ hai tô')
+    expect(help.quests[0]?.title).toBe('Chuyện giao cỡ ba tô, con')
     expect(help.reply).toContain('nhật ký')
   })
 

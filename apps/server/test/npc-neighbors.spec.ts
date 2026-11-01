@@ -1,5 +1,5 @@
 import type { NpcId, PlayerEvent } from '@saigon/shared'
-import { NPCS } from '@saigon/shared'
+import { MARKET_ITEMS, NPCS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { ask, offline, required, setupNpc } from './support/npc'
 
@@ -43,8 +43,14 @@ describe('every neighbor can author an errand', () => {
       )
       const event = completed.questEvents.find((e) => e.type === 'completed')
       expect(event?.quest.id).toBe(quest.id)
-      // Final reward folds in the thrifty bonus when no coins were spent.
-      expect(completed.world.currency).toBe(30 + (event?.reward.currency ?? 0))
+      // A BUY step spends market coins; the thrifty bonus still applies since
+      // no ride fares were charged. Account for any purchase in the balance.
+      const spent = quest.steps
+        .filter((step) => step.type === 'BUY')
+        .reduce((sum, step) => sum + MARKET_ITEMS[step.marketItemId].price, 0)
+      expect(completed.world.currency).toBe(
+        30 - spent + (event?.reward.currency ?? 0)
+      )
       expect(completed.quests).toEqual([])
     }
   )

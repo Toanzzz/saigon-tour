@@ -199,7 +199,13 @@ export class NpcHarness {
       this.guard.allow(playerId) &&
       this.npcGuard.allow(`${npcId}:${playerId}`)
     if (allowed) {
-      reply = await this.generate(npcId, request, playerId, outcome)
+      reply = await this.generate(
+        npcId,
+        request,
+        playerId,
+        outcome,
+        twistedLine ?? null
+      )
       if (reply) source = 'live'
     }
     if (!reply) await offerSeed(this.game, npcId, request, playerId, outcome)
@@ -244,7 +250,8 @@ export class NpcHarness {
     npcId: NpcId,
     request: InteractRequest,
     playerId: string,
-    outcome: ToolOutcome
+    outcome: ToolOutcome,
+    twistedLine: string | null
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
     const context = await buildContext(
@@ -253,7 +260,8 @@ export class NpcHarness {
       npcId,
       request,
       playerId,
-      outcome
+      outcome,
+      twistedLine
     )
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([

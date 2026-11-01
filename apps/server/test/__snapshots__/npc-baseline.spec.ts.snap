@@ -61,12 +61,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","postoffice","river","cityhall"],"npcs":["thao","son","vy","ba"],"items":["photo","postcard","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: camera-strap (neutral), photo-vest (warm), vespa (close)
-Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The authentic shot","description":"Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.","payoff":"Sơn liked the pigeon more than the Opera House. Honestly? So do I now."}",
+Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"DELIVER","itemId":"photo","npcId":"vy"}],"scope":"solo","title":"The authentic shot","description":"I am chasing the authentic shot. Scout the cathedral square for the light, ask Son what to frame, then deliver the photo to Vy before a pigeon photobombs the whole plan.","payoff":"Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"ba"},"line":"Son: the best subject is the cyclo in the corner, and it is Ba’s. The photo belongs to him."}}",
   "alley-diner": "
 You are Trang, a devoted food enthusiast who holds court in the food alley.
 
@@ -122,7 +122,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","tam","linh"],"items":["broth","noodles","herbs","baguette","coffee","banana"],"gifts":["baguette","coffee"]}
@@ -171,7 +171,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -231,12 +231,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: bucket-hat (neutral), ao-ba-ba (warm), basket-bicycle (close)
-Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"A photo and a moral","description":"Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?","payoff":"Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story."}",
+Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"GO_TO","locationId":"opera"},{"type":"TALK_TO","npcId":"alex"},{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The photo that wandered","description":"This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.","payoff":"Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"tam"},"line":"Alex: the man in this old photo is Tam’s grandfather. Forget Son — this belongs with Tam."}}",
   "bread-vendor": "
 You are Chú Bình, a bánh mì vendor at Chợ Bến Thành.
 
@@ -292,7 +292,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","alley","park"],"npcs":["hoa","tam","mai"],"items":["baguette","herbs","noodles","coffee","banana"],"gifts":["baguette","coffee"]}
@@ -341,7 +341,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -390,7 +390,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -439,7 +439,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -488,7 +488,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -549,12 +549,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","park","alley","cityhall"],"npcs":["linh","mai","tam","vy"],"items":["herbs","noodles","broth","baguette","coffee","banana"],"gifts":["postcard","coffee"]}
 Signature rewards you grant as friendship grows: non-la (neutral), apron (warm), dog (close)
-Example valid quest spec: {"giverNpcId":"hoa","steps":[{"type":"DELIVER","itemId":"broth","npcId":"linh"}],"scope":"solo","title":"A two-bowl problem","description":"Chị Linh sounds like a two-bowl problem, con. Carry this broth to her in the park before it cools to a one-bowl mood.","payoff":"Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it."}",
+Example valid quest spec: {"giverNpcId":"hoa","steps":[{"type":"GO_TO","locationId":"alley"},{"type":"TALK_TO","npcId":"mai"},{"type":"DELIVER","itemId":"broth","npcId":"linh"}],"scope":"solo","title":"A three-bowl delivery, con","description":"A three-bowl problem, con: duck into the alley, ask Mai where lunch landed, then rush this broth to Linh in the park while it is still a three-bowl broth.","payoff":"The lantern crew cleared the pot? A three-bowl problem, solved in one pour.","twist":{"step":{"type":"DELIVER","itemId":"broth","npcId":"vy"},"line":"Mai: Linh’s lunch moved to Vy’s lantern crew — they are starving over there. Take the broth to Vy instead."}}",
   "linh": "
 You are Chị Linh, a university student who volunteers in the neighborhood park.
 
@@ -610,12 +610,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","cathedral","cityhall"],"npcs":["hoa","tam","mai","vy","thao"],"items":["herbs","noodles","broth","baguette","banana","postcard"],"gifts":["postcard","banana"]}
 Signature rewards you grant as friendship grows: volunteer-cap (neutral), bicycle (warm), bunny (close)
-Example valid quest spec: {"giverNpcId":"linh","steps":[{"type":"DELIVER","itemId":"herbs","npcId":"hoa"}],"scope":"solo","title":"Deputy Herb Logistics Officer","description":"I am appointing you Deputy Herb Logistics Officer. Your first duty: deliver these herbs to Cô Hoa at the market. Badge pending.","payoff":"Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately."}",
+Example valid quest spec: {"giverNpcId":"linh","steps":[{"type":"GO_TO","locationId":"market"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"postcard","npcId":"mai"}],"scope":"solo","title":"Deputy Invitations Officer","description":"I am appointing you Deputy Invitations Officer. Report to the market, recruit Cô Hoa to the committee, then deliver this invitation postcard to Mai for the neighborhood lunch.","payoff":"Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"thao"},"line":"Hoa: Mai is not on the guest list — she is the guest list. Give the invite to Thao; she runs entertainment."}}",
   "mai": "
 You are Mai, the owner of a little sidewalk café beside Bến Thành Market.
 
@@ -674,12 +674,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","alley","park","postoffice"],"npcs":["hoa","tam","linh","son"],"items":["coffee","banana","baguette","postcard"],"gifts":["coffee","banana"]}
 Signature rewards you grant as friendship grows: scarf (neutral), barista (warm), cat (close)
-Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Tasting notes: caramel, rain, ambition","description":"Carry this cà phê sữa đá to Cô Hoa. Tasting notes: caramel, a hint of afternoon rain, and quiet ambition. Do not shake the ambition out.","payoff":"Hoa said it tastes like coffee? Finally, an honest review. Five stars."}",
+Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"BUY","marketItemId":"banana"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Tasting notes: a palate cleanser","description":"First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.","payoff":"Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.","twist":{"step":{"type":"DELIVER","itemId":"coffee","npcId":"son"},"line":"Hoa: con, I am a pho person, not a coffee person. Give it to Son — he reviews everything."}}",
   "market-browse": "You are Ngọc, Market regular, based at market.
 Observant and independent; cares about the neighborhood and market regular.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -724,7 +724,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -773,7 +773,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -822,7 +822,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -882,7 +882,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","cityhall","cathedral"],"npcs":["alex","thao","vy"],"items":["photo","postcard","coffee","banana"],"gifts":["postcard","coffee"]}
@@ -931,7 +931,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -991,7 +991,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","river"],"npcs":["linh","hoa","ba"],"items":["banana","herbs","coffee","noodles"],"gifts":["banana","coffee"]}
@@ -1040,7 +1040,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -1100,7 +1100,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","opera","market"],"npcs":["vy","alex","thao"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
@@ -1160,7 +1160,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","cityhall","cathedral"],"npcs":["son","vy","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
@@ -1220,7 +1220,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","park","market"],"npcs":["ba","linh","hoa"],"items":["banana","herbs","coffee","noodles"],"gifts":["banana","coffee"]}
@@ -1269,7 +1269,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -1330,12 +1330,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","river","cathedral","market","opera"],"npcs":["alex","ba","thao","mai"],"items":["postcard","photo","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: satchel (neutral), beret (warm), parrot (close)
-Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"ba"}],"scope":"solo","title":"Dear River, you looked tired today","description":"Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: \\"Dear River, you looked tired today. Rest up. Warmly, Sơn.\\"","payoff":"Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement."}",
+Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"GO_TO","locationId":"river"},{"type":"TALK_TO","npcId":"ba"},{"type":"DELIVER","itemId":"postcard","npcId":"mai"}],"scope":"solo","title":"Dear River, you looked tired","description":"I wrote a postcard. It opens, \\"Dear River, you looked tired today.\\" Walk to the river, ask Ong Ba to hear it out, then carry the postcard to Mai.","payoff":"Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"thao"},"line":"Ba: the river cannot read, you know. But Thao sings to it every evening — give the postcard to her."}}",
   "square-tourist": "
 You are An, a happy visitor who tours the city with a paper map printed in 1998.
 
@@ -1391,7 +1391,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cathedral","locations":["cathedral","cityhall","opera","postoffice"],"npcs":["vy","alex","son"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
@@ -1440,7 +1440,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
@@ -1503,7 +1503,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","park","river","cityhall"],"npcs":["hoa","linh","ba","mai"],"items":["coffee","banana","postcard","cake"],"gifts":["coffee","postcard"]}
@@ -1565,12 +1565,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","cityhall","park"],"npcs":["alex","vy","son","linh"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: headphones (neutral), ao-dai (warm), chick (close)
-Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"son"}],"scope":"solo","title":"A little ballad for the errand","description":"Bring this coffee to Sơn at the post office. I am composing a tiny ballad about your footsteps; try to walk in a nice rhythm so the chorus works.","payoff":"The chorus landed on the last step to Sơn. I am naming the song after your shoes."}",
+Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"TALK_TO","npcId":"vy"}],"scope":"solo","title":"The echo across the square","description":"I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.","payoff":"Linh and her megaphone? That explains the melody — and the key change at dinnertime.","twist":{"step":{"type":"TALK_TO","npcId":"linh"},"line":"Son: that was no lantern. The echo was Linh practicing with her megaphone. Go ask her."}}",
   "vy": "
 You are Vy, a lantern maker who works near Tòa Thị Chính and the Nguyễn Huệ
 walking street.
@@ -1628,12 +1628,12 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","alley","market","opera"],"npcs":["hoa","mai","thao","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: lantern-backpack (neutral), evening (warm), lantern-hat (close)
-Example valid quest spec: {"giverNpcId":"vy","steps":[{"type":"DELIVER","itemId":"coffee","npcId":"mai"}],"scope":"solo","title":"Coffee for the lantern crew","description":"Take this cà phê to Mai for the lantern crew. Tell her it is for \\"Phở Moon\\", the lantern that survived last year's drizzle. A hero deserves caffeine.","payoff":"Mai toasted Phở Moon with the coffee. The lantern has never felt so seen."}",
+Example valid quest spec: {"giverNpcId":"vy","steps":[{"type":"GO_TO","locationId":"alley"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"postcard","npcId":"thao"}],"scope":"solo","title":"A lantern needs a name","description":"A new lantern needs a name and a dramatic backstory. Hang it in the alley, ask Cô Hoa for the name, then send the announcement postcard to Thao.","payoff":"Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"alex"},"line":"Hoa: I named it \\"Pho Moon.\\" Thao hates puns, so send the card to Alex — he will photograph it."}}",
 }
 `;
 
@@ -2219,6 +2219,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "alex": {
     "en": [
       {
+        "description": "I am chasing the authentic shot. Scout the cathedral square for the light, ask Son what to frame, then deliver the photo to Vy before a pigeon photobombs the whole plan.",
+        "giverNpcId": "alex",
+        "payoff": "Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "cathedral",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "son",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "photo",
+            "npcId": "vy",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "The authentic shot",
+        "twist": {
+          "line": "Son: the best subject is the cyclo in the corner, and it is Ba’s. The photo belongs to him.",
+          "step": {
+            "itemId": "photo",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.",
         "giverNpcId": "alex",
         "payoff": "Sơn liked the pigeon more than the Opera House. Honestly? So do I now.",
@@ -2246,6 +2276,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mình đang săn khung hình chân thật. Ra quảng trường nhà thờ tìm ánh sáng, hỏi Sơn nên chụp gì, rồi mang tấm hình giao cho Vy trước khi có con bồ câu nhảy vô phá khung hình.",
+        "giverNpcId": "alex",
+        "payoff": "Ông Ba mê chiếc xích lô ở góc hình hả? Dĩ nhiên rồi. Khung hình chân thật luôn là cái mình không cố chụp.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "cathedral",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "son",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "photo",
+            "npcId": "vy",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Khung hình chân thật",
+        "twist": {
+          "line": "Sơn: chủ thể đẹp nhất là chiếc xích lô ở góc hình kìa, mà nó là của ông Ba. Tấm hình này phải đưa ông mới đúng.",
+          "step": {
+            "itemId": "photo",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Mang tấm ảnh này cho Sơn ở bưu điện. Đây là tấm Nhà hát chân thật nhất của mình. Góc ảnh có con bồ câu đang chớp mắt. Nó làm nên tấm hình.",
         "giverNpcId": "alex",
@@ -2367,6 +2427,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "ba": {
     "en": [
       {
+        "description": "This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.",
+        "giverNpcId": "ba",
+        "payoff": "Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "opera",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "alex",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "The photo that wandered",
+        "twist": {
+          "line": "Alex: the man in this old photo is Tam’s grandfather. Forget Son — this belongs with Tam.",
+          "step": {
+            "itemId": "photo",
+            "npcId": "tam",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?",
         "giverNpcId": "ba",
         "payoff": "Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story.",
@@ -2394,6 +2484,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Tấm hình cũ này có một câu chuyện, mà chuyện thì cứ lan man. Ra nhà hát, nhờ Alex ngó qua, rồi mang tấm hình tới cho Sơn. Bài học, như mọi khi, lại nói về chuyện khác.",
+        "giverNpcId": "ba",
+        "payoff": "Tâm rưng rưng hả? Thấy chưa, đó là bài học: tấm hình nào rồi cũng tìm đường về nhà, như chuyện của ông rồi cũng tới chỗ cần tới.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "opera",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "alex",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Tấm hình đi lạc",
+        "twist": {
+          "line": "Alex: người đàn ông trong tấm hình cũ này là ông nội của Tâm đó. Khỏi đưa Sơn — tấm này phải về với Tâm.",
+          "step": {
+            "itemId": "photo",
+            "npcId": "tam",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Mang tấm hình cũ này cho Sơn ở bưu điện giúp ông. Nó làm ông nhớ con cá ông từng vuột mất, dạy ông tính kiên nhẫn. Hay con cá mới là đứa kiên nhẫn ta?",
         "giverNpcId": "ba",
@@ -2605,6 +2725,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "hoa": {
     "en": [
       {
+        "description": "A three-bowl problem, con: duck into the alley, ask Mai where lunch landed, then rush this broth to Linh in the park while it is still a three-bowl broth.",
+        "giverNpcId": "hoa",
+        "payoff": "The lantern crew cleared the pot? A three-bowl problem, solved in one pour.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "alley",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "mai",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "broth",
+            "npcId": "linh",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A three-bowl delivery, con",
+        "twist": {
+          "line": "Mai: Linh’s lunch moved to Vy’s lantern crew — they are starving over there. Take the broth to Vy instead.",
+          "step": {
+            "itemId": "broth",
+            "npcId": "vy",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Chị Linh sounds like a two-bowl problem, con. Carry this broth to her in the park before it cools to a one-bowl mood.",
         "giverNpcId": "hoa",
         "payoff": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",
@@ -2633,6 +2783,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Chuyện cỡ ba tô đó con: ghé vô hẻm, hỏi Mai bữa trưa dời đi đâu, rồi mang tô nước lèo này ra công viên cho chị Linh khi còn nóng cỡ ba tô.",
+        "giverNpcId": "hoa",
+        "payoff": "Nhóm lồng đèn húp sạch nồi hả? Chuyện cỡ ba tô, một lần rót là xong.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "alley",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "mai",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "broth",
+            "npcId": "linh",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Chuyện giao cỡ ba tô, con",
+        "twist": {
+          "line": "Mai: bữa trưa của chị Linh dời qua nhóm làm lồng đèn của Vy rồi — tụi nó đói lả bên đó. Mang nước lèo qua cho Vy đi.",
+          "step": {
+            "itemId": "broth",
+            "npcId": "vy",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Chị Linh nghe như chuyện cỡ hai tô đó con. Mang tô nước lèo này ra công viên cho chị ấy trước khi nguội còn cỡ một tô.",
         "giverNpcId": "hoa",
@@ -2665,6 +2845,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "linh": {
     "en": [
       {
+        "description": "I am appointing you Deputy Invitations Officer. Report to the market, recruit Cô Hoa to the committee, then deliver this invitation postcard to Mai for the neighborhood lunch.",
+        "giverNpcId": "linh",
+        "payoff": "Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "market",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "hoa",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "postcard",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Deputy Invitations Officer",
+        "twist": {
+          "line": "Hoa: Mai is not on the guest list — she is the guest list. Give the invite to Thao; she runs entertainment.",
+          "step": {
+            "itemId": "postcard",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "I am appointing you Deputy Herb Logistics Officer. Your first duty: deliver these herbs to Cô Hoa at the market. Badge pending.",
         "giverNpcId": "linh",
         "payoff": "Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately.",
@@ -2696,6 +2906,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Chị phong em làm Phó ban Thư mời. Ra chợ, mời Cô Hoa vào ban tổ chức, rồi mang tấm bưu thiếp mời này giao cho Mai cho bữa trưa của xóm nghen.",
+        "giverNpcId": "linh",
+        "payoff": "Thảo nhận nhiệm vụ rồi hả? Tuyệt. Em được thăng làm Trưởng ban Thư mời luôn.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "market",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "hoa",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "postcard",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Phó ban Thư mời",
+        "twist": {
+          "line": "Hoa: Mai đâu nằm trong danh sách khách — Mai chính là danh sách khách đó. Đưa thư mời cho Thảo đi, Thảo lo văn nghệ.",
+          "step": {
+            "itemId": "postcard",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Chị bổ nhiệm bạn làm Phó phòng Hậu cần Rau thơm. Nhiệm vụ đầu tiên: mang rau thơm này cho Cô Hoa ở chợ. Huy hiệu sẽ có sau.",
         "giverNpcId": "linh",
@@ -2731,6 +2971,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "mai": {
     "en": [
       {
+        "description": "First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.",
+        "giverNpcId": "mai",
+        "payoff": "Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.",
+        "scope": "solo",
+        "steps": [
+          {
+            "marketItemId": "banana",
+            "type": "BUY",
+          },
+          {
+            "npcId": "hoa",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "coffee",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Tasting notes: a palate cleanser",
+        "twist": {
+          "line": "Hoa: con, I am a pho person, not a coffee person. Give it to Son — he reviews everything.",
+          "step": {
+            "itemId": "coffee",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Carry this cà phê sữa đá to Cô Hoa. Tasting notes: caramel, a hint of afternoon rain, and quiet ambition. Do not shake the ambition out.",
         "giverNpcId": "mai",
         "payoff": "Hoa said it tastes like coffee? Finally, an honest review. Five stars.",
@@ -2759,6 +3029,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Trước hết, mua một trái chuối ngoài chợ để súc miệng cái đã. Rồi ghé Cô Hoa và đưa cô ly cà phê sữa đá này. Hương vị: caramel, chợ sớm, và một chút đắng gan lì.",
+        "giverNpcId": "mai",
+        "payoff": "Sơn viết lại cảm nhận hả? Viết bưu thiếp cho ly cà phê luôn? Cuối cùng cũng gặp người sành điệu.",
+        "scope": "solo",
+        "steps": [
+          {
+            "marketItemId": "banana",
+            "type": "BUY",
+          },
+          {
+            "npcId": "hoa",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "coffee",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Hương vị: món súc miệng",
+        "twist": {
+          "line": "Hoa: con ơi, cô là người của phở chớ đâu phải cà phê. Đưa cho Sơn đi — cái gì nó cũng chấm điểm hết.",
+          "step": {
+            "itemId": "coffee",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Mang ly cà phê sữa đá này tới Cô Hoa. Hương vị: caramel, chút mưa chiều, và một ít hoài bão lặng lẽ. Đừng lắc rớt hoài bão nha.",
         "giverNpcId": "mai",
@@ -3271,6 +3571,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "son": {
     "en": [
       {
+        "description": "I wrote a postcard. It opens, "Dear River, you looked tired today." Walk to the river, ask Ong Ba to hear it out, then carry the postcard to Mai.",
+        "giverNpcId": "son",
+        "payoff": "Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "river",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "ba",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "postcard",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Dear River, you looked tired",
+        "twist": {
+          "line": "Ba: the river cannot read, you know. But Thao sings to it every evening — give the postcard to her.",
+          "step": {
+            "itemId": "postcard",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: "Dear River, you looked tired today. Rest up. Warmly, Sơn."",
         "giverNpcId": "son",
         "payoff": "Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.",
@@ -3298,6 +3628,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mình viết một tấm bưu thiếp. Mở đầu là: "Sông ơi, bữa nay trông mệt quá." Ra bờ sông, nhờ Ông Ba nghe thử, rồi mang tấm thiếp tới cho Mai.",
+        "giverNpcId": "son",
+        "payoff": "Thảo hát tấm thiếp cho dòng sông nghe hả? Sông ơi, giờ sông có giọng rồi đó. Thương, Sơn.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "river",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "ba",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "postcard",
+            "npcId": "mai",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Sông ơi, bữa nay trông mệt",
+        "twist": {
+          "line": "Ba: sông đâu biết đọc đâu con. Nhưng chiều nào Thảo cũng hát cho nó nghe — đưa tấm thiếp cho Thảo đi.",
+          "step": {
+            "itemId": "postcard",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Mang tấm bưu thiếp này cho Ông Ba ở bờ sông. Nó gửi cho chính dòng sông: "Gửi Dòng Sông, hôm nay trông mệt quá. Nghỉ ngơi nhé. Thân, Sơn."",
         "giverNpcId": "son",
@@ -3529,6 +3889,34 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "thao": {
     "en": [
       {
+        "description": "I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.",
+        "giverNpcId": "thao",
+        "payoff": "Linh and her megaphone? That explains the melody — and the key change at dinnertime.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "cathedral",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "son",
+            "type": "TALK_TO",
+          },
+          {
+            "npcId": "vy",
+            "type": "TALK_TO",
+          },
+        ],
+        "title": "The echo across the square",
+        "twist": {
+          "line": "Son: that was no lantern. The echo was Linh practicing with her megaphone. Go ask her.",
+          "step": {
+            "npcId": "linh",
+            "type": "TALK_TO",
+          },
+        },
+      },
+      {
         "description": "Bring this coffee to Sơn at the post office. I am composing a tiny ballad about your footsteps; try to walk in a nice rhythm so the chorus works.",
         "giverNpcId": "thao",
         "payoff": "The chorus landed on the last step to Sơn. I am naming the song after your shoes.",
@@ -3556,6 +3944,34 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Mình nghe một giai điệu vang trong quảng trường và phải tìm cho ra nguồn. Ra nhà thờ, hỏi Sơn nghe được gì, rồi tìm Vy — biết đâu mấy chiếc lồng đèn của bạn ấy đang ngân nga.",
+        "giverNpcId": "thao",
+        "payoff": "Linh với cái loa phóng thanh hả? Thảo nào có giai điệu — lại còn đổi tông đúng giờ cơm chiều.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "cathedral",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "son",
+            "type": "TALK_TO",
+          },
+          {
+            "npcId": "vy",
+            "type": "TALK_TO",
+          },
+        ],
+        "title": "Tiếng vọng qua quảng trường",
+        "twist": {
+          "line": "Sơn: lồng đèn gì đâu. Tiếng vọng đó là Linh tập loa phóng thanh đó. Qua hỏi chị ấy đi.",
+          "step": {
+            "npcId": "linh",
+            "type": "TALK_TO",
+          },
+        },
+      },
       {
         "description": "Mang ly cà phê này cho Sơn ở bưu điện. Mình đang soạn một khúc ballad nhỏ về bước chân bạn; đi nhịp nhàng chút để điệp khúc nghe cho hay nhé.",
         "giverNpcId": "thao",
@@ -3587,6 +4003,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "vy": {
     "en": [
       {
+        "description": "A new lantern needs a name and a dramatic backstory. Hang it in the alley, ask Cô Hoa for the name, then send the announcement postcard to Thao.",
+        "giverNpcId": "vy",
+        "payoff": "Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "alley",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "hoa",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "postcard",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A lantern needs a name",
+        "twist": {
+          "line": "Hoa: I named it "Pho Moon." Thao hates puns, so send the card to Alex — he will photograph it.",
+          "step": {
+            "itemId": "postcard",
+            "npcId": "alex",
+            "type": "DELIVER",
+          },
+        },
+      },
+      {
         "description": "Take this cà phê to Mai for the lantern crew. Tell her it is for "Phở Moon", the lantern that survived last year's drizzle. A hero deserves caffeine.",
         "giverNpcId": "vy",
         "payoff": "Mai toasted Phở Moon with the coffee. The lantern has never felt so seen.",
@@ -3614,6 +4060,36 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       },
     ],
     "vi": [
+      {
+        "description": "Chiếc lồng đèn mới cần một cái tên và một câu chuyện thật kịch tính. Treo nó trong hẻm, nhờ Cô Hoa đặt tên, rồi gửi tấm bưu thiếp thông báo cho Thảo.",
+        "giverNpcId": "vy",
+        "payoff": "Alex chụp "Phở Moon" lúc chạng vạng hả? Một chiếc lồng đèn có cả câu chuyện lẫn tấm chân dung. Bất tử luôn.",
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "alley",
+            "type": "GO_TO",
+          },
+          {
+            "npcId": "hoa",
+            "type": "TALK_TO",
+          },
+          {
+            "itemId": "postcard",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Lồng đèn cần một cái tên",
+        "twist": {
+          "line": "Hoa: cô đặt tên nó là "Phở Moon." Thảo ghét chơi chữ lắm, nên gửi tấm thiệp cho Alex đi — nó sẽ chụp hình cho.",
+          "step": {
+            "itemId": "postcard",
+            "npcId": "alex",
+            "type": "DELIVER",
+          },
+        },
+      },
       {
         "description": "Mang ly cà phê này cho Mai cho đội làm đèn lồng. Nói với chị ấy là dành cho "Trăng Phở", chiếc đèn sống sót qua cơn mưa phùn năm ngoái. Anh hùng thì xứng đáng có cà phê.",
         "giverNpcId": "vy",
@@ -5055,6 +5531,50 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "alex",
       "payoff": {
+        "en": "Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.",
+        "vi": "Ông Ba mê chiếc xích lô ở góc hình hả? Dĩ nhiên rồi. Khung hình chân thật luôn là cái mình không cố chụp.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "cathedral",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "son",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "photo",
+          "npcId": "vy",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I am chasing the authentic shot. Scout the cathedral square for the light, ask Son what to frame, then deliver the photo to Vy before a pigeon photobombs the whole plan.",
+          "title": "The authentic shot",
+        },
+        "vi": {
+          "description": "Mình đang săn khung hình chân thật. Ra quảng trường nhà thờ tìm ánh sáng, hỏi Sơn nên chụp gì, rồi mang tấm hình giao cho Vy trước khi có con bồ câu nhảy vô phá khung hình.",
+          "title": "Khung hình chân thật",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Son: the best subject is the cyclo in the corner, and it is Ba’s. The photo belongs to him.",
+          "vi": "Sơn: chủ thể đẹp nhất là chiếc xích lô ở góc hình kìa, mà nó là của ông Ba. Tấm hình này phải đưa ông mới đúng.",
+        },
+        "step": {
+          "itemId": "photo",
+          "npcId": "ba",
+          "type": "DELIVER",
+        },
+      },
+    },
+    {
+      "giverNpcId": "alex",
+      "payoff": {
         "en": "Sơn liked the pigeon more than the Opera House. Honestly? So do I now.",
         "vi": "Sơn thích con bồ câu hơn cả Nhà hát. Thành thật mà nói? Giờ mình cũng vậy.",
       },
@@ -5189,6 +5709,50 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "ba",
+      "payoff": {
+        "en": "Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.",
+        "vi": "Tâm rưng rưng hả? Thấy chưa, đó là bài học: tấm hình nào rồi cũng tìm đường về nhà, như chuyện của ông rồi cũng tới chỗ cần tới.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "opera",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "alex",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "photo",
+          "npcId": "son",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.",
+          "title": "The photo that wandered",
+        },
+        "vi": {
+          "description": "Tấm hình cũ này có một câu chuyện, mà chuyện thì cứ lan man. Ra nhà hát, nhờ Alex ngó qua, rồi mang tấm hình tới cho Sơn. Bài học, như mọi khi, lại nói về chuyện khác.",
+          "title": "Tấm hình đi lạc",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Alex: the man in this old photo is Tam’s grandfather. Forget Son — this belongs with Tam.",
+          "vi": "Alex: người đàn ông trong tấm hình cũ này là ông nội của Tâm đó. Khỏi đưa Sơn — tấm này phải về với Tâm.",
+        },
+        "step": {
+          "itemId": "photo",
+          "npcId": "tam",
+          "type": "DELIVER",
+        },
+      },
+    },
+    {
       "giverNpcId": "bread-vendor",
       "payoff": {
         "en": "Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now.",
@@ -5317,6 +5881,50 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "hoa",
       "payoff": {
+        "en": "The lantern crew cleared the pot? A three-bowl problem, solved in one pour.",
+        "vi": "Nhóm lồng đèn húp sạch nồi hả? Chuyện cỡ ba tô, một lần rót là xong.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "alley",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "mai",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "broth",
+          "npcId": "linh",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "A three-bowl problem, con: duck into the alley, ask Mai where lunch landed, then rush this broth to Linh in the park while it is still a three-bowl broth.",
+          "title": "A three-bowl delivery, con",
+        },
+        "vi": {
+          "description": "Chuyện cỡ ba tô đó con: ghé vô hẻm, hỏi Mai bữa trưa dời đi đâu, rồi mang tô nước lèo này ra công viên cho chị Linh khi còn nóng cỡ ba tô.",
+          "title": "Chuyện giao cỡ ba tô, con",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Mai: Linh’s lunch moved to Vy’s lantern crew — they are starving over there. Take the broth to Vy instead.",
+          "vi": "Mai: bữa trưa của chị Linh dời qua nhóm làm lồng đèn của Vy rồi — tụi nó đói lả bên đó. Mang nước lèo qua cho Vy đi.",
+        },
+        "step": {
+          "itemId": "broth",
+          "npcId": "vy",
+          "type": "DELIVER",
+        },
+      },
+    },
+    {
+      "giverNpcId": "hoa",
+      "payoff": {
         "en": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",
         "vi": "Chị Linh cười hả? Tốt. Cô tưởng cỡ hai tô, ai dè một tô là xong.",
       },
@@ -5410,6 +6018,50 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "linh",
+      "payoff": {
+        "en": "Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.",
+        "vi": "Thảo nhận nhiệm vụ rồi hả? Tuyệt. Em được thăng làm Trưởng ban Thư mời luôn.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "market",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "hoa",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "postcard",
+          "npcId": "mai",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I am appointing you Deputy Invitations Officer. Report to the market, recruit Cô Hoa to the committee, then deliver this invitation postcard to Mai for the neighborhood lunch.",
+          "title": "Deputy Invitations Officer",
+        },
+        "vi": {
+          "description": "Chị phong em làm Phó ban Thư mời. Ra chợ, mời Cô Hoa vào ban tổ chức, rồi mang tấm bưu thiếp mời này giao cho Mai cho bữa trưa của xóm nghen.",
+          "title": "Phó ban Thư mời",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Hoa: Mai is not on the guest list — she is the guest list. Give the invite to Thao; she runs entertainment.",
+          "vi": "Hoa: Mai đâu nằm trong danh sách khách — Mai chính là danh sách khách đó. Đưa thư mời cho Thảo đi, Thảo lo văn nghệ.",
+        },
+        "step": {
+          "itemId": "postcard",
+          "npcId": "thao",
+          "type": "DELIVER",
+        },
+      },
+    },
+    {
       "giverNpcId": "mai",
       "scope": "solo",
       "steps": [
@@ -5427,6 +6079,50 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Mang ly cà phê này qua chợ cho cô Hoa.",
           "title": "Cà phê cho cô Hoa",
+        },
+      },
+    },
+    {
+      "giverNpcId": "mai",
+      "payoff": {
+        "en": "Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.",
+        "vi": "Sơn viết lại cảm nhận hả? Viết bưu thiếp cho ly cà phê luôn? Cuối cùng cũng gặp người sành điệu.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "marketItemId": "banana",
+          "type": "BUY",
+        },
+        {
+          "npcId": "hoa",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "coffee",
+          "npcId": "hoa",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.",
+          "title": "Tasting notes: a palate cleanser",
+        },
+        "vi": {
+          "description": "Trước hết, mua một trái chuối ngoài chợ để súc miệng cái đã. Rồi ghé Cô Hoa và đưa cô ly cà phê sữa đá này. Hương vị: caramel, chợ sớm, và một chút đắng gan lì.",
+          "title": "Hương vị: món súc miệng",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Hoa: con, I am a pho person, not a coffee person. Give it to Son — he reviews everything.",
+          "vi": "Hoa: con ơi, cô là người của phở chớ đâu phải cà phê. Đưa cho Sơn đi — cái gì nó cũng chấm điểm hết.",
+        },
+        "step": {
+          "itemId": "coffee",
+          "npcId": "son",
+          "type": "DELIVER",
         },
       },
     },
@@ -5808,6 +6504,50 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "son",
       "payoff": {
+        "en": "Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.",
+        "vi": "Thảo hát tấm thiếp cho dòng sông nghe hả? Sông ơi, giờ sông có giọng rồi đó. Thương, Sơn.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "river",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "ba",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "postcard",
+          "npcId": "mai",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I wrote a postcard. It opens, "Dear River, you looked tired today." Walk to the river, ask Ong Ba to hear it out, then carry the postcard to Mai.",
+          "title": "Dear River, you looked tired",
+        },
+        "vi": {
+          "description": "Mình viết một tấm bưu thiếp. Mở đầu là: "Sông ơi, bữa nay trông mệt quá." Ra bờ sông, nhờ Ông Ba nghe thử, rồi mang tấm thiếp tới cho Mai.",
+          "title": "Sông ơi, bữa nay trông mệt",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Ba: the river cannot read, you know. But Thao sings to it every evening — give the postcard to her.",
+          "vi": "Ba: sông đâu biết đọc đâu con. Nhưng chiều nào Thảo cũng hát cho nó nghe — đưa tấm thiếp cho Thảo đi.",
+        },
+        "step": {
+          "itemId": "postcard",
+          "npcId": "thao",
+          "type": "DELIVER",
+        },
+      },
+    },
+    {
+      "giverNpcId": "son",
+      "payoff": {
         "en": "Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.",
         "vi": "Ông Ba đọc to cho dòng sông nghe. Dòng sông không nói gì, mà Sơn hiểu đó là sự đồng tình sâu sắc.",
       },
@@ -6043,6 +6783,92 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Lắng nghe thành phố ở quảng trường nhà thờ.",
           "title": "Tiếng vọng qua quảng trường",
+        },
+      },
+    },
+    {
+      "giverNpcId": "thao",
+      "payoff": {
+        "en": "Linh and her megaphone? That explains the melody — and the key change at dinnertime.",
+        "vi": "Linh với cái loa phóng thanh hả? Thảo nào có giai điệu — lại còn đổi tông đúng giờ cơm chiều.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "cathedral",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "son",
+          "type": "TALK_TO",
+        },
+        {
+          "npcId": "vy",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.",
+          "title": "The echo across the square",
+        },
+        "vi": {
+          "description": "Mình nghe một giai điệu vang trong quảng trường và phải tìm cho ra nguồn. Ra nhà thờ, hỏi Sơn nghe được gì, rồi tìm Vy — biết đâu mấy chiếc lồng đèn của bạn ấy đang ngân nga.",
+          "title": "Tiếng vọng qua quảng trường",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Son: that was no lantern. The echo was Linh practicing with her megaphone. Go ask her.",
+          "vi": "Sơn: lồng đèn gì đâu. Tiếng vọng đó là Linh tập loa phóng thanh đó. Qua hỏi chị ấy đi.",
+        },
+        "step": {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      },
+    },
+    {
+      "giverNpcId": "vy",
+      "payoff": {
+        "en": "Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.",
+        "vi": "Alex chụp "Phở Moon" lúc chạng vạng hả? Một chiếc lồng đèn có cả câu chuyện lẫn tấm chân dung. Bất tử luôn.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "alley",
+          "type": "GO_TO",
+        },
+        {
+          "npcId": "hoa",
+          "type": "TALK_TO",
+        },
+        {
+          "itemId": "postcard",
+          "npcId": "thao",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "A new lantern needs a name and a dramatic backstory. Hang it in the alley, ask Cô Hoa for the name, then send the announcement postcard to Thao.",
+          "title": "A lantern needs a name",
+        },
+        "vi": {
+          "description": "Chiếc lồng đèn mới cần một cái tên và một câu chuyện thật kịch tính. Treo nó trong hẻm, nhờ Cô Hoa đặt tên, rồi gửi tấm bưu thiếp thông báo cho Thảo.",
+          "title": "Lồng đèn cần một cái tên",
+        },
+      },
+      "twist": {
+        "line": {
+          "en": "Hoa: I named it "Pho Moon." Thao hates puns, so send the card to Alex — he will photograph it.",
+          "vi": "Hoa: cô đặt tên nó là "Phở Moon." Thảo ghét chơi chữ lắm, nên gửi tấm thiệp cho Alex đi — nó sẽ chụp hình cho.",
+        },
+        "step": {
+          "itemId": "postcard",
+          "npcId": "alex",
+          "type": "DELIVER",
         },
       },
     },

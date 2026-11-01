@@ -3,7 +3,21 @@ import { describe, expect, it } from 'vitest'
 import { ask, live, offline, required, scripted, setupNpc } from './support/npc'
 
 const ctx = setupNpc()
-const seed = required(seedsFor('hoa')[0])
+// A content-stable single-step hoa delivery; the twist arc is now first in
+// the catalog, so proposing it directly keeps these behavioral tests simple.
+const seed = {
+  giverNpcId: 'hoa' as const,
+  steps: [
+    {
+      type: 'DELIVER' as const,
+      itemId: 'broth' as const,
+      npcId: 'linh' as const,
+    },
+  ],
+  scope: 'solo' as const,
+  title: 'Fresh broth for a neighbor',
+  description: 'Bring this broth to Linh in the park.',
+}
 
 describe('NPC authored errands', () => {
   it('records a model-authored spec with server-generated id and reward', async () => {
@@ -288,5 +302,81 @@ describe('NPC authored errands', () => {
     expect(
       (await harness.interact('ba', ask('Again'), ctx.playerId)).source
     ).toBe('fallback')
+  })
+
+  it('briefs the model when a twist fires during the chat turn', async () => {
+    const seen: { messages: { content: unknown }[] }[] = []
+    const harness = ctx.fx.harness(
+      live,
+      scripted([{ text: 'Oh! Then to Vy it goes.' }], seen)
+    )
+    // Hoa's arc: GO_TO alley, TALK_TO mai, DELIVER broth -> linh (twist -> vy).
+    const offer = await harness.game.proposeQuest(
+      ctx.playerId,
+      'hoa',
+      required(seedsFor('hoa')[0])
+    )
+    if (!offer.accepted) throw new Error(offer.reason)
+    // Clear the Ki step so only the Sho TALK_TO mai remains before the twist.
+    await harness.game.applyEvents(ctx.playerId, [
+      { type: 'visit', locationId: 'alley' },
+    ])
+    // Chatting with Mai (the Sho target) completes TALK_TO and fires the twist.
+    await harness.interact(
+      'mai',
+      ask('Where did lunch go?', {
+        worldContext: {
+          playerLocation: 'alley',
+          nearbyNpcs: ['mai'],
+          timeOfDay: 'afternoon',
+        },
+      }),
+      ctx.playerId
+    )
+    expect(JSON.stringify(seen.at(-1)?.messages)).toContain(
+      'Twist just happened:'
+    )
+  })
+
+  it('rotates past a just-completed seed when offering a fallback errand', async () => {
+    const harness = ctx.fx.harness(offline)
+    const [first] = seedsFor('hoa')
+    await harness.game.proposeQuest(
+      ctx.playerId,
+      'hoa',
+      required(seedsFor('hoa')[0])
+    )
+    // Force-complete the active hoa quest by walking its live steps.
+    for (let i = 0; i < 3; i++) {
+      const live = (await harness.game.get(ctx.playerId)).quests.find(
+        (q) => q.giverNpcId === 'hoa'
+      )
+      if (!live) break
+      const step = live.steps[i]
+      if (!step) break
+      const event =
+        step.type === 'GO_TO'
+          ? { type: 'visit' as const, locationId: step.locationId }
+          : step.type === 'TALK_TO'
+            ? { type: 'talk' as const, npcId: step.npcId }
+            : step.type === 'DELIVER'
+              ? {
+                  type: 'deliver' as const,
+                  itemId: step.itemId,
+                  npcId: step.npcId,
+                }
+              : { type: 'purchase' as const, itemId: 'banana' as const }
+      await harness.game.applyEvents(ctx.playerId, [event])
+    }
+    await harness.game.checkQuests(ctx.playerId, 'hoa')
+    const record = await harness.game.get(ctx.playerId)
+    expect(record.completed.at(-1)?.title).toBe(first?.title)
+    // Next fallback offer must skip the just-completed seed title.
+    const offered = await harness.interact(
+      'hoa',
+      ask('Any errands?', { intent: 'help' }),
+      ctx.playerId
+    )
+    expect(offered.quests[0]?.title).not.toBe(first?.title)
   })
 })

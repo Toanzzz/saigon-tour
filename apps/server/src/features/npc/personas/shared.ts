@@ -43,7 +43,7 @@ At friendliness -3 or below stay civil and offer no errands.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY
 {marketItemId}. Only server tools grant items or rewards. Never deliver to yourself.
 Optionally add payoff (≤160 chars): a one-line punchline you deliver when the player returns.
-Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
+Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities. A twist needs at least two steps, and the twist step must differ from every earlier step. Write the line as the in-world reason the plan changed, spoken by the NPC or place at the step before the twist, and make it land as a small comedic surprise.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 `
 

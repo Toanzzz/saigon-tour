@@ -138,3 +138,21 @@ export function required<T>(value: T | undefined | null): T {
   if (value == null) throw new Error('Missing test entity')
   return value
 }
+
+/**
+ * A content-stable single-step hoa delivery, so tests that complete a quest by
+ * delivering broth do not depend on hoa's first catalog seed (now a twist arc).
+ */
+export const hoaDelivery = () => ({
+  giverNpcId: 'hoa' as const,
+  steps: [
+    {
+      type: 'DELIVER' as const,
+      itemId: 'broth' as const,
+      npcId: 'linh' as const,
+    },
+  ],
+  scope: 'solo' as const,
+  title: 'Fresh broth for a neighbor',
+  description: 'Bring this broth to Linh in the park.',
+})

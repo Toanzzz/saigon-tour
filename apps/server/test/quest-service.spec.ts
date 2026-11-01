@@ -1,7 +1,7 @@
 import { seedsFor } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { QuestService } from '@/domain/quests'
-import { offline, required, setupNpc } from './support/npc'
+import { hoaDelivery, offline, required, setupNpc } from './support/npc'
 
 const ctx = setupNpc()
 describe('quest transactions', () => {
@@ -21,7 +21,7 @@ describe('quest transactions', () => {
 
   it('checks every ready quest from the giver and leaves others active', async () => {
     const game = new QuestService(ctx.fx.db)
-    const spec = required(seedsFor('hoa')[0])
+    const spec = hoaDelivery()
     await game.proposeQuest(ctx.playerId, 'hoa', spec)
     await game.proposeQuest(ctx.playerId, 'hoa', {
       ...spec,
@@ -44,7 +44,7 @@ describe('quest transactions', () => {
   it('can deliver the same item to the same neighbor for a new quest', async () => {
     const game = new QuestService(ctx.fx.db)
     for (let repeat = 0; repeat < 2; repeat++) {
-      await game.proposeQuest(ctx.playerId, 'hoa', required(seedsFor('hoa')[0]))
+      await game.proposeQuest(ctx.playerId, 'hoa', hoaDelivery())
       await game.applyEvents(ctx.playerId, [
         { type: 'deliver', itemId: 'broth', npcId: 'linh' },
       ])

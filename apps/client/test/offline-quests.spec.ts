@@ -4,6 +4,7 @@ import {
   type InteractRequest,
   type NpcId,
   QUEST_SEEDS,
+  seedsFor,
 } from '@saigon/shared'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { interactWith, offline } from '@/shared/api/agent'
@@ -76,8 +77,8 @@ describe('offline NPC quests', () => {
     changeLocale('vi')
     try {
       const result = offline('hoa', request('hoa', 'help'), initialState())
-      expect(result.quests[0]?.title).toBe('Chuyện cỡ hai tô')
-      expect(result.reply).toContain('Chuyện cỡ hai tô')
+      expect(result.quests[0]?.title).toBe('Chuyện giao cỡ ba tô, con')
+      expect(result.reply).toContain('Chuyện giao cỡ ba tô, con')
     } finally {
       changeLocale('en')
     }
@@ -256,5 +257,28 @@ describe('offline NPC quests', () => {
     const checked = offline('hoa', request('hoa', 'check'), state)
     expect(checked.questEvents).toEqual([])
     expect(checked.world.currency).toBe(30)
+  })
+
+  it('rotates past a just-completed seed title offline', () => {
+    const [first, ...rest] = seedsFor('hoa')
+    const next = rest[0]
+    expect(first).toBeDefined()
+    expect(next).toBeDefined()
+    // hoa's last completed quest is its first seed, so the offer should skip it.
+    const state = {
+      ...initialState(),
+      completed: [
+        {
+          id: 'q_prev',
+          title: first?.title ?? '',
+          giverNpcId: 'hoa' as const,
+          reward: { currency: 10, itemId: null, reputation: 1 },
+          completedAt: Date.now(),
+        },
+      ],
+    }
+    const result = offline('hoa', request('hoa', 'help'), state)
+    expect(result.quests[0]?.title).not.toBe(first?.title)
+    expect(result.quests[0]?.title).toBe(next?.title)
   })
 })

@@ -4,17 +4,36 @@ import { readConfig } from '@/shared'
 import { required, setupParty } from './support/party'
 
 const ctx = setupParty()
-const seed = { ...required(seedsFor('hoa')[0]), scope: 'party' as const }
+// A content-stable single-step party hoa delivery, independent of which seed
+// is first in hoa's catalog (now a twist arc).
+const seed = {
+  giverNpcId: 'hoa' as const,
+  steps: [
+    {
+      type: 'DELIVER' as const,
+      itemId: 'broth' as const,
+      npcId: 'linh' as const,
+    },
+  ],
+  scope: 'party' as const,
+  title: 'Fresh broth for a neighbor',
+  description: 'Bring this broth to Linh in the park.',
+}
 
 describe('durable generic party quests', () => {
   it('offers a shared id with independent member steps and pushes rewards once per member', async () => {
     const [first, second] = await ctx.team()
-    const offered = await ctx.ask(first, 'hoa', 'help')
-    const quest = required(offered.quests[0])
+    const offer = await ctx.app.harness.game.proposeQuest(
+      first.player.id,
+      'hoa',
+      seed
+    )
+    if (!offer.accepted) throw new Error(offer.reason)
+    const quest = offer.quest
     expect(quest.scope).toBe('party')
     expect(quest.party?.memberIds).toEqual([first.player.id, second.player.id])
-    expect(second.socket.messages).toContainEqual(
-      expect.objectContaining({ type: 'world', quests: [quest] })
+    expect((await ctx.app.db.player(second.player.id)).quests[0]?.id).toBe(
+      quest.id
     )
     await ctx.ask(first, 'linh', 'chat', [
       { type: 'deliver', itemId: 'broth', npcId: 'linh' },
