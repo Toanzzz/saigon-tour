@@ -131,3 +131,5 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - New `shared/state/view.ts` holds the discrete, React-visible values derived each frame (the per-frame simulation data — motion, input, presence sample Maps — stays mutable). Each store writes only on change and exposes a reset; `resetViewStores()` runs in the test `beforeEach`.
 - `playerView.animation` is written by the `player.tsx` frame loop via `setPlayerAnimation` (idle/walk/sprint) and read with `useSelector`, replacing the local `useState`.
 - `touchView.knob` is written by the `touch.tsx` pointer handlers via `setTouchKnob`; the stick reads it with `useSelector`. The blur/visibility recenter moved into `installInput()` (`clearInput()` now also resets the knob), so it fires even when the stick is unmounted.
+
+- `npcLabels` store `{[npcId]: {visible, marker, pulse, at}}` is computed by one `NpcLabelsTicker` (`useFrame`, rendered once in `Neighbors`), writing the map only on change. Each `NpcLabel` now selects its own entry (`shallow`) instead of running a per-label quest scan every frame.

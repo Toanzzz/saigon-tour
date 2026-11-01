@@ -30,7 +30,48 @@ export const setTouchKnob = (x: number, y: number) => {
 }
 export const resetTouchKnob = () => touchView.setState(() => ({ knob: [0, 0] }))
 
+export interface NpcLabelView {
+  visible: boolean
+  marker: string
+  pulse: string
+  at: number
+}
+/** Per-NPC world-label state, computed each frame by one ticker (NpcLabels). */
+export const npcLabels = new Store<Record<string, NpcLabelView>>({})
+const EMPTY_LABEL: NpcLabelView = {
+  visible: false,
+  marker: '',
+  pulse: '',
+  at: 0,
+}
+export const npcLabelOf = (id: string): NpcLabelView =>
+  npcLabels.state[id] ?? EMPTY_LABEL
+/** Replace the whole map only when some entry actually changed. */
+export function writeNpcLabels(next: Record<string, NpcLabelView>) {
+  const prev = npcLabels.state
+  const keys = Object.keys(next)
+  let changed = keys.length !== Object.keys(prev).length
+  if (!changed)
+    for (const key of keys) {
+      const a = prev[key]
+      const b = next[key]
+      if (
+        !a ||
+        a.visible !== b.visible ||
+        a.marker !== b.marker ||
+        a.pulse !== b.pulse ||
+        a.at !== b.at
+      ) {
+        changed = true
+        break
+      }
+    }
+  if (changed) npcLabels.setState(() => next)
+}
+export const resetNpcLabels = () => npcLabels.setState(() => ({}))
+
 export function resetViewStores() {
   resetPlayerView()
   resetTouchKnob()
+  resetNpcLabels()
 }

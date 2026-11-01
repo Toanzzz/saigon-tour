@@ -11,7 +11,7 @@ import { game } from '@/shared/state/game'
 import { questTarget } from '@/shared/state/quests'
 import { Character } from '@/shared/world'
 import { PEOPLE } from '@/shared/world/places'
-import { NpcLabel } from './npc-label'
+import { NpcLabel, NpcLabelsTicker } from './npc-label'
 import { Crowd } from './residents'
 
 export function Neighbors() {
@@ -22,6 +22,7 @@ export function Neighbors() {
   )
   return (
     <>
+      <NpcLabelsTicker />
       {NEIGHBOR_IDS.map((id) => (
         <Neighbor
           key={id}
