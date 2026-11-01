@@ -33,6 +33,7 @@ declare global {
       hideDebugUi: (hidden: boolean) => void
       teleport: (x: number, z: number) => void
       carry: () => { care: string; aside: string | null; peak: number }
+      setCurrency: (value: number) => void
     }
   }
 }
@@ -192,6 +193,11 @@ export function installTestHooks() {
     carry() {
       const { care, aside, peak } = carryStore.state
       return { care, aside, peak }
+    },
+    setCurrency(value) {
+      if (!Number.isSafeInteger(value) || value < 0)
+        throw new Error('Currency must be a non-negative integer')
+      update({ world: { ...game.state.world, currency: value } })
     },
   }
 }

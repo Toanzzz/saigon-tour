@@ -327,7 +327,7 @@ export function advance(
 }
 
 /** Does an active quest's next step BUY this market item? Gates market credit. */
-function creditEligible(quests: Quest[], itemId: string): boolean {
+export function creditEligible(quests: Quest[], itemId: string): boolean {
   return quests.some((quest) => {
     if (quest.status === 'completed') return false
     const index = quest.progress.findIndex((done) => !done)

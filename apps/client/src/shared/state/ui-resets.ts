@@ -46,14 +46,22 @@ export function installUiResets() {
 
 /** Run the shared 1 s clock only while the world room is full. */
 export function installWaitingClock() {
-  if (net.state.waiting) startClock()
-  else stopClock()
-  const unsubscribe = net.subscribe((state) => {
-    if (state.waiting) startClock()
-    else stopClock()
-  })
+  // Hold the shared clock across waiting transitions only, so the reference
+  // count stays balanced with other holders (the riddle countdown).
+  let holding = false
+  const sync = (waiting: boolean) => {
+    if (waiting && !holding) {
+      holding = true
+      startClock()
+    } else if (!waiting && holding) {
+      holding = false
+      stopClock()
+    }
+  }
+  sync(Boolean(net.state.waiting))
+  const unsubscribe = net.subscribe((state) => sync(Boolean(state.waiting)))
   return () => {
     unsubscribe.unsubscribe()
-    stopClock()
+    sync(false)
   }
 }

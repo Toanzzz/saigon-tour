@@ -1,4 +1,4 @@
-import { MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
+import { creditEligible, MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
 import {
@@ -233,18 +233,25 @@ export function MarketPanel({ state }: { state: GameState }) {
         {(Object.keys(MARKET_ITEMS) as MarketItemId[]).map((id) => {
           const item = MARKET_ITEMS[id]
           const count = state.world.inventory[id] ?? 0
+          const onCredit =
+            state.world.currency < item.price &&
+            creditEligible(state.quests, id)
           return (
             <button
               type="button"
               className="market-item"
               key={id}
-              disabled={state.world.currency < item.price}
+              disabled={state.world.currency < item.price && !onCredit}
               onClick={() => buyMarketItem(id)}
             >
               <span>
                 <strong>{marketItemLabel(id)}</strong>
                 <small>
-                  {id === 'coffee' ? m.market_coffee() : m.market_banana()}
+                  {onCredit
+                    ? m.market_on_credit({ item: marketItemLabel(id) })
+                    : id === 'coffee'
+                      ? m.market_coffee()
+                      : m.market_banana()}
                 </small>
               </span>
               <span className="market-price">

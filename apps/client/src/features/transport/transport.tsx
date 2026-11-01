@@ -15,8 +15,14 @@ import { m } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify, update, visit } from '@/shared/state/game'
 import { Character, Vehicle } from '@/shared/world'
-import { MODES, PLACES, placeName } from '@/shared/world/places'
+import {
+  MODES,
+  PLACES,
+  placeName,
+  distance as planar,
+} from '@/shared/world/places'
 import { isXRPresenting } from '@/shared/xr/store'
+import { arriveAside } from './asides'
 import { route } from './routes'
 
 export function Transport() {
@@ -116,6 +122,11 @@ export function Transport() {
       })
       audio.play('arrive')
       notify(m.toast_welcome_to({ place: placeName(ride.to) }))
+      arriveAside(
+        ride.mode,
+        planar(PLACES[ride.from].at, PLACES[ride.to].at),
+        ride.to
+      )
     }
   })
   return (

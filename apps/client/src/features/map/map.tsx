@@ -178,6 +178,7 @@ export function NeighborhoodMap({
         ))}
       {state.quests.map((quest) => {
         const target = questPin(quest)
+        if (!target) return null
         return (
           <g
             key={quest.id}

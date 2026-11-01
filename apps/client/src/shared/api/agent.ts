@@ -12,6 +12,7 @@ import {
   type NpcId,
   seedsFor,
   shiftFriendship,
+  stepText,
   validateSpec,
   wantsErrand,
   ZERO_REWARD,
@@ -101,6 +102,10 @@ export function offline(
   const twistedBefore = new Set(
     quests.filter((quest) => quest.twist?.replaced).map((quest) => quest.id)
   )
+  // Track which riddle quests were already revealed, to detect a greet reveal.
+  const revealedBefore = new Set(
+    quests.filter((quest) => quest.revealed).map((quest) => quest.id)
+  )
   // Pending events already changed the local world. Advance quests without charging twice.
   for (const event of [
     { type: 'talk' as const, npcId: npc },
@@ -118,6 +123,14 @@ export function offline(
     (quest) => quest.twist?.replaced && !twistedBefore.has(quest.id)
   )
   if (freshTwist?.twist) reply = freshTwist.twist.line
+  // A riddle this greet's talk revealed speaks the authored reveal line.
+  const freshReveal = quests.find(
+    (quest) => quest.riddle && quest.revealed && !revealedBefore.has(quest.id)
+  )
+  if (!freshTwist?.twist && freshReveal?.steps[0])
+    reply = m.riddle_greet_reveal({
+      answer: stepText(freshReveal.steps[0], getLocale()),
+    })
   for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
     if (quest.scope === 'party') {
       continue

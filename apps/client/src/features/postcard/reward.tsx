@@ -55,6 +55,23 @@ export function RewardPanel({ state }: { state: GameState }) {
           })}
         </span>
       </div>
+      {(state.rewardQuest?.reward.bonus?.thrifty ||
+        state.rewardQuest?.reward.bonus?.sharp) && (
+        <div className="reward-earned reward-bonus">
+          {state.rewardQuest?.reward.bonus?.thrifty ? (
+            <span>
+              <Icon name="coin" />
+              {m.reward_thrifty()}
+            </span>
+          ) : null}
+          {state.rewardQuest?.reward.bonus?.sharp ? (
+            <span>
+              <Icon name="star" />
+              {m.reward_sharp()}
+            </span>
+          ) : null}
+        </div>
+      )}
       {state.rewardQuest?.reward.unlockId && (
         <div className="reward-earned reward-unlock">
           <span>

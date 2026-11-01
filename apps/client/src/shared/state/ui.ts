@@ -76,10 +76,14 @@ export const setWardrobeTab = (slot: UnlockSlot) =>
 export const resetWardrobeTab = () =>
   wardrobeTab.setState(() => ({ slot: 'hat' }))
 
-// --- Shared 1 s clock (waiting notice) ---------------------------------------
+// --- Shared 1 s clock (waiting notice, riddle countdown) ---------------------
 export const clock = new Store({ now: Date.now() })
 let clockTimer: ReturnType<typeof setInterval> | undefined
+// Reference count so independent holders (waiting notice, riddle countdown)
+// can start and stop the tick without cutting each other off.
+let clockHolds = 0
 export function startClock() {
+  clockHolds += 1
   if (clockTimer) return
   clock.setState(() => ({ now: Date.now() }))
   clockTimer = setInterval(() => {
@@ -87,12 +91,17 @@ export function startClock() {
   }, 1000)
 }
 export function stopClock() {
-  if (!clockTimer) return
+  clockHolds = Math.max(0, clockHolds - 1)
+  if (clockHolds > 0 || !clockTimer) return
   clearInterval(clockTimer)
   clockTimer = undefined
 }
 export const resetClock = () => {
-  stopClock()
+  clockHolds = 0
+  if (clockTimer) {
+    clearInterval(clockTimer)
+    clockTimer = undefined
+  }
   clock.setState(() => ({ now: Date.now() }))
 }
 

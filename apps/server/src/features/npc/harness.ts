@@ -9,6 +9,7 @@ import {
   type InteractResponse,
   type NpcId,
   type QuestEvent,
+  stepText,
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { z } from 'zod'
@@ -139,6 +140,33 @@ export class NpcHarness {
           : null
       })
       .find((line): line is string => Boolean(line))
+    // A riddle revealed by this greet's talk is spoken as the authored reveal.
+    const riddleRevealLine = record.quests
+      .map((quest) => {
+        const before = previous.quests.find((entry) => entry.id === quest.id)
+        const first = quest.steps[0]
+        return quest.riddle && first && quest.revealed && !before?.revealed
+          ? stepText(first, request.locale)
+          : null
+      })
+      .find((answer): answer is string => Boolean(answer))
+    // Chat-path riddle context for this giver: hint-only while hidden, or an
+    // instruction to voice the answer on the turn it was revealed.
+    const giverRiddle = record.quests.find(
+      (quest) =>
+        quest.giverNpcId === npcId && quest.riddle && !quest.progress[0]
+    )
+    const giverRiddleBefore = giverRiddle
+      ? previous.quests.find((entry) => entry.id === giverRiddle.id)
+      : undefined
+    const first = giverRiddle?.steps[0]
+    let riddleContext: string | null = null
+    if (giverRiddle && first) {
+      if (giverRiddle.revealed && !giverRiddleBefore?.revealed)
+        riddleContext = `You just told the player the riddle answer: ${stepText(first, request.locale)}. Say it in your voice.`
+      else if (!giverRiddle.revealed && giverRiddle.riddle)
+        riddleContext = `Riddle unrevealed: ${giverRiddle.riddle.text}. Hint, never answer.`
+    }
     if (request.intent === 'greet') {
       const npcQuests = current.quests.filter(
         (quest) => quest.giverNpcId === npcId
@@ -165,6 +193,12 @@ export class NpcHarness {
           fallbackLine(npcId, current.world, 'completed', request.locale)
       // A fresh twist speaks its authored line over the cached greeting.
       if (twistedLine) line.reply = twistedLine
+      // A riddle the greet just revealed speaks the authored reveal line.
+      else if (riddleRevealLine)
+        line.reply =
+          request.locale === 'vi'
+            ? `Câu đố đó hả? ${riddleRevealLine}.`
+            : `That riddle? ${riddleRevealLine}.`
       await recordTurn(
         this.storage,
         npcId,
@@ -204,7 +238,8 @@ export class NpcHarness {
         request,
         playerId,
         outcome,
-        twistedLine ?? null
+        twistedLine ?? null,
+        riddleContext
       )
       if (reply) source = 'live'
     }
@@ -218,7 +253,8 @@ export class NpcHarness {
           final.world,
           kind(outcome),
           request.locale,
-          friendlinessOf(final.friendship, npcId)
+          friendlinessOf(final.friendship, npcId),
+          final.quests
         )
       source = 'fallback'
     }
@@ -251,7 +287,8 @@ export class NpcHarness {
     request: InteractRequest,
     playerId: string,
     outcome: ToolOutcome,
-    twistedLine: string | null
+    twistedLine: string | null,
+    riddleContext: string | null = null
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
     const context = await buildContext(
@@ -261,7 +298,8 @@ export class NpcHarness {
       request,
       playerId,
       outcome,
-      twistedLine
+      twistedLine,
+      riddleContext
     )
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([

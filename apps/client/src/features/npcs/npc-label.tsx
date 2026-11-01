@@ -1,13 +1,14 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { NEIGHBOR_IDS, type NpcId } from '@saigon/shared'
+import { isRevealed, NEIGHBOR_IDS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
 import { npcPosition } from '@/shared/api/city'
 import { npcLabel } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { pulses } from '@/shared/state/friendship'
-import { game } from '@/shared/state/game'
+import { type GameState, game } from '@/shared/state/game'
+import { clock } from '@/shared/state/ui'
 import {
   type NpcLabelView,
   npcLabelOf,
@@ -15,19 +16,41 @@ import {
   writeNpcLabels,
 } from '@/shared/state/view'
 
-function labelFor(id: NpcId): NpcLabelView {
-  const state = game.state
-  const quests = state.quests.filter((quest) => quest.giverNpcId === id)
-  const ready = quests.some((quest) => quest.status === 'ready')
-  const target = state.quests.some((quest) =>
-    quest.steps.some(
+/**
+ * Does any quest point at this NPC as a next step? A hidden riddle on step 0
+ * never lights up the answer NPC, so the marker cannot leak the answer.
+ */
+export function npcIsQuestTarget(
+  state: GameState,
+  id: NpcId,
+  now: number
+): boolean {
+  return state.quests.some((quest) => {
+    const hidden = Boolean(quest.riddle) && !isRevealed(quest, now)
+    return quest.steps.some(
       (step, i) =>
         !quest.progress[i] &&
+        !(hidden && i === 0) &&
         step.type !== 'GO_TO' &&
         step.type !== 'BUY' &&
         step.npcId === id
     )
-  )
+  })
+}
+
+/** The world-label marker for an NPC: '?' ready, '!' has/targets a quest. */
+export function npcMarker(state: GameState, id: NpcId, now: number): string {
+  const quests = state.quests.filter((quest) => quest.giverNpcId === id)
+  const ready = quests.some((quest) => quest.status === 'ready')
+  const target = npcIsQuestTarget(state, id, now)
+  return ready ? '?' : quests.length || target ? '!' : ''
+}
+
+function labelFor(id: NpcId): NpcLabelView {
+  const state = game.state
+  const now = clock.state.now
+  const quests = state.quests.filter((quest) => quest.giverNpcId === id)
+  const target = npcIsQuestTarget(state, id, now)
   const position = npcPosition(id)
   const visible = Boolean(
     quests.length ||
@@ -42,8 +65,12 @@ function labelFor(id: NpcId): NpcLabelView {
     event && Date.now() - event.at < 2200
       ? `${event.delta > 0 ? '+' : ''}${event.delta} ${event.delta > 0 ? '♥' : ''}`
       : ''
-  const marker = ready ? '?' : quests.length || target ? '!' : ''
-  return { visible, marker, pulse, at: event?.at ?? 0 }
+  return {
+    visible,
+    marker: npcMarker(state, id, now),
+    pulse,
+    at: event?.at ?? 0,
+  }
 }
 
 /** Single frame ticker: computes every neighbor label once and writes the map

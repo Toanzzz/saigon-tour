@@ -1,4 +1,4 @@
-import { advance } from '@saigon/shared'
+import { advance, createQuest } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { grantQuest, grantReward, initialState } from '@/shared/state/game'
 import { greetingFor, hubView } from '@/widgets/hub'
@@ -16,13 +16,29 @@ describe('city hub quest view', () => {
     expect(view.story.steps.some((step) => step.state === 'now')).toBe(true)
     expect(view.story.done).toBe(false)
   })
-  it('offers the cheapest affordable ride toward the current step', () => {
+  it('suggests walking for a short next leg', () => {
+    // Market -> park is under 70 units: the hub suggests walking, not a ride.
     const state = grantQuest(initialState(), questFixture())
+    expect(hubView(state, now).ride).toBeNull()
+  })
+  it('offers the cheapest affordable ride for a long next leg', () => {
+    const quest = createQuest(
+      {
+        giverNpcId: 'thao',
+        title: 'A long walk to the square',
+        description: 'Visit the cathedral square.',
+        scope: 'solo',
+        steps: [{ type: 'GO_TO', locationId: 'cathedral' }],
+      },
+      'q_test_far',
+      Date.now()
+    )
+    const state = grantQuest(initialState(), quest)
     expect(hubView(state, now).ride).toMatchObject({
       mode: 'cyclo',
       fare: 3,
       from: 'market',
-      to: 'park',
+      to: 'cathedral',
     })
     expect(
       hubView({ ...state, world: { ...state.world, currency: 2 } }, now).ride
@@ -52,7 +68,8 @@ describe('city hub quest view', () => {
       ...grantQuest(initialState(), quest),
       stop: 'park' as const,
     }
-    expect(hubView(state, now).ride?.to).toBe('market')
+    // Park -> the market giver is a short, walkable leg: no ride suggested.
+    expect(hubView(state, now).ride).toBeNull()
     const complete = grantReward(state, quest)
     expect(hubView(complete, now).coins).toBe(30 + quest.reward.currency)
   })

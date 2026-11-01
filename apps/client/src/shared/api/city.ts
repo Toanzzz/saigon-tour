@@ -3,6 +3,7 @@ import {
   type CitySnapshot,
   CitySnapshotSchema,
   initialCity,
+  type LocationId,
   type NeighborId,
   NPC_POSITIONS,
   NPCS,
@@ -47,4 +48,18 @@ export function npcPosition(npcId: NpcId): [number, number, number] {
     city.state.npcPlacements[npcId as NeighborId]?.position ??
     NPC_POSITIONS[npcId as NeighborId]
   )
+}
+
+/**
+ * The location a neighbor is currently placed at when the Director moved them
+ * off their home; null when they are home or not a neighbor. Drives the
+ * "now at {place}" suffix on quest steps.
+ */
+export function npcPlacement(npcId: NpcId): LocationId | null {
+  if (NPCS[npcId].kind !== 'neighbor') return null
+  const placement = city.state.npcPlacements[npcId as NeighborId]
+  if (!placement) return null
+  return placement.locationId === NPCS[npcId].location
+    ? null
+    : placement.locationId
 }

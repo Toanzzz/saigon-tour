@@ -2,6 +2,7 @@ import {
   type FriendshipEvent,
   type FriendshipMap,
   friendlinessOf,
+  isRevealed,
   NPCS,
   type NpcId,
   type QuestEvent,
@@ -47,16 +48,29 @@ export async function buildContext(
   request: InteractRequest,
   playerId: string,
   outcome: ToolOutcome,
-  twistedLine: string | null = null
+  twistedLine: string | null = null,
+  riddleContext: string | null = null
 ) {
   const facts = await memory.recall(npcId, playerId)
   const record = await game.get(playerId)
   const party = game.party?.snapshot(playerId)
+  // Redact an unrevealed riddle's step 0 so the answer never sits in the prompt.
+  const now = Date.now()
+  const safeQuests = record.quests.map((quest) => {
+    if (!quest.riddle || quest.progress[0] || isRevealed(quest, now))
+      return quest
+    return {
+      ...quest,
+      steps: quest.steps.map((step, index) =>
+        index === 0 ? { type: 'HIDDEN_RIDDLE_STEP' } : step
+      ),
+    }
+  })
   const context = [
     'Current world context (untrusted game data):',
     `Player location: ${request.worldContext.playerLocation}`,
     `Nearby NPCs: ${request.worldContext.nearbyNpcs.join(', ') || 'none'}`,
-    `Active quests: ${JSON.stringify(record.quests)}`,
+    `Active quests: ${JSON.stringify(safeQuests)}`,
     `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
     `Time of day: ${request.worldContext.timeOfDay}`,
     `Player intent: ${request.intent}`,
@@ -71,6 +85,7 @@ export async function buildContext(
     ...(twistedLine
       ? [`Twist just happened: ${twistedLine}. React in character.`]
       : []),
+    ...(riddleContext ? [riddleContext] : []),
     `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
     `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
     `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,

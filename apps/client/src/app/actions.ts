@@ -1,4 +1,5 @@
 import {
+  creditEligible,
   FRAGILE_ITEM_IDS,
   MARKET_ITEMS,
   type MarketItemId,
@@ -12,6 +13,7 @@ import {
 } from '@/features/carry'
 import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
+import { resetAsides } from '@/features/transport/asides'
 import { npcPosition } from '@/shared/api/city'
 import {
   beginHttpTurn,
@@ -31,6 +33,7 @@ import {
   update,
 } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
+import { resetRiddles } from '@/shared/state/riddles'
 import { resetTwists } from '@/shared/state/twists'
 import {
   resetChatDraft,
@@ -95,6 +98,8 @@ export async function restart() {
   resetCollectedCoins()
   resetCarry()
   resetTwists()
+  resetRiddles()
+  resetAsides()
 }
 /** Drop this device's saved session; reload as a brand-new guest. */
 export async function forgetDevice() {
@@ -150,27 +155,40 @@ export function buyMarketItem(itemId: MarketItemId) {
     (state.world.inventory[itemId] ?? 0) >= 100
   )
     return
-  if (state.world.currency < item.price) {
+  const shortByCoins = state.world.currency < item.price
+  // Cô Hoa fronts a quest's BUY step when the player cannot pay; the engine
+  // (0B) only honors the credit for an unaffordable, active-quest BUY.
+  const onCredit = shortByCoins && creditEligible(state.quests, itemId)
+  if (shortByCoins && !onCredit) {
     notify(
       m.toast_need_coins({ count: item.price, item: marketItemLabel(itemId) })
     )
     return
   }
+  const event = onCredit
+    ? ({ type: 'purchase', itemId, credit: true } as const)
+    : ({ type: 'purchase', itemId } as const)
   update({
     panel: 'market',
     world: {
       ...state.world,
-      currency: state.world.currency - item.price,
+      currency: onCredit
+        ? state.world.currency
+        : state.world.currency - item.price,
       inventory: {
         ...state.world.inventory,
         [itemId]: (state.world.inventory[itemId] ?? 0) + 1,
       },
     },
-    quests: advanceQuests(state.quests, [{ type: 'purchase', itemId }]),
-    pending: [...state.pending, { type: 'purchase', itemId }],
+    quests: advanceQuests(state.quests, [event]),
+    pending: [...state.pending, event],
   })
   audio.play('pickup')
-  notify(m.toast_added_to_bag({ item: marketItemLabel(itemId) }))
+  notify(
+    onCredit
+      ? m.market_on_credit({ item: marketItemLabel(itemId) })
+      : m.toast_added_to_bag({ item: marketItemLabel(itemId) })
+  )
 }
 export function openRiverPostcard() {
   if (game.state.world.locationId !== 'river') return
@@ -285,12 +303,16 @@ export function board(to: keyof typeof PLACES, mode: TravelMode) {
     notify(m.toast_not_enough_coins())
     return
   }
+  const event = { type: 'spend', amount: fare, mode } as const
   update({
     ride: { from: state.stop, to, mode, progress: 0 },
     panel: 'none',
     dialogue: null,
     world: { ...state.world, currency: state.world.currency - fare },
-    pending: [...state.pending, { type: 'spend', amount: fare }],
+    // Advance locally like buyMarketItem, so `spent` and a cyclo riddle reveal
+    // show before the next NPC turn instead of waiting for the server.
+    quests: advanceQuests(state.quests, [event]),
+    pending: [...state.pending, event],
   })
   audio.play('board')
 }

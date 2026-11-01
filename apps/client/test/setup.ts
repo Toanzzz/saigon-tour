@@ -1,7 +1,9 @@
 import { beforeEach } from 'vitest'
 import { resetCarry } from '@/features/carry'
+import { resetAsides } from '@/features/transport/asides'
 import { setLocale } from '@/paraglide/runtime'
 import { resetPresenceView } from '@/shared/api/presence-view'
+import { resetRiddles } from '@/shared/state/riddles'
 import { resetTwists } from '@/shared/state/twists'
 import { resetUiStores } from '@/shared/state/ui'
 import { resetViewStores } from '@/shared/state/view'
@@ -14,6 +16,8 @@ beforeEach(() => {
   resetUiStores()
   resetViewStores()
   resetTwists()
+  resetRiddles()
+  resetAsides()
   resetCarry()
   resetPresenceView()
   resetXr()

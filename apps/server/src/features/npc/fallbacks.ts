@@ -1,8 +1,11 @@
 import {
+  isRevealed,
   type Locale,
   type NeighborId,
   type NpcId,
+  type Quest,
   RESIDENT_TEXT,
+  stepText,
   type WorldState,
 } from '@saigon/shared'
 
@@ -67,18 +70,55 @@ const IDLE: Record<NeighborId, Line> = {
   },
 }
 
+/** The next incomplete step of the player's most relevant active quest. */
+function pendingStep(quests: Quest[] | undefined, npcId: NpcId, now: number) {
+  if (!quests?.length) return null
+  // Prefer a quest this NPC gave, else any active quest with work left.
+  const ordered = [
+    ...quests.filter((quest) => quest.giverNpcId === npcId),
+    ...quests.filter((quest) => quest.giverNpcId !== npcId),
+  ].filter((quest) => quest.status === 'active' || quest.status === 'ready')
+  for (const quest of ordered) {
+    const index = quest.progress.findIndex((done) => !done)
+    const step = index >= 0 ? quest.steps[index] : undefined
+    if (!step) continue
+    // Never name the answer to a riddle that the city has not revealed yet.
+    if (index === 0 && quest.riddle && !isRevealed(quest, now)) continue
+    return step
+  }
+  return null
+}
+
+/** Concrete "still to do" line naming the next step and its place. */
+function incompleteLine(
+  quests: Quest[] | undefined,
+  npcId: NpcId,
+  locale: Locale,
+  now: number
+): string {
+  const step = pendingStep(quests, npcId, now)
+  if (!step) return OUTCOMES.incomplete[locale]
+  return locale === 'vi'
+    ? `Vẫn còn chút việc: ${stepText(step, 'vi')}, rồi quay lại nhé.`
+    : `There is still something to do: ${stepText(step, 'en')}, then come back.`
+}
+
 /** Deterministic lines describe only validated outcomes. */
 export function fallbackLine(
   npcId: NpcId,
   _world: WorldState,
   outcome: 'offered' | 'completed' | 'incomplete' | 'failed' | null,
   locale: Locale = 'en',
-  level = 0
+  level = 0,
+  quests?: Quest[],
+  now: number = Date.now()
 ): string {
   if (!outcome && level <= -3)
     return locale === 'vi'
       ? 'Chào bạn. Hôm nay tôi chưa muốn nhờ việc gì.'
       : 'Hello. I am not ready to ask any favors today.'
+  if (outcome === 'incomplete')
+    return incompleteLine(quests, npcId, locale, now)
   if (outcome) return OUTCOMES[outcome][locale]
   const neighbor = IDLE[npcId as NeighborId]
   if (neighbor) return neighbor[locale]

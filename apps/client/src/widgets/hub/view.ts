@@ -1,9 +1,17 @@
-import { type LocationId, NPCS, type NpcId, type Quest } from '@saigon/shared'
+import {
+  isRevealed,
+  type LocationId,
+  NPCS,
+  type NpcId,
+  type Quest,
+} from '@saigon/shared'
 import { city } from '@/shared/api/city'
 import { m, npcDisplay, npcLabel } from '@/shared/i18n'
 import { type GameState, trackedQuest } from '@/shared/state/game'
-import { nextStep, stepCopy } from '@/shared/state/quests'
+import { nextStep, stepLine } from '@/shared/state/quests'
+import { clock } from '@/shared/state/ui'
 import {
+  distance,
   MODES,
   modeName,
   PLACES,
@@ -109,6 +117,8 @@ function cityTrail(): {
 function objectiveLocation(state: GameState): LocationId | null {
   const quest = trackedQuest(state)
   if (!quest) return null
+  // A hidden riddle has no known destination; do not suggest a ride to it.
+  if (quest.riddle && !isRevealed(quest, clock.state.now)) return null
   const step = nextStep(quest)
   if (!step)
     return (
@@ -127,8 +137,8 @@ function storySteps(state: GameState): HubStep[] {
   const quest = trackedQuest(state)
   if (quest)
     return [
-      ...quest.steps.map((step, index) => ({
-        title: stepCopy(step),
+      ...quest.steps.map((_step, index) => ({
+        title: stepLine(quest, index),
         detail: quest.progress[index]
           ? m.hub_completed()
           : m.hub_next_kindness(),
@@ -192,9 +202,14 @@ function nextStop(state: GameState): LocationId | null {
   )
 }
 
+/** Legs shorter than this are a pleasant walk; the hub suggests on foot. */
+const WALKABLE_LEG = 70
+
 export function cheapestRide(state: GameState): HubRide | null {
   const to = nextStop(state)
   if (!to) return null
+  // A short next leg is better walked than paid for; suggest no ride.
+  if (distance(PLACES[state.stop].at, PLACES[to].at) < WALKABLE_LEG) return null
   const [mode] = (Object.keys(MODES) as TravelMode[])
     .filter((id) => MODES[id].fare <= state.world.currency)
     .sort((a, b) => MODES[a].fare - MODES[b].fare)

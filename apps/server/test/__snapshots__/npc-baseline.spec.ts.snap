@@ -2274,6 +2274,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "Light across the square",
       },
+      {
+        "description": "I set the best backdrop in town as a riddle. Work out where it stands, or let a neighbor or a cyclo give it away.",
+        "giverNpcId": "alex",
+        "payoff": "You framed it without a hint. The pigeon still photobombed, but that is on the pigeon.",
+        "riddle": {
+          "text": "Velvet curtains, a grand staircase, and a façade that poses for every photo. Even latecomers get reviewed here. Find the stage.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "opera",
+            "type": "GO_TO",
+          },
+        ],
+        "title": "A riddle worth a frame",
+      },
     ],
     "vi": [
       {
@@ -2331,6 +2347,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
           },
         ],
         "title": "Ánh sáng qua quảng trường",
+      },
+      {
+        "description": "Mình biến phông nền đẹp nhất phố thành câu đố. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô bật mí.",
+        "giverNpcId": "alex",
+        "payoff": "Bạn canh được khung mà không cần gợi ý. Con bồ câu vẫn phá ảnh, mà đó là lỗi của nó.",
+        "riddle": {
+          "text": "Rèm nhung, bậc thang bề thế, mặt tiền lúc nào cũng tạo dáng cho ảnh. Tới trễ cũng bị chấm điểm. Tìm sân khấu đó đi.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "opera",
+            "type": "GO_TO",
+          },
+        ],
+        "title": "Câu đố đáng một khung hình",
       },
     ],
   },
@@ -3207,6 +3239,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "A note for a fellow regular",
       },
+      {
+        "description": "I turned tonight’s review into a riddle about a neighbor. Deduce who, or let a neighbor or a cyclo name them.",
+        "giverNpcId": "opera-visitor",
+        "payoff": "You found my critic without a program note. Four stars for the entrance.",
+        "riddle": {
+          "text": "Find the neighbor who freezes a single moment and swears the pigeon planned the photobomb. Ask them for the review.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "npcId": "alex",
+            "type": "TALK_TO",
+          },
+        ],
+        "title": "A riddle for opening night",
+      },
     ],
     "vi": [
       {
@@ -3235,6 +3283,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
           },
         ],
         "title": "Lời nhắn cho người quen",
+      },
+      {
+        "description": "Mình biến bài nhận xét tối nay thành câu đố về một người hàng xóm. Đoán xem là ai, hoặc để hàng xóm hay bác xích lô gọi tên.",
+        "giverNpcId": "opera-visitor",
+        "payoff": "Bạn tìm ra nhà phê bình của mình mà chẳng cần tờ chương trình. Bốn sao cho màn vào cửa.",
+        "riddle": {
+          "text": "Tìm người hàng xóm hay bắt lấy một khoảnh khắc rồi thề là con bồ câu cố tình phá ảnh. Hỏi họ lời nhận xét nhé.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "npcId": "alex",
+            "type": "TALK_TO",
+          },
+        ],
+        "title": "Câu đố cho đêm khai diễn",
       },
     ],
   },
@@ -3447,6 +3511,23 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "A photo for City Hall",
       },
+      {
+        "description": "A haiku for a hidden address. Work out who receives this postcard, or let a neighbor or a cyclo tell you.",
+        "giverNpcId": "postcard-reader",
+        "payoff": "Delivered to the right poet. Stamp, address, and riddle: all three finally rhyme.",
+        "riddle": {
+          "text": "Carry this card to the neighbor who mails letters to the river and never waits for a reply. He will know the stamp.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A stamp-poem riddle",
+      },
     ],
     "vi": [
       {
@@ -3475,6 +3556,23 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
           },
         ],
         "title": "Tấm ảnh cho Tòa Thị Chính",
+      },
+      {
+        "description": "Một bài haiku cho địa chỉ còn giấu. Đoán xem ai nhận tấm bưu thiếp này, hoặc để hàng xóm hay bác xích lô mách cho.",
+        "giverNpcId": "postcard-reader",
+        "payoff": "Giao đúng cho nhà thơ rồi. Con tem, địa chỉ, và câu đố: cuối cùng cả ba cũng vần.",
+        "riddle": {
+          "text": "Mang tấm thiệp này đến người hàng xóm hay gửi thư cho dòng sông mà chẳng bao giờ chờ hồi âm. Anh ấy sẽ biết con tem.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Câu đố thơ con tem",
       },
     ],
   },
@@ -3626,6 +3724,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "Room for a river view",
       },
+      {
+        "description": "Dear Reader: I hid my favorite hall in a riddle. Guess where it stands, or let a neighbor or a cyclo read it aloud.",
+        "giverNpcId": "son",
+        "payoff": "You read the riddle like a postcard. Dear You: nicely done. It wrote back this time.",
+        "riddle": {
+          "text": "A vaulted hall where old clocks pretend to be windows and the whole city mails its small stories. Begin where the letters wait.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "postoffice",
+            "type": "GO_TO",
+          },
+        ],
+        "title": "A riddle for the letters",
+      },
     ],
     "vi": [
       {
@@ -3684,6 +3798,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "Chỗ cho cảnh sông",
       },
+      {
+        "description": "Gửi bạn đọc: mình giấu gian sảnh mình thích trong một câu đố. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô đọc giúp.",
+        "giverNpcId": "son",
+        "payoff": "Bạn đọc câu đố như đọc bưu thiếp. Gửi bạn: giỏi lắm. Lần này nó có hồi âm đó.",
+        "riddle": {
+          "text": "Gian sảnh mái vòm, mấy cái đồng hồ cũ giả làm cửa sổ, cả thành phố gửi những mẩu chuyện nhỏ ở đó. Bắt đầu nơi thư đang chờ.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "postoffice",
+            "type": "GO_TO",
+          },
+        ],
+        "title": "Câu đố cho những lá thư",
+      },
     ],
   },
   "square-tourist": {
@@ -3715,6 +3845,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "A photo for the post office",
       },
+      {
+        "description": "I am proudly lost, so I made a riddle about a neighbor instead. Guess who, or let a neighbor or a cyclo say the name.",
+        "giverNpcId": "square-tourist",
+        "payoff": "You found them without the map. I will note this landmark the way I find everything: by accident.",
+        "riddle": {
+          "text": "Find the neighbor who gives every paper lantern a dramatic name before dusk. My 1998 map is no help; ask them to point.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "npcId": "vy",
+            "type": "TALK_TO",
+          },
+        ],
+        "title": "A riddle, map optional",
+      },
     ],
     "vi": [
       {
@@ -3743,6 +3889,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
           },
         ],
         "title": "Tấm ảnh cho bưu điện",
+      },
+      {
+        "description": "Tôi lạc đường một cách tự hào, nên đố bạn về một người hàng xóm. Đoán xem là ai, hoặc để hàng xóm hay bác xích lô nói tên.",
+        "giverNpcId": "square-tourist",
+        "payoff": "Bạn tìm ra mà chẳng cần bản đồ. Tôi sẽ ghi lại cột mốc này theo cách tôi tìm mọi thứ: tình cờ.",
+        "riddle": {
+          "text": "Tìm người hàng xóm đặt cho mỗi chiếc lồng đèn giấy một cái tên thật kịch tính trước khi trời tối. Tấm bản đồ 1998 của tôi chịu; nhờ họ chỉ đường.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "npcId": "vy",
+            "type": "TALK_TO",
+          },
+        ],
+        "title": "Câu đố, khỏi cần bản đồ",
       },
     ],
   },
@@ -3942,6 +4104,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
         ],
         "title": "An echo across the square",
       },
+      {
+        "description": "I caught a melody in the square and set it as a riddle. Solve where it lives, or let a neighbor or a cyclo tell you.",
+        "giverNpcId": "thao",
+        "payoff": "You found the echo yourself. Now the ballad has a proper first verse.",
+        "riddle": {
+          "text": "Two red-brick bell towers keep the square’s best echo. The pigeons only pretend to conduct. Stand where it answers.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "cathedral",
+            "type": "GO_TO",
+          },
+        ],
+        "title": "A riddle for the echo",
+      },
     ],
     "vi": [
       {
@@ -3997,6 +4175,22 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
           },
         ],
         "title": "Tiếng vọng qua quảng trường",
+      },
+      {
+        "description": "Mình bắt được một giai điệu ngoài quảng trường và đố bạn. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô mách cho.",
+        "giverNpcId": "thao",
+        "payoff": "Bạn tự tìm ra tiếng vọng rồi. Giờ khúc ballad đã có đoạn mở đầu đàng hoàng.",
+        "riddle": {
+          "text": "Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất của quảng trường. Mấy chú bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi nó vọng lại.",
+        },
+        "scope": "solo",
+        "steps": [
+          {
+            "locationId": "cathedral",
+            "type": "GO_TO",
+          },
+        ],
+        "title": "Câu đố cho tiếng vọng",
       },
     ],
   },
@@ -5510,6 +5704,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
   "QUEST_SEEDS": [
     {
       "giverNpcId": "alex",
+      "payoff": {
+        "en": "You framed it without a hint. The pigeon still photobombed, but that is on the pigeon.",
+        "vi": "Bạn canh được khung mà không cần gợi ý. Con bồ câu vẫn phá ảnh, mà đó là lỗi của nó.",
+      },
+      "riddle": {
+        "text": {
+          "en": "Velvet curtains, a grand staircase, and a façade that poses for every photo. Even latecomers get reviewed here. Find the stage.",
+          "vi": "Rèm nhung, bậc thang bề thế, mặt tiền lúc nào cũng tạo dáng cho ảnh. Tới trễ cũng bị chấm điểm. Tìm sân khấu đó đi.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "opera",
+          "type": "GO_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I set the best backdrop in town as a riddle. Work out where it stands, or let a neighbor or a cyclo give it away.",
+          "title": "A riddle worth a frame",
+        },
+        "vi": {
+          "description": "Mình biến phông nền đẹp nhất phố thành câu đố. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô bật mí.",
+          "title": "Câu đố đáng một khung hình",
+        },
+      },
+    },
+    {
+      "giverNpcId": "alex",
       "scope": "solo",
       "steps": [
         {
@@ -6258,6 +6482,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "opera-visitor",
+      "payoff": {
+        "en": "You found my critic without a program note. Four stars for the entrance.",
+        "vi": "Bạn tìm ra nhà phê bình của mình mà chẳng cần tờ chương trình. Bốn sao cho màn vào cửa.",
+      },
+      "riddle": {
+        "text": {
+          "en": "Find the neighbor who freezes a single moment and swears the pigeon planned the photobomb. Ask them for the review.",
+          "vi": "Tìm người hàng xóm hay bắt lấy một khoảnh khắc rồi thề là con bồ câu cố tình phá ảnh. Hỏi họ lời nhận xét nhé.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "alex",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I turned tonight’s review into a riddle about a neighbor. Deduce who, or let a neighbor or a cyclo name them.",
+          "title": "A riddle for opening night",
+        },
+        "vi": {
+          "description": "Mình biến bài nhận xét tối nay thành câu đố về một người hàng xóm. Đoán xem là ai, hoặc để hàng xóm hay bác xích lô gọi tên.",
+          "title": "Câu đố cho đêm khai diễn",
+        },
+      },
+    },
+    {
       "giverNpcId": "park-reader",
       "scope": "solo",
       "steps": [
@@ -6436,6 +6690,37 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "postcard-reader",
+      "payoff": {
+        "en": "Delivered to the right poet. Stamp, address, and riddle: all three finally rhyme.",
+        "vi": "Giao đúng cho nhà thơ rồi. Con tem, địa chỉ, và câu đố: cuối cùng cả ba cũng vần.",
+      },
+      "riddle": {
+        "text": {
+          "en": "Carry this card to the neighbor who mails letters to the river and never waits for a reply. He will know the stamp.",
+          "vi": "Mang tấm thiệp này đến người hàng xóm hay gửi thư cho dòng sông mà chẳng bao giờ chờ hồi âm. Anh ấy sẽ biết con tem.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "postcard",
+          "npcId": "son",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "A haiku for a hidden address. Work out who receives this postcard, or let a neighbor or a cyclo tell you.",
+          "title": "A stamp-poem riddle",
+        },
+        "vi": {
+          "description": "Một bài haiku cho địa chỉ còn giấu. Đoán xem ai nhận tấm bưu thiếp này, hoặc để hàng xóm hay bác xích lô mách cho.",
+          "title": "Câu đố thơ con tem",
+        },
+      },
+    },
+    {
       "giverNpcId": "river-jogger",
       "scope": "solo",
       "steps": [
@@ -6498,6 +6783,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
           "title": "Lời nhắn của Nhi",
+        },
+      },
+    },
+    {
+      "giverNpcId": "son",
+      "payoff": {
+        "en": "You read the riddle like a postcard. Dear You: nicely done. It wrote back this time.",
+        "vi": "Bạn đọc câu đố như đọc bưu thiếp. Gửi bạn: giỏi lắm. Lần này nó có hồi âm đó.",
+      },
+      "riddle": {
+        "text": {
+          "en": "A vaulted hall where old clocks pretend to be windows and the whole city mails its small stories. Begin where the letters wait.",
+          "vi": "Gian sảnh mái vòm, mấy cái đồng hồ cũ giả làm cửa sổ, cả thành phố gửi những mẩu chuyện nhỏ ở đó. Bắt đầu nơi thư đang chờ.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "postoffice",
+          "type": "GO_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Dear Reader: I hid my favorite hall in a riddle. Guess where it stands, or let a neighbor or a cyclo read it aloud.",
+          "title": "A riddle for the letters",
+        },
+        "vi": {
+          "description": "Gửi bạn đọc: mình giấu gian sảnh mình thích trong một câu đố. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô đọc giúp.",
+          "title": "Câu đố cho những lá thư",
         },
       },
     },
@@ -6608,6 +6923,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Mang tấm ảnh này đến cho anh Sơn ở Bưu điện Trung tâm.",
           "title": "Tấm ảnh cho bưu điện",
+        },
+      },
+    },
+    {
+      "giverNpcId": "square-tourist",
+      "payoff": {
+        "en": "You found them without the map. I will note this landmark the way I find everything: by accident.",
+        "vi": "Bạn tìm ra mà chẳng cần bản đồ. Tôi sẽ ghi lại cột mốc này theo cách tôi tìm mọi thứ: tình cờ.",
+      },
+      "riddle": {
+        "text": {
+          "en": "Find the neighbor who gives every paper lantern a dramatic name before dusk. My 1998 map is no help; ask them to point.",
+          "vi": "Tìm người hàng xóm đặt cho mỗi chiếc lồng đèn giấy một cái tên thật kịch tính trước khi trời tối. Tấm bản đồ 1998 của tôi chịu; nhờ họ chỉ đường.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "vy",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I am proudly lost, so I made a riddle about a neighbor instead. Guess who, or let a neighbor or a cyclo say the name.",
+          "title": "A riddle, map optional",
+        },
+        "vi": {
+          "description": "Tôi lạc đường một cách tự hào, nên đố bạn về một người hàng xóm. Đoán xem là ai, hoặc để hàng xóm hay bác xích lô nói tên.",
+          "title": "Câu đố, khỏi cần bản đồ",
         },
       },
     },
@@ -6763,6 +7108,36 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Mang ly cà phê này cho Sơn ở bưu điện. Mình đang soạn một khúc ballad nhỏ về bước chân bạn; đi nhịp nhàng chút để điệp khúc nghe cho hay nhé.",
           "title": "Khúc ballad nhỏ cho chuyến đi",
+        },
+      },
+    },
+    {
+      "giverNpcId": "thao",
+      "payoff": {
+        "en": "You found the echo yourself. Now the ballad has a proper first verse.",
+        "vi": "Bạn tự tìm ra tiếng vọng rồi. Giờ khúc ballad đã có đoạn mở đầu đàng hoàng.",
+      },
+      "riddle": {
+        "text": {
+          "en": "Two red-brick bell towers keep the square’s best echo. The pigeons only pretend to conduct. Stand where it answers.",
+          "vi": "Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất của quảng trường. Mấy chú bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi nó vọng lại.",
+        },
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "cathedral",
+          "type": "GO_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I caught a melody in the square and set it as a riddle. Solve where it lives, or let a neighbor or a cyclo tell you.",
+          "title": "A riddle for the echo",
+        },
+        "vi": {
+          "description": "Mình bắt được một giai điệu ngoài quảng trường và đố bạn. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô mách cho.",
+          "title": "Câu đố cho tiếng vọng",
         },
       },
     },

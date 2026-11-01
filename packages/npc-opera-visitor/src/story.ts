@@ -1,5 +1,6 @@
 import type { NpcStory } from '@saigon/npc-kit'
 import { gag } from './seeds/gag'
+import { riddle } from './seeds/riddle'
 
 export const story: NpcStory = {
   seeds: [
@@ -18,6 +19,7 @@ export const story: NpcStory = {
         },
       },
     },
+    riddle,
   ],
   domain: {
     home: 'opera',

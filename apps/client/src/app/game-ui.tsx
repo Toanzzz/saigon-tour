@@ -20,6 +20,7 @@ import {
 } from '@/widgets/hud/panels'
 import { PartyInviteControls } from '@/widgets/hud/party'
 import { EmoteControls, PeoplePanel } from '@/widgets/hud/people'
+import { RideLine } from '@/widgets/hud/ride-line'
 import { TouchStick } from '@/widgets/hud/touch'
 import { WaitingNotice } from '@/widgets/hud/waiting'
 import { WardrobePanel } from '@/widgets/hud/wardrobe'
@@ -163,6 +164,7 @@ export function GameUI() {
               max="1"
               value={state.ride.progress}
             />
+            <RideLine />
           </div>
         </div>
       )}

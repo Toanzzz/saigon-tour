@@ -1,9 +1,12 @@
+import { isRevealed } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useEffect, useState } from 'react'
 import { m } from '@/shared/i18n'
 import { type GameState, trackedQuest, update } from '@/shared/state/game'
 import { questHint } from '@/shared/state/quests'
+import { riddleClock } from '@/shared/state/riddles'
 import { twistSignal } from '@/shared/state/twists'
+import { clock } from '@/shared/state/ui'
 import { Icon } from '@/shared/ui/icons'
 
 const TWIST_EYEBROW_MS = 6000
@@ -24,6 +27,8 @@ function useRecentTwist(): boolean {
 export function Objective({ state }: { state: GameState }) {
   const quest = trackedQuest(state)
   const twisted = useRecentTwist()
+  const now = useSelector(clock, (value) => value.now)
+  const riddling = Boolean(quest?.riddle) && !!quest && !isRevealed(quest, now)
   return (
     <button
       type="button"
@@ -36,14 +41,24 @@ export function Objective({ state }: { state: GameState }) {
         <span className="eyebrow">
           {twisted
             ? m.twist_eyebrow()
-            : quest
-              ? m.objective_needs_hand()
-              : m.objective_memory()}
+            : riddling
+              ? m.riddle_eyebrow()
+              : quest
+                ? m.objective_needs_hand()
+                : m.objective_memory()}
         </span>
         <strong>{quest?.title ?? m.map_title()}</strong>
         <span className="objective-hint">
           {quest ? questHint(quest) : m.objective_say_hello()}
         </span>
+        {riddling && quest && (
+          <span className="objective-riddle-options">
+            {m.riddle_options({ time: riddleClock(quest, now) })}
+          </span>
+        )}
+      </span>
+      <span className="objective-riddle-mark" aria-hidden="true">
+        {riddling ? '?' : null}
       </span>
       <Icon name={quest ? 'leaf' : 'book'} size={22} />
     </button>

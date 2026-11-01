@@ -85,3 +85,42 @@ among the giver's last three completed quests.
 - Dense mobile views exceed the initial 300k triangle target.
 - QA scripts out of date: `qa-avatar` (looks for the old “Young woman” title button), `qa-ride` (Vietnamese option label under an en-US context), `qa-journal` (waits on an un-offered quest), and `qa-audio` (imports the old `apps/client/src/audio/index.ts` path).
 - Open tasks in `docs/tasks.md`: demo seed, desktop perf pass, VR perf pass, voice, AI-generated art, open-weight path, demo video, and submission.
+
+## Phase 3 — Clues, spends, and rides
+
+Every step has an automatic core clue. People steps (`TALK_TO`/`DELIVER`/`BRING`)
+append `· now at {place}` through `stepCopy` when a neighbor's live placement in
+the `city` store differs from home. A BUY step the player cannot afford is
+fronted on credit: `buyMarketItem` and the market panel use `creditEligible`
+(shared engine) so an unaffordable active-quest BUY sends `{ purchase, credit }`
+and shows `m.market_on_credit`; the engine grants the item without charging.
+The server's `incomplete` fallback names the next step and its place through the
+shared `stepText(step, locale)` (`packages/shared/src/quest/step-text.ts`).
+
+Six givers (`thao`, `alex`, `son`, `opera-visitor`, `square-tourist`,
+`postcard-reader`) carry an additional riddle seed (`src/seeds/riddle.ts`) whose
+step 0 is hidden. While `!isRevealed(quest, now)` the answer is hidden at the
+source: `stepCopy`/`questHint`/`stepLine` return the riddle text for step 0,
+`questTarget` and `hub` `objectiveLocation` and `map` `questPin` return null, and
+the world-label marker (`npcMarker`) skips a hidden step 0. The objective and
+journal show the riddle with a `?` and the options
+`Ask a neighbor · Ride a cyclo · Clear in m:ss`. `shared/state/riddles.ts`
+watches quests plus the shared UI clock (reference-counted with the waiting
+notice), toasts `riddle_revealed_{talk,cyclo,time}` or `riddle_sharp_eye`, and is
+reset in `restart()` and test setup. A greet that reveals the riddle replies with
+the authored `That riddle? {stepText(answer)}` on the server and in `offline()`.
+`turn.ts` adds `Riddle unrevealed: …. Hint, never answer.` for the giver while
+hidden and `You just told the player the riddle answer: …` on the turn it
+reveals.
+
+Each ride mode states its trade-off in `mode_*_description`. `board()` sends
+`{ spend, amount, mode }` and advances quests locally, so `spent` and a cyclo
+riddle reveal show before the next NPC turn. `features/transport/gossip.ts`
+chooses deterministic driver lines from `(mode, destination, city event, tracked
+quest)`; the cyclo talks at progress 0.2/0.5/0.8 and its last line reveals a
+hidden riddle. `widgets/hud/ride-line.tsx` renders the current line (XR toasts).
+`features/transport/asides.ts` narrates arrivals at most once per 20 s.
+
+Completion bonuses show on the reward card: `reward_thrifty` and `reward_sharp`
+read `reward.bonus`. The hub `cheapestRide` suggests walking when the next leg is
+under 70 units.

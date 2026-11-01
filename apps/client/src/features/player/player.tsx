@@ -16,6 +16,7 @@ import {
   stepFootCarry,
 } from '@/features/carry'
 import { Pet } from '@/features/pets'
+import { arriveAside } from '@/features/transport/asides'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, update, visit } from '@/shared/state/game'
@@ -114,6 +115,13 @@ export function Player() {
       const place = (Object.keys(PLACES) as (keyof typeof PLACES)[]).find(
         (key) => distance(position, PLACES[key].at) < 10
       )
+      // A walk into a new place earns a narrator aside (throttled in asides.ts).
+      if (place && !state.ride && place !== state.world.locationId)
+        arriveAside(
+          'walk',
+          distance(PLACES[state.stop].at, PLACES[place].at),
+          place
+        )
       update({ position, ...(place ? visit(state, place) : {}) })
     }
   })

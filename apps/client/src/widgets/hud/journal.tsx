@@ -1,16 +1,20 @@
-import { QUEST_EXPIRY_MS } from '@saigon/shared'
+import { isRevealed, QUEST_EXPIRY_MS } from '@saigon/shared'
 import { useMutation } from '@tanstack/react-query'
+import { useSelector } from '@tanstack/react-store'
 import { close } from '@/app/actions'
 import { abandonQuest } from '@/shared/api/quests'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
-import { questHint, stepCopy } from '@/shared/state/quests'
+import { questHint, stepCopy, stepLine } from '@/shared/state/quests'
+import { riddleClock } from '@/shared/state/riddles'
+import { clock } from '@/shared/state/ui'
 import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 
 export function JournalPanel({ state }: { state: GameState }) {
   const abandon = useMutation({ mutationFn: abandonQuest })
+  const now = useSelector(clock, (value) => value.now)
   return (
     <Dialog
       title={m.journal_title()}
@@ -72,12 +76,18 @@ export function JournalPanel({ state }: { state: GameState }) {
                         </span>
                       </span>
                     ) : (
-                      stepCopy(step)
+                      stepLine(quest, index)
                     )}
                   </li>
                 )
               })}
             </ol>
+            {quest.riddle && !isRevealed(quest, now) && (
+              <p className="journal-riddle-options">
+                <span aria-hidden="true">? </span>
+                {m.riddle_options({ time: riddleClock(quest, now) })}
+              </p>
+            )}
             <p>{questHint(quest)}</p>
             <span className="journal-reward">
               {m.journal_reward({
