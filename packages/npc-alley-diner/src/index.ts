@@ -1,19 +1,14 @@
-import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { defineNpc } from '@saigon/npc-kit'
+import { look } from './look'
+import { place } from './place'
+import { profile } from './profile'
+import { story } from './story'
 
-const look: NpcLook = {
-  body: 'own',
-  color: '#baddc1',
-  portraitBg: 'var(--avatar-color)',
-  animation: 'sit',
-  avatar: true,
-}
-
-export default defineResident({
+export default defineNpc({
   id: 'alley-diner',
-  name: { en: 'Trang', vi: 'Trang' },
-  roles: { en: 'Food enthusiast', vi: 'Người mê ẩm thực' },
-  place: { en: 'the food alley', vi: 'hẻm ẩm thực' },
-  home: 'alley',
-  at: [-23, 31],
+  profile,
+  story,
+  unlocks: [],
   look,
+  place,
 })

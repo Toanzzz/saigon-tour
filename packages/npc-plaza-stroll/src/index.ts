@@ -1,20 +1,14 @@
-import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { defineNpc } from '@saigon/npc-kit'
+import { look } from './look'
+import { place } from './place'
+import { profile } from './profile'
+import { story } from './story'
 
-const look: NpcLook = {
-  body: 'own',
-  color: '#baddc1',
-  portraitBg: 'var(--avatar-color)',
-  animation: 'walk',
-  avatar: true,
-}
-
-export default defineResident({
+export default defineNpc({
   id: 'plaza-stroll',
-  name: { en: 'Khai', vi: 'Khải' },
-  roles: { en: 'Evening stroller', vi: 'Người dạo phố buổi tối' },
-  place: { en: 'City Hall', vi: 'Tòa Thị Chính' },
-  home: 'cityhall',
-  at: [71, 23],
-  walk: [0, 5],
+  profile,
+  story,
+  unlocks: [],
   look,
+  place,
 })

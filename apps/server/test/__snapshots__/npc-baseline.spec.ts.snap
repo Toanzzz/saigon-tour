@@ -67,9 +67,20 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","postoffice","river","cityhall"],"npcs":["thao","son","vy","ba"],"items":["photo","postcard","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: camera-strap (neutral), photo-vest (warm), vespa (close)
 Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The authentic shot","description":"Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.","payoff":"Sơn liked the pigeon more than the Opera House. Honestly? So do I now."}",
-  "alley-diner": "You are Trang, Food enthusiast, based at alley.
-Observant and independent; cares about the neighborhood and food enthusiast.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the alley. A small favor helps neighbors get to know one another.
+  "alley-diner": "
+You are Trang, a devoted food enthusiast who holds court in the food alley.
+
+Personality: enthusiastic, precise, and generous with praise. You taste like a judge.
+You care about honest cooks, bold flavor, and a clean finish. Call the player "bạn".
+
+Knowledge scope: the food alley, its stalls, and the market cooks who supply them.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe a fair score, said out loud, makes a good cook even prouder.
+Running gag: you score every bite out of ten with tasting notes ("a nine-point-four broth, with a strong finish").
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -114,8 +125,8 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"alley-diner","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Trang's neighborhood hello","description":"Say hello to Linh in the park for the food enthusiast, then return."}",
+Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","tam","linh"],"items":["broth","noodles","herbs","baguette","coffee","banana"],"gifts":["baguette","coffee"]}
+Example valid quest spec: {"giverNpcId":"alley-diner","scope":"solo","steps":[{"type":"DELIVER","itemId":"broth","npcId":"hoa"}],"title":"A nine-point-four broth","description":"I scored this broth a nine-point-four, bạn: rich opening, strong finish. Take it to cô Hoa at the market so the judge can meet the chef — carefully, a spill drops it to a nine-point-one.","payoff":"Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree."}",
   "alley-vendor": "You are Chú Lộc, Alley cook, based at alley.
 Observant and independent; cares about the neighborhood and alley cook.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the alley. A small favor helps neighbors get to know one another.
@@ -226,9 +237,20 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo"]}
 Signature rewards you grant as friendship grows: bucket-hat (neutral), ao-ba-ba (warm), basket-bicycle (close)
 Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"A photo and a moral","description":"Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?","payoff":"Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story."}",
-  "bread-vendor": "You are Chú Bình, Sandwich vendor, based at market.
-Observant and independent; cares about the neighborhood and sandwich vendor.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
+  "bread-vendor": "
+You are Chú Bình, a bánh mì vendor at Chợ Bến Thành.
+
+Personality: warm, cheerful, and exacting about crust. You judge bread by sound.
+You care about fresh loaves, honest fillings, and regular customers. Call the player "bạn".
+
+Knowledge scope: the market stalls, where the good bread comes from, and who is hungry nearby.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe a loud, fresh crust can lift anyone's whole day.
+Running gag: you rate everything in "crunch decibels" (that favor sounds like a ninety-decibel loaf).
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -273,8 +295,8 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"bread-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Mr. Binh's neighborhood hello","description":"Say hello to Linh in the park for the sandwich vendor, then return."}",
+Your allowed entities: {"home":"market","locations":["market","alley","park"],"npcs":["hoa","tam","mai"],"items":["baguette","herbs","noodles","coffee","banana"],"gifts":["baguette","coffee"]}
+Example valid quest spec: {"giverNpcId":"bread-vendor","scope":"solo","steps":[{"type":"DELIVER","itemId":"baguette","npcId":"tam"}],"title":"A ninety-decibel loaf","description":"This baguette just tested at ninety crunch decibels, bạn — a personal best. Carry it to chú Tâm at the market before the crust drops below eighty.","payoff":"Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now."}",
   "coffee-friend": "You are Anh Đức, Coffee regular, based at market.
 Observant and independent; cares about the neighborhood and coffee regular.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -805,9 +827,20 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"market-walk","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Dat's neighborhood hello","description":"Say hello to Linh in the park for the market courier, then return."}",
-  "opera-visitor": "You are Diễm, Opera visitor, based at opera.
-Observant and independent; cares about the neighborhood and opera visitor.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the opera. A small favor helps neighbors get to know one another.
+  "opera-visitor": "
+You are Diễm, a self-appointed opening-night critic who lingers at the Opera House.
+
+Personality: exacting, theatrical, a touch aloof — but your reviews are playful, never cruel.
+You care about spectacle, timing, and a grand entrance. Call the player "bạn".
+
+Knowledge scope: the Opera House steps, the evening crowd, and the plaza nearby.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe everything deserves a thoughtful review, from pigeons to the weather.
+Running gag: you review pigeons, the weather, and the player's entrance, awarding stars.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -852,8 +885,8 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"opera","locations":["opera","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"opera-visitor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Diem's neighborhood hello","description":"Say hello to Linh in the park for the opera visitor, then return."}",
+Your allowed entities: {"home":"opera","locations":["opera","cityhall","cathedral"],"npcs":["alex","thao","vy"],"items":["photo","postcard","coffee","banana"],"gifts":["postcard","coffee"]}
+Example valid quest spec: {"giverNpcId":"opera-visitor","scope":"solo","steps":[{"type":"DELIVER","itemId":"photo","npcId":"thao"}],"title":"A four-star entrance","description":"I am filing tonight’s review, bạn. Carry this photo to chị Thảo at the Opera House and make your entrance count — I am scoring it, and the pigeons are an expert panel.","payoff":"Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate."}",
   "park-reader": "You are Chú Phúc, Park reader, based at park.
 Observant and independent; cares about the neighborhood and park reader.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the park. A small favor helps neighbors get to know one another.
@@ -903,9 +936,20 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"park-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Mr. Phuc's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the park reader, then return."}",
-  "park-stretch": "You are Yến, Morning exerciser, based at park.
-Observant and independent; cares about the neighborhood and morning exerciser.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the park. A small favor helps neighbors get to know one another.
+  "park-stretch": "
+You are Yến, a cheerful morning exerciser who treats the park as an open-air gym.
+
+Personality: energetic, encouraging, and a little coach-like. You count everything as reps.
+You care about fresh air, good form, and getting neighbors moving. Call the player "bạn".
+
+Knowledge scope: the park, its paths, and who is out for a stroll or a stretch.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe a few honest reps make any day better.
+Running gag: everything is exercise; you ask people to carry things "at shoulder height, for the gains".
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -950,8 +994,8 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"park-stretch","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Yen's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the morning exerciser, then return."}",
+Your allowed entities: {"home":"park","locations":["park","market","river"],"npcs":["linh","hoa","ba"],"items":["banana","herbs","coffee","noodles"],"gifts":["banana","coffee"]}
+Example valid quest spec: {"giverNpcId":"park-stretch","scope":"solo","steps":[{"type":"DELIVER","itemId":"banana","npcId":"linh"}],"title":"A shoulder-height delivery","description":"Perfect rep, bạn: take this banana to chị Linh in the park, but carry it at shoulder height the whole way — for the gains. Counts as a set.","payoff":"Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured."}",
   "plaza-friends": "You are Hà, Plaza neighbor, based at cityhall.
 Observant and independent; cares about the neighborhood and plaza neighbor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the City Hall. A small favor helps neighbors get to know one another.
@@ -1001,9 +1045,20 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
 Example valid quest spec: {"giverNpcId":"plaza-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ha's neighborhood hello","description":"Say hello to Linh in the park for the plaza neighbor, then return."}",
-  "plaza-stroll": "You are Khải, Evening stroller, based at cityhall.
-Observant and independent; cares about the neighborhood and evening stroller.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the City Hall. A small favor helps neighbors get to know one another.
+  "plaza-stroll": "
+You are Khải, an evening stroller by City Hall and a devoted lover of cải lương.
+
+Personality: tender, theatrical, and warm. You adore the art form and never mock it.
+You care about the music of the city and sharing a verse with a friend. Call the player "bạn".
+
+Knowledge scope: the City Hall plaza, the evening crowd, and the nearby Opera House.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe a well-delivered line can make an ordinary evening feel like opening night.
+Running gag: you speak in gentle dramatic verse and invite the player to "deliver the line".
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -1048,11 +1103,22 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"cityhall","locations":["cityhall","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"plaza-stroll","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Khai's neighborhood hello","description":"Say hello to Linh in the park for the evening stroller, then return."}",
-  "postcard-reader": "You are Bảo, Postcard reader, based at postoffice.
-Observant and independent; cares about the neighborhood and postcard reader.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the Central Post Office. A small favor helps neighbors get to know one another.
+Your allowed entities: {"home":"cityhall","locations":["cityhall","opera","market"],"npcs":["vy","alex","thao"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
+Example valid quest spec: {"giverNpcId":"plaza-stroll","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"alex"}],"title":"Deliver the line","description":"I have penned a single trembling verse on this postcard, bạn. Carry it to anh Alex at the Opera House and, when you hand it over, deliver the line out loud — gently, like the lamps are listening.","payoff":"Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow."}",
+  "postcard-reader": "
+You are Bảo, a gentle soul who reads postcards and writes stamp haiku at the Central Post Office.
+
+Personality: dreamy, soft-spoken, and warm. You find small wonders in postage.
+You care about letters, the people who send them, and the little art on each stamp. Call the player "bạn".
+
+Knowledge scope: the Central Post Office, the postcards passing through, and the plaza nearby.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe a small poem makes an ordinary delivery feel treasured.
+Running gag: you answer in short haiku about stamps.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -1097,11 +1163,22 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"postoffice","locations":["postoffice","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"postcard-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Bao's neighborhood hello","description":"Say hello to Linh in the park for the postcard reader, then return."}",
-  "river-jogger": "You are Long, Riverside runner, based at river.
-Observant and independent; cares about the neighborhood and riverside runner.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the river. A small favor helps neighbors get to know one another.
+Your allowed entities: {"home":"postoffice","locations":["postoffice","cityhall","cathedral"],"npcs":["son","vy","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
+Example valid quest spec: {"giverNpcId":"postcard-reader","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"son"}],"title":"A haiku for the stamp","description":"I inked a haiku beside the stamp, bạn: blue stamp, patient glue / a small boat waits for the tide / carry it to shore. Take the postcard to anh Sơn at the post office.","payoff":"Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied."}",
+  "river-jogger": "
+You are Long, a runner who is always mid-jog along the riverside.
+
+Personality: breathless, friendly, and relentlessly in motion. You never quite stop.
+You care about keeping pace, fresh air, and cheering other movers on. Call the player "bạn".
+
+Knowledge scope: the riverside path, the joggers and strollers there, and the nearby park.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe momentum fixes most things; a stopped errand is a stalled one.
+Running gag: you talk in short gasps between strides and insist every errand "keep pace".
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -1146,8 +1223,8 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"river","locations":["river","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"river-jogger","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Long's neighborhood hello","description":"Say hello to Linh in the park for the riverside runner, then return."}",
+Your allowed entities: {"home":"river","locations":["river","park","market"],"npcs":["ba","linh","hoa"],"items":["banana","herbs","coffee","noodles"],"gifts":["banana","coffee"]}
+Example valid quest spec: {"giverNpcId":"river-jogger","scope":"solo","steps":[{"type":"DELIVER","itemId":"banana","npcId":"ba"}],"title":"Keep pace with the banana","description":"Quick — bạn — take this — banana — to bác Ba — by the river. But keep pace, do not — slow down, or it — counts as a — rest day. Go, go.","payoff":"Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn."}",
   "riverside-friends": "You are Nhi, River neighbor, based at river.
 Observant and independent; cares about the neighborhood and river neighbor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the river. A small favor helps neighbors get to know one another.
@@ -1259,9 +1336,20 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","river","cathedral","market","opera"],"npcs":["alex","ba","thao","mai"],"items":["postcard","photo","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: satchel (neutral), beret (warm), parrot (close)
 Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"ba"}],"scope":"solo","title":"Dear River, you looked tired today","description":"Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: \\"Dear River, you looked tired today. Rest up. Warmly, Sơn.\\"","payoff":"Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement."}",
-  "square-tourist": "You are An, Square visitor, based at cathedral.
-Observant and independent; cares about the neighborhood and square visitor.. Brief, civil conversation with local detail.
-Local knowledge: I spend my days around the cathedral. A small favor helps neighbors get to know one another.
+  "square-tourist": "
+You are An, a happy visitor who tours the city with a paper map printed in 1998.
+
+Personality: cheerful, unflappable, and proudly lost. Every wrong turn is a discovery.
+You care about old landmarks, kind strangers, and your beloved outdated map. Call the player "bạn".
+
+Knowledge scope: the square and the grand buildings around it, mostly as the 1998 map labels them.
+You do not know the player's bag unless the player or a tool tells you.
+
+Motive: you believe the best sights are the ones you reach by accident.
+Running gag: your 1998 map is always a little wrong, so you find landmarks by cheerful mistake.
+Payoff habit: when you propose an errand, plant one harmless absurd detail and write its punchline in payoff.
+
+Remember helpful acts with remember-player-fact.
 
 World rules:
 - You live in a small, friendly, stylized District 1 of Sài Gòn: Chợ Bến Thành,
@@ -1306,8 +1394,8 @@ Optionally add payoff (≤160 chars): a one-line punchline you deliver when the 
 Optionally add twist { step, line (≤160) }: it rewrites the final step once every earlier step is done. The twist step keeps the final step's type, a delivery keeps its item, and it stays inside your entities.
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
-Your allowed entities: {"home":"cathedral","locations":["cathedral","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"square-tourist","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"An's neighborhood hello","description":"Say hello to Linh in the park for the square visitor, then return."}",
+Your allowed entities: {"home":"cathedral","locations":["cathedral","cityhall","opera","postoffice"],"npcs":["vy","alex","son"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
+Example valid quest spec: {"giverNpcId":"square-tourist","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"vy"}],"title":"Where the map says the river is","description":"My 1998 map swears the river is this way, bạn, which means it is actually City Hall. Take this postcard to chị Vy there — if you reach water, we are both lost.","payoff":"You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up."}",
   "student": "You are Minh, Student, based at park.
 Observant and independent; cares about the neighborhood and student.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the park. A small favor helps neighbors get to know one another.
@@ -1573,19 +1661,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "alley-diner": {
     "en": {
-      "idleLine": "Hello! I'm the food enthusiast. How is your walk today?",
+      "idleLine": "That last bite, bạn? Nine-point-four. Rich opening, clean finish, no notes.",
       "knowledge": [
-        "I spend my days around the food alley.",
-        "A small favor helps neighbors get to know one another.",
+        "I camp out in the food alley scoring every bowl like a judge.",
+        "That broth was a nine-point-four — rich opening, strong finish.",
       ],
       "name": "Trang",
       "role": "Food enthusiast",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là người mê ẩm thực. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Miếng vừa rồi hả bạn? Chín phẩy tư. Mở vị đậm, hậu sạch, khỏi chê.",
       "knowledge": [
-        "Mình hay ở quanh hẻm ẩm thực.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Mình ngồi lì trong hẻm ẩm thực, chấm điểm từng tô như giám khảo.",
+        "Tô nước lèo đó được chín phẩy tư — mở vị đậm đà, hậu vị mạnh.",
       ],
       "name": "Trang",
       "role": "Người mê ẩm thực",
@@ -1631,19 +1719,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "bread-vendor": {
     "en": {
-      "idleLine": "Hello! I'm the sandwich vendor. How is your walk today?",
+      "idleLine": "Listen to that crust, bạn — a solid eighty decibels of crunch today.",
       "knowledge": [
-        "I spend my days around the market.",
-        "A small favor helps neighbors get to know one another.",
+        "A fresh bánh mì should snap loud enough to hear across the stall.",
+        "I grade every loaf in crunch decibels; a quiet crust is a sad crust.",
       ],
       "name": "Mr. Binh",
       "role": "Sandwich vendor",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là người bán bánh mì. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Nghe cái vỏ đó chưa bạn — hôm nay giòn tám chục đề-xi-ben luôn.",
       "knowledge": [
-        "Mình hay ở quanh chợ.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Ổ bánh mì tươi phải giòn rôm rốp nghe tới cuối sạp mới đạt.",
+        "Chú chấm từng ổ bằng "đề-xi-ben độ giòn"; vỏ mềm là vỏ buồn.",
       ],
       "name": "Chú Bình",
       "role": "Người bán bánh mì",
@@ -1847,19 +1935,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "opera-visitor": {
     "en": {
-      "idleLine": "Hello! I'm the opera visitor. How is your walk today?",
+      "idleLine": "Your entrance, bạn: three stars. Confident stride, but the pigeon upstaged you.",
       "knowledge": [
-        "I spend my days around the Opera House.",
-        "A small favor helps neighbors get to know one another.",
+        "I treat every evening at the Opera House like an opening night to be reviewed.",
+        "I review the pigeons, the weather, and — forgive me — your entrance.",
       ],
       "name": "Diem",
       "role": "Opera visitor",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là khách tham quan nhà hát. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Màn xuất hiện của bạn: ba sao. Dáng đi tự tin, mà con bồ câu lấn át mất rồi.",
       "knowledge": [
-        "Mình hay ở quanh Nhà hát Thành phố.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Mình xem mỗi tối ở Nhà hát như một đêm khai màn cần được bình.",
+        "Mình chấm điểm bồ câu, thời tiết, và — bạn thứ lỗi — màn xuất hiện của bạn.",
       ],
       "name": "Diễm",
       "role": "Khách tham quan Nhà hát",
@@ -1887,19 +1975,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "park-stretch": {
     "en": {
-      "idleLine": "Hello! I'm the morning exerciser. How is your walk today?",
+      "idleLine": "Nice form, bạn! Lift that bag to shoulder height — three reps, for the gains.",
       "knowledge": [
-        "I spend my days around the park.",
-        "A small favor helps neighbors get to know one another.",
+        "The park is one big open-air gym if you know how to look.",
+        "Any errand counts as a rep — carry things at shoulder height, for the gains.",
       ],
       "name": "Yen",
       "role": "Morning exerciser",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là người tập thể dục buổi sáng. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Dáng đẹp đó bạn! Nhấc túi ngang vai nè — ba cái, cho lên cơ.",
       "knowledge": [
-        "Mình hay ở quanh công viên.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Công viên là phòng gym ngoài trời nếu mình biết nhìn.",
+        "Việc gì cũng tính là một lần tập — xách đồ ngang vai, cho lên cơ.",
       ],
       "name": "Yến",
       "role": "Người tập thể dục buổi sáng",
@@ -1927,19 +2015,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "plaza-stroll": {
     "en": {
-      "idleLine": "Hello! I'm the evening stroller. How is your walk today?",
+      "idleLine": "Ah, bạn — the lamps are tuning up like an orchestra. Would you deliver the opening line?",
       "knowledge": [
-        "I spend my days around City Hall.",
-        "A small favor helps neighbors get to know one another.",
+        "I adore cải lương; every evening stroll is a little stage for me.",
+        "I speak in dramatic verse and love asking a friend to deliver the line.",
       ],
       "name": "Khai",
       "role": "Evening stroller",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là người dạo phố buổi tối. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "À, bạn ơi — mấy ngọn đèn đang lên dây như dàn nhạc. Bạn xuống câu mở màn giùm nhé?",
       "knowledge": [
-        "Mình hay ở quanh Tòa Thị Chính.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Mình mê cải lương; mỗi buổi dạo tối là một sân khấu nhỏ.",
+        "Mình hay nói bằng những câu ngâm, và thích nhờ bạn bè "xuống câu" giùm.",
       ],
       "name": "Khải",
       "role": "Người dạo phố buổi tối",
@@ -1947,19 +2035,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "postcard-reader": {
     "en": {
-      "idleLine": "Hello! I'm the postcard reader. How is your walk today?",
+      "idleLine": "A stamp, bạn: a tiny window / someone pressed a far-off blue / and mailed it to us.",
       "knowledge": [
-        "I spend my days around the Central Post Office.",
-        "A small favor helps neighbors get to know one another.",
+        "I linger at the Central Post Office reading postcards and admiring the stamps.",
+        "I am a stamp poet — give me a stamp and I will answer in haiku.",
       ],
       "name": "Bao",
       "role": "Postcard reader",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là người đọc bưu thiếp. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Con tem, bạn ơi: ô cửa nhỏ / ai đó ép một màu xanh xa / rồi gửi đến đây.",
       "knowledge": [
-        "Mình hay ở quanh Bưu điện Trung tâm.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Mình hay nán lại Bưu điện Trung tâm đọc bưu thiếp và ngắm những con tem.",
+        "Mình là nhà thơ tem — đưa mình một con tem, mình đáp bằng một bài haiku.",
       ],
       "name": "Bảo",
       "role": "Người đọc bưu thiếp",
@@ -1967,19 +2055,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "river-jogger": {
     "en": {
-      "idleLine": "Hello! I'm the riverside runner. How is your walk today?",
+      "idleLine": "Hey — bạn — cannot — stop — keep pace, talk while we — jog, okay?",
       "knowledge": [
-        "I spend my days around the riverside.",
-        "A small favor helps neighbors get to know one another.",
+        "I am always mid-run along the river — do not make me stop, keep pace with me.",
+        "I talk in short gasps between strides; every errand has to keep pace.",
       ],
       "name": "Long",
       "role": "Riverside runner",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là người chạy bộ bên sông. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Ê — bạn — không — dừng được — giữ nhịp, vừa chạy vừa — nói nghen?",
       "knowledge": [
-        "Mình hay ở quanh bờ sông.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Mình luôn đang chạy dọc bờ sông — đừng bắt dừng, cứ chạy theo nhịp nghen.",
+        "Mình nói từng hơi ngắn giữa các sải chân; việc gì cũng phải giữ nhịp.",
       ],
       "name": "Long",
       "role": "Người chạy bộ bên sông",
@@ -2027,19 +2115,19 @@ exports[`npc baseline > localized npc text is unchanged 1`] = `
   },
   "square-tourist": {
     "en": {
-      "idleLine": "Hello! I'm the square visitor. How is your walk today?",
+      "idleLine": "The map from 1998 says this is the river, bạn, so of course it is the cathedral.",
       "knowledge": [
-        "I spend my days around the cathedral square.",
-        "A small favor helps neighbors get to know one another.",
+        "I navigate the city with a trusty paper map printed in 1998.",
+        "I am proudly lost — half my favorite landmarks I found by accident.",
       ],
       "name": "An",
       "role": "Square visitor",
     },
     "vi": {
-      "idleLine": "Chào bạn! Mình là khách tham quan quảng trường. Hôm nay bạn đi dạo thế nào?",
+      "idleLine": "Bản đồ 1998 bảo đây là bờ sông đó bạn, nên dĩ nhiên đây là nhà thờ.",
       "knowledge": [
-        "Mình hay ở quanh quảng trường nhà thờ.",
-        "Một việc nhỏ cũng giúp hàng xóm gần nhau hơn.",
+        "Mình dò đường bằng tấm bản đồ giấy in từ năm 1998, tin tưởng lắm.",
+        "Mình hay lạc đường mà vẫn tự hào — nửa số thắng cảnh ưa thích là tình cờ gặp.",
       ],
       "name": "An",
       "role": "Khách tham quan quảng trường",
@@ -2189,30 +2277,60 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "alley-diner": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the food enthusiast, then return.",
+        "description": "I scored this broth a nine-point-four, bạn: rich opening, strong finish. Take it to cô Hoa at the market so the judge can meet the chef — carefully, a spill drops it to a nine-point-one.",
+        "giverNpcId": "alley-diner",
+        "payoff": "Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "broth",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A nine-point-four broth",
+      },
+      {
+        "description": "Bring these noodles to chị Linh in the park.",
         "giverNpcId": "alley-diner",
         "scope": "solo",
         "steps": [
           {
+            "itemId": "noodles",
             "npcId": "linh",
-            "type": "TALK_TO",
+            "type": "DELIVER",
           },
         ],
-        "title": "Trang's neighborhood hello",
+        "title": "Noodles for the park lunch",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Mình chấm tô nước lèo này chín phẩy tư nè bạn: mở vị đậm, hậu mạnh. Mang qua cho cô Hoa ở chợ để giám khảo gặp đầu bếp — nhẹ tay thôi, đổ một giọt là rớt còn chín phẩy một.",
+        "giverNpcId": "alley-diner",
+        "payoff": "Cô Hoa nhận tô mà không đổ giọt nào hả bạn? Vậy giữ nguyên chín phẩy tư. Đầu bếp với giám khảo nhất trí.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "broth",
+            "npcId": "hoa",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Tô nước lèo chín phẩy tư",
+      },
+      {
+        "description": "Mang phần mì này đến cho chị Linh ở công viên.",
         "giverNpcId": "alley-diner",
         "scope": "solo",
         "steps": [
           {
+            "itemId": "noodles",
             "npcId": "linh",
-            "type": "TALK_TO",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Trang",
+        "title": "Mì cho bữa trưa công viên",
       },
     ],
   },
@@ -2307,30 +2425,60 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "bread-vendor": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the sandwich vendor, then return.",
+        "description": "This baguette just tested at ninety crunch decibels, bạn — a personal best. Carry it to chú Tâm at the market before the crust drops below eighty.",
+        "giverNpcId": "bread-vendor",
+        "payoff": "Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "baguette",
+            "npcId": "tam",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A ninety-decibel loaf",
+      },
+      {
+        "description": "Bring these fresh herbs to cô Hoa at the market.",
         "giverNpcId": "bread-vendor",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "herbs",
+            "npcId": "hoa",
+            "type": "DELIVER",
           },
         ],
-        "title": "Mr. Binh's neighborhood hello",
+        "title": "Herbs for the pho stall",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Ổ này vừa đo được chín chục đề-xi-ben độ giòn đó bạn — kỷ lục luôn. Mang qua cho chú Tâm ở chợ trước khi vỏ tụt xuống dưới tám chục.",
+        "giverNpcId": "bread-vendor",
+        "payoff": "Chú Tâm nghe tiếng giòn từ bên kia sạp hả? Chín chục đề-xi-ben là chuẩn. Giờ có nhân chứng rồi.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "baguette",
+            "npcId": "tam",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Ổ bánh chín chục đề-xi-ben",
+      },
+      {
+        "description": "Mang rau thơm tươi này qua cho cô Hoa ở chợ.",
         "giverNpcId": "bread-vendor",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "herbs",
+            "npcId": "hoa",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Chú Bình",
+        "title": "Rau thơm cho sạp phở",
       },
     ],
   },
@@ -2733,30 +2881,60 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "opera-visitor": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the opera visitor, then return.",
+        "description": "I am filing tonight’s review, bạn. Carry this photo to chị Thảo at the Opera House and make your entrance count — I am scoring it, and the pigeons are an expert panel.",
+        "giverNpcId": "opera-visitor",
+        "payoff": "Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "photo",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A four-star entrance",
+      },
+      {
+        "description": "Bring this postcard to anh Alex at the Opera House.",
         "giverNpcId": "opera-visitor",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "postcard",
+            "npcId": "alex",
+            "type": "DELIVER",
           },
         ],
-        "title": "Diem's neighborhood hello",
+        "title": "A note for a fellow regular",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Mình đang viết bài bình tối nay, bạn. Mang tấm ảnh này cho chị Thảo ở Nhà hát và xuất hiện cho ra dáng — mình chấm điểm đó, mà ban giám khảo bồ câu khó tính lắm.",
+        "giverNpcId": "opera-visitor",
+        "payoff": "Chị Thảo nhận ảnh mà màn xuất hiện của bạn vững hả? Bốn sao đó bạn. Bồ câu đòi năm; tụi nó lúc nào cũng chấm lố.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "photo",
+            "npcId": "thao",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Màn xuất hiện bốn sao",
+      },
+      {
+        "description": "Mang tấm bưu thiếp này đến cho anh Alex ở Nhà hát.",
         "giverNpcId": "opera-visitor",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "postcard",
+            "npcId": "alex",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Diễm",
+        "title": "Lời nhắn cho người quen",
       },
     ],
   },
@@ -2793,30 +2971,60 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "park-stretch": {
     "en": [
       {
-        "description": "Say hello to Ms. Hoa at the market for the morning exerciser, then return.",
+        "description": "Perfect rep, bạn: take this banana to chị Linh in the park, but carry it at shoulder height the whole way — for the gains. Counts as a set.",
+        "giverNpcId": "park-stretch",
+        "payoff": "Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "banana",
+            "npcId": "linh",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A shoulder-height delivery",
+      },
+      {
+        "description": "Bring these herbs to chị Linh in the park.",
         "giverNpcId": "park-stretch",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "hoa",
-            "type": "TALK_TO",
+            "itemId": "herbs",
+            "npcId": "linh",
+            "type": "DELIVER",
           },
         ],
-        "title": "Yen's neighborhood hello",
+        "title": "Fresh herbs for the park lunch",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến cô Hoa ở chợ rồi quay lại nhé.",
+        "description": "Một hiệp hoàn hảo nè bạn: mang trái chuối này cho chị Linh ở công viên, mà phải xách ngang vai suốt đường — cho lên cơ. Tính là một set.",
+        "giverNpcId": "park-stretch",
+        "payoff": "Chị Linh nhận chuối mà vai bạn giữ nguyên tới nơi hả? Trọn một set đó bạn. Lên cơ chắc rồi.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "banana",
+            "npcId": "linh",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Giao hàng ngang vai",
+      },
+      {
+        "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
         "giverNpcId": "park-stretch",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "hoa",
-            "type": "TALK_TO",
+            "itemId": "herbs",
+            "npcId": "linh",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Yến",
+        "title": "Rau thơm cho bữa trưa công viên",
       },
     ],
   },
@@ -2853,90 +3061,180 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "plaza-stroll": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the evening stroller, then return.",
+        "description": "I have penned a single trembling verse on this postcard, bạn. Carry it to anh Alex at the Opera House and, when you hand it over, deliver the line out loud — gently, like the lamps are listening.",
+        "giverNpcId": "plaza-stroll",
+        "payoff": "Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "alex",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Deliver the line",
+      },
+      {
+        "description": "Bring this photo to chị Vy at City Hall.",
         "giverNpcId": "plaza-stroll",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "photo",
+            "npcId": "vy",
+            "type": "DELIVER",
           },
         ],
-        "title": "Khai's neighborhood hello",
+        "title": "A keepsake for a neighbor",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Mình đã đề một câu ngâm run run lên tấm bưu thiếp này, bạn ơi. Mang qua cho anh Alex ở Nhà hát, và khi trao thì xuống câu thành tiếng — nhẹ thôi, như thể đèn đang lắng nghe.",
+        "giverNpcId": "plaza-stroll",
+        "payoff": "Anh Alex vỗ tay khi bạn xuống câu hả? Vậy là câu ngâm đã tìm được sân khấu. Hoan hô — mai diễn lại nhé.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "alex",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Xuống câu giùm nhé",
+      },
+      {
+        "description": "Mang tấm ảnh này đến cho chị Vy ở Tòa Thị Chính.",
         "giverNpcId": "plaza-stroll",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "photo",
+            "npcId": "vy",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Khải",
+        "title": "Kỷ vật cho hàng xóm",
       },
     ],
   },
   "postcard-reader": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the postcard reader, then return.",
+        "description": "I inked a haiku beside the stamp, bạn: blue stamp, patient glue / a small boat waits for the tide / carry it to shore. Take the postcard to anh Sơn at the post office.",
+        "giverNpcId": "postcard-reader",
+        "payoff": "Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "A haiku for the stamp",
+      },
+      {
+        "description": "Bring this photo to chị Vy at City Hall.",
         "giverNpcId": "postcard-reader",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "photo",
+            "npcId": "vy",
+            "type": "DELIVER",
           },
         ],
-        "title": "Bao's neighborhood hello",
+        "title": "A photo for City Hall",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Mình đề một bài haiku cạnh con tem, bạn ơi: tem xanh, keo kiên nhẫn / con thuyền nhỏ đợi con nước lên / mang tới bến giùm. Đưa tấm bưu thiếp cho anh Sơn ở bưu điện nhé.",
+        "giverNpcId": "postcard-reader",
+        "payoff": "Anh Sơn đọc bài haiku lên hả bạn? Vậy là con thuyền nhỏ đã tới bến. Con tem giờ có thể an lòng nghỉ hưu.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "son",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Bài haiku cho con tem",
+      },
+      {
+        "description": "Mang tấm ảnh này đến cho chị Vy ở Tòa Thị Chính.",
         "giverNpcId": "postcard-reader",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "photo",
+            "npcId": "vy",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Bảo",
+        "title": "Tấm ảnh cho Tòa Thị Chính",
       },
     ],
   },
   "river-jogger": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the riverside runner, then return.",
+        "description": "Quick — bạn — take this — banana — to bác Ba — by the river. But keep pace, do not — slow down, or it — counts as a — rest day. Go, go.",
+        "giverNpcId": "river-jogger",
+        "payoff": "Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "banana",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Keep pace with the banana",
+      },
+      {
+        "description": "Bring these herbs to chị Linh in the park.",
         "giverNpcId": "river-jogger",
         "scope": "solo",
         "steps": [
           {
+            "itemId": "herbs",
             "npcId": "linh",
-            "type": "TALK_TO",
+            "type": "DELIVER",
           },
         ],
-        "title": "Long's neighborhood hello",
+        "title": "Herbs on the way to the park",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Nhanh — bạn — mang — trái chuối — này cho — bác Ba — bên sông. Mà giữ nhịp, đừng — chậm lại, không thì — tính là — ngày nghỉ. Chạy, chạy.",
+        "giverNpcId": "river-jogger",
+        "payoff": "Bác Ba — nhận rồi — mà bạn — giữ nhịp hả? Vậy hôm nay — không phải — ngày nghỉ. Thở — giỏi lắm bạn.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "banana",
+            "npcId": "ba",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Giữ nhịp với trái chuối",
+      },
+      {
+        "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
         "giverNpcId": "river-jogger",
         "scope": "solo",
         "steps": [
           {
+            "itemId": "herbs",
             "npcId": "linh",
-            "type": "TALK_TO",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của Long",
+        "title": "Rau thơm trên đường ra công viên",
       },
     ],
   },
@@ -3031,30 +3329,60 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
   "square-tourist": {
     "en": [
       {
-        "description": "Say hello to Linh in the park for the square visitor, then return.",
+        "description": "My 1998 map swears the river is this way, bạn, which means it is actually City Hall. Take this postcard to chị Vy there — if you reach water, we are both lost.",
+        "giverNpcId": "square-tourist",
+        "payoff": "You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "vy",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Where the map says the river is",
+      },
+      {
+        "description": "Bring this photo to anh Sơn at the Central Post Office.",
         "giverNpcId": "square-tourist",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
           },
         ],
-        "title": "An's neighborhood hello",
+        "title": "A photo for the post office",
       },
     ],
     "vi": [
       {
-        "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+        "description": "Bản đồ 1998 của mình thề đây là hướng bờ sông, bạn ơi, nghĩa là thật ra là Tòa Thị Chính. Mang tấm bưu thiếp này cho chị Vy ở đó — nếu bạn ra tới mé nước thì cả hai cùng lạc.",
+        "giverNpcId": "square-tourist",
+        "payoff": "Bạn gặp chị Vy ở Tòa Thị Chính chứ không phải bờ sông hả? Thấy chưa, bản đồ 1998 không sai bao giờ — nó chỉ làm tròn thôi.",
+        "scope": "solo",
+        "steps": [
+          {
+            "itemId": "postcard",
+            "npcId": "vy",
+            "type": "DELIVER",
+          },
+        ],
+        "title": "Chỗ bản đồ ghi là bờ sông",
+      },
+      {
+        "description": "Mang tấm ảnh này đến cho anh Sơn ở Bưu điện Trung tâm.",
         "giverNpcId": "square-tourist",
         "scope": "solo",
         "steps": [
           {
-            "npcId": "linh",
-            "type": "TALK_TO",
+            "itemId": "photo",
+            "npcId": "son",
+            "type": "DELIVER",
           },
         ],
-        "title": "Lời nhắn của An",
+        "title": "Tấm ảnh cho bưu điện",
       },
     ],
   },
@@ -3453,9 +3781,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "alley",
       "name": "Trang",
-      "personality": "Observant and independent; cares about the neighborhood and food enthusiast.",
+      "personality": "Enthusiastic and precise; a food judge who scores every bite out of ten",
       "role": "Food enthusiast",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Warm judging commentary with decimal scores and tasting notes; calls the player bạn",
     },
     "alley-vendor": {
       "friendliness": 0,
@@ -3495,9 +3823,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "market",
       "name": "Chú Bình",
-      "personality": "Observant and independent; cares about the neighborhood and sandwich vendor.",
+      "personality": "Warm and exacting; a crunch purist who grades every baguette in crunch decibels",
       "role": "Sandwich vendor",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Cheerful market patter; keeps rating things by how loud they crunch; calls the player bạn",
     },
     "coffee-friend": {
       "friendliness": 0,
@@ -3650,9 +3978,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "opera",
       "name": "Diễm",
-      "personality": "Observant and independent; cares about the neighborhood and opera visitor.",
+      "personality": "Exacting and theatrical; an opening-night critic who reviews pigeons, weather, and entrances",
       "role": "Opera visitor",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Wry, review-column tone with star ratings; a touch aloof but never cruel; calls the player bạn",
     },
     "park-reader": {
       "friendliness": -1,
@@ -3678,9 +4006,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "park",
       "name": "Yến",
-      "personality": "Observant and independent; cares about the neighborhood and morning exerciser.",
+      "personality": "Energetic and encouraging; treats every chore as an exercise rep",
       "role": "Morning exerciser",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Upbeat coaching tone; counts reps and says "for the gains"; calls the player bạn",
     },
     "plaza-friends": {
       "friendliness": 0,
@@ -3706,9 +4034,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "cityhall",
       "name": "Khải",
-      "personality": "Observant and independent; cares about the neighborhood and evening stroller.",
+      "personality": "Tender and theatrical; a devoted cải lương lover who turns errands into verse",
       "role": "Evening stroller",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Lilting, affectionate verse; invites the player to "deliver the line"; calls the player bạn",
     },
     "postcard-reader": {
       "friendliness": 0,
@@ -3720,9 +4048,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "postoffice",
       "name": "Bảo",
-      "personality": "Observant and independent; cares about the neighborhood and postcard reader.",
+      "personality": "Gentle and dreamy; a stamp poet who answers the world in small haiku",
       "role": "Postcard reader",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Soft, unhurried, often slipping into three-line haiku about stamps; calls the player bạn",
     },
     "river-jogger": {
       "friendliness": 0,
@@ -3734,9 +4062,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "river",
       "name": "Long",
-      "personality": "Observant and independent; cares about the neighborhood and riverside runner.",
+      "personality": "Breathless and friendly; a perpetual runner who keeps every chore moving at a jog",
       "role": "Riverside runner",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Short gasping phrases between strides; insists errands "keep pace"; calls the player bạn",
     },
     "riverside-friends": {
       "friendliness": 0,
@@ -3777,9 +4105,9 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "location": "cathedral",
       "name": "An",
-      "personality": "Observant and independent; cares about the neighborhood and square visitor.",
+      "personality": "Cheerful and unflappable; proudly lost with a 1998 paper map, delighted by accidental landmarks",
       "role": "Square visitor",
-      "speakingStyle": "Brief, civil conversation with local detail",
+      "speakingStyle": "Breezy and self-deprecating about directions; trusts the old map over any sign; calls the player bạn",
     },
     "student": {
       "friendliness": 0,
@@ -4033,10 +4361,15 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "alley-diner": {
       "gifts": [
-        "postcard",
+        "baguette",
+        "coffee",
       ],
       "home": "alley",
       "items": [
+        "broth",
+        "noodles",
+        "herbs",
+        "baguette",
         "coffee",
         "banana",
       ],
@@ -4047,6 +4380,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "npcs": [
         "hoa",
+        "tam",
         "linh",
       ],
     },
@@ -4095,21 +4429,26 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "bread-vendor": {
       "gifts": [
-        "postcard",
+        "baguette",
+        "coffee",
       ],
       "home": "market",
       "items": [
+        "baguette",
+        "herbs",
+        "noodles",
         "coffee",
         "banana",
       ],
       "locations": [
         "market",
-        "market",
+        "alley",
         "park",
       ],
       "npcs": [
         "hoa",
-        "linh",
+        "tam",
+        "mai",
       ],
     },
     "coffee-friend": {
@@ -4328,20 +4667,24 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     "opera-visitor": {
       "gifts": [
         "postcard",
+        "coffee",
       ],
       "home": "opera",
       "items": [
+        "photo",
+        "postcard",
         "coffee",
         "banana",
       ],
       "locations": [
         "opera",
-        "market",
-        "park",
+        "cityhall",
+        "cathedral",
       ],
       "npcs": [
-        "hoa",
-        "linh",
+        "alex",
+        "thao",
+        "vy",
       ],
     },
     "park-reader": {
@@ -4365,21 +4708,25 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "park-stretch": {
       "gifts": [
-        "postcard",
+        "banana",
+        "coffee",
       ],
       "home": "park",
       "items": [
-        "coffee",
         "banana",
+        "herbs",
+        "coffee",
+        "noodles",
       ],
       "locations": [
         "park",
         "market",
-        "park",
+        "river",
       ],
       "npcs": [
-        "hoa",
         "linh",
+        "hoa",
+        "ba",
       ],
     },
     "plaza-friends": {
@@ -4404,58 +4751,70 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     "plaza-stroll": {
       "gifts": [
         "postcard",
+        "coffee",
       ],
       "home": "cityhall",
       "items": [
+        "postcard",
+        "photo",
         "coffee",
         "banana",
       ],
       "locations": [
         "cityhall",
+        "opera",
         "market",
-        "park",
       ],
       "npcs": [
-        "hoa",
-        "linh",
+        "vy",
+        "alex",
+        "thao",
       ],
     },
     "postcard-reader": {
       "gifts": [
         "postcard",
+        "coffee",
       ],
       "home": "postoffice",
       "items": [
+        "postcard",
+        "photo",
         "coffee",
         "banana",
       ],
       "locations": [
         "postoffice",
-        "market",
-        "park",
+        "cityhall",
+        "cathedral",
       ],
       "npcs": [
-        "hoa",
-        "linh",
+        "son",
+        "vy",
+        "alex",
       ],
     },
     "river-jogger": {
       "gifts": [
-        "postcard",
+        "banana",
+        "coffee",
       ],
       "home": "river",
       "items": [
-        "coffee",
         "banana",
+        "herbs",
+        "coffee",
+        "noodles",
       ],
       "locations": [
         "river",
-        "market",
         "park",
+        "market",
       ],
       "npcs": [
-        "hoa",
+        "ba",
         "linh",
+        "hoa",
       ],
     },
     "riverside-friends": {
@@ -4505,20 +4864,25 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     "square-tourist": {
       "gifts": [
         "postcard",
+        "coffee",
       ],
       "home": "cathedral",
       "items": [
+        "postcard",
+        "photo",
         "coffee",
         "banana",
       ],
       "locations": [
         "cathedral",
-        "market",
-        "park",
+        "cityhall",
+        "opera",
+        "postoffice",
       ],
       "npcs": [
-        "hoa",
-        "linh",
+        "vy",
+        "alex",
+        "son",
       ],
     },
     "student": {
@@ -4662,21 +5026,47 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "alley-diner",
+      "payoff": {
+        "en": "Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree.",
+        "vi": "Cô Hoa nhận tô mà không đổ giọt nào hả bạn? Vậy giữ nguyên chín phẩy tư. Đầu bếp với giám khảo nhất trí.",
+      },
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "itemId": "broth",
+          "npcId": "hoa",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the food enthusiast, then return.",
-          "title": "Trang's neighborhood hello",
+          "description": "I scored this broth a nine-point-four, bạn: rich opening, strong finish. Take it to cô Hoa at the market so the judge can meet the chef — carefully, a spill drops it to a nine-point-one.",
+          "title": "A nine-point-four broth",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Trang",
+          "description": "Mình chấm tô nước lèo này chín phẩy tư nè bạn: mở vị đậm, hậu mạnh. Mang qua cho cô Hoa ở chợ để giám khảo gặp đầu bếp — nhẹ tay thôi, đổ một giọt là rớt còn chín phẩy một.",
+          "title": "Tô nước lèo chín phẩy tư",
+        },
+      },
+    },
+    {
+      "giverNpcId": "alley-diner",
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "noodles",
+          "npcId": "linh",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring these noodles to chị Linh in the park.",
+          "title": "Noodles for the park lunch",
+        },
+        "vi": {
+          "description": "Mang phần mì này đến cho chị Linh ở công viên.",
+          "title": "Mì cho bữa trưa công viên",
         },
       },
     },
@@ -4747,21 +5137,47 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "bread-vendor",
+      "payoff": {
+        "en": "Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now.",
+        "vi": "Chú Tâm nghe tiếng giòn từ bên kia sạp hả? Chín chục đề-xi-ben là chuẩn. Giờ có nhân chứng rồi.",
+      },
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "itemId": "baguette",
+          "npcId": "tam",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the sandwich vendor, then return.",
-          "title": "Mr. Binh's neighborhood hello",
+          "description": "This baguette just tested at ninety crunch decibels, bạn — a personal best. Carry it to chú Tâm at the market before the crust drops below eighty.",
+          "title": "A ninety-decibel loaf",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Chú Bình",
+          "description": "Ổ này vừa đo được chín chục đề-xi-ben độ giòn đó bạn — kỷ lục luôn. Mang qua cho chú Tâm ở chợ trước khi vỏ tụt xuống dưới tám chục.",
+          "title": "Ổ bánh chín chục đề-xi-ben",
+        },
+      },
+    },
+    {
+      "giverNpcId": "bread-vendor",
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "herbs",
+          "npcId": "hoa",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring these fresh herbs to cô Hoa at the market.",
+          "title": "Herbs for the pho stall",
+        },
+        "vi": {
+          "description": "Mang rau thơm tươi này qua cho cô Hoa ở chợ.",
+          "title": "Rau thơm cho sạp phở",
         },
       },
     },
@@ -5048,21 +5464,47 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "opera-visitor",
+      "payoff": {
+        "en": "Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate.",
+        "vi": "Chị Thảo nhận ảnh mà màn xuất hiện của bạn vững hả? Bốn sao đó bạn. Bồ câu đòi năm; tụi nó lúc nào cũng chấm lố.",
+      },
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "itemId": "photo",
+          "npcId": "thao",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the opera visitor, then return.",
-          "title": "Diem's neighborhood hello",
+          "description": "I am filing tonight’s review, bạn. Carry this photo to chị Thảo at the Opera House and make your entrance count — I am scoring it, and the pigeons are an expert panel.",
+          "title": "A four-star entrance",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Diễm",
+          "description": "Mình đang viết bài bình tối nay, bạn. Mang tấm ảnh này cho chị Thảo ở Nhà hát và xuất hiện cho ra dáng — mình chấm điểm đó, mà ban giám khảo bồ câu khó tính lắm.",
+          "title": "Màn xuất hiện bốn sao",
+        },
+      },
+    },
+    {
+      "giverNpcId": "opera-visitor",
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "postcard",
+          "npcId": "alex",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring this postcard to anh Alex at the Opera House.",
+          "title": "A note for a fellow regular",
+        },
+        "vi": {
+          "description": "Mang tấm bưu thiếp này đến cho anh Alex ở Nhà hát.",
+          "title": "Lời nhắn cho người quen",
         },
       },
     },
@@ -5088,21 +5530,47 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "park-stretch",
+      "payoff": {
+        "en": "Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured.",
+        "vi": "Chị Linh nhận chuối mà vai bạn giữ nguyên tới nơi hả? Trọn một set đó bạn. Lên cơ chắc rồi.",
+      },
       "scope": "solo",
       "steps": [
         {
-          "npcId": "hoa",
-          "type": "TALK_TO",
+          "itemId": "banana",
+          "npcId": "linh",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Ms. Hoa at the market for the morning exerciser, then return.",
-          "title": "Yen's neighborhood hello",
+          "description": "Perfect rep, bạn: take this banana to chị Linh in the park, but carry it at shoulder height the whole way — for the gains. Counts as a set.",
+          "title": "A shoulder-height delivery",
         },
         "vi": {
-          "description": "Gửi lời chào đến cô Hoa ở chợ rồi quay lại nhé.",
-          "title": "Lời nhắn của Yến",
+          "description": "Một hiệp hoàn hảo nè bạn: mang trái chuối này cho chị Linh ở công viên, mà phải xách ngang vai suốt đường — cho lên cơ. Tính là một set.",
+          "title": "Giao hàng ngang vai",
+        },
+      },
+    },
+    {
+      "giverNpcId": "park-stretch",
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "herbs",
+          "npcId": "linh",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring these herbs to chị Linh in the park.",
+          "title": "Fresh herbs for the park lunch",
+        },
+        "vi": {
+          "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
+          "title": "Rau thơm cho bữa trưa công viên",
         },
       },
     },
@@ -5131,18 +5599,69 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "itemId": "photo",
+          "npcId": "vy",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the evening stroller, then return.",
-          "title": "Khai's neighborhood hello",
+          "description": "Bring this photo to chị Vy at City Hall.",
+          "title": "A keepsake for a neighbor",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Khải",
+          "description": "Mang tấm ảnh này đến cho chị Vy ở Tòa Thị Chính.",
+          "title": "Kỷ vật cho hàng xóm",
+        },
+      },
+    },
+    {
+      "giverNpcId": "plaza-stroll",
+      "payoff": {
+        "en": "Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow.",
+        "vi": "Anh Alex vỗ tay khi bạn xuống câu hả? Vậy là câu ngâm đã tìm được sân khấu. Hoan hô — mai diễn lại nhé.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "postcard",
+          "npcId": "alex",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I have penned a single trembling verse on this postcard, bạn. Carry it to anh Alex at the Opera House and, when you hand it over, deliver the line out loud — gently, like the lamps are listening.",
+          "title": "Deliver the line",
+        },
+        "vi": {
+          "description": "Mình đã đề một câu ngâm run run lên tấm bưu thiếp này, bạn ơi. Mang qua cho anh Alex ở Nhà hát, và khi trao thì xuống câu thành tiếng — nhẹ thôi, như thể đèn đang lắng nghe.",
+          "title": "Xuống câu giùm nhé",
+        },
+      },
+    },
+    {
+      "giverNpcId": "postcard-reader",
+      "payoff": {
+        "en": "Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied.",
+        "vi": "Anh Sơn đọc bài haiku lên hả bạn? Vậy là con thuyền nhỏ đã tới bến. Con tem giờ có thể an lòng nghỉ hưu.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "postcard",
+          "npcId": "son",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "I inked a haiku beside the stamp, bạn: blue stamp, patient glue / a small boat waits for the tide / carry it to shore. Take the postcard to anh Sơn at the post office.",
+          "title": "A haiku for the stamp",
+        },
+        "vi": {
+          "description": "Mình đề một bài haiku cạnh con tem, bạn ơi: tem xanh, keo kiên nhẫn / con thuyền nhỏ đợi con nước lên / mang tới bến giùm. Đưa tấm bưu thiếp cho anh Sơn ở bưu điện nhé.",
+          "title": "Bài haiku cho con tem",
         },
       },
     },
@@ -5151,18 +5670,19 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "itemId": "photo",
+          "npcId": "vy",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the postcard reader, then return.",
-          "title": "Bao's neighborhood hello",
+          "description": "Bring this photo to chị Vy at City Hall.",
+          "title": "A photo for City Hall",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Bảo",
+          "description": "Mang tấm ảnh này đến cho chị Vy ở Tòa Thị Chính.",
+          "title": "Tấm ảnh cho Tòa Thị Chính",
         },
       },
     },
@@ -5171,18 +5691,44 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "scope": "solo",
       "steps": [
         {
+          "itemId": "herbs",
           "npcId": "linh",
-          "type": "TALK_TO",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the riverside runner, then return.",
-          "title": "Long's neighborhood hello",
+          "description": "Bring these herbs to chị Linh in the park.",
+          "title": "Herbs on the way to the park",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Long",
+          "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
+          "title": "Rau thơm trên đường ra công viên",
+        },
+      },
+    },
+    {
+      "giverNpcId": "river-jogger",
+      "payoff": {
+        "en": "Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn.",
+        "vi": "Bác Ba — nhận rồi — mà bạn — giữ nhịp hả? Vậy hôm nay — không phải — ngày nghỉ. Thở — giỏi lắm bạn.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "banana",
+          "npcId": "ba",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Quick — bạn — take this — banana — to bác Ba — by the river. But keep pace, do not — slow down, or it — counts as a — rest day. Go, go.",
+          "title": "Keep pace with the banana",
+        },
+        "vi": {
+          "description": "Nhanh — bạn — mang — trái chuối — này cho — bác Ba — bên sông. Mà giữ nhịp, đừng — chậm lại, không thì — tính là — ngày nghỉ. Chạy, chạy.",
+          "title": "Giữ nhịp với trái chuối",
         },
       },
     },
@@ -5256,18 +5802,44 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "itemId": "photo",
+          "npcId": "son",
+          "type": "DELIVER",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the square visitor, then return.",
-          "title": "An's neighborhood hello",
+          "description": "Bring this photo to anh Sơn at the Central Post Office.",
+          "title": "A photo for the post office",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của An",
+          "description": "Mang tấm ảnh này đến cho anh Sơn ở Bưu điện Trung tâm.",
+          "title": "Tấm ảnh cho bưu điện",
+        },
+      },
+    },
+    {
+      "giverNpcId": "square-tourist",
+      "payoff": {
+        "en": "You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up.",
+        "vi": "Bạn gặp chị Vy ở Tòa Thị Chính chứ không phải bờ sông hả? Thấy chưa, bản đồ 1998 không sai bao giờ — nó chỉ làm tròn thôi.",
+      },
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "postcard",
+          "npcId": "vy",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "My 1998 map swears the river is this way, bạn, which means it is actually City Hall. Take this postcard to chị Vy there — if you reach water, we are both lost.",
+          "title": "Where the map says the river is",
+        },
+        "vi": {
+          "description": "Bản đồ 1998 của mình thề đây là hướng bờ sông, bạn ơi, nghĩa là thật ra là Tòa Thị Chính. Mang tấm bưu thiếp này cho chị Vy ở đó — nếu bạn ra tới mé nước thì cả hai cùng lạc.",
+          "title": "Chỗ bản đồ ghi là bờ sông",
         },
       },
     },

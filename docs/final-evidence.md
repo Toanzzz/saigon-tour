@@ -173,3 +173,11 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Seeds: `seedsFor` excludes milestone seeds; new `milestoneSeeds(npcId, locale)`.
 - Client: `stepCopy`/`questTarget`/`dialogueQuests` handle BRING; the giver's active errand shows a Give button when the next step is BRING to this NPC and the item is held. Labels + `step_bring` in EN/VI and the QA item map.
 - Tests: `apps/server/test/quest-bring-milestone.spec.ts` (8), client `quests.test.ts` BRING-to-giver case.
+
+## Phase 1a commit 2 — featured resident personas and gag seeds (2026-11-02)
+
+- DoD green: `bun run check` → `check:types` → `build` → `test`. Server 366 passed / 2 skipped; client 168 passed. `npc-baseline` snapshot updated; diff limited to the 8 residents (bread-vendor, park-stretch, square-tourist, plaza-stroll, river-jogger, opera-visitor, postcard-reader, alley-diner).
+- Each residents package now uses `defineNpc` with its own `profile.ts`, `story.ts`, `persona.ts`, `look.ts`, `place.ts`, and `src/seeds/gag.ts`; look values, placement, and `opera-visitor` friendliness `-2` preserved from the former `defineResident` calls.
+- Personas carry bespoke comedic voices (crunch decibels, reps for the gains, 1998 paper map, cải lương verse, gasping jog, opening-night reviews, stamp haiku, decimal food scores), address the player as "bạn", and close with `Motive`/`Running gag`/`Payoff habit` lines. `packages/shared/src/npcs/personas.ts` imports the 8 package personas and prefers a non-empty body over the resident template.
+- Each `story.ts` lists the gag seed first, keeps a lightweight neighborly second seed, and defines a per-resident `domain`; every gag step and item stays inside its domain. No milestone component items or cake are used; BUY stays coffee/banana.
+- Seeds validate via `apps/server/test/npc-seeds.spec.ts` (both locales, length limits). `npc-registry`, `npc-neighbors`, full server and client suites pass with no other fixture changes.

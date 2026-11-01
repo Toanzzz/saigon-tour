@@ -1,21 +1,14 @@
-import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { defineNpc } from '@saigon/npc-kit'
+import { look } from './look'
+import { place } from './place'
+import { profile } from './profile'
+import { story } from './story'
 
-const look: NpcLook = {
-  body: 'own',
-  color: '#baddc1',
-  portraitBg: 'var(--avatar-color)',
-  animation: 'walk',
-  avatar: true,
-}
-
-export default defineResident({
+export default defineNpc({
   id: 'river-jogger',
-  name: { en: 'Long', vi: 'Long' },
-  roles: { en: 'Riverside runner', vi: 'Người chạy bộ bên sông' },
-  place: { en: 'the riverside', vi: 'bờ sông' },
-  home: 'river',
-  at: [61, 34.8],
-  walk: [6, 0],
-  phase: 1,
+  profile,
+  story,
+  unlocks: [],
   look,
+  place,
 })

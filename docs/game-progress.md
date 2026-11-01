@@ -44,6 +44,14 @@ look, place, and a server-only persona), aggregated by
 Resident portraits now use each resident's own body and colour. Scaffold with
 `bun scripts/new-npc.ts <id> [neighbor|resident]`.
 
+Eight featured residents (`bread-vendor`, `park-stretch`, `square-tourist`,
+`plaza-stroll`, `river-jogger`, `opera-visitor`, `postcard-reader`,
+`alley-diner`) now use `defineNpc` with their own profile/story/persona/look/
+place files, a bespoke comedic voice, a per-resident quest domain, and a gag
+seed (composed first in `story.ts`) whose single step lands a payoff. Residents
+address the player as "bạn"; personas.ts prefers a non-empty package persona
+over the shared resident template.
+
 ## Verification
 
 - Required gates: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.

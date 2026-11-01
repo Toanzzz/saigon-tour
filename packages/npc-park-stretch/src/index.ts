@@ -1,19 +1,14 @@
-import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { defineNpc } from '@saigon/npc-kit'
+import { look } from './look'
+import { place } from './place'
+import { profile } from './profile'
+import { story } from './story'
 
-const look: NpcLook = {
-  body: 'own',
-  color: '#baddc1',
-  portraitBg: 'var(--avatar-color)',
-  animation: 'emote-yes',
-  avatar: true,
-}
-
-export default defineResident({
+export default defineNpc({
   id: 'park-stretch',
-  name: { en: 'Yen', vi: 'Yến' },
-  roles: { en: 'Morning exerciser', vi: 'Người tập thể dục buổi sáng' },
-  place: { en: 'the park', vi: 'công viên' },
-  home: 'park',
-  at: [34, -5.8],
+  profile,
+  story,
+  unlocks: [],
   look,
+  place,
 })

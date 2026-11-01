@@ -1,19 +1,14 @@
-import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { defineNpc } from '@saigon/npc-kit'
+import { look } from './look'
+import { place } from './place'
+import { profile } from './profile'
+import { story } from './story'
 
-const look: NpcLook = {
-  body: 'own',
-  color: '#baddc1',
-  portraitBg: 'var(--avatar-color)',
-  animation: 'interact-right',
-  avatar: true,
-}
-
-export default defineResident({
+export default defineNpc({
   id: 'bread-vendor',
-  name: { en: 'Mr. Binh', vi: 'Chú Bình' },
-  roles: { en: 'Sandwich vendor', vi: 'Người bán bánh mì' },
-  place: { en: 'the market', vi: 'chợ' },
-  home: 'market',
-  at: [-34, 2],
+  profile,
+  story,
+  unlocks: [],
   look,
+  place,
 })
