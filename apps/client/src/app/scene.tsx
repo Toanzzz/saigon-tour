@@ -6,6 +6,7 @@ import { ACESFilmicToneMapping } from 'three'
 import { Diagnostics } from '@/app/diagnostics'
 import { CityEvents } from '@/features/city/events'
 import { Sun } from '@/features/city/sun'
+import { Coins } from '@/features/collectibles'
 import { Neighbors } from '@/features/npcs/neighbors'
 import { RemotePlayers } from '@/features/npcs/remote-players'
 import { CameraRig } from '@/features/player/camera'
@@ -61,6 +62,7 @@ export function Scene() {
             debug={debug}
           >
             <CityWorld evening={evening} />
+            <Coins />
             <Player key={generation} />
             <Transport />
             <Neighbors />

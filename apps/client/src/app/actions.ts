@@ -1,4 +1,5 @@
 import { MARKET_ITEMS, type MarketItemId, type NpcId } from '@saigon/shared'
+import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
 import { npcPosition } from '@/shared/api/city'
 import {
@@ -79,6 +80,7 @@ export async function restart() {
   resetTransportForm()
   resetWardrobeTab()
   resetJourneyConfirm()
+  resetCollectedCoins()
 }
 /** Drop this device's saved session; reload as a brand-new guest. */
 export async function forgetDevice() {

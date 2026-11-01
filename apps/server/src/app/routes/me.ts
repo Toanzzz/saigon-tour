@@ -1,6 +1,8 @@
 import { zValidator } from '@hono/zod-validator'
 import {
   AvatarBodySchema,
+  CoinPickupIdSchema,
+  coinPickup,
   PlayerNameSchema,
   UNLOCK_SLOTS,
   UnlockIdSchema,
@@ -66,6 +68,17 @@ export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
         })
       }
     )
+    .post('/pickups/:coinId', async (c) => {
+      const parsed = CoinPickupIdSchema.safeParse(c.req.param('coinId'))
+      if (!parsed.success) return c.json({ error: 'invalid_coin' }, 400)
+      const coin = coinPickup(parsed.data)
+      if (!coin) return c.json({ error: 'unknown_coin' }, 404)
+      const result = await db.grantCoin(c.var.player.id, coin.id, coin.amount)
+      return c.json({
+        ...result,
+        player: await harness.game.get(c.var.player.id),
+      })
+    })
     .post('/reset', async (c) => {
       const { id } = c.var.player
       await harness.clearMemory(id)

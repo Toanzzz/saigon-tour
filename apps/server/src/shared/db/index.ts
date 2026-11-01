@@ -138,8 +138,25 @@ export class GameDb {
       await client.query('DELETE FROM quest_completions WHERE player_id=$1', [
         id,
       ])
+      await client.query('DELETE FROM coin_pickups WHERE player_id=$1', [id])
     })
     return this.player(id)
+  }
+  /**
+   * Record a world coin pickup once per player and add its value to the wallet
+   * in the same transaction. Returns whether a new row was inserted (false when
+   * the coin was already collected) so the client only celebrates real grants.
+   */
+  async grantCoin(id: string, coinId: string, amount: number) {
+    return this.mutatePlayer(id, async (save, client) => {
+      const inserted = await client.query(
+        'INSERT INTO coin_pickups(player_id,coin_id) VALUES($1,$2) ON CONFLICT DO NOTHING RETURNING coin_id',
+        [id, coinId]
+      )
+      if (!inserted.rows.length) return { granted: false, amount: 0 }
+      save.world.currency = Math.min(100000, save.world.currency + amount)
+      return { granted: true, amount }
+    })
   }
   async rememberFact(fact: {
     npcId: NpcId

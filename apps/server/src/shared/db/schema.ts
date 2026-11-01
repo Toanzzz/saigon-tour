@@ -54,6 +54,16 @@ export const questCompletions = pgTable(
   },
   (t) => [primaryKey({ columns: [t.playerId, t.questId] })]
 )
+export const coinPickups = pgTable(
+  'coin_pickups',
+  {
+    playerId: uuid('player_id')
+      .references(() => players.id, { onDelete: 'cascade' })
+      .notNull(),
+    coinId: text('coin_id').notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.playerId, t.coinId] })]
+)
 export const npcFacts = pgTable(
   'npc_facts',
   {

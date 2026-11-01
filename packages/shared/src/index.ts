@@ -1,4 +1,5 @@
 export * from './city'
+export * from './collectibles'
 export * from './contracts'
 export * from './events'
 export * from './locale'

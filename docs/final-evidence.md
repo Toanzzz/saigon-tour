@@ -44,6 +44,14 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - `node scripts/qa-coin-emblem.mjs`, unsandboxed headless Chromium at 1280×800 and 390×844: the `reward` test state opens the popup, one `.reward-coin-stage` sits in the coin row, the WebGL canvas backing store is 56×56, `models/collectibles/coin.glb` serves 200 (5,744 bytes), and `+50 coins` stays visible. The gold coin is visible in both captures. Local evidence: `/tmp/saigon-tour-qa/coin-emblem-desktop.png`, `coin-emblem-mobile.png`.
 - Economy untouched: no change to amounts, fares, rewards, or persistence; no server or `packages/shared` edits. Pure presentation.
 
+## World coin pickups
+
+- New `features/collectibles/` client slice renders ambient spinning `collectibles/coin` pickups at authored District 1 positions (`packages/shared/src/collectibles.ts`); walking within 1.4 units collects one. The client never mutates currency — it calls `POST /me/pickups/:coinId`, which grants `COIN_PICKUP_AMOUNT` (5) exactly once per player through a new `coin_pickups` ledger (migration `0009`), clamped to the wallet max, and cleared on reset.
+- Server Vitest `coin-pickups.spec.ts` (4 cases): first pickup grants +5 and bumps the revision; a repeat is a no-op (`granted:false`, one ledger row); invalid id → 400, unknown id → 404, unauthenticated → 401; reset clears the ledger so the coin grants again.
+- Client Vitest `collectibles.spec.ts` (3 cases): every authored coin sits clear of all non-wall solids (player capsule + clearance) and inside the walkable bounds, with unique ids and a positive amount.
+- `node scripts/qa-coin-pickup.mjs`, unsandboxed headless Chromium at 1280×800 and 390×844 against the online guest: teleporting onto `coin_leloi_1` raised the wallet 30 → 35 once, marked the coin collected in `collectedCoins`, and a second teleport onto the same spot granted nothing (ledger once-only, end-to-end through the live server). Audio stays `locked` in headless, so the `pickup` cue assertion is skipped there. Local evidence: `/private/tmp/saigon-tour-qa/coin-pickup-desktop.png`, `coin-pickup-mobile.png`.
+- Decorative-plus-grant only: fares, quest rewards, the market, and the flat HUD glyph are unchanged; no `applyPlayerEvents`/quest path was touched.
+
 ## Conversation UI
 
 - The errands strip sits between the header and history; `dialogueQuests` returns `fromNpc`/`forNpc`/`ready`/`delivery`/`canHelp`/`full`, and the journal and dialog share it. Six unit cases cover none/from/for/ready/delivery/full.
