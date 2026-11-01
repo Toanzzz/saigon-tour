@@ -5,6 +5,7 @@ import { abandonQuest } from '@/shared/api/quests'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { questHint, stepCopy } from '@/shared/state/quests'
+import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 
@@ -104,7 +105,7 @@ export function JournalPanel({ state }: { state: GameState }) {
         <h3>{m.journal_bag()}</h3>
         <div className="bag-items">
           <span>
-            <Icon name="coin" />
+            <CoinEmblem />
             {m.coins({ count: state.world.currency })}
           </span>
           {(state.world.inventory.herbs ?? 0) > 0 && (

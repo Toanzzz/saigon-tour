@@ -309,18 +309,22 @@
   z-index: 0;
   pointer-events: none;
 }
-/* Reward-popup 3D coin: a small transparent, modal-only Canvas chip. */
-.reward-coin-stage {
+/* 3D coin emblem: a small transparent Canvas sized like an inline glyph, used
+   wherever the currency appears (header, journal, hub, reward popup). */
+.coin-emblem {
   position: relative;
-  width: 56px;
-  height: 56px;
+  display: inline-block;
   flex: none;
-  margin: -8px -2px -8px -6px;
+  vertical-align: middle;
 }
-.reward-coin-canvas {
+.coin-emblem-canvas {
   position: absolute !important;
   inset: 0;
   pointer-events: none;
+}
+/* Snug the larger reward-popup coin against the earned amount. */
+.reward-coin-row .coin-emblem {
+  margin: -6px -2px -6px -4px;
 }
 .wardrobe-stage,
 .wardrobe-main {

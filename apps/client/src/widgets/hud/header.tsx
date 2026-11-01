@@ -1,6 +1,7 @@
 import { canOpenHub, openHub, pause } from '@/app/actions'
 import { m } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
+import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Icon } from '@/shared/ui/icons'
 import { placeName } from '@/shared/world/places'
 import { XRSessionButton, xrStore } from '@/shared/xr'
@@ -18,7 +19,7 @@ export function GameHeader({ state }: { state: GameState }) {
         <PeopleButton />
         <span className="wallet">
           <span className="sr-only">{m.header_coins()}</span>
-          <Icon name="coin" />
+          <CoinEmblem />
           <b>{state.world.currency}</b>
         </span>
         <button

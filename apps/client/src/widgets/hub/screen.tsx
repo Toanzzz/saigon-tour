@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { closeHub } from '@/app/actions'
 import { m } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
+import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Icon } from '@/shared/ui/icons'
 import { PartyInviteControls } from '@/widgets/hud/party'
 import { NeighborCard, StoryCard } from './cards'
@@ -35,7 +36,7 @@ export function HubScreen({ state }: { state: GameState }) {
           </span>
           <span className="wallet">
             <span className="sr-only">{m.header_coins()}</span>
-            <Icon name="coin" />
+            <CoinEmblem />
             <b>{view.coins}</b>
           </span>
           <button

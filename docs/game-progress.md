@@ -7,7 +7,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Player promise: meet neighbors, help with small errands, and discover a compact Sài Gòn neighborhood.
 - Core loop: talk → ask for an errand → follow 1–3 validated steps → return to the giver → receive a persistent reward. Walking is free; transport and market purchases spend coins.
 - Spatial plan: Bến Thành anchors Lê Lợi; Nguyễn Huệ links City Hall and the river; Đồng Khởi links the Opera House and cathedral/Post Office square. The food alley and park provide quieter destinations.
-- World: licensed character/prop assets, authored streets and landmark façades, supplied landmark statues, Draco-compressed models, day/evening lighting, ambient crowds, transport, market, and river viewpoint. A coin collectible model (`models/collectibles/coin.glb`, built by `scripts/blender/build-collectibles.py`) spins beside the earned amount in the reward popup and as ambient world pickups along the District 1 walkways; the flat 2D glyph remains the SSR/test fallback.
+- World: licensed character/prop assets, authored streets and landmark façades, supplied landmark statues, Draco-compressed models, day/evening lighting, ambient crowds, transport, market, and river viewpoint. A coin collectible model (`models/collectibles/coin.glb`, built by `scripts/blender/build-collectibles.py`) renders as a spinning 3D `CoinEmblem` everywhere the currency appears — HUD header, journal, hub wallet and story card, and the reward popup — plus ambient world pickups along the District 1 walkways. The flat 2D glyph is the SSR/test and error fallback.
 
 ## Systems
 

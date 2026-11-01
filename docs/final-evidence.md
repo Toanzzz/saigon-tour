@@ -38,11 +38,12 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Opening a conversation sends `intent: greet` with an empty message. Headless Playwright at 1440×900 and 390×900 showed one NPC line, no player line, and no `What is happening in the neighborhood?` text. The next typed message included the greeting in the model context; asked what it had just said, the NPC repeated its greeting.
 - That run exposed a provider greeting stopped by the output limit (`finish_reason: length`). Greeting generation allows 300 output tokens, skips caching truncated replies, and versions the cache key.
 
-## Reward popup coin emblem
+## Coin emblem everywhere the currency shows
 
-- The reward popup renders a spinning 3D `collectibles/coin` in a small transparent, modal-only `<Canvas>` beside the earned amount; `reward.tsx` keeps the flat 2D `Icon` as the `typeof window === 'undefined'` SSR/test fallback, so `party.spec.tsx` (`renderToStaticMarkup(<RewardPanel/>)`) still passes.
-- `node scripts/qa-coin-emblem.mjs`, unsandboxed headless Chromium at 1280×800 and 390×844: the `reward` test state opens the popup, one `.reward-coin-stage` sits in the coin row, the WebGL canvas backing store is 56×56, `models/collectibles/coin.glb` serves 200 (5,744 bytes), and `+50 coins` stays visible. The gold coin is visible in both captures. Local evidence: `/tmp/saigon-tour-qa/coin-emblem-desktop.png`, `coin-emblem-mobile.png`.
-- Economy untouched: no change to amounts, fares, rewards, or persistence; no server or `packages/shared` edits. Pure presentation.
+- `shared/ui/coin-emblem.tsx` renders a reusable spinning 3D `collectibles/coin` in a small transparent, self-contained `<Canvas>` sized like an inline glyph, with the flat 2D `coin` `Icon` as the `typeof window === 'undefined'` SSR/test fallback and the error-boundary fallback. It replaces the flat glyph in the HUD header wallet, the journal bag, the hub wallet and story card, and the reward popup.
+- `party.spec.tsx` (`renderToStaticMarkup(<RewardPanel/>)`) still passes: SSR renders the flat glyph, so no WebGL is needed in jsdom.
+- `node scripts/qa-coin-emblem.mjs`, unsandboxed headless Chromium at 1280×800 and 390×844: a live 3D coin canvas is attached in `.game-header .wallet`, the journal bag, the hub topbar/story card, and the reward row across both viewports. Measured frame health with the always-on header emblem: desktop ~55 fps / 256 draw calls, mobile ~54 fps / 228 draw calls. Local evidence: `/private/tmp/saigon-tour-qa/coin-emblem-{desktop,mobile}-{header,journal,hub,reward}.png`.
+- Pure presentation: amounts, fares, rewards, and persistence are unchanged.
 
 ## World coin pickups
 

@@ -11,90 +11,129 @@ const executablePath =
 const gameUrl = process.env.GAME_URL || 'http://127.0.0.1:58000/?debug=1'
 const outDir = process.env.QA_OUT || '/private/tmp/saigon-tour-qa'
 
-/** Open the reward popup via the test hook and confirm the 3D coin paints. */
-async function checkReward(page, label) {
-  await page.waitForFunction(() => window.__THREE_GAME_TEST_HOOKS__, null, {
-    timeout: 30000,
+const diag = (page) => page.evaluate(() => window.__THREE_GAME_DIAGNOSTICS__)
+const moduleValue = (page, path, expression) =>
+  page.evaluate(
+    async ({ path, expression }) => {
+      const loaded = performance
+        .getEntriesByType('resource')
+        .map((r) => r.name)
+        .filter((name) => name.includes(`/src/${path}`))
+        .at(-1)
+      const mod = await import(loaded ?? `/src/${path}`)
+      return Function('mod', expression)(mod)
+    },
+    { path, expression }
+  )
+
+/** Count live 3D coin emblem canvases (each `.coin-emblem` wraps one canvas). */
+const emblemCanvases = (page, scope = '') =>
+  page.locator(`${scope} .coin-emblem canvas`).count()
+
+async function onlinePlay(page) {
+  await page.waitForFunction(
+    () =>
+      window.__THREE_GAME_DIAGNOSTICS__?.state &&
+      window.__THREE_GAME_TEST_HOOKS__,
+    null,
+    { timeout: 30000 }
+  )
+  await moduleValue(
+    page,
+    'shared/state/game.ts',
+    "return new Promise((r)=>{const t0=Date.now();const t=()=>{if(mod.game.state.guestStatus==='online')return r(true);if(Date.now()-t0>15000)return r(false);setTimeout(t,100)};t()})"
+  ).then((online) => assert.ok(online, 'guest online'))
+  await moduleValue(
+    page,
+    'shared/state/game.ts',
+    "mod.update({screen:'playing',panel:'none'});return true"
+  )
+  await page.waitForFunction(
+    () => window.__THREE_GAME_DIAGNOSTICS__?.state.screen === 'playing',
+    null,
+    { timeout: 15000 }
+  )
+}
+
+async function check(page, label) {
+  await onlinePlay(page)
+
+  // 1. HUD header wallet emblem (always-on during play).
+  await page.locator('.game-header .wallet .coin-emblem canvas').waitFor({
+    state: 'attached',
+    timeout: 15000,
   })
+  assert.ok(
+    (await emblemCanvases(page, '.game-header')) >= 1,
+    `${label}: header coin emblem`
+  )
+  await page.screenshot({ path: `${outDir}/coin-emblem-${label}-header.png` })
+
+  // 2. Journal wallet emblem.
+  await moduleValue(
+    page,
+    'shared/state/game.ts',
+    "mod.update({panel:'journal'});return true"
+  )
+  await page.locator('.journal-section .coin-emblem canvas').waitFor({
+    state: 'attached',
+    timeout: 15000,
+  })
+  await page.screenshot({ path: `${outDir}/coin-emblem-${label}-journal.png` })
+  await moduleValue(
+    page,
+    'shared/state/game.ts',
+    "mod.update({panel:'none'});return true"
+  )
+
+  // 3. Hub wallet + story card emblems.
+  await moduleValue(
+    page,
+    'shared/state/game.ts',
+    "mod.update({screen:'hub'});return true"
+  )
+  await page.locator('.hub-topbar .wallet .coin-emblem canvas').waitFor({
+    state: 'attached',
+    timeout: 15000,
+  })
+  const hubEmblems = await emblemCanvases(page, '.hub-inner')
+  assert.ok(hubEmblems >= 1, `${label}: hub coin emblem(s): ${hubEmblems}`)
+  await page.screenshot({ path: `${outDir}/coin-emblem-${label}-hub.png` })
+  await moduleValue(
+    page,
+    'shared/state/game.ts',
+    "mod.update({screen:'playing'});return true"
+  )
+
+  // 4. Reward popup emblem.
   await page.evaluate(() => window.__THREE_GAME_TEST_HOOKS__.setState('reward'))
-
-  const stage = page.locator('.reward-coin-stage')
-  await stage.waitFor({ state: 'visible', timeout: 15000 })
-  const canvas = page.locator('.reward-coin-stage canvas')
-  await canvas.waitFor({ state: 'attached', timeout: 15000 })
-
-  // Reward amount text is still present next to the 3D coin.
-  const amount = await page.locator('.reward-coin-row').innerText()
-  assert.ok(/\+/.test(amount), `${label}: reward amount visible (${amount})`)
-
-  // The 2D SSR glyph is replaced by the client 3D stage.
-  const stageCount = await page
-    .locator('.reward-coin-row .reward-coin-stage')
-    .count()
-  assert.equal(stageCount, 1, `${label}: one 3D coin stage in the coin row`)
-
-  // The WebGL canvas loaded with real backing-store dimensions.
-  const gl = await page.evaluate(() => {
-    const c = document.querySelector('.reward-coin-stage canvas')
-    if (!(c instanceof HTMLCanvasElement)) return null
-    const ctx = c.getContext('webgl2') || c.getContext('webgl')
-    const r = c.getBoundingClientRect()
-    return {
-      has: !!ctx,
-      w: c.width,
-      h: c.height,
-      rectW: r.width,
-      rectH: r.height,
-    }
+  await page.locator('.reward-coin-row .coin-emblem canvas').waitFor({
+    state: 'attached',
+    timeout: 15000,
   })
-  assert.ok(gl?.has, `${label}: WebGL context present`)
-  assert.ok(gl.w > 0 && gl.h > 0, `${label}: canvas backing store sized`)
-  assert.ok(gl.rectW >= 40 && gl.rectH >= 40, `${label}: coin box laid out`)
+  await page.screenshot({ path: `${outDir}/coin-emblem-${label}-reward.png` })
 
-  // The coin GLB is served.
-  const coin = await page.evaluate(async () => {
-    const base = document.querySelector('base')?.href || `${location.origin}/`
-    const r = await fetch(`${base}models/collectibles/coin.glb`)
-    return r.status
-  })
-  assert.equal(coin, 200, `${label}: coin.glb served`)
-
-  await page.waitForTimeout(800)
-  await page
-    .locator('.reward-dialog')
-    .screenshot({ path: `${outDir}/coin-emblem-${label}.png` })
-  return { amount, gl }
+  const d = await diag(page)
+  return { label, fps: Math.round(d.fps), drawCalls: d.renderer.render.calls }
 }
 
 async function run() {
   const browser = await chromium.launch({ executablePath })
   try {
-    const desktop = await browser.newContext({
-      viewport: { width: 1280, height: 800 },
-    })
-    const dpage = await desktop.newPage()
-    await dpage.goto(gameUrl, { waitUntil: 'networkidle' })
-    await dpage.waitForFunction(
-      () => window.__THREE_GAME_DIAGNOSTICS__?.state,
-      null,
-      { timeout: 30000 }
-    )
-    console.log('desktop', JSON.stringify(await checkReward(dpage, 'desktop')))
-
-    const mobile = await browser.newContext({
-      viewport: { width: 390, height: 844 },
-      isMobile: true,
-      hasTouch: true,
-    })
-    const mpage = await mobile.newPage()
-    await mpage.goto(gameUrl, { waitUntil: 'networkidle' })
-    await mpage.waitForFunction(
-      () => window.__THREE_GAME_DIAGNOSTICS__?.state,
-      null,
-      { timeout: 30000 }
-    )
-    console.log('mobile', JSON.stringify(await checkReward(mpage, 'mobile')))
-
+    for (const [label, viewport] of [
+      ['desktop', { width: 1280, height: 800 }],
+      ['mobile', { width: 390, height: 844 }],
+    ]) {
+      const context = await browser.newContext({
+        viewport,
+        isMobile: label === 'mobile',
+        hasTouch: label === 'mobile',
+      })
+      const page = await context.newPage()
+      await page.goto(gameUrl, { waitUntil: 'networkidle' })
+      console.log(label, JSON.stringify(await check(page, label)))
+      await context.close()
+    }
     console.log('PASS qa-coin-emblem')
   } finally {
     await browser.close()

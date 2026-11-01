@@ -2,6 +2,7 @@ import { closeHub, talk } from '@/app/actions'
 import { npcPosition } from '@/shared/api/city'
 import { m, npcLabel } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
+import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Icon } from '@/shared/ui/icons'
 import { distance } from '@/shared/world/places'
 import type { HubView } from './view'
@@ -65,7 +66,7 @@ export function StoryCard({ view }: { view: HubView }) {
       </div>
       <div className="story-footer">
         <span className="chip bus">
-          <Icon name="coin" size={15} /> {m.coins({ count: story.coins })}
+          <CoinEmblem size={15} /> {m.coins({ count: story.coins })}
         </span>
         <span className="chip leaf">
           <Icon name="stamp" size={15} /> {m.hub_neighbor_thanks()}

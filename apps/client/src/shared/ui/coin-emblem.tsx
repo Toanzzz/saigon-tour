@@ -2,6 +2,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { Component, type ReactNode, Suspense, useRef } from 'react'
 import type { Group } from 'three'
 import { AvatarLights, Model } from '@/shared/world'
+import { Icon } from './icons'
 
 /** Slow spin about the emblem axis (model up after export_yup). */
 function Spin({ children }: { children: ReactNode }) {
@@ -17,9 +18,9 @@ function Spin({ children }: { children: ReactNode }) {
   )
 }
 
-/** Keeps a missing GLB from blanking the reward popup. */
-class StageBoundary extends Component<
-  { children: ReactNode },
+/** Keeps a missing GLB (or a lost WebGL context) from blanking the host UI. */
+class EmblemBoundary extends Component<
+  { children: ReactNode; fallback: ReactNode },
   { failed: boolean }
 > {
   state = { failed: false }
@@ -28,25 +29,32 @@ class StageBoundary extends Component<
   }
   componentDidCatch() {}
   render() {
-    return this.state.failed ? null : this.props.children
+    return this.state.failed ? this.props.fallback : this.props.children
   }
 }
 
 /**
- * Client-only spinning 3D coin for the reward popup. A small transparent,
- * modal-only `<Canvas>` (not an always-on HUD canvas); the 2D `Icon` stays as
- * the SSR/test fallback in `reward.tsx`.
+ * The 3D gold coin emblem used wherever the currency appears: HUD header,
+ * journal, hub wallet/story cards, and the reward popup. A small transparent,
+ * self-contained `<Canvas>` sized like an inline glyph. The flat 2D `coin`
+ * `Icon` is the SSR/test fallback (no WebGL in jsdom) and the error fallback.
  */
-export function CoinStage() {
+export function CoinEmblem({ size = 20 }: { size?: number }) {
+  const fallback = <Icon name="coin" size={size} />
+  // SSR and tests render the flat glyph; the Canvas is client-only.
+  if (typeof window === 'undefined') return fallback
   return (
-    <div className="reward-coin-stage">
-      <StageBoundary>
+    <span
+      className="coin-emblem"
+      style={{ width: size, height: size }}
+      aria-hidden="true"
+    >
+      <EmblemBoundary fallback={fallback}>
         <Canvas
-          className="reward-coin-canvas"
+          className="coin-emblem-canvas"
           dpr={[1, 1.5]}
           camera={{ position: [0, 0, 2.6], fov: 35 }}
           gl={{ alpha: true }}
-          frameloop="always"
         >
           <AvatarLights />
           <Suspense fallback={null}>
@@ -55,7 +63,7 @@ export function CoinStage() {
             </Spin>
           </Suspense>
         </Canvas>
-      </StageBoundary>
-    </div>
+      </EmblemBoundary>
+    </span>
   )
 }
