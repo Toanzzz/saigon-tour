@@ -22,11 +22,14 @@
     "test:integration": "bun run --filter @saigon/server test:integration"
   },
   "devDependencies": {
+    "@ai-sdk/openai-compatible": "^3.0.82",
     "@biomejs/biome": "2.6.4",
     "@gltf-transform/core": "4.5.1",
     "@gltf-transform/extensions": "4.5.1",
     "@gltf-transform/functions": "4.5.1",
+    "@types/bun": "^1.4.4",
     "@types/draco3d": "^1.4.10",
+    "ai": "^7.0.159",
     "concurrently": "^10.0.6",
     "draco3d": "1.5.9",
     "sharp": "0.35.5",
