@@ -88,9 +88,10 @@ def star(name, surface_y, facing, mat, points=5, outer=0.12, inner=0.052, depth=
 
 
 def coin():
-    gold = material("coin-gold", "#f2b733", rough=0.28, metal=1.0)
-    rim = material("coin-rim", "#c7861c", rough=0.35, metal=1.0)
-    emblem = material("coin-emblem", "#fff0c2", rough=0.3, metal=1.0, emit=0.6)
+    # Vietnam flag palette: a red coin body with a yellow star emblem.
+    gold = material("coin-red", "#da251d", rough=0.3, metal=0.7)
+    rim = material("coin-rim", "#a81813", rough=0.35, metal=0.7)
+    emblem = material("coin-emblem", "#ffff00", rough=0.3, metal=0.6, emit=0.6)
     # Thin disc body with a slightly wider, darker rim ring for readability.
     body = cylinder("coin", 0.2, 0.05, (0, 0, 0), gold, verts=32, bevel=0.012)
     ring = cylinder("coin-ring", 0.21, 0.035, (0, 0, 0), rim, verts=32)
