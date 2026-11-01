@@ -1,5 +1,5 @@
 import { QUEST_EXPIRY_MS } from '@saigon/shared'
-import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { close } from '@/app/actions'
 import { abandonQuest } from '@/shared/api/quests'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
@@ -9,7 +9,7 @@ import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 
 export function JournalPanel({ state }: { state: GameState }) {
-  const [abandoning, setAbandoning] = useState<string | null>(null)
+  const abandon = useMutation({ mutationFn: abandonQuest })
   return (
     <Dialog
       title={m.journal_title()}
@@ -90,15 +90,8 @@ export function JournalPanel({ state }: { state: GameState }) {
               <button
                 type="button"
                 className="text-button"
-                disabled={abandoning !== null}
-                onClick={async () => {
-                  setAbandoning(quest.id)
-                  try {
-                    await abandonQuest(quest.id)
-                  } finally {
-                    setAbandoning(null)
-                  }
-                }}
+                disabled={abandon.isPending}
+                onClick={() => abandon.mutate(quest.id)}
               >
                 {m.journal_abandon()}
               </button>

@@ -124,4 +124,4 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 
 ## Client state → TanStack Store (phase 5: pending flags → useMutation)
 
-- Title start (`commitProfile`) and pause rename (`commitProfile`), Meta sign-in (`signInWithMeta`), and XR enter/exit now drive their pending/disabled state from `useMutation` `isPending` instead of a `saving`/`starting`/`signingIn`/`busy` `useState`; the existing functions are the `mutationFn`.
+- Title start (`commitProfile`) and pause rename (`commitProfile`), Meta sign-in (`signInWithMeta`), journal abandon (`abandonQuest`), and XR enter/exit now drive their pending/disabled state from `useMutation` `isPending` instead of a `saving`/`starting`/`signingIn`/`abandoning`/`busy` `useState`; the existing functions are the `mutationFn`.
