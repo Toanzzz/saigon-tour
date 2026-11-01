@@ -60,7 +60,7 @@ const browser = await chromium.launch({
       'Library/Caches/ms-playwright/chromium_headless_shell-1243/chrome-headless-shell-mac-arm64/chrome-headless-shell'
     ),
 })
-const context = await browser.newContext()
+const context = await browser.newContext({ locale: 'en-US' })
 const page = await context.newPage()
 const errors = []
 page.on('pageerror', (e) => errors.push(String(e)))

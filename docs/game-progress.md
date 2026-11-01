@@ -26,6 +26,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Development state sync: a stale process sent initial snapshots without later patches. The identical direct/proxied probes pass after a user-managed full restart. Dev API shutdown closes room sockets, the HTTP server, and the database pool, then exits on SIGINT/SIGTERM. `bun dev` sends SIGKILL after 3 seconds if that process is still running.
 
 - NPC dialog clarity: an Errands strip (ready/needs-you/in-progress/available states from a shared `dialogueQuests`) sits between the header and history; NPC lines are bubbles, the header eyebrow shows role · location, portraits are per-NPC, and the footer source-label is text-on-offline only. Verified by gates, 6 new `dialogueQuests` unit cases, and headless Playwright (desktop + 390px) for the full quest cycle and all four strip states.
+- English + Vietnamese: Paraglide JS 2 client catalogs (`apps/client/messages`). Locale: saved choice (query cache `['settings']`) → browser `vi*` → `en`. Title `EN | VI` toggle and Pause `Language / Ngôn ngữ` select switch live; only the DOM UI remounts. NPC interact requests send `locale`; the server adds a per-turn language rule, caches greetings per locale, and has Vietnamese fallbacks and seed quests. Room-wide barks, headlines, and Director events stay English. Saved quests keep their original language.
 
 ## Runtime and contracts
 

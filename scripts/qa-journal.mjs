@@ -16,6 +16,7 @@ await mkdir(out, { recursive: true })
 try {
   for (const width of [1440, 390]) {
     const context = await browser.newContext({
+      locale: 'en-US',
       viewport: { width, height: width === 390 ? 844 : 900 },
       isMobile: width === 390,
       hasTouch: width === 390,

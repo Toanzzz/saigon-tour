@@ -31,6 +31,7 @@ async function verify(viewport) {
   const mobile = viewport.width === 390
   const label = mobile ? 'mobile' : 'desktop'
   const context = await browser.newContext({
+    locale: 'en-US',
     viewport,
     isMobile: mobile,
     hasTouch: mobile,

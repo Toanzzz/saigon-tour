@@ -14,7 +14,10 @@ const browser = await chromium.launch({
     '/Users/toan/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing',
   args: ['--enable-webgl'],
 })
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } })
+const page = await browser.newPage({
+  locale: 'en-US',
+  viewport: { width: 1440, height: 900 },
+})
 const errors = []
 page.on('pageerror', (e) => errors.push(e.message))
 page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
