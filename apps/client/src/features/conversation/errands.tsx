@@ -1,9 +1,14 @@
-import { type ItemId, NPCS, type NpcId, type Quest } from '@saigon/shared'
-import { acceptQuest, deliverOrVerify, openJournal } from '@/app/actions'
+import {
+  friendlinessOf,
+  type ItemId,
+  NPCS,
+  type NpcId,
+  type Quest,
+} from '@saigon/shared'
+import { giveItem, openJournal } from '@/app/actions'
 import { itemLabel, m } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { dialogueQuests, questHint } from '@/shared/state/quests'
-import { Icon } from '@/shared/ui/icons'
 
 function Pill({ tone, label }: { tone: string; label: string }) {
   return <span className={`errand-pill errand-pill-${tone}`}>{label}</span>
@@ -30,14 +35,6 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
           <p className="errand-hint">
             {m.errands_good_news({ name: npcName })}
           </p>
-          <button
-            type="button"
-            className="primary-button"
-            onClick={() => void deliverOrVerify()}
-          >
-            <Icon name="check" />
-            {m.errands_turn_in()}
-          </button>
         </div>
       ))}
       {forNpc.map((quest) => {
@@ -54,7 +51,7 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
               <button
                 type="button"
                 className="primary-button"
-                onClick={() => void deliverOrVerify()}
+                onClick={() => void giveItem()}
               >
                 {m.errands_give({ item: itemLabel(item) })}
               </button>
@@ -86,14 +83,11 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
         </div>
       ))}
       {canHelp ? (
-        <button
-          type="button"
-          className="primary-button errand-offer"
-          onClick={() => void acceptQuest()}
-        >
-          <Icon name="leaf" />
-          {m.errands_ask()}
-        </button>
+        <p>
+          {friendlinessOf(state.friendship, npc) <= -3
+            ? m.errands_cold({ name: npcName })
+            : m.errands_chat_hint({ name: npcName })}
+        </p>
       ) : (
         full && (
           <div className="errand errand-full">

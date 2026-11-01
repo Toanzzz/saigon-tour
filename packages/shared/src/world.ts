@@ -1,6 +1,10 @@
 import type { NpcId, Reward } from './contracts'
+import { RESIDENTS } from './residents'
 
 export interface NpcPersona {
+  kind: 'neighbor' | 'resident'
+  friendliness: number
+  idleLine?: Record<'en' | 'vi', string>
   id: NpcId
   name: string
   role: string
@@ -11,8 +15,11 @@ export interface NpcPersona {
 }
 
 export const NPCS: Record<NpcId, NpcPersona> = {
+  ...RESIDENTS,
   hoa: {
     id: 'hoa',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Cô Hoa',
     role: 'Market food vendor',
     personality: 'Warm, practical, proud of her family recipes',
@@ -25,6 +32,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   tam: {
     id: 'tam',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Anh Tâm',
     role: 'Neighborhood driver',
     personality: 'Cheerful and helpful, knows every shortcut',
@@ -37,6 +46,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   linh: {
     id: 'linh',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Chị Linh',
     role: 'Student and neighborhood volunteer',
     personality: 'Curious, kind, cares about the community',
@@ -49,6 +60,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   ba: {
     id: 'ba',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Ông Ba',
     role: 'Cyclo driver and storyteller',
     personality: 'Patient, nostalgic, loves the river',
@@ -61,6 +74,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   mai: {
     id: 'mai',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Mai',
     role: 'Sidewalk café owner',
     personality: 'Warm, observant, quietly witty, remembers regulars',
@@ -74,6 +89,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   alex: {
     id: 'alex',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Alex',
     role: 'Visiting photographer',
     personality: 'Curious, upbeat, considerate of the neighborhood',
@@ -87,6 +104,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   vy: {
     id: 'vy',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Vy',
     role: 'Lantern maker near City Hall',
     personality: 'Patient, inventive, and quietly proud of the evening streets',
@@ -100,6 +119,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   son: {
     id: 'son',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Sơn',
     role: 'Postcard collector',
     personality: 'Curious, sentimental, and always looking for a new view',
@@ -113,6 +134,8 @@ export const NPCS: Record<NpcId, NpcPersona> = {
   },
   thao: {
     id: 'thao',
+    kind: 'neighbor',
+    friendliness: 1,
     name: 'Thảo',
     role: 'Opera House music student',
     personality:

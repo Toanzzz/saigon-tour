@@ -61,7 +61,8 @@ export type Quest = z.infer<typeof QuestSchema>
 
 export const QuestEventSchema = z
   .object({
-    type: z.enum(['offered', 'progress', 'completed', 'incomplete']),
+    type: z.enum(['offered', 'progress', 'completed', 'incomplete', 'failed']),
+    reason: z.enum(['abandoned', 'expired', 'declined']).optional(),
     quest: QuestSchema,
     reward: RewardSchema,
   })

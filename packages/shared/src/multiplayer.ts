@@ -2,12 +2,13 @@ import { z } from 'zod'
 import { CityHeadlineSchema } from './city/schema'
 import {
   CompletedQuestSchema,
-  NpcIdSchema,
+  NeighborIdSchema,
   PlayerEventSchema,
   QuestSchema,
   WorldStateSchema,
 } from './contracts'
 import { PartyInviteSchema, PartySnapshotSchema } from './party'
+import { FriendshipMapSchema } from './quest/friendship'
 
 export const WORLD_BOUNDS = { x: [-110, 150], z: [-120, 100] } as const
 export const NPC_POSITIONS = {
@@ -20,7 +21,7 @@ export const NPC_POSITIONS = {
   vy: [64, 0, -18],
   son: [103, 0, -78],
   thao: [94, 0, -31],
-} satisfies Record<z.infer<typeof NpcIdSchema>, [number, number, number]>
+} satisfies Record<z.infer<typeof NeighborIdSchema>, [number, number, number]>
 export const EmoteSchema = z.enum(['wave', 'thanks', 'hello', 'follow-me'])
 export type Emote = z.infer<typeof EmoteSchema>
 export const PositionSchema = z.tuple([
@@ -88,7 +89,7 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
   }),
   z.object({
     type: z.literal('npc-line'),
-    npcId: NpcIdSchema,
+    npcId: NeighborIdSchema,
     reply: z.string().max(700),
   }),
   z.object({
@@ -99,6 +100,7 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     quests: z.array(QuestSchema).max(3),
     completed: z.array(CompletedQuestSchema),
     reputation: z.number(),
+    friendship: FriendshipMapSchema.default({}),
   }),
   z.object({ type: z.literal('error'), message: z.string() }),
   z.object({ type: z.literal('party'), party: PartySnapshotSchema.nullable() }),
@@ -111,6 +113,7 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     world: WorldStateSchema,
     completed: z.array(CompletedQuestSchema),
     reputation: z.number(),
+    friendship: FriendshipMapSchema.default({}),
   }),
 ])
 export type ServerSocketMessage = z.infer<typeof ServerSocketMessageSchema>

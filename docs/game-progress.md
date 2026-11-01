@@ -53,3 +53,13 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Evidence: `docs/final-evidence.md`; ignored captures/reports in `artifacts/` and live usage JSON under `/tmp/saigon-quest-evidence/`.
 - Server Vitest uses two workers; this avoids reproduced PGlite initialization timeouts under concurrent browser load without increasing timeouts.
 - Physical Quest 3 hardware, zone-specific audio mixing, and Facebook OAuth with production credentials are unverified. The expanded mobile scene exceeds the initial 300k triangle target in dense views.
+
+## NPC friendship harness
+
+- Shared ids cover 29 agents; city placements, director control, and barks remain neighbor-only.
+- Friendship persists on the player row through migration 0005, normal row locks, revisions, socket saves, and reset.
+- Conversation-driven offers, automatic ready completion, bounded friendship tools, decline ownership, expiry, delivery reclamation, resident poses, labels, and local history cache are implemented.
+- Root gates pass. Unit verification: 150 server tests and 120 client tests passed. Real Postgres integration: two tests passed, including persisted completion friendship.
+- Scripted compaction spike and 25-turn live Postgres memory flow pass. Live prompt tokens fall from 4,181 to 2,871 after compaction; turn-two lotus tea preference is recalled.
+- Desktop and 390px Playwright: walker pause, chat offer, automatic completion, +1 friendship, abandonment −1, reopened/reloaded history, authenticated reset clearing history, reduced-motion fade, and no page errors or overflow pass.
+- Live model-authored herb delivery and greet completion pass: propose-quest, 55 coins, once-only reward.

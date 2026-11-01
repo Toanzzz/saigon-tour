@@ -1,7 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useRapier } from '@react-three/rapier'
 import { useEffect } from 'react'
-import { crowdStats } from '@/features/npcs/crowd'
+import { crowdStats } from '@/features/npcs/residents'
 import { city } from '@/shared/api/city'
 import { eventDiagnostics } from '@/shared/api/events'
 import { npcSpeech, presence, speech } from '@/shared/api/presence'

@@ -1,8 +1,13 @@
-import { type InteractRequest, type NpcId, seedsFor } from '@saigon/shared'
+import {
+  type InteractRequest,
+  looksLikeHelpRequest,
+  type NpcId,
+  seedsFor,
+} from '@saigon/shared'
 import type { ToolOutcome } from './outcome'
 import type { QuestService } from './service'
 
-export async function runIntent(
+export async function offerSeed(
   game: QuestService,
   npcId: NpcId,
   request: InteractRequest,
@@ -11,7 +16,7 @@ export async function runIntent(
 ) {
   const before = outcome.events.length
   if (
-    request.intent === 'help' &&
+    looksLikeHelpRequest(request.message) &&
     !outcome.events.some((e) => e.type === 'offered')
   ) {
     for (const spec of seedsFor(npcId, request.locale)) {
@@ -34,10 +39,6 @@ export async function runIntent(
       }
     }
   }
-  if (request.intent === 'check') {
-    outcome.calls.push('check-quests')
-    outcome.events.push(...(await game.checkQuests(playerId, npcId)))
-  }
   return outcome.events.length > before
 }
 
@@ -48,4 +49,23 @@ export const outcomeKind = (outcome: ToolOutcome) =>
       ? 'offered'
       : outcome.events.some((e) => e.type === 'incomplete')
         ? 'incomplete'
-        : null
+        : outcome.events.some((e) => e.type === 'failed')
+          ? 'failed'
+          : null
+
+export async function completeReady(
+  game: QuestService,
+  playerId: string,
+  npcId: NpcId
+) {
+  const record = await game.get(playerId)
+  if (
+    !record.quests.some(
+      (quest) => quest.giverNpcId === npcId && quest.status === 'ready'
+    )
+  )
+    return []
+  return (await game.checkQuests(playerId, npcId)).filter(
+    (event) => event.type === 'completed'
+  )
+}

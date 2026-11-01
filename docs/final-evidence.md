@@ -89,3 +89,14 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - `docker buildx build --platform linux/arm64 -f apps/server/Dockerfile .` passed.
 - Host t-oracle (`oracle.toan.io`, aarch64): user `toan` is in `docker`, and the `edge` network exists.
 - Not yet observed: GitHub secrets/vars, the host `.env`, a workflow run, `https://saigon-api.toan.io/health`, and the deployed client.
+
+## NPC friendliness harness
+
+- Required root gates pass in order: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`. Server: 150 passing / 2 skipped; client: 120 passing.
+
+- Migration `0005_npc_friendship.sql` adds player-row friendship. `bun run test:integration` passes both real Postgres cases; completion friendship persists at +2 and the completion ledger grants once under concurrency.
+- Unit coverage includes all 29 NPC seed loops, friendship clamps/presets/cooldown/chat cap/offer gate, once-per-turn adjustment, decline ownership/progress, expiry/reclamation, reset, history identity isolation, and explicit-model observational memory.
+- `node scripts/qa-friendship.mjs`, unsandboxed headless Chromium at 1440×900 and 390×900: walker stops nearby; real conversation input requests an errand; talking to Linh advances it; return greeting opens reward and adds +1; reopening shows meter +1 and prior chat; abandonment subtracts one; history survives reload; authenticated journey reset clears history; reduced-motion feedback uses `friendship-fade`. No page exceptions or horizontal overflow. Local evidence: `artifacts/npc-friendship/results.json` and resident captures.
+- Live quest script with `google/gemini-3.8-flash`: model calls `propose-quest`, delivery advances, giver greet completes, wallet reaches 55, repeated completion does not grant again. Recorded usage: 4,284 input / 128 output tokens, estimated $0.002398.
+- Live memory script: 25 turns using Postgres storage, explicit metered compatible model, minimal reasoning, asynchronous observation. Observations exist; prompt input falls from 4,181 at turn 19 to 2,871 at turn 20; turn-two lotus tea preference is recalled on turn 26. Raw context is bounded to forty messages through `getContext`, since Mastra OM ignores `lastMessages`. Reset explicitly clears the OM record because the installed Postgres adapter's `deleteThread` removes only messages, vectors, and thread metadata.
+- Verification commands using `.env` unset inherited `META_MUSE_API_KEY`: the inherited old key returned provider HTTP 401 while the updated file credential succeeded. No secret values are recorded.

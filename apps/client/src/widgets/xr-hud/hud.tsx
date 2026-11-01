@@ -1,13 +1,6 @@
-import { NPCS } from '@saigon/shared'
+import { friendlinessOf, NPCS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import {
-  acceptQuest,
-  board,
-  close,
-  deliverOrVerify,
-  interact,
-  nearby,
-} from '@/app/actions'
+import { board, close, giveItem, interact, nearby } from '@/app/actions'
 import { itemLabel, m, useLocale } from '@/shared/i18n'
 import { game, trackedQuest } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
@@ -27,11 +20,11 @@ export function XRGameHud() {
         (line) =>
           `${line.role === 'user' ? m.map_you() : npc.name}: ${line.content}`
       )
-    if (state.dialogue.thinking) lines.push(m.chat_thinking({ name: npc.name }))
-    const { delivery, ready, canHelp } = dialogueQuests(
-      state,
-      state.dialogue.npc
+    lines.unshift(
+      `${m.friendship_label()}: ${friendlinessOf(state.friendship, state.dialogue.npc)}`
     )
+    if (state.dialogue.thinking) lines.push(m.chat_thinking({ name: npc.name }))
+    const { delivery } = dialogueQuests(state, state.dialogue.npc)
     return (
       <XRWorldPanel
         title={npc.name}
@@ -40,15 +33,6 @@ export function XRGameHud() {
           state.dialogue.thinking
             ? []
             : [
-                ...(canHelp
-                  ? [
-                      {
-                        id: 'help',
-                        label: m.xr_any_errands(),
-                        onClick: acceptQuest,
-                      },
-                    ]
-                  : []),
                 ...(delivery
                   ? [
                       {
@@ -56,16 +40,7 @@ export function XRGameHud() {
                         label: m.errands_give({
                           item: itemLabel(delivery.itemId),
                         }),
-                        onClick: deliverOrVerify,
-                      },
-                    ]
-                  : []),
-                ...(ready
-                  ? [
-                      {
-                        id: 'check',
-                        label: m.xr_im_back(),
-                        onClick: deliverOrVerify,
+                        onClick: giveItem,
                       },
                     ]
                   : []),

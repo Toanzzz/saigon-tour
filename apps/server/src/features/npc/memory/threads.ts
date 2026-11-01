@@ -3,7 +3,7 @@ import type { MastraDBMessage } from '@mastra/core/agent'
 import type { MastraCompositeStore } from '@mastra/core/storage'
 import { NPCS, type NpcId } from '@saigon/shared'
 
-export async function recordGreeting(
+export async function recordTurn(
   storage: MastraCompositeStore,
   npcId: NpcId,
   playerId: string,
@@ -45,6 +45,37 @@ export async function clearPlayerThreads(
 ) {
   const memory = await storage.getStore('memory')
   if (!memory) throw new Error('npc_memory_store_unavailable')
-  for (const npcId of Object.keys(NPCS))
+  for (const npcId of Object.keys(NPCS)) {
+    await memory.clearObservationalMemory(`${npcId}:${playerId}`, playerId)
     await memory.deleteThread({ threadId: `${npcId}:${playerId}` })
+  }
+}
+
+export async function readHistory(
+  storage: MastraCompositeStore,
+  npcId: NpcId,
+  playerId: string,
+  limit = 30
+) {
+  const memory = await storage.getStore('memory')
+  if (!memory) throw new Error('npc_memory_store_unavailable')
+  const result = await memory.listMessages({
+    threadId: `${npcId}:${playerId}`,
+    resourceId: playerId,
+    perPage: limit,
+    page: 0,
+    orderBy: { field: 'createdAt', direction: 'DESC' },
+  })
+  return {
+    messages: result.messages.reverse().flatMap((message) => {
+      if (message.role !== 'user' && message.role !== 'assistant') return []
+      const text = message.content.parts
+        .filter((part) => part.type === 'text')
+        .map((part) => part.text)
+        .join('\n')
+      return text.trim()
+        ? [{ role: message.role, text, at: message.createdAt.toISOString() }]
+        : []
+    }),
+  }
 }

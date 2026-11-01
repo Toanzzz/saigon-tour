@@ -1,6 +1,5 @@
-import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { NPCS, type NpcId } from '@saigon/shared'
+import { NEIGHBOR_IDS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useRef } from 'react'
 import type { Group } from 'three'
@@ -11,14 +10,15 @@ import { game } from '@/shared/state/game'
 import { questTarget } from '@/shared/state/quests'
 import { Character } from '@/shared/world'
 import { PEOPLE } from '@/shared/world/places'
-import { Crowd } from './crowd'
+import { NpcLabel } from './npc-label'
+import { Crowd } from './residents'
 
 export function Neighbors() {
   const state = useSelector(game, (s) => s)
   const active = questTarget(state)
   return (
     <>
-      {(Object.keys(PEOPLE) as NpcId[]).map((id) => (
+      {NEIGHBOR_IDS.map((id) => (
         <Neighbor
           key={id}
           id={id}
@@ -38,7 +38,6 @@ export function Neighbors() {
 function Neighbor({
   id,
   highlighted,
-  ready,
 }: {
   id: NpcId
   highlighted: boolean
@@ -74,21 +73,7 @@ function Neighbor({
         <ringGeometry args={[0.75, highlighted ? 0.93 : 0.8, 40]} />
         <meshBasicMaterial color={PEOPLE[id].color} transparent opacity={0.9} />
       </mesh>
-      <Html
-        center
-        position={[0, 2.55, 0]}
-        distanceFactor={19}
-        style={{ pointerEvents: 'none' }}
-      >
-        {highlighted && (
-          <div className="world-label active">
-            <span className="quest-marker" aria-hidden="true">
-              <b>{ready ? '?' : '!'}</b>
-            </span>
-            <span className="name-tag">{NPCS[id].name}</span>
-          </div>
-        )}
-      </Html>
+      <NpcLabel id={id} />
     </group>
   )
 }

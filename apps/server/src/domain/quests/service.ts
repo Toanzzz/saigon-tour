@@ -1,7 +1,11 @@
 import {
   applyQuestEvents,
+  CHAT_COOLDOWN_MS,
+  CHAT_FRIENDSHIP_MAX,
   type CitySnapshot,
+  canOfferQuests,
   createQuest,
+  friendlinessOf,
   type ItemId,
   isReady,
   type NpcId,
@@ -14,7 +18,8 @@ import {
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { GameDb, PlayerSave } from '@/shared/db'
-import { allocateDeliveries, grantQuest, reclaimDeliveries } from './rewards'
+import { expireQuests, failQuest, shift } from './friendship'
+import { allocateDeliveries, grantQuest } from './rewards'
 
 export type OfferResult =
   | { accepted: true; quest: Quest }
@@ -31,13 +36,34 @@ export class QuestService {
     return this.db.readPlayer(playerId)
   }
 
-  applyEvents(playerId: string, events: PlayerEvent[], _npcId?: NpcId) {
-    return this.db.mutatePlayer(playerId, (record) => {
+  async applyEvents(
+    playerId: string,
+    events: PlayerEvent[],
+    _npcId?: NpcId,
+    now = Date.now()
+  ) {
+    const before = await this.get(playerId)
+    const ids = [
+      playerId,
+      ...before.quests.flatMap((quest) => quest.party?.memberIds ?? []),
+    ]
+    const updates = new Map<string, PlayerSave>()
+    const result = await this.db.mutatePlayers(ids, (saves) => {
+      const record = saves.get(playerId)
+      if (!record) throw new Error('player_not_found')
       const advanced = applyQuestEvents(record.world, record.quests, events)
       record.world = advanced.world
       record.quests = advanced.quests
-      return structuredClone(record)
+      const questEvents = expireQuests(record, now)
+      for (const [id, save] of saves) {
+        if (id === playerId) continue
+        const failed = expireQuests(save, now)
+        if (failed.length) updates.set(id, structuredClone(save))
+      }
+      return { ...structuredClone(record), questEvents }
     })
+    for (const [id, save] of updates) this.push?.(id, save)
+    return result
   }
 
   async proposeQuest(
@@ -68,6 +94,8 @@ export class QuestService {
       for (const id of ids) {
         const record = saves.get(id)
         if (!record) return { accepted: false, reason: 'member_not_found' }
+        if (!canOfferQuests(record.friendship, giver))
+          return { accepted: false, reason: 'friendliness_too_low' }
         const checked = validateSpec(input, {
           quests: record.quests,
           inParty: Boolean(party),
@@ -143,6 +171,7 @@ export class QuestService {
             client
           )
           if (event) {
+            shift(participant.save, giver, 1, 'completed')
             if (participant.id === playerId) output.push(event)
             if (quest.party)
               granted.push({ id: participant.id, quest: event.quest })
@@ -164,11 +193,52 @@ export class QuestService {
     return events
   }
 
-  async abandon(playerId: string, questId: string) {
+  async adjustFriendship(
+    playerId: string,
+    npcId: NpcId,
+    dir: 'warmer' | 'cooler',
+    now = Date.now()
+  ) {
+    return this.db.mutatePlayer(playerId, (save) => {
+      const last = save.friendship[npcId]?.chatAt
+      if (last !== undefined && now - last < CHAT_COOLDOWN_MS) return null
+      if (
+        dir === 'warmer' &&
+        friendlinessOf(save.friendship, npcId) >= CHAT_FRIENDSHIP_MAX
+      )
+        return null
+      const event = shift(save, npcId, dir === 'warmer' ? 1 : -1, 'chat')
+      save.friendship[npcId] = { level: event.level, chatAt: now }
+      return event
+    })
+  }
+
+  async expire(playerId: string, now = Date.now()) {
+    await this.applyEvents(playerId, [], undefined, now)
+    return this.db.player(playerId)
+  }
+
+  abandon(playerId: string, questId: string) {
+    return this.fail(playerId, questId, 'abandoned')
+  }
+
+  async fail(
+    playerId: string,
+    questId: string,
+    reason: 'abandoned' | 'declined',
+    giver?: NpcId
+  ) {
     await this.db.mutatePlayer(playerId, (record) => {
       const quest = record.quests.find((entry) => entry.id === questId)
-      if (quest) reclaimDeliveries(record, quest)
-      record.quests = record.quests.filter((entry) => entry.id !== questId)
+      if (!quest) return
+      if (
+        reason === 'declined' &&
+        (quest.giverNpcId !== giver ||
+          quest.status !== 'active' ||
+          quest.progress.some(Boolean))
+      )
+        return
+      failQuest(record, quest, reason)
     })
     const player = await this.db.player(playerId)
     this.push?.(playerId, player)

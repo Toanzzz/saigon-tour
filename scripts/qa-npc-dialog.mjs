@@ -87,7 +87,7 @@ try {
     await apply(page, 'available')
     assert.match(
       await page.locator('.errands').innerText(),
-      /Ask for an errand/
+      /Ask .* if they need a hand/
     )
     await page.screenshot({ path: `${out}/available-${width}.png` })
 
@@ -100,7 +100,7 @@ try {
     await apply(page, 'ready')
     const readyText = await page.locator('.errands').innerText()
     assert.match(readyText, /Ready/)
-    assert.match(readyText, /Turn in/)
+    assert.match(readyText, /good news|thank|tell/i)
     await page.screenshot({ path: `${out}/ready-${width}.png` })
 
     await apply(page, 'full')

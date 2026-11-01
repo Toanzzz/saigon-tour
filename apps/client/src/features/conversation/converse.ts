@@ -7,15 +7,16 @@ import {
   type TimeOfDay,
 } from '@saigon/shared'
 import { interactWith, queryClient } from '@/shared/api/agent'
-import { npcPosition } from '@/shared/api/city'
 import { beginHttpTurn, endHttpTurn } from '@/shared/api/events'
+import { appendHistory } from '@/shared/api/history'
 import { net, updateNet } from '@/shared/api/status'
 import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
+import { noteFriendship } from '@/shared/state/friendship'
 import { type GameState, game, notify, update } from '@/shared/state/game'
-import { distance, PEOPLE } from '@/shared/world/places'
+import { nearbyNpcs } from './nearby'
 
-export type Intent = 'chat' | 'help' | 'check' | 'greet'
+export type Intent = 'chat' | 'greet'
 
 const timeOfDay = (hour = new Date().getHours()): TimeOfDay =>
   hour < 11
@@ -90,9 +91,6 @@ export async function converse(text: string, intent: Intent, opening = false) {
     dialogue: { ...dialog, history, thinking: true },
     pending: pending.slice(sentEvents.length),
   })
-  const nearbyNpcs = (Object.keys(PEOPLE) as NpcId[]).filter(
-    (id) => id !== dialog.npc && distance(npcPosition(id), position) < 12
-  )
   const result = await mutate(() =>
     interactWith(
       dialog.npc,
@@ -102,7 +100,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
         events: sentEvents,
         worldContext: {
           playerLocation: game.state.world.locationId,
-          nearbyNpcs,
+          nearbyNpcs: nearbyNpcs(dialog.npc, position),
           timeOfDay: timeOfDay(),
         },
       },
@@ -111,6 +109,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
   )
   endHttpTurn()
   if (game.state.sessionId !== sessionId) return
+  appendHistory(dialog.npc, text, result.response.reply)
   apply(
     result.response,
     dialog.npc,
@@ -134,6 +133,15 @@ function apply(
   synced: boolean,
   partyVersion: number
 ) {
+  if (result.revision >= game.state.serverRevision)
+    noteFriendship(
+      game.state.friendship,
+      result.friendship,
+      result.friendshipEvents
+    )
+  for (const event of result.questEvents)
+    if (event.type === 'failed')
+      notify(m.quest_failed({ title: event.quest.title }))
   const events = result.questEvents
   if (synced && net.state.partyVersion === partyVersion)
     updateNet({ party: result.party })
@@ -147,6 +155,7 @@ function apply(
     }
     let next: GameState = {
       ...state,
+      friendship: result.friendship,
       serverRevision: synced ? result.revision : state.serverRevision,
       ...applyQuestEvents(result.world, result.quests, state.pending),
       trackedQuestId: result.quests.some(
@@ -207,7 +216,7 @@ function apply(
               history: [
                 ...history,
                 { role: 'assistant' as const, content: result.reply },
-              ].slice(-12),
+              ].slice(-30),
             }
           : state.dialogue,
     }

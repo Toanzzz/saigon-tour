@@ -54,7 +54,9 @@ describe('quest engine', () => {
     expect(QuestSchema.safeParse(createQuest(seed())).success).toBe(true)
   })
   it('validates an offline seed for every persona', () => {
-    expect(new Set(QUEST_SEEDS.map((spec) => spec.giverNpcId)).size).toBe(9)
+    expect(new Set(QUEST_SEEDS.map((spec) => spec.giverNpcId)).size).toBe(
+      Object.keys(NPCS).length
+    )
     for (const locale of LocaleSchema.options)
       for (const npc of Object.keys(NPCS) as NpcId[])
         for (const spec of seedsFor(npc, locale))

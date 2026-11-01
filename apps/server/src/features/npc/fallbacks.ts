@@ -1,7 +1,20 @@
-import type { Locale, NpcId, WorldState } from '@saigon/shared'
+import {
+  type Locale,
+  type NeighborId,
+  NPCS,
+  type NpcId,
+  type WorldState,
+} from '@saigon/shared'
 
 type Line = Record<Locale, string>
-const OUTCOMES: Record<'offered' | 'completed' | 'incomplete', Line> = {
+const OUTCOMES: Record<
+  'offered' | 'completed' | 'incomplete' | 'failed',
+  Line
+> = {
+  failed: {
+    en: 'All right. That errand is closed; I hoped you could help.',
+    vi: 'Ừ, việc đó kết thúc rồi. Mình đã mong bạn giúp được.',
+  },
   offered: {
     en: 'Cảm ơn! Your errand is in the journal. Follow its steps, then come back to me.',
     vi: 'Cảm ơn nha! Việc đã ghi vào nhật ký rồi. Làm theo từng bước rồi quay lại gặp mình nhé.',
@@ -15,7 +28,7 @@ const OUTCOMES: Record<'offered' | 'completed' | 'incomplete', Line> = {
     vi: 'Vẫn còn chút việc nữa. Xem các bước trong nhật ký rồi quay lại nhé.',
   },
 }
-const IDLE: Record<NpcId, Line> = {
+const IDLE: Record<NeighborId, Line> = {
   hoa: {
     en: 'Chào con! The market is busy. Ask me for an errand if you would like to help.',
     vi: 'Chào con! Chợ đang đông lắm. Muốn giúp cô thì hỏi cô việc nhé.',
@@ -58,8 +71,17 @@ const IDLE: Record<NpcId, Line> = {
 export function fallbackLine(
   npcId: NpcId,
   _world: WorldState,
-  outcome: 'offered' | 'completed' | 'incomplete' | null,
-  locale: Locale = 'en'
+  outcome: 'offered' | 'completed' | 'incomplete' | 'failed' | null,
+  locale: Locale = 'en',
+  level = 0
 ): string {
-  return (outcome ? OUTCOMES[outcome] : IDLE[npcId])[locale]
+  if (!outcome && level <= -3)
+    return locale === 'vi'
+      ? 'Chào bạn. Hôm nay tôi chưa muốn nhờ việc gì.'
+      : 'Hello. I am not ready to ask any favors today.'
+  return (
+    outcome
+      ? OUTCOMES[outcome]
+      : (NPCS[npcId].idleLine ?? IDLE[npcId as NeighborId])
+  )[locale]
 }

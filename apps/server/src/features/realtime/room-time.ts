@@ -1,4 +1,4 @@
-import type { NpcId, PresencePlayer, TimeOfDay } from '@saigon/shared'
+import type { NeighborId, PresencePlayer, TimeOfDay } from '@saigon/shared'
 import type { Room } from './rooms'
 
 /** Close codes the client distinguishes (4000–4999 are application codes). */
@@ -27,7 +27,7 @@ export function timeBucket(now: number): TimeOfDay {
         ? 'afternoon'
         : 'evening'
 }
-export function nearNpc(player: PresencePlayer, npcId: NpcId, room: Room) {
+export function nearNpc(player: PresencePlayer, npcId: NeighborId, room: Room) {
   const position = room.city.position(npcId)
   return (
     !player.ride &&

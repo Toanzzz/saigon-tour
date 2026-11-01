@@ -57,6 +57,7 @@ describe.skipIf(!enabled)('Postgres persistence', () => {
     expect(player.world.currency).toBe(
       30 + rewardFor(required(seedsFor('hoa')[0])).currency
     )
+    expect(player.friendship.hoa?.level).toBe(2)
     expect(player.world.completedQuestIds).toHaveLength(1)
     expect(player.world.completedQuestIds[0]).toMatch(/^q_/)
     const count = await db.sql.query(

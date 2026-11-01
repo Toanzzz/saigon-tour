@@ -1,4 +1,5 @@
 export * from './domains'
 export * from './engine'
+export * from './friendship'
 export * from './schema'
 export * from './seeds'

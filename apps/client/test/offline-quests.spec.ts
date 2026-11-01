@@ -51,13 +51,7 @@ describe('offline NPC quests', () => {
     expect(result.world.currency).toBe(30)
     expect(result.world.completedQuestIds).toEqual([])
     expect(result.quests[0]?.status).toBe('ready')
-    expect(result.questEvents).toEqual([
-      {
-        type: 'incomplete',
-        quest,
-        reward: { currency: 0, itemId: null, reputation: 0 },
-      },
-    ])
+    expect(result.questEvents).toEqual([])
   })
   it('does not replay already applied pending events into later repeated steps', () => {
     const quest = {
@@ -134,7 +128,7 @@ describe('offline NPC quests', () => {
     const duplicate = offline('hoa', request('hoa', 'help'), state)
     expect(duplicate.quests).toHaveLength(1)
     const checked = offline('hoa', request('hoa', 'check'), state)
-    expect(checked.questEvents[0]?.type).toBe('incomplete')
+    expect(checked.questEvents).toEqual([])
     expect(checked.world.currency).toBe(30)
   })
 })

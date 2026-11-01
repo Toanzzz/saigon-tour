@@ -22,6 +22,7 @@ export interface Reservation {
   id: string
 }
 const initial = (): PlayerSave => ({
+  friendship: {},
   revision: 0,
   world: {
     locationId: 'market',

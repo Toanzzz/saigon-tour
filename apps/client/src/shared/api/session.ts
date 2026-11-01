@@ -29,6 +29,7 @@ let initialization: Promise<void> | null = null
 
 export function guestState(player: Guest) {
   return {
+    friendship: player.friendship,
     serverRevision: player.revision,
     guestId: player.id,
     guestName: player.name,
@@ -190,6 +191,8 @@ export async function signOut() {
     await authPost('/sign-out')
   } finally {
     saveToken(null)
+    const { queryClient } = await import('./query')
+    queryClient.removeQueries({ queryKey: ['npc-history'] })
   }
 }
 

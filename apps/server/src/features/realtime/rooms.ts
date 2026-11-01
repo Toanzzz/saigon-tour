@@ -1,7 +1,7 @@
 import {
   type GuestPlayer,
+  type NeighborId,
   NPC_POSITIONS,
-  type NpcId,
   type PlayerEvent,
   type ServerSocketMessage,
 } from '@saigon/shared'
@@ -240,7 +240,7 @@ export class RoomManager {
       if (!players.length) continue
       room.sync?.(players, room.city.snapshot())
       if (room.ticking) continue
-      for (const npcId of Object.keys(NPC_POSITIONS) as NpcId[])
+      for (const npcId of Object.keys(NPC_POSITIONS) as NeighborId[])
         if (players.some((player) => nearNpc(player, npcId, room)))
           room.scheduler.notify(npcId, 'player-nearby')
       room.ticking = true

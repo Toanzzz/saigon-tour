@@ -11,7 +11,8 @@ import {
   endHttpTurn,
   resetEventSequence,
 } from '@/shared/api/events'
-import { clearPersistedQueries } from '@/shared/api/query'
+import { cachedHistory, fetchHistory } from '@/shared/api/history'
+import { clearPersistedQueries, queryClient } from '@/shared/api/query'
 import { guestState, resetSession, signOut } from '@/shared/api/session'
 import { audio } from '@/shared/audio'
 import { itemLabel, m } from '@/shared/i18n'
@@ -55,6 +56,7 @@ export async function restart() {
     notify(m.toast_reset_failed())
     return
   }
+  queryClient.removeQueries({ queryKey: ['npc-history'] })
   resetEventSequence()
   audio.setPaused(false)
   game.setState(() => ({
@@ -197,23 +199,29 @@ export async function talk(npc: NpcId) {
     dialogue: {
       npc,
       requestId: crypto.randomUUID(),
-      history: [],
+      history: cachedHistory(npc),
+      earlierCount: cachedHistory(npc).length,
       thinking: true,
       source: null,
     },
     world: { ...s.world, talkedTo: [...new Set([...s.world.talkedTo, npc])] },
     pending: [...s.pending, { type: 'talk', npcId: npc }],
   }))
+  if (state.guestStatus === 'online') {
+    await fetchHistory(npc).catch(() => {})
+    if (game.state.dialogue?.npc !== npc) return
+    update({
+      dialogue: {
+        ...game.state.dialogue,
+        history: cachedHistory(npc),
+        earlierCount: cachedHistory(npc).length,
+      },
+    })
+  }
   await converse(m.prompt_greet(), 'greet', true)
 }
 export const chat = (text: string) => converse(text, 'chat')
-export async function acceptQuest() {
-  const state = game.state
-  if (!state.dialogue || state.dialogue.thinking || state.quests.length >= 3)
-    return
-  await converse(m.prompt_help(), 'help')
-}
-export async function deliverOrVerify() {
+export async function giveItem() {
   const state = game.state
   const { dialogue } = state
   if (!dialogue || dialogue.thinking) return
@@ -227,7 +235,6 @@ export async function deliverOrVerify() {
     )
     return
   }
-  await converse(m.prompt_check(), 'check')
 }
 export function board(to: keyof typeof PLACES, mode: TravelMode) {
   const state = game.state

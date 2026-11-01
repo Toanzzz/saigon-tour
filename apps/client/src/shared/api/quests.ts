@@ -3,8 +3,10 @@ import {
   type GuestPlayer,
   GuestPlayerSchema,
   type Quest,
+  shiftFriendship,
 } from '@saigon/shared'
 import { m } from '@/shared/i18n'
+import { noteFriendship } from '@/shared/state/friendship'
 import { game, notify } from '@/shared/state/game'
 import { rpc } from './client'
 import { beginHttpTurn, endHttpTurn } from './events'
@@ -13,6 +15,8 @@ import { guestState } from './session'
 export function removeQuestLocally(quest: Quest) {
   game.setState((state) => {
     if (!state.quests.some((entry) => entry.id === quest.id)) return state
+    const friendship = shiftFriendship(state.friendship, quest.giverNpcId, -1)
+    noteFriendship(state.friendship, friendship)
     const quests = state.quests.filter((entry) => entry.id !== quest.id)
     const inventory = { ...state.world.inventory }
     for (const [index, step] of quest.steps.entries())
@@ -20,6 +24,7 @@ export function removeQuestLocally(quest: Quest) {
         inventory[step.itemId] = Math.max(0, (inventory[step.itemId] ?? 0) - 1)
     return {
       ...state,
+      friendship,
       quests,
       trackedQuestId:
         state.trackedQuestId === quest.id
@@ -30,6 +35,8 @@ export function removeQuestLocally(quest: Quest) {
   })
 }
 export function applyQuestSave(player: GuestPlayer) {
+  if (player.revision >= game.state.serverRevision)
+    noteFriendship(game.state.friendship, player.friendship)
   game.setState((state) =>
     player.revision < state.serverRevision
       ? state

@@ -1,6 +1,12 @@
-import type { CompletedQuest, Quest, WorldState } from '@saigon/shared'
+import type {
+  CompletedQuest,
+  FriendshipMap,
+  Quest,
+  WorldState,
+} from '@saigon/shared'
 
 export interface PlayerSave {
+  friendship: FriendshipMap
   revision: number
   world: WorldState
   quests: Quest[]

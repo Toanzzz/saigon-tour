@@ -40,6 +40,7 @@ beforeEach(() =>
 )
 const completion = () => ({
   type: 'quest-completed' as const,
+  friendship: {},
   revision: 4,
   quest: finished,
   quests: [solo],
@@ -86,7 +87,7 @@ describe('party controls and authoritative quest rewards', () => {
       },
     }
     expect(renderToStaticMarkup(<Conversation state={state} />)).toContain(
-      'Ask for an errand'
+      'Ask Cô Hoa if they need a hand.'
     )
   })
   it('handles invites, expiry, and presence membership', () => {

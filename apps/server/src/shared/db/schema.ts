@@ -1,4 +1,9 @@
-import type { CompletedQuest, Quest, WorldState } from '@saigon/shared'
+import type {
+  CompletedQuest,
+  FriendshipMap,
+  Quest,
+  WorldState,
+} from '@saigon/shared'
 import {
   integer,
   jsonb,
@@ -15,6 +20,7 @@ import { user } from './auth-schema'
 export * from './auth-schema'
 
 export const players = pgTable('players', {
+  friendship: jsonb().$type<FriendshipMap>().notNull().default({}),
   revision: integer().notNull().default(0),
   id: uuid().primaryKey(),
   tokenHash: text('token_hash').unique(),

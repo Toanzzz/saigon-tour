@@ -268,7 +268,7 @@
   "chat_connecting": "Đang kết nối với hàng xóm…",
   "errands_label": "Việc vặt",
   "errands_ready": "Sẵn sàng",
-  "errands_good_news": "Báo tin vui cho {name}.",
+  "errands_good_news": "{name} sẽ cảm ơn bạn.",
   "errands_turn_in": "Hoàn tất",
   "errands_needs_you": "Cần bạn",
   "errands_give": "Đưa {item}",
@@ -328,5 +328,15 @@
   "xr_exit": "Thoát VR",
   "xr_enter": "Vào VR",
   "toast_errand_added": "Đã thêm một việc vào nhật ký.",
-  "dialog_close": "Đóng bảng"
+  "dialog_close": "Đóng bảng",
+  "errands_chat_hint": "Hỏi {name} xem có cần giúp gì không.",
+  "friendship_label": "Độ thân thiện",
+  "friendship_changed": "{name}: độ thân thiện {delta}",
+  "history_earlier": "Trước đó",
+  "errands_cold": "{name} chưa muốn nhờ bạn giúp.",
+  "quest_expires": "Hết hạn sau {minutes} phút",
+  "quest_failed": "Việc đã kết thúc: {title}",
+  "friendship_cold": "Dè dặt",
+  "friendship_neutral": "Đang làm quen",
+  "friendship_warm": "Thân thiện"
 }

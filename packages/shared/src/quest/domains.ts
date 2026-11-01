@@ -1,4 +1,5 @@
 import type { ItemId, LocationId, NpcId } from '../entities'
+import { RESIDENT_DOMAINS } from './resident-domains'
 
 export interface QuestDomain {
   home: LocationId
@@ -10,6 +11,7 @@ export interface QuestDomain {
 
 /** Persona boundaries are enforced by the engine as well as the agent prompt. */
 export const QUEST_DOMAINS: Record<NpcId, QuestDomain> = {
+  ...RESIDENT_DOMAINS,
   hoa: {
     home: 'market',
     locations: ['market', 'park', 'alley', 'cityhall'],

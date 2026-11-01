@@ -61,7 +61,7 @@ try {
     affectedNpc,
     {
       message: 'Any errands for the city event? Please propose one now.',
-      intent: 'help',
+      intent: 'chat',
       events: [],
       worldContext: {
         playerLocation: after.npcPlacements[affectedNpc].locationId,

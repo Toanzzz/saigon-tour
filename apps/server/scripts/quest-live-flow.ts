@@ -15,13 +15,14 @@ try {
     'hoa',
     {
       message:
-        'Any errands? Please write me a small original solo errand and propose it through your tool.',
-      intent: 'help',
+        'Any errands? Please propose a solo errand to take herbs to Linh.',
+      intent: 'chat',
       events: [],
       worldContext: { playerLocation: 'market', timeOfDay: 'morning' },
     },
     player.id
   )
+  assert.equal(offered.source, 'live', 'offer must come from live model')
   assert(
     offered.toolCalls.includes('propose-quest'),
     'live model must author the quest'
@@ -44,9 +45,8 @@ try {
   const completed = await harness.interact(
     'hoa',
     {
-      message:
-        "I'm back. Please check my errands and grant any earned thank-you through your tool.",
-      intent: 'check',
+      message: "I'm back. Hello again!",
+      intent: 'greet',
       events: [],
       worldContext: { playerLocation: 'market', timeOfDay: 'morning' },
     },

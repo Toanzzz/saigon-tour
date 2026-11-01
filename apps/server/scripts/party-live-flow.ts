@@ -33,7 +33,7 @@ try {
     {
       message:
         'Our party would like an original short errand. Please propose a party quest now.',
-      intent: 'help',
+      intent: 'chat',
       events: [],
       worldContext: { playerLocation: 'market', timeOfDay: 'morning' },
     },
@@ -67,7 +67,7 @@ try {
     {
       message:
         "I'm back. Check our party quest and give each member their earned reward.",
-      intent: 'check',
+      intent: 'greet',
       events: [],
       worldContext: { playerLocation: 'market', timeOfDay: 'morning' },
     },

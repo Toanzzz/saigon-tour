@@ -11,9 +11,9 @@ const ProfileSchema = z.object({ name: PlayerNameSchema }).strict()
 export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
   return new Hono<Env>()
     .use('*', requireAuth(auth, db))
-    .get('/', (c) =>
+    .get('/', async (c) =>
       c.json({
-        player: c.var.player,
+        player: await harness.game.expire(c.var.player.id),
         account: { anonymous: Boolean(c.var.user.isAnonymous) },
       })
     )

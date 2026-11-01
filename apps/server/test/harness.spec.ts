@@ -108,23 +108,19 @@ describe('NPC authored errands', () => {
     }
   )
 
-  it('executes help/check even if the model skips the tool', async () => {
+  it('preserves a live reply without inventing a seed offer', async () => {
     const harness = ctx.fx.harness(
       live,
       scripted([{ text: 'Lovely weather!' }])
     )
-    const offered = await harness.interact(
+    const response = await harness.interact(
       'hoa',
       ask('Any errands?', { intent: 'help' }),
       ctx.playerId
     )
-    expect(offered.quests).toHaveLength(1)
-    const checked = await harness.interact(
-      'hoa',
-      ask('Back!', { intent: 'check' }),
-      ctx.playerId
-    )
-    expect(checked.questEvents[0]?.type).toBe('incomplete')
+    expect(response.reply).toBe('Lovely weather!')
+    expect(response.source).toBe('live')
+    expect(response.quests).toEqual([])
   })
 
   it('keeps memory scoped to NPC and player', async () => {
@@ -166,7 +162,8 @@ describe('NPC authored errands', () => {
     }
     for (const body of seen) {
       expect(body.tools?.map((t) => t.function.name).sort()).toEqual([
-        'checkQuests',
+        'adjustFriendliness',
+        'dropQuest',
         'getContext',
         'proposeQuest',
         'rememberPlayerFact',
@@ -175,7 +172,7 @@ describe('NPC authored errands', () => {
         'Example valid quest spec:'
       )
     }
-    expect(seen).toHaveLength(9)
+    expect(seen).toHaveLength(Object.keys(NPCS).length)
   })
 
   it('rejects unsafe model text and limits player bursts', async () => {

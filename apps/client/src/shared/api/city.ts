@@ -3,12 +3,15 @@ import {
   type CitySnapshot,
   CitySnapshotSchema,
   initialCity,
+  type NeighborId,
   NPC_POSITIONS,
+  NPCS,
   type NpcId,
 } from '@saigon/shared'
 import { Store } from '@tanstack/store'
 import { notify } from '@/shared/state/game'
-import { placeName } from '@/shared/world/places'
+import { npcPoses } from '@/shared/world/npc-pose'
+import { PEOPLE, placeName } from '@/shared/world/places'
 
 export const city = new Store<CitySnapshot>(initialCity())
 export function resetCity() {
@@ -38,5 +41,10 @@ export function cityHeadline(headline: CityHeadline) {
   notify(headline.text)
 }
 export function npcPosition(npcId: NpcId): [number, number, number] {
-  return city.state.npcPlacements[npcId]?.position ?? NPC_POSITIONS[npcId]
+  if (NPCS[npcId].kind === 'resident')
+    return npcPoses.get(npcId) ?? PEOPLE[npcId].at
+  return (
+    city.state.npcPlacements[npcId as NeighborId]?.position ??
+    NPC_POSITIONS[npcId as NeighborId]
+  )
 }

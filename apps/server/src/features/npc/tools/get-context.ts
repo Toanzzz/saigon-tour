@@ -1,5 +1,5 @@
 import { createTool } from '@mastra/core/tools'
-import { CitySnapshotSchema, QuestSchema } from '@saigon/shared'
+import { CitySnapshotSchema, friendlinessOf, QuestSchema } from '@saigon/shared'
 import { z } from 'zod'
 import { type NpcServices, requestValues } from './context'
 
@@ -10,6 +10,7 @@ export const createGetContextTool = ({ game }: NpcServices) =>
       'Read player coins, places visited, active errands, completed errands and party members.',
     inputSchema: z.object({}),
     outputSchema: z.object({
+      friendliness: z.number(),
       coins: z.number(),
       visited: z.array(z.string()),
       metNeighbors: z.array(z.string()),
@@ -26,7 +27,11 @@ export const createGetContextTool = ({ game }: NpcServices) =>
       const record = await game.get(playerId)
       return {
         city: game.city?.(playerId) ?? null,
-        need: game.city?.(playerId)?.needs[npcId] ?? null,
+        need:
+          game.city?.(playerId)?.needs[
+            npcId as import('@saigon/shared').NeighborId
+          ] ?? null,
+        friendliness: friendlinessOf(record.friendship, npcId),
         coins: record.world.currency,
         visited: record.world.visitedLocations,
         metNeighbors: record.world.talkedTo,

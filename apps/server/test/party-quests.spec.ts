@@ -19,9 +19,11 @@ describe('durable generic party quests', () => {
     await ctx.ask(first, 'linh', 'chat', [
       { type: 'deliver', itemId: 'herbs', npcId: 'linh' },
     ])
-    expect((await ctx.ask(first, 'hoa', 'check')).questEvents[0]?.type).toBe(
-      'incomplete'
-    )
+    expect(
+      (await ctx.ask(first, 'hoa', 'check')).questEvents.some(
+        (event) => event.type === 'completed'
+      )
+    ).toBe(false)
     expect(
       (await ctx.app.db.player(second.player.id)).quests[0]?.progress
     ).toEqual([false])

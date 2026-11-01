@@ -299,7 +299,7 @@
   "chat_connecting": "Connecting with your neighbor…",
   "errands_label": "Errands",
   "errands_ready": "Ready",
-  "errands_good_news": "Bring the good news back to {name}.",
+  "errands_good_news": "{name} will thank you.",
   "errands_turn_in": "Turn in",
   "errands_needs_you": "Needs you",
   "errands_give": "Give {item}",
@@ -359,5 +359,15 @@
   "xr_exit": "Exit VR",
   "xr_enter": "Enter VR",
   "toast_errand_added": "An errand was added to your journal.",
-  "dialog_close": "Close panel"
+  "dialog_close": "Close panel",
+  "errands_chat_hint": "Ask {name} if they need a hand.",
+  "friendship_label": "Friendliness",
+  "friendship_changed": "{name}: friendliness {delta}",
+  "history_earlier": "Earlier",
+  "errands_cold": "{name} isn't ready to ask favors.",
+  "quest_expires": "Expires in {minutes} min",
+  "quest_failed": "Errand closed: {title}",
+  "friendship_cold": "Reserved",
+  "friendship_neutral": "Getting acquainted",
+  "friendship_warm": "Warm"
 }

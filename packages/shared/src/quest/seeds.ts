@@ -1,5 +1,6 @@
 import type { NpcId } from '../entities'
 import type { Locale } from '../locale'
+import { RESIDENT_SEEDS } from './resident-seeds'
 import type { QuestSpec } from './schema'
 
 /** Seed quests carry text per language; projected to a plain QuestSpec on use. */
@@ -8,6 +9,7 @@ export type SeedCatalog = Omit<QuestSpec, 'title' | 'description'> & {
 }
 
 export const QUEST_SEEDS: SeedCatalog[] = [
+  ...RESIDENT_SEEDS,
   {
     giverNpcId: 'hoa',
     text: {

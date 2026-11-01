@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const NpcIdSchema = z.enum([
+export const NEIGHBOR_IDS = [
   'hoa',
   'tam',
   'linh',
@@ -10,7 +10,32 @@ export const NpcIdSchema = z.enum([
   'vy',
   'son',
   'thao',
-])
+] as const
+export const NeighborIdSchema = z.enum(NEIGHBOR_IDS)
+export type NeighborId = z.infer<typeof NeighborIdSchema>
+export const RESIDENT_IDS = [
+  'bread-vendor',
+  'fruit-vendor',
+  'market-browse',
+  'market-walk',
+  'market-family',
+  'coffee-friend',
+  'coffee-reader',
+  'commuter',
+  'student',
+  'park-reader',
+  'park-stretch',
+  'plaza-friends',
+  'plaza-stroll',
+  'opera-visitor',
+  'postcard-reader',
+  'square-tourist',
+  'riverside-friends',
+  'river-jogger',
+  'alley-vendor',
+  'alley-diner',
+] as const
+export const NpcIdSchema = z.enum([...NEIGHBOR_IDS, ...RESIDENT_IDS])
 export type NpcId = z.infer<typeof NpcIdSchema>
 export const LocationIdSchema = z.enum([
   'market',

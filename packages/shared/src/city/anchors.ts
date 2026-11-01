@@ -1,4 +1,4 @@
-import type { LocationId, NpcId } from '../entities'
+import type { LocationId, NeighborId } from '../entities'
 import { NPC_POSITIONS } from '../multiplayer'
 import { NPCS } from '../world'
 import type { CitySnapshot } from './schema'
@@ -28,7 +28,7 @@ export const CITY_ANCHORS: Record<LocationId, Record<string, CityPosition>> = {
 
 export function initialCitySnapshot(): CitySnapshot {
   const npcPlacements = {} as CitySnapshot['npcPlacements']
-  for (const npcId of Object.keys(NPC_POSITIONS) as NpcId[]) {
+  for (const npcId of Object.keys(NPC_POSITIONS) as NeighborId[]) {
     npcPlacements[npcId] = {
       locationId: NPCS[npcId].location,
       anchorId: npcId,

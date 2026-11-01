@@ -1,4 +1,10 @@
-import { type LocationId, NPC_POSITIONS, type NpcId } from '@saigon/shared'
+import {
+  type LocationId,
+  NPC_POSITIONS,
+  type NpcId,
+  RESIDENT_ANCHORS,
+  RESIDENTS,
+} from '@saigon/shared'
 import { m } from '@/shared/i18n'
 
 export type Point = [number, number, number]
@@ -7,6 +13,23 @@ export const PEOPLE: Record<
   NpcId,
   { at: Point; model: string; color: string }
 > = {
+  ...(Object.fromEntries(
+    Object.values(RESIDENTS).map((npc) => [
+      npc.id,
+      {
+        at: [
+          RESIDENT_ANCHORS[npc.id].at[0],
+          0.12,
+          RESIDENT_ANCHORS[npc.id].at[1],
+        ] as Point,
+        model: 'male-a',
+        color: '#baddc1',
+      },
+    ])
+  ) as Record<
+    keyof typeof RESIDENTS,
+    { at: Point; model: string; color: string }
+  >),
   hoa: { at: NPC_POSITIONS.hoa, model: 'female-b', color: '#f6c568' },
   tam: { at: NPC_POSITIONS.tam, model: 'male-a', color: '#85c7b6' },
   linh: { at: NPC_POSITIONS.linh, model: 'female-a', color: '#ed9d86' },

@@ -4,6 +4,7 @@ import type { MastraModelConfig } from '@mastra/core/llm'
 import {
   type Locale,
   LocaleSchema,
+  NEIGHBOR_IDS,
   NPCS,
   type NpcId,
   type TimeOfDay,
@@ -72,25 +73,26 @@ export class ShortLines {
     this.barkAgents = agents(barkModel)
   }
 
-  key(npc: NpcId, bucket: TimeOfDay, locale: Locale = 'en') {
+  key(npc: NpcId, bucket: TimeOfDay, locale: Locale = 'en', band = 'neutral') {
     const hash = createHash('sha256')
       .update(`${NPC_PERSONAS[npc]}\0${this.modelId}`)
       .digest('hex')
-    return `${npc}:${bucket}:${locale}:${hash}`
+    return `${npc}:${bucket}:${locale}:${band}:${hash}`
   }
 
   async greeting(
     npc: NpcId,
     bucket: TimeOfDay,
-    locale: Locale = 'en'
+    locale: Locale = 'en',
+    band: 'cold' | 'neutral' | 'warm' = 'neutral'
   ): Promise<ShortLine & { cached: boolean }> {
-    const key = this.key(npc, bucket, locale)
+    const key = this.key(npc, bucket, locale, band)
     const existing = await this.db.getGreeting(key)
     if (existing) return { ...existing, cached: true }
     let pending = this.pending.get(key)
     const shared = Boolean(pending)
     if (!pending) {
-      pending = this.fill(npc, bucket, locale, key)
+      pending = this.fill(npc, bucket, locale, key, band)
       this.pending.set(key, pending)
     }
     try {
@@ -104,9 +106,10 @@ export class ShortLines {
     npc: NpcId,
     bucket: TimeOfDay,
     locale: Locale,
-    key: string
+    key: string,
+    band: string
   ) {
-    const line = await this.generate(npc, bucket, false, locale)
+    const line = await this.generate(npc, bucket, false, locale, band)
     await this.db.putGreeting(key, line.reply, line.source)
     return line
   }
@@ -118,7 +121,7 @@ export class ShortLines {
   async prewarm() {
     const results = []
     for (const locale of LocaleSchema.options)
-      for (const npc of Object.keys(NPCS) as NpcId[])
+      for (const npc of NEIGHBOR_IDS)
         for (const bucket of GREETING_BUCKETS)
           results.push({
             npcId: npc,
@@ -133,15 +136,25 @@ export class ShortLines {
     npc: NpcId,
     bucket: TimeOfDay,
     bark: boolean,
-    locale: Locale = 'en'
+    locale: Locale = 'en',
+    band = 'neutral'
   ): Promise<ShortLine> {
-    if (!this.live) return fallback(npc, bucket, locale)
+    if (!this.live)
+      return band === 'cold'
+        ? {
+            reply:
+              locale === 'vi'
+                ? 'Chào bạn. Hôm nay tôi chưa muốn nhờ việc gì.'
+                : 'Hello. I am keeping to myself today.',
+            source: 'fallback',
+          }
+        : fallback(npc, bucket, locale)
     try {
       const agent = (bark ? this.barkAgents : this.agents)[npc]
       const result = await agent.generate(
         bark
           ? `It is ${bucket}. Say one short atmospheric neighborhood line for passersby. Do not offer an errand.`
-          : `It is ${bucket}. Give one short welcoming greeting to a new visitor. Do not offer or claim to start an errand. ${languageRule(locale)}`,
+          : `It is ${bucket}. Give one short ${band} greeting to this visitor. Do not offer or claim to start an errand. ${languageRule(locale)}`,
         {
           activeTools: [],
           maxSteps: 1,

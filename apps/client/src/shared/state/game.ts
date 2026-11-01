@@ -2,6 +2,7 @@ import {
   type AgentSource,
   advance,
   type CompletedQuest,
+  type FriendshipMap,
   type NpcId,
   type PlayerEvent,
   type Quest,
@@ -25,6 +26,7 @@ export interface Dialogue {
   npc: NpcId
   requestId: string
   history: { role: 'user' | 'assistant'; content: string }[]
+  earlierCount?: number
   thinking: boolean
   source: AgentSource | null
 }
@@ -37,6 +39,7 @@ export interface Ride {
 export interface GameState {
   screen: 'title' | 'playing' | 'paused' | 'hub'
   panel: Panel
+  friendship: FriendshipMap
   serverRevision: number
   sessionId: string
   guestId: string | null
@@ -73,6 +76,7 @@ export interface GameState {
 }
 export function initialState(generation = 0): GameState {
   return {
+    friendship: {},
     serverRevision: 0,
     screen: 'title',
     panel: 'none',

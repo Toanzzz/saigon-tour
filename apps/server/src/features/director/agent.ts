@@ -1,6 +1,6 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { Agent } from '@mastra/core/agent'
-import { CITY_ANCHORS, QUEST_DOMAINS } from '@saigon/shared'
+import { CITY_ANCHORS, NEIGHBOR_IDS, QUEST_DOMAINS } from '@saigon/shared'
 import type { CityWorld } from '@/domain/city'
 import type { ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
@@ -28,7 +28,7 @@ export function directorAgent(
     id: 'city-director',
     name: 'City Director',
     model: provider.chatModel(config.model ?? ''),
-    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC quest domains: ${JSON.stringify(QUEST_DOMAINS)}`,
+    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
     tools: directorTools(city, calls, active),
   })
 }

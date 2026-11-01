@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { LocationIdSchema, NpcIdSchema } from '../entities'
+import { LocationIdSchema, NeighborIdSchema } from '../entities'
 
 export const CityWeatherSchema = z.enum(['clear', 'rain'])
 export const CityEventKindSchema = z.enum([
@@ -40,9 +40,9 @@ export type NpcPlacement = z.infer<typeof NpcPlacementSchema>
 export const CitySnapshotSchema = z
   .object({
     revision: z.number().int().min(0),
-    npcPlacements: z.record(NpcIdSchema, NpcPlacementSchema),
+    npcPlacements: z.record(NeighborIdSchema, NpcPlacementSchema),
     events: z.array(CityEventSchema).max(2),
-    needs: z.partialRecord(NpcIdSchema, z.string().min(1).max(180)),
+    needs: z.partialRecord(NeighborIdSchema, z.string().min(1).max(180)),
     weather: CityWeatherSchema,
     headlines: z.array(CityHeadlineSchema).max(12),
   })
@@ -69,7 +69,7 @@ export const CityActionSchema = z.discriminatedUnion('type', [
   z
     .object({
       type: z.literal('move-npc'),
-      npcId: NpcIdSchema,
+      npcId: NeighborIdSchema,
       locationId: LocationIdSchema,
       anchorId: z.string().min(1).max(40),
     })
@@ -77,7 +77,7 @@ export const CityActionSchema = z.discriminatedUnion('type', [
   z
     .object({
       type: z.literal('set-npc-need'),
-      npcId: NpcIdSchema,
+      npcId: NeighborIdSchema,
       need: z.string().min(1).max(180).nullable(),
     })
     .strict(),

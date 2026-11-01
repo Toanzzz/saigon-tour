@@ -6,7 +6,7 @@ import {
   type CityHeadline,
   type CitySnapshot,
   initialCitySnapshot,
-  type NpcId,
+  type NeighborId,
 } from '@saigon/shared'
 import { safeLine } from '@/features/npc/safety'
 
@@ -26,7 +26,7 @@ export class CityWorld {
     private readonly changed: () => void = () => {}
   ) {}
 
-  position(npcId: NpcId): readonly [number, number, number] {
+  position(npcId: NeighborId): readonly [number, number, number] {
     return this.state.npcPlacements[npcId].position
   }
 

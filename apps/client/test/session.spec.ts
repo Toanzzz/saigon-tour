@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { initialState } from '@/shared/state/game'
 
 const saved = {
+  friendship: {},
   revision: 7,
   id: 'b258d475-4914-409d-bc43-e38d6137dc92',
   name: 'Emma Clarke',

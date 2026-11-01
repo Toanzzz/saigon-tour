@@ -103,7 +103,7 @@ async function deferredTurn() {
       })
   )
   vi.stubGlobal('fetch', fetchMock)
-  const turn = converse('Help, please!', 'help', true)
+  const turn = converse('Help, please!', 'chat', true)
   await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1))
   return { turn, resolve }
 }
@@ -132,6 +132,7 @@ describe('HTTP and socket ordering', () => {
     const { turn, resolve } = await deferredTurn()
     handlePartyMessage({
       type: 'quest-completed',
+      friendship: {},
       revision: 2,
       quest: partyQuest,
       quests: [],
@@ -163,6 +164,7 @@ describe('HTTP and socket ordering', () => {
     const { turn, resolve } = await deferredTurn()
     handlePartyMessage({
       type: 'quest-completed',
+      friendship: {},
       revision: 4,
       quest: partyQuest,
       quests: [],
@@ -185,6 +187,7 @@ it('rejects old HTTP world and quest while still finishing its dialogue', async 
   const { turn, resolve } = await deferredTurn()
   acknowledgeWorld({
     type: 'world',
+    friendship: {},
     sequence: 0,
     revision: 5,
     world: { ...initialState().world, currency: 80 },
@@ -220,6 +223,7 @@ it('keeps completed reward UI closed when HTTP duplicates a socket completion', 
   }
   handlePartyMessage({
     type: 'quest-completed',
+    friendship: {},
     revision: 3,
     quest: partyQuest,
     quests: [],

@@ -6,7 +6,7 @@ export function questFixture(
 ): Quest {
   const spec = seedsFor(npcId)[0]
   if (!spec) throw new Error(`Missing quest seed for ${npcId}`)
-  return createQuest(spec, id, 1000)
+  return createQuest(spec, id, Date.now())
 }
 export function completedFixture(quest: Quest) {
   return {

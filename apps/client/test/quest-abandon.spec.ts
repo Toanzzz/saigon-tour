@@ -12,6 +12,7 @@ import { questFixture } from './quest-fixture'
 
 const quest = questFixture()
 const player = (revision = 2): GuestPlayer => ({
+  friendship: {},
   id: '11111111-1111-4111-8111-111111111111',
   name: 'Sóc Nắng',
   color: '#ffeeaa',

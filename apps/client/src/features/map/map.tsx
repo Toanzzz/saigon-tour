@@ -165,7 +165,10 @@ export function NeighborhoodMap({
             key={id}
             transform={`translate(${x(npcPosition(id as NpcId)[0])} ${z(npcPosition(id as NpcId)[2])})`}
           >
-            <circle r="2.6" fill={person.color} />
+            <circle
+              r={NPCS[id as NpcId].kind === 'resident' ? 1.5 : 2.6}
+              fill={person.color}
+            />
             <title>{NPCS[id as NpcId].name}</title>
           </g>
         ))}

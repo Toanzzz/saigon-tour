@@ -8,6 +8,7 @@ import {
 } from './entities'
 import { LocaleSchema } from './locale'
 import { PartySnapshotSchema } from './party'
+import { FriendshipEventSchema, FriendshipMapSchema } from './quest/friendship'
 import {
   CompletedQuestSchema,
   QuestEventSchema,
@@ -67,6 +68,7 @@ export type PlayerEvent = z.infer<typeof PlayerEventSchema>
 export const InteractRequestSchema = z
   .object({
     message: z.string().trim().min(1).max(500),
+    // Deprecated help/check are accepted as chat for older clients.
     intent: z.enum(['chat', 'help', 'check', 'greet']).default('chat'),
     locale: LocaleSchema.default('en'),
     events: z.array(PlayerEventSchema).max(16).default([]),
@@ -95,6 +97,8 @@ export const InteractResponseSchema = z
     reply: z.string().min(1).max(700),
     source: SourceSchema,
     degraded: z.boolean(),
+    friendship: FriendshipMapSchema.default({}),
+    friendshipEvents: z.array(FriendshipEventSchema).max(8).default([]),
     world: WorldStateSchema,
     quests: z.array(QuestSchema).max(3),
     questEvents: z.array(QuestEventSchema).max(16),
@@ -105,6 +109,7 @@ export type InteractResponse = z.infer<typeof InteractResponseSchema>
 
 export const GuestPlayerSchema = z.object({
   revision: z.number().int().min(0).default(0),
+  friendship: FriendshipMapSchema.default({}),
   id: z.uuid(),
   name: z.string(),
   color: z.string(),
@@ -114,3 +119,16 @@ export const GuestPlayerSchema = z.object({
   reputation: z.number(),
 })
 export type GuestPlayer = z.infer<typeof GuestPlayerSchema>
+
+export const NpcHistorySchema = z.object({
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'assistant']),
+        text: z.string(),
+        at: z.string(),
+      })
+    )
+    .max(60),
+})
+export type NpcHistory = z.infer<typeof NpcHistorySchema>

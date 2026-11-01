@@ -1,6 +1,6 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { NPC_POSITIONS, type NpcId, type PresencePlayer } from '@saigon/shared'
+import { NPCS, type NpcId, type PresencePlayer } from '@saigon/shared'
 import { useEffect, useRef, useState } from 'react'
 import type { Group } from 'three'
 import { npcPosition } from '@/shared/api/city'
@@ -39,7 +39,7 @@ export function RemotePlayers() {
       {players.map((player) => (
         <RemotePlayer key={player.id} player={player} />
       ))}
-      {(Object.keys(NPC_POSITIONS) as NpcId[]).map((npc) => (
+      {(Object.keys(NPCS) as NpcId[]).map((npc) => (
         <NpcSpeech key={npc} npc={npc} />
       ))}
       <SelfSpeech />

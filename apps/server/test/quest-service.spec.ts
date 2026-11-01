@@ -72,9 +72,6 @@ describe('quest transactions', () => {
       },
       ctx.playerId
     )
-    expect(result.questEvents.map((event) => event.type)).toEqual([
-      'progress',
-      'incomplete',
-    ])
+    expect(result.questEvents.map((event) => event.type)).toEqual(['progress'])
   })
 })

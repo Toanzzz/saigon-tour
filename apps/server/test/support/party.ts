@@ -120,7 +120,8 @@ export function setupParty() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: 'Can I help with an errand?',
+          message:
+            intent === 'help' ? 'Can I help with an errand?' : 'Hello again!',
           intent,
           events,
           worldContext: {

@@ -18,6 +18,7 @@ function world(
 ): Extract<ServerSocketMessage, { type: 'world' }> {
   return {
     type: 'world',
+    friendship: {},
     revision: 0,
     sequence,
     world: { ...initialState().world, currency },

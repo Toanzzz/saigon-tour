@@ -36,6 +36,13 @@
       "when": 1793462512860,
       "tag": "0004_city_director",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793516098700,
+      "tag": "0005_npc_friendship",
+      "breakpoints": true
     }
   ]
 }

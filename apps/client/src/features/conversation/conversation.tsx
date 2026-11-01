@@ -7,6 +7,7 @@ import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 import { placeName } from '@/shared/world/places'
 import { NpcErrands } from './errands'
+import { FriendshipMeter } from './friendship-meter'
 
 const messageKeys = new WeakMap<object, string>()
 let nextMessageKey = 0
@@ -45,6 +46,7 @@ export function Conversation({ state }: { state: GameState }) {
       onClose={close}
       className="conversation"
     >
+      <FriendshipMeter npcId={dialog.npc} friendship={state.friendship} />
       <div className={`portrait portrait-${dialog.npc}`} aria-hidden="true">
         <span>{npc.name.split(' ').at(-1)?.slice(0, 1)}</span>
       </div>
@@ -56,10 +58,13 @@ export function Conversation({ state }: { state: GameState }) {
         aria-label={m.chat_log()}
         aria-live="polite"
       >
-        {dialog.history.map((line) => (
+        {dialog.history.map((line, index) => (
           <p className={`speech ${line.role}`} key={messageKey(line)}>
             {line.role === 'user' && (
               <span className="speaker">{m.map_you()}</span>
+            )}
+            {index === dialog.earlierCount && index > 0 && (
+              <span className="history-divider">{m.history_earlier()}</span>
             )}
             {line.content}
           </p>

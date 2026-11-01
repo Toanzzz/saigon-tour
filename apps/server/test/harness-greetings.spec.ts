@@ -1,4 +1,4 @@
-import { LocaleSchema, NPCS } from '@saigon/shared'
+import { LocaleSchema, NEIGHBOR_IDS } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
 import { GREETING_BUCKETS, NPC_PERSONAS } from '@/features/npc'
@@ -156,7 +156,7 @@ describe('Mastra NPC harness greetings', () => {
       scripted([{ text: 'Chào! Enjoy the neighborhood.' }], seen)
     )
     const bucketCount =
-      Object.keys(NPCS).length *
+      NEIGHBOR_IDS.length *
       GREETING_BUCKETS.length *
       LocaleSchema.options.length
     expect(bucketCount).toBe(72)

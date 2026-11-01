@@ -1,33 +1,38 @@
 # NPC agent harness
 
-Nine Mastra NPC agents write short errands through validated tools. The Node + Hono server owns player state; model text never grants inventory, currency, reputation, quest ids, or rewards.
+All 29 NPCs have static Mastra agents: nine neighbors and twenty residents. The Node + Hono server owns player state; model text never grants inventory, currency, reputation, quest ids, or rewards. The City Director and ambient barks target the nine neighbors.
 
 ## Quest loop
 
-1. The player asks any neighbor “Any errands?”. The agent proposes a title, description, one to three steps, and a scope.
-2. `QuestService` validates entity enums, the giver’s persona domain, self-delivery, duplicates, party eligibility, and the three-active-quest cap. Rejections carry a specific reason the agent can correct.
-3. An accepted quest is active immediately. A party proposal gives each member the same quest id with independent progress. Delivery items come from the giver. New accepted visit, talk, delivery, and purchase events advance the next matching step.
-4. The player returns to the giver and chooses “I’m back”. Every ready quest from that giver completes, with rewards recorded once through `quest_completions`. Party completion waits for every remaining recipient and pushes each reward over the room socket.
+1. The player asks an NPC for help in conversation. The agent proposes a title, description, one to three steps, and a scope.
+2. `QuestService` validates entity enums, the giver’s domain, self-delivery, duplicates, party eligibility, the three-quest cap, and friendliness. At −3 or below, offers return `friendliness_too_low`.
+3. Accepted quests allocate their delivery items. Visit, talk, delivery, and purchase events advance the next matching step. Party proposals use a shared id with independent participant progress.
+4. Every interaction with the giver, including the opening greeting, automatically completes ready quests. Party completion waits for every participant still holding a copy. A transaction grants each reward once through `quest_completions` and increases each rewarded participant’s friendship with the giver by one.
+5. Active errands expire lazily after twenty minutes; ready errands never expire. Abandonment, expiry, and declining an unstarted errand reclaim unused supplied items and reduce friendship by one. Abandonment removes only the player’s copy.
 
-Step primitives are `GO_TO {locationId}`, `TALK_TO {npcId}`, `DELIVER {itemId,npcId}`, and `BUY {marketItemId}`. Locations, recipients, items, home anchors, and gift choices are constrained by `packages/shared/src/quest/domains.ts`. Rewards are deterministic: a base, step count, and distance from the giver’s home; currency is clamped to 100 and reputation to 1–2.
+Steps are `GO_TO {locationId}`, `TALK_TO {npcId}`, `DELIVER {itemId,npcId}`, and `BUY {marketItemId}`. Domains constrain locations, recipients, items, and gifts. Rewards depend on step count and travel distance, with currency capped at 100 and reputation at 1–2.
 
 ## Tools and memory
 
-Every NPC has `propose-quest`, `check-quests`, `get-context`, and `remember-player-fact`. All use authenticated player identity. The speaker must match the proposed giver. `get-context` returns the player, active quests, and the room city snapshot, including current events and the speaker’s need. Persona prompts include domain limits and example quest specs.
+Every agent has `proposeQuest`, `dropQuest`, `adjustFriendliness`, `getContext`, and `rememberPlayerFact`. Tools use authenticated identity. Only the giver can decline its own active errand before progress. Context includes the shared city, party, current errands, completed errands for this turn, remembered facts, and friendliness with tone guidance. Resident personas include their role, local knowledge, home, and shared safety rules.
 
-Conversation history is scoped to `npcId:playerId`; remembered facts are scoped to the same pair and limited to twelve. Postgres stores journeys, completions, facts, model spend, and persistent Mastra memory. Reset clears the journey and NPC memory while keeping identity.
+Friendship lives on the locked player row as JSON. Levels range from −5 to +5 and start from authored presets. The model may request one ±1 adjustment per turn, subject to a three-minute per-player/NPC cooldown. Chat can raise friendship only to +3; completed quests can reach +5. Socket saves carry friendship with the normal revision.
+
+Postgres stores every server conversation under `npcId:playerId`, including greetings and fallback replies. `GET /npc/:npcId/history?limit=30` authenticates the caller and returns only user/assistant text parts from that caller’s thread. The client persists history in TanStack Query, includes offline turns locally, and clears it on journey reset or sign-out. Tool payloads and system context are excluded from the history response.
+
+Mastra Observational Memory compacts each thread using the same explicit metered model as the NPC. The Observer threshold is 3,000 message tokens; the Reflector threshold is 2,000 observation tokens. Both have 600 output-token limits and minimal reasoning. Async buffering keeps compaction off the ordinary request path. Hooks log token usage. Observations preserve promises, preferences, gifts, errands, and tone. A bounded context wrapper limits raw messages to forty because OM ignores `lastMessages`. Twelve durable facts per NPC/player remain available alongside observations. Reset waits for memory work, clears OM records explicitly, and deletes all 29 threads.
 
 ## Reliability
 
-Help and check intents run deterministic validation even if the model omits the tool. If live generation fails or its budget is exhausted, help chooses a validated seed quest. Seed specs use the same schema and engine as live proposals and browser offline play.
+Deprecated `help` and `check` intent values normalize to chat. Ready completion runs deterministically. A missing live reply permits a validated seed offer only when the player’s message asks for help; a live reply is preserved. The browser offline mirror expires stale errands, completes solo ready errands, applies friendship, and offers seeds through the same shared rules. Party rewards require server authority.
 
-The harness allows three model steps, enforces request timeouts and call limits, sanitizes replies, and reserves model spend before every provider request. Failed or unknown-usage calls retain their reservation ceiling. Secrets stay in the server environment.
+The harness allows three model steps, sanitizes replies, enforces timeouts and call limits, and reserves spend before every provider request, including Observer and Reflector requests. Unknown usage retains the reservation ceiling. Secrets stay in server environment variables. Greetings cache by NPC, time, locale, model/persona hash, and friendliness band; prewarm and barks cover neighbors only.
 
 ## Journal and party errands
 
-Party membership makes `scope: party` proposals available. Validation checks every recipient before assignment. The saved quest records original recipient ids, and each recipient has their own progress. A giver checks readiness across the recipients still holding the quest and grants each reward once inside a transaction. Original ownership survives party changes; abandoning removes only the speaker’s copy and reclaims its remaining supplied delivery items.
+The journal lists steps, remaining active lifetime, tracking, and abandonment. Conversations provide Give controls for carried deliveries; errands are requested in chat and completion happens on return. Resident walkers publish live poses, pause near the player or during dialogue, and share quest labels and friendship feedback with neighbors.
 
-The journal lists active errands and steps, lets the player track or abandon a quest, and the minimap marks the tracked objective. `POST /me/quests/:questId/abandon` uses the authenticated session and returns the updated saved player.
+Party assignment validates every recipient before mutation. Original recipient ownership survives party changes. Readiness checks only participants retaining their copy; abandoning or resetting a journey removes that participant’s copy. Socket updates synchronize saves and once-only rewards.
 
 ## City Director
 

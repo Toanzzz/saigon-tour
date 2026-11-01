@@ -1,3 +1,4 @@
+import { QUEST_EXPIRY_MS } from '@saigon/shared'
 import { useState } from 'react'
 import { close } from '@/app/actions'
 import { abandonQuest } from '@/shared/api/quests'
@@ -21,6 +22,18 @@ export function JournalPanel({ state }: { state: GameState }) {
           <section key={quest.id} aria-label={quest.title}>
             <h4>{quest.title}</h4>
             <p>{quest.description}</p>
+            {quest.status === 'active' && (
+              <p>
+                {m.quest_expires({
+                  minutes: Math.max(
+                    0,
+                    Math.ceil(
+                      (quest.createdAt + QUEST_EXPIRY_MS - Date.now()) / 60000
+                    )
+                  ),
+                })}
+              </p>
+            )}
             {quest.scope === 'party' && <p>{m.journal_shared()}</p>}
             <ol>
               {quest.steps.map((step, index) => (

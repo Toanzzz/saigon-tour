@@ -42,3 +42,11 @@ Modular shophouses, palms, pavement, stall props, benches, and ambient pedestria
 Anonymous guests retain progress in Postgres. The People control (`P`) shows the public room and party invitations; `Q` sends fixed emotes and phrases. Nearby tourists interpolate at a 150 ms delay. NPC room lines run on proximity events and bounded cooldowns. A City Director creates shared festivals, market rushes, rain, street music, and lost-item events, moves neighbors between authored anchors, and gives them needs that shape new errands. Event markers and the hub’s City pulse explain what is happening. Rain changes tint and fog.
 
 Parties of two to four support invitations and shared presence. Each player’s quest journal and rewards are saved independently. A party speaker can receive a shared errand. Each recipient follows their own steps, then one return visit rewards all ready recipients once. The journal supports tracking and abandoning errands, and the minimap marks the tracked target. See `docs/multiplayer.md` for protocol, topology, and persistence behavior.
+
+## Neighbors, residents, and friendship
+
+Nine neighbors and twenty residents accept conversations and offer errands within their own domains. Walking residents pause and face the player within conversation range. The map shows smaller resident dots, and quest targets follow live positions.
+
+Friendship ranges from −5 to +5. Neighbors start at +1; residents start mostly neutral, with a few reserved presets. Meaningful chat can shift friendship by one once per turn with a three-minute cooldown and a +3 chat ceiling. Completed errands add one for each rewarded participant. Abandoned, expired, or declined errands subtract one. At −3 or below, an NPC stays civil and offers no errands.
+
+Players request errands in chat, give carried items through the conversation, and return to the giver for automatic thanks and rewards. Active errands expire after twenty minutes; ready errands persist. Reopening conversations shows earlier messages; journey reset clears conversation memory and friendship.

@@ -3,6 +3,7 @@ import {
   type PlayerEvent,
   type ServerSocketMessage,
 } from '@saigon/shared'
+import { noteFailedQuests, noteFriendship } from '@/shared/state/friendship'
 import { game, update } from '@/shared/state/game'
 
 type SocketEvent = Exclude<PlayerEvent, { type: 'deliver' }>
@@ -46,6 +47,14 @@ export function currentEventBatch() {
 export function acknowledgeWorld(
   message: Extract<ServerSocketMessage, { type: 'world' }>
 ) {
+  if (message.revision >= game.state.serverRevision)
+    noteFriendship(game.state.friendship, message.friendship)
+  if (message.revision >= game.state.serverRevision)
+    noteFailedQuests(
+      game.state.quests,
+      message.quests,
+      message.completed.map((quest) => quest.id)
+    )
   const newerSave = message.revision > game.state.serverRevision
   if (!newerSave && inFlight && message.sequence < inFlight.sequence) return
   if (!newerSave && !inFlight && message.sequence <= sequence) return
@@ -59,6 +68,7 @@ export function acknowledgeWorld(
       ? state
       : {
           ...state,
+          friendship: message.friendship,
           serverRevision: message.revision,
           ...applyQuestEvents(message.world, message.quests, [
             ...(inFlight?.events ?? []),

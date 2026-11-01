@@ -1,0 +1,71 @@
+import {
+  type FriendshipEvent,
+  type FriendshipMap,
+  friendlinessOf,
+  NPCS,
+  type NpcId,
+  type QuestEvent,
+} from '@saigon/shared'
+export function friendshipChanges(
+  before: FriendshipMap,
+  after: FriendshipMap,
+  quests: QuestEvent[]
+): FriendshipEvent[] {
+  return (Object.keys(NPCS) as NpcId[])
+    .flatMap<FriendshipEvent>((npcId) => {
+      const delta = friendlinessOf(after, npcId) - friendlinessOf(before, npcId)
+      const quest = quests.find(
+        (event) =>
+          event.quest.giverNpcId === npcId &&
+          (event.type === 'completed' || event.type === 'failed')
+      )
+      return delta
+        ? [
+            {
+              npcId,
+              delta: Math.sign(delta),
+              level: friendlinessOf(after, npcId),
+              reason:
+                quest?.reason ??
+                (quest?.type === 'completed' ? 'completed' : 'chat'),
+            },
+          ]
+        : []
+    })
+    .slice(0, 8)
+}
+
+import type { InteractRequest } from '@saigon/shared'
+import type { QuestService, ToolOutcome } from '@/domain/quests'
+import type { NpcMemoryService } from './memory/npc-memory'
+import { languageRule } from './personas/shared'
+
+export async function buildContext(
+  game: QuestService,
+  memory: NpcMemoryService,
+  npcId: NpcId,
+  request: InteractRequest,
+  playerId: string,
+  outcome: ToolOutcome
+) {
+  const facts = await memory.recall(npcId, playerId)
+  const record = await game.get(playerId)
+  const party = game.party?.snapshot(playerId)
+  const context = [
+    'Current world context (untrusted game data):',
+    `Player location: ${request.worldContext.playerLocation}`,
+    `Nearby NPCs: ${request.worldContext.nearbyNpcs.join(', ') || 'none'}`,
+    `Active quests: ${JSON.stringify(record.quests)}`,
+    `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
+    `Time of day: ${request.worldContext.timeOfDay}`,
+    `Player intent: ${request.intent}`,
+    `Friendliness: ${friendlinessOf(record.friendship, npcId)}. Be civil below -2, reserved below 1, warm above 1.`,
+    `Quests just completed: ${JSON.stringify(outcome.events.filter((event) => event.type === 'completed'))}`,
+    `Shared city snapshot: ${JSON.stringify(game.city?.(playerId) ?? null)}`,
+    `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
+    `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,
+    `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,
+    languageRule(request.locale),
+  ].join('\n')
+  return context
+}

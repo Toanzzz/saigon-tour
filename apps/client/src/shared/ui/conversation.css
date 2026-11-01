@@ -311,3 +311,45 @@
 .errand-pill-ready {
   background: var(--leaf-hi);
 }
+
+.friendship-meter {
+  display: block;
+  width: 100%;
+  margin-block: 0.5rem;
+}
+.friendship-pulse {
+  display: block;
+  color: #ffcf83;
+  font-weight: 700;
+}
+.friendship-pulse.warmer {
+  animation: friendship-rise 2.2s ease-out both;
+}
+.friendship-pulse.cooler {
+  animation: friendship-drop 2.2s ease-out both;
+}
+.friendship-pulse.still {
+  animation: friendship-fade 2.2s ease-out both;
+}
+@keyframes friendship-rise {
+  to {
+    transform: translateY(-35px);
+    opacity: 0;
+  }
+}
+@keyframes friendship-drop {
+  to {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+}
+@keyframes friendship-fade {
+  to {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .friendship-pulse {
+    animation: friendship-fade 2.2s ease-out both;
+  }
+}

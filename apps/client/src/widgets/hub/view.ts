@@ -110,10 +110,18 @@ function objectiveLocation(state: GameState): LocationId | null {
   const quest = trackedQuest(state)
   if (!quest) return null
   const step = nextStep(quest)
-  if (!step) return city.state.npcPlacements[quest.giverNpcId].locationId
+  if (!step)
+    return (
+      city.state.npcPlacements[
+        quest.giverNpcId as import('@saigon/shared').NeighborId
+      ]?.locationId ?? NPCS[quest.giverNpcId].location
+    )
   if (step.type === 'GO_TO') return step.locationId
   if (step.type === 'BUY') return 'market'
-  return city.state.npcPlacements[step.npcId].locationId
+  return (
+    city.state.npcPlacements[step.npcId as import('@saigon/shared').NeighborId]
+      ?.locationId ?? NPCS[step.npcId].location
+  )
 }
 function storySteps(state: GameState): HubStep[] {
   const quest = trackedQuest(state)

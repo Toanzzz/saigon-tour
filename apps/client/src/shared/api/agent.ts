@@ -1,12 +1,16 @@
 import {
   advance,
   applyPlayerEvents,
+  canOfferQuests,
   createQuest,
   type InteractResponse,
   InteractResponseSchema,
+  isExpired,
+  looksLikeHelpRequest,
   NPCS,
   type NpcId,
   seedsFor,
+  shiftFriendship,
   validateSpec,
   ZERO_REWARD,
 } from '@saigon/shared'
@@ -71,9 +75,26 @@ export function offline(
   body: InteractBody,
   state: GameState
 ): InteractResponse {
+  let friendship = structuredClone(state.friendship)
   let world = structuredClone(state.world)
   let quests = structuredClone(state.quests)
   const questEvents: InteractResponse['questEvents'] = []
+  for (const quest of quests.filter((quest) => isExpired(quest))) {
+    for (const [index, step] of quest.steps.entries())
+      if (step.type === 'DELIVER' && !quest.progress[index])
+        world.inventory[step.itemId] = Math.max(
+          0,
+          (world.inventory[step.itemId] ?? 0) - 1
+        )
+    friendship = shiftFriendship(friendship, quest.giverNpcId, -1)
+    questEvents.push({
+      type: 'failed',
+      reason: 'expired',
+      quest,
+      reward: ZERO_REWARD,
+    })
+  }
+  quests = quests.filter((quest) => !isExpired(quest))
   // Pending events already changed the local world. Advance quests without charging twice.
   for (const event of [
     { type: 'talk' as const, npcId: npc },
@@ -86,7 +107,32 @@ export function offline(
     name: NPCS[npc].name,
     fact: NPCS[npc].knowledge[0] ?? '',
   })
-  if (body.intent === 'help') {
+  for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
+    if (quest.scope === 'party') {
+      continue
+    }
+    if (
+      quest.status === 'ready' &&
+      !world.completedQuestIds.includes(quest.id)
+    ) {
+      quest.status = 'completed'
+      friendship = shiftFriendship(friendship, quest.giverNpcId, 1)
+      world.currency = Math.min(100000, world.currency + quest.reward.currency)
+      world.completedQuestIds = [...world.completedQuestIds, quest.id].slice(
+        -32
+      )
+      if (quest.reward.itemId)
+        world.inventory[quest.reward.itemId] = Math.min(
+          100,
+          (world.inventory[quest.reward.itemId] ?? 0) + 1
+        )
+      questEvents.push({ type: 'completed', quest, reward: quest.reward })
+    }
+  }
+  quests = quests.filter((quest) => quest.status !== 'completed')
+  if (questEvents.some((event) => event.type === 'completed'))
+    reply = m.offline_thanks()
+  if (looksLikeHelpRequest(body.message) && canOfferQuests(friendship, npc)) {
     const spec = seedsFor(npc, getLocale()).find(
       (candidate) =>
         validateSpec(candidate, { quests }).ok &&
@@ -114,39 +160,9 @@ export function offline(
       reply = `${quest.title}. ${quest.description}`
     } else reply = m.offline_no_errand()
   }
-  if (body.intent === 'check') {
-    for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
-      if (quest.scope === 'party') {
-        questEvents.push({ type: 'incomplete', quest, reward: ZERO_REWARD })
-        continue
-      }
-      if (
-        quest.status === 'ready' &&
-        !world.completedQuestIds.includes(quest.id)
-      ) {
-        quest.status = 'completed'
-        world.currency = Math.min(
-          100000,
-          world.currency + quest.reward.currency
-        )
-        world.completedQuestIds = [...world.completedQuestIds, quest.id].slice(
-          -32
-        )
-        if (quest.reward.itemId)
-          world.inventory[quest.reward.itemId] = Math.min(
-            100,
-            (world.inventory[quest.reward.itemId] ?? 0) + 1
-          )
-        questEvents.push({ type: 'completed', quest, reward: quest.reward })
-      } else
-        questEvents.push({ type: 'incomplete', quest, reward: ZERO_REWARD })
-    }
-    quests = quests.filter((quest) => quest.status !== 'completed')
-    reply = questEvents.some((event) => event.type === 'completed')
-      ? m.offline_thanks()
-      : m.offline_not_done()
-  }
   return {
+    friendship,
+    friendshipEvents: [],
     revision: state.serverRevision,
     npcId: npc,
     reply,

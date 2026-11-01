@@ -118,9 +118,8 @@ export async function enterPlay(page) {
 }
 export async function offerQuest(page, giver = 'hoa') {
   await meet(page, giver)
-  await page
-    .getByRole('button', { name: 'Ask for an errand', exact: true })
-    .click()
+  await page.getByLabel('Your message').fill('Any errands?')
+  await page.getByRole('button', { name: 'Send message', exact: true }).click()
   await page.waitForFunction(
     (giver) =>
       window.__THREE_GAME_DIAGNOSTICS__?.state.quests?.some(
@@ -174,10 +173,9 @@ export async function followQuest(page, offered) {
 export async function completeQuest(page, giver = 'hoa') {
   const offered = await offerQuest(page, giver)
   await followQuest(page, offered)
-  await meet(page, giver)
   const before = (await diagnostics(page)).state.currency
   const completed = (await diagnostics(page)).state.completed
-  await page.getByRole('button', { name: 'Turn in', exact: true }).click()
+  await meet(page, giver)
   await page.waitForFunction(
     (completed) =>
       window.__THREE_GAME_DIAGNOSTICS__?.state.completed > completed,

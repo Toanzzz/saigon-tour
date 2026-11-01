@@ -4,6 +4,7 @@ import {
   type ServerSocketMessage,
 } from '@saigon/shared'
 import { m } from '@/shared/i18n'
+import { noteFriendship } from '@/shared/state/friendship'
 import { type GameState, game } from '@/shared/state/game'
 import { currentEventBatch } from './events'
 import { net, updateNet } from './status'
@@ -25,6 +26,7 @@ export function completedQuest(
   )
   return {
     ...state,
+    friendship: message.friendship,
     serverRevision: message.revision,
     ...applyQuestEvents(message.world, message.quests, [
       ...(currentEventBatch()?.events ?? []),
@@ -60,6 +62,8 @@ export function handlePartyMessage(message: ServerSocketMessage) {
     })
   else if (message.type === 'party-invited') updateNet({ invite: message })
   else if (message.type === 'quest-completed') {
+    if (message.revision >= game.state.serverRevision)
+      noteFriendship(game.state.friendship, message.friendship)
     updateNet({ partyVersion: net.state.partyVersion + 1 })
     game.setState((state) => completedQuest(state, message))
   }

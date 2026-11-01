@@ -1,4 +1,4 @@
-import type { NpcId } from '@saigon/shared'
+import type { NeighborId } from '@saigon/shared'
 
 export type WakeReason =
   | 'player-nearby'
@@ -6,7 +6,7 @@ export type WakeReason =
   | 'world-event'
   | 'schedule'
 export interface WakeRequest {
-  npcId: NpcId
+  npcId: NeighborId
   reason: WakeReason
 }
 
@@ -15,8 +15,8 @@ export interface WakeRequest {
  * and each tick wakes at most `budget` NPCs that are past their cooldown.
  */
 export class NpcScheduler {
-  private queue = new Map<NpcId, WakeReason>()
-  private lastWake = new Map<NpcId, number>()
+  private queue = new Map<NeighborId, WakeReason>()
+  private lastWake = new Map<NeighborId, number>()
   private suppressed = false
 
   constructor(
@@ -25,7 +25,7 @@ export class NpcScheduler {
     private readonly budget = 3
   ) {}
 
-  notify(npcId: NpcId, reason: WakeReason) {
+  notify(npcId: NeighborId, reason: WakeReason) {
     this.queue.set(npcId, reason)
   }
 

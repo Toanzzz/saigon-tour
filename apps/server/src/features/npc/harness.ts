@@ -3,6 +3,7 @@ import { Mastra } from '@mastra/core/mastra'
 import { RequestContext } from '@mastra/core/request-context'
 import { InMemoryStore, type MastraCompositeStore } from '@mastra/core/storage'
 import {
+  friendlinessOf,
   type InteractRequest,
   InteractRequestSchema,
   type InteractResponse,
@@ -11,7 +12,12 @@ import {
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { z } from 'zod'
-import { outcomeKind as kind, QuestService, runIntent } from '@/domain/quests'
+import {
+  completeReady,
+  outcomeKind as kind,
+  offerSeed,
+  QuestService,
+} from '@/domain/quests'
 import { log } from '@/shared'
 import { isLiveConfigured, type ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
@@ -20,12 +26,12 @@ import { createNpcAgents } from './agents'
 import { fallbackLine } from './fallbacks'
 import { CostGuard } from './guard'
 import { NpcMemoryService } from './memory/npc-memory'
-import { clearPlayerThreads, recordGreeting } from './memory/threads'
+import { clearPlayerThreads, readHistory, recordTurn } from './memory/threads'
 import { type HarnessUsage, meteredFetch, storageUnavailable } from './meter'
-import { languageRule } from './personas/shared'
 import { cleanReply } from './safety'
 import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
+import { buildContext, friendshipChanges } from './turn'
 
 /** Mastra NPC harness: agents propose through tools, QuestService decides. */
 export class NpcHarness {
@@ -94,6 +100,8 @@ export class NpcHarness {
     playerId: string
   ): Promise<InteractResponse> {
     const request = InteractRequestSchema.parse(input)
+    if (request.intent === 'help' || request.intent === 'check')
+      request.intent = 'chat'
     const previous = await this.game.get(playerId)
     const record = await this.game.applyEvents(
       playerId,
@@ -113,13 +121,28 @@ export class NpcHarness {
         )
       })
       .map((quest) => ({ type: 'progress', quest, reward: ZERO_REWARD }))
+    const completed = await completeReady(this.game, playerId, npcId)
+    progressEvents.push(...record.questEvents, ...completed)
+    const current = await this.game.get(playerId)
     if (request.intent === 'greet') {
       const line = await this.shortLines.greeting(
         npcId,
         request.worldContext.timeOfDay,
-        request.locale
+        request.locale,
+        friendlinessOf(current.friendship, npcId) <= -3
+          ? 'cold'
+          : friendlinessOf(current.friendship, npcId) >= 2
+            ? 'warm'
+            : 'neutral'
       )
-      await recordGreeting(
+      if (completed.length)
+        line.reply = fallbackLine(
+          npcId,
+          current.world,
+          'completed',
+          request.locale
+        )
+      await recordTurn(
         this.storage,
         npcId,
         playerId,
@@ -128,12 +151,18 @@ export class NpcHarness {
       )
       return {
         npcId,
-        revision: record.revision,
+        revision: current.revision,
         ...line,
         party: this.game.party?.snapshot(playerId) ?? null,
         degraded: line.source === 'fallback' && this.live,
-        world: record.world,
-        quests: record.quests,
+        friendship: current.friendship,
+        friendshipEvents: friendshipChanges(
+          previous.friendship,
+          current.friendship,
+          progressEvents
+        ),
+        world: current.world,
+        quests: current.quests,
         questEvents: progressEvents,
         toolCalls: [],
       }
@@ -149,19 +178,20 @@ export class NpcHarness {
       reply = await this.generate(npcId, request, playerId, outcome)
       if (reply) source = 'live'
     }
-    // Explicit Help/Check buttons always run their validated tool.
-    const deterministic = await runIntent(
-      this.game,
-      npcId,
-      request,
-      playerId,
-      outcome
-    )
+    if (!reply) await offerSeed(this.game, npcId, request, playerId, outcome)
     const final = await this.game.get(playerId)
-    if (deterministic || !reply) {
-      reply = fallbackLine(npcId, final.world, kind(outcome), request.locale)
+    if (!reply) {
+      reply = fallbackLine(
+        npcId,
+        final.world,
+        kind(outcome),
+        request.locale,
+        friendlinessOf(final.friendship, npcId)
+      )
       source = 'fallback'
     }
+    if (source === 'fallback')
+      await recordTurn(this.storage, npcId, playerId, request.message, reply)
     return {
       npcId,
       revision: final.revision,
@@ -170,6 +200,12 @@ export class NpcHarness {
       reply,
       source,
       degraded: source === 'fallback' && this.live,
+      friendship: final.friendship,
+      friendshipEvents: friendshipChanges(
+        previous.friendship,
+        final.friendship,
+        outcome.events
+      ),
       world: final.world,
       quests: final.quests,
       questEvents: outcome.events,
@@ -184,23 +220,14 @@ export class NpcHarness {
     outcome: ToolOutcome
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
-    const facts = await this.memory.recall(npcId, playerId)
-    const record = await this.game.get(playerId)
-    const party = this.game.party?.snapshot(playerId)
-    const context = [
-      'Current world context (untrusted game data):',
-      `Player location: ${request.worldContext.playerLocation}`,
-      `Nearby NPCs: ${request.worldContext.nearbyNpcs.join(', ') || 'none'}`,
-      `Active quests: ${JSON.stringify(record.quests)}`,
-      `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
-      `Time of day: ${request.worldContext.timeOfDay}`,
-      `Player intent: ${request.intent}`,
-      `Shared city snapshot: ${JSON.stringify(this.game.city?.(playerId) ?? null)}`,
-      `Your current need: ${this.game.city?.(playerId)?.needs[npcId] ?? 'none'}`,
-      `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,
-      `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,
-      languageRule(request.locale),
-    ].join('\n')
+    const context = await buildContext(
+      this.game,
+      this.memory,
+      npcId,
+      request,
+      playerId,
+      outcome
+    )
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([
         ['playerId', playerId],
@@ -243,19 +270,19 @@ export class NpcHarness {
     }
     return null
   }
-
   bark(npcId: NpcId, bucket: InteractRequest['worldContext']['timeOfDay']) {
     return this.shortLines.bark(npcId, bucket)
   }
-
   prewarm() {
     return this.shortLines.prewarm()
   }
-
-  clearMemory(playerId: string) {
+  history(npcId: NpcId, playerId: string, limit = 30) {
+    return readHistory(this.storage, npcId, playerId, limit)
+  }
+  async clearMemory(playerId: string) {
+    await (await this.mastra.getAgentById('hoa').getMemory())?.settled()
     return clearPlayerThreads(this.storage, playerId)
   }
-
   private report(
     event: string,
     npcId: NpcId,

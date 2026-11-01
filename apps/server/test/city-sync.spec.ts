@@ -5,8 +5,8 @@ import {
   CitySnapshotSchema,
   cityFromRoomState,
   initialCitySnapshot,
+  type NeighborId,
   NPC_POSITIONS,
-  type NpcId,
   syncCity,
   WorldRoomState,
 } from '@saigon/shared'
@@ -16,7 +16,7 @@ describe('city room schema sync', () => {
   it('starts every NPC at its authored home position', () => {
     const city = initialCitySnapshot()
     expect(CitySnapshotSchema.safeParse(city).success).toBe(true)
-    for (const id of Object.keys(NPC_POSITIONS) as NpcId[]) {
+    for (const id of Object.keys(NPC_POSITIONS) as NeighborId[]) {
       const placement = city.npcPlacements[id]
       expect(placement.position).toEqual(NPC_POSITIONS[id])
       expect(CITY_ANCHORS[placement.locationId][placement.anchorId]).toEqual(

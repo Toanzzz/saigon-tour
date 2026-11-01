@@ -3,7 +3,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
 export const PERSIST_KEY = 'saigon-tour.query-cache'
-const PERSISTED: readonly string[] = ['session', 'settings']
+const PERSISTED: readonly string[] = ['session', 'settings', 'npc-history']
 
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
