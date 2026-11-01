@@ -147,6 +147,7 @@ export class RoomManager {
           look: guest.look ?? null,
         },
         socket,
+        joinedAt: this.now(),
         disconnectedAt: null,
         acknowledgedSequence: 0,
         eventQueue: Promise.resolve(),

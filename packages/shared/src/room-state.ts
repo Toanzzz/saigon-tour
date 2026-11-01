@@ -1,10 +1,22 @@
 import { type MapSchema, schema, t } from '@colyseus/schema'
+import { z } from 'zod'
 import type { CitySnapshot } from './city/schema'
 import type { PresencePlayer } from './multiplayer'
 import { type Look, LookSchema } from './unlocks'
 
 /** Room name registered with the Colyseus matchmaker. */
 export const WORLD_ROOM = 'world'
+
+/** `GET /realtime/status`: capacity and the longest-present player. */
+export const RoomStatusSchema = z.object({
+  capacity: z.number().int().nonnegative(),
+  players: z.number().int().nonnegative(),
+  full: z.boolean(),
+  longest: z
+    .object({ name: z.string(), stayedMs: z.number().nonnegative() })
+    .nullable(),
+})
+export type RoomStatus = z.infer<typeof RoomStatusSchema>
 
 /** One connected tourist, synced to every client in the street room. */
 export const PresenceState = schema(

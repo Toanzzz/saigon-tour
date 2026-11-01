@@ -23,6 +23,7 @@ import {
 import { PartyInviteControls } from '@/widgets/hud/party'
 import { EmoteControls, PeoplePanel } from '@/widgets/hud/people'
 import { TouchStick } from '@/widgets/hud/touch'
+import { WaitingNotice } from '@/widgets/hud/waiting'
 import { WardrobePanel } from '@/widgets/hud/wardrobe'
 import { close, interact, nearby, openRiverPostcard } from './actions'
 import { TitleScreen } from './title-screen'
@@ -39,6 +40,7 @@ export function GameUI() {
     return (
       <div className="game-ui">
         <TitleScreen />
+        <WaitingNotice />
       </div>
     )
   const clear =
@@ -46,6 +48,7 @@ export function GameUI() {
   return (
     <div className="game-ui">
       <GameHeader state={state} />
+      <WaitingNotice />
       {clear && !xrPresenting && (
         <div className="party-invite-toast">
           <PartyInviteControls />

@@ -4,6 +4,7 @@ import {
   cityFromRoomState,
   type Emote,
   type PartyClientMessage,
+  RoomStatusSchema,
   type ServerSocketMessage,
   ServerSocketMessageSchema,
   toPresence,
@@ -37,6 +38,27 @@ export function realtimeUrl(base = API_BASE, origin = location.href) {
 }
 let activeRoom: Room<unknown, WorldRoomState> | null = null
 let lastEmote = -Infinity
+/** Poll interval while the one world room is full. */
+const WAIT_MS = 10000
+
+/** Fetch `/realtime/status`; returns the waiting snapshot or null on failure. */
+async function fetchWaiting() {
+  try {
+    const response = await fetch(`${realtimeUrl()}/realtime/status`, {
+      credentials: 'include',
+    })
+    if (!response.ok) return null
+    const parsed = RoomStatusSchema.safeParse(await response.json())
+    if (!parsed.success) return null
+    return {
+      capacity: parsed.data.capacity,
+      longest: parsed.data.longest,
+      receivedAt: Date.now(),
+    }
+  } catch {
+    return null
+  }
+}
 
 function sendMessage({ type, ...payload }: ClientSocketMessage) {
   if (!activeRoom || net.state.connection !== 'connected') return false
@@ -61,6 +83,7 @@ function handle(message: ServerSocketMessage, room: Room) {
       connection: 'connected',
       selfId: message.selfId,
       room: message.room,
+      waiting: null,
     })
     const batch = currentEventBatch()
     if (batch) room.send('events', batch)
@@ -177,8 +200,15 @@ export function installRealtime() {
         if (!disposed && game.state.guestStatus === 'online') schedule()
         else offline()
       })
-    } catch {
-      if (!disposed) schedule()
+    } catch (error) {
+      if (disposed) return
+      if ((error as { message?: string })?.message === 'room_full') {
+        const waiting = await fetchWaiting()
+        if (disposed || game.state.guestId !== guest) return
+        updateNet({ connection: 'waiting', players: [], waiting })
+        clearTimeout(retry)
+        retry = setTimeout(connect, WAIT_MS)
+      } else schedule()
     } finally {
       joining = false
     }

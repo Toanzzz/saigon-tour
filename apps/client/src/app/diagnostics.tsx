@@ -60,6 +60,7 @@ export function Diagnostics() {
       audio: audio.stats(),
       network: {
         connection: net.state.connection,
+        waiting: net.state.waiting,
         room: net.state.room,
         playerCount: net.state.players.length,
         selfId: net.state.selfId,

@@ -78,3 +78,10 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - `RewardSchema.unlockId` is optional so legacy quest/completed jsonb rows still parse. `createQuest`/`rewardFor` select the giver's first not-owned, not-promised, tier-allowed unlock.
 - Server migration 0007 adds the `players.unlocks` jsonb column. Unlocks persist through save/update/reset, grant idempotently inside the `quest_completions` guard, and reset clears them. `POST /me/equip` validates ownership and slot, writes `equipped`, and pushes the new look to the live room; presence carries `look`.
 - Client syncs `unlocks` over the session load, world, and quest-completed paths, mirrors the grant offline, and shows the unlock in the reward popup, journal, and XR HUD.
+
+## Single world room and waiting notice
+
+- The game runs exactly one street room. Capacity stays 20; Colyseus gets `maxClients = 20 + 5` headroom and a `WorldRoom.active` singleton guard so it never auto-locks or spills into a second room. Capacity is enforced in `onAuth` via `admit`, which throws `room_full` before a seat is reserved. A player who already holds a slot (replacement, reload, or a retained disconnect) is always admitted.
+- Matchmaking is serialized through a promise chain so two concurrent first joins land in one room. `room_full` maps to HTTP 503 so the client treats it as a soft refusal.
+- `GET /realtime/status` returns `{ capacity, players, full, longest }`. `longest` is the connected member with the earliest `joinedAt`; `joinedAt` survives replacement and reconnect, and `stayedMs` is server-computed. The endpoint rejects a present-but-unlisted `Origin` and allows same-origin reads.
+- The client enters a `waiting` connection state on `room_full`, polls `/realtime/status`, and retries every 10s with no backoff. `WaitingNotice` shows a `role="status"` card on the title screen and in the HUD with the longest stroller's name and a locally ticking duration (minutes, then `h min`). Solo play continues while waiting; `welcome` clears the notice.

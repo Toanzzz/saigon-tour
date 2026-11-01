@@ -8,7 +8,7 @@ import type { Auth } from '@/features/auth'
 import { CityDirector } from '@/features/director'
 import type { NpcHarness } from '@/features/npc'
 import { PartyService } from '@/features/party'
-import { RoomManager, WorldRoom } from '@/features/realtime'
+import { RoomManager, status, WorldRoom } from '@/features/realtime'
 import type { GameDb, ServerConfig } from '@/shared'
 import type { Env } from './routes/deps'
 
@@ -24,6 +24,8 @@ export { RoomManager } from '@/features/realtime'
 const ROOM_PATH = /^\/[\w-]+\/[\w-]+\/?$/
 const MAX_CONNECTIONS = 400
 let booted: Promise<void> | null = null
+/** Serialize matchmaking so two world rooms can't be created at once. */
+let matchmakeChain: Promise<unknown> = Promise.resolve()
 
 /**
  * Wire Colyseus into the existing Hono app: matchmaking is a Hono route
@@ -80,21 +82,40 @@ export function createRealtime(
     if (matchMaker.stats.local.ccu >= MAX_CONNECTIONS)
       return c.json({ error: 'server_full' }, 503)
     const body = await c.req.json().catch(() => ({}))
-    try {
-      const reservation = await matchMaker.controller.invokeMethod(
-        c.req.param('method'),
+    const method = c.req.param('method')
+    const ctx = createAuthContext({
+      headers: c.req.raw.headers,
+      req: c.req.raw,
+    })
+    const run = matchmakeChain.then(() =>
+      matchMaker.controller.invokeMethod(
+        method,
         WORLD_ROOM,
         typeof body === 'object' && body ? body : {},
-        createAuthContext({ headers: c.req.raw.headers, req: c.req.raw })
+        ctx
       )
-      return c.json(reservation)
+    )
+    matchmakeChain = run.catch(() => undefined)
+    try {
+      return c.json(await run)
     } catch (error) {
       const { code, message } = error as { code?: number; message?: string }
+      // `room_full` is a soft refusal: the client waits and retries.
       return c.json(
         { code: code ?? 4211, error: message ?? 'matchmake_failed' },
-        400
+        message === 'room_full' ? 503 : 400
       )
     }
+  })
+
+  app.get('/realtime/status', (c) => {
+    // Same-origin GETs omit `Origin`; a cross-origin browser always sends it,
+    // and the app-wide CORS layer blocks disallowed origins. Reject only a
+    // present-but-unlisted origin here.
+    const origin = c.req.header('Origin')
+    if (origin && !config.origins.includes(origin))
+      return c.json({ error: 'forbidden_origin' }, 403)
+    return c.json(status(manager, now))
   })
 
   manager.start()

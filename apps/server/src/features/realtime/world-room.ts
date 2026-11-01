@@ -17,6 +17,7 @@ import {
 import type { QuestService } from '@/domain/quests'
 import type { Auth } from '@/features/auth'
 import type { GameDb } from '@/shared/db'
+import { admit } from './room-status'
 import {
   CLOSE,
   ROOM_CAPACITY,
@@ -73,17 +74,23 @@ export class WorldRoom extends Room<{ state: WorldRoomState }> {
     })
     if (!session) return false
     const player = await WorldRoom.deps.db.ensurePlayer(session.user)
+    if (!admit(WorldRoom.deps.manager, player.id)) throw new Error('room_full')
     const equipped = player.unlocks.equipped
     const look = Object.keys(equipped).length ? equipped : null
     return { id: player.id, name: player.name, color: player.color, look }
   }
 
-  maxClients = ROOM_CAPACITY
+  /** Headroom so Colyseus never auto-locks or spills into a second room. */
+  maxClients = ROOM_CAPACITY + 5
+  /** Only one world room may exist at a time. */
+  static active = false
   private street!: StreetRoom
   private sockets = new Map<string, RoomSocket>()
   private limits = new Map<string, Limits>()
 
   onCreate() {
+    if (WorldRoom.active) throw new Error('room_full')
+    WorldRoom.active = true
     const { manager } = WorldRoom.deps
     this.street = manager.createRoom(true)
     this.state = new WorldRoomState()
@@ -131,6 +138,7 @@ export class WorldRoom extends Room<{ state: WorldRoomState }> {
   }
 
   onDispose() {
+    WorldRoom.active = false
     WorldRoom.deps.manager.dispose(this.street)
   }
 

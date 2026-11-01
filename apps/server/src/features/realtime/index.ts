@@ -1,3 +1,4 @@
+export { admit, status } from './room-status'
 export {
   CLOSE,
   type NpcBarker,

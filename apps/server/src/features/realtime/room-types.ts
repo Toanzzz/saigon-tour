@@ -21,6 +21,8 @@ export interface RoomSocket {
 export interface RoomMember {
   player: PresencePlayer
   socket: RoomSocket | null
+  /** When the member first joined; preserved across replacement and reconnect. */
+  joinedAt: number
   disconnectedAt: number | null
   acknowledgedSequence: number
   eventQueue: Promise<unknown>

@@ -5,17 +5,99 @@ import { required, setupRealtime, until } from './support/peer'
 const ctx = setupRealtime()
 
 describe('Colyseus street rooms and NPC barks', () => {
-  it('places the 21st player in a separate room with isolated presence', async () => {
+  it('keeps one room and refuses the 21st player as room_full', async () => {
     const joined = []
-    for (let i = 0; i < 21; i++) joined.push(await ctx.guest())
+    for (let i = 0; i < 20; i++) joined.push(await ctx.guest())
     const first = required(joined[0])
     const twentieth = required(joined[19])
-    const last = required(joined[20])
     expect(twentieth.welcome.room).toBe(first.welcome.room)
     await twentieth.peer.waitPlayers((players) => players.length === 20)
-    expect(last.welcome.room).not.toBe(first.welcome.room)
-    const players = await last.peer.waitPlayers((list) => list.length === 1)
-    expect(players.map((p) => p.id)).toEqual([last.player.id])
+
+    const twentyFirst = await ctx.fx.guest()
+    const error = await ctx.expectRejected(twentyFirst.token)
+    expect(error.message).toBe('room_full')
+
+    const owned = [...ctx.app.realtime.manager.rooms.values()].filter(
+      (room) => room.owned
+    )
+    expect(owned).toHaveLength(1)
+
+    const status = await ctx.status()
+    expect(status).toMatchObject({ capacity: 20, players: 20, full: true })
+    expect(status.longest?.name).toBe(first.player.name)
+    expect(status.longest?.stayedMs).toBeGreaterThanOrEqual(0)
+  })
+
+  it('admits the same player rejoining at capacity into the same room', async () => {
+    const joined = []
+    for (let i = 0; i < 20; i++) joined.push(await ctx.guest())
+    const first = required(joined[0])
+    const replacement = await ctx.open(first.token)
+    const welcome = await replacement.wait('welcome')
+    expect(welcome.room).toBe(first.welcome.room)
+    expect(await first.peer.closed).toMatchObject({ code: 4002 })
+    expect(
+      [...ctx.app.realtime.manager.rooms.values()].filter((r) => r.owned)
+    ).toHaveLength(1)
+  })
+
+  it('lets a retained dropped slot rejoin, then a waiting guest in when one leaves', async () => {
+    ctx.app.realtime.manager.stop()
+    const joined = []
+    for (let i = 0; i < 20; i++) joined.push(await ctx.guest())
+    const first = required(joined[0])
+    const room = required(ctx.app.realtime.manager.room(first.player.id))
+
+    // A dropped-but-retained slot still counts against capacity.
+    await first.peer.drop()
+    await until(() =>
+      room.members.get(first.player.id)?.socket === null ? true : undefined
+    )
+    const waiting = await ctx.fx.guest()
+    expect((await ctx.expectRejected(waiting.token)).message).toBe('room_full')
+
+    // The retained player reconnects into the same slot.
+    const back = await ctx.open(first.token)
+    expect((await back.wait('welcome')).room).toBe(first.welcome.room)
+
+    // Once a different player leaves, the waiting guest is admitted.
+    const second = required(joined[1])
+    await second.peer.room.leave()
+    await until(() =>
+      ctx.app.realtime.manager.room(second.player.id) === undefined
+        ? true
+        : undefined
+    )
+    const admitted = await ctx.open(waiting.token)
+    expect((await admitted.wait('welcome')).room).toBe(first.welcome.room)
+  })
+
+  it('creates exactly one room under two concurrent first joins', async () => {
+    const [a, b] = await Promise.all([ctx.fx.guest(), ctx.fx.guest()])
+    const [peerA, peerB] = await Promise.all([
+      ctx.open(a.token),
+      ctx.open(b.token),
+    ])
+    const welcomeA = await peerA.wait('welcome')
+    const welcomeB = await peerB.wait('welcome')
+    expect(welcomeA.room).toBe(welcomeB.room)
+    expect(
+      [...ctx.app.realtime.manager.rooms.values()].filter((r) => r.owned)
+    ).toHaveLength(1)
+  })
+
+  it('preserves joinedAt across a replacement so the longest player is stable', async () => {
+    const first = await ctx.guest()
+    await ctx.guest()
+    const before = await ctx.status()
+    expect(before.longest?.name).toBe(first.player.name)
+
+    const replacement = await ctx.open(first.token)
+    await replacement.wait('welcome')
+    await first.peer.closed
+
+    const after = await ctx.status()
+    expect(after.longest?.name).toBe(first.player.name)
   })
 
   it('replaces the old session when the same player joins again', async () => {

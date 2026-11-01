@@ -160,5 +160,31 @@ export function setupRealtime() {
           : undefined
       )
     },
+    /** Join with a token and expect matchmaking to reject; returns the error. */
+    async expectRejected(token?: string, from = origin) {
+      const client = new Client(url, { headers: { Origin: from } })
+      if (token) client.auth.token = token
+      try {
+        const peer = new Peer(
+          await client.joinOrCreate<WorldRoomState>(WORLD_ROOM)
+        )
+        peers.push(peer)
+        throw new Error('Expected join to reject')
+      } catch (error) {
+        return error as { message?: string; code?: number }
+      }
+    },
+    /** `GET /realtime/status` over HTTP with the configured origin. */
+    async status(from = origin) {
+      const response = await fetch(`${url}/realtime/status`, {
+        headers: { Origin: from },
+      })
+      return (await response.json()) as {
+        capacity: number
+        players: number
+        full: boolean
+        longest: { name: string; stayedMs: number } | null
+      }
+    },
   }
 }

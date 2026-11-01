@@ -15,6 +15,7 @@ function connectionLabel(status: NetState['connection']) {
     connecting: m.connection_connecting,
     connected: m.connection_connected,
     reconnecting: m.connection_reconnecting,
+    waiting: m.connection_waiting,
   }
   return labels[status]()
 }
@@ -53,7 +54,9 @@ export function PeoplePanel() {
       <p role="status" className="connection-copy">
         {state.connection === 'connected'
           ? m.people_sharing()
-          : m.people_reconnecting()}
+          : state.connection === 'waiting'
+            ? m.people_waiting()
+            : m.people_reconnecting()}
       </p>
       {state.party && (
         <section className="party-roster" aria-label={m.people_your_party()}>

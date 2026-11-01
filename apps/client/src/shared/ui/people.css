@@ -19,6 +19,37 @@
 .connection-dot.connected {
   background: #24754d;
 }
+.connection-dot.waiting {
+  background: #c8872a;
+}
+.waiting-notice {
+  position: absolute;
+  z-index: 20;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(380px, calc(100vw - 40px));
+  background: var(--wall);
+  border: var(--edge);
+  border-radius: var(--round);
+  box-shadow: var(--lift);
+  padding: 14px 16px;
+  pointer-events: auto;
+  text-align: center;
+}
+.waiting-notice strong {
+  display: block;
+  margin-bottom: 6px;
+}
+.waiting-notice p {
+  margin: 0;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.waiting-notice .waiting-longest {
+  margin-top: 8px;
+  color: var(--bus);
+}
 .people-list {
   padding: 0;
   list-style: none;
