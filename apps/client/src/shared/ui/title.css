@@ -222,3 +222,27 @@
 .new-journey:disabled {
   opacity: 0.6;
 }
+.language-toggle {
+  display: inline-flex;
+  margin: 0 0 18px;
+  padding: 0;
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  overflow: hidden;
+  box-shadow: var(--lift-sm);
+}
+.language-toggle button {
+  min-width: 48px;
+  min-height: 40px;
+  border: 0;
+  background: var(--wall);
+  font-size: 14px;
+  font-weight: 800;
+}
+.language-toggle button + button {
+  border-left: var(--edge);
+}
+.language-toggle button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--wall-hi);
+}

@@ -10,10 +10,18 @@ import {
 } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { NeighborhoodMap } from '@/features/map/map'
+import { LanguageSelect } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
-import { MODES, PLACES, type TravelMode } from '@/shared/world/places'
+import {
+  MODES,
+  modeDescription,
+  modeName,
+  PLACES,
+  placeName,
+  type TravelMode,
+} from '@/shared/world/places'
 import { PauseName } from './pause-name'
 
 export function TransportPanel({ state }: { state: GameState }) {
@@ -26,7 +34,7 @@ export function TransportPanel({ state }: { state: GameState }) {
   return (
     <Dialog
       title="Where shall we go?"
-      eyebrow={PLACES[state.stop].name}
+      eyebrow={placeName(state.stop)}
       onClose={close}
       className="transport-dialog"
     >
@@ -41,12 +49,12 @@ export function TransportPanel({ state }: { state: GameState }) {
             aria-pressed={mode === id}
             onClick={() => setMode(id as TravelMode)}
           >
-            <span>{item.name}</span>
+            <span>{modeName(id as TravelMode)}</span>
             <small>{item.fare} coins</small>
           </button>
         ))}
       </fieldset>
-      <p className="ride-description">{MODES[mode].description}</p>
+      <p className="ride-description">{modeDescription(mode)}</p>
       <label className="field-label" htmlFor="ride-destination">
         Destination
       </label>
@@ -59,9 +67,9 @@ export function TransportPanel({ state }: { state: GameState }) {
       >
         {Object.entries(PLACES)
           .filter(([id]) => id !== state.stop)
-          .map(([id, place]) => (
+          .map(([id]) => (
             <option key={id} value={id}>
-              {place.name}
+              {placeName(id as keyof typeof PLACES)}
             </option>
           ))}
       </select>
@@ -76,7 +84,7 @@ export function TransportPanel({ state }: { state: GameState }) {
         onClick={() => board(destination, mode)}
       >
         <Icon name="bus" />
-        Board {MODES[mode].name}
+        Board {modeName(mode)}
         <span>{fare} coins</span>
       </button>
       {!affordable && (
@@ -171,6 +179,7 @@ export function PausePanel({ state }: { state: GameState }) {
           onChange={(event) => update({ reducedMotion: event.target.checked })}
         />
       </label>
+      <LanguageSelect />
       <div className="controls-reference">
         <span>
           <kbd>W A S D</kbd> Move

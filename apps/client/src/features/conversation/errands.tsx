@@ -1,22 +1,9 @@
 import { type ItemId, NPCS, type NpcId, type Quest } from '@saigon/shared'
 import { acceptQuest, deliverOrVerify, openJournal } from '@/app/actions'
+import { itemLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { dialogueQuests, questHint } from '@/shared/state/quests'
 import { Icon } from '@/shared/ui/icons'
-
-const ITEM_LABELS: Record<ItemId, string> = {
-  herbs: 'fresh herbs',
-  postcard: 'postcard',
-  photo: 'group photo',
-  noodles: 'noodles',
-  broth: 'broth',
-  baguette: 'bánh mì',
-  coffee: 'cà phê sữa',
-  banana: 'chuối chín',
-}
-function itemLabel(itemId: ItemId): string {
-  return ITEM_LABELS[itemId]
-}
 
 function Pill({ tone, label }: { tone: string; label: string }) {
   return <span className={`errand-pill errand-pill-${tone}`}>{label}</span>

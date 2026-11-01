@@ -1,6 +1,6 @@
 import { useSelector } from '@tanstack/react-store'
 import { city } from '@/shared/api/city'
-import { PLACES } from '@/shared/world/places'
+import { placeName } from '@/shared/world/places'
 
 export function CityPulse() {
   const snapshot = useSelector(city, (state) => state)
@@ -19,7 +19,7 @@ export function CityPulse() {
       </p>
       {snapshot.events.map((event) => (
         <p key={event.id}>
-          <strong>{event.title}</strong> · {PLACES[event.locationId].name}
+          <strong>{event.title}</strong> · {placeName(event.locationId)}
         </p>
       ))}
       <ul>

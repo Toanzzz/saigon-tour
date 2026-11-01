@@ -7,7 +7,7 @@ import { audio } from '@/shared/audio'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify, update, visit } from '@/shared/state/game'
 import { Character, Vehicle } from '@/shared/world'
-import { MODES, PLACES } from '@/shared/world/places'
+import { MODES, PLACES, placeName } from '@/shared/world/places'
 import { route } from './routes'
 
 export function Transport() {
@@ -78,7 +78,7 @@ export function Transport() {
         ...visit(game.state, ride.to),
       })
       audio.play('arrive')
-      notify(`Welcome to ${PLACES[ride.to].name}`)
+      notify(`Welcome to ${placeName(ride.to)}`)
     }
   })
   return (

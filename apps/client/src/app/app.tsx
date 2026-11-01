@@ -4,6 +4,7 @@ import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react'
 import { queryClient } from '@/shared/api/agent'
 import { initializeSession } from '@/shared/api/session'
 import { installRealtime } from '@/shared/api/socket'
+import { m, useLocale } from '@/shared/i18n'
 import { installInput } from '@/shared/runtime/input'
 import { GameUI } from './game-ui'
 import { Scene } from './scene'
@@ -13,12 +14,14 @@ function Loading() {
   const { active, progress } = useProgress()
   return active ? (
     <div className="loading-badge" role="status">
-      Preparing your neighborhood <span>{Math.round(progress)}%</span>
+      {m.app_loading()} <span>{Math.round(progress)}%</span>
     </div>
   ) : null
 }
 
 export function App() {
+  // Remount only the DOM layer on language change; the scene keeps running.
+  const locale = useLocale()
   useEffect(() => {
     void initializeSession()
     installTestHooks()
@@ -31,11 +34,11 @@ export function App() {
   }, [])
   return (
     <QueryClientProvider client={queryClient}>
-      <main aria-label="Sài Gòn exploration game">
+      <main aria-label={m.app_label()}>
         <div className="game-canvas">
           <Scene />
         </div>
-        <GameUI />
+        <GameUI key={locale} />
         <Loading />
       </main>
     </QueryClientProvider>
@@ -54,13 +57,10 @@ export class GameBoundary extends Component<
   render() {
     return this.state.error ? (
       <div className="fatal-error">
-        <h1>The neighborhood couldn’t load</h1>
-        <p>
-          Check your connection and enable WebGL in your browser, then try
-          again.
-        </p>
+        <h1>{m.app_fatal_title()}</h1>
+        <p>{m.app_fatal_body()}</p>
         <button type="button" onClick={() => location.reload()}>
-          Try again
+          {m.app_try_again()}
         </button>
       </div>
     ) : (

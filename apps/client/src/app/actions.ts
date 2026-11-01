@@ -14,6 +14,7 @@ import {
 import { clearPersistedQueries } from '@/shared/api/query'
 import { guestState, resetSession, signOut } from '@/shared/api/session'
 import { audio } from '@/shared/audio'
+import { itemLabel, m } from '@/shared/i18n'
 import {
   advanceQuests,
   game,
@@ -41,9 +42,7 @@ export async function restart() {
   if (state.guestStatus === 'resetting') return
   const acquired = await beginHttpTurn()
   if (!acquired) {
-    notify(
-      'Please wait for your current conversation to finish, then try again.'
-    )
+    notify(m.toast_wait_conversation())
     return
   }
   update({ guestStatus: 'resetting' })
@@ -53,7 +52,7 @@ export async function restart() {
   } catch {
     endHttpTurn()
     update({ guestStatus: state.guestStatus })
-    notify('Your saved journey could not be reset. Try again when connected.')
+    notify(m.toast_reset_failed())
     return
   }
   resetEventSequence()
@@ -129,7 +128,7 @@ export function buyMarketItem(itemId: MarketItemId) {
   )
     return
   if (state.world.currency < item.price) {
-    notify(`You need ${item.price} coins for ${item.label}.`)
+    notify(m.toast_need_coins({ count: item.price, item: item.label }))
     return
   }
   update({
@@ -146,7 +145,7 @@ export function buyMarketItem(itemId: MarketItemId) {
     pending: [...state.pending, { type: 'purchase', itemId }],
   })
   audio.play('pickup')
-  notify(`${item.label} added to your bag.`)
+  notify(m.toast_added_to_bag({ item: item.label }))
 }
 export function openRiverPostcard() {
   if (game.state.world.locationId !== 'river') return
@@ -159,13 +158,13 @@ export function nearby(
     ...Object.entries(PEOPLE).map(([id]) => ({
       kind: 'npc' as const,
       id,
-      label: `Talk to ${NPCS[id as NpcId].name}`,
+      label: m.hud_talk_to({ name: NPCS[id as NpcId].name }),
       at: npcPosition(id as NpcId),
     })),
     ...Object.entries(PLACES).map(([id, value]) => ({
       kind: 'stop' as const,
       id,
-      label: 'Choose a ride',
+      label: m.hud_choose_ride(),
       at: value.stop,
     })),
   ].filter((target) => distance(target.at, position) < 4)
@@ -205,18 +204,14 @@ export async function talk(npc: NpcId) {
     world: { ...s.world, talkedTo: [...new Set([...s.world.talkedTo, npc])] },
     pending: [...s.pending, { type: 'talk', npcId: npc }],
   }))
-  await converse(
-    'Chào bạn! What is happening in the neighborhood?',
-    'greet',
-    true
-  )
+  await converse(m.prompt_greet(), 'greet', true)
 }
 export const chat = (text: string) => converse(text, 'chat')
 export async function acceptQuest() {
   const state = game.state
   if (!state.dialogue || state.dialogue.thinking || state.quests.length >= 3)
     return
-  await converse('I would love to help. Do you have an errand for me?', 'help')
+  await converse(m.prompt_help(), 'help')
 }
 export async function deliverOrVerify() {
   const state = game.state
@@ -226,17 +221,20 @@ export async function deliverOrVerify() {
   if (delivery) {
     game.setState((current) => deliver(current, delivery.itemId, dialogue.npc))
     audio.play('pickup')
-    await converse(`Here is the ${delivery.itemId} for your errand!`, 'chat')
+    await converse(
+      m.prompt_deliver({ item: itemLabel(delivery.itemId) }),
+      'chat'
+    )
     return
   }
-  await converse('I finished your errand. Can you check?', 'check')
+  await converse(m.prompt_check(), 'check')
 }
 export function board(to: keyof typeof PLACES, mode: TravelMode) {
   const state = game.state
   const fare = MODES[mode].fare
   if (state.ride || to === state.stop) return
   if (state.world.currency < fare) {
-    notify('Not enough coins. The city is always free to explore on foot.')
+    notify(m.toast_not_enough_coins())
     return
   }
   update({

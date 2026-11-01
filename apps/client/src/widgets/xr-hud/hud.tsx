@@ -10,7 +10,7 @@ import {
 } from '@/app/actions'
 import { game, trackedQuest } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
-import { MODES, PLACES } from '@/shared/world/places'
+import { MODES, PLACES, placeName } from '@/shared/world/places'
 import { XRWorldPanel } from '@/shared/xr'
 
 export function XRGameHud() {
@@ -83,7 +83,7 @@ export function XRGameHud() {
             .filter((id) => id !== state.stop)
             .map((id) => ({
               id,
-              label: `Bus → ${PLACES[id].name}`,
+              label: `Bus → ${placeName(id)}`,
               onClick: () => board(id, 'bus'),
             })),
           { id: 'close', label: 'Continue', onClick: close },
@@ -106,7 +106,7 @@ export function XRGameHud() {
     const title =
       target.kind === 'npc'
         ? target.label
-        : PLACES[target.id as keyof typeof PLACES].name
+        : placeName(target.id as keyof typeof PLACES)
     return (
       <XRWorldPanel
         title={title}

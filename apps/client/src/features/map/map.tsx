@@ -16,7 +16,7 @@ import {
   ROADS,
   WATER,
 } from '@/shared/world/district'
-import { PEOPLE, PLACES } from '@/shared/world/places'
+import { PEOPLE, PLACES, placeName } from '@/shared/world/places'
 import { questPin } from './targets'
 
 /* Text on a translucent pill so labels stay legible over roads and blocks. */
@@ -100,7 +100,7 @@ export function NeighborhoodMap({
       className={large ? 'neighborhood-map large' : 'neighborhood-map'}
       viewBox="0 0 176 160"
       role="img"
-      aria-label={`Neighborhood map. You are near ${PLACES[state.world.locationId].name}.`}
+      aria-label={`Neighborhood map. You are near ${placeName(state.world.locationId)}.`}
     >
       <title>Sài Gòn neighborhood map</title>
       <rect width="176" height="160" fill="#b1b8cb" />

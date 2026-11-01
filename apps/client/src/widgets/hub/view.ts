@@ -2,7 +2,13 @@ import { type LocationId, NPCS, type NpcId } from '@saigon/shared'
 import { city } from '@/shared/api/city'
 import { type GameState, trackedQuest } from '@/shared/state/game'
 import { nextStep, stepCopy } from '@/shared/state/quests'
-import { MODES, PLACES, type TravelMode } from '@/shared/world/places'
+import {
+  MODES,
+  modeName,
+  PLACES,
+  placeName,
+  type TravelMode,
+} from '@/shared/world/places'
 
 export type StepState = 'done' | 'now' | 'next'
 export interface HubStep {
@@ -183,7 +189,7 @@ export function cheapestRide(state: GameState): HubRide | null {
   if (!mode) return null
   return {
     mode,
-    name: MODES[mode].name,
+    name: modeName(mode),
     fare: MODES[mode].fare,
     from: state.stop,
     to,
@@ -227,7 +233,7 @@ export function hubView(state: GameState, now = new Date()): HubView {
     ride: cheapestRide(state),
     places: ids.map((id) => ({
       id,
-      label: PLACES[id].name,
+      label: placeName(id),
       visited: state.world.visitedLocations.includes(id),
       here: state.world.locationId === id,
     })),

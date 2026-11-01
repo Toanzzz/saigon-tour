@@ -2,6 +2,7 @@ import { useProgress } from '@react-three/drei'
 import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useEffect, useState } from 'react'
+import { LanguageToggle, m } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
@@ -25,14 +26,15 @@ export function TitleScreen() {
     if (saved) start()
   }
   return (
-    <section className="title-screen" aria-label="Welcome to Sài Gòn">
+    <section className="title-screen" aria-label={m.title_welcome_label()}>
       <div className="title-content">
+        <LanguageToggle />
         <h1>Sài Gòn</h1>
-        <p className="title-subtitle">A little journey</p>
+        <p className="title-subtitle">{m.title_subtitle()}</p>
         <p className="title-description">
           {returningGuest && guestName
-            ? `Welcome back, ${guestName}`
-            : 'Meet a neighbor, lend a hand, and let the city surprise you.'}
+            ? m.title_welcome_back({ name: guestName })
+            : m.title_description()}
           {continuing && <JourneySummary />}
         </p>
         <div className="title-form">
@@ -47,16 +49,18 @@ export function TitleScreen() {
               onClick={begin}
             >
               {active ? (
-                `Opening the neighborhood… ${Math.round(progress)}%`
+                m.title_loading({ percent: Math.round(progress) })
               ) : guestStatus === 'loading' ? (
-                'Finding your journey…'
+                m.title_finding_journey()
               ) : continuing ? (
                 <span className="title-continue">
-                  Continue journey
-                  <small>as {guestName}</small>
+                  {m.title_continue()}
+                  <small>
+                    {m.title_continue_as({ name: guestName ?? '' })}
+                  </small>
                 </span>
               ) : (
-                'Start exploring'
+                m.title_start()
               )}
             </button>
             <XRSessionButton store={xrStore} />
@@ -66,22 +70,20 @@ export function TitleScreen() {
         </div>
         <p className="title-controls desktop-only">
           <span>
-            <kbd>W A S D</kbd> move
+            <kbd>W A S D</kbd> {m.title_controls_move()}
           </span>
           <span>
-            <kbd>Drag</kbd> look
+            <kbd>{m.controls_drag()}</kbd> {m.controls_look()}
           </span>
           <span>
-            <kbd>E</kbd> say hello
+            <kbd>E</kbd> {m.title_controls_hello()}
           </span>
         </p>
-        <p className="title-controls touch-only">
-          Use the thumbstick to move. Drag the city to look around.
-        </p>
+        <p className="title-controls touch-only">{m.title_controls_touch()}</p>
       </div>
-      <nav className="title-legal" aria-label="Legal">
-        <a href="/legal/privacy.html">Privacy Policy</a>
-        <a href="/legal/data-deletion.html">User Data Deletion</a>
+      <nav className="title-legal" aria-label={m.title_legal()}>
+        <a href="/legal/privacy.html">{m.title_privacy()}</a>
+        <a href="/legal/data-deletion.html">{m.title_data_deletion()}</a>
       </nav>
     </section>
   )

@@ -4,9 +4,10 @@ import { Conversation } from '@/features/conversation/conversation'
 import { NeighborhoodMap } from '@/features/map/map'
 import { RewardPanel } from '@/features/postcard/reward'
 import { audio } from '@/shared/audio'
+import { m } from '@/shared/i18n'
 import { game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
-import { PLACES } from '@/shared/world/places'
+import { placeName } from '@/shared/world/places'
 import { useXRPresenting } from '@/shared/xr'
 import { HubScreen } from '@/widgets/hub'
 import { GameHeader } from '@/widgets/hud/header'
@@ -57,13 +58,14 @@ export function GameUI() {
           <button
             type="button"
             className="minimap-button"
-            aria-label="Open neighborhood map"
+            aria-label={m.hud_open_map()}
             onClick={() => update({ panel: 'map' })}
           >
             <NeighborhoodMap state={state} />
             <span>
               <Icon name="compass" size={14} />
-              Neighborhood<kbd>M</kbd>
+              {m.hud_neighborhood()}
+              <kbd>M</kbd>
             </span>
           </button>
           <div className="touch-only">
@@ -71,7 +73,7 @@ export function GameUI() {
             <button
               type="button"
               className="touch-interact"
-              aria-label={target?.label ?? 'Interact'}
+              aria-label={target?.label ?? m.hud_interact()}
               disabled={!target}
               onClick={interact}
             >
@@ -79,7 +81,9 @@ export function GameUI() {
                 name={target?.kind === 'stop' ? 'bus' : 'arrow'}
                 size={24}
               />
-              <span>{target?.kind === 'stop' ? 'Ride' : 'Talk'}</span>
+              <span>
+                {target?.kind === 'stop' ? m.hud_ride() : m.hud_talk()}
+              </span>
             </button>
           </div>
           {target && (
@@ -99,7 +103,7 @@ export function GameUI() {
               onClick={() => update({ panel: 'market' })}
             >
               <Icon name="leaf" size={20} />
-              Browse market goods
+              {m.hud_browse_market()}
             </button>
           )}
           {state.world.locationId === 'river' && (
@@ -109,21 +113,21 @@ export function GameUI() {
               onClick={openRiverPostcard}
             >
               <Icon name="map" size={20} />
-              See the river postcard view
+              {m.hud_river_postcard()}
             </button>
           )}
           <div className="desktop-hint desktop-only">
             <span>
-              <kbd>WASD</kbd> stroll
+              <kbd>WASD</kbd> {m.hud_hint_stroll()}
             </span>
             <span>
-              <kbd>Drag</kbd> look
+              <kbd>{m.controls_drag()}</kbd> {m.controls_look()}
             </span>
             <span>
-              <kbd>J</kbd> journal
+              <kbd>J</kbd> {m.hud_hint_journal()}
             </span>
             <span>
-              <kbd>H</kbd> hub
+              <kbd>H</kbd> {m.hud_hint_hub()}
             </span>
           </div>
         </>
@@ -132,10 +136,12 @@ export function GameUI() {
         <div className="ride-banner">
           <Icon name="bus" />
           <div>
-            <span className="eyebrow">Watch the city go by</span>
-            <strong>On the way to {PLACES[state.ride.to].name}</strong>
+            <span className="eyebrow">{m.ride_watch()}</span>
+            <strong>
+              {m.ride_on_the_way({ place: placeName(state.ride.to) })}
+            </strong>
             <progress
-              aria-label="Ride progress"
+              aria-label={m.ride_progress()}
               max="1"
               value={state.ride.progress}
             />
@@ -161,7 +167,7 @@ export function GameUI() {
       {state.screen === 'hub' && !xrPresenting && <HubScreen state={state} />}
       {state.panel !== 'none' && (
         <button type="button" className="sr-only" onClick={close}>
-          Return to city
+          {m.hud_return_to_city()}
         </button>
       )}
     </div>

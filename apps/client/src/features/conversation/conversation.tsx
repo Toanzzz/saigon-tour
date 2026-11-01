@@ -4,7 +4,7 @@ import { chat, close } from '@/app/actions'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
-import { PLACES } from '@/shared/world/places'
+import { placeName } from '@/shared/world/places'
 import { NpcErrands } from './errands'
 
 const messageKeys = new WeakMap<object, string>()
@@ -40,7 +40,7 @@ export function Conversation({ state }: { state: GameState }) {
   return (
     <Dialog
       title={npc.name}
-      eyebrow={`${npc.role} · ${PLACES[npc.location].name}`}
+      eyebrow={`${npc.role} · ${placeName(npc.location)}`}
       onClose={close}
       className="conversation"
     >

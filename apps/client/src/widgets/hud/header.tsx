@@ -1,7 +1,7 @@
 import { canOpenHub, openHub, pause } from '@/app/actions'
 import { type GameState, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
-import { PLACES } from '@/shared/world/places'
+import { placeName } from '@/shared/world/places'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { PeopleButton } from './people'
 
@@ -11,7 +11,7 @@ export function GameHeader({ state }: { state: GameState }) {
     <header className="game-header">
       <div className="game-identity">
         <span>Sài Gòn</span>
-        <small>{PLACES[state.world.locationId].name}</small>
+        <small>{placeName(state.world.locationId)}</small>
       </div>
       <nav className="header-tools" aria-label="Game controls">
         <PeopleButton />

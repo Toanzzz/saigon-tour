@@ -1,8 +1,9 @@
 import { useSelector } from '@tanstack/react-store'
 import { useEffect, useState } from 'react'
 import { audio } from '@/shared/audio'
+import { m } from '@/shared/i18n'
 import { type GameState, game, trackedQuest } from '@/shared/state/game'
-import { PLACES } from '@/shared/world/places'
+import { placeName } from '@/shared/world/places'
 import { restart } from './actions'
 
 /** True once the saved guest has played: favors, quests, talks, or travel. */
@@ -22,11 +23,11 @@ export function JourneySummary() {
   const parts = useSelector(game, (state) => {
     const done = state.completed.length
     const quest = trackedQuest(state)?.title
-    const place = PLACES[state.world.locationId]?.name
+    const place = placeName(state.world.locationId)
     return [
-      done ? `${done} ${done === 1 ? 'favor' : 'favors'} done` : '',
-      quest ? `Helping with “${quest}”` : '',
-      place ? `near ${place}` : '',
+      done ? m.title_summary_favors({ count: done }) : '',
+      quest ? m.title_summary_quest({ quest }) : '',
+      place ? m.title_summary_place({ place }) : '',
     ]
       .filter(Boolean)
       .join(' · ')
@@ -59,10 +60,10 @@ export function NewJourneyButton({ className = '' }: { className?: string }) {
       onClick={press}
     >
       {resetting
-        ? 'Starting fresh…'
+        ? m.journey_resetting()
         : confirming
-          ? 'Tap again to erase progress'
-          : 'Start a new journey'}
+          ? m.journey_confirm()
+          : m.journey_new()}
     </button>
   )
 }

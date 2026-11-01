@@ -2,6 +2,7 @@ import { PlayerNameSchema, randomPlayerName } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useEffect, useState } from 'react'
 import { renamePlayer, signInWithMeta, signOut } from '@/shared/api/session'
+import { m } from '@/shared/i18n'
 import { game, notify, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
 
@@ -16,7 +17,7 @@ export async function commitPlayerName(name: string) {
     await renamePlayer(parsed.data)
     return true
   } catch {
-    notify('That name could not be saved. Try another one.')
+    notify(m.toast_name_not_saved())
     return false
   }
 }
@@ -35,7 +36,7 @@ export function TitleName({
   const valid = PlayerNameSchema.safeParse(name).success
   return (
     <label className="title-name" htmlFor="player-name">
-      <span>Your name</span>
+      <span>{m.title_your_name()}</span>
       <span className="title-name-row">
         <input
           id="player-name"
@@ -49,8 +50,8 @@ export function TitleName({
         <button
           type="button"
           className="title-dice"
-          aria-label="Pick another random name"
-          title="Pick another random name"
+          aria-label={m.title_random_name()}
+          title={m.title_random_name()}
           disabled={guestStatus === 'loading'}
           onClick={() => onName(randomPlayerName())}
         >
@@ -70,7 +71,7 @@ export function TitleAccount() {
       await signInWithMeta()
     } catch {
       setSigningIn(false)
-      notify('Meta sign-in is unavailable right now.')
+      notify(m.toast_meta_unavailable())
     }
   }
   const leave = async () => {
@@ -80,15 +81,15 @@ export function TitleAccount() {
   if (account === 'meta')
     return (
       <p className="title-account">
-        <span>Progress saved to your Meta account.</span>
+        <span>{m.title_meta_saved()}</span>
         <button type="button" className="text-button" onClick={leave}>
-          Sign out
+          {m.title_sign_out()}
         </button>
       </p>
     )
   return (
     <p className="title-account">
-      <span>Guest progress stays on this device.</span>
+      <span>{m.title_guest_saved()}</span>
       {metaAvailable && guestStatus === 'online' && (
         <button
           type="button"
@@ -96,7 +97,7 @@ export function TitleAccount() {
           disabled={signingIn}
           onClick={meta}
         >
-          {signingIn ? 'Opening Meta…' : 'Continue with Meta'}
+          {signingIn ? m.title_meta_opening() : m.title_meta_continue()}
         </button>
       )}
     </p>

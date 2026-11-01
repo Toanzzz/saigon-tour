@@ -149,3 +149,15 @@
 .reward-earned span + span {
   background: var(--leaf-hi);
 }
+.language-row {
+  align-items: center;
+}
+.language-row select {
+  min-height: 44px;
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  padding: 8px 12px;
+  background: var(--wall-hi);
+  color: var(--ink);
+  font-weight: 600;
+}
