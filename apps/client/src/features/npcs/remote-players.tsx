@@ -1,42 +1,36 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { NPCS, type NpcId, type PresencePlayer } from '@saigon/shared'
-import { useEffect, useRef, useState } from 'react'
+import { useSelector } from '@tanstack/react-store'
+import { useRef } from 'react'
 import type { Group } from 'three'
 import { Pet } from '@/features/pets'
 import { npcPosition } from '@/shared/api/city'
-import {
-  interpolate,
-  nearestPlayers,
-  npcSpeech,
-  presence,
-  speech,
-} from '@/shared/api/presence'
+import { interpolate, presence } from '@/shared/api/presence'
+import { presenceView, samplePresenceView } from '@/shared/api/presence-view'
 import { motion } from '@/shared/runtime/motion'
-import { game } from '@/shared/state/game'
 import { Avatar, PersonalVehicle, Vehicle } from '@/shared/world'
 import { useXRPresenting } from '@/shared/xr'
 
-export function RemotePlayers() {
-  const [players, setPlayers] = useState<PresencePlayer[]>([])
-  const ids = useRef('')
+/** Single ~5 Hz ticker that refreshes the React-visible presence slice. */
+function PresenceTicker() {
   const elapsed = useRef(0)
   useFrame((_, delta) => {
     elapsed.current += delta
     if (elapsed.current < 0.2) return
     elapsed.current = 0
-    const nearest = nearestPlayers(
-      game.state.position,
+    samplePresenceView(
       matchMedia('(max-width: 700px), (pointer: coarse)').matches ? 6 : 8
     )
-    const key = nearest.map((player) => player.id).join(',')
-    if (key !== ids.current) {
-      ids.current = key
-      setPlayers(nearest)
-    }
   })
+  return null
+}
+
+export function RemotePlayers() {
+  const players = useSelector(presenceView, (view) => view.nearest)
   return (
     <>
+      <PresenceTicker />
       {players.map((player) => (
         <RemotePlayer key={player.id} player={player} />
       ))}
@@ -67,12 +61,11 @@ function NpcSpeech({ npc }: { npc: NpcId }) {
 function RemotePlayer({ player }: { player: PresencePlayer }) {
   const ref = useRef<Group>(null)
   const label = useRef<Group>(null)
-  const [ride, setRide] = useState(player.ride)
-  const [moving, setMoving] = useState(false)
-  const previous = useRef(player.position)
-  const elapsed = useRef(0)
+  const view = useSelector(presenceView, (v) => v.remote[player.id])
+  const ride = view?.ride ?? player.ride
+  const moving = view?.moving ?? false
   const xr = useXRPresenting()
-  useFrame((_, delta) => {
+  useFrame(() => {
     const entry = presence.get(player.id)
     if (!entry || !ref.current) {
       if (ref.current) ref.current.visible = false
@@ -84,17 +77,6 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
     ref.current.position.set(...sample.position)
     ref.current.rotation.y = sample.heading
     if (label.current) label.current.rotation.y = -sample.heading
-    elapsed.current += delta
-    if (elapsed.current > 0.2) {
-      elapsed.current = 0
-      setRide((value) => (value === sample.ride ? value : sample.ride))
-      const speed = Math.hypot(
-        previous.current[0] - sample.position[0],
-        previous.current[2] - sample.position[2]
-      )
-      setMoving(speed > 0.05)
-      previous.current = sample.position
-    }
   })
   const mode =
     ride === 'bus' || ride === 'metro' || ride === 'xeom' || ride === 'cyclo'
@@ -147,6 +129,7 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
     </>
   )
 }
+
 function SelfSpeech() {
   const ref = useRef<Group>(null)
   useFrame(() => {
@@ -158,6 +141,7 @@ function SelfSpeech() {
     </group>
   )
 }
+
 function SpeechLabel({
   playerId,
   name,
@@ -169,29 +153,12 @@ function SpeechLabel({
   npc?: NpcId
   self?: boolean
 }) {
-  const [text, setText] = useState('')
-  const current = useRef('')
-  const elapsed = useRef(0)
-  const xr = useXRPresenting()
-  useFrame((_, delta) => {
-    elapsed.current += delta
-    if (elapsed.current < 0.1) return
-    elapsed.current = 0
-    const bubble = npc
-      ? npcSpeech.get(npc)
-      : speech.get((self ? game.state.guestId : playerId) ?? '')
-    const next = bubble && bubble.until > performance.now() ? bubble.text : ''
-    if (next !== current.current) {
-      current.current = next
-      setText(next)
-    }
+  const text = useSelector(presenceView, (view) => {
+    if (npc) return view.bubbles.npcs[npc] ?? ''
+    if (self) return view.bubbles.self
+    return (playerId && view.bubbles.players[playerId]) || ''
   })
-  useEffect(
-    () => () => {
-      current.current = ''
-    },
-    []
-  )
+  const xr = useXRPresenting()
   if (xr || (!name && !text)) return null
   return (
     <Html

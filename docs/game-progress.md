@@ -133,3 +133,5 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - `touchView.knob` is written by the `touch.tsx` pointer handlers via `setTouchKnob`; the stick reads it with `useSelector`. The blur/visibility recenter moved into `installInput()` (`clearInput()` now also resets the knob), so it fires even when the stick is unmounted.
 
 - `npcLabels` store `{[npcId]: {visible, marker, pulse, at}}` is computed by one `NpcLabelsTicker` (`useFrame`, rendered once in `Neighbors`), writing the map only on change. Each `NpcLabel` now selects its own entry (`shallow`) instead of running a per-label quest scan every frame.
+
+- `shared/api/presence-view.ts` adds a `presenceView` store (`nearest` players, per-id `remote` `{ride, moving}`, and `bubbles` for self/players/npcs). One `PresenceTicker` (`useFrame`, ~5 Hz, write-on-change) in `RemotePlayers` recomputes it via `samplePresenceView`. `RemotePlayer` and `SpeechLabel` now select from the store instead of each running their own throttled `useState` loops; the per-frame ref position/rotation interpolation stays mutable in `useFrame`.
