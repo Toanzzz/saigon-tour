@@ -57,7 +57,7 @@ export function greetingPrompt(context: GreetingContext) {
         )
         .join('; ')
     : 'none'
-  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. Mention the weather or an active event only when it fits naturally. Do not offer or claim to start an errand.`
+  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment. Do not offer or claim to start an errand.`
 }
 
 const TIME_VI: Record<TimeOfDay, string> = {

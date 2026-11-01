@@ -77,7 +77,7 @@ export class ShortLines {
   key(npc: NpcId, context: GreetingContext, locale: Locale = 'en') {
     const hash = createHash('sha256')
       .update(
-        `greeting-v3\0${NPC_PERSONAS[npc]}\0${this.modelId}\0${greetingSignature(context)}`
+        `greeting-v4\0${NPC_PERSONAS[npc]}\0${this.modelId}\0${greetingSignature(context)}`
       )
       .digest('hex')
     return `${npc}:${locale}:${hash}`
