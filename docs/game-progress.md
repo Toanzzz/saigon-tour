@@ -71,3 +71,10 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Chat affinity + avatar: the NPC portrait renders a head-and-shoulders crop of the real character glb (single hidden on-demand WebGL canvas, cached per model+color, falls back to an initial). The portrait carries a corner affinity crest (five tiers: Cold, Wary, Getting acquainted, Warm, Close friend) and opens an `affinity-info` popover (tier ladder, level, next-tier distance, tip); a change bumps/dips the crest. A screen-reader-only `<meter>` keeps the numeric value. Each NPC message shows a round mini-avatar. The conversation footer (source label, Continue exploring) was removed; the close button suffices.
 
 - World NPC quest diamond only renders when it has a `!`/`?` glyph. Pause panel has a "What the symbols mean" guide covering the two quest diamonds and the affinity crest.
+
+## Quest reward unlocks
+
+- Neighbors grant permanent cosmetics, vehicles, and pets as quest rewards, gated by friendship tier (`FRIENDSHIP_TIERS`: neutral 0, warm 2, close 4). Catalog of 27 signature unlocks (9 neighbors x 3 tiers) in `packages/shared/src/unlocks`.
+- `RewardSchema.unlockId` is optional so legacy quest/completed jsonb rows still parse. `createQuest`/`rewardFor` select the giver's first not-owned, not-promised, tier-allowed unlock.
+- Server migration 0007 adds the `players.unlocks` jsonb column. Unlocks persist through save/update/reset, grant idempotently inside the `quest_completions` guard, and reset clears them. `POST /me/equip` validates ownership and slot, writes `equipped`, and pushes the new look to the live room; presence carries `look`.
+- Client syncs `unlocks` over the session load, world, and quest-completed paths, mirrors the grant offline, and shows the unlock in the reward popup, journal, and XR HUD.

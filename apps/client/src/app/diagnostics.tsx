@@ -37,6 +37,7 @@ export function Diagnostics() {
         quests: state.quests,
         trackedQuestId: state.trackedQuestId,
         completed: state.completed.length,
+        unlocks: state.unlocks,
         ride: state.ride,
         timeOfDay: state.timeOfDay,
         viewpoint: state.viewpoint,

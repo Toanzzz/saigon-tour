@@ -109,3 +109,9 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 ## Chat header affinity
 
 - Headless Playwright at 1440×900 and 390×900 opened Linh via the real interact control. Start: `• Getting acquainted`, `+1 to Warm`, meter value 1, one warm pip lit. After raising Linh to 2 through `noteFriendship`: `♥ Warm`, two warm pips, one `.changed` pip, no page errors. The header fit in one 26px row inside the dialog at both widths.
+
+## Quest reward unlocks
+
+- Gates: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass. Unit coverage: 166 server tests (adds `unlocks`, `unlocks-grant`, `me-equip`) and 128 client tests (adds `wardrobe`).
+- Server tests prove the giver's tier-gated unlock selection, idempotent grant under 12 concurrent completions, equip ownership/slot validation, reset clearing, and that legacy rewards without `unlockId` still parse.
+- `node scripts/qa-unlocks.mjs`, unsandboxed headless Chromium at 1440×900 and 390×900: completing Hoa's seed errand grants the neutral-tier `non-la` unlock, the reward popup shows "unlocked", the wardrobe opens from the header button, and equipping sets `equipped.hat = non-la`. No page errors at either width. Evidence: `artifacts/unlocks/results.json` and reward/wardrobe screenshots.
