@@ -33,6 +33,14 @@ export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
         return c.json({ player })
       }
     )
+    .post('/quests/:questId/abandon', async (c) => {
+      const questId = c.req.param('questId')
+      if (!/^q_[a-zA-Z0-9_-]{1,64}$/.test(questId))
+        return c.json({ error: 'invalid_quest_id' }, 400)
+      return c.json({
+        player: await harness.game.abandon(c.var.player.id, questId),
+      })
+    })
     .post('/reset', async (c) => {
       const { id } = c.var.player
       await harness.clearMemory(id)

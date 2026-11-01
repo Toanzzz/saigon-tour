@@ -1,13 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import type {
-  CompletedQuest,
-  GuestPlayer,
-  NpcId,
-  Quest,
-  WorldState,
-} from '@saigon/shared'
+import type { GuestPlayer, NpcId } from '@saigon/shared'
 import {
   GuestPlayerSchema,
   randomPlayerColor,
@@ -18,19 +12,11 @@ import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { Pool } from 'pg'
 import * as schema from './schema'
 
-export interface PlayerSave {
-  revision: number
-  world: WorldState
-  quests: Quest[]
-  completed: CompletedQuest[]
-  reputation: number
-}
-interface SqlClient {
-  query(
-    text: string,
-    values?: unknown[]
-  ): Promise<{ rows: Record<string, unknown>[] }>
-}
+export type { PlayerSave, SqlClient } from './player-save'
+
+import { PlayerMutations } from './player-mutations'
+import type { PlayerSave, SqlClient } from './player-save'
+
 export interface Reservation {
   day: string
   id: string
@@ -54,14 +40,16 @@ const publicPlayer = (r: Record<string, unknown>): GuestPlayer =>
   GuestPlayerSchema.parse(r)
 
 export class GameDb {
-  private locks = new Map<string, Promise<unknown>>()
+  private mutations: PlayerMutations
   private reservations = new Set<string>()
   constructor(
     readonly sql: SqlClient,
     readonly pool?: Pool,
     private readonly now = () => new Date(),
     private readonly barkLimit = 200
-  ) {}
+  ) {
+    this.mutations = new PlayerMutations(sql, pool)
+  }
   async health() {
     await this.sql.query('SELECT 1')
     return true
@@ -122,56 +110,21 @@ export class GameDb {
   async readPlayer(id: string): Promise<PlayerSave> {
     return this.player(id)
   }
-  async mutatePlayer<T>(
+  mutatePlayers<T>(
+    ids: string[],
+    fn: (saves: Map<string, PlayerSave>, client: SqlClient) => T | Promise<T>
+  ): Promise<T> {
+    return this.mutations.run(ids, fn)
+  }
+  mutatePlayer<T>(
     id: string,
     fn: (save: PlayerSave, client: SqlClient) => T | Promise<T>
   ): Promise<T> {
-    const previous = this.locks.get(id) ?? Promise.resolve()
-    const operation = previous
-      .catch(() => {})
-      .then(async () => {
-        const client = this.pool ? await this.pool.connect() : this.sql
-        try {
-          await client.query('BEGIN')
-          const { rows } = await client.query(
-            'SELECT * FROM players WHERE id=$1 FOR UPDATE',
-            [id]
-          )
-          if (!rows[0]) throw new Error('player_not_found')
-          const save: PlayerSave = publicPlayer(rows[0])
-          save.revision += 1
-          const result = await fn(save, client)
-          for (const quest of save.completed)
-            await client.query(
-              'INSERT INTO quest_completions(player_id,quest_id) VALUES($1,$2) ON CONFLICT DO NOTHING',
-              [id, quest.id]
-            )
-          await client.query(
-            'UPDATE players SET world=$2,quests=$3,completed=$4,reputation=$5,revision=$6,seen_at=now() WHERE id=$1',
-            [
-              id,
-              JSON.stringify(save.world),
-              JSON.stringify(save.quests),
-              JSON.stringify(save.completed),
-              save.reputation,
-              save.revision,
-            ]
-          )
-          await client.query('COMMIT')
-          return result
-        } catch (error) {
-          await client.query('ROLLBACK')
-          throw error
-        } finally {
-          if ('release' in client) client.release()
-        }
-      })
-    this.locks.set(id, operation)
-    try {
-      return await operation
-    } finally {
-      if (this.locks.get(id) === operation) this.locks.delete(id)
-    }
+    return this.mutatePlayers([id], (saves, client) => {
+      const save = saves.get(id)
+      if (!save) throw new Error('player_not_found')
+      return fn(save, client)
+    })
   }
   async reset(id: string) {
     await this.mutatePlayer(id, async (save, client) => {

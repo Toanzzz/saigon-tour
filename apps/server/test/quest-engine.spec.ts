@@ -5,7 +5,9 @@ import {
   isReady,
   QUEST_DOMAINS,
   QUEST_SEEDS,
+  QuestSchema,
   type QuestSpec,
+  QuestSpecSchema,
   rewardFor,
   seedsFor,
   validateSpec,
@@ -26,6 +28,28 @@ const world = (): WorldState => ({
 })
 
 describe('quest engine', () => {
+  it('accepts server-owned party membership while rejecting it from proposals', () => {
+    const party = {
+      id: '11111111-1111-4111-8111-111111111111',
+      memberIds: [
+        '11111111-1111-4111-8111-111111111111',
+        '22222222-2222-4222-8222-222222222222',
+      ],
+    }
+    const quest = { ...createQuest(seed()), scope: 'party', party }
+    expect(QuestSchema.safeParse(quest).success).toBe(true)
+    expect(QuestSpecSchema.safeParse({ ...seed(), party }).success).toBe(false)
+    expect(
+      QuestSchema.safeParse({
+        ...quest,
+        party: {
+          ...party,
+          memberIds: [party.memberIds[0], party.memberIds[0]],
+        },
+      }).success
+    ).toBe(false)
+    expect(QuestSchema.safeParse(createQuest(seed())).success).toBe(true)
+  })
   it('validates an offline seed for every persona', () => {
     expect(new Set(QUEST_SEEDS.map((spec) => spec.giverNpcId)).size).toBe(9)
     for (const spec of QUEST_SEEDS)

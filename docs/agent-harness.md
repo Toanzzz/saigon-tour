@@ -6,8 +6,8 @@ Nine Mastra NPC agents write short errands through validated tools. The Node + H
 
 1. The player asks any neighbor “Any errands?”. The agent proposes a title, description, one to three steps, and a scope.
 2. `QuestService` validates entity enums, the giver’s persona domain, self-delivery, duplicates, party eligibility, and the three-active-quest cap. Rejections carry a specific reason the agent can correct.
-3. An accepted quest is active immediately. Delivery items come from the giver. New accepted visit, talk, delivery, and purchase events advance the next matching step.
-4. The player returns to the giver and chooses “I’m back”. Every ready quest from that giver completes, with rewards recorded once through `quest_completions`.
+3. An accepted quest is active immediately. A party proposal gives each member the same quest id with independent progress. Delivery items come from the giver. New accepted visit, talk, delivery, and purchase events advance the next matching step.
+4. The player returns to the giver and chooses “I’m back”. Every ready quest from that giver completes, with rewards recorded once through `quest_completions`. Party completion waits for every remaining recipient and pushes each reward over the room socket.
 
 Step primitives are `GO_TO {locationId}`, `TALK_TO {npcId}`, `DELIVER {itemId,npcId}`, and `BUY {marketItemId}`. Locations, recipients, items, home anchors, and gift choices are constrained by `packages/shared/src/quest/domains.ts`. Rewards are deterministic: a base, step count, and distance from the giver’s home; currency is clamped to 100 and reputation to 1–2.
 
@@ -22,6 +22,12 @@ Conversation history is scoped to `npcId:playerId`; remembered facts are scoped 
 Help and check intents run deterministic validation even if the model omits the tool. If live generation fails or its budget is exhausted, help chooses a validated seed quest. Seed specs use the same schema and engine as live proposals and browser offline play.
 
 The harness allows three model steps, enforces request timeouts and call limits, sanitizes replies, and reserves model spend before every provider request. Failed or unknown-usage calls retain their reservation ceiling. Secrets stay in the server environment.
+
+## Journal and party errands
+
+Party membership makes `scope: party` proposals available. Validation checks every recipient before assignment. The saved quest records original recipient ids, and each recipient has their own progress. A giver checks readiness across the recipients still holding the quest and grants each reward once inside a transaction. Original ownership survives party changes; abandoning removes only the speaker’s copy and reclaims its remaining supplied delivery items.
+
+The journal lists active errands and steps, lets the player track or abandon a quest, and the minimap marks the tracked objective. `POST /me/quests/:questId/abandon` uses the authenticated session and returns the updated saved player.
 
 ## City Director
 

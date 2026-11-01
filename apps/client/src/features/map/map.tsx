@@ -1,5 +1,7 @@
 import { NPCS, type NpcId } from '@saigon/shared'
+import { useSelector } from '@tanstack/react-store'
 import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
+import { city, npcPosition } from '@/shared/api/city'
 import type { GameState } from '@/shared/state/game'
 import {
   BOUNDS,
@@ -15,6 +17,7 @@ import {
   WATER,
 } from '@/shared/world/district'
 import { PEOPLE, PLACES } from '@/shared/world/places'
+import { questPin } from './targets'
 
 /* Text on a translucent pill so labels stay legible over roads and blocks. */
 function MapLabel({
@@ -90,6 +93,7 @@ export function NeighborhoodMap({
   state: GameState
   large?: boolean
 }) {
+  useSelector(city, (snapshot) => snapshot.revision)
   const { cityhall, cathedral } = LANDMARKS
   return (
     <svg
@@ -158,12 +162,29 @@ export function NeighborhoodMap({
         Object.entries(PEOPLE).map(([id, person]) => (
           <g
             key={id}
-            transform={`translate(${x(person.at[0])} ${z(person.at[2])})`}
+            transform={`translate(${x(npcPosition(id as NpcId)[0])} ${z(npcPosition(id as NpcId)[2])})`}
           >
             <circle r="2.6" fill={person.color} />
             <title>{NPCS[id as NpcId].name}</title>
           </g>
         ))}
+      {state.quests.map((quest) => {
+        const target = questPin(quest)
+        return (
+          <g
+            key={quest.id}
+            transform={`translate(${x(target[0])} ${z(target[2])})`}
+          >
+            <title>{`Errand target: ${quest.title}`}</title>
+            <path
+              d="M0 -6 4 0 0 6 -4 0Z"
+              fill={state.trackedQuestId === quest.id ? '#ffd84d' : '#fff6d6'}
+              stroke="#262835"
+              strokeWidth="1.2"
+            />
+          </g>
+        )
+      })}
       <circle
         cx={x(state.position[0])}
         cy={z(state.position[2])}

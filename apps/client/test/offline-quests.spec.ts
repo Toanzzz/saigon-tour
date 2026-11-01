@@ -30,6 +30,33 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals())
 
 describe('offline NPC quests', () => {
+  it('refuses to grant a shared quest reward without authoritative party state', () => {
+    const quest = {
+      ...questFixture(),
+      scope: 'party' as const,
+      status: 'ready' as const,
+      progress: [true],
+      party: {
+        id: '11111111-1111-4111-8111-111111111111',
+        memberIds: [
+          '11111111-1111-4111-8111-111111111111',
+          '22222222-2222-4222-8222-222222222222',
+        ],
+      },
+    }
+    const state = { ...initialState(), quests: [quest] }
+    const result = offline('hoa', request('hoa', 'check'), state)
+    expect(result.world.currency).toBe(30)
+    expect(result.world.completedQuestIds).toEqual([])
+    expect(result.quests[0]?.status).toBe('ready')
+    expect(result.questEvents).toEqual([
+      {
+        type: 'incomplete',
+        quest,
+        reward: { currency: 0, itemId: null, reputation: 0 },
+      },
+    ])
+  })
   it('does not replay already applied pending events into later repeated steps', () => {
     const quest = {
       ...questFixture(),

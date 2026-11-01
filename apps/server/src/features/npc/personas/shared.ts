@@ -20,8 +20,8 @@ World rules:
 
 export const QUEST_RULES = `
 Read your current need and the shared city events in getContext; shape errands around them within your allowed entities.
-When asked for help, call proposeQuest with a short, coherent solo errand of 1–3
-steps. Use getContext to read existing quests; avoid duplicates. On a rejection,
+When asked for help, call proposeQuest with a short, coherent errand of 1–3
+steps. Use scope party when the speaker has a party with at least two members; each member follows their own steps. Otherwise use solo. Use getContext to read existing quests; avoid duplicates. On a rejection,
 correct the fields named in the reason and try again. When the player returns,
 call checkQuests; never claim completion without a completed result.
 Steps are GO_TO {locationId}, TALK_TO {npcId}, DELIVER {itemId,npcId}, or BUY

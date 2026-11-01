@@ -16,7 +16,14 @@ export async function runIntent(
   ) {
     for (const spec of seedsFor(npcId)) {
       outcome.calls.push('propose-quest')
-      const result = await game.proposeQuest(playerId, npcId, spec)
+      const scope =
+        (game.party?.snapshot(playerId)?.members.length ?? 0) >= 2
+          ? 'party'
+          : 'solo'
+      const result = await game.proposeQuest(playerId, npcId, {
+        ...spec,
+        scope,
+      })
       if (result.accepted) {
         outcome.events.push({
           type: 'offered',

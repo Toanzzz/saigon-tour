@@ -16,7 +16,12 @@ import { completedFixture, questFixture } from './quest-fixture'
 const self = '11111111-1111-4111-8111-111111111111'
 const other = '22222222-2222-4222-8222-222222222222'
 const solo = questFixture()
-const finished = { ...questFixture('mai'), status: 'completed' as const }
+const finished = {
+  ...questFixture('mai'),
+  status: 'completed' as const,
+  scope: 'party' as const,
+  party: { id: self, memberIds: [self, other] },
+}
 const summary = completedFixture(finished)
 const party = (): PartySnapshot => ({
   id: self,
@@ -112,6 +117,31 @@ describe('party controls and authoritative quest rewards', () => {
   it('ignores stale completion pushes', () => {
     const state = { ...initialState(), serverRevision: 5 }
     expect(completedQuest(state, completion())).toBe(state)
+  })
+  it('shows all rewards from a batch even when individual socket pushes share a save revision', () => {
+    const second = {
+      ...questFixture('mai', 'q_test_mai_second'),
+      steps: [{ type: 'GO_TO' as const, locationId: 'postoffice' as const }],
+      status: 'completed' as const,
+      scope: 'party' as const,
+      party: { id: self, memberIds: [self, other] },
+    }
+    const message = {
+      ...completion(),
+      quests: [],
+      completed: [summary, completedFixture(second)],
+      world: {
+        ...completion().world,
+        currency: 30 + finished.reward.currency + second.reward.currency,
+        completedQuestIds: [finished.id, second.id],
+      },
+    }
+    const firstPush = completedQuest(initialState(), message)
+    const secondPush = completedQuest(firstPush, { ...message, quest: second })
+    expect(secondPush.reward).toBe(
+      finished.reward.currency + second.reward.currency
+    )
+    expect(secondPush.completed).toHaveLength(2)
   })
   it('replays pending delivery progress after an unrelated reward push', () => {
     const state = {

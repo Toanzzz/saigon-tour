@@ -18,6 +18,9 @@ export function completedQuest(
   message: Extract<ServerSocketMessage, { type: 'quest-completed' }>
 ): GameState {
   if (message.revision < state.serverRevision) return state
+  const unseen = message.completed.filter(
+    (quest) => !state.completed.some((entry) => entry.id === quest.id)
+  )
   const alreadySeen = state.completed.some(
     (quest) => quest.id === message.quest.id
   )
@@ -38,7 +41,9 @@ export function completedQuest(
     ...(alreadySeen
       ? {}
       : {
-          reward: message.quest.reward.currency,
+          reward:
+            unseen.reduce((total, quest) => total + quest.reward.currency, 0) ||
+            message.quest.reward.currency,
           rewardQuest: message.quest,
           screen: 'playing' as const,
           panel: 'reward' as const,

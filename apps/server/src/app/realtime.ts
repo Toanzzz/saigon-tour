@@ -46,6 +46,17 @@ export function createRealtime(
   const party = new PartyService(manager, db, now)
   harness.game.party = party
   harness.game.city = (id) => manager.room(id)?.city.snapshot() ?? null
+  harness.game.push = (id, save, completed) => {
+    if (completed)
+      manager.send(id, { type: 'quest-completed', ...save, quest: completed })
+    else
+      manager.send(id, {
+        type: 'world',
+        ...save,
+        sequence: manager.room(id)?.members.get(id)?.acknowledgedSequence ?? 0,
+      })
+  }
+
   WorldRoom.deps = {
     auth,
     db,

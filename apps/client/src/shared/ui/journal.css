@@ -187,3 +187,14 @@
 .map-dialog .panel-intro {
   margin-bottom: 0;
 }
+
+.journal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.journal-actions > button {
+  min-height: 44px;
+}

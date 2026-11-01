@@ -37,7 +37,24 @@ export async function dismiss(page) {
   const button = page.getByRole('button', { name: 'Close panel', exact: true })
   if (await button.isVisible()) await button.click()
 }
+export async function activate(page) {
+  await page.bringToFront()
+  if ((await diagnostics(page))?.state.screen === 'paused')
+    await page
+      .getByRole('button', { name: 'Continue exploring', exact: true })
+      .click()
+}
 export async function teleport(page, x, z) {
+  await activate(page)
+  await page.waitForFunction(
+    () => !window.__THREE_GAME_DIAGNOSTICS__?.network.events.httpBusy,
+    null,
+    { timeout: 30000 }
+  )
+  await page.locator('.thinking').waitFor({
+    state: 'detached',
+    timeout: 30000,
+  })
   await dismiss(page)
   await page.evaluate(
     ([x, z]) => window.__THREE_GAME_TEST_HOOKS__.teleport(x, z),
@@ -65,14 +82,32 @@ export async function meet(page, npcId) {
 }
 export async function openGame(page) {
   await page.goto(gameUrl)
-  await page
-    .getByRole('button', { name: 'Start exploring', exact: true })
-    .click({ timeout: 45000 })
+  await enterPlay(page)
   await page.waitForFunction(
     () => window.__THREE_GAME_DIAGNOSTICS__?.state.frame > 30
   )
 }
-export async function completeQuest(page, giver = 'hoa') {
+export async function enterPlay(page) {
+  const start = page.getByRole('button', {
+    name: 'Start exploring',
+    exact: true,
+  })
+  await start.click({ timeout: 45000 })
+  try {
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state.screen === 'playing',
+      null,
+      { timeout: 8000 }
+    )
+  } catch (error) {
+    if (!(await start.isVisible())) throw error
+    await start.click()
+    await page.waitForFunction(
+      () => window.__THREE_GAME_DIAGNOSTICS__?.state.screen === 'playing'
+    )
+  }
+}
+export async function offerQuest(page, giver = 'hoa') {
   await meet(page, giver)
   await page.getByRole('button', { name: 'Any errands?', exact: true }).click()
   await page.waitForFunction(
@@ -87,6 +122,9 @@ export async function completeQuest(page, giver = 'hoa') {
     (q) => q.giverNpcId === giver
   )
   assert(offered.id.startsWith('q_'))
+  return offered
+}
+export async function followQuest(page, offered) {
   for (const [index, step] of offered.steps.entries()) {
     if (step.type === 'GO_TO') {
       await teleport(page, ...locations[step.locationId])
@@ -118,6 +156,10 @@ export async function completeQuest(page, giver = 'hoa') {
       { timeout: 30000 }
     )
   }
+}
+export async function completeQuest(page, giver = 'hoa') {
+  const offered = await offerQuest(page, giver)
+  await followQuest(page, offered)
   await meet(page, giver)
   const before = (await diagnostics(page)).state.currency
   const completed = (await diagnostics(page)).state.completed

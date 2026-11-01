@@ -18,7 +18,12 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Pass 2 implemented and validated. A City Director owns each occupied room’s events, weather, NPC placements/needs, and headlines. Actions pass deterministic validation; placement uses authored anchors; events cap at two; model turns run at most once per ninety seconds with daily count/spend guards.
 - City state uses Colyseus patches; headline messages produce toasts. NPC models and speech move to synchronized positions; interaction range reads those positions. Rain uses tint/fog. Event markers and the hub City pulse feed reflect room state.
 - Pass 2 proof: all root gates; 100 server / 67 client tests. Live two-context desktop/mobile shared event/move/feed passed. Live Director tools and a need-reactive NPC proposal have recorded usage. Deterministic scripted-room desktop/mobile two-context verification passed.
-- Pass 3 pending: party-scope per-member quests, journal abandonment, minimap target pins. `DIRECTOR_MODE=scripted` is available for deterministic demo beats.
+- Pass 3 implemented and validated. Party quests use a shared ID and original recipient list, independent progress, atomic group assignment, and once-only rewards. Leave/disconnect retains participation; abandon/reset removes the player’s copy.
+- Journal abandonment reclaims pending supplied delivery items. Minimap pins follow live NPC targets; tracking chooses the current HUD objective. `DIRECTOR_MODE=scripted` supplies deterministic demo beats.
+- Pass 3 proof: root gates, 111 server / 82 client tests, two real Postgres integration cases including cross-instance concurrent group completion, isolated live Muse party completion and socket pushes, desktop/mobile live and offline journal controls, and final offline completion flow.
+- Live party browser proof: real invite/accept, independent three-step progress, return verification, and 61-coin rewards pushed to both desktop/mobile clients; no page errors.
+- Persistence Playwright passed at both widths: live quest completion, reload preserving wallet/completion/name, and reset preserving identity/name while restoring 30 coins and clearing quests/completions.
+- Development state sync: a stale process sent initial snapshots without later patches. The identical direct/proxied probes pass after a user-managed full restart. Exact old-process cause remains unproven; no transport workaround was applied.
 
 ## Runtime and contracts
 

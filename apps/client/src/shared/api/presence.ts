@@ -25,7 +25,8 @@ export function recordPlayer(player: PresencePlayer, at = performance.now()) {
 }
 export function recordPlayers(players: PresencePlayer[], selfId: string) {
   const ids = new Set(players.map((player) => player.id))
-  for (const id of presence.keys()) if (!ids.has(id)) presence.delete(id)
+  for (const id of presence.keys())
+    if (id === selfId || !ids.has(id)) presence.delete(id)
   for (const player of players) if (player.id !== selfId) recordPlayer(player)
 }
 export function interpolate(

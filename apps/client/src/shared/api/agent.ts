@@ -79,7 +79,18 @@ export function offline(
   let reply = `Chào bạn! I'm ${NPCS[npc].name}. ${NPCS[npc].knowledge[0]}`
   if (body.intent === 'help') {
     const spec = seedsFor(npc).find(
-      (candidate) => validateSpec(candidate, { quests }).ok
+      (candidate) =>
+        validateSpec(candidate, { quests }).ok &&
+        candidate.steps.every(
+          (step) =>
+            step.type !== 'DELIVER' ||
+            (world.inventory[step.itemId] ?? 0) +
+              candidate.steps.filter(
+                (entry) =>
+                  entry.type === 'DELIVER' && entry.itemId === step.itemId
+              ).length <=
+              100
+        )
     )
     if (spec) {
       const quest = createQuest(spec)
@@ -98,6 +109,10 @@ export function offline(
   }
   if (body.intent === 'check') {
     for (const quest of quests.filter((entry) => entry.giverNpcId === npc)) {
+      if (quest.scope === 'party') {
+        questEvents.push({ type: 'incomplete', quest, reward: ZERO_REWARD })
+        continue
+      }
       if (
         quest.status === 'ready' &&
         !world.completedQuestIds.includes(quest.id)

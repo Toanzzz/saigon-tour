@@ -1,4 +1,5 @@
 import { type LocationId, NPCS, type NpcId } from '@saigon/shared'
+import { city } from '@/shared/api/city'
 import { type GameState, trackedQuest } from '@/shared/state/game'
 import { nextStep, stepCopy } from '@/shared/state/quests'
 import { MODES, PLACES, type TravelMode } from '@/shared/world/places'
@@ -107,10 +108,10 @@ function objectiveLocation(state: GameState): LocationId | null {
   const quest = trackedQuest(state)
   if (!quest) return null
   const step = nextStep(quest)
-  if (!step) return NPCS[quest.giverNpcId].location
+  if (!step) return city.state.npcPlacements[quest.giverNpcId].locationId
   if (step.type === 'GO_TO') return step.locationId
   if (step.type === 'BUY') return 'market'
-  return NPCS[step.npcId].location
+  return city.state.npcPlacements[step.npcId].locationId
 }
 function storySteps(state: GameState): HubStep[] {
   const quest = trackedQuest(state)

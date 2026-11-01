@@ -38,7 +38,7 @@ Client (desktop + WebXR) ──HTTPS JSON──▶ API (Hono, Docker) ──▶ 
 ```
 
 API routes: `GET /health`, `GET /auth/providers`, Better Auth under `/auth/*`, `GET /me`,
-`POST /me/profile`, `POST /me/reset`, `POST /npc/:npcId/interact`, `POST /matchmake/:method/world`
+`POST /me/profile`, `POST /me/reset`, `POST /me/quests/:questId/abandon`, `POST /npc/:npcId/interact`, `POST /matchmake/:method/world`
 (Colyseus). Details: `docs/meta-api.md`, `docs/multiplayer.md`.
 
 ## 4. Client
@@ -61,6 +61,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 
 - All nine NPCs have `propose-quest`, `check-quests`, `get-context`, and `remember-player-fact`.
 - `QuestService` owns player mutations, validates proposals against shared persona domains, and grants rewards once through durable completion records.
+- Party quests share an id and original recipient list, with separate per-player progress. Completion locks recipient saves together and grants/pushes rewards once per member. Abandon removes the player’s copy and reclaims remaining supplied deliveries.
 - Quests contain one to three sequential `GO_TO`, `TALK_TO`, `DELIVER`, or `BUY` steps. Each player has at most three active quests; an accepted offer activates immediately and supplies delivery items.
 - `packages/shared/src/quest` owns schemas, allowlists, validation, progress, deterministic rewards, and fallback seeds. The offline client uses the same engine.
 - Memory: last ten messages per `npcId:playerId` thread plus up to twelve remembered facts, stored in Postgres.

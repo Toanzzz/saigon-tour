@@ -4,6 +4,7 @@ import {
   chromium,
   completeQuest,
   diagnostics,
+  enterPlay,
   executablePath,
   openGame,
 } from './qa-quest-flow.mjs'
@@ -20,6 +21,26 @@ try {
       hasTouch: width === 390,
     })
     const page = await context.newPage()
+    const network = []
+    page.on('response', async (response) => {
+      if (!response.url().includes('/npc/')) return
+      network.push({
+        url: response.url(),
+        request: response.request().postDataJSON(),
+        status: response.status(),
+        response: await response.json().catch(() => null),
+      })
+    })
+    page.on('framenavigated', (frame) => {
+      if (frame === page.mainFrame())
+        network.push({ navigation: frame.url(), at: Date.now() })
+    })
+    page.on('websocket', (socket) =>
+      socket.on('framereceived', ({ payload }) => {
+        if (typeof payload !== 'string') return
+        network.push({ websocket: payload.slice(0, 3000), at: Date.now() })
+      })
+    )
     await openGame(page)
     let result
     try {
@@ -32,6 +53,7 @@ try {
             diagnostics: await diagnostics(page),
             text: await page.locator('body').innerText(),
             error: String(error),
+            network,
           },
           null,
           2
@@ -43,9 +65,7 @@ try {
     const guestName = rewarded.network.guestName
     await page.reload()
     await page.getByText(`Welcome back, ${guestName}`).waitFor()
-    await page
-      .getByRole('button', { name: 'Start exploring', exact: true })
-      .click()
+    await enterPlay(page)
     await page.waitForFunction(
       (coins) => window.__THREE_GAME_DIAGNOSTICS__?.state.currency === coins,
       rewarded.state.currency

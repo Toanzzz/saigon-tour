@@ -34,12 +34,28 @@ export const QuestSpecSchema = z
   .strict()
 export type QuestSpec = z.infer<typeof QuestSpecSchema>
 
+export const QuestPartySchema = z
+  .object({
+    id: z.uuid(),
+    memberIds: z
+      .array(z.uuid())
+      .min(2)
+      .max(4)
+      .refine(
+        (ids) => new Set(ids).size === ids.length,
+        'Party quest member ids must be unique'
+      ),
+  })
+  .strict()
+export type QuestParty = z.infer<typeof QuestPartySchema>
+
 export const QuestSchema = QuestSpecSchema.extend({
   id: z.string().regex(/^q_[a-zA-Z0-9_-]{1,64}$/),
   reward: RewardSchema,
   progress: z.array(z.boolean()).min(1).max(3),
   status: z.enum(['active', 'ready', 'completed']),
   createdAt: z.number().int().min(0),
+  party: QuestPartySchema.optional(),
 }).strict()
 export type Quest = z.infer<typeof QuestSchema>
 

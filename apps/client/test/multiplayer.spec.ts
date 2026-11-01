@@ -4,7 +4,9 @@ import {
   clearPresence,
   interpolate,
   nearestPlayers,
+  presence,
   recordPlayer,
+  recordPlayers,
 } from '@/shared/api/presence'
 import { realtimeUrl } from '@/shared/api/socket'
 
@@ -20,6 +22,13 @@ function player(id: string, x = 0, heading = 0): PresencePlayer {
 }
 afterEach(clearPresence)
 describe('multiplayer transport and interpolation', () => {
+  it('removes self recorded before welcome establishes local identity', () => {
+    recordPlayers([player('self'), player('other')], '')
+    expect(presence.has('self')).toBe(true)
+    recordPlayers([player('self'), player('other')], 'self')
+    expect(presence.has('self')).toBe(false)
+    expect(presence.has('other')).toBe(true)
+  })
   it('keeps the API proxy prefix and resolves explicit API origins', () => {
     expect(realtimeUrl('/api', 'http://localhost:58000/')).toBe(
       'http://localhost:58000/api'
