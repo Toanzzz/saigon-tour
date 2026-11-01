@@ -6,7 +6,7 @@ const look: NpcLook = {
   portraitBg: 'var(--avatar-color)',
   animation: 'sit',
   yaw: Math.PI / 2,
-  avatar: false,
+  avatar: true,
 }
 
 export default defineResident({

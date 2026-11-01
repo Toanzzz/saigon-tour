@@ -5,7 +5,7 @@ const look: NpcLook = {
   color: '#baddc1',
   portraitBg: 'var(--avatar-color)',
   animation: 'holding-both',
-  avatar: false,
+  avatar: true,
 }
 
 export default defineResident({
