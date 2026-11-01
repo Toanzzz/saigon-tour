@@ -43,8 +43,8 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 
 ## CI deploy — November 1, 2026
 
-- `.github/workflows/deploy.yml`: push to `main` runs verify → arm64 API image to GHCR → SSH recreate on t-oracle via `scripts/deploy-remote.sh` and `compose.prod.yml` → client `wrangler deploy` with `VITE_API_BASE_URL=${API_URL}`. Pull requests run verify only. `scripts/setup-deploy.sh` sets the secrets, vars, deploy key, and host `.env`.
-- Local proof: root gates, `actionlint`, `shellcheck`, `docker compose -f compose.prod.yml config`, and a linux/arm64 image build. Not yet run: `setup-deploy.sh` against the host, a CI run, the public health check, and Playwright against workers.dev.
+- `.github/workflows/deploy.yml`: push to `main` runs verify → arm64 API image to GHCR → SSH recreate on t-oracle via `scripts/deploy-remote.sh` and `compose.prod.yml` → client `wrangler deploy` with `VITE_API_BASE_URL=${API_URL}`. Pull requests run verify only. `bun run credentials` (`scripts/credentials.ts`) infers gh/ssh/wrangler context, links a pre-filled Cloudflare token template, verifies, then sets the secrets, vars, deploy key, and host `.env`.
+- Local proof: root gates, `actionlint`, `shellcheck`, `docker compose -f compose.prod.yml config`, and a linux/arm64 image build. Not yet run: `bun run credentials` against the host, a CI run, the public health check, and Playwright against workers.dev.
 
 ## Verification and limits
 

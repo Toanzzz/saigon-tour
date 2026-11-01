@@ -16,6 +16,7 @@
     "build": "bun run --filter '@saigon/client' build && bun run --filter '@saigon/server' build",
     "test": "bun run --filter '@saigon/server' test && bun run --filter '@saigon/client' test",
     "prepare:assets": "bun scripts/prepare-assets.ts",
+    "credentials": "bun scripts/credentials.ts",
     "preview": "bun run --filter '@saigon/client' preview",
     "db:up": "docker compose up -d --wait db",
     "test:integration": "bun run --filter @saigon/server test:integration"

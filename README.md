@@ -64,13 +64,15 @@ docker run --env-file .env -p 58001:58001 saigon-tour-api
 `compose.prod.yml` runs Postgres 18 (loopback `127.0.0.1:58002`) and the API on the shared
 `edge` network as `saigon-api:58001`, behind Caddy at `https://saigon-api.toan.io`.
 
-`scripts/setup-deploy.sh [--host t-oracle] [--force]` sets the credentials below once and is
-safe to re-run. It prints the remaining manual steps: the Caddy block, DNS, and the Meta
-redirect URI.
+`bun run credentials [--host t-oracle] [--force]` walks through the credentials below and is
+safe to re-run. It infers the repository (`gh`), host (`ssh -G`), and Cloudflare account
+(`wrangler whoami`), prints a pre-filled Cloudflare token template link (Workers Scripts:
+Edit), verifies the token and `META_MUSE_API_KEY` before storing them, and ends with the
+remaining manual steps: the Caddy block, DNS, and the Meta redirect URI.
 
 - GitHub secrets: `DEPLOY_SSH_KEY`, `DEPLOY_KNOWN_HOSTS`, `DEPLOY_HOST`, `DEPLOY_USER`,
   optional `DEPLOY_DIR` (default `apps/saigon-tour` under `$HOME`), `CLOUDFLARE_API_TOKEN`
-  (Edit Cloudflare Workers), `CLOUDFLARE_ACCOUNT_ID`.
+  (Workers Scripts: Edit), `CLOUDFLARE_ACCOUNT_ID`.
 - GitHub variable: `API_URL` (`https://saigon-api.toan.io`).
 - Host `${DEPLOY_DIR}/.env` (mode 600): `POSTGRES_PASSWORD`,
   `DATABASE_URL=postgres://saigon:<pw>@postgres:5432/saigon`, `META_MUSE_API_KEY`,
