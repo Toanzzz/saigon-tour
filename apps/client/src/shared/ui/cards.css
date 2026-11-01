@@ -315,7 +315,16 @@
   position: relative;
   display: inline-block;
   flex: none;
+  aspect-ratio: 1 / 1;
   vertical-align: middle;
+}
+/* The journal bag styles its descendant spans with a chip border/padding;
+   strip those from the emblem so its box stays square and matches the hub. */
+.bag-items .coin-emblem {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 .coin-emblem-canvas {
   position: absolute !important;
