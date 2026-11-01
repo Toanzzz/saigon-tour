@@ -66,7 +66,7 @@ export function StoryCard({ view }: { view: HubView }) {
       </div>
       <div className="story-footer">
         <span className="chip bus">
-          <CoinEmblem size={15} /> {m.coins({ count: story.coins })}
+          <CoinEmblem size={30} /> {m.coins({ count: story.coins })}
         </span>
         <span className="chip leaf">
           <Icon name="stamp" size={15} /> {m.hub_neighbor_thanks()}

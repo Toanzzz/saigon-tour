@@ -35,7 +35,7 @@ export function RewardPanel({ state }: { state: GameState }) {
       <p className="reward-copy">{rewardCopy(state.rewardQuest)}</p>
       <div className="reward-earned">
         <span className="reward-coin-row">
-          <CoinEmblem size={44} />+{m.coins({ count: state.reward })}
+          <CoinEmblem size={88} />+{m.coins({ count: state.reward })}
         </span>
         <span>
           <Icon name="star" />

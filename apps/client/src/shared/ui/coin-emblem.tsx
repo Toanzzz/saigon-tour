@@ -39,14 +39,20 @@ class EmblemBoundary extends Component<
  * self-contained `<Canvas>` sized like an inline glyph. The flat 2D `coin`
  * `Icon` is the SSR/test fallback (no WebGL in jsdom) and the error fallback.
  */
-export function CoinEmblem({ size = 20 }: { size?: number }) {
-  const fallback = <Icon name="coin" size={size} />
+export function CoinEmblem({ size = 40 }: { size?: number }) {
+  // The coin renders at `size` but only occupies half that in layout flow, so
+  // doubling the visual coin never grows its host chip/row. The overflow is
+  // centred with a symmetric negative margin; the 2D fallback keeps the small
+  // footprint so SSR/tests are unaffected.
+  const footprint = Math.round(size / 2)
+  const bleed = -(size - footprint) / 2
+  const fallback = <Icon name="coin" size={footprint} />
   // SSR and tests render the flat glyph; the Canvas is client-only.
   if (typeof window === 'undefined') return fallback
   return (
     <span
       className="coin-emblem"
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, margin: bleed }}
       aria-hidden="true"
     >
       <EmblemBoundary fallback={fallback}>
