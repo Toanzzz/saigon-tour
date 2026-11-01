@@ -52,6 +52,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 - **World state:** location, coins, items, reputation, quests. After each NPC turn the client
   replaces it with the server's authoritative `world`.
 - **Multiplayer:** public street rooms, remote tourists, emotes, parties (2–4) with invitations and presence.
+- **Avatar and wardrobe:** a plain man or woman body chosen on the title screen and carried in presence as `body`; split `outfit-top`/`outfit-bottom` clothing materials recoloured by earned outfits; a 3D wardrobe (one shared drei `View` canvas) equips hats, outfits, accessories, rides, and pets at any time.
 - **City:** room-authoritative NPC anchors, events, needs, headlines, and weather. The hub exposes City pulse; rain uses tint/fog. NPC proximity follows synchronized positions.
 - **XR:** world-space panels and XR HUD; the DOM hub is hidden in XR.
 

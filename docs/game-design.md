@@ -50,3 +50,9 @@ Nine neighbors and twenty residents accept conversations and offer errands withi
 Friendship ranges from −5 to +5. Neighbors start at +1; residents start mostly neutral, with a few reserved presets. Meaningful chat can shift friendship by one once per turn with a three-minute cooldown and a +3 chat ceiling. Completed errands add one for each rewarded participant. Abandoned, expired, or declined errands subtract one. At −3 or below, an NPC stays civil and offers no errands.
 
 Players request errands in chat, give carried items through the conversation, and return to the giver for automatic thanks and rewards. Active errands expire after twenty minutes; ready errands persist. Reopening conversations shows earlier messages; journey reset clears conversation memory and friendship.
+
+## Avatar and wardrobe
+
+Players pick a plain young man or young woman on the title screen. The body is identity, like the name: it can be changed later from the wardrobe and survives a new journey. Both bodies are Kenney mini-characters whose shirt and trouser faces are split into recolourable `outfit-top` and `outfit-bottom` materials, so earned outfits recolour the clothing without touching skin or face.
+
+Neighbor gifts land in the wardrobe as hats, outfits, accessories, rides, and follower pets, one equipped per slot. The wardrobe is a 3D fitting room: a turning avatar stage on one side and slot tabs with spinning item previews on the other. Earned items equip and unequip at any time — from the wardrobe (key `I`) while walking, riding, paused, or in the hub, or straight from the reward popup with "Wear now". Locked items show who grants them and at which friendship tier.
