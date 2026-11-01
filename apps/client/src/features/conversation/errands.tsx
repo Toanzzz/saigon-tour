@@ -1,6 +1,6 @@
 import { type ItemId, NPCS, type NpcId, type Quest } from '@saigon/shared'
 import { acceptQuest, deliverOrVerify, openJournal } from '@/app/actions'
-import { itemLabel } from '@/shared/i18n'
+import { itemLabel, m } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { dialogueQuests, questHint } from '@/shared/state/quests'
 import { Icon } from '@/shared/ui/icons'
@@ -20,21 +20,23 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
   const active = fromNpc.filter((quest) => quest.status === 'active')
   const npcName = NPCS[npc].name
   return (
-    <section className="errands" aria-label="Errands">
+    <section className="errands" aria-label={m.errands_label()}>
       {ready.map((quest) => (
         <div className="errand" key={quest.id}>
           <div className="errand-head">
             <span className="errand-title">{quest.title}</span>
-            <Pill tone="ready" label="Ready" />
+            <Pill tone="ready" label={m.errands_ready()} />
           </div>
-          <p className="errand-hint">Bring the good news back to {npcName}.</p>
+          <p className="errand-hint">
+            {m.errands_good_news({ name: npcName })}
+          </p>
           <button
             type="button"
             className="primary-button"
             onClick={() => void deliverOrVerify()}
           >
             <Icon name="check" />
-            Turn in
+            {m.errands_turn_in()}
           </button>
         </div>
       ))}
@@ -45,7 +47,7 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
           <div className="errand" key={quest.id}>
             <div className="errand-head">
               <span className="errand-title">{quest.title}</span>
-              <Pill tone="active" label="Needs you" />
+              <Pill tone="active" label={m.errands_needs_you()} />
             </div>
             <p className="errand-hint">{questHint(quest)}</p>
             {item && held ? (
@@ -54,10 +56,12 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
                 className="primary-button"
                 onClick={() => void deliverOrVerify()}
               >
-                Give {itemLabel(item)}
+                {m.errands_give({ item: itemLabel(item) })}
               </button>
             ) : item ? (
-              <p className="errand-need">Need {itemLabel(item)}.</p>
+              <p className="errand-need">
+                {m.errands_need({ item: itemLabel(item) })}
+              </p>
             ) : null}
           </div>
         )
@@ -66,7 +70,7 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
         <div className="errand" key={quest.id}>
           <div className="errand-head">
             <span className="errand-title">{quest.title}</span>
-            <Pill tone="active" label="In progress" />
+            <Pill tone="active" label={m.errands_in_progress()} />
           </div>
           <p className="errand-hint">{questHint(quest)}</p>
           <button
@@ -75,7 +79,9 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
             aria-pressed={state.trackedQuestId === quest.id}
             onClick={() => update({ trackedQuestId: quest.id })}
           >
-            {state.trackedQuestId === quest.id ? 'Tracking' : 'Track'}
+            {state.trackedQuestId === quest.id
+              ? m.errands_tracking()
+              : m.errands_track()}
           </button>
         </div>
       ))}
@@ -86,16 +92,14 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
           onClick={() => void acceptQuest()}
         >
           <Icon name="leaf" />
-          Ask for an errand
+          {m.errands_ask()}
         </button>
       ) : (
         full && (
           <div className="errand errand-full">
-            <p className="errand-need">
-              Journal full (3/3) — finish or abandon one to take more.
-            </p>
+            <p className="errand-need">{m.errands_full()}</p>
             <button type="button" className="text-button" onClick={openJournal}>
-              Open journal
+              {m.header_open_journal()}
             </button>
           </div>
         )

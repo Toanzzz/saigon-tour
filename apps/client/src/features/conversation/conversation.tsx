@@ -1,6 +1,7 @@
 import { NPCS } from '@saigon/shared'
 import { type SubmitEvent, useEffect, useRef, useState } from 'react'
 import { chat, close } from '@/app/actions'
+import { m } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -52,19 +53,21 @@ export function Conversation({ state }: { state: GameState }) {
         className="conversation-history"
         ref={historyRef}
         role="log"
-        aria-label="Conversation"
+        aria-label={m.chat_log()}
         aria-live="polite"
       >
         {dialog.history.map((line) => (
           <p className={`speech ${line.role}`} key={messageKey(line)}>
-            {line.role === 'user' && <span className="speaker">You</span>}
+            {line.role === 'user' && (
+              <span className="speaker">{m.map_you()}</span>
+            )}
             {line.content}
           </p>
         ))}
         {dialog.thinking && (
           <p className="thinking" role="status">
             <span />
-            {npc.name} is thinking…
+            {m.chat_thinking({ name: npc.name })}
           </p>
         )}
       </div>
@@ -75,13 +78,13 @@ export function Conversation({ state }: { state: GameState }) {
         }}
       >
         <label className="sr-only" htmlFor="npc-message">
-          Your message
+          {m.chat_your_message()}
         </label>
         <input
           id="npc-message"
           value={text}
           maxLength={500}
-          placeholder="Say something…"
+          placeholder={m.chat_placeholder()}
           autoComplete="off"
           onChange={(event) => setText(event.target.value)}
           disabled={dialog.thinking}
@@ -89,7 +92,7 @@ export function Conversation({ state }: { state: GameState }) {
         <button
           type="submit"
           className="icon-button"
-          aria-label="Send message"
+          aria-label={m.chat_send()}
           disabled={dialog.thinking || !text.trim()}
         >
           <Icon name="arrow" />
@@ -100,16 +103,16 @@ export function Conversation({ state }: { state: GameState }) {
           className={`source-label ${dialog.source ?? ''}`}
           title={
             dialog.source === 'live'
-              ? 'Live NPC conversation'
+              ? m.chat_live()
               : dialog.source === 'fallback'
-                ? 'Offline conversation'
-                : 'Connecting with your neighbor…'
+                ? m.chat_offline()
+                : m.chat_connecting()
           }
         >
-          {dialog.source === 'fallback' && 'Offline conversation'}
+          {dialog.source === 'fallback' && m.chat_offline()}
         </span>
         <button type="button" className="text-button" onClick={close}>
-          Continue exploring
+          {m.pause_continue()}
         </button>
       </div>
     </Dialog>

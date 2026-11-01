@@ -2,6 +2,7 @@ import { NPCS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
 import { city, npcPosition } from '@/shared/api/city'
+import { m } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import {
   BOUNDS,
@@ -100,9 +101,9 @@ export function NeighborhoodMap({
       className={large ? 'neighborhood-map large' : 'neighborhood-map'}
       viewBox="0 0 176 160"
       role="img"
-      aria-label={`Neighborhood map. You are near ${placeName(state.world.locationId)}.`}
+      aria-label={m.map_aria({ place: placeName(state.world.locationId) })}
     >
-      <title>Sài Gòn neighborhood map</title>
+      <title>{m.map_svg_title()}</title>
       <rect width="176" height="160" fill="#b1b8cb" />
       {GROUND.map((r) => rect(r, '#d3d7e6'))}
       {rect(WATER, '#9dc3e7')}
@@ -175,7 +176,7 @@ export function NeighborhoodMap({
             key={quest.id}
             transform={`translate(${x(target[0])} ${z(target[2])})`}
           >
-            <title>{`Errand target: ${quest.title}`}</title>
+            <title>{m.map_errand_target({ title: quest.title })}</title>
             <path
               d="M0 -6 4 0 0 6 -4 0Z"
               fill={state.trackedQuestId === quest.id ? '#ffd84d' : '#fff6d6'}

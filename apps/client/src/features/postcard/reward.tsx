@@ -1,6 +1,7 @@
 import { close } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { rewardCopy } from '@/shared/api/party'
+import { itemLabel, m } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -8,18 +9,22 @@ import { Icon } from '@/shared/ui/icons'
 export function RewardPanel({ state }: { state: GameState }) {
   return (
     <Dialog
-      title="A little kindness goes far."
-      eyebrow="A good day in Sài Gòn"
+      title={m.reward_title()}
+      eyebrow={m.reward_eyebrow()}
       onClose={close}
       className="reward-dialog"
     >
       <div
         className="postcard"
         role="img"
-        aria-label={`${state.rewardQuest?.reward.itemId ?? 'Neighborhood keepsake'} earned`}
+        aria-label={m.reward_earned({
+          item: state.rewardQuest?.reward.itemId
+            ? itemLabel(state.rewardQuest.reward.itemId)
+            : m.reward_keepsake(),
+        })}
       >
         <span className="postcard-mark">Sài Gòn</span>
-        <span>with love, from the neighborhood</span>
+        <span>{m.reward_with_love()}</span>
         <i className="postcard-stamp">
           <Icon name="star" size={28} />
         </i>
@@ -27,16 +32,20 @@ export function RewardPanel({ state }: { state: GameState }) {
       <p className="reward-copy">{rewardCopy(state.rewardQuest)}</p>
       <div className="reward-earned">
         <span>
-          <Icon name="coin" />+{state.reward} coins
+          <Icon name="coin" />+{m.coins({ count: state.reward })}
         </span>
         <span>
           <Icon name="star" />
-          {state.rewardQuest?.reward.itemId ?? 'A new friend'} · +
-          {state.rewardQuest?.reward.reputation ?? 0} reputation
+          {m.reward_item_reputation({
+            item: state.rewardQuest?.reward.itemId
+              ? itemLabel(state.rewardQuest.reward.itemId)
+              : m.reward_new_friend(),
+            reputation: state.rewardQuest?.reward.reputation ?? 0,
+          })}
         </span>
       </div>
       <button type="button" className="primary-button wide" onClick={close}>
-        Continue exploring
+        {m.pause_continue()}
       </button>
       <NewJourneyButton className="restart-button" />
     </Dialog>

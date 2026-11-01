@@ -4,6 +4,7 @@ import { useMemo, useRef } from 'react'
 import { type Group, Vector3 } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
 import { audio } from '@/shared/audio'
+import { m } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { game, notify, update, visit } from '@/shared/state/game'
 import { Character, Vehicle } from '@/shared/world'
@@ -78,7 +79,7 @@ export function Transport() {
         ...visit(game.state, ride.to),
       })
       audio.play('arrive')
-      notify(`Welcome to ${placeName(ride.to)}`)
+      notify(m.toast_welcome_to({ place: placeName(ride.to) }))
     }
   })
   return (

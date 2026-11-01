@@ -3,14 +3,13 @@ import {
   type Quest,
   type ServerSocketMessage,
 } from '@saigon/shared'
+import { m } from '@/shared/i18n'
 import { type GameState, game } from '@/shared/state/game'
 import { currentEventBatch } from './events'
 import { net, updateNet } from './status'
 
 export function rewardCopy(quest: Quest | null) {
-  return quest
-    ? `You completed “${quest.title}”. Your neighbor sends a heartfelt thank-you.`
-    : 'A neighbor sends a heartfelt thank-you for your help.'
+  return quest ? m.reward_completed({ title: quest.title }) : m.reward_generic()
 }
 
 export function completedQuest(
