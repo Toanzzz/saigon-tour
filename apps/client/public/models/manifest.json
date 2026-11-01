@@ -1395,22 +1395,76 @@
     "animations": []
   },
   {
-    "path": "people/player-tourist.glb",
-    "bytes": 136696,
-    "meshes": 13,
-    "materials": 7,
-    "triangles": 1660,
-    "vertices": 2813,
+    "path": "people/player-man.glb",
+    "bytes": 125080,
+    "meshes": 2,
+    "materials": 3,
+    "triangles": 710,
+    "vertices": 1099,
     "bounds": {
       "min": [
         -0.3835841417312622,
         1.043081283569336e-7,
-        -0.299999941903917
+        -0.17236118018627167
       ],
       "max": [
         0.3835841417312622,
-        0.7110000103712096,
-        0.3000000819379408
+        0.6759665608406067,
+        0.1696052849292755
+      ]
+    },
+    "animations": [
+      "attack-kick-left",
+      "attack-kick-right",
+      "attack-melee-left",
+      "attack-melee-right",
+      "crouch",
+      "die",
+      "drive",
+      "emote-no",
+      "emote-yes",
+      "fall",
+      "holding-both",
+      "holding-both-shoot",
+      "holding-left",
+      "holding-left-shoot",
+      "holding-right",
+      "holding-right-shoot",
+      "idle",
+      "interact-left",
+      "interact-right",
+      "jump",
+      "pick-up",
+      "sit",
+      "sprint",
+      "static",
+      "walk",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-back",
+      "wheelchair-move-forward",
+      "wheelchair-move-left",
+      "wheelchair-move-right",
+      "wheelchair-sit"
+    ]
+  },
+  {
+    "path": "people/player-woman.glb",
+    "bytes": 124576,
+    "meshes": 2,
+    "materials": 3,
+    "triangles": 756,
+    "vertices": 1098,
+    "bounds": {
+      "min": [
+        -0.3835841417312622,
+        1.043081283569336e-7,
+        -0.31942278146743774
+      ],
+      "max": [
+        0.3835841417312622,
+        0.7164753675460815,
+        0.20763881504535675
       ]
     },
     "animations": [

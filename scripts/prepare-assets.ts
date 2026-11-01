@@ -208,12 +208,16 @@ for (const [name, source] of Object.entries(landmarks)) {
   )
   await writeRuntime(target, document)
 }
-const playerTarget = resolve(output, 'people/player-tourist.glb')
-const player = await io.read(
-  resolve(root, 'assets/player-tourist/player-tourist.glb')
-)
-await player.transform(dedup(), prune())
-await writeRuntime(playerTarget, player)
+// Plain player bodies picked on the title screen; the earned cosmetics layer
+// on top. The retired player-tourist source stays in assets/ but ships nothing.
+for (const body of ['man', 'woman']) {
+  const bodyTarget = resolve(output, `people/player-${body}.glb`)
+  const bodyDoc = await io.read(
+    resolve(root, `assets/player-bases/player-${body}.glb`)
+  )
+  await bodyDoc.transform(dedup(), prune())
+  await writeRuntime(bodyTarget, bodyDoc)
+}
 const decoderSource = resolve(
   dirname(
     createRequire(resolve(root, 'apps/client/package.json')).resolve(

@@ -14,7 +14,7 @@ remain in their source folders.
 | Tòa Thị Chính, Nhà thờ Đức Bà | `landmarks/toathichinh-model.glb`, `landmarks/nhathoducba-model.glb` | Project models generated from supplied references | `scripts/prepare-assets.ts` caps textures at 1024 px |
 | City Hall statue | `landmarks/toathichinh-statue-model.glb` | Supplied project artwork | Original source retained; runtime copy prepared by `scripts/prepare-assets.ts` |
 | Cathedral square statue | `landmarks/nhathoducba-statue-model.glb` | Supplied project artwork | Original source and reference render retained; runtime copy prepared by `scripts/prepare-assets.ts` |
-| Tourist player | `player-tourist/player-tourist.blend` | Kenney `character-male-e` plus project-authored hat, backpack, and camera | Built by `scripts/blender/build-tourist.py`; CC0 base |
+| Player bodies (man, woman) | `player-bases/player-man.blend`, `player-bases/player-woman.blend` | Kenney `character-male-e` and `character-female-e` with the shirt/trouser faces split into recolourable materials | Built by `scripts/blender/build-player-bases.py`; CC0 base |
 | Road furnishings | `city-kit-roads` | Kenney | `city-kit-roads/License.txt`, CC0 |
 | Cars and shuttle base | `car-kit` | Kenney | `car-kit/License.txt`, CC0 |
 | Tram | `train-kit` | Kenney, Guus Vermeulen, Tony Schaer | `train-kit/License.txt`, CC0 |
