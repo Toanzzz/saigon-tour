@@ -1522,5 +1522,59 @@
       "wheelchair-move-right",
       "wheelchair-sit"
     ]
+  },
+  {
+    "path": "npcs/hoa.glb",
+    "bytes": 124288,
+    "meshes": 4,
+    "materials": 3,
+    "triangles": 848,
+    "vertices": 994,
+    "bounds": {
+      "min": [
+        -0.3835841417312622,
+        1.043081283569336e-7,
+        -0.3300000279560729
+      ],
+      "max": [
+        0.3835841417312622,
+        0.8560000216960888,
+        0.33000007694809724
+      ]
+    },
+    "animations": [
+      "attack-kick-left",
+      "attack-kick-right",
+      "attack-melee-left",
+      "attack-melee-right",
+      "crouch",
+      "die",
+      "drive",
+      "emote-no",
+      "emote-yes",
+      "fall",
+      "holding-both",
+      "holding-both-shoot",
+      "holding-left",
+      "holding-left-shoot",
+      "holding-right",
+      "holding-right-shoot",
+      "idle",
+      "interact-left",
+      "interact-right",
+      "jump",
+      "pick-up",
+      "sit",
+      "sprint",
+      "static",
+      "walk",
+      "wheelchair-look-left",
+      "wheelchair-look-right",
+      "wheelchair-move-back",
+      "wheelchair-move-forward",
+      "wheelchair-move-left",
+      "wheelchair-move-right",
+      "wheelchair-sit"
+    ]
   }
 ]

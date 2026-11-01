@@ -7,4 +7,4 @@ the opening herbs quest and the market hub.
 - Arc: introduces the player to the neighborhood through small errands.
 - Relationships: sends herbs to Linh; near Tâm and Mai at the market.
 - Voice: warm, practical, slightly teasing; calls the player "con".
-- Art to-do: own market-vendor model and a square portrait.
+- Art: own market-vendor model (nón lá + apron on the Kenney female-b rig) and a square comic portrait.
