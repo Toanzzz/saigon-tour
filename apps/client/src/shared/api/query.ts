@@ -3,15 +3,17 @@ import { QueryClient } from '@tanstack/react-query'
 import { persistQueryClient } from '@tanstack/react-query-persist-client'
 
 export const PERSIST_KEY = 'saigon-tour.query-cache'
-const PERSISTED = ['session'] as const
+const PERSISTED: readonly string[] = ['session', 'settings']
 
 export const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
 })
-queryClient.setQueryDefaults(PERSISTED, {
-  gcTime: Number.POSITIVE_INFINITY,
-  staleTime: Number.POSITIVE_INFINITY,
-})
+// Defaults match by key prefix, so each persisted key needs its own entry.
+for (const key of PERSISTED)
+  queryClient.setQueryDefaults([key], {
+    gcTime: Number.POSITIVE_INFINITY,
+    staleTime: Number.POSITIVE_INFINITY,
+  })
 
 /** Browser storage, resolved per call; storage-disabled browsers play unsaved. */
 const storage = {
@@ -43,7 +45,8 @@ const [stopPersisting, restored] = persistQueryClient({
   persister,
   maxAge: Number.POSITIVE_INFINITY,
   dehydrateOptions: {
-    shouldDehydrateQuery: (query) => query.queryKey[0] === PERSISTED[0],
+    shouldDehydrateQuery: (query) =>
+      PERSISTED.includes(String(query.queryKey[0])),
     shouldDehydrateMutation: () => false,
   },
 })

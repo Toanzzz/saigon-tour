@@ -10,5 +10,5 @@
     { "path": "../server/tsconfig.lib.json" },
     { "path": "../../packages/shared" }
   ],
-  "include": ["src", "test", "vite.config.ts"]
+  "include": ["src", "test", "vite.config.ts", "paraglide.config.ts", "scripts"]
 }

@@ -6,7 +6,8 @@
     "dev": "vite --host 127.0.0.1 --port 58000",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1 --port 58000",
-    "check:types": "tsc -b",
+    "i18n:compile": "bun scripts/i18n-compile.ts",
+    "check:types": "bun run i18n:compile && tsc -b",
     "test": "vitest run"
   },
   "dependencies": {
@@ -14,6 +15,7 @@
     "@colyseus/sdk": "0.18.9",
     "@fontsource-variable/baloo-2": "5.3.0",
     "@fontsource/be-vietnam-pro": "5.3.0",
+    "@inlang/paraglide-js": "2.29.3",
     "@react-three/drei": "10.7.9",
     "@react-three/fiber": "9.8.2",
     "@react-three/rapier": "2.2.0",

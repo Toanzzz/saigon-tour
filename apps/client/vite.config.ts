@@ -1,8 +1,10 @@
+import { paraglideVitePlugin } from '@inlang/paraglide-js'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
+import { paraglideOptions } from './paraglide.config'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), paraglideVitePlugin(paraglideOptions)],
   resolve: { tsconfigPaths: true },
   base: process.env.CLIENT_BASE_PATH || '/',
   server: {
@@ -31,6 +33,7 @@ export default defineConfig({
   build: { chunkSizeWarningLimit: 1600 },
   ssr: { resolve: { mainFields: ['module', 'main'] } },
   test: {
+    setupFiles: ['test/setup.ts'],
     server: {
       deps: { inline: [/@pmndrs\/xr/, /@react-three\/xr/, /meshline/] },
     },

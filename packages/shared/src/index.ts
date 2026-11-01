@@ -1,6 +1,7 @@
 export * from './city'
 export * from './contracts'
 export * from './events'
+export * from './locale'
 export * from './multiplayer'
 export * from './names'
 export * from './party'

@@ -12,7 +12,7 @@
     "dev:client": "bun run --filter '@saigon/client' dev",
     "dev:server": "bun run --filter '@saigon/server' dev",
     "check": "biome check .",
-    "check:types": "tsc -b",
+    "check:types": "bun run --filter '@saigon/client' i18n:compile && tsc -b",
     "build": "bun run --filter '@saigon/client' build && bun run --filter '@saigon/server' build",
     "test": "bun run --filter '@saigon/server' test && bun run --filter '@saigon/client' test",
     "prepare:assets": "bun scripts/prepare-assets.ts",
