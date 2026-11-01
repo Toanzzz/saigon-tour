@@ -1,6 +1,6 @@
 # Saigon Tour
 
-- Multiple agents may work in this repository at the same time. If you encounter unknown changes, stop and ask the user for coordination before continuing.
+- Multiple agents may work in this repository at the same time. If you encounter unknown changes related to your work, stop and ask the user for coordination before continuing.
 - Bun 1.4.4, isolated workspaces. TypeScript 7/tsgo, Biome 2.6.x.
 - Client: React Three Fiber, Three.js, Rapier, TanStack Store/Query, WebXR.
 - Server: Node + Hono in a Docker image. Shared contracts: zod 4, raw TypeScript package.
