@@ -290,3 +290,50 @@
 .neighbor-card .primary-button {
   margin-top: auto;
 }
+
+.wardrobe-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.wardrobe-slot h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.75;
+}
+.wardrobe-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.wardrobe-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: var(--edge);
+  border-radius: 999px;
+  background: var(--wall-hi);
+  font-size: 14px;
+  cursor: pointer;
+}
+.wardrobe-chip.is-equipped {
+  background: var(--roof-hi);
+  font-weight: 600;
+}
+.wardrobe-chip.is-locked {
+  opacity: 0.55;
+  cursor: default;
+}
+.affinity-unlock {
+  margin: 4px 0 0;
+  font-size: 13px;
+  opacity: 0.8;
+}
+.reward-unlock {
+  margin-top: 6px;
+}

@@ -359,6 +359,7 @@
   "xr_enter": "Enter VR",
   "toast_errand_added": "An errand was added to your journal.",
   "dialog_close": "Close panel",
+  "errands_busy_hint": "{name} is busy with {event} — ask if they need a hand.",
   "errands_chat_hint": "Ask {name} if they need a hand.",
   "friendship_label": "Friendliness",
   "friendship_changed": "{name}: friendliness {delta}",
@@ -420,5 +421,6 @@
   "wardrobe_open": "Open wardrobe",
   "reward_unlock": "{item} unlocked",
   "reward_unlock_reputation": "{item} unlocked · +{reputation} reputation",
-  "tier_unlocks_hint": "{tier} → unlocks {item}"
+  "tier_unlocks_hint": "{tier} → unlocks {item}",
+  "toast_equip_failed": "Could not equip that right now."
 }

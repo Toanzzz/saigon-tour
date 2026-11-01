@@ -39,6 +39,14 @@ export function GameHeader({ state }: { state: GameState }) {
         >
           <Icon name="book" />
         </button>
+        <button
+          type="button"
+          className="icon-button"
+          aria-label={m.wardrobe_open()}
+          onClick={() => update({ panel: 'wardrobe' })}
+        >
+          <Icon name="star" />
+        </button>
         <XRSessionButton store={xrStore} />
         <button
           type="button"

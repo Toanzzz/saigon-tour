@@ -20,6 +20,7 @@ const paths = {
   stamp: 'M9 3h6v5l-2 3v3h7v4H4v-4h7v-3L9 8V3Zm-5 18h16',
   play: 'M7 4v16l13-8L7 4Z',
   dice: 'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm3 5h.01M16 8h.01M12 12h.01M8 16h.01M16 16h.01',
+  lock: 'M7 10V8a5 5 0 0 1 10 0v2m-11 0h12v10H6V10Z',
 } as const
 
 export function Icon({

@@ -328,6 +328,7 @@
   "xr_enter": "Vào thực tế ảo",
   "toast_errand_added": "Đã thêm một việc vào nhật ký.",
   "dialog_close": "Đóng bảng",
+  "errands_busy_hint": "{name} đang bận với {event} — hỏi xem có cần giúp một tay không.",
   "errands_chat_hint": "Hỏi {name} xem có cần giúp gì không.",
   "friendship_label": "Độ thân thiện",
   "friendship_changed": "{name}: độ thân thiện {delta}",
@@ -389,5 +390,6 @@
   "wardrobe_open": "Mở tủ đồ",
   "reward_unlock": "Mở khóa {item}",
   "reward_unlock_reputation": "Mở khóa {item} · +{reputation} uy tín",
-  "tier_unlocks_hint": "{tier} → mở khóa {item}"
+  "tier_unlocks_hint": "{tier} → mở khóa {item}",
+  "toast_equip_failed": "Chưa thể trang bị lúc này."
 }

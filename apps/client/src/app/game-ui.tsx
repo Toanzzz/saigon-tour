@@ -23,6 +23,7 @@ import {
 import { PartyInviteControls } from '@/widgets/hud/party'
 import { EmoteControls, PeoplePanel } from '@/widgets/hud/people'
 import { TouchStick } from '@/widgets/hud/touch'
+import { WardrobePanel } from '@/widgets/hud/wardrobe'
 import { close, interact, nearby, openRiverPostcard } from './actions'
 import { TitleScreen } from './title-screen'
 
@@ -161,6 +162,7 @@ export function GameUI() {
       {state.panel === 'journal' && <JournalPanel state={state} />}
       {state.panel === 'map' && <MapPanel state={state} />}
       {state.panel === 'reward' && <RewardPanel state={state} />}
+      {state.panel === 'wardrobe' && <WardrobePanel />}
       {(state.screen === 'paused' || state.panel === 'settings') && (
         <PausePanel state={state} />
       )}

@@ -54,6 +54,8 @@ export function installInput() {
       update({ panel: game.state.panel === 'journal' ? 'none' : 'journal' })
     if (event.code === 'KeyM' && canOpen)
       update({ panel: game.state.panel === 'map' ? 'none' : 'map' })
+    if (event.code === 'KeyI' && canOpen)
+      update({ panel: game.state.panel === 'wardrobe' ? 'none' : 'wardrobe' })
     if (event.code === 'KeyP' && canOpen && !isXRPresenting())
       update({ panel: game.state.panel === 'people' ? 'none' : 'people' })
     if (

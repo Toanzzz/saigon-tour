@@ -1,13 +1,16 @@
 import {
   FRIENDSHIP_MAX,
   FRIENDSHIP_MIN,
+  FRIENDSHIP_TIERS,
   type FriendshipMap,
   friendlinessOf,
+  GIVER_UNLOCKS,
   NPCS,
   type NpcId,
+  UNLOCKS,
 } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { m } from '@/shared/i18n'
+import { m, tierLabel, unlockLabel } from '@/shared/i18n'
 import { pulses } from '@/shared/state/friendship'
 import { game } from '@/shared/state/game'
 import {
@@ -33,6 +36,10 @@ export function AffinityAvatar({
   const label = tier.label()
   const next = AFFINITY_TIERS[index + 1]
   const signed = `${level > 0 ? '+' : ''}${level}`
+  const owned = useSelector(game, (state) => state.unlocks.owned)
+  const nextUnlock = (GIVER_UNLOCKS[npcId as keyof typeof GIVER_UNLOCKS] ?? [])
+    .map((id) => UNLOCKS[id])
+    .find((entry) => entry && !owned.includes(entry.id))
   return (
     <div className={`affinity${still ? ' still' : ''}`}>
       <meter
@@ -88,6 +95,14 @@ export function AffinityAvatar({
               })
             : m.friendship_top()}
         </p>
+        {nextUnlock && level < FRIENDSHIP_TIERS[nextUnlock.tier] && (
+          <p className="affinity-unlock">
+            {m.tier_unlocks_hint({
+              tier: tierLabel(nextUnlock.tier),
+              item: unlockLabel(nextUnlock.id),
+            })}
+          </p>
+        )}
         <p className="affinity-tip">
           {tier.id === 'cold'
             ? m.errands_cold({ name: NPCS[npcId].name })
