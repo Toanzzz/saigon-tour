@@ -6,19 +6,22 @@ export const buildingRows = [
     yaw: 0,
     type: ['a', 'c', 'e', 'f', 'g'][i],
   })),
-  ...[-40, -30, -20, -10, 0].map((x, i) => ({
+  // Behind the HẺM ẨM THỰC plaza (z 25–31), clear of Lê Lợi (z ≤ 15.5).
+  ...[-42, -35, -25, -13, -4].map((x, i) => ({
     x,
-    z: 24,
+    z: 20,
     scale: 6.2,
     yaw: Math.PI,
     type: ['c', 'g', 'j', 'e', 'a'][i],
   })),
-  ...[-30, -19, -8, 3, 24, 34].map((z, i) => ({
-    x: 42,
+  // East frontage on the park/Lê Lợi corridor; the wide 'j' sits north of
+  // Lê Lợi, the rest south of it, all clear of Lê Thánh Tôn (z -19..-13).
+  ...[-31, -22, -10, 0, 24].map((z, i) => ({
+    x: 44,
     z,
     scale: 6.5,
     yaw: -Math.PI / 2,
-    type: ['e', 'f', 'g', 'j', 'c', 'a'][i],
+    type: ['e', 'f', 'g', 'c', 'j'][i],
   })),
   ...[-18, -7, 4].map((z, i) => ({
     x: -42,
@@ -33,7 +36,7 @@ export const buildingRows = [
     { x: 81, z, scale: 6, yaw: -Math.PI / 2, type: ['e', 'c', 'g', 'a'][i] },
   ]),
   // East side of Đồng Khởi, then the north corridor to the cathedral.
-  ...[-56, -46, -26, -6, 2, 21, 30].map((z, i) => ({
+  ...[-56, -46, -22, -6, 2, 21, 30].map((z, i) => ({
     x: 97,
     z,
     scale: 6,

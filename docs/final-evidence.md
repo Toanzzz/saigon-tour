@@ -7,6 +7,14 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - At `ee46866`: `bun run check:types` → `bun run build` → `bun run test` pass. Server 186 passed / 2 skipped; client 135 passed.
 - On this docs tree: `bun run check` passes with one existing `cards.css` `!important` warning.
 
+## City solids registry
+
+- Gates on this tree: `bun run check` passes (one existing `cards.css` `!important` warning); `bun run check:types` → `bun run build` → `bun run test` pass. Server 186 passed / 2 skipped; client 140 passed, including `test/city-layout.spec.ts` (5).
+- The layout lint was red first on the pre-fix layout, listing the plan's overlaps (the whole z=24 row inside the HẺM plaza, j↔e, f@42,-19 ↔ Lê Thánh Tôn, j@42,3 ↔ Lê Lợi and the park, c@97,-26 ↔ opera), then green after re-spacing `layout.ts` and moving the `market-family`, `coffee-friend`, `coffee-reader`, and `mai` anchors clear of the true footprints.
+- Measured `fromModel` footprints match the plan's bounds: building-e@(-22,-34) hx 5.25 (old collider 2.8); wide building-j rotated −π/2 is hx 4.36 / hz 6.77 (old 2.8 / 2.7); the market centre shifts z −12 → −12.67 for the asymmetric bbox.
+- Headless Playwright with `?debug` on desktop (1440×900) and mobile (390×844), 108 colliders present: driving into building-e@(-22,-34) from z −26 stops the player at z −30.43 (the visual façade); driving into the wide building-j@(44,24) from x 36 stops at x 39.30. Both confirm the walk-through is fixed in-game. Local evidence: `artifacts/city-solids/city-solids.json`, `debug-1440.png`, `debug-390.png`.
+- Not re-verified: `scripts/qa-city-complete.mjs` still fails at the market "Cà phê sữa" purchase step (an out-of-date market/i18n flow, unrelated to collision); its movement/navigation phase reached the market panel without pathing errors.
+
 ## Quests and party errands
 
 - Live Muse Spark tool spike with the shared discriminated-union schema and validator: a self-delivery proposal returned `self_delivery`; Muse corrected the recipient within three steps. Model `muse-spark-1.3-contributor`; three metered requests, 4,078 input / 372 output tokens, estimated $0.002783. Local evidence: `/tmp/saigon-quest-evidence/model-spike.json`.

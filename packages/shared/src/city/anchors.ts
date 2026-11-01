@@ -10,7 +10,7 @@ export const CITY_ANCHORS: Record<LocationId, Record<string, CityPosition>> = {
   market: {
     hoa: [-23, 0, 3.5],
     tam: [-12, 0, 10],
-    mai: [-30, 0, 18],
+    mai: [-30, 0, 8],
     gathering: [-17, 0, 8],
   },
   park: { linh: [24, 0, -5], gathering: [21, 0, -1] },

@@ -22,6 +22,7 @@ export function Scene() {
   const paused = useSelector(game, (s) => s.screen === 'paused')
   const generation = useSelector(game, (s) => s.generation)
   const evening = useSelector(game, (s) => s.timeOfDay === 'evening')
+  const debug = new URLSearchParams(location.search).has('debug')
   return (
     <Canvas
       shadows="percentage"
@@ -53,7 +54,12 @@ export function Scene() {
       <Sun evening={evening} />
       <Suspense fallback={null}>
         <XRRuntime store={xrStore} hud={<XRGameHud />}>
-          <Physics gravity={[0, -20, 0]} timeStep={1 / 60} paused={paused}>
+          <Physics
+            gravity={[0, -20, 0]}
+            timeStep={1 / 60}
+            paused={paused}
+            debug={debug}
+          >
             <CityWorld evening={evening} />
             <Player key={generation} />
             <Transport />
