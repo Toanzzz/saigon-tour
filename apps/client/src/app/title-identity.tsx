@@ -16,10 +16,10 @@ import { AvatarLights, AvatarTurntable } from '@/shared/world'
 export async function commitProfile(name: string, body: AvatarBody) {
   const parsed = PlayerNameSchema.safeParse(name)
   if (!parsed.success) return false
-  const unchanged =
-    parsed.data === game.state.guestName && body === game.state.body
   update({ guestName: parsed.data, body })
-  if (unchanged || game.state.guestStatus !== 'online') return true
+  // The title toggle sets body into the store eagerly for the live preview, so
+  // save unconditionally when online; the server write is idempotent.
+  if (game.state.guestStatus !== 'online') return true
   try {
     await saveProfile(parsed.data, body)
     return true
