@@ -8,12 +8,16 @@ import {
   friendlinessOf,
   type ItemId,
   isReady,
+  type Look,
   type NpcId,
   type PartySnapshot,
   type PlayerEvent,
   type Quest,
   type QuestEvent,
   type QuestSpec,
+  slotOf,
+  type UnlockId,
+  type UnlockSlot,
   validateSpec,
   ZERO_REWARD,
 } from '@saigon/shared'
@@ -109,7 +113,18 @@ export class QuestService {
           if ((record.world.inventory[item] ?? 0) + count > 100)
             return { accepted: false, reason: `inventory_full:${item}` }
       }
-      const quest = createQuest(input)
+      const proposer = saves.get(playerId)
+      const promised = proposer
+        ? proposer.quests
+            .filter((entry) => entry.status !== 'completed')
+            .map((entry) => entry.reward.unlockId)
+            .filter((id): id is NonNullable<typeof id> => Boolean(id))
+        : []
+      const quest = createQuest(input, undefined, undefined, {
+        owned: proposer?.unlocks.owned ?? [],
+        promised,
+        friendship: friendlinessOf(proposer?.friendship ?? {}, giver),
+      })
       if (party) quest.party = { id: party.id, memberIds: ids }
       for (const id of ids) {
         const record = saves.get(id)
@@ -191,6 +206,32 @@ export class QuestService {
     for (const update of notifications)
       this.push?.(update.id, update.save, update.quest)
     return events
+  }
+
+  /**
+   * Equip or clear a cosmetic/vehicle/pet slot. The player must already own the
+   * item, and the slot must match the item's slot. Returns the new look or null
+   * when the request is rejected.
+   */
+  async equip(
+    playerId: string,
+    slot: UnlockSlot,
+    id: UnlockId | null
+  ): Promise<Look | null | 'rejected'> {
+    const result = await this.db.mutatePlayer(playerId, (save) => {
+      if (id !== null) {
+        if (!save.unlocks.owned.includes(id)) return 'rejected' as const
+        if (slotOf(id) !== slot) return 'rejected' as const
+        save.unlocks.equipped = { ...save.unlocks.equipped, [slot]: id }
+      } else {
+        const next = { ...save.unlocks.equipped }
+        delete next[slot]
+        save.unlocks.equipped = next
+      }
+      const equipped = save.unlocks.equipped
+      return Object.keys(equipped).length ? { ...equipped } : null
+    })
+    return result
   }
 
   async adjustFriendship(

@@ -25,6 +25,8 @@ export async function grantQuest(
       (record.world.inventory[reward.itemId] ?? 0) + 1
     )
   record.reputation += reward.reputation
+  if (reward.unlockId && !record.unlocks.owned.includes(reward.unlockId))
+    record.unlocks.owned = [...record.unlocks.owned, reward.unlockId]
   record.world.completedQuestIds = [
     ...record.world.completedQuestIds,
     quest.id,

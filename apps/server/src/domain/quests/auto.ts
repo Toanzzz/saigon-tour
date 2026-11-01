@@ -1,8 +1,8 @@
 import {
   type InteractRequest,
-  looksLikeHelpRequest,
   type NpcId,
   seedsFor,
+  wantsErrand,
 } from '@saigon/shared'
 import type { ToolOutcome } from './outcome'
 import type { QuestService } from './service'
@@ -16,7 +16,7 @@ export async function offerSeed(
 ) {
   const before = outcome.events.length
   if (
-    looksLikeHelpRequest(request.message) &&
+    wantsErrand(request.message) &&
     !outcome.events.some((e) => e.type === 'offered')
   ) {
     for (const spec of seedsFor(npcId, request.locale)) {

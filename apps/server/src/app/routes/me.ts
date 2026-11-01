@@ -1,11 +1,14 @@
 import { zValidator } from '@hono/zod-validator'
-import { PlayerNameSchema } from '@saigon/shared'
+import { PlayerNameSchema, UNLOCK_SLOTS, UnlockIdSchema } from '@saigon/shared'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { requireAuth } from './auth'
 import type { Env, RouteDeps } from './deps'
 
 const ProfileSchema = z.object({ name: PlayerNameSchema }).strict()
+const EquipSchema = z
+  .object({ slot: z.enum(UNLOCK_SLOTS), id: UnlockIdSchema.nullable() })
+  .strict()
 
 /** Authenticated player routes, mounted under `/me`. */
 export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
@@ -41,6 +44,21 @@ export function meRoutes({ auth, db, harness, realtime }: RouteDeps) {
         player: await harness.game.abandon(c.var.player.id, questId),
       })
     })
+    .post(
+      '/equip',
+      zValidator('json', EquipSchema, (result, c) => {
+        if (!result.success) return c.json({ error: 'invalid_equip' }, 400)
+      }),
+      async (c) => {
+        const { slot, id } = c.req.valid('json')
+        const look = await harness.game.equip(c.var.player.id, slot, id)
+        if (look === 'rejected') return c.json({ error: 'not_owned' }, 409)
+        realtime.updateLook(c.var.player.id, look)
+        return c.json({
+          player: await harness.game.get(c.var.player.id),
+        })
+      }
+    )
     .post('/reset', async (c) => {
       const { id } = c.var.player
       await harness.clearMemory(id)

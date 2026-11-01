@@ -41,7 +41,7 @@ export class PlayerMutations {
               [id, quest.id]
             )
           await client.query(
-            'UPDATE players SET world=$2,quests=$3,completed=$4,reputation=$5,revision=$6,friendship=$7,seen_at=now() WHERE id=$1',
+            'UPDATE players SET world=$2,quests=$3,completed=$4,reputation=$5,revision=$6,friendship=$7,unlocks=$8,seen_at=now() WHERE id=$1',
             [
               id,
               JSON.stringify(save.world),
@@ -50,6 +50,7 @@ export class PlayerMutations {
               save.reputation,
               save.revision,
               JSON.stringify(save.friendship),
+              JSON.stringify(save.unlocks),
             ]
           )
         }

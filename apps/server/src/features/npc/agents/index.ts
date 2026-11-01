@@ -1,11 +1,13 @@
 import { Agent } from '@mastra/core/agent'
 import type { MastraModelConfig } from '@mastra/core/llm'
 import {
+  GIVER_UNLOCKS,
   type NeighborId,
   NPCS,
   type NpcId,
   QUEST_DOMAINS,
   seedsFor,
+  UNLOCKS,
 } from '@saigon/shared'
 import { createNpcMemory } from '../memory/npc-memory'
 import { cafeOwnerPersona } from '../personas/cafe-owner'
@@ -38,6 +40,16 @@ const NEIGHBOR_PERSONAS: Record<NeighborId, string> = {
   thao: musicStudentPersona,
 }
 
+/** Human-readable list of a giver's signature unlocks, so personas never promise rewards they can't grant. */
+function unlockHint(id: NpcId): string {
+  const ids = (GIVER_UNLOCKS as Record<string, string[]>)[id]
+  if (!ids?.length) return ''
+  const list = ids
+    .map((unlockId) => `${unlockId} (${UNLOCKS[unlockId].tier})`)
+    .join(', ')
+  return `\nSignature rewards you grant as friendship grows: ${list}`
+}
+
 export const NPC_PERSONAS = Object.fromEntries(
   Object.values(NPCS).map((npc) => [
     npc.id,
@@ -66,7 +78,7 @@ export function createNpcAgents(
         name: id,
         instructions: `${instructions}
 ${QUEST_RULES}
-Your allowed entities: ${JSON.stringify(QUEST_DOMAINS[id as NpcId])}
+Your allowed entities: ${JSON.stringify(QUEST_DOMAINS[id as NpcId])}${unlockHint(id as NpcId)}
 Example valid quest spec: ${JSON.stringify(seedsFor(id as NpcId, 'en')[0])}`,
         model,
         memory,

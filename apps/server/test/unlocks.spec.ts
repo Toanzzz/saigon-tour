@@ -110,6 +110,6 @@ describe('schema compatibility', () => {
   })
 
   it('defaults empty unlocks', () => {
-    expect(UnlocksSchema.parse(undefined ?? {})).toEqual(EMPTY_UNLOCKS)
+    expect(UnlocksSchema.parse({})).toEqual(EMPTY_UNLOCKS)
   })
 })

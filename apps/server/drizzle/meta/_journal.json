@@ -50,6 +50,13 @@
       "when": 1793520218417,
       "tag": "0006_contextual_greetings",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793524066880,
+      "tag": "0007_clean_thor",
+      "breakpoints": true
     }
   ]
 }

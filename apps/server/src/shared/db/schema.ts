@@ -2,6 +2,7 @@ import type {
   CompletedQuest,
   FriendshipMap,
   Quest,
+  Unlocks,
   WorldState,
 } from '@saigon/shared'
 import {
@@ -33,6 +34,10 @@ export const players = pgTable('players', {
   quests: jsonb().$type<Quest[]>().notNull().default([]),
   completed: jsonb().$type<CompletedQuest[]>().notNull(),
   reputation: integer().notNull().default(0),
+  unlocks: jsonb()
+    .$type<Unlocks>()
+    .notNull()
+    .default({ owned: [], equipped: {} }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()
     .notNull(),

@@ -2,6 +2,7 @@ import type {
   CompletedQuest,
   FriendshipMap,
   Quest,
+  Unlocks,
   WorldState,
 } from '@saigon/shared'
 
@@ -12,6 +13,7 @@ export interface PlayerSave {
   quests: Quest[]
   completed: CompletedQuest[]
   reputation: number
+  unlocks: Unlocks
 }
 export interface SqlClient {
   query(

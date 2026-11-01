@@ -2,7 +2,7 @@ import type { Server as HttpServer } from 'node:http'
 import { createAuthContext, matchMaker } from '@colyseus/core'
 import { setTransport } from '@colyseus/core/Transport'
 import { WebSocketTransport } from '@colyseus/ws-transport'
-import { WORLD_ROOM } from '@saigon/shared'
+import { type Look, WORLD_ROOM } from '@saigon/shared'
 import type { Hono } from 'hono'
 import type { Auth } from '@/features/auth'
 import { CityDirector } from '@/features/director'
@@ -104,6 +104,10 @@ export function createRealtime(
     rename(playerId: string, name: string) {
       const player = manager.getPlayer(playerId)
       if (player) player.name = name
+    },
+    /** Push a freshly equipped look onto the player's live presence, if connected. */
+    updateLook(playerId: string, look: Look | null) {
+      return manager.updateLook(playerId, look)
     },
     /** Attach room sockets to the listening HTTP server. */
     async attach(server: HttpServer) {

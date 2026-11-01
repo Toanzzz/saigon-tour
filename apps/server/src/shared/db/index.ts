@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { GuestPlayer, NpcId } from '@saigon/shared'
 import {
+  EMPTY_UNLOCKS,
   GuestPlayerSchema,
   randomPlayerColor,
   STARTING_CURRENCY,
@@ -36,6 +37,7 @@ const initial = (): PlayerSave => ({
   quests: [],
   completed: [],
   reputation: 0,
+  unlocks: structuredClone(EMPTY_UNLOCKS),
 })
 const publicPlayer = (r: Record<string, unknown>): GuestPlayer =>
   GuestPlayerSchema.parse(r)
@@ -59,7 +61,7 @@ export class GameDb {
   async ensurePlayer(user: { id: string; name: string }) {
     const save = initial()
     await this.sql.query(
-      'INSERT INTO players(id,user_id,name,color,world,quests,completed,reputation) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (user_id) DO NOTHING',
+      'INSERT INTO players(id,user_id,name,color,world,quests,completed,reputation,unlocks) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (user_id) DO NOTHING',
       [
         randomUUID(),
         user.id,
@@ -69,6 +71,7 @@ export class GameDb {
         '[]',
         '[]',
         0,
+        JSON.stringify(save.unlocks),
       ]
     )
     const { rows } = await this.sql.query(

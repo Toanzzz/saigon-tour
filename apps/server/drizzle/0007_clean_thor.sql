@@ -1,0 +1,1 @@
+ALTER TABLE "players" ADD COLUMN "unlocks" jsonb DEFAULT '{"owned":[],"equipped":{}}'::jsonb NOT NULL;

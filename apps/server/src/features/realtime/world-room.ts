@@ -6,6 +6,7 @@ import {
 } from '@colyseus/core'
 import {
   ClientSocketMessageSchema,
+  type Look,
   type PartyClientMessage,
   type ServerSocketMessage,
   syncCity,
@@ -38,6 +39,7 @@ interface Identity {
   id: string
   name: string
   color: string
+  look: Look | null
 }
 interface Limits {
   windowStart: number
@@ -71,7 +73,9 @@ export class WorldRoom extends Room<{ state: WorldRoomState }> {
     })
     if (!session) return false
     const player = await WorldRoom.deps.db.ensurePlayer(session.user)
-    return { id: player.id, name: player.name, color: player.color }
+    const equipped = player.unlocks.equipped
+    const look = Object.keys(equipped).length ? equipped : null
+    return { id: player.id, name: player.name, color: player.color, look }
   }
 
   maxClients = ROOM_CAPACITY

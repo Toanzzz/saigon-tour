@@ -1,5 +1,6 @@
 import {
   type GuestPlayer,
+  type Look,
   type NeighborId,
   NPC_POSITIONS,
   type PlayerEvent,
@@ -51,6 +52,13 @@ export class RoomManager {
     return this.room(playerId)?.members.get(playerId)?.player
   }
 
+  /** Push a new equipped look onto a live presence so the room broadcasts it. */
+  updateLook(playerId: string, look: Look | null) {
+    const player = this.getPlayer(playerId)
+    if (player) player.look = look
+    return Boolean(player)
+  }
+
   onLeave(hook: (playerId: string) => void) {
     this.leaveHooks.add(hook)
     return () => this.leaveHooks.delete(hook)
@@ -100,7 +108,7 @@ export class RoomManager {
 
   /** Assign to the player's current room, else any room with space. */
   connect(
-    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'>,
+    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'> & { look?: Look | null },
     socket: RoomSocket
   ) {
     const room =
@@ -115,7 +123,7 @@ export class RoomManager {
   /** Attach a socket to a room, replacing the player's previous socket. */
   join(
     room: Room,
-    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'>,
+    guest: Pick<GuestPlayer, 'id' | 'name' | 'color'> & { look?: Look | null },
     socket: RoomSocket
   ) {
     const current = this.room(guest.id)
@@ -136,7 +144,7 @@ export class RoomManager {
           position: [-16, 0, 8],
           heading: 0,
           ride: 'loading',
-          look: null,
+          look: guest.look ?? null,
         },
         socket,
         disconnectedAt: null,
