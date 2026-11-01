@@ -1,30 +1,58 @@
 .affinity {
   position: absolute;
   top: 34px;
-  right: 78px;
+  left: 26px;
 }
-.affinity-badge {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
+.affinity-portrait {
+  position: relative;
+  display: block;
+  width: 52px;
+  height: 52px;
   padding: 0;
   border: var(--edge);
   border-radius: var(--round-sm);
+  box-shadow: var(--lift-sm);
+  background: var(--roof-hi);
+  cursor: pointer;
+  overflow: visible;
+}
+.affinity-portrait:focus-visible {
+  outline: 3px solid var(--bus);
+  outline-offset: 2px;
+}
+.affinity-portrait .npc-avatar-lg {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--round-sm);
+  overflow: hidden;
+  font-size: 26px;
+}
+.affinity-crest {
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
   background: var(--wall-hi);
   box-shadow: var(--lift-sm);
-  color: var(--ink);
-  cursor: pointer;
 }
-.affinity-badge:hover,
-.affinity-badge:focus-visible {
+.affinity-crest.tier-cold {
+  background: var(--pool);
+}
+.affinity-crest.tier-warm {
+  background: var(--roof-hi);
+}
+.affinity-crest.tier-close {
   background: var(--bus);
-  outline: none;
 }
-.affinity-badge.up {
+.affinity-portrait.up .affinity-crest {
   animation: affinity-bump 0.7s ease-out;
 }
-.affinity-badge.down {
+.affinity-portrait.down .affinity-crest {
   animation: affinity-dip 0.7s ease-out;
 }
 .affinity-icon {
@@ -114,21 +142,103 @@
 }
 @media (max-width: 700px) {
   .affinity {
-    top: 30px;
-    right: 70px;
+    top: 32px;
+    left: 20px;
   }
-  .affinity-badge {
-    width: 40px;
-    height: 40px;
+  .affinity-portrait {
+    width: 46px;
+    height: 46px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .affinity-badge.up,
-  .affinity-badge.down {
+  .affinity-portrait.up .affinity-crest,
+  .affinity-portrait.down .affinity-crest {
     animation: none;
   }
 }
-.affinity.still .affinity-badge.up,
-.affinity.still .affinity-badge.down {
+.affinity.still .affinity-portrait.up .affinity-crest,
+.affinity.still .affinity-portrait.down .affinity-crest {
   animation: none;
+}
+
+.marker-guide {
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 2px dashed var(--wall-side);
+}
+.marker-guide h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.marker-guide ul {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.marker-guide li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.guide-diamond {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  background: var(--bus);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  transform: rotate(45deg);
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--ink);
+}
+.guide-diamond b {
+  transform: rotate(-45deg);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.npc-avatar {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--avatar-color, var(--roof-hi));
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1;
+}
+.npc-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.npc-avatar-sm {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: var(--lift-sm);
+  font-size: 14px;
+  align-self: flex-end;
+  margin-bottom: 14px;
+}
+.speech-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.speech-row .speech.assistant {
+  margin-right: 0;
+  margin-left: 0;
+  flex: 1;
 }

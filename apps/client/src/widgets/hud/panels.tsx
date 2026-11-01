@@ -9,6 +9,7 @@ import {
   toggleTimeOfDay,
 } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
+import { MarkerGuide } from '@/features/conversation/marker-guide'
 import { NeighborhoodMap } from '@/features/map/map'
 import { LanguageSelect, m, marketItemLabel } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
@@ -200,6 +201,7 @@ export function PausePanel({ state }: { state: GameState }) {
           <kbd>M</kbd> {m.pause_key_map()}
         </span>
       </div>
+      <MarkerGuide />
       <NewJourneyButton className="restart-button" />
       <button
         type="button"

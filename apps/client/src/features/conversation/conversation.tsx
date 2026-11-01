@@ -6,8 +6,10 @@ import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 import { placeName } from '@/shared/world/places'
+import { AffinityAvatar } from './affinity-avatar'
+import { AvatarRenderer } from './avatar-render'
 import { NpcErrands } from './errands'
-import { FriendshipMeter } from './friendship-meter'
+import { NpcAvatar } from './npc-avatar'
 
 const messageKeys = new WeakMap<object, string>()
 let nextMessageKey = 0
@@ -46,10 +48,7 @@ export function Conversation({ state }: { state: GameState }) {
       onClose={close}
       className="conversation"
     >
-      <FriendshipMeter npcId={dialog.npc} friendship={state.friendship} />
-      <div className={`portrait portrait-${dialog.npc}`} aria-hidden="true">
-        <span>{npc.name.split(' ').at(-1)?.slice(0, 1)}</span>
-      </div>
+      <AffinityAvatar npcId={dialog.npc} friendship={state.friendship} />
       {!dialog.thinking && <NpcErrands state={state} npc={dialog.npc} />}
       <div
         className="conversation-history"
@@ -63,12 +62,17 @@ export function Conversation({ state }: { state: GameState }) {
             {index === dialog.earlierCount && index > 0 && (
               <p className="history-divider">{m.history_earlier()}</p>
             )}
-            <p className={`speech ${line.role}`}>
-              {line.role === 'user' && (
+            {line.role === 'assistant' ? (
+              <div className="speech-row">
+                <NpcAvatar id={dialog.npc} size="sm" />
+                <p className="speech assistant">{line.content}</p>
+              </div>
+            ) : (
+              <p className="speech user">
                 <span className="speaker">{m.map_you()}</span>
-              )}
-              {line.content}
-            </p>
+                {line.content}
+              </p>
+            )}
           </Fragment>
         ))}
         {dialog.thinking && (
@@ -105,23 +109,7 @@ export function Conversation({ state }: { state: GameState }) {
           <Icon name="arrow" />
         </button>
       </form>
-      <div className="conversation-footer">
-        <span
-          className={`source-label ${dialog.source ?? ''}`}
-          title={
-            dialog.source === 'live'
-              ? m.chat_live()
-              : dialog.source === 'fallback'
-                ? m.chat_offline()
-                : m.chat_connecting()
-          }
-        >
-          {dialog.source === 'fallback' && m.chat_offline()}
-        </span>
-        <button type="button" className="text-button" onClick={close}>
-          {m.pause_continue()}
-        </button>
-      </div>
+      <AvatarRenderer />
     </Dialog>
   )
 }

@@ -68,4 +68,6 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 
 - Greetings use all 11 affinity levels, room time, weather, active city events, and neighbor need. Revisiting without speaking keeps one unanswered greeting; the Earlier divider renders separately.
 
-- Chat header affinity: a compact heart-badge icon (five authored tiers: Cold, Wary, Getting acquainted, Warm, Close friend). The badge opens an `affinity-info` popover with the tier ladder, current level, next-tier distance, and a tip. A friendship change bumps/dips the badge (no motion under reduced-motion). A screen-reader-only `<meter>` keeps the numeric value.
+- Chat affinity + avatar: the NPC portrait renders a head-and-shoulders crop of the real character glb (single hidden on-demand WebGL canvas, cached per model+color, falls back to an initial). The portrait carries a corner affinity crest (five tiers: Cold, Wary, Getting acquainted, Warm, Close friend) and opens an `affinity-info` popover (tier ladder, level, next-tier distance, tip); a change bumps/dips the crest. A screen-reader-only `<meter>` keeps the numeric value. Each NPC message shows a round mini-avatar. The conversation footer (source label, Continue exploring) was removed; the close button suffices.
+
+- World NPC quest diamond only renders when it has a `!`/`?` glyph. Pause panel has a "What the symbols mean" guide covering the two quest diamonds and the affinity crest.

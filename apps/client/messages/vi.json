@@ -343,5 +343,9 @@
   "friendship_badge": "Độ thân thiện: {tier}. Xem chi tiết",
   "friendship_next": "+{points} để {tier}",
   "friendship_top": "Thân nhất rồi",
-  "friendship_tip": "Trò chuyện và giúp việc vặt để thân hơn."
+  "friendship_tip": "Trò chuyện và giúp việc vặt để thân hơn.",
+  "guide_title": "Ý nghĩa các ký hiệu",
+  "guide_quest_new": "Có việc vặt mới để nhận",
+  "guide_quest_ready": "Việc vặt đã xong, mang trả",
+  "guide_affinity": "Mức thân thiết với hàng xóm — chạm vào khi trò chuyện để xem các mức"
 }

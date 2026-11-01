@@ -15,8 +15,10 @@ import {
   AffinityIcon,
   affinityTier,
 } from '@/shared/ui/affinity'
+import { NpcAvatar } from './npc-avatar'
 
-export function FriendshipMeter({
+/** Portrait avatar that doubles as the affinity control and popover. */
+export function AffinityAvatar({
   npcId,
   friendship,
 }: {
@@ -46,11 +48,14 @@ export function FriendshipMeter({
       <button
         type="button"
         key={recent?.at ?? 0}
-        className={`affinity-badge${recent ? (recent.delta > 0 ? ' up' : ' down') : ''}`}
+        className={`affinity-portrait${recent ? (recent.delta > 0 ? ' up' : ' down') : ''}`}
         popoverTarget="affinity-info"
         aria-label={m.friendship_badge({ tier: label })}
       >
-        <AffinityIcon tier={tier.id} />
+        <NpcAvatar id={npcId} size="lg" />
+        <span className={`affinity-crest tier-${tier.id}`} aria-hidden="true">
+          <AffinityIcon tier={tier.id} size={18} />
+        </span>
       </button>
       <div id="affinity-info" className="affinity-info" popover="auto">
         <div className="affinity-info-head">

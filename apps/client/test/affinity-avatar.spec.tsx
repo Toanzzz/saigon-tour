@@ -1,12 +1,12 @@
 import { renderToStaticMarkup } from 'react-dom/server'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { FriendshipMeter } from '@/features/conversation/friendship-meter'
+import { AffinityAvatar } from '@/features/conversation/affinity-avatar'
 import { pulses } from '@/shared/state/friendship'
 import { affinityTier } from '@/shared/ui/affinity'
 
 const render = (level: number) =>
   renderToStaticMarkup(
-    <FriendshipMeter npcId="hoa" friendship={{ hoa: { level } }} />
+    <AffinityAvatar npcId="hoa" friendship={{ hoa: { level } }} />
   )
 
 describe('affinity header', () => {
@@ -32,6 +32,6 @@ describe('affinity header', () => {
   })
   it('flags a recent positive change on the badge', () => {
     pulses.setState(() => ({ hoa: { delta: 1, at: Date.now() } }))
-    expect(render(2)).toContain('affinity-badge up')
+    expect(render(2)).toContain('affinity-portrait up')
   })
 })

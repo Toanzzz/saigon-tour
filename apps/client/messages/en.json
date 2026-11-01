@@ -374,5 +374,9 @@
   "friendship_badge": "Friendliness: {tier}. Show details",
   "friendship_next": "+{points} to {tier}",
   "friendship_top": "As close as it gets",
-  "friendship_tip": "Chat and help with errands to grow closer."
+  "friendship_tip": "Chat and help with errands to grow closer.",
+  "guide_title": "What the symbols mean",
+  "guide_quest_new": "New errand to pick up",
+  "guide_quest_ready": "Errand ready to hand in",
+  "guide_affinity": "How close you are with a neighbor — tap it in a chat to see the levels"
 }
