@@ -65,6 +65,8 @@ export async function restart() {
     guestColor: state.guestColor,
     guestStatus: player ? 'online' : 'offline',
     returningGuest: false,
+    account: state.account,
+    metaAvailable: state.metaAvailable,
     ...(player ? guestState(player) : {}),
     muted: state.muted,
     volume: state.volume,

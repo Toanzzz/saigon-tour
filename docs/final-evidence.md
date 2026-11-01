@@ -66,6 +66,7 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Root gates pass: `bun run check` → `bun run check:types` → `bun run build` → `bun run test` (server 114 passing / 2 skipped, client 88 passing).
 - Headless Playwright against the local dev server, 1440×900 and 390×844 (touch), 3 passing two-viewport runs: returning title has no name input or Change control, and the primary button reads `Continue journey as {name}`. Pause → edit name → `Save name` updates the server name; the button hides after save and the title shows the new name after reload. Pause and title `Start a new journey` arm `Tap again to erase progress`, revert after 4s, and the second tap returns to the fresh title (`Start exploring`, no Welcome back or summary, empty quests, current name prefilled). Editing that name → Start exploring saves the new name. No page errors.
 - `scripts/qa-persistence.mjs` passes at both widths with the two-tap reset and fresh-title assertion.
+- Reset keeps account and Meta availability: the reset previously rebuilt state from `initialState()`, so `metaAvailable` became false and `account` null, hiding `Continue with Meta` until reload. Headless Playwright at 1440 and 390: the button shows after Pause → two-tap reset; the same script fails on the prior code.
 - Intermittent: in a few runs, clicking Continue right after a reload left the screen on `title` before diagnostics were installed; the QA waits for diagnostics before clicking. Cause unproven.
 
 ## Verification limits
