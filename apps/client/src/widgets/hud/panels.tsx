@@ -5,6 +5,7 @@ import {
   board,
   buyMarketItem,
   close,
+  forgetDevice,
   pause,
   restart,
   toggleTimeOfDay,
@@ -301,6 +302,13 @@ export function PausePanel({ state }: { state: GameState }) {
         onClick={restart}
       >
         Start a new journey
+      </button>
+      <button
+        type="button"
+        className="text-button restart-button"
+        onClick={() => void forgetDevice()}
+      >
+        Clear saved data
       </button>
     </Dialog>
   )

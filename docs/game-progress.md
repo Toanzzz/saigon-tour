@@ -233,3 +233,9 @@ Story steps: the trail covers all eight authored destinations; an active objecti
 ## Tourist names
 
 - Preset player names are a realistic tourist first name plus surname (`packages/shared/src/names.ts`), for example "Emma Clarke" or "Kenji Tanaka". Anonymous sign-in and the title-screen dice both use `randomPlayerName()`.
+
+## Persisted query cache
+
+- The client keeps its Better Auth token in the TanStack Query cache under `['session', 'token']`. `persistQueryClient` with the async storage persister saves it to the `saigon-tour.query-cache` key (`apps/client/src/shared/api/query.ts`). Client code does not call `localStorage` directly.
+- `initializeSession` waits for the cache to restore before it reads the token.
+- "Clear saved data" in the pause menu signs out, which clears the auth cookie, removes the persisted cache, and reloads, so the next load is a new guest with a new name. A browser hard refresh keeps the cache.

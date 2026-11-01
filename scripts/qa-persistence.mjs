@@ -20,11 +20,21 @@ try {
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
     await page.goto(process.env.GAME_URL || 'http://127.0.0.1:58003/?debug=1')
-    await page.waitForFunction(() =>
-      localStorage.getItem('saigon-tour.session-token')
+    await page.waitForFunction(
+      () =>
+        JSON.parse(
+          localStorage.getItem('saigon-tour.query-cache') ?? 'null'
+        )?.clientState.queries.find(
+          (q) => q.queryKey.join('/') === 'session/token'
+        )?.state.data
     )
-    const token = await page.evaluate(() =>
-      localStorage.getItem('saigon-tour.session-token')
+    const token = await page.evaluate(
+      () =>
+        JSON.parse(
+          localStorage.getItem('saigon-tour.query-cache') ?? 'null'
+        )?.clientState.queries.find(
+          (q) => q.queryKey.join('/') === 'session/token'
+        )?.state.data
     )
     const base = process.env.API_URL || 'http://127.0.0.1:58004'
     const headers = {

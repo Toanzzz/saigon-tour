@@ -7,10 +7,12 @@ import {
   objectiveSatisfied,
   SECRET_QUESTS,
 } from '@saigon/shared'
-import { QueryClient } from '@tanstack/react-query'
 import type { InferRequestType, InferResponseType } from 'hono/client'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
+
+export { queryClient } from './query'
+
 import { initializeSession, sessionToken } from './session'
 
 /** NPC interact endpoint, typed from the shared Hono RPC contract. */
@@ -18,9 +20,6 @@ const interact$post = rpc.npc[':npcId'].interact.$post
 export type InteractBody = InferRequestType<typeof interact$post>['json']
 export type InteractResponsePayload = InferResponseType<typeof interact$post>
 
-export const queryClient = new QueryClient({
-  defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
-})
 export interface InteractionResult {
   response: InteractResponse
   synced: boolean

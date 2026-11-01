@@ -1,6 +1,7 @@
 import { type InteractRequest, type NpcId, SECRET_QUESTS } from '@saigon/shared'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { interactWith } from '@/shared/api/agent'
+import { saveToken } from '@/shared/api/transport'
 import type { GameState } from '@/shared/state/game'
 import { initialState } from '@/shared/state/game'
 
@@ -26,7 +27,7 @@ const request = (
 })
 
 beforeEach(() => {
-  vi.stubGlobal('localStorage', { getItem: () => 'offline-test-token' })
+  saveToken('offline-test-token')
   vi.stubGlobal(
     'fetch',
     vi.fn().mockRejectedValue(new Error('offline test network'))

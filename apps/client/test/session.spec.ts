@@ -14,6 +14,7 @@ const saved = {
 }
 let storage: Map<string, string>
 let fetchMock: ReturnType<typeof vi.fn>
+let transport: typeof import('@/shared/api/transport')
 let game: typeof import('@/shared/state/game').game
 let update: typeof import('@/shared/state/game').update
 beforeEach(async () => {
@@ -29,6 +30,7 @@ beforeEach(async () => {
   })
   fetchMock = vi.fn()
   vi.stubGlobal('fetch', fetchMock)
+  transport = await import('@/shared/api/transport')
   game.setState(() => initialState())
 })
 afterEach(() => vi.unstubAllGlobals())
@@ -53,7 +55,7 @@ describe('auth sessions', () => {
       method: 'POST',
       credentials: 'include',
     })
-    expect(storage.get(session.SESSION_TOKEN_KEY)).toBe('session-token')
+    expect(transport.sessionToken()).toBe('session-token')
     expect(session.authorizationHeaders()).toEqual({
       Authorization: 'Bearer session-token',
     })
@@ -64,7 +66,7 @@ describe('auth sessions', () => {
   })
   it('hydrates saved progress, replaying events observed during loading', async () => {
     const session = await import('@/shared/api/session')
-    storage.set(session.SESSION_TOKEN_KEY, 'existing-token')
+    transport.saveToken('existing-token')
     let resolve!: (response: Response) => void
     fetchMock.mockImplementation((url: string) =>
       url.endsWith('/auth/providers')
@@ -104,22 +106,22 @@ describe('auth sessions', () => {
       return Response.json({ player: saved, account: { anonymous: false } })
     })
     await session.initializeSession()
-    expect(storage.get(session.SESSION_TOKEN_KEY)).toBe('meta-token')
+    expect(transport.sessionToken()).toBe('meta-token')
     expect(String(replaceState.mock.calls[0]?.[2])).not.toContain('signedIn')
     expect(game.state.account).toBe('meta')
   })
   it('keeps the token and current world when the server is unavailable', async () => {
     const session = await import('@/shared/api/session')
-    storage.set(session.SESSION_TOKEN_KEY, 'existing-token')
+    transport.saveToken('existing-token')
     fetchMock.mockRejectedValue(new TypeError('Network unavailable'))
     await session.initializeSession()
     expect(game.state.guestStatus).toBe('offline')
     expect(game.state.world).toEqual(initialState().world)
-    expect(storage.get(session.SESSION_TOKEN_KEY)).toBe('existing-token')
+    expect(transport.sessionToken()).toBe('existing-token')
   })
   it('starts a new anonymous session only after a 401', async () => {
     const session = await import('@/shared/api/session')
-    storage.set(session.SESSION_TOKEN_KEY, 'expired')
+    transport.saveToken('expired')
     let me = 0
     fetchMock.mockImplementation(async (url: string) => {
       if (url.endsWith('/auth/providers')) return Response.json({ meta: false })
@@ -130,12 +132,12 @@ describe('auth sessions', () => {
         : Response.json(anonymous)
     })
     await session.initializeSession()
-    expect(storage.get(session.SESSION_TOKEN_KEY)).toBe('replacement')
+    expect(transport.sessionToken()).toBe('replacement')
     expect(game.state.returningGuest).toBe(false)
   })
   it('renames through the authenticated profile endpoint', async () => {
     const session = await import('@/shared/api/session')
-    storage.set(session.SESSION_TOKEN_KEY, 'existing-token')
+    transport.saveToken('existing-token')
     fetchMock.mockResolvedValue(
       Response.json({ player: { ...saved, name: 'Cô Lan' } })
     )
@@ -146,7 +148,7 @@ describe('auth sessions', () => {
   })
   it('resets through the authenticated endpoint without replacing the token', async () => {
     const session = await import('@/shared/api/session')
-    storage.set(session.SESSION_TOKEN_KEY, 'existing-token')
+    transport.saveToken('existing-token')
     const player = { ...saved, world: initialState().world, completed: [] }
     fetchMock.mockResolvedValue(Response.json({ player }))
     expect(await session.resetSession()).toEqual(player)
@@ -159,6 +161,43 @@ describe('auth sessions', () => {
     expect(new Headers(resetInit.headers).get('Authorization')).toBe(
       'Bearer existing-token'
     )
-    expect(storage.get(session.SESSION_TOKEN_KEY)).toBe('existing-token')
+    expect(transport.sessionToken()).toBe('existing-token')
+  })
+})
+
+describe('persisted query cache', () => {
+  const waitForSave = () =>
+    vi.waitFor(() => expect(storage.get(query.PERSIST_KEY)).toBeTruthy())
+  let query: typeof import('@/shared/api/query')
+  beforeEach(async () => {
+    query = await import('@/shared/api/query')
+    await query.queryCacheRestored
+  })
+
+  it('saves the session token through the query persister', async () => {
+    transport.saveToken('persisted-token')
+    await waitForSave()
+    const saved = JSON.parse(storage.get(query.PERSIST_KEY) ?? '{}')
+    expect(saved.clientState.queries[0]).toMatchObject({
+      queryKey: ['session', 'token'],
+      state: { data: 'persisted-token' },
+    })
+    expect([...storage.keys()]).toEqual([query.PERSIST_KEY])
+  })
+  it('restores the token after a reload', async () => {
+    transport.saveToken('reloaded-token')
+    await waitForSave()
+    vi.resetModules()
+    const reloaded = await import('@/shared/api/query')
+    await reloaded.queryCacheRestored
+    const next = await import('@/shared/api/transport')
+    expect(next.sessionToken()).toBe('reloaded-token')
+  })
+  it('clears the persisted cache on request', async () => {
+    transport.saveToken('doomed-token')
+    await waitForSave()
+    await query.clearPersistedQueries()
+    expect(storage.has(query.PERSIST_KEY)).toBe(false)
+    expect(transport.sessionToken()).toBeNull()
   })
 })

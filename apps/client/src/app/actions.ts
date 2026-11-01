@@ -10,7 +10,8 @@ import {
   endHttpTurn,
   resetEventSequence,
 } from '@/shared/api/events'
-import { guestState, resetSession } from '@/shared/api/session'
+import { clearPersistedQueries } from '@/shared/api/query'
+import { guestState, resetSession, signOut } from '@/shared/api/session'
 import { net } from '@/shared/api/status'
 import { audio } from '@/shared/audio'
 import { game, initialState, notify, update } from '@/shared/state/game'
@@ -64,6 +65,12 @@ export async function restart() {
     reducedMotion: state.reducedMotion,
     timeOfDay: state.timeOfDay,
   }))
+}
+/** Drop this device's saved session; reload as a brand-new guest. */
+export async function forgetDevice() {
+  await signOut().catch(() => {})
+  await clearPersistedQueries()
+  location.reload()
 }
 export function pause() {
   const paused = game.state.screen !== 'paused'

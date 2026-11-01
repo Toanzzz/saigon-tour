@@ -8,12 +8,13 @@ import { motion } from '@/shared/runtime/motion'
 import { game, update } from '@/shared/state/game'
 import { PLACES } from '@/shared/world/places'
 import { rpc } from './client'
+import { queryCacheRestored } from './query'
 import { apiUrl, saveToken, sessionToken } from './transport'
 
 export {
   API_BASE,
   authorizationHeaders,
-  SESSION_TOKEN_KEY,
+  SESSION_TOKEN_QUERY,
   sessionToken,
 } from './transport'
 export type Guest = GuestPlayer
@@ -97,6 +98,7 @@ export function initializeSession(): Promise<void> {
     update({ guestStatus: 'loading' })
     void loadProviders()
     try {
+      await queryCacheRestored
       const marker = takeReturnMarker()
       if (marker === 'meta') await adoptCookieSession()
       if (marker === 'error') update({ toast: 'Meta sign-in was cancelled.' })

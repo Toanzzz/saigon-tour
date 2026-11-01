@@ -223,3 +223,8 @@ Validated on October 30, 2026 from the local production previews.
 - Headless Playwright on the Docker API (58004) plus a preview build (58003), desktop 1440 plus mobile 390 contexts: both joined `Nguyễn Huệ 1` and saw each other in People; the wave reached the other client; the invite was accepted; Team errand assigned two dishes; each player delivered through the NPC button; Check team errand gave both players 70 coins, +2 reputation, and a photo; reload kept both. No page or console errors and no mobile overflow. Captures: `artifacts/pass-colyseus/`.
 - Solo herb quest, reload (80 coins), and reset (30 coins, same name) passed at 1440 and 390 (`artifacts/pass-persistence/session-flow.json`). The title name/dice/Meta-redirect check passed again.
 - The bus-ride arrival check (`scripts/qa-ride.mjs`) is flaky on this build and on the pre-Colyseus commit: run alternately, the control failed 2 of 2 and this build passed 1 of 2, with the same symptom (no teleport at arrival). The flake is in the ride flow and predates this pass.
+
+## Clear saved data (2026-11-01)
+
+- Headless Chromium against the running dev server, at 1280px and 390px. A fresh load got a new name ("Hugo Dubois" / "Liam Becker"). The only storage key was `saigon-tour.query-cache`. A normal reload kept the name. Pause → "Clear saved data" reloaded with a new name ("Lukas Becker" / "Sofía Brooks"). No page or console errors.
+- Without signing out first, the new anonymous sign-in returned 400 `ANONYMOUS_USERS_CANNOT_SIGN_IN_AGAIN_ANONYMOUSLY` because the old auth cookie was still set. The button now signs out before it clears the cache.

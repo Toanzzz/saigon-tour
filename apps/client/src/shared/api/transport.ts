@@ -1,29 +1,17 @@
+import { queryClient } from './query'
+
 export const API_BASE = import.meta.env.VITE_API_BASE_URL || '/api'
-export const SESSION_TOKEN_KEY = 'saigon-tour.session-token'
+export const SESSION_TOKEN_QUERY = ['session', 'token'] as const
 
-let token: string | null = null
-
-function readToken() {
-  try {
-    return localStorage.getItem(SESSION_TOKEN_KEY)
-  } catch {
-    return null
-  }
-}
-
+/** Store the Better Auth token in the persisted query cache. */
 export function saveToken(value: string | null) {
-  token = value
-  try {
-    if (value) localStorage.setItem(SESSION_TOKEN_KEY, value)
-    else localStorage.removeItem(SESSION_TOKEN_KEY)
-  } catch {
-    // Browsers with storage disabled can still play for this session.
-  }
+  if (value) queryClient.setQueryData(SESSION_TOKEN_QUERY, value)
+  else queryClient.removeQueries({ queryKey: SESSION_TOKEN_QUERY })
 }
 
 /** The Better Auth session token, sent as a bearer credential. */
 export function sessionToken() {
-  return token ?? readToken()
+  return queryClient.getQueryData<string>(SESSION_TOKEN_QUERY) ?? null
 }
 
 export function authorizationHeaders(): Record<string, string> {

@@ -4,6 +4,7 @@ import { converse } from '@/features/conversation/converse'
 import { acknowledgeWorld, resetEventSequence } from '@/shared/api/events'
 import { handlePartyMessage } from '@/shared/api/party'
 import { net, updateNet } from '@/shared/api/status'
+import { saveToken } from '@/shared/api/transport'
 import { game, initialState, update } from '@/shared/state/game'
 
 const reply = () => ({
@@ -21,7 +22,7 @@ const reply = () => ({
 beforeEach(() => {
   resetEventSequence()
   updateNet({ party: null })
-  vi.stubGlobal('localStorage', { getItem: () => 'guest-token' })
+  saveToken('guest-token')
   game.setState(() => ({
     ...initialState(),
     guestStatus: 'online',
