@@ -846,6 +846,450 @@
     "animations": []
   },
   {
+    "path": "pets/dog.glb",
+    "bytes": 39876,
+    "meshes": 5,
+    "materials": 1,
+    "triangles": 490,
+    "vertices": 424,
+    "bounds": {
+      "min": [
+        -0.62499998426818,
+        -1.1920928966180355e-8,
+        -0.6250000380835026
+      ],
+      "max": [
+        0.6350000061950768,
+        1.5844366548864135,
+        0.8755174494424374
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "run",
+      "eat",
+      "dance",
+      "gesture-positive",
+      "gesture-negative"
+    ]
+  },
+  {
+    "path": "pets/bunny.glb",
+    "bytes": 40200,
+    "meshes": 5,
+    "materials": 1,
+    "triangles": 575,
+    "vertices": 470,
+    "bounds": {
+      "min": [
+        -0.62499998426818,
+        -1.1920928966180355e-8,
+        -0.6250000380835026
+      ],
+      "max": [
+        0.62500001573182,
+        2.010044574579407,
+        0.7048249459901363
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "run",
+      "eat",
+      "dance",
+      "gesture-positive",
+      "gesture-negative"
+    ]
+  },
+  {
+    "path": "pets/cat.glb",
+    "bytes": 49908,
+    "meshes": 7,
+    "materials": 1,
+    "triangles": 684,
+    "vertices": 523,
+    "bounds": {
+      "min": [
+        -0.6249999842681788,
+        -1.1920928966180355e-8,
+        -1.1036085391897648
+      ],
+      "max": [
+        0.6250000157318212,
+        1.7099943874685057,
+        0.7024125075974972
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "run",
+      "eat",
+      "dance",
+      "gesture-positive",
+      "gesture-negative"
+    ]
+  },
+  {
+    "path": "pets/parrot.glb",
+    "bytes": 51536,
+    "meshes": 7,
+    "materials": 1,
+    "triangles": 530,
+    "vertices": 434,
+    "bounds": {
+      "min": [
+        -1.0979936607948242,
+        -1.1920928966180355e-8,
+        -1.0939188683771122
+      ],
+      "max": [
+        1.0979935684166016,
+        1.681249972166687,
+        0.8083500481286556
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "run",
+      "eat",
+      "dance",
+      "gesture-positive",
+      "gesture-negative"
+    ]
+  },
+  {
+    "path": "pets/chick.glb",
+    "bytes": 42644,
+    "meshes": 5,
+    "materials": 1,
+    "triangles": 490,
+    "vertices": 353,
+    "bounds": {
+      "min": [
+        -1.0979935415855322,
+        -1.1920928966180355e-8,
+        -0.6250000380835026
+      ],
+      "max": [
+        1.0979935684166038,
+        1.5942499636022338,
+        0.7250000453630001
+      ]
+    },
+    "animations": [
+      "static",
+      "idle",
+      "walk",
+      "run",
+      "eat",
+      "dance",
+      "gesture-positive",
+      "gesture-negative"
+    ]
+  },
+  {
+    "path": "cosmetics/non-la.glb",
+    "bytes": 1500,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 46,
+    "vertices": 96,
+    "bounds": {
+      "min": [
+        -0.33000001311302185,
+        0.5960000157356262,
+        -0.33000001311302185
+      ],
+      "max": [
+        0.33000001311302185,
+        0.8560000061988831,
+        0.33000001311302185
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/helmet.glb",
+    "bytes": 3488,
+    "meshes": 2,
+    "materials": 2,
+    "triangles": 332,
+    "vertices": 696,
+    "bounds": {
+      "min": [
+        -0.23999997973442078,
+        0.4520000219345093,
+        -0.23999999463558197
+      ],
+      "max": [
+        0.24000000953674316,
+        0.8600000143051147,
+        0.25999999046325684
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/volunteer-cap.glb",
+    "bytes": 3304,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 332,
+    "vertices": 696,
+    "bounds": {
+      "min": [
+        -0.21999995410442352,
+        0.5440000295639038,
+        -0.2199999988079071
+      ],
+      "max": [
+        0.2199999988079071,
+        0.8079999685287476,
+        0.30000001192092896
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/bucket-hat.glb",
+    "bytes": 2708,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 168,
+    "vertices": 264,
+    "bounds": {
+      "min": [
+        -0.3100000023841858,
+        0.600999996997416,
+        -0.3100000023841858
+      ],
+      "max": [
+        0.3100000023841858,
+        0.7759999781847,
+        0.3100000023841858
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/lantern-hat.glb",
+    "bytes": 4032,
+    "meshes": 2,
+    "materials": 2,
+    "triangles": 468,
+    "vertices": 828,
+    "bounds": {
+      "min": [
+        -0.1871134638786316,
+        0.6359999999403954,
+        -0.1899999976158142
+      ],
+      "max": [
+        0.1871134638786316,
+        0.8835528530180454,
+        0.1899999976158142
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/beret.glb",
+    "bytes": 3248,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 266,
+    "vertices": 572,
+    "bounds": {
+      "min": [
+        -0.22650574147701263,
+        0.5824999809265137,
+        -0.24999992549419403
+      ],
+      "max": [
+        0.22650577127933502,
+        0.7894999980926514,
+        0.20999997854232788
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/sunglasses.glb",
+    "bytes": 3888,
+    "meshes": 3,
+    "materials": 2,
+    "triangles": 324,
+    "vertices": 648,
+    "bounds": {
+      "min": [
+        -0.14500001072883606,
+        0.4399999976158142,
+        0.1899999976158142
+      ],
+      "max": [
+        0.14500001072883606,
+        0.5,
+        0.21000000834465027
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/scarf.glb",
+    "bytes": 2504,
+    "meshes": 1,
+    "materials": 1,
+    "triangles": 320,
+    "vertices": 640,
+    "bounds": {
+      "min": [
+        -0.23000000417232513,
+        0.38999998569488525,
+        -0.16099999845027924
+      ],
+      "max": [
+        0.23000000417232513,
+        0.44999998807907104,
+        0.16099999845027924
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/camera-strap.glb",
+    "bytes": 3320,
+    "meshes": 2,
+    "materials": 2,
+    "triangles": 348,
+    "vertices": 616,
+    "bounds": {
+      "min": [
+        -0.2199999988079071,
+        0.2199999988079071,
+        -0.13199999928474426
+      ],
+      "max": [
+        0.2199999988079071,
+        0.3190525770187378,
+        0.13199999928474426
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/lantern-backpack.glb",
+    "bytes": 2756,
+    "meshes": 2,
+    "materials": 2,
+    "triangles": 152,
+    "vertices": 288,
+    "bounds": {
+      "min": [
+        -0.07999999821186066,
+        0.1899999976158142,
+        -0.23000000044703484
+      ],
+      "max": [
+        0.07999999821186066,
+        0.47999998554587364,
+        -0.07000000029802322
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/satchel.glb",
+    "bytes": 2668,
+    "meshes": 2,
+    "materials": 1,
+    "triangles": 216,
+    "vertices": 432,
+    "bounds": {
+      "min": [
+        0.06750000268220901,
+        0.14000000059604645,
+        -0.0625
+      ],
+      "max": [
+        0.21250000596046448,
+        0.2849999964237213,
+        0.009999999776482582
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "cosmetics/headphones.glb",
+    "bytes": 4460,
+    "meshes": 3,
+    "materials": 2,
+    "triangles": 456,
+    "vertices": 832,
+    "bounds": {
+      "min": [
+        -0.22999998927116394,
+        0.4000000059604645,
+        -0.2599999886006117
+      ],
+      "max": [
+        0.22999998927116394,
+        0.6733205262571573,
+        0.1999999899417162
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "vehicles/cub.glb",
+    "bytes": 8624,
+    "meshes": 7,
+    "materials": 4,
+    "triangles": 652,
+    "vertices": 1260,
+    "bounds": {
+      "min": [
+        -0.25999999046325684,
+        -4.299483263858761e-8,
+        -0.6699999570846558
+      ],
+      "max": [
+        0.25999999046325684,
+        0.973776438736195,
+        0.6800000464220997
+      ]
+    },
+    "animations": []
+  },
+  {
+    "path": "vehicles/vespa.glb",
+    "bytes": 9772,
+    "meshes": 7,
+    "materials": 4,
+    "triangles": 868,
+    "vertices": 1728,
+    "bounds": {
+      "min": [
+        -0.2978058457374573,
+        -4.299483263858761e-8,
+        -0.8399999141693115
+      ],
+      "max": [
+        0.29780587553977966,
+        0.9837764265122753,
+        0.64000004529953
+      ]
+    },
+    "animations": []
+  },
+  {
     "path": "landmarks/cho-ben-thanh.glb",
     "bytes": 392328,
     "meshes": 13,

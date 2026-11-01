@@ -123,6 +123,50 @@ for (const [pack, selection] of Object.entries(selected)) {
     await writeRuntime(target, document)
   }
 }
+// Pets are the CC0 cube-pets pack, renamed to the unlock catalog ids.
+const pets: Record<string, string> = {
+  dog: 'animal-dog',
+  bunny: 'animal-bunny',
+  cat: 'animal-cat',
+  parrot: 'animal-parrot',
+  chick: 'animal-chick',
+}
+for (const [id, name] of Object.entries(pets)) {
+  const source = resolve(root, 'assets/cube-pets/GLB format', `${name}.glb`)
+  const target = resolve(output, 'pets', `${id}.glb`)
+  await mkdir(dirname(target), { recursive: true })
+  const document = await io.read(source)
+  await document.transform(dedup(), prune())
+  await writeRuntime(target, document)
+}
+// Cosmetics and vehicles are project-authored, built by the Blender scripts.
+const authored: Record<string, string[]> = {
+  cosmetics: [
+    'non-la',
+    'helmet',
+    'volunteer-cap',
+    'bucket-hat',
+    'lantern-hat',
+    'beret',
+    'sunglasses',
+    'scarf',
+    'camera-strap',
+    'lantern-backpack',
+    'satchel',
+    'headphones',
+  ],
+  vehicles: ['cub', 'vespa'],
+}
+for (const [pack, names] of Object.entries(authored)) {
+  for (const name of names) {
+    const source = resolve(root, 'assets', pack, `${name}.glb`)
+    const target = resolve(output, pack, `${name}.glb`)
+    await mkdir(dirname(target), { recursive: true })
+    const document = await io.read(source)
+    await document.transform(dedup(), prune())
+    await writeRuntime(target, document)
+  }
+}
 const marketTarget = resolve(output, 'landmarks/cho-ben-thanh.glb')
 await mkdir(dirname(marketTarget), { recursive: true })
 const market = await readSource('landmarks/chobenthanh-model.glb')

@@ -21,6 +21,9 @@ remain in their source folders.
 | River boats | `watercraft-pack` | Kenney | `watercraft-pack/License.txt`, CC0 |
 | Palms, trees, planting | `nature-kit` | Kenney | `nature-kit/License.txt`, CC0 |
 | Food and stall props | `food-kit` | Kenney | `food-kit/License.txt`, CC0 |
+| Pet followers (dog, bunny, cat, parrot, chick) | `cube-pets` | Kenney | `cube-pets/License.txt`, CC0 |
+| Cosmetic unlocks (hats, accessories) | `cosmetics` | Project artwork | Built by `scripts/blender/build-cosmetics.py`; original low-poly meshes |
+| Vehicle unlocks (Cub, Vespa) | `vehicles` | Project artwork | Built by `scripts/blender/build-vehicles.py`; original low-poly meshes |
 
 Kenney packs permit personal, educational, and commercial use under Creative Commons Zero.
 The full license text is retained beside each source pack. The UI sprite sheets are excluded
