@@ -14,18 +14,49 @@ export const collectedCoins = new Store<ReadonlySet<CoinPickupId>>(
   new Set<CoinPickupId>()
 )
 
+/**
+ * Coins mid collect-animation, keyed by the frame-clock time (s) the pickup
+ * fired. A coin is in `collectedCoins` immediately (so it can never re-grant),
+ * but stays here for one short window so the renderer can play its pop/sparkle
+ * exit before unmounting. Reduced motion leaves this empty (instant collect).
+ */
+export const collectingCoins = new Store<ReadonlyMap<CoinPickupId, number>>(
+  new Map<CoinPickupId, number>()
+)
+
+/** How long (s) the in-world collect effect plays before the coin unmounts. */
+export const COLLECT_EFFECT_SECONDS = 0.5
+
 export function isCollected(id: CoinPickupId) {
   return collectedCoins.state.has(id)
+}
+
+/** Called by the renderer when a coin's exit animation has finished. */
+export function finishCollecting(id: CoinPickupId) {
+  if (!collectingCoins.state.has(id)) return
+  collectingCoins.setState((map) => {
+    const next = new Map(map)
+    next.delete(id)
+    return next
+  })
 }
 
 /**
  * Collect a world coin. The server grants currency once per player; the client
  * never mutates currency directly. Offline guests still see the coin vanish
- * with an audio ping, and a later `/me` sync reconciles the wallet.
+ * with an audio ping, and a later `/me` sync reconciles the wallet. The visual
+ * collect effect is cosmetic and runs on this same path for online and offline.
  */
-export async function collectCoin(id: CoinPickupId) {
+export async function collectCoin(id: CoinPickupId, now: number) {
   if (collectedCoins.state.has(id)) return
   collectedCoins.setState((set) => new Set<CoinPickupId>(set).add(id))
+  // Animate the exit unless reduced motion is on (then the coin just vanishes).
+  if (!game.state.reducedMotion) {
+    collectingCoins.setState((map) => new Map(map).set(id, now))
+    // Guarantee cleanup even if the frame loop is throttled (hidden tab, etc.);
+    // the renderer also clears this when its animation finishes.
+    setTimeout(() => finishCollecting(id), COLLECT_EFFECT_SECONDS * 1000 + 250)
+  }
   audio.play('pickup')
 
   if (game.state.guestStatus !== 'online') return
@@ -44,7 +75,8 @@ export async function collectCoin(id: CoinPickupId) {
   }
 }
 
-/** Clear local collected coins, e.g. on a new journey/reset. */
+/** Clear local collected + in-flight coins, e.g. on a new journey/reset. */
 export function resetCollectedCoins() {
   collectedCoins.setState(() => new Set())
+  collectingCoins.setState(() => new Map())
 }

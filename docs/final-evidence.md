@@ -45,6 +45,13 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - `node scripts/qa-coin-emblem.mjs`, unsandboxed headless Chromium at 1280×800 and 390×844: a live 3D coin canvas is attached in `.game-header .wallet`, the journal bag, the hub topbar/story card, and the reward row across both viewports. Measured frame health with the always-on header emblem: desktop ~55 fps / 256 draw calls, mobile ~54 fps / 228 draw calls. Local evidence: `/private/tmp/saigon-tour-qa/coin-emblem-{desktop,mobile}-{header,journal,hub,reward}.png`.
 - Pure presentation: amounts, fares, rewards, and persistence are unchanged.
 
+## Coin collect effect
+
+- `features/collectibles/coins.tsx` adds a `CollectingCoin`: on pickup the coin pops (scale 1 -> ~1.6 -> 0), lifts ~0.6 units, spins faster, and emits a one-shot gold drei `Sparkles` burst for ~0.5 s before unmounting. It is transform-only, so the shared cached `collectibles/coin` material (also used by the HUD `CoinEmblem`) is never mutated.
+- `pickup.ts` keeps `collectedCoins` as the permanent source of truth and adds a short-lived `collectingCoins` map (frame-clock start time). The renderer clears an entry when its animation finishes; a `setTimeout(COLLECT_EFFECT_SECONDS + 0.25 s)` guarantees cleanup even if the frame loop is throttled (hidden tab). `resetCollectedCoins()` clears both sets. Reduced motion skips the effect entirely (instant vanish, ping retained).
+- The grant path is unchanged: `collectCoin` still calls `POST /me/pickups/:coinId` once; the effect is purely cosmetic and runs for online and offline guests.
+- `node scripts/qa-coin-collect.mjs`, unsandboxed headless Chromium at 1280x800 and 390x844: teleporting onto `coin_leloi_1` raised the wallet 30 -> 35 once, the `collectingCoins` effect set populated then cleared to 0 within the window, and re-entering the spot granted nothing. A reduced-motion run collected with the effect set never populated. Local evidence: `/private/tmp/saigon-tour-qa/coin-collect-{desktop,mobile}.png`.
+
 ## World coin pickups
 
 - New `features/collectibles/` client slice renders ambient spinning `collectibles/coin` pickups at authored District 1 positions (`packages/shared/src/collectibles.ts`); walking within 1.4 units collects one. The client never mutates currency — it calls `POST /me/pickups/:coinId`, which grants `COIN_PICKUP_AMOUNT` (5) exactly once per player through a new `coin_pickups` ledger (migration `0009`), clamped to the wallet max, and cleared on reset.

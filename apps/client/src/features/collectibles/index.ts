@@ -1,2 +1,6 @@
 export { Coins } from './coins'
-export { collectCoin, isCollected, resetCollectedCoins } from './pickup'
+export {
+  collectCoin,
+  isCollected,
+  resetCollectedCoins,
+} from './pickup'
