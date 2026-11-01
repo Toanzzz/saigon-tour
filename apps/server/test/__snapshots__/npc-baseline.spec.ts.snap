@@ -4117,162 +4117,22 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
   },
   "QUEST_SEEDS": [
     {
-      "giverNpcId": "plaza-friends",
+      "giverNpcId": "alex",
       "scope": "solo",
       "steps": [
         {
-          "npcId": "linh",
-          "type": "TALK_TO",
+          "locationId": "cathedral",
+          "type": "GO_TO",
         },
       ],
       "text": {
         "en": {
-          "description": "Say hello to Linh in the park for the plaza neighbor, then return.",
-          "title": "Ha's neighborhood hello",
+          "description": "Visit the cathedral square and find the afternoon light.",
+          "title": "Light across the square",
         },
         "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Hà",
-        },
-      },
-    },
-    {
-      "giverNpcId": "plaza-stroll",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the evening stroller, then return.",
-          "title": "Khai's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Khải",
-        },
-      },
-    },
-    {
-      "giverNpcId": "opera-visitor",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the opera visitor, then return.",
-          "title": "Diem's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Diễm",
-        },
-      },
-    },
-    {
-      "giverNpcId": "postcard-reader",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the postcard reader, then return.",
-          "title": "Bao's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Bảo",
-        },
-      },
-    },
-    {
-      "giverNpcId": "square-tourist",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the square visitor, then return.",
-          "title": "An's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của An",
-        },
-      },
-    },
-    {
-      "giverNpcId": "riverside-friends",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the river neighbor, then return.",
-          "title": "Nhi's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Nhi",
-        },
-      },
-    },
-    {
-      "giverNpcId": "river-jogger",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the riverside runner, then return.",
-          "title": "Long's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Long",
-        },
-      },
-    },
-    {
-      "giverNpcId": "alley-vendor",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the alley cook, then return.",
-          "title": "Mr. Loc's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Chú Lộc",
+          "description": "Ghé quảng trường nhà thờ và tìm ánh nắng buổi chiều.",
+          "title": "Ánh sáng qua quảng trường",
         },
       },
     },
@@ -4297,6 +4157,46 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "alley-vendor",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the alley cook, then return.",
+          "title": "Mr. Loc's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Chú Lộc",
+        },
+      },
+    },
+    {
+      "giverNpcId": "ba",
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "opera",
+          "type": "GO_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Visit the Opera House and find another side of our city.",
+          "title": "A view along the river",
+        },
+        "vi": {
+          "description": "Ghé Nhà hát Thành phố và khám phá một góc khác của thành phố.",
+          "title": "Ngắm cảnh dọc sông",
+        },
+      },
+    },
+    {
       "giverNpcId": "bread-vendor",
       "scope": "solo",
       "steps": [
@@ -4313,86 +4213,6 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
           "title": "Lời nhắn của Chú Bình",
-        },
-      },
-    },
-    {
-      "giverNpcId": "fruit-vendor",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the fruit vendor, then return.",
-          "title": "Ms. Hanh's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Cô Hạnh",
-        },
-      },
-    },
-    {
-      "giverNpcId": "market-browse",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the market regular, then return.",
-          "title": "Ngoc's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Ngọc",
-        },
-      },
-    },
-    {
-      "giverNpcId": "market-walk",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the market courier, then return.",
-          "title": "Dat's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Đạt",
-        },
-      },
-    },
-    {
-      "giverNpcId": "market-family",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "linh",
-          "type": "TALK_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Say hello to Linh in the park for the family shopper, then return.",
-          "title": "Huong's neighborhood hello",
-        },
-        "vi": {
-          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
-          "title": "Lời nhắn của Chị Hương",
         },
       },
     },
@@ -4457,9 +4277,54 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
-      "giverNpcId": "student",
+      "giverNpcId": "fruit-vendor",
       "scope": "solo",
       "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the fruit vendor, then return.",
+          "title": "Ms. Hanh's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Cô Hạnh",
+        },
+      },
+    },
+    {
+      "giverNpcId": "hoa",
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "herbs",
+          "npcId": "linh",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Bring these fresh herbs to Linh in the park.",
+          "title": "Fresh herbs for a neighbor",
+        },
+        "vi": {
+          "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
+          "title": "Rau thơm cho hàng xóm",
+        },
+      },
+    },
+    {
+      "giverNpcId": "linh",
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "market",
+          "type": "GO_TO",
+        },
         {
           "npcId": "hoa",
           "type": "TALK_TO",
@@ -4467,12 +4332,113 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       ],
       "text": {
         "en": {
-          "description": "Say hello to Ms. Hoa at the market for the student, then return.",
-          "title": "Minh's neighborhood hello",
+          "description": "Visit the market and invite Ms. Hoa to our neighborhood lunch.",
+          "title": "A community lunch invitation",
         },
         "vi": {
-          "description": "Gửi lời chào đến cô Hoa ở chợ rồi quay lại nhé.",
-          "title": "Lời nhắn của Minh",
+          "description": "Ghé chợ và mời cô Hoa đến bữa trưa chung của xóm.",
+          "title": "Lời mời ăn trưa của xóm",
+        },
+      },
+    },
+    {
+      "giverNpcId": "mai",
+      "scope": "solo",
+      "steps": [
+        {
+          "itemId": "coffee",
+          "npcId": "hoa",
+          "type": "DELIVER",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Take this coffee across the market to Ms. Hoa.",
+          "title": "Coffee for Ms. Hoa",
+        },
+        "vi": {
+          "description": "Mang ly cà phê này qua chợ cho cô Hoa.",
+          "title": "Cà phê cho cô Hoa",
+        },
+      },
+    },
+    {
+      "giverNpcId": "market-browse",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the market regular, then return.",
+          "title": "Ngoc's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Ngọc",
+        },
+      },
+    },
+    {
+      "giverNpcId": "market-family",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the family shopper, then return.",
+          "title": "Huong's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Chị Hương",
+        },
+      },
+    },
+    {
+      "giverNpcId": "market-walk",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the market courier, then return.",
+          "title": "Dat's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Đạt",
+        },
+      },
+    },
+    {
+      "giverNpcId": "opera-visitor",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the opera visitor, then return.",
+          "title": "Diem's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Diễm",
         },
       },
     },
@@ -4517,148 +4483,102 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
-      "giverNpcId": "hoa",
+      "giverNpcId": "plaza-friends",
       "scope": "solo",
       "steps": [
         {
-          "itemId": "herbs",
           "npcId": "linh",
-          "type": "DELIVER",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Bring these fresh herbs to Linh in the park.",
-          "title": "Fresh herbs for a neighbor",
-        },
-        "vi": {
-          "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
-          "title": "Rau thơm cho hàng xóm",
-        },
-      },
-    },
-    {
-      "giverNpcId": "tam",
-      "scope": "solo",
-      "steps": [
-        {
-          "npcId": "ba",
           "type": "TALK_TO",
         },
       ],
       "text": {
         "en": {
-          "description": "Check on Mr. Ba by the river and say hello.",
-          "title": "A riverside hello",
+          "description": "Say hello to Linh in the park for the plaza neighbor, then return.",
+          "title": "Ha's neighborhood hello",
         },
         "vi": {
-          "description": "Ghé thăm ông Ba bên sông và chào ông một tiếng.",
-          "title": "Lời chào bên sông",
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Hà",
         },
       },
     },
     {
-      "giverNpcId": "linh",
+      "giverNpcId": "plaza-stroll",
       "scope": "solo",
       "steps": [
         {
-          "locationId": "market",
-          "type": "GO_TO",
-        },
-        {
-          "npcId": "hoa",
+          "npcId": "linh",
           "type": "TALK_TO",
         },
       ],
       "text": {
         "en": {
-          "description": "Visit the market and invite Ms. Hoa to our neighborhood lunch.",
-          "title": "A community lunch invitation",
+          "description": "Say hello to Linh in the park for the evening stroller, then return.",
+          "title": "Khai's neighborhood hello",
         },
         "vi": {
-          "description": "Ghé chợ và mời cô Hoa đến bữa trưa chung của xóm.",
-          "title": "Lời mời ăn trưa của xóm",
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Khải",
         },
       },
     },
     {
-      "giverNpcId": "ba",
+      "giverNpcId": "postcard-reader",
       "scope": "solo",
       "steps": [
         {
-          "locationId": "opera",
-          "type": "GO_TO",
+          "npcId": "linh",
+          "type": "TALK_TO",
         },
       ],
       "text": {
         "en": {
-          "description": "Visit the Opera House and find another side of our city.",
-          "title": "A view along the river",
+          "description": "Say hello to Linh in the park for the postcard reader, then return.",
+          "title": "Bao's neighborhood hello",
         },
         "vi": {
-          "description": "Ghé Nhà hát Thành phố và khám phá một góc khác của thành phố.",
-          "title": "Ngắm cảnh dọc sông",
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Bảo",
         },
       },
     },
     {
-      "giverNpcId": "mai",
+      "giverNpcId": "river-jogger",
       "scope": "solo",
       "steps": [
         {
-          "itemId": "coffee",
-          "npcId": "hoa",
-          "type": "DELIVER",
+          "npcId": "linh",
+          "type": "TALK_TO",
         },
       ],
       "text": {
         "en": {
-          "description": "Take this coffee across the market to Ms. Hoa.",
-          "title": "Coffee for Ms. Hoa",
+          "description": "Say hello to Linh in the park for the riverside runner, then return.",
+          "title": "Long's neighborhood hello",
         },
         "vi": {
-          "description": "Mang ly cà phê này qua chợ cho cô Hoa.",
-          "title": "Cà phê cho cô Hoa",
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Long",
         },
       },
     },
     {
-      "giverNpcId": "alex",
+      "giverNpcId": "riverside-friends",
       "scope": "solo",
       "steps": [
         {
-          "locationId": "cathedral",
-          "type": "GO_TO",
+          "npcId": "linh",
+          "type": "TALK_TO",
         },
       ],
       "text": {
         "en": {
-          "description": "Visit the cathedral square and find the afternoon light.",
-          "title": "Light across the square",
+          "description": "Say hello to Linh in the park for the river neighbor, then return.",
+          "title": "Nhi's neighborhood hello",
         },
         "vi": {
-          "description": "Ghé quảng trường nhà thờ và tìm ánh nắng buổi chiều.",
-          "title": "Ánh sáng qua quảng trường",
-        },
-      },
-    },
-    {
-      "giverNpcId": "vy",
-      "scope": "solo",
-      "steps": [
-        {
-          "locationId": "alley",
-          "type": "GO_TO",
-        },
-      ],
-      "text": {
-        "en": {
-          "description": "Visit the food alley and look for a welcoming evening corner.",
-          "title": "An evening walk",
-        },
-        "vi": {
-          "description": "Ghé hẻm ẩm thực và tìm một góc phố buổi tối thật ấm cúng.",
-          "title": "Dạo phố buổi tối",
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của Nhi",
         },
       },
     },
@@ -4683,6 +4603,66 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "giverNpcId": "square-tourist",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "linh",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Linh in the park for the square visitor, then return.",
+          "title": "An's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
+          "title": "Lời nhắn của An",
+        },
+      },
+    },
+    {
+      "giverNpcId": "student",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "hoa",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Say hello to Ms. Hoa at the market for the student, then return.",
+          "title": "Minh's neighborhood hello",
+        },
+        "vi": {
+          "description": "Gửi lời chào đến cô Hoa ở chợ rồi quay lại nhé.",
+          "title": "Lời nhắn của Minh",
+        },
+      },
+    },
+    {
+      "giverNpcId": "tam",
+      "scope": "solo",
+      "steps": [
+        {
+          "npcId": "ba",
+          "type": "TALK_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Check on Mr. Ba by the river and say hello.",
+          "title": "A riverside hello",
+        },
+        "vi": {
+          "description": "Ghé thăm ông Ba bên sông và chào ông một tiếng.",
+          "title": "Lời chào bên sông",
+        },
+      },
+    },
+    {
       "giverNpcId": "thao",
       "scope": "solo",
       "steps": [
@@ -4699,6 +4679,26 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
         "vi": {
           "description": "Lắng nghe thành phố ở quảng trường nhà thờ.",
           "title": "Tiếng vọng qua quảng trường",
+        },
+      },
+    },
+    {
+      "giverNpcId": "vy",
+      "scope": "solo",
+      "steps": [
+        {
+          "locationId": "alley",
+          "type": "GO_TO",
+        },
+      ],
+      "text": {
+        "en": {
+          "description": "Visit the food alley and look for a welcoming evening corner.",
+          "title": "An evening walk",
+        },
+        "vi": {
+          "description": "Ghé hẻm ẩm thực và tìm một góc phố buổi tối thật ấm cúng.",
+          "title": "Dạo phố buổi tối",
         },
       },
     },
