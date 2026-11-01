@@ -39,6 +39,7 @@ export function completedQuest(
       : (message.quests[0]?.id ?? null),
     completed: message.completed,
     reputation: message.reputation,
+    unlocks: message.unlocks,
     ...(alreadySeen
       ? {}
       : {

@@ -15,6 +15,7 @@ const saved = {
   quests: [],
   completed: [completed],
   reputation: 1,
+  unlocks: { owned: [], equipped: {} },
 }
 let storage: Map<string, string>
 let fetchMock: ReturnType<typeof vi.fn>

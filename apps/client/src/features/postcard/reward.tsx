@@ -1,7 +1,7 @@
 import { close } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { rewardCopy } from '@/shared/api/party'
-import { itemLabel, m } from '@/shared/i18n'
+import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -44,6 +44,16 @@ export function RewardPanel({ state }: { state: GameState }) {
           })}
         </span>
       </div>
+      {state.rewardQuest?.reward.unlockId && (
+        <div className="reward-earned reward-unlock">
+          <span>
+            <Icon name="star" />
+            {m.reward_unlock({
+              item: unlockLabel(state.rewardQuest.reward.unlockId),
+            })}
+          </span>
+        </div>
+      )}
       <button type="button" className="primary-button wide" onClick={close}>
         {m.pause_continue()}
       </button>

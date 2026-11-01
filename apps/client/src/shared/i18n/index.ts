@@ -8,6 +8,9 @@ export {
   npcDisplay,
   npcLabel,
   placeSign,
+  slotLabel,
+  tierLabel,
+  unlockLabel,
 } from './labels'
 export {
   changeLocale,

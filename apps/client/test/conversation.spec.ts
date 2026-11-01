@@ -144,6 +144,7 @@ describe('HTTP and socket ordering', () => {
       },
       completed: [summary],
       reputation: 2,
+      unlocks: { owned: [], equipped: {} },
     })
     expect(game.state.dialogue).toBeNull()
     resolve(Response.json(soloReply(3, 70)))
@@ -176,6 +177,7 @@ describe('HTTP and socket ordering', () => {
       },
       completed: [summary],
       reputation: 2,
+      unlocks: { owned: [], equipped: {} },
     })
     resolve(Response.json(soloReply(3, 30)))
     await turn
@@ -195,6 +197,7 @@ it('rejects old HTTP world and quest while still finishing its dialogue', async 
     quests: [],
     completed: [],
     reputation: 0,
+    unlocks: { owned: [], equipped: {} },
   })
   expect(game.state.dialogue?.thinking).toBe(true)
   resolve(Response.json(soloReply(4, 30)))
@@ -231,6 +234,7 @@ it('keeps completed reward UI closed when HTTP duplicates a socket completion', 
     world,
     completed: [summary],
     reputation: 2,
+    unlocks: { owned: [], equipped: {} },
   })
   update({ panel: 'none', rewardQuest: quest })
   resolve(

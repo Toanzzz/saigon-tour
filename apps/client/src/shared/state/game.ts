@@ -2,11 +2,13 @@ import {
   type AgentSource,
   advance,
   type CompletedQuest,
+  EMPTY_UNLOCKS,
   type FriendshipMap,
   type NpcId,
   type PlayerEvent,
   type Quest,
   STARTING_CURRENCY,
+  type Unlocks,
   type WorldState,
 } from '@saigon/shared'
 import { Store } from '@tanstack/store'
@@ -22,6 +24,7 @@ export type Panel =
   | 'people'
   | 'market'
   | 'postcard'
+  | 'wardrobe'
 export interface Dialogue {
   npc: NpcId
   requestId: string
@@ -73,6 +76,7 @@ export interface GameState {
   reputation: number
   timeOfDay: 'day' | 'evening'
   viewpoint: 'river' | null
+  unlocks: Unlocks
 }
 export function initialState(generation = 0): GameState {
   return {
@@ -118,6 +122,7 @@ export function initialState(generation = 0): GameState {
     reputation: 0,
     timeOfDay: 'day',
     viewpoint: null,
+    unlocks: structuredClone(EMPTY_UNLOCKS),
   }
 }
 export const game = new Store<GameState>(initialState())
@@ -167,9 +172,18 @@ export function grantReward(state: GameState, quest: Quest): GameState {
   )
     return state
   const quests = state.quests.filter((entry) => entry.id !== quest.id)
+  const unlockId = quest.reward.unlockId
+  const unlocks =
+    unlockId && !state.unlocks.owned.includes(unlockId)
+      ? {
+          ...state.unlocks,
+          owned: [...state.unlocks.owned, unlockId],
+        }
+      : state.unlocks
   return {
     ...state,
     quests,
+    unlocks,
     trackedQuestId:
       state.trackedQuestId === quest.id
         ? (quests[0]?.id ?? null)

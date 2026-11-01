@@ -39,6 +39,7 @@ export function guestState(player: Guest) {
     trackedQuestId: player.quests[0]?.id ?? null,
     completed: player.completed,
     reputation: player.reputation,
+    unlocks: player.unlocks,
   }
 }
 

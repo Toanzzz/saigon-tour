@@ -1,7 +1,7 @@
 import { friendlinessOf, NPCS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { board, close, giveItem, interact, nearby } from '@/app/actions'
-import { itemLabel, m, npcDisplay, useLocale } from '@/shared/i18n'
+import { itemLabel, m, npcDisplay, unlockLabel, useLocale } from '@/shared/i18n'
 import { game, trackedQuest } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
 import { MODES, PLACES, placeName } from '@/shared/world/places'
@@ -87,6 +87,13 @@ export function XRGameHud() {
               ? itemLabel(state.rewardQuest.reward.itemId)
               : m.xr_neighbor_thanks(),
           }),
+          ...(state.rewardQuest?.reward.unlockId
+            ? [
+                m.reward_unlock({
+                  item: unlockLabel(state.rewardQuest.reward.unlockId),
+                }),
+              ]
+            : []),
         ]}
         buttons={[{ id: 'close', label: m.xr_continue(), onClick: close }]}
       />

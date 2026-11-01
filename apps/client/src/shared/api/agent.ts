@@ -3,14 +3,15 @@ import {
   applyPlayerEvents,
   canOfferQuests,
   createQuest,
+  friendlinessOf,
   type InteractResponse,
   InteractResponseSchema,
   isExpired,
-  looksLikeHelpRequest,
   type NpcId,
   seedsFor,
   shiftFriendship,
   validateSpec,
+  wantsErrand,
   ZERO_REWARD,
 } from '@saigon/shared'
 import type { InferRequestType, InferResponseType } from 'hono/client'
@@ -131,10 +132,7 @@ export function offline(
   quests = quests.filter((quest) => quest.status !== 'completed')
   if (questEvents.some((event) => event.type === 'completed'))
     reply = m.offline_thanks()
-  if (
-    looksLikeHelpRequest(body.message ?? '') &&
-    canOfferQuests(friendship, npc)
-  ) {
+  if (wantsErrand(body.message ?? '') && canOfferQuests(friendship, npc)) {
     const spec = seedsFor(npc, getLocale()).find(
       (candidate) =>
         validateSpec(candidate, { quests }).ok &&
@@ -150,7 +148,15 @@ export function offline(
         )
     )
     if (spec) {
-      const quest = createQuest(spec)
+      const promised = quests
+        .filter((entry) => entry.status !== 'completed')
+        .map((entry) => entry.reward.unlockId)
+        .filter((id): id is NonNullable<typeof id> => Boolean(id))
+      const quest = createQuest(spec, undefined, undefined, {
+        owned: state.unlocks.owned,
+        promised,
+        friendship: friendlinessOf(friendship, npc),
+      })
       quests.push(quest)
       for (const step of quest.steps)
         if (step.type === 'DELIVER')

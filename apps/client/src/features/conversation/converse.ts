@@ -186,8 +186,12 @@ function apply(
     if (rewards.length) {
       completed = true
       const event = rewards[rewards.length - 1]
+      const owned = new Set(state.unlocks.owned)
+      for (const entry of rewards)
+        if (entry.reward.unlockId) owned.add(entry.reward.unlockId)
       next = {
         ...next,
+        unlocks: { ...state.unlocks, owned: [...owned] },
         completed: [
           ...state.completed,
           ...rewards.map(({ quest, reward }) => ({

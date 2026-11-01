@@ -25,6 +25,7 @@ function world(
     quests: [],
     completed: [],
     reputation: 0,
+    unlocks: { owned: [], equipped: {} },
   }
 }
 beforeEach(() => {

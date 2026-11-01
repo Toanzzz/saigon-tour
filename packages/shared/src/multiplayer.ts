@@ -9,7 +9,7 @@ import {
 } from './contracts'
 import { PartyInviteSchema, PartySnapshotSchema } from './party'
 import { FriendshipMapSchema } from './quest/friendship'
-import { LookSchema } from './unlocks'
+import { LookSchema, UnlocksSchema } from './unlocks'
 
 export const WORLD_BOUNDS = { x: [-110, 150], z: [-120, 100] } as const
 export const NPC_POSITIONS = {
@@ -103,6 +103,7 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     completed: z.array(CompletedQuestSchema),
     reputation: z.number(),
     friendship: FriendshipMapSchema.default({}),
+    unlocks: UnlocksSchema.default({ owned: [], equipped: {} }),
   }),
   z.object({ type: z.literal('error'), message: z.string() }),
   z.object({ type: z.literal('party'), party: PartySnapshotSchema.nullable() }),
@@ -116,6 +117,7 @@ export const ServerSocketMessageSchema = z.discriminatedUnion('type', [
     completed: z.array(CompletedQuestSchema),
     reputation: z.number(),
     friendship: FriendshipMapSchema.default({}),
+    unlocks: UnlocksSchema.default({ owned: [], equipped: {} }),
   }),
 ])
 export type ServerSocketMessage = z.infer<typeof ServerSocketMessageSchema>

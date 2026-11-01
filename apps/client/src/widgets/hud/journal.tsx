@@ -2,7 +2,7 @@ import { QUEST_EXPIRY_MS } from '@saigon/shared'
 import { useState } from 'react'
 import { close } from '@/app/actions'
 import { abandonQuest } from '@/shared/api/quests'
-import { itemLabel, m } from '@/shared/i18n'
+import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { questHint, stepCopy } from '@/shared/state/quests'
 import { Dialog } from '@/shared/ui/dialog'
@@ -64,6 +64,13 @@ export function JournalPanel({ state }: { state: GameState }) {
                 reputation: quest.reward.reputation,
               })}
             </span>
+            {quest.reward.unlockId && (
+              <span className="journal-reward journal-unlock">
+                {m.reward_unlock({
+                  item: unlockLabel(quest.reward.unlockId),
+                })}
+              </span>
+            )}
             <div className="journal-actions">
               <button
                 type="button"

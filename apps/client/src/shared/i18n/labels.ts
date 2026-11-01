@@ -6,6 +6,9 @@ import {
   type NpcId,
   npcText,
   placeLabel,
+  type UnlockId,
+  type UnlockSlot,
+  type UnlockTier,
 } from '@saigon/shared'
 import { m } from '@/paraglide/messages'
 import { getLocale } from '@/paraglide/runtime'
@@ -53,4 +56,31 @@ export function errorMessage(code: string): string {
     too_far: m.err_too_far,
   }
   return (Object.hasOwn(messages, code) ? messages[code] : m.err_generic)()
+}
+
+/** Localized unlock name keyed by catalog id; call at render time. */
+export function unlockLabel(id: UnlockId): string {
+  const key = `unlock_${id.replace(/-/g, '_')}` as keyof typeof m
+  const entry = m[key] as (() => string) | undefined
+  return entry ? entry() : id
+}
+
+export function tierLabel(tier: UnlockTier): string {
+  const labels: Record<UnlockTier, () => string> = {
+    neutral: m.tier_neutral,
+    warm: m.tier_warm,
+    close: m.tier_close,
+  }
+  return labels[tier]()
+}
+
+export function slotLabel(slot: UnlockSlot): string {
+  const labels: Record<UnlockSlot, () => string> = {
+    hat: m.slot_hat,
+    outfit: m.slot_outfit,
+    accessory: m.slot_accessory,
+    vehicle: m.slot_vehicle,
+    pet: m.slot_pet,
+  }
+  return labels[slot]()
 }

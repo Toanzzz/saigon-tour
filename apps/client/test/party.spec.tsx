@@ -52,6 +52,7 @@ const completion = () => ({
   },
   completed: [summary],
   reputation: finished.reward.reputation,
+  unlocks: { owned: [], equipped: {} },
 })
 describe('party controls and authoritative quest rewards', () => {
   it('applies rewards once, preserves active quests, and exits pause', () => {
