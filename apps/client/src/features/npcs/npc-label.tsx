@@ -61,7 +61,11 @@ export function NpcLabel({ id }: { id: NpcId }) {
       style={{ pointerEvents: 'none' }}
     >
       <div className="world-label">
-        {view.marker && <span className="quest-marker">{view.marker}</span>}
+        {view.marker && (
+          <span className="quest-marker">
+            <b>{view.marker}</b>
+          </span>
+        )}
         <span className="name-tag">{npcLabel(id)}</span>
         {view.pulse && (
           <span
