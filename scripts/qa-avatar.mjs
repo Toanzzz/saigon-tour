@@ -14,11 +14,12 @@ const out = process.env.QA_OUTPUT || 'artifacts/avatar'
 await mkdir(out, { recursive: true })
 const results = []
 
-/** Wait for the title screen (guest session loaded, not yet playing). */
+/** Wait for the title screen body toggle to be ready. */
 async function waitTitle(page) {
-  await page.waitForFunction(
-    () => window.__THREE_GAME_DIAGNOSTICS__?.state.screen === 'title'
-  )
+  await page.getByRole('button', { name: 'Young woman' }).waitFor({
+    state: 'visible',
+    timeout: 45000,
+  })
 }
 
 try {
