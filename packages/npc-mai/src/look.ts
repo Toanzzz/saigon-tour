@@ -1,7 +1,7 @@
 import type { NpcLook } from '@saigon/npc-kit'
 
 export const look: NpcLook = {
-  body: 'female-b',
+  body: 'own',
   color: '#baddc1',
   portraitBg: 'var(--leaf-hi)',
   animation: 'idle',

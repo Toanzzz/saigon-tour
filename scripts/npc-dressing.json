@@ -1,0 +1,21 @@
+{
+  "tam": { "accessory": "cosmetics/helmet.glb", "accessory_bone": "head" },
+  "linh": { "hat": "cosmetics/volunteer-cap.glb", "apron": [0.85, 0.42, 0.3] },
+  "ba": {
+    "hat": "cosmetics/bucket-hat.glb",
+    "apron": [0.35, 0.29, 0.48],
+    "skirt": true
+  },
+  "mai": { "accessory": "cosmetics/scarf.glb", "apron": [0.23, 0.18, 0.16] },
+  "alex": { "accessory": "cosmetics/camera-strap.glb" },
+  "vy": {
+    "accessory": "cosmetics/lantern-backpack.glb",
+    "apron": [0.17, 0.21, 0.4]
+  },
+  "son": { "hat": "cosmetics/beret.glb", "accessory": "cosmetics/satchel.glb" },
+  "thao": {
+    "accessory": "cosmetics/headphones.glb",
+    "accessory_bone": "head",
+    "apron": [0.91, 0.42, 0.61]
+  }
+}
