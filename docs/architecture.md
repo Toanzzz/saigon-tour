@@ -107,7 +107,9 @@ players, no heavy post-processing in XR. Targets: ≥ 60 FPS desktop, ≥ 72 FPS
 ```
 apps/client/src/{app,widgets,features,shared}
 apps/server/src/{app,domain,features,shared}   # + Dockerfile, drizzle/, test/
-packages/shared/src                            # zod contracts and world data
+packages/shared/src                            # zod contracts; derives NPC tables from the registry
+packages/npc-kit                               # NPC id lists, defineNpc/defineResident, residentPrompt
+packages/npc-<id>                              # one package per NPC: profile, story, unlocks, look, place, persona, assets
 assets/                                        # licensed source models (LICENSES.md)
 scripts/                                       # asset prep, Blender builds, QA, credentials
 docs/                                          # specs, design, progress, evidence
@@ -117,7 +119,28 @@ compose.prod.yml                               # host stack: Postgres + API on t
 .github/workflows/deploy.yml                   # verify → image → api → client on push to main
 ```
 
-## 9. Open decisions
+## 9. NPC packages
+
+Each of the 29 NPCs owns its content in `packages/npc-<id>/` (directory slug = NPC
+id, which is persisted in DB rows and Mastra threads). A package exports a default
+`NpcDefinition` built with `defineNpc`/`defineResident` from `@saigon/npc-kit`
+(profile, story, unlocks, look, place) plus a server-only `./persona` prompt body.
+
+- `packages/shared/src/npcs/registry.ts` imports all 29 defaults; a `satisfies`
+  guard fails the build if an id is missing or unknown.
+- `packages/shared/src/npcs/derive.ts` rebuilds every legacy export (`NPCS`,
+  `NPC_NAMES`, `NEIGHBOR_TEXT`, `RESIDENT_TEXT`, `RESIDENTS`, `RESIDENT_ANCHORS`,
+  `NPC_POSITIONS`, `QUEST_SEEDS`, `QUEST_DOMAINS`, unlock arrays, `GIVER_UNLOCKS`)
+  from the registry, plus a new `NPC_LOOKS` that drives the client's `PEOPLE` and
+  `RESIDENT_VISUALS` and the portrait background.
+- Prompts live behind the server-only subpath `@saigon/shared/personas`
+  (`NPC_PROMPTS`), so no prompt text reaches the client bundle. The server appends
+  `SHARED_RULES` as before.
+- `packages/npc-<id>/assets` may ship a world model (`model/<id>.glb`) and a square
+  portrait (`avatar/portrait.*`); `scripts/prepare-assets.ts` emits the runtime
+  copies. Scaffold a new NPC with `bun scripts/new-npc.ts <id> [neighbor|resident]`.
+
+## 10. Open decisions
 
 - **D1.** Voice (Muse Transcribe) only if time remains.
 - **D2.** Open-weight endpoint (Muse Spark Open) not wired; `META_API_URL` can point to one.

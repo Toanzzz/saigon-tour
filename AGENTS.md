@@ -11,6 +11,7 @@
 - `bun run prepare:assets` creates runtime models; preserve the source models.
 - Feature modules expose public APIs through `index.ts`; imports flow toward shared contracts.
 - Each package owns its composite TypeScript project; no cross-package relative imports.
+- NPC content lives in `packages/npc-<id>`; register it in `packages/shared/src/npcs/registry.ts`.
 - Client state lives in TanStack Stores; see `apps/client/AGENTS.md`.
 - Target ≤300 lines per source file.
 - Definition of Done: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.

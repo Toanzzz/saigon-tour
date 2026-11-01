@@ -34,6 +34,16 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - `.github/workflows/deploy.yml`: a push to `main` runs verify → arm64 API image to GHCR → SSH recreate on t-oracle via `scripts/deploy-remote.sh` and `compose.prod.yml` → client `wrangler deploy` with `VITE_API_BASE_URL=${API_URL}`. Pull requests run verify only. `bun run credentials` sets the secrets, vars, deploy key, and host `.env`.
 - Deployed: the last successful Deploy run is for `d9a2bc1`; later commits are not deployed. `https://saigon-tour-api.toan.io/health` reports `live` with the Muse model.
 
+## NPC packages
+
+Each of the 29 NPCs owns a `packages/npc-<id>/` package (profile, story, unlocks,
+look, place, and a server-only persona), aggregated by
+`packages/shared/src/npcs/registry.ts`. The legacy shared exports and a new
+`NPC_LOOKS` derive from the registry; prompts load through the server-only
+`@saigon/shared/personas` subpath, so no prompt text reaches the client bundle.
+Resident portraits now use each resident's own body and colour. Scaffold with
+`bun scripts/new-npc.ts <id> [neighbor|resident]`.
+
 ## Verification
 
 - Required gates: `bun run check` → `bun run check:types` → `bun run build` → `bun run test`.

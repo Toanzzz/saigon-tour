@@ -125,3 +125,16 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Incremental-state investigation: backend PID 26453 sent initial room snapshots without later patches through both direct and Vite-proxied connections; isolated Bun/Node controls passed. A user-managed restart to PID 42450 made the identical probes synchronize joins and movement, and the party browser flow then passed. The old process's cause remains unproven; no transport workaround was applied.
 - QA scripts out of date: `qa-avatar` looks for the old “Young woman” title button; `qa-ride` looks for the Vietnamese “Nhà thờ Đức Bà” option under an en-US context; `qa-journal` times out waiting on an un-offered quest; `qa-audio` imports the old `apps/client/src/audio/index.ts` path and needs a scratch `PLAYWRIGHT_MODULE`.
 - Physical Quest 3 hardware, production Facebook OAuth, and zone-specific audio mixing are unverified. Dense mobile views exceed the original 300k-triangle scene target.
+
+## NPC packages
+
+- `apps/server/test/npc-baseline.spec.ts` (canonicalized snapshot) and
+  `npc-registry.spec.ts` pass: the 29 packages reconstruct the shared NPC tables
+  and composed prompts byte-identically.
+- `grep -r 'Calls the player "con"' apps/client/dist` finds nothing after `bun run build`.
+- `bun run prepare:assets` on a clean tree leaves `git diff apps/client/public` empty;
+  a temporary `npc-hoa` portrait fixture produced `avatar-lg.webp` and
+  `avatar-sm.webp`, then was reverted.
+- `docker build -f apps/server/Dockerfile .` succeeded with `COPY packages`.
+- Gates: `bun run check:types`, `bun run build`, server Vitest (311 passed, 2
+  skipped) and client Vitest (143 passed) all green.
