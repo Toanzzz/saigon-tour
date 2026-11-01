@@ -13,7 +13,13 @@ await mkdir(out, { recursive: true })
 // Drive the game store directly from the dev server for exact dialog states.
 async function apply(page, kind) {
   await page.evaluate(async (kind) => {
-    const { update } = await import('/src/shared/state/game.ts')
+    // After HMR, Vite serves the app's copy as game.ts?t=…; import that instance.
+    const loaded = performance
+      .getEntriesByType('resource')
+      .map((entry) => entry.name)
+      .filter((name) => name.includes('/src/shared/state/game.ts'))
+      .at(-1)
+    const { update } = await import(loaded ?? '/src/shared/state/game.ts')
     const dialogue = {
       npc: 'hoa',
       requestId: `qa-${kind}`,
