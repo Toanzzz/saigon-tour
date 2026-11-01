@@ -1,8 +1,12 @@
 import { useSelector } from '@tanstack/react-store'
-import { useEffect, useState } from 'react'
 import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
 import { type GameState, game, trackedQuest } from '@/shared/state/game'
+import {
+  armJourneyConfirm,
+  disarmJourneyConfirm,
+  journeyConfirm,
+} from '@/shared/state/ui'
 import { placeName } from '@/shared/world/places'
 import { restart } from './actions'
 
@@ -38,16 +42,11 @@ export function JourneySummary() {
 
 /** Two-tap reset: the first tap arms it, the second erases progress. */
 export function NewJourneyButton({ className = '' }: { className?: string }) {
-  const [confirming, setConfirming] = useState(false)
+  const confirming = useSelector(journeyConfirm, (s) => s.armed)
   const resetting = useSelector(game, (s) => s.guestStatus === 'resetting')
-  useEffect(() => {
-    if (!confirming) return
-    const timer = setTimeout(() => setConfirming(false), 4000)
-    return () => clearTimeout(timer)
-  }, [confirming])
   const press = async () => {
-    if (!confirming) return setConfirming(true)
-    setConfirming(false)
+    if (!confirming) return armJourneyConfirm()
+    disarmJourneyConfirm()
     void audio.unlock()
     await restart()
   }

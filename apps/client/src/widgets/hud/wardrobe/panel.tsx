@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'react'
 import { close } from '@/app/actions'
 import { m, slotLabel } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
+import { setWardrobeTab, wardrobeTab } from '@/shared/state/ui'
 import { Dialog } from '@/shared/ui/dialog'
 import { LockedCard, OwnedCard } from './item-card'
 import { WardrobeStage } from './stage'
@@ -30,7 +31,7 @@ function slotEntries(slot: UnlockSlot, owned: readonly string[]) {
 export function WardrobePanel() {
   const unlocks = useSelector(game, (s) => s.unlocks)
   const body = useSelector(game, (s) => s.body)
-  const [slot, setSlot] = useState<UnlockSlot>('hat')
+  const slot = useSelector(wardrobeTab, (s) => s.slot)
   // Only mount the shared Canvas on the client so SSR tests still render cards.
   const [mounted, setMounted] = useState(false)
   const eventSource = useRef<HTMLDivElement>(null)
@@ -64,7 +65,7 @@ export function WardrobePanel() {
                 role="tab"
                 className={`wardrobe-tab${slot === option ? ' is-active' : ''}`}
                 aria-selected={slot === option}
-                onClick={() => setSlot(option)}
+                onClick={() => setWardrobeTab(option)}
               >
                 {slotLabel(option)}
               </button>

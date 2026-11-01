@@ -1,5 +1,6 @@
 import { MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
-import { useState } from 'react'
+import { useSelector } from '@tanstack/react-store'
+import { shallow } from '@tanstack/store'
 import {
   board,
   buyMarketItem,
@@ -13,6 +14,11 @@ import { MarkerGuide } from '@/features/conversation/marker-guide'
 import { NeighborhoodMap } from '@/features/map/map'
 import { LanguageSelect, m, marketItemLabel } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
+import {
+  setTransportDestination,
+  setTransportMode,
+  transportForm,
+} from '@/shared/state/ui'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 import {
@@ -26,10 +32,10 @@ import {
 import { PauseName } from './pause-name'
 
 export function TransportPanel({ state }: { state: GameState }) {
-  const [mode, setMode] = useState<TravelMode>('bus')
-  const [destination, setDestination] = useState<keyof typeof PLACES>(
-    state.stop === 'park' ? 'market' : 'park'
-  )
+  // The form is seeded on panel open by installUiResets (shared/state/ui-resets).
+  const { mode, destination } = useSelector(transportForm, (form) => form, {
+    compare: shallow,
+  })
   const fare = MODES[mode].fare
   const affordable = state.world.currency >= fare
   return (
@@ -48,7 +54,7 @@ export function TransportPanel({ state }: { state: GameState }) {
             key={id}
             className={`ride-choice ${mode === id ? 'selected' : ''}`}
             aria-pressed={mode === id}
-            onClick={() => setMode(id as TravelMode)}
+            onClick={() => setTransportMode(id as TravelMode)}
           >
             <span>{modeName(id as TravelMode)}</span>
             <small>{m.coins({ count: item.fare })}</small>
@@ -63,7 +69,7 @@ export function TransportPanel({ state }: { state: GameState }) {
         id="ride-destination"
         value={destination}
         onChange={(event) =>
-          setDestination(event.target.value as keyof typeof PLACES)
+          setTransportDestination(event.target.value as keyof typeof PLACES)
         }
       >
         {Object.entries(PLACES)

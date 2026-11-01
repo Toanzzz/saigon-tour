@@ -1,7 +1,7 @@
 import { useSelector } from '@tanstack/react-store'
-import { useEffect, useState } from 'react'
 import { net } from '@/shared/api/status'
 import { m } from '@/shared/i18n'
+import { clock } from '@/shared/state/ui'
 
 /** Minutes under an hour, otherwise `h min`, from a live millisecond total. */
 function formatDuration(ms: number) {
@@ -19,12 +19,9 @@ function formatDuration(ms: number) {
  */
 export function WaitingNotice() {
   const waiting = useSelector(net, (value) => value.waiting)
-  const [now, setNow] = useState(() => Date.now())
-  useEffect(() => {
-    if (!waiting) return
-    const timer = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(timer)
-  }, [waiting])
+  // The 1 s tick is owned by the shared `clock` store, which runs only while
+  // the room is full (installWaitingClock in shared/state/ui-resets.ts).
+  const now = useSelector(clock, (value) => value.now)
   if (!waiting) return null
   const elapsed = waiting.longest
     ? waiting.longest.stayedMs + (now - waiting.receivedAt)

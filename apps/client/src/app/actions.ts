@@ -20,6 +20,12 @@ import {
 } from '@/shared/state/game'
 import { dialogueQuests } from '@/shared/state/quests'
 import {
+  resetChatDraft,
+  resetJourneyConfirm,
+  resetTransportForm,
+  resetWardrobeTab,
+} from '@/shared/state/ui'
+import {
   distance,
   MODES,
   PEOPLE,
@@ -69,6 +75,10 @@ export async function restart() {
     reducedMotion: state.reducedMotion,
     timeOfDay: state.timeOfDay,
   }))
+  resetChatDraft()
+  resetTransportForm()
+  resetWardrobeTab()
+  resetJourneyConfirm()
 }
 /** Drop this device's saved session; reload as a brand-new guest. */
 export async function forgetDevice() {

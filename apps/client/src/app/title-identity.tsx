@@ -4,9 +4,9 @@ import {
   randomPlayerBody,
   randomPlayerName,
 } from '@saigon/shared'
+import { useMutation } from '@tanstack/react-query'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
-import { useEffect, useState } from 'react'
 import { saveProfile, signInWithMeta, signOut } from '@/shared/api/session'
 import { m } from '@/shared/i18n'
 import { game, notify, update } from '@/shared/state/game'
@@ -40,14 +40,12 @@ export function TitleName({
   body: AvatarBody
   onBody: (body: AvatarBody) => void
 }) {
-  const { guestName, guestStatus } = useSelector(
+  // Name seeding from guestName is handled centrally in installUiResets.
+  const { guestStatus } = useSelector(
     game,
-    (s) => ({ guestName: s.guestName, guestStatus: s.guestStatus }),
+    (s) => ({ guestStatus: s.guestStatus }),
     { compare: shallow }
   )
-  useEffect(() => {
-    if (guestName) onName(guestName)
-  }, [guestName, onName])
   const valid = PlayerNameSchema.safeParse(name).success
   const loading = guestStatus === 'loading'
   const bodyLabel = body === 'man' ? m.body_man() : m.body_woman()
@@ -104,16 +102,11 @@ export function TitleAccount() {
     }),
     { compare: shallow }
   )
-  const [signingIn, setSigningIn] = useState(false)
-  const meta = async () => {
-    setSigningIn(true)
-    try {
-      await signInWithMeta()
-    } catch {
-      setSigningIn(false)
-      notify(m.toast_meta_unavailable())
-    }
-  }
+  const meta = useMutation({
+    mutationFn: signInWithMeta,
+    // A rejected Meta flow leaves the guest signed in; surface a toast.
+    onError: () => notify(m.toast_meta_unavailable()),
+  })
   const leave = async () => {
     await signOut().catch(() => {})
     location.reload()
@@ -134,10 +127,10 @@ export function TitleAccount() {
         <button
           type="button"
           className="meta-button"
-          disabled={signingIn}
-          onClick={meta}
+          disabled={meta.isPending}
+          onClick={() => meta.mutate()}
         >
-          {signingIn ? m.title_meta_opening() : m.title_meta_continue()}
+          {meta.isPending ? m.title_meta_opening() : m.title_meta_continue()}
         </button>
       )}
     </p>

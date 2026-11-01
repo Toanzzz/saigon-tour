@@ -114,3 +114,14 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 
 - `shared/audio` gains `installAudioSync()`: seeds the engine from `game.muted`/`game.volume` and subscribes the store (write-on-change, tracking previous values since 0.11 `subscribe` passes only the new one). Installed in `app/app.tsx`; the `useEffect` that mirrored audio in `GameUI` is gone.
 - XR fonts: `shared/xr/panel.tsx` replaces the per-component `useFontsReady` `useState` with a module-level `fontsReady` store set once by `loadFonts()`; `useFontsReady` now kicks the one-time load and reads the store via `useSelector`.
+
+## Client state → TanStack Store (phase 4: UI stores + central resets)
+
+- New `shared/state/ui.ts` holds the transient UI drafts/toggles as module-level stores, each with a `resetX()`: `nameDraft`, `journeyConfirm` (armed flag + 4 s auto-disarm timer in the store action), `transportForm` (mode + destination), `chatDraft` (text + showEarlier), `wardrobeTab` (slot), and a shared 1 s `clock`. `resetUiStores()` clears all of them and runs in the test `beforeEach`.
+- New `shared/state/ui-resets.ts` `installUiResets()` subscribes `game` (tracking the previous value, since 0.11 `subscribe` passes only the new one) and seeds on transitions: panel→transport seeds the form from `stop`; panel→wardrobe resets the tab; a new/changed dialogue NPC clears the chat draft; opening pause/settings or a `guestName` change seeds the name draft. `installWaitingClock()` runs the clock only while `net.waiting`. Both install in `app/app.tsx`.
+- Components now read these stores instead of local `useState`: `title-screen`/`title-identity` (name draft, dropped the seeding effects), `pause-name`, `panels` `TransportPanel`, `conversation` (dropped the render-time NPC-switch reset), `wardrobe/panel` (kept the SSR `mounted` guard), `title-journey` `NewJourneyButton`, and `waiting` (shared clock). Drafts now survive the locale remount of `GameUI`.
+- `restart()` (`app/actions.ts`) clears the journey-scoped UI stores (chat, transport, wardrobe, journey confirm).
+
+## Client state → TanStack Store (phase 5: pending flags → useMutation)
+
+- Title start (`commitProfile`) and pause rename (`commitProfile`), Meta sign-in (`signInWithMeta`), and XR enter/exit now drive their pending/disabled state from `useMutation` `isPending` instead of a `saving`/`starting`/`signingIn`/`busy` `useState`; the existing functions are the `mutationFn`.

@@ -1,8 +1,14 @@
 import { NPCS } from '@saigon/shared'
-import { Fragment, type SubmitEvent, useEffect, useRef, useState } from 'react'
+import { useSelector } from '@tanstack/react-store'
+import { Fragment, type SubmitEvent, useEffect, useRef } from 'react'
 import { chat, close } from '@/app/actions'
 import { m, npcDisplay } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
+import {
+  chatDraft,
+  setChatText,
+  toggleChatShowEarlier,
+} from '@/shared/state/ui'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 import { placeName } from '@/shared/world/places'
@@ -24,17 +30,13 @@ function messageKey(message: object) {
 
 export function Conversation({ state }: { state: GameState }) {
   const dialog = state.dialogue
-  const [text, setText] = useState('')
-  const [showEarlier, setShowEarlier] = useState(false)
+  // Composer text and earlier-history toggle live in the chatDraft store; the
+  // NPC-switch reset is handled centrally in installUiResets (ui-resets.ts).
+  const text = useSelector(chatDraft, (draft) => draft.text)
+  const showEarlier = useSelector(chatDraft, (draft) => draft.showEarlier)
   const historyRef = useRef<HTMLDivElement>(null)
-  const shownNpc = useRef(dialog?.npc)
   const historyLength = dialog?.history.length
   const thinking = dialog?.thinking
-  // Reset the collapse when switching to a different NPC, during render.
-  if (dialog && shownNpc.current !== dialog.npc) {
-    shownNpc.current = dialog.npc
-    if (showEarlier) setShowEarlier(false)
-  }
   useEffect(() => {
     if ((historyLength || thinking) && historyRef.current)
       historyRef.current.scrollTop = historyRef.current.scrollHeight
@@ -45,7 +47,7 @@ export function Conversation({ state }: { state: GameState }) {
     event.preventDefault()
     if (!text.trim() || dialog?.thinking) return
     const message = text
-    setText('')
+    setChatText('')
     await chat(message)
   }
   return (
@@ -94,7 +96,7 @@ export function Conversation({ state }: { state: GameState }) {
                   type="button"
                   className="history-toggle"
                   aria-expanded={showEarlier}
-                  onClick={() => setShowEarlier((open) => !open)}
+                  onClick={toggleChatShowEarlier}
                 >
                   {showEarlier
                     ? m.history_hide_earlier()
@@ -129,7 +131,7 @@ export function Conversation({ state }: { state: GameState }) {
           maxLength={500}
           placeholder={m.chat_placeholder()}
           autoComplete="off"
-          onChange={(event) => setText(event.target.value)}
+          onChange={(event) => setChatText(event.target.value)}
           disabled={dialog.thinking}
         />
         <button

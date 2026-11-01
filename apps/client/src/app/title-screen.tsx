@@ -1,10 +1,11 @@
 import { useProgress } from '@react-three/drei'
 import { PlayerNameSchema } from '@saigon/shared'
+import { useMutation } from '@tanstack/react-query'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
-import { useEffect, useState } from 'react'
 import { LanguageToggle, m } from '@/shared/i18n'
 import { game, update } from '@/shared/state/game'
+import { nameDraft, setNameDraft } from '@/shared/state/ui'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
 import { commitProfile, TitleAccount, TitleName } from './title-identity'
@@ -23,18 +24,15 @@ export function TitleScreen() {
     { compare: shallow }
   )
   const continuing = useSelector(game, hasJourney)
-  const [name, setName] = useState('')
-  const [starting, setStarting] = useState(false)
-  useEffect(() => {
-    if (guestName) setName(guestName)
-  }, [guestName])
+  // The name draft is seeded from guestName centrally (installUiResets).
+  const name = useSelector(nameDraft, (s) => s.name)
   const valid = PlayerNameSchema.safeParse(name).success
-  const begin = async () => {
-    setStarting(true)
-    const saved = await commitProfile(name, body)
-    setStarting(false)
-    if (saved) start()
-  }
+  const begin = useMutation({
+    mutationFn: () => commitProfile(name, body),
+    onSuccess: (saved) => {
+      if (saved) start()
+    },
+  })
   return (
     <section className="title-screen" aria-label={m.title_welcome_label()}>
       <div className="title-content">
@@ -51,7 +49,7 @@ export function TitleScreen() {
           {!continuing && (
             <TitleName
               name={name}
-              onName={setName}
+              onName={setNameDraft}
               body={body}
               onBody={(next) => update({ body: next })}
             />
@@ -61,9 +59,9 @@ export function TitleScreen() {
               type="button"
               className="primary-button title-start"
               disabled={
-                active || guestStatus === 'loading' || !valid || starting
+                active || guestStatus === 'loading' || !valid || begin.isPending
               }
-              onClick={begin}
+              onClick={() => begin.mutate()}
             >
               {active ? (
                 m.title_loading({ percent: Math.round(progress) })
