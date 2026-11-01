@@ -105,3 +105,7 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 
 - Opening a conversation sends `intent: greet` with an empty message. Headless Playwright at 1440×900 and 390×900 showed one NPC line, no player line, and no `What is happening in the neighborhood?` text. The next typed message included the greeting in the model context. Asked what the NPC had just said, the NPC repeated its greeting.
 - The run exposed a provider greeting stopped by the output limit (`finish_reason: length`). Greeting generation now allows 300 output tokens, skips caching truncated replies, and versions the cache key.
+
+## Chat header affinity
+
+- Headless Playwright at 1440×900 and 390×900 opened Linh via the real interact control. Start: `• Getting acquainted`, `+1 to Warm`, meter value 1, one warm pip lit. After raising Linh to 2 through `noteFriendship`: `♥ Warm`, two warm pips, one `.changed` pip, no page errors. The header fit in one 26px row inside the dialog at both widths.

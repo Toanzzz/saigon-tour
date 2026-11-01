@@ -337,5 +337,8 @@
   "quest_failed": "Việc đã kết thúc: {title}",
   "friendship_cold": "Dè dặt",
   "friendship_neutral": "Đang làm quen",
-  "friendship_warm": "Thân thiện"
+  "friendship_warm": "Thân thiện",
+  "friendship_to_warm": "+{points} để Thân thiện",
+  "friendship_to_neutral": "+{points} để Đang làm quen",
+  "friendship_max": "Bạn thân"
 }

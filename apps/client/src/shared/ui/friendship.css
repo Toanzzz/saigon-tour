@@ -1,0 +1,78 @@
+.friendship-summary {
+  --tier: var(--wall-side);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+.friendship-summary.tier-cold {
+  --tier: var(--pool);
+}
+.friendship-summary.tier-warm {
+  --tier: var(--roof-hi);
+}
+.friendship-tier {
+  padding: 2px 10px;
+  border: var(--edge);
+  border-radius: 99px;
+  background: var(--tier);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.friendship-pips {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.friendship-pips .pip {
+  width: 14px;
+  height: 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  background: var(--wall-hi);
+}
+.friendship-pips .pip.after-center {
+  margin-left: 9px;
+  position: relative;
+}
+.friendship-pips .pip.after-center::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: -5px;
+  width: 2px;
+  height: 17px;
+  border-radius: 1px;
+  background: var(--ink);
+}
+.friendship-pips .pip.cool.on {
+  background: var(--pool);
+}
+.friendship-pips .pip.warm.on {
+  background: var(--bus-red);
+}
+.friendship-pips .pip.changed {
+  animation: pip-pop 0.9s ease-out;
+}
+.friendship-summary.still .pip.changed {
+  animation: none;
+  outline: 2px solid var(--bus);
+}
+.friendship-hint {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+@keyframes pip-pop {
+  40% {
+    transform: scale(1.5);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .friendship-pips .pip.changed {
+    animation: none;
+    outline: 2px solid var(--bus);
+  }
+}

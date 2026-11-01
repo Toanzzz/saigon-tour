@@ -65,3 +65,5 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Live model-authored herb delivery and greet completion pass: propose-quest, 55 coins, once-only reward.
 
 - Opening an NPC conversation shows a cached assistant greeting without sending an automatic player line. The greeting is stored in that NPC/player thread for later model context.
+
+- Chat header affinity: tier chip (❄ Reserved / • Getting acquainted / ♥ Warm), 10 centre-out pips (cool left, warm right, centre tick), and a next-tier hint. A friendship change pops the changed pip (outline only with reduced motion). A screen-reader-only `<meter>` keeps the numeric value.

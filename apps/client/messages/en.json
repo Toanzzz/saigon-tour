@@ -368,5 +368,8 @@
   "quest_failed": "Errand closed: {title}",
   "friendship_cold": "Reserved",
   "friendship_neutral": "Getting acquainted",
-  "friendship_warm": "Warm"
+  "friendship_warm": "Warm",
+  "friendship_to_warm": "+{points} to Warm",
+  "friendship_to_neutral": "+{points} to Getting acquainted",
+  "friendship_max": "Best friends"
 }
