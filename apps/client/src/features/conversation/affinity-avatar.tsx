@@ -61,7 +61,7 @@ export function AffinityAvatar({
       >
         <NpcAvatar id={npcId} size="lg" />
         <span className={`affinity-crest tier-${tier.id}`} aria-hidden="true">
-          <AffinityIcon tier={tier.id} size={18} />
+          <AffinityIcon tier={tier.id} size={22} />
         </span>
       </button>
       <div id="affinity-info" className="affinity-info" popover="auto">

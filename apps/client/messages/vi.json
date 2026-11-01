@@ -340,6 +340,8 @@
   "xr_exit": "Thoát thực tế ảo",
   "xr_enter": "Vào thực tế ảo",
   "toast_errand_added": "Đã thêm một việc vào nhật ký.",
+  "celebrate_accepted": "Đã nhận việc",
+  "celebrate_completed": "Hoàn thành việc",
   "dialog_close": "Đóng bảng",
   "errands_busy_hint": "{name} đang bận với {event} — hỏi xem có cần giúp một tay không.",
   "errands_chat_hint": "Hỏi {name} xem có cần giúp gì không.",

@@ -162,3 +162,54 @@ shows "Ask about the concert" (`canAskMilestone`) which calls
 `offline()` mirrors the milestone intent and the apex auto-offer; the reward card
 gets a `milestone_reward_banner`, and a `milestone_begins_toast` fires on
 completion. `milestone_*` message keys added in EN + southern VI.
+
+## On-demand greetings prepared by the Director
+
+Greetings are prepared when the city changes, not assembled on every greet. When
+a Director turn starts a new event (`CityDirector.turn` diffs the pre/post city
+snapshot for new event ids), it calls `onEvents(snapshot, started)`; `realtime.ts`
+wires that to `harness.prepareGreetings`. `relevantNpcsForEvent`
+(`packages/shared/src/city/anchors.ts`) picks NPCs placed at the event location
+(or whose home is there) plus any NPC the event hands a need. Each is passed to
+`ShortLines.prepare`, which precomputes greetings across every affinity tier and
+time bucket per locale into the existing `npc_greetings` cache, so a player's
+greet hits a warm, state-aware line.
+
+Affinity tiers live in `packages/shared/src/quest/friendship.ts`:
+`AFFINITY_TIERS` (hostile/guarded/neutral/warm/close), `affinityTier(level)`, and
+`TIER_LEVEL` (representative level per tier used when precomputing). The player's
+live level maps to a tier whose cached greeting is served.
+
+Player name: a persona opts in with `greetsByName: true` (npc-kit `NpcProfile`,
+surfaced on `NPCS[*].greetsByName`); Hoa and Mai opt in. When live, `greetingPrompt`
+tells the model to address the visitor as the literal `{name}` token
+(`NAME_PLACEHOLDER`). The cached line keeps `{name}`; `fillGreetingName` fills it
+on first interact from `InteractRequest.playerName` (client sends `guestName`),
+and drops the token cleanly when no name is available.
+
+Greetings no longer enter the conversation thread. The greet path stores the
+shown opener in `NpcHarness.lastGreeting` (`npc:player`) instead of `recordTurn`.
+A later chat turn injects it as context only when `refersToGreeting(message)`
+matches (e.g. "what did you say", "the gathering", VI "sự kiện"); `buildContext`
+takes `referredGreeting` and frames it as something the NPC already said.
+
+## Errand offers describe the task; accept/finish celebrate
+
+When a player asks how to help and no model is live, the deterministic offer no
+longer answers with the generic "it is in the journal" line. `offeredErrandLine`
+(`apps/server/src/features/npc/fallbacks.ts`) voices the errand: the authored
+quest `description` plus the concrete first step (`stepText`), skipping a hidden
+riddle's step until the city reveals it. `NpcHarness` prefers this line for a
+just-offered quest; the journal entry is a side effect. A live model path is
+unchanged and still speaks in the NPC's own voice.
+
+Accepting or finishing an errand plays the celebratory jingle and shows a burst.
+`converse.ts` fires `audio.play('accept')` (the longer `reward` sound) and
+`celebrate('accepted')` on an offer, and `audio.play('reward')` plus
+`celebrate('completed')` on completion. `celebrate(kind)` (game store) drives a
+transient `<Celebration/>` overlay (`apps/client/src/widgets/hud/celebration.tsx`)
+with a badge, ring, and label; it respects reduced motion.
+
+The conversation header portrait is enlarged (88px desktop, 76px mobile; ~1.7x)
+in `friendship.css`/`conversation.css`, with header text clearance widened to
+match.

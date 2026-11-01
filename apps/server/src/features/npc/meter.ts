@@ -21,6 +21,64 @@ export function storageUnavailable(error: unknown, depth = 0): boolean {
   })
 }
 
+/**
+ * Collapse a thrown value (and its nested cause/error chain) into a single
+ * compact line for the failure log, so a swallowed NPC turn error is
+ * debuggable without a stack trace. Dedupes repeated messages and includes any
+ * HTTP status / response body the provider attached.
+ */
+export function describeError(error: unknown, attempt?: number): string {
+  const parts: string[] = []
+  if (typeof attempt === 'number') parts.push(`attempt=${attempt + 1}`)
+  const seen = new Set<string>()
+  let current: unknown = error
+  for (let depth = 0; current && depth <= 8; depth++) {
+    const piece = errorPiece(current)
+    if (piece && !seen.has(piece)) {
+      seen.add(piece)
+      parts.push(piece)
+    }
+    current =
+      current && typeof current === 'object'
+        ? ((current as Record<string, unknown>).cause ??
+          (current as Record<string, unknown>).error)
+        : undefined
+  }
+  if (parts.length <= (typeof attempt === 'number' ? 1 : 0))
+    parts.push(`error=${safeStringify(error)}`)
+  return parts.join(' ')
+}
+
+function errorPiece(value: unknown): string | null {
+  if (value instanceof Error) {
+    const extra = value as Error & {
+      name?: string
+      statusCode?: number
+      status?: number
+      responseBody?: unknown
+      data?: unknown
+    }
+    const bits = [`${extra.name ?? 'Error'}: ${extra.message}`]
+    const status = extra.statusCode ?? extra.status
+    if (status != null) bits.push(`status=${status}`)
+    const body = extra.responseBody ?? extra.data
+    if (body != null) bits.push(`body=${safeStringify(body)}`)
+    return bits.join(' ')
+  }
+  if (typeof value === 'string') return value
+  return null
+}
+
+function safeStringify(value: unknown): string {
+  try {
+    const text = typeof value === 'string' ? value : JSON.stringify(value)
+    if (!text) return String(value)
+    return text.length > 500 ? `${text.slice(0, 500)}…` : text
+  } catch {
+    return String(value)
+  }
+}
+
 /** Reserve every HTTP model step, including retries, before calling the provider. */
 export function meteredFetch(
   db: GameDb,

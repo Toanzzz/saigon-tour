@@ -2,10 +2,12 @@ import { createHash } from 'node:crypto'
 import { Agent } from '@mastra/core/agent'
 import type { MastraModelConfig } from '@mastra/core/llm'
 import {
+  AFFINITY_TIERS,
   type Locale,
   LocaleSchema,
   NPCS,
   type NpcId,
+  TIER_LEVEL,
   type TimeOfDay,
 } from '@saigon/shared'
 import type { GameDb } from '@/shared/db'
@@ -112,6 +114,36 @@ export class ShortLines {
     return { ...(await pending), cached: shared }
   }
 
+  /**
+   * Precompute greetings for one NPC across every affinity tier and locale.
+   * The Director calls this when an event starts and signals relevant NPCs, so
+   * the state-aware opener is cached before any player greets.
+   */
+  async prepare(
+    npc: NpcId,
+    baseContext: GreetingContext,
+    locales: readonly Locale[] = LocaleSchema.options
+  ) {
+    const results = []
+    for (const locale of locales)
+      for (const bucket of GREETING_BUCKETS)
+        for (const tier of AFFINITY_TIERS) {
+          const context = {
+            ...baseContext,
+            level: TIER_LEVEL[tier],
+            timeOfDay: bucket,
+          }
+          results.push({
+            npcId: npc,
+            tier,
+            bucket,
+            locale,
+            ...(await this.greeting(npc, context, locale, true)),
+          })
+        }
+    return results
+  }
+
   private async fill(
     npc: NpcId,
     context: GreetingContext,
@@ -163,7 +195,7 @@ export class ShortLines {
       }
     try {
       const result = await this.agents[npc].generate(
-        `${greetingPrompt(context)} ${languageRule(locale)}`,
+        `${greetingPrompt(npc, context)} ${languageRule(locale)}`,
         {
           activeTools: [],
           maxSteps: 1,

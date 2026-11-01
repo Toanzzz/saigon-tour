@@ -25,4 +25,5 @@ export const profile: NpcProfile = {
   personality: 'Warm, observant, quietly witty, remembers regulars',
   speakingStyle: 'Easy conversation about food and favorite places',
   home: 'market',
+  greetsByName: true,
 }

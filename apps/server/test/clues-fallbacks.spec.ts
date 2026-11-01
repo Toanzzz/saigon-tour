@@ -5,7 +5,7 @@ import {
   stepText,
 } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
-import { fallbackLine } from '@/features/npc/fallbacks'
+import { fallbackLine, offeredErrandLine } from '@/features/npc/fallbacks'
 
 const world = {
   currency: 0,
@@ -129,5 +129,35 @@ describe('stepText reads both locales', () => {
   it('names the neighbor and place for a people step', () => {
     const line = stepText({ type: 'TALK_TO', npcId: 'vy' }, 'en')
     expect(line).toContain('Vy')
+  })
+})
+
+describe('offered errand line describes the errand in chat', () => {
+  it('names the setup and concrete first step, not journal boilerplate', () => {
+    const quest = deliverQuest()
+    const line = offeredErrandLine(quest, 'en')
+    expect(line).toContain('Bring herbs to Linh.')
+    expect(line).toContain(stepText(quest.steps[0], 'en'))
+    expect(line).not.toContain('journal')
+  })
+  it('keeps a hidden riddle step out of the offer', () => {
+    const quest = createQuest(
+      {
+        giverNpcId: 'hoa',
+        title: 'Riddle run',
+        description: 'Solve my riddle first.',
+        scope: 'solo',
+        steps: [
+          { type: 'GO_TO', locationId: 'park' },
+          { type: 'DELIVER', itemId: 'herbs', npcId: 'linh' },
+        ],
+        riddle: { text: 'Where the fountain sings.' },
+      },
+      'q_riddle',
+      1_000_000
+    )
+    const line = offeredErrandLine(quest, 'en', 1_000_000)
+    expect(line).toBe('Solve my riddle first.')
+    expect(line).not.toContain(stepText(quest.steps[0], 'en'))
   })
 })

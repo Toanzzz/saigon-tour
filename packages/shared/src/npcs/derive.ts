@@ -38,6 +38,7 @@ export interface NpcPersona {
   speakingStyle: string
   location: LocationId
   knowledge: string[]
+  greetsByName: boolean
 }
 
 function persona(def: NpcDefinition): NpcPersona {
@@ -58,6 +59,7 @@ function persona(def: NpcDefinition): NpcPersona {
     speakingStyle: def.profile.speakingStyle,
     location: def.profile.home,
     knowledge,
+    greetsByName: def.profile.greetsByName ?? false,
   }
 }
 

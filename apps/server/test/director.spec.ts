@@ -8,6 +8,30 @@ import { live, offline, scripted, setupNpc } from './support/npc'
 const ctx = setupNpc()
 const config = { ...offline, directorMode: 'scripted' as const }
 describe('room city director', () => {
+  it('signals relevant NPCs with newly started events', async () => {
+    const city = new CityWorld(() => 100000)
+    const signalled: { ids: string[]; events: string[] } = {
+      ids: [],
+      events: [],
+    }
+    const director = new CityDirector(
+      city,
+      config,
+      ctx.fx.db,
+      vi.fn(),
+      (snapshot, events) => {
+        signalled.events = events.map((event) => event.title)
+        signalled.ids = events.flatMap((event) =>
+          snapshot.events.some((e) => e.id === event.id) ? [event.id] : []
+        )
+      }
+    )
+    await director.tick(100000, 2)
+    // The first scripted beat starts "An evening gathering" at City Hall.
+    expect(signalled.events).toContain('An evening gathering')
+    expect(signalled.ids).toHaveLength(signalled.events.length)
+  })
+
   it('does nothing in empty rooms and runs one scripted beat per ninety seconds', async () => {
     const city = new CityWorld(() => 100000)
     const fetcher = vi.fn()

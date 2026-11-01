@@ -55,3 +55,43 @@ export const looksLikeJoinRequest = (message: string) =>
 /** True when the player is asking for something to do (help or join an event). */
 export const wantsErrand = (message: string) =>
   looksLikeHelpRequest(message) || looksLikeJoinRequest(message)
+
+/** Coarse affinity tiers used to precompute a small set of greetings per NPC. */
+export const AFFINITY_TIERS = [
+  'hostile',
+  'guarded',
+  'neutral',
+  'warm',
+  'close',
+] as const
+export type AffinityTier = (typeof AFFINITY_TIERS)[number]
+
+/** Map a -5..+5 friendliness level onto a coarse greeting tier. */
+export function affinityTier(level: number): AffinityTier {
+  if (level <= -3) return 'hostile'
+  if (level < 0) return 'guarded'
+  if (level === 0) return 'neutral'
+  if (level >= 3) return 'close'
+  return 'warm'
+}
+
+/** A representative level for a tier, used when precomputing greetings. */
+export const TIER_LEVEL: Record<AffinityTier, number> = {
+  hostile: -5,
+  guarded: -1,
+  neutral: 0,
+  warm: 1,
+  close: 5,
+}
+
+/** Placeholder a persona greeting may carry to be filled with the player name. */
+export const NAME_PLACEHOLDER = '{name}'
+
+/**
+ * The player referred to the NPC's prepared greeting or the event it mentioned,
+ * so the opener should enter this conversation turn as context.
+ */
+export const refersToGreeting = (message: string) =>
+  /\b(greet(?:ing|ed)?|you said|you mentioned|earlier|hello|hi there|you told me|gathering|event|festival|happening|welcome)\b|chào|vừa nói|lúc nãy|hồi nãy|sự kiện|lễ hội|đang diễn ra/iu.test(
+    message
+  )

@@ -9,7 +9,7 @@ import { ask, offline, scripted, setupNpc } from './support/npc'
 
 const ctx = setupNpc()
 describe('NPC history', () => {
-  it('records greetings and fallback turns, isolates the caller and clears on reset', async () => {
+  it('records chat turns but keeps the opener out of history, isolates the caller and clears on reset', async () => {
     const app = createApp(offline, fetch, ctx.fx)
     const guest = await ctx.fx.guest()
     const other = await ctx.fx.guest()
@@ -32,11 +32,13 @@ describe('NPC history', () => {
     }
     expect((await app.request('/npc/bread-vendor/history')).status).toBe(401)
     const saved = await history(guest.token)
-    expect(saved.messages).toHaveLength(3)
-    expect(saved.messages[0]).toMatchObject({ role: 'assistant' })
-    expect(saved.messages.map((line: { text: string }) => line.text)).toContain(
-      'Any errands?'
-    )
+    // The greeting is shown but not stored, so only the chat turn persists.
+    expect(saved.messages).toHaveLength(2)
+    expect(saved.messages[0]).toMatchObject({
+      role: 'user',
+      text: 'Any errands?',
+    })
+    expect(saved.messages[1]).toMatchObject({ role: 'assistant' })
     expect((await history(other.token)).messages).toEqual([])
     const store = await ctx.fx.storage.getStore('memory')
     await store?.initializeObservationalMemory({
@@ -55,7 +57,7 @@ describe('NPC history', () => {
     ).toBeNull()
     app.realtime.manager.shutdown()
   })
-  it('does not duplicate an unanswered greeting on revisit', async () => {
+  it('keeps repeated greetings out of the conversation history', async () => {
     const app = createApp(offline, fetch, ctx.fx)
     const guest = await ctx.fx.guest()
     for (let visit = 0; visit < 3; visit++)
@@ -68,8 +70,7 @@ describe('NPC history', () => {
       headers: { Authorization: `Bearer ${guest.token}` },
     })
     const saved = await response.json()
-    expect(saved.messages).toHaveLength(1)
-    expect(saved.messages[0]).toMatchObject({ role: 'assistant' })
+    expect(saved.messages).toEqual([])
     app.realtime.manager.shutdown()
   })
 

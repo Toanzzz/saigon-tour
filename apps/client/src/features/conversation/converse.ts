@@ -13,7 +13,13 @@ import { net, updateNet } from '@/shared/api/status'
 import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
 import { noteFriendship } from '@/shared/state/friendship'
-import { type GameState, game, notify, update } from '@/shared/state/game'
+import {
+  celebrate,
+  type GameState,
+  game,
+  notify,
+  update,
+} from '@/shared/state/game'
 import { nearbyNpcs } from './nearby'
 
 export type Intent = 'chat' | 'greet' | 'milestone'
@@ -102,6 +108,9 @@ export async function converse(text: string, intent: Intent, opening = false) {
       {
         message: text.slice(0, 500),
         intent,
+        ...(game.state.guestName
+          ? { playerName: game.state.guestName.slice(0, 60) }
+          : {}),
         events: sentEvents,
         worldContext: {
           playerLocation: game.state.world.locationId,
@@ -256,9 +265,13 @@ function apply(
     }
   })
   if (offered) {
-    audio.play('pickup')
+    audio.play('accept')
+    celebrate('accepted')
     notify(m.toast_errand_added())
   }
-  if (completed) audio.play('reward')
+  if (completed) {
+    audio.play('reward')
+    celebrate('completed')
+  }
   if (milestoneBegan) notify(m.milestone_begins_toast())
 }

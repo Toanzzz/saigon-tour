@@ -71,6 +71,8 @@ export interface GameState {
   stop: WorldState['locationId']
   source: AgentSource | null
   toast: string
+  /** Transient quest-feedback burst; drives the celebration flash. */
+  celebrate: { kind: 'accepted' | 'completed'; at: number } | null
   muted: boolean
   volume: number
   reducedMotion: boolean
@@ -118,6 +120,7 @@ export function initialState(generation = 0): GameState {
     stop: 'market',
     source: null,
     toast: '',
+    celebrate: null,
     muted: false,
     volume: 0.5,
     reducedMotion: false,
@@ -137,6 +140,13 @@ export function notify(toast: string) {
   clearTimeout(toastTimer)
   update({ toast })
   toastTimer = setTimeout(() => update({ toast: '' }), 4500)
+}
+let celebrateTimer: ReturnType<typeof setTimeout>
+/** Fire a transient celebration burst for an accepted or completed errand. */
+export function celebrate(kind: 'accepted' | 'completed') {
+  clearTimeout(celebrateTimer)
+  update({ celebrate: { kind, at: Date.now() } })
+  celebrateTimer = setTimeout(() => update({ celebrate: null }), 1600)
 }
 export function trackedQuest(state: GameState): Quest | null {
   return (

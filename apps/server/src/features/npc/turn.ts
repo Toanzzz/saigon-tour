@@ -50,7 +50,8 @@ export async function buildContext(
   outcome: ToolOutcome,
   twistedLine: string | null = null,
   riddleContext: string | null = null,
-  milestoneContext: string | null = null
+  milestoneContext: string | null = null,
+  referredGreeting: string | null = null
 ) {
   const facts = await memory.recall(npcId, playerId)
   const record = await game.get(playerId)
@@ -88,6 +89,11 @@ export async function buildContext(
       : []),
     ...(riddleContext ? [riddleContext] : []),
     ...(milestoneContext ? [milestoneContext] : []),
+    ...(referredGreeting
+      ? [
+          `The player is referring back to how you greeted them: "${referredGreeting}". Treat it as something you already said and respond to their reference naturally.`,
+        ]
+      : []),
     `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
     `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
     `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,

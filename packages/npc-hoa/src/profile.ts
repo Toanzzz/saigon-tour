@@ -24,4 +24,5 @@ export const profile: NpcProfile = {
     'Warm, practical, proud of her family recipes; measures problems in bowls of broth',
   speakingStyle: 'Warm, practical, lightly teasing; calls the player con',
   home: 'market',
+  greetsByName: true,
 }

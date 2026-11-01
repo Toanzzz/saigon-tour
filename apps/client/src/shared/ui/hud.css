@@ -335,3 +335,102 @@
 .ride-banner progress::-moz-progress-bar {
   background: var(--ridges);
 }
+
+.celebration {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  pointer-events: none;
+  z-index: 5;
+  animation: celebration-pop 1.6s ease-out forwards;
+}
+.celebration-ring {
+  grid-area: 1 / 1;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 4px solid var(--leaf);
+  animation: celebration-ring 0.9s ease-out forwards;
+}
+.celebration-completed .celebration-ring {
+  border-color: var(--bus);
+}
+.celebration-badge {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border: var(--edge);
+  border-radius: 50%;
+  color: var(--ink);
+  background: var(--leaf);
+  box-shadow: var(--lift-sm);
+  animation: celebration-badge 0.6s cubic-bezier(0.3, 1.7, 0.5, 1);
+}
+.celebration-completed .celebration-badge {
+  background: var(--bus);
+}
+.celebration-label {
+  grid-area: 2 / 1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+  background: #fff6d6d9;
+  border: var(--edge);
+  border-radius: 99px;
+  padding: 4px 14px;
+  box-shadow: var(--lift-sm);
+}
+@keyframes celebration-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.9);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -52%) scale(1);
+  }
+}
+@keyframes celebration-ring {
+  from {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+@keyframes celebration-badge {
+  from {
+    transform: scale(0.4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .celebration,
+  .celebration-ring,
+  .celebration-badge {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+  .celebration {
+    opacity: 1;
+  }
+  .celebration-ring {
+    opacity: 0;
+  }
+}

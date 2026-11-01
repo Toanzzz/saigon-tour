@@ -3,6 +3,7 @@ import {
   type CitySnapshot,
   hostingEvent,
   type Locale,
+  NAME_PLACEHOLDER,
   type NeighborId,
   NPCS,
   type NpcId,
@@ -58,7 +59,7 @@ export function greetingSignature(context: GreetingContext) {
   })
 }
 
-export function greetingPrompt(context: GreetingContext) {
+export function greetingPrompt(npc: NpcId, context: GreetingContext) {
   const events = context.events.length
     ? context.events
         .map(
@@ -67,7 +68,7 @@ export function greetingPrompt(context: GreetingContext) {
         )
         .join('; ')
     : 'none'
-  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. ${context.errand === 'active' ? ' This visitor is already helping you with an errand; greet them warmly, thank them for taking it on, and gently encourage them to finish it. Do not offer a new errand.' : context.errand === 'ready' ? ' This visitor has finished what you asked; greet them warmly and welcome them back to settle up. Do not offer a new errand.' : context.hosting ? ` You are busy hosting ${context.hosting.title} right here (${context.hosting.description}); greet warmly but make clear you are caught up in it and could use a hand, without starting an errand yet.` : ' Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment.'} Do not offer or claim to start an errand.`
+  return `It is ${context.timeOfDay}. Weather: ${context.weather}. Active city events: ${events}. Your current need: ${context.need ?? 'none'}. Friendliness toward this visitor is ${context.level} on a -5 to +5 scale. Greet this visitor in one or two short sentences. Match the friendliness exactly: hostile at -5, guarded below 0, neutral at 0, warm above 0, very close at +5. ${context.errand === 'active' ? ' This visitor is already helping you with an errand; greet them warmly, thank them for taking it on, and gently encourage them to finish it. Do not offer a new errand.' : context.errand === 'ready' ? ' This visitor has finished what you asked; greet them warmly and welcome them back to settle up. Do not offer a new errand.' : context.hosting ? ` You are busy hosting ${context.hosting.title} right here (${context.hosting.description}); greet warmly but make clear you are caught up in it and could use a hand, without starting an errand yet.` : ' Usually greet without mentioning the weather or events; bring one up only when it clearly fits this visitor and moment.'} Do not offer or claim to start an errand.${NPCS[npc].greetsByName ? ` If it suits your persona, address the visitor as ${NAME_PLACEHOLDER} — use that literal token, which is later replaced with their name.` : ''}`
 }
 
 const TIME_VI: Record<TimeOfDay, string> = {
@@ -131,4 +132,21 @@ export function fallbackGreeting(
             ? ` ${event.title} is happening.`
             : ` ${NPCS[npc].knowledge[0] ?? ''}`
   return `${tone}${weather}${tail}`.trim()
+}
+
+/**
+ * Fill a cached greeting's optional {name} placeholder on first interact. With
+ * no usable name the token is removed and surrounding spacing/punctuation is
+ * tidied so the line still reads naturally.
+ */
+export function fillGreetingName(reply: string, name: string | null): string {
+  if (!reply.includes(NAME_PLACEHOLDER)) return reply
+  const clean = name?.trim()
+  if (clean) return reply.split(NAME_PLACEHOLDER).join(clean)
+  return reply
+    .replace(/,?\s*{name}\s*,?\s*([!?.])/g, '$1')
+    .replace(/,?\s*{name}\s*,?\s*/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\s+([!?.,])/g, '$1')
+    .trim()
 }

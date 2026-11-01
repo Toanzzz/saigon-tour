@@ -228,10 +228,10 @@ describe('NPC authored errands', () => {
     // The revisit greeting reflects the accepted errand, not the host pitch.
     expect(revisit.reply.toLowerCase()).toContain('taking this on')
     expect(revisit.reply.toLowerCase()).not.toContain('hosting')
-    // The acceptance line survives: the greeting is appended, not overwritten.
+    // The acceptance chat turn is recorded; the greeting stays out of history.
     const { messages } = await harness.history('vy', ctx.playerId, 30)
     expect(messages.map((line) => line.text)).toContain(accept.reply)
-    expect(messages.at(-1)?.text).toBe(revisit.reply)
+    expect(messages.map((line) => line.text)).not.toContain(revisit.reply)
   })
 
   it('greets as busy hosting when an event sits at the NPC location', async () => {

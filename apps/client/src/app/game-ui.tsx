@@ -8,6 +8,7 @@ import { Icon } from '@/shared/ui/icons'
 import { placeName } from '@/shared/world/places'
 import { useXRPresenting } from '@/shared/xr'
 import { HubScreen } from '@/widgets/hub'
+import { Celebration } from '@/widgets/hud/celebration'
 import { GameHeader } from '@/widgets/hud/header'
 import { Objective } from '@/widgets/hud/objective'
 import {
@@ -174,6 +175,7 @@ export function GameUI() {
           {state.toast}
         </div>
       )}
+      <Celebration />
       {state.dialogue && <Conversation state={state} />}
       {state.panel === 'transport' && <TransportPanel state={state} />}
       {state.panel === 'market' && <MarketPanel state={state} />}

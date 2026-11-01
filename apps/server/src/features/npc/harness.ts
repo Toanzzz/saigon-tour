@@ -3,12 +3,17 @@ import { Mastra } from '@mastra/core/mastra'
 import { RequestContext } from '@mastra/core/request-context'
 import { InMemoryStore, type MastraCompositeStore } from '@mastra/core/storage'
 import {
+  type CityEvent,
+  type CitySnapshot,
   friendlinessOf,
   type InteractRequest,
   InteractRequestSchema,
   type InteractResponse,
+  NPCS,
   type NpcId,
   type QuestEvent,
+  refersToGreeting,
+  relevantNpcsForEvent,
   stepText,
   ZERO_REWARD,
 } from '@saigon/shared'
@@ -27,12 +32,17 @@ import { isLiveConfigured, type ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
 import type { Fetcher } from '@/shared/http'
 import { createNpcAgents } from './agents'
-import { fallbackLine } from './fallbacks'
-import { greetingContext } from './greeting-context'
+import { fallbackLine, offeredErrandLine } from './fallbacks'
+import { fillGreetingName, greetingContext } from './greeting-context'
 import { CostGuard } from './guard'
 import { NpcMemoryService } from './memory/npc-memory'
 import { clearPlayerThreads, readHistory, recordTurn } from './memory/threads'
-import { type HarnessUsage, meteredFetch, storageUnavailable } from './meter'
+import {
+  describeError,
+  type HarnessUsage,
+  meteredFetch,
+  storageUnavailable,
+} from './meter'
 import { cleanReply } from './safety'
 import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
@@ -54,6 +64,8 @@ export class NpcHarness {
   private readonly live: boolean
   private readonly shortLines: ShortLines
   private readonly storage: MastraCompositeStore
+  /** The opener shown to each player per NPC, injected only when they refer to it. */
+  private readonly lastGreeting = new Map<string, string>()
 
   constructor(
     private readonly config: ServerConfig,
@@ -202,14 +214,11 @@ export class NpcHarness {
           request.locale === 'vi'
             ? `Câu đố đó hả? ${riddleRevealLine}.`
             : `That riddle? ${riddleRevealLine}.`
-      await recordTurn(
-        this.storage,
-        npcId,
-        playerId,
-        request.message,
-        line.reply,
-        true
-      )
+      // Fill the optional {name} placeholder the persona greeting may carry.
+      line.reply = fillGreetingName(line.reply, request.playerName ?? null)
+      // The opener is shown to the player but kept out of the conversation
+      // thread; it is injected only if a later turn refers back to it.
+      this.lastGreeting.set(`${npcId}:${playerId}`, line.reply)
       return {
         npcId,
         revision: current.revision,
@@ -270,6 +279,9 @@ export class NpcHarness {
       this.guard.allow(playerId) &&
       this.npcGuard.allow(`${npcId}:${playerId}`)
     if (allowed) {
+      const referredGreeting = refersToGreeting(request.message)
+        ? (this.lastGreeting.get(`${npcId}:${playerId}`) ?? null)
+        : null
       reply = await this.generate(
         npcId,
         request,
@@ -277,7 +289,8 @@ export class NpcHarness {
         outcome,
         twistedLine ?? null,
         riddleContext,
-        milestoneContext
+        milestoneContext,
+        referredGreeting
       )
       if (reply) source = 'live'
     }
@@ -285,9 +298,17 @@ export class NpcHarness {
       await offerSeed(this.game, npcId, request, playerId, outcome)
     const final = await this.game.get(playerId)
     if (!reply) {
+      // An errand just offered this turn is described in the giver's voice so
+      // the player learns what to do in chat; the journal entry is incidental.
+      const offeredQuest = outcome.events.find(
+        (event) => event.type === 'offered'
+      )?.quest
       reply =
         (kind(outcome) === 'completed' ? completedPayoff : null) ??
         milestoneFallback ??
+        (offeredQuest
+          ? offeredErrandLine(offeredQuest, request.locale)
+          : null) ??
         fallbackLine(
           npcId,
           final.world,
@@ -329,7 +350,8 @@ export class NpcHarness {
     outcome: ToolOutcome,
     twistedLine: string | null,
     riddleContext: string | null = null,
-    milestoneContext: string | null = null
+    milestoneContext: string | null = null,
+    referredGreeting: string | null = null
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
     const context = await buildContext(
@@ -341,7 +363,8 @@ export class NpcHarness {
       outcome,
       twistedLine,
       riddleContext,
-      milestoneContext
+      milestoneContext,
+      referredGreeting
     )
     for (let attempt = 0; attempt < 2; attempt++) {
       const requestContext = new RequestContext<NpcRequestValues>([
@@ -383,12 +406,42 @@ export class NpcHarness {
         if (outcome.calls.length) return null
       } catch (error) {
         if (storageUnavailable(error)) throw error
-        this.report('npc_turn_failed', npcId, outcome.calls, 'error')
+        this.report(
+          'npc_turn_failed',
+          npcId,
+          outcome.calls,
+          'error',
+          describeError(error, attempt)
+        )
         if (outcome.calls.length) return null
       }
     }
     return null
   }
+  /**
+   * Director signal: an event just started, so NPCs tied to it precompute a
+   * fresh greeting across every affinity tier before any player walks up.
+   */
+  async prepareGreetings(city: CitySnapshot, events: CityEvent[]) {
+    const npcs = new Set<NpcId>()
+    for (const event of events)
+      for (const npcId of relevantNpcsForEvent(city, event)) npcs.add(npcId)
+    await Promise.allSettled(
+      [...npcs].map((npcId) =>
+        this.shortLines.prepare(
+          npcId,
+          greetingContext(
+            npcId,
+            NPCS[npcId].friendliness,
+            'morning',
+            city,
+            null
+          )
+        )
+      )
+    )
+  }
+
   bark(npcId: NpcId, bucket: InteractRequest['worldContext']['timeOfDay']) {
     return this.shortLines.bark(npcId, bucket)
   }
@@ -409,12 +462,13 @@ export class NpcHarness {
     event: string,
     npcId: NpcId,
     calls: string[],
-    level: 'info' | 'warn' | 'error' = 'info'
+    level: 'info' | 'warn' | 'error' = 'info',
+    detail?: string
   ) {
     if (!this.config.production)
       log(
         event,
-        `NPC ${npcId} tools=[${calls.join(',')}] usd=${this.usage.estimatedUsd.toFixed(4)}`,
+        `NPC ${npcId} tools=[${calls.join(',')}] usd=${this.usage.estimatedUsd.toFixed(4)}${detail ? ` ${detail}` : ''}`,
         level
       )
   }

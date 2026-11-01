@@ -116,6 +116,33 @@ try {
     )
     await page.screenshot({ path: `${out}/available-${width}.png` })
 
+    // The header portrait is enlarged (~1.5-2x the old 52/46px).
+    const portrait = page.locator('.affinity-portrait')
+    const portraitWidth = await portrait.evaluate(
+      (el) => el.getBoundingClientRect().width
+    )
+    assert.ok(
+      portraitWidth >= 70,
+      `portrait too small at ${width}: ${portraitWidth}px`
+    )
+
+    // Quest accept/finish fires a celebration burst with the jingle.
+    for (const kind of ['accepted', 'completed']) {
+      await page.evaluate(async (kind) => {
+        const loaded = performance
+          .getEntriesByType('resource')
+          .map((entry) => entry.name)
+          .filter((name) => name.includes('/src/shared/state/game.ts'))
+          .at(-1)
+        const { celebrate } = await import(
+          loaded ?? '/src/shared/state/game.ts'
+        )
+        celebrate(kind)
+      }, kind)
+      await page.locator(`.celebration-${kind}`).waitFor({ state: 'visible' })
+      await page.screenshot({ path: `${out}/celebrate-${kind}-${width}.png` })
+    }
+
     await apply(page, 'active')
     const activeText = await page.locator('.errands').innerText()
     assert.match(activeText, /In progress/)

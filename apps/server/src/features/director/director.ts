@@ -1,3 +1,4 @@
+import type { CityEvent, CitySnapshot } from '@saigon/shared'
 import type { CityWorld } from '@/domain/city'
 import { isLiveConfigured, type ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
@@ -28,7 +29,12 @@ export class CityDirector {
     readonly city: CityWorld,
     private readonly config: ServerConfig,
     private readonly db: GameDb,
-    private readonly fetcher: Fetcher = fetch
+    private readonly fetcher: Fetcher = fetch,
+    /** Signaled with newly started events so relevant NPCs can prepare greetings. */
+    private readonly onEvents: (
+      city: CitySnapshot,
+      events: CityEvent[]
+    ) => void = () => {}
   ) {
     this.scheduler = new NpcScheduler(async () => this.turn(), 90000, 1)
   }
@@ -65,7 +71,9 @@ export class CityDirector {
 
   private async turn() {
     if (this.disposed || !this.players) return
-    const previous = this.city.snapshot().revision
+    const before = this.city.snapshot()
+    const previous = before.revision
+    const knownEventIds = new Set(before.events.map((event) => event.id))
     let live = false
     if (
       this.config.directorMode !== 'scripted' &&
@@ -110,5 +118,8 @@ export class CityDirector {
     } else this.lastSource = 'live'
     this.beat += 1
     if (this.calls.length > 64) this.calls.splice(0, this.calls.length - 64)
+    const after = this.city.snapshot()
+    const started = after.events.filter((event) => !knownEventIds.has(event.id))
+    if (started.length) this.onEvents(after, started)
   }
 }

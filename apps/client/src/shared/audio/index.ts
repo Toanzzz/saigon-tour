@@ -1,6 +1,12 @@
 import { game } from '@/shared/state/game'
 
-export type AudioEvent = 'click' | 'pickup' | 'board' | 'arrive' | 'reward'
+export type AudioEvent =
+  | 'click'
+  | 'pickup'
+  | 'accept'
+  | 'board'
+  | 'arrive'
+  | 'reward'
 
 type SoundId = 'confirm' | 'bell' | 'reward' | 'city'
 type AudioGroup = 'ui' | 'sfx' | 'ambience'
@@ -10,6 +16,7 @@ const EVENTS: Record<
 > = {
   click: { sound: 'confirm', group: 'ui', gain: 0.45 },
   pickup: { sound: 'confirm', group: 'sfx', gain: 0.6 },
+  accept: { sound: 'reward', group: 'sfx', gain: 0.65 },
   board: { sound: 'bell', group: 'sfx', gain: 0.55 },
   arrive: { sound: 'bell', group: 'sfx', gain: 0.55 },
   reward: { sound: 'reward', group: 'sfx', gain: 0.7 },
@@ -48,6 +55,7 @@ class GameAudio {
   private events: Record<AudioEvent, number> = {
     click: 0,
     pickup: 0,
+    accept: 0,
     board: 0,
     arrive: 0,
     reward: 0,

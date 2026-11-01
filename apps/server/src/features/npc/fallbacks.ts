@@ -103,6 +103,27 @@ function incompleteLine(
     : `There is still something to do: ${stepText(step, 'en')}, then come back.`
 }
 
+/**
+ * Describe a freshly offered errand in the giver's voice: the authored setup
+ * line plus the concrete first step, so the player learns what to do in chat.
+ * The journal entry is a side effect, not the whole reply. A hidden riddle's
+ * step is never named here.
+ */
+export function offeredErrandLine(
+  quest: Quest,
+  locale: Locale = 'en',
+  now: number = Date.now()
+): string {
+  const setup = quest.description.trim()
+  const first = quest.steps[0]
+  const hideFirst = Boolean(quest.riddle) && !isRevealed(quest, now)
+  const step = !hideFirst && first ? stepText(first, locale) : null
+  if (!step) return setup
+  return locale === 'vi'
+    ? `${setup} Trước tiên, hãy ${step}.`
+    : `${setup} First, ${step}.`
+}
+
 /** Deterministic lines describe only validated outcomes. */
 export function fallbackLine(
   npcId: NpcId,

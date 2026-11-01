@@ -206,3 +206,12 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Client: hub board (`widgets/hub/milestone.tsx` + `view.ts` derivation from inventory + `completed[].milestone`), "Ask about the concert" button (`canAskMilestone`, gated like the server), reward banner, `milestone_*` EN/VI.
 - Review: NO BLOCKERS. Applied two nit fixes — extracted the shared `runConcertSequence` (the milestone spec now exercises the real hook code via a thin safety wrapper) and added the `canOfferQuests` gate to the offline mirror and `canAskMilestone`.
 - Flaky infra note (pre-existing, unrelated to this change): `quest-migration.spec.ts` can exceed its 5s `testTimeout` on a cold PGlite start/first transform; it passes in ~1s with a 30s timeout and on warm full-suite runs. Worth bumping that test's timeout in a later cleanup.
+
+## NPC offer clarity + accept/finish celebration + larger portrait (2026-11-02)
+
+- DoD green: `bun run check` (zero warnings) → `check:types` → `build` → `test`. Server 403 passed / 2 skipped; client 233 passed.
+- Server: `offeredErrandLine` (`apps/server/src/features/npc/fallbacks.ts`) describes a just-offered errand (authored `description` + concrete first `stepText`, hidden-riddle step suppressed via `isRevealed`); `harness.ts` prefers it for the `offered` event, so the deterministic reply no longer says "it is in the journal". Milestone/apex paths keep their own authored description.
+- Client: `celebrate(kind)` transient store state + `<Celebration/>` overlay (`apps/client/src/widgets/hud/celebration.tsx`, `shared/ui/hud.css`); `converse.ts` plays `accept` (reward jingle) + `celebrate('accepted')` on an offer and `reward` + `celebrate('completed')` on completion. New `accept` audio event maps to the 1.76s `reward.mp3` jingle. EN/VI `celebrate_accepted`/`celebrate_completed`.
+- Portrait: `.affinity-portrait` 52→88px (mobile 46→76px) in `friendship.css`; header text clearance widened in `conversation.css`.
+- Tests: `apps/server/test/clues-fallbacks.spec.ts` — added `offeredErrandLine` describe (EN describes setup+step, no "journal"; hidden-riddle offer stays at the description only). `apps/server/test/harness-greetings.spec.ts` — updated the VI help assertion to expect the descriptive line ("Trước tiên, hãy") and not "nhật ký".
+- UI: `scripts/qa-npc-dialog.mjs` (headless Playwright, run unsandboxed) passed at 1440 and 390 — portrait ≥70px and the `celebration-accepted`/`celebration-completed` overlays render. Screenshots in `artifacts/npc-dialog-clarity/`.

@@ -371,6 +371,8 @@
   "xr_exit": "Exit VR",
   "xr_enter": "Enter VR",
   "toast_errand_added": "An errand was added to your journal.",
+  "celebrate_accepted": "Errand accepted",
+  "celebrate_completed": "Errand complete",
   "dialog_close": "Close panel",
   "errands_busy_hint": "{name} is busy with {event} — ask if they need a hand.",
   "errands_chat_hint": "Ask {name} if they need a hand.",

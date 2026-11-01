@@ -6,8 +6,8 @@
 .affinity-portrait {
   position: relative;
   display: block;
-  width: 52px;
-  height: 52px;
+  width: 88px;
+  height: 88px;
   padding: 0;
   border: var(--edge);
   border-radius: var(--round-sm);
@@ -25,16 +25,16 @@
   height: 100%;
   border-radius: var(--round-sm);
   overflow: hidden;
-  font-size: 26px;
+  font-size: 40px;
 }
 .affinity-crest {
   position: absolute;
-  right: -8px;
-  bottom: -8px;
+  right: -6px;
+  bottom: -6px;
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   border: 2px solid var(--ink);
   border-radius: 50%;
   background: var(--wall-hi);
@@ -146,8 +146,8 @@
     left: 20px;
   }
   .affinity-portrait {
-    width: 46px;
-    height: 46px;
+    width: 76px;
+    height: 76px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

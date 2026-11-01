@@ -4480,6 +4480,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
   "NPCS": {
     "alex": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "alex",
       "kind": "neighbor",
       "knowledge": [
@@ -4495,6 +4496,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "alley-diner": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "alley-diner",
       "kind": "resident",
       "knowledge": [
@@ -4509,6 +4511,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "alley-vendor": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "alley-vendor",
       "kind": "resident",
       "knowledge": [
@@ -4523,6 +4526,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "ba": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "ba",
       "kind": "neighbor",
       "knowledge": [
@@ -4537,6 +4541,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "bread-vendor": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "bread-vendor",
       "kind": "resident",
       "knowledge": [
@@ -4551,6 +4556,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "coffee-friend": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "coffee-friend",
       "kind": "resident",
       "knowledge": [
@@ -4565,6 +4571,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "coffee-reader": {
       "friendliness": -1,
+      "greetsByName": false,
       "id": "coffee-reader",
       "kind": "resident",
       "knowledge": [
@@ -4579,6 +4586,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "commuter": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "commuter",
       "kind": "resident",
       "knowledge": [
@@ -4593,6 +4601,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "fruit-vendor": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "fruit-vendor",
       "kind": "resident",
       "knowledge": [
@@ -4607,6 +4616,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "hoa": {
       "friendliness": 1,
+      "greetsByName": true,
       "id": "hoa",
       "kind": "neighbor",
       "knowledge": [
@@ -4621,6 +4631,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "linh": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "linh",
       "kind": "neighbor",
       "knowledge": [
@@ -4635,6 +4646,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "mai": {
       "friendliness": 1,
+      "greetsByName": true,
       "id": "mai",
       "kind": "neighbor",
       "knowledge": [
@@ -4650,6 +4662,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "market-browse": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "market-browse",
       "kind": "resident",
       "knowledge": [
@@ -4664,6 +4677,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "market-family": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "market-family",
       "kind": "resident",
       "knowledge": [
@@ -4678,6 +4692,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "market-walk": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "market-walk",
       "kind": "resident",
       "knowledge": [
@@ -4692,6 +4707,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "opera-visitor": {
       "friendliness": -2,
+      "greetsByName": false,
       "id": "opera-visitor",
       "kind": "resident",
       "knowledge": [
@@ -4706,6 +4722,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "park-reader": {
       "friendliness": -1,
+      "greetsByName": false,
       "id": "park-reader",
       "kind": "resident",
       "knowledge": [
@@ -4720,6 +4737,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "park-stretch": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "park-stretch",
       "kind": "resident",
       "knowledge": [
@@ -4734,6 +4752,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "plaza-friends": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "plaza-friends",
       "kind": "resident",
       "knowledge": [
@@ -4748,6 +4767,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "plaza-stroll": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "plaza-stroll",
       "kind": "resident",
       "knowledge": [
@@ -4762,6 +4782,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "postcard-reader": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "postcard-reader",
       "kind": "resident",
       "knowledge": [
@@ -4776,6 +4797,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "river-jogger": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "river-jogger",
       "kind": "resident",
       "knowledge": [
@@ -4790,6 +4812,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "riverside-friends": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "riverside-friends",
       "kind": "resident",
       "knowledge": [
@@ -4804,6 +4827,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "son": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "son",
       "kind": "neighbor",
       "knowledge": [
@@ -4819,6 +4843,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "square-tourist": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "square-tourist",
       "kind": "resident",
       "knowledge": [
@@ -4833,6 +4858,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "student": {
       "friendliness": 0,
+      "greetsByName": false,
       "id": "student",
       "kind": "resident",
       "knowledge": [
@@ -4847,6 +4873,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "tam": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "tam",
       "kind": "neighbor",
       "knowledge": [
@@ -4861,6 +4888,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "thao": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "thao",
       "kind": "neighbor",
       "knowledge": [
@@ -4876,6 +4904,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     "vy": {
       "friendliness": 1,
+      "greetsByName": false,
       "id": "vy",
       "kind": "neighbor",
       "knowledge": [

@@ -62,3 +62,24 @@ export function hostingEvent(
     city.npcPlacements[neighbor]?.locationId ?? NPCS[npcId].location
   return city.events.find((event) => event.locationId === location) ?? null
 }
+
+/**
+ * Neighbors relevant to a city event: those currently placed at the event's
+ * location (or whose home is there), plus anyone the event hands a need. These
+ * are the NPCs a Director signals to prepare a state-aware greeting.
+ */
+export function relevantNpcsForEvent(
+  city: CitySnapshot,
+  event: CityEvent
+): NeighborId[] {
+  const relevant = new Set<NeighborId>()
+  for (const npcId of Object.keys(NPCS) as NpcId[]) {
+    if (NPCS[npcId].kind !== 'neighbor') continue
+    const neighbor = npcId as NeighborId
+    const at = city.npcPlacements[neighbor]?.locationId ?? NPCS[npcId].location
+    if (at === event.locationId) relevant.add(neighbor)
+  }
+  for (const neighbor of Object.keys(city.needs) as NeighborId[])
+    relevant.add(neighbor)
+  return [...relevant]
+}

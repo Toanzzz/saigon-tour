@@ -55,11 +55,41 @@ describe('Mastra NPC harness greetings', () => {
     expect(cached.cached).toBe(true)
     expect(cached.reply).toBe('Chào! Welcome to the warm market morning.')
     expect(seen).toHaveLength(1)
+    // The opener is not injected into an ordinary chat turn.
     await harness.interact('hoa', ask('Tell me about breakfast'), ctx.playerId)
+    const plain = JSON.stringify(seen.at(-1)?.messages)
+    expect(plain).toContain('Tell me about breakfast')
+    expect(plain).not.toContain('Welcome to the warm market morning')
+  })
+
+  it('injects the prepared opener only when the player refers back to it', async () => {
+    const seen: { messages: { role: string; content: string }[] }[] = []
+    const harness = ctx.fx.harness(
+      live,
+      scripted(
+        [
+          { text: 'Chào! Welcome to the warm market morning.' },
+          { text: 'Breakfast is pho, of course.' },
+        ],
+        seen
+      )
+    )
+    const greet = ask('', {
+      intent: 'greet',
+      worldContext: { ...worldContext, timeOfDay: 'morning' },
+    })
+    await harness.interact('hoa', greet, ctx.playerId)
+    await harness.settleGreetings()
+    // Re-greet so the stored opener is the prepared live line, not the fallback.
+    await harness.interact('hoa', greet, ctx.playerId)
+    const referred = await harness.interact(
+      'hoa',
+      ask('What did you say when you greeted me earlier?'),
+      ctx.playerId
+    )
+    expect(referred.source).toBe('live')
     const messages = JSON.stringify(seen.at(-1)?.messages)
-    expect(messages).toContain('Tell me about breakfast')
-    expect(messages).toContain(first.reply)
-    expect(messages).not.toContain('Hello, neighbor!')
+    expect(messages).toContain('Welcome to the warm market morning')
   })
 
   it('caches greetings per language and asks for Vietnamese', async () => {
@@ -125,7 +155,10 @@ describe('Mastra NPC harness greetings', () => {
       ctx.playerId
     )
     expect(help.quests[0]?.title).toBe('Chuyện giao cỡ ba tô, con')
-    expect(help.reply).toContain('nhật ký')
+    // The offer is described in the giver's voice with the concrete first step,
+    // not a generic "it is in the journal" line.
+    expect(help.reply).toContain('Trước tiên, hãy')
+    expect(help.reply).not.toContain('nhật ký')
   })
 
   it('does not cache a greeting cut off by the output limit', async () => {

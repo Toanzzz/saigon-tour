@@ -27,6 +27,8 @@ export interface NpcProfile {
   home: LocationId
   /** Residents expose one idle line per locale. */
   idle?: Text
+  /** Opt in to addressing the player by name in greetings via a {name} placeholder. */
+  greetsByName?: boolean
 }
 
 /** A quest step. Mirrors the shared QuestSpec step union structurally. */

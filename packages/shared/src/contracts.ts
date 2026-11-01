@@ -78,6 +78,8 @@ export const InteractRequestSchema = z
     intent: z
       .enum(['chat', 'help', 'check', 'greet', 'milestone'])
       .default('chat'),
+    // Optional display name used to fill a persona greeting's {name} placeholder.
+    playerName: z.string().trim().max(60).optional(),
     locale: LocaleSchema.default('en'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
