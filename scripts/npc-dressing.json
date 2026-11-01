@@ -5,39 +5,23 @@
   },
   "linh": {
     "hat": "cosmetics/volunteer-cap.glb",
-    "apron": [
-      0.85,
-      0.42,
-      0.3
-    ]
+    "apron": [0.85, 0.42, 0.3]
   },
   "ba": {
     "hat": "cosmetics/bucket-hat.glb",
-    "apron": [
-      0.35,
-      0.29,
-      0.48
-    ],
+    "apron": [0.35, 0.29, 0.48],
     "skirt": true
   },
   "mai": {
     "accessory": "cosmetics/scarf.glb",
-    "apron": [
-      0.23,
-      0.18,
-      0.16
-    ]
+    "apron": [0.23, 0.18, 0.16]
   },
   "alex": {
     "accessory": "cosmetics/camera-strap.glb"
   },
   "vy": {
     "accessory": "cosmetics/lantern-backpack.glb",
-    "apron": [
-      0.17,
-      0.21,
-      0.4
-    ]
+    "apron": [0.17, 0.21, 0.4]
   },
   "son": {
     "hat": "cosmetics/beret.glb",
@@ -46,42 +30,22 @@
   "thao": {
     "accessory": "cosmetics/headphones.glb",
     "accessory_bone": "head",
-    "apron": [
-      0.91,
-      0.42,
-      0.61
-    ]
+    "apron": [0.91, 0.42, 0.61]
   },
   "bread-vendor": {
     "hat": "cosmetics/bucket-hat.glb",
-    "apron": [
-      0.8,
-      0.55,
-      0.25
-    ]
+    "apron": [0.8, 0.55, 0.25]
   },
   "fruit-vendor": {
     "hat": "cosmetics/non-la.glb",
-    "apron": [
-      0.3,
-      0.55,
-      0.35
-    ]
+    "apron": [0.3, 0.55, 0.35]
   },
   "alley-vendor": {
     "hat": "cosmetics/bucket-hat.glb",
-    "apron": [
-      0.7,
-      0.3,
-      0.2
-    ]
+    "apron": [0.7, 0.3, 0.2]
   },
   "alley-diner": {
-    "apron": [
-      0.85,
-      0.55,
-      0.6
-    ]
+    "apron": [0.85, 0.55, 0.6]
   },
   "market-browse": {
     "accessory": "cosmetics/satchel.glb"
@@ -91,11 +55,7 @@
   },
   "market-family": {
     "hat": "cosmetics/non-la.glb",
-    "apron": [
-      0.55,
-      0.45,
-      0.7
-    ]
+    "apron": [0.55, 0.45, 0.7]
   },
   "commuter": {
     "accessory": "cosmetics/sunglasses.glb",

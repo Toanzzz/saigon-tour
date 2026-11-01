@@ -48,6 +48,7 @@ export function WardrobePanel() {
         {mounted && (
           <Canvas
             className="wardrobe-canvas"
+            style={{ position: 'absolute' }}
             dpr={[1, 1.5]}
             eventSource={eventSource as React.RefObject<HTMLElement>}
             gl={{ alpha: true }}

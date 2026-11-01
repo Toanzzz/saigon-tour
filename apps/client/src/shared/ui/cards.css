@@ -304,7 +304,7 @@
 }
 /* The shared WebGL canvas covers the dialog body; each View draws into a box. */
 .wardrobe-canvas {
-  position: absolute !important;
+  position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
@@ -327,7 +327,7 @@
   background: none;
 }
 .coin-emblem-canvas {
-  position: absolute !important;
+  position: absolute;
   inset: 0;
   pointer-events: none;
 }

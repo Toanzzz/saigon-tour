@@ -58,6 +58,7 @@ export function CoinEmblem({ size = 40 }: { size?: number }) {
       <EmblemBoundary fallback={fallback}>
         <Canvas
           className="coin-emblem-canvas"
+          style={{ position: 'absolute' }}
           dpr={[1, 1.5]}
           camera={{ position: [0, 0, 2.6], fov: 35 }}
           gl={{ alpha: true }}
