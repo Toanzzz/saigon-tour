@@ -49,6 +49,14 @@
   min-width: 30px;
   text-align: center;
 }
+.pause-name {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 4px;
+}
+.pause-name-save {
+  min-height: 44px;
+}
 .restart-button {
   display: block;
   margin: 12px auto -8px;

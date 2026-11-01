@@ -6,14 +6,15 @@ import {
   close,
   forgetDevice,
   pause,
-  restart,
   toggleTimeOfDay,
 } from '@/app/actions'
+import { NewJourneyButton } from '@/app/title-journey'
 import { NeighborhoodMap } from '@/features/map/map'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
 import { MODES, PLACES, type TravelMode } from '@/shared/world/places'
+import { PauseName } from './pause-name'
 
 export function TransportPanel({ state }: { state: GameState }) {
   const [mode, setMode] = useState<TravelMode>('bus')
@@ -132,6 +133,7 @@ export function PausePanel({ state }: { state: GameState }) {
       <button type="button" className="primary-button wide" onClick={resume}>
         Continue exploring
       </button>
+      <PauseName />
       <div className="settings-row">
         <label htmlFor="game-volume">City sounds</label>
         <output>{Math.round(state.volume * 100)}%</output>
@@ -189,14 +191,7 @@ export function PausePanel({ state }: { state: GameState }) {
           <kbd>M</kbd> Map
         </span>
       </div>
-      <button
-        type="button"
-        className="text-button restart-button"
-        disabled={state.guestStatus === 'resetting'}
-        onClick={restart}
-      >
-        Start a new journey
-      </button>
+      <NewJourneyButton className="restart-button" />
       <button
         type="button"
         className="text-button restart-button"

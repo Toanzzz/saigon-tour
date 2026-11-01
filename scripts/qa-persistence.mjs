@@ -78,6 +78,12 @@ try {
     await page
       .getByRole('button', { name: 'Start a new journey', exact: true })
       .click()
+    await page
+      .getByRole('button', { name: 'Tap again to erase progress', exact: true })
+      .click()
+    await page
+      .getByRole('button', { name: 'Start exploring', exact: true })
+      .waitFor({ timeout: 30000 })
     await page.waitForFunction(
       () => window.__THREE_GAME_DIAGNOSTICS__?.state.currency === 30
     )

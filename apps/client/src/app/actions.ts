@@ -60,12 +60,11 @@ export async function restart() {
   audio.setPaused(false)
   game.setState(() => ({
     ...initialState(state.generation + 1),
-    screen: 'playing',
     guestId: state.guestId,
     guestName: state.guestName,
     guestColor: state.guestColor,
     guestStatus: player ? 'online' : 'offline',
-    returningGuest: state.returningGuest,
+    returningGuest: false,
     ...(player ? guestState(player) : {}),
     muted: state.muted,
     volume: state.volume,

@@ -1,4 +1,5 @@
-import { close, restart } from '@/app/actions'
+import { close } from '@/app/actions'
+import { NewJourneyButton } from '@/app/title-journey'
 import { rewardCopy } from '@/shared/api/party'
 import type { GameState } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
@@ -37,14 +38,7 @@ export function RewardPanel({ state }: { state: GameState }) {
       <button type="button" className="primary-button wide" onClick={close}>
         Continue exploring
       </button>
-      <button
-        type="button"
-        className="text-button restart-button"
-        disabled={state.guestStatus === 'resetting'}
-        onClick={restart}
-      >
-        Start a new journey
-      </button>
+      <NewJourneyButton className="restart-button" />
     </Dialog>
   )
 }

@@ -6,12 +6,7 @@ import { game } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
 import { commitPlayerName, TitleAccount, TitleName } from './title-identity'
-import {
-  hasJourney,
-  JourneySummary,
-  NewJourneyButton,
-  PlayingAs,
-} from './title-journey'
+import { hasJourney, JourneySummary, NewJourneyButton } from './title-journey'
 
 export function TitleScreen() {
   const { active, progress } = useProgress()
@@ -41,11 +36,7 @@ export function TitleScreen() {
           {continuing && <JourneySummary />}
         </p>
         <div className="title-form">
-          {continuing ? (
-            <PlayingAs name={name} onName={setName} />
-          ) : (
-            <TitleName name={name} onName={setName} />
-          )}
+          {!continuing && <TitleName name={name} onName={setName} />}
           <div className="title-actions">
             <button
               type="button"
@@ -55,17 +46,22 @@ export function TitleScreen() {
               }
               onClick={begin}
             >
-              {active
-                ? `Opening the neighborhood… ${Math.round(progress)}%`
-                : guestStatus === 'loading'
-                  ? 'Finding your journey…'
-                  : continuing
-                    ? 'Continue journey'
-                    : 'Start exploring'}
+              {active ? (
+                `Opening the neighborhood… ${Math.round(progress)}%`
+              ) : guestStatus === 'loading' ? (
+                'Finding your journey…'
+              ) : continuing ? (
+                <span className="title-continue">
+                  Continue journey
+                  <small>as {guestName}</small>
+                </span>
+              ) : (
+                'Start exploring'
+              )}
             </button>
             <XRSessionButton store={xrStore} />
           </div>
-          {continuing && <NewJourneyButton name={name} />}
+          {continuing && <NewJourneyButton className="title-new-journey" />}
           <TitleAccount />
         </div>
         <p className="title-controls desktop-only">
