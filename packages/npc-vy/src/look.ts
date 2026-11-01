@@ -5,4 +5,5 @@ export const look: NpcLook = {
   color: '#e6a56e',
   portraitBg: 'var(--bus)',
   animation: 'idle',
+  avatar: true,
 }
