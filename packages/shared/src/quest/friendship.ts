@@ -43,3 +43,15 @@ export const isExpired = (quest: Quest, now = Date.now()) =>
   quest.status === 'active' && now - quest.createdAt >= QUEST_EXPIRY_MS
 export const looksLikeHelpRequest = (message: string) =>
   /\b(help|errands?|tasks?|favou?rs?)\b|giúp|việc/iu.test(message)
+/**
+ * Join/participation intent, e.g. "let me join", "count me in", "I want to take
+ * part", or Vietnamese "cho tôi tham gia". A player who asks to join an event is
+ * asking for something to do, so it routes into the same errand-offer flow.
+ */
+export const looksLikeJoinRequest = (message: string) =>
+  /\b(join|joining|take part|taking part|participate|participating|sign (?:me )?up|count me in|i'?m in|let me in|how (?:can|do) i (?:join|help|take part))\b|tham gia|cho (?:tôi|minh|mình) (?:tham gia|vào)|(?:muốn|cho) vào/iu.test(
+    message
+  )
+/** True when the player is asking for something to do (help or join an event). */
+export const wantsErrand = (message: string) =>
+  looksLikeHelpRequest(message) || looksLikeJoinRequest(message)

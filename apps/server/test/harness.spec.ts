@@ -175,6 +175,32 @@ describe('NPC authored errands', () => {
     expect(seen).toHaveLength(Object.keys(NPCS).length)
   })
 
+  it('offers an errand when the player asks to join an active event', async () => {
+    const harness = ctx.fx.harness(offline)
+    await harness.interact('vy', ask('', { intent: 'greet' }), ctx.playerId)
+    const result = await harness.interact(
+      'vy',
+      ask('let me join'),
+      ctx.playerId
+    )
+    expect(result.questEvents[0]?.type).toBe('offered')
+    expect(result.quests[0]?.giverNpcId).toBe('vy')
+  })
+
+  it('records each chat turn once even when the live reply is empty', async () => {
+    const harness = ctx.fx.harness(live, scripted([{ text: '' }]))
+    await harness.interact('vy', ask('', { intent: 'greet' }), ctx.playerId)
+    for (let turn = 0; turn < 3; turn++)
+      await harness.interact('vy', ask('let me join'), ctx.playerId)
+    const { messages } = await harness.history('vy', ctx.playerId, 30)
+    const users = messages.filter((line) => line.role === 'user')
+    expect(users).toHaveLength(3)
+    // No orphaned user runs: every user line is answered by an assistant line.
+    for (let i = 0; i < messages.length - 1; i++)
+      if (messages[i]?.role === 'user')
+        expect(messages[i + 1]?.role).toBe('assistant')
+  })
+
   it('rejects unsafe model text and limits player bursts', async () => {
     const harness = ctx.fx.harness(
       live,

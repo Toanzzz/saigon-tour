@@ -192,8 +192,9 @@ export class NpcHarness {
       )
       source = 'fallback'
     }
-    if (source === 'fallback')
-      await recordTurn(this.storage, npcId, playerId, request.message, reply)
+    // Record every chat turn exactly once. Mastra memory is read-only, so this
+    // is the only writer; live and fallback replies persist the same way.
+    await recordTurn(this.storage, npcId, playerId, request.message, reply)
     return {
       npcId,
       revision: final.revision,
@@ -241,6 +242,10 @@ export class NpcHarness {
           memory: {
             thread: `${npcId}:${playerId}`,
             resource: playerId,
+            // The harness is the single history writer (see recordTurn below).
+            // Read memory for recall, but never let the agent persist turns, or
+            // live and fallback writers duplicate/orphan messages in the thread.
+            options: { readOnly: true },
           },
           context: [{ role: 'system', content: context }],
           requestContext,
