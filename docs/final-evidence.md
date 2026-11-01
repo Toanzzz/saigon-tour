@@ -45,6 +45,12 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Regression coverage includes migration of existing active/completed saves, concurrent offer cap and completion checks, repeated deliveries, full inventory purchase rejection, and pending-event quest progression through all four revision-fenced client apply paths.
 - PGlite fixture initialization timed out under unrestricted test workers during concurrent browser work. A one-variable run with two workers passed unchanged assertions and timeouts; server Vitest uses two workers.
 
+## Title screen continue vs new journey — November 1, 2026
+
+- Root gates pass: `bun run check` (Biome flags only the ignored `plan/*.md` drafts) → `bun run check:types` → `bun run build` → `bun run test` (client 88 passing).
+- Headless Playwright against the local dev server, 1440×900 and 390×844 (touch): fresh context shows `Start exploring`, editable name, no summary or new-journey control. After accepting Hoa's errand and reloading, the title shows `Welcome back, {name}`, a chip such as `Helping with “Fresh herbs for Linh” · near Bến Thành Market`, `Playing as … · Change`, and `Continue journey`. Continue keeps the quest. Change → new name → Continue persists the name across reload. `Start a new journey` shows `Tap again to erase progress`, reverts after 4s, and the second tap enters play with an empty quest list; a reload then shows the fresh state with the kept name. No page errors. Passed 3 consecutive two-viewport runs plus 2 extra mobile runs. One earlier mobile run timed out waiting for play after Change → Continue and did not reproduce in the later 6 mobile runs; cause unproven.
+- `scripts/qa-persistence.mjs` passes at both widths; `enterPlay` in `scripts/qa-quest-flow.mjs` accepts `Start exploring` or `Continue journey`.
+
 ## Verification limits
 
 - Incremental-state investigation: backend PID 26453 sent initial room snapshots without later patches through both direct and Vite-proxied connections; isolated Bun/Node controls passed. A user-managed restart to PID 42450 made the identical direct/proxied probes synchronize joins and movement. The party browser flow then passed. Exact old-process cause remains unproven; no transport workaround was applied.

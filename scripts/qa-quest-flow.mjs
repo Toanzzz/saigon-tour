@@ -89,8 +89,7 @@ export async function openGame(page) {
 }
 export async function enterPlay(page) {
   const start = page.getByRole('button', {
-    name: 'Start exploring',
-    exact: true,
+    name: /^(Start exploring|Continue journey)$/,
   })
   await start.click({ timeout: 45000 })
   try {

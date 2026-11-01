@@ -44,6 +44,9 @@
   .title-form {
     max-width: none;
   }
+  .title-summary {
+    font-size: 13px;
+  }
   .title-legal {
     left: 24px;
   }

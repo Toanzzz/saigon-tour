@@ -1,17 +1,27 @@
 import { useProgress } from '@react-three/drei'
 import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { game } from '@/shared/state/game'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
 import { commitPlayerName, TitleAccount, TitleName } from './title-identity'
+import {
+  hasJourney,
+  JourneySummary,
+  NewJourneyButton,
+  PlayingAs,
+} from './title-journey'
 
 export function TitleScreen() {
   const { active, progress } = useProgress()
   const { guestName, guestStatus, returningGuest } = useSelector(game, (s) => s)
+  const continuing = useSelector(game, hasJourney)
   const [name, setName] = useState('')
   const [starting, setStarting] = useState(false)
+  useEffect(() => {
+    if (guestName) setName(guestName)
+  }, [guestName])
   const valid = PlayerNameSchema.safeParse(name).success
   const begin = async () => {
     setStarting(true)
@@ -28,9 +38,14 @@ export function TitleScreen() {
           {returningGuest && guestName
             ? `Welcome back, ${guestName}`
             : 'Meet a neighbor, lend a hand, and let the city surprise you.'}
+          {continuing && <JourneySummary />}
         </p>
         <div className="title-form">
-          <TitleName name={name} onName={setName} />
+          {continuing ? (
+            <PlayingAs name={name} onName={setName} />
+          ) : (
+            <TitleName name={name} onName={setName} />
+          )}
           <div className="title-actions">
             <button
               type="button"
@@ -44,10 +59,13 @@ export function TitleScreen() {
                 ? `Opening the neighborhood… ${Math.round(progress)}%`
                 : guestStatus === 'loading'
                   ? 'Finding your journey…'
-                  : 'Start exploring'}
+                  : continuing
+                    ? 'Continue journey'
+                    : 'Start exploring'}
             </button>
             <XRSessionButton store={xrStore} />
           </div>
+          {continuing && <NewJourneyButton name={name} />}
           <TitleAccount />
         </div>
         <p className="title-controls desktop-only">
