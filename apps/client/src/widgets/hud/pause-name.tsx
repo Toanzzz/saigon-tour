@@ -2,6 +2,7 @@ import { PlayerNameSchema } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { useState } from 'react'
 import { commitPlayerName, TitleName } from '@/app/title-identity'
+import { m } from '@/shared/i18n'
 import { game, notify } from '@/shared/state/game'
 
 /** Rename during play; Save appears once the name differs from the saved one. */
@@ -15,7 +16,7 @@ export function PauseName() {
     setSaving(true)
     const saved = await commitPlayerName(name)
     setSaving(false)
-    if (saved) notify(`You're now ${name.trim()}.`)
+    if (saved) notify(m.toast_renamed({ name: name.trim() }))
   }
   return (
     <div className="pause-name">
@@ -27,7 +28,7 @@ export function PauseName() {
           disabled={!valid || saving}
           onClick={save}
         >
-          {saving ? 'Saving…' : 'Save name'}
+          {saving ? m.pause_saving() : m.pause_save_name()}
         </button>
       )}
     </div>

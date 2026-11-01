@@ -10,7 +10,7 @@ import {
 } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { NeighborhoodMap } from '@/features/map/map'
-import { LanguageSelect } from '@/shared/i18n'
+import { LanguageSelect, m } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -33,14 +33,14 @@ export function TransportPanel({ state }: { state: GameState }) {
   const affordable = state.world.currency >= fare
   return (
     <Dialog
-      title="Where shall we go?"
+      title={m.transport_title()}
       eyebrow={placeName(state.stop)}
       onClose={close}
       className="transport-dialog"
     >
-      <p className="panel-intro">A window seat. A new corner of the city.</p>
+      <p className="panel-intro">{m.transport_intro()}</p>
       <fieldset className="ride-options">
-        <legend>Your ride</legend>
+        <legend>{m.transport_your_ride()}</legend>
         {Object.entries(MODES).map(([id, item]) => (
           <button
             type="button"
@@ -50,13 +50,13 @@ export function TransportPanel({ state }: { state: GameState }) {
             onClick={() => setMode(id as TravelMode)}
           >
             <span>{modeName(id as TravelMode)}</span>
-            <small>{item.fare} coins</small>
+            <small>{m.coins({ count: item.fare })}</small>
           </button>
         ))}
       </fieldset>
       <p className="ride-description">{modeDescription(mode)}</p>
       <label className="field-label" htmlFor="ride-destination">
-        Destination
+        {m.transport_destination()}
       </label>
       <select
         id="ride-destination"
@@ -74,8 +74,8 @@ export function TransportPanel({ state }: { state: GameState }) {
           ))}
       </select>
       <div className="fare-row">
-        <span>Your wallet</span>
-        <strong>{state.world.currency} coins</strong>
+        <span>{m.wallet()}</span>
+        <strong>{m.coins({ count: state.world.currency })}</strong>
       </div>
       <button
         type="button"
@@ -84,12 +84,12 @@ export function TransportPanel({ state }: { state: GameState }) {
         onClick={() => board(destination, mode)}
       >
         <Icon name="bus" />
-        Board {modeName(mode)}
-        <span>{fare} coins</span>
+        {m.transport_board({ mode: modeName(mode) })}
+        <span>{m.coins({ count: fare })}</span>
       </button>
       {!affordable && (
         <p className="help-text" role="status">
-          Not enough coins for this ride. Walking is always free.
+          {m.transport_not_enough()}
         </p>
       )}
     </Dialog>
@@ -101,27 +101,27 @@ export { JournalPanel } from './journal'
 export function MapPanel({ state }: { state: GameState }) {
   return (
     <Dialog
-      title="A city of small stories"
-      eyebrow="Your neighborhood"
+      title={m.map_title()}
+      eyebrow={m.map_eyebrow()}
       onClose={close}
       className="map-dialog"
     >
       <NeighborhoodMap state={state} large />
       <div className="map-legend">
         <span>
-          <i /> You
+          <i /> {m.map_you()}
         </span>
         <span>
-          <i className="stop" /> Transport stops
+          <i className="stop" /> {m.map_stops()}
         </span>
         <span>
-          {state.world.visitedLocations.length}/{Object.keys(PLACES).length}{' '}
-          places discovered
+          {m.map_discovered({
+            count: state.world.visitedLocations.length,
+            total: Object.keys(PLACES).length,
+          })}
         </span>
       </div>
-      <p className="panel-intro">
-        Take a ride or follow your curiosity. Every street leads somewhere.
-      </p>
+      <p className="panel-intro">{m.map_intro()}</p>
     </Dialog>
   )
 }
@@ -133,17 +133,17 @@ export function PausePanel({ state }: { state: GameState }) {
   }
   return (
     <Dialog
-      title="Take your time."
-      eyebrow="The city can wait"
+      title={m.pause_title()}
+      eyebrow={m.pause_eyebrow()}
       onClose={resume}
       className="pause-dialog"
     >
       <button type="button" className="primary-button wide" onClick={resume}>
-        Continue exploring
+        {m.pause_continue()}
       </button>
       <PauseName />
       <div className="settings-row">
-        <label htmlFor="game-volume">City sounds</label>
+        <label htmlFor="game-volume">{m.pause_city_sounds()}</label>
         <output>{Math.round(state.volume * 100)}%</output>
       </div>
       <input
@@ -156,7 +156,7 @@ export function PausePanel({ state }: { state: GameState }) {
         onChange={(event) => update({ volume: Number(event.target.value) })}
       />
       <label className="setting-checkbox">
-        <span>Mute audio</span>
+        <span>{m.pause_mute()}</span>
         <input
           type="checkbox"
           checked={state.muted}
@@ -164,7 +164,7 @@ export function PausePanel({ state }: { state: GameState }) {
         />
       </label>
       <label className="setting-checkbox">
-        <span>Evening city lights</span>
+        <span>{m.pause_evening()}</span>
         <input
           type="checkbox"
           checked={state.timeOfDay === 'evening'}
@@ -172,7 +172,7 @@ export function PausePanel({ state }: { state: GameState }) {
         />
       </label>
       <label className="setting-checkbox">
-        <span>Reduce camera motion</span>
+        <span>{m.pause_reduce_motion()}</span>
         <input
           type="checkbox"
           checked={state.reducedMotion}
@@ -182,22 +182,22 @@ export function PausePanel({ state }: { state: GameState }) {
       <LanguageSelect />
       <div className="controls-reference">
         <span>
-          <kbd>W A S D</kbd> Move
+          <kbd>W A S D</kbd> {m.pause_key_move()}
         </span>
         <span>
-          <kbd>Drag</kbd> Look around
+          <kbd>{m.controls_drag()}</kbd> {m.pause_key_look()}
         </span>
         <span>
-          <kbd>Shift</kbd> Stroll faster
+          <kbd>Shift</kbd> {m.pause_key_faster()}
         </span>
         <span>
-          <kbd>E</kbd> Talk or ride
+          <kbd>E</kbd> {m.pause_key_talk()}
         </span>
         <span>
-          <kbd>J</kbd> Journal
+          <kbd>J</kbd> {m.pause_key_journal()}
         </span>
         <span>
-          <kbd>M</kbd> Map
+          <kbd>M</kbd> {m.pause_key_map()}
         </span>
       </div>
       <NewJourneyButton className="restart-button" />
@@ -206,7 +206,7 @@ export function PausePanel({ state }: { state: GameState }) {
         className="text-button restart-button"
         onClick={() => void forgetDevice()}
       >
-        Clear saved data
+        {m.pause_clear_data()}
       </button>
     </Dialog>
   )
@@ -215,14 +215,12 @@ export function PausePanel({ state }: { state: GameState }) {
 export function MarketPanel({ state }: { state: GameState }) {
   return (
     <Dialog
-      title="A little market break"
-      eyebrow="Bến Thành market"
+      title={m.market_title()}
+      eyebrow={placeName('market')}
       onClose={close}
       className="market-dialog"
     >
-      <p className="panel-intro">
-        Pick up a small taste for the road. Purchases stay in your saved bag.
-      </p>
+      <p className="panel-intro">{m.market_intro()}</p>
       <div className="market-items">
         {(Object.keys(MARKET_ITEMS) as MarketItemId[]).map((id) => {
           const item = MARKET_ITEMS[id]
@@ -238,21 +236,19 @@ export function MarketPanel({ state }: { state: GameState }) {
               <span>
                 <strong>{item.label}</strong>
                 <small>
-                  {id === 'coffee'
-                    ? 'A warm cup for the walk'
-                    : 'A bright snack from the stall'}
+                  {id === 'coffee' ? m.market_coffee() : m.market_banana()}
                 </small>
               </span>
               <span className="market-price">
-                {item.price} coins · ×{count}
+                {m.coins({ count: item.price })} · ×{count}
               </span>
             </button>
           )
         })}
       </div>
       <div className="fare-row">
-        <span>Your wallet</span>
-        <strong>{state.world.currency} coins</strong>
+        <span>{m.wallet()}</span>
+        <strong>{m.coins({ count: state.world.currency })}</strong>
       </div>
     </Dialog>
   )
@@ -261,17 +257,14 @@ export function MarketPanel({ state }: { state: GameState }) {
 export function PostcardPanel() {
   return (
     <Dialog
-      title="A river postcard"
-      eyebrow="Bạch Đằng waterfront"
+      title={m.postcard_title()}
+      eyebrow={m.postcard_eyebrow()}
       onClose={close}
       className="postcard-dialog"
     >
-      <p className="panel-intro">
-        The river opens the skyline. Pause here, then return to the promenade
-        whenever you are ready.
-      </p>
+      <p className="panel-intro">{m.postcard_intro()}</p>
       <button type="button" className="primary-button wide" onClick={close}>
-        Return to the riverside
+        {m.postcard_return()}
       </button>
     </Dialog>
   )

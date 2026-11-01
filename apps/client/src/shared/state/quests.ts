@@ -1,4 +1,12 @@
-import { NPCS, type NpcId, type Quest, type QuestStep } from '@saigon/shared'
+import {
+  MARKET_ITEMS,
+  NPCS,
+  type NpcId,
+  type Quest,
+  type QuestStep,
+} from '@saigon/shared'
+import { itemLabel, m } from '@/shared/i18n'
+import { placeName } from '@/shared/world/places'
 import { type GameState, trackedQuest } from './game'
 
 export function nextStep(quest: Quest): QuestStep | undefined {
@@ -7,20 +15,23 @@ export function nextStep(quest: Quest): QuestStep | undefined {
 export function stepCopy(step: QuestStep): string {
   switch (step.type) {
     case 'GO_TO':
-      return `Visit ${step.locationId}.`
+      return m.step_visit({ place: placeName(step.locationId) })
     case 'TALK_TO':
-      return `Talk to ${NPCS[step.npcId].name}.`
+      return m.step_talk({ name: NPCS[step.npcId].name })
     case 'DELIVER':
-      return `Give ${step.itemId} to ${NPCS[step.npcId].name}.`
+      return m.step_give({
+        item: itemLabel(step.itemId),
+        name: NPCS[step.npcId].name,
+      })
     case 'BUY':
-      return `Buy ${step.marketItemId} at the market.`
+      return m.step_buy({ item: MARKET_ITEMS[step.marketItemId].label })
   }
 }
 export function questHint(quest: Quest): string {
   const step = nextStep(quest)
   return step
     ? stepCopy(step)
-    : `Return to ${NPCS[quest.giverNpcId].name} for your thank-you.`
+    : m.step_return({ name: NPCS[quest.giverNpcId].name })
 }
 export function questTarget(state: GameState): NpcId | null {
   const quest = trackedQuest(state)

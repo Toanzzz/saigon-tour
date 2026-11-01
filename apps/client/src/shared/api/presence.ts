@@ -1,10 +1,15 @@
 import type { Emote, NpcId, PresencePlayer } from '@saigon/shared'
+import { m } from '@/shared/i18n'
 
-export const EMOTE_TEXT: Record<Emote, string> = {
-  wave: '👋 Wave',
-  thanks: 'Thank you!',
-  hello: 'Hello!',
-  'follow-me': 'Follow me!',
+/** Localized emote label; call at display time. */
+export function emoteText(emote: Emote): string {
+  const labels: Record<Emote, () => string> = {
+    wave: m.emote_wave,
+    thanks: m.emote_thanks,
+    hello: m.emote_hello,
+    'follow-me': m.emote_follow,
+  }
+  return labels[emote]()
 }
 export interface Sample {
   at: number

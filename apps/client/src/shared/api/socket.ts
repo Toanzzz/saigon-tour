@@ -22,7 +22,7 @@ import {
 import { clearExpiredInvite, handlePartyMessage } from './party'
 import {
   clearPresence,
-  EMOTE_TEXT,
+  emoteText,
   npcSpeech,
   recordPlayers,
   speech,
@@ -73,7 +73,7 @@ function handle(message: ServerSocketMessage, room: Room) {
   else if (message.type === 'world') acknowledgeWorld(message)
   else if (message.type === 'emote')
     speech.set(message.playerId, {
-      text: EMOTE_TEXT[message.emote],
+      text: emoteText(message.emote),
       until: performance.now() + 4500,
     })
   else if (message.type === 'npc-line')

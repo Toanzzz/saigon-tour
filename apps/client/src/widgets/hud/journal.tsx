@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { close } from '@/app/actions'
 import { abandonQuest } from '@/shared/api/quests'
+import { itemLabel, m } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
 import { questHint, stepCopy } from '@/shared/state/quests'
 import { Dialog } from '@/shared/ui/dialog'
@@ -10,22 +11,17 @@ export function JournalPanel({ state }: { state: GameState }) {
   const [abandoning, setAbandoning] = useState<string | null>(null)
   return (
     <Dialog
-      title="Your little journey"
-      eyebrow="Travel journal"
+      title={m.journal_title()}
+      eyebrow={m.journal_eyebrow()}
       onClose={close}
     >
       <div className="journal-section">
-        <h3>On your mind · {state.quests.length}/3</h3>
+        <h3>{m.journal_on_mind({ count: state.quests.length })}</h3>
         {state.quests.map((quest) => (
           <section key={quest.id} aria-label={quest.title}>
             <h4>{quest.title}</h4>
             <p>{quest.description}</p>
-            {quest.scope === 'party' && (
-              <p>
-                Shared errand · your steps. Everyone finishes before the group
-                thank-you.
-              </p>
-            )}
+            {quest.scope === 'party' && <p>{m.journal_shared()}</p>}
             <ol>
               {quest.steps.map((step, index) => (
                 <li
@@ -33,7 +29,11 @@ export function JournalPanel({ state }: { state: GameState }) {
                 >
                   <span
                     role="img"
-                    aria-label={quest.progress[index] ? 'Done' : 'Pending'}
+                    aria-label={
+                      quest.progress[index]
+                        ? m.journal_done()
+                        : m.journal_pending()
+                    }
                   >
                     {quest.progress[index] ? '✓ ' : '○ '}
                   </span>
@@ -43,9 +43,13 @@ export function JournalPanel({ state }: { state: GameState }) {
             </ol>
             <p>{questHint(quest)}</p>
             <span className="journal-reward">
-              {quest.reward.currency} coins ·{' '}
-              {quest.reward.itemId ?? 'a thank-you'} · +
-              {quest.reward.reputation} reputation
+              {m.journal_reward({
+                coins: m.coins({ count: quest.reward.currency }),
+                item: quest.reward.itemId
+                  ? itemLabel(quest.reward.itemId)
+                  : m.journal_thank_you(),
+                reputation: quest.reward.reputation,
+              })}
             </span>
             <div className="journal-actions">
               <button
@@ -54,7 +58,7 @@ export function JournalPanel({ state }: { state: GameState }) {
                 aria-pressed={state.trackedQuestId === quest.id}
                 onClick={() => update({ trackedQuestId: quest.id })}
               >
-                Track errand
+                {m.journal_track()}
               </button>
               <button
                 type="button"
@@ -69,38 +73,36 @@ export function JournalPanel({ state }: { state: GameState }) {
                   }
                 }}
               >
-                Abandon errand
+                {m.journal_abandon()}
               </button>
             </div>
           </section>
         ))}
-        {!state.quests.length && (
-          <p>Say hello to a neighbor and see who could use a hand.</p>
-        )}
+        {!state.quests.length && <p>{m.journal_empty()}</p>}
       </div>
       <div className="journal-section">
-        <h3>In your bag</h3>
+        <h3>{m.journal_bag()}</h3>
         <div className="bag-items">
           <span>
             <Icon name="coin" />
-            {state.world.currency} coins
+            {m.coins({ count: state.world.currency })}
           </span>
           {(state.world.inventory.herbs ?? 0) > 0 && (
             <span>
               <Icon name="leaf" />
-              Fresh herbs × {state.world.inventory.herbs}
+              {m.journal_herbs()} × {state.world.inventory.herbs}
             </span>
           )}
           {(state.world.inventory.postcard ?? 0) > 0 && (
             <span>
               <Icon name="map" />
-              Sài Gòn postcard × {state.world.inventory.postcard}
+              {m.journal_postcard()} × {state.world.inventory.postcard}
             </span>
           )}
           {(state.world.inventory.photo ?? 0) > 0 && (
             <span>
               <Icon name="star" />
-              Group photo × {state.world.inventory.photo}
+              {m.journal_photo()} × {state.world.inventory.photo}
             </span>
           )}
           {(state.world.inventory.coffee ?? 0) > 0 && (
@@ -118,7 +120,7 @@ export function JournalPanel({ state }: { state: GameState }) {
         </div>
       </div>
       <div className="journal-section">
-        <h3>Good memories</h3>
+        <h3>{m.journal_memories()}</h3>
         {state.completed.length ? (
           state.completed.map((quest) => (
             <p className="completed-errand" key={quest.id}>
@@ -127,11 +129,11 @@ export function JournalPanel({ state }: { state: GameState }) {
             </p>
           ))
         ) : (
-          <p className="muted-copy">Your first story is waiting to happen.</p>
+          <p className="muted-copy">{m.journal_first_story()}</p>
         )}
       </div>
       <button type="button" className="primary-button wide" onClick={close}>
-        Continue exploring
+        {m.pause_continue()}
       </button>
     </Dialog>
   )

@@ -1,4 +1,5 @@
 import { type PointerEvent, useEffect, useRef, useState } from 'react'
+import { m } from '@/shared/i18n'
 import { clearInput, input } from '@/shared/runtime/input'
 
 export function TouchStick() {
@@ -42,7 +43,7 @@ export function TouchStick() {
     <fieldset
       ref={ref}
       className="touch-stick"
-      aria-label="Movement joystick"
+      aria-label={m.touch_joystick()}
       onPointerDown={(event) => {
         pointer.current = event.pointerId
         event.currentTarget.setPointerCapture(event.pointerId)

@@ -1,6 +1,7 @@
 import { useSelector } from '@tanstack/react-store'
 import { sendParty } from '@/shared/api/socket'
 import { net, updateNet } from '@/shared/api/status'
+import { m } from '@/shared/i18n'
 
 export function PartyInviteControls() {
   const { invite, connection } = useSelector(net, (state) => state)
@@ -12,11 +13,12 @@ export function PartyInviteControls() {
   return (
     <section
       className="party-invite"
-      aria-label="Party invitation"
+      aria-label={m.party_invitation()}
       aria-live="polite"
     >
       <p>
-        <strong>{invite.fromName}</strong> invited you to explore together.
+        <strong>{invite.fromName}</strong>
+        {m.party_invited()}
       </p>
       <div>
         <button
@@ -25,7 +27,7 @@ export function PartyInviteControls() {
           disabled={connection !== 'connected'}
           onClick={() => respond(true)}
         >
-          Accept invite
+          {m.party_accept()}
         </button>
         <button
           type="button"
@@ -33,7 +35,7 @@ export function PartyInviteControls() {
           disabled={connection !== 'connected'}
           onClick={() => respond(false)}
         >
-          Decline invite
+          {m.party_decline()}
         </button>
       </div>
     </section>
