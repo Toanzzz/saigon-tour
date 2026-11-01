@@ -996,6 +996,27 @@
     ]
   },
   {
+    "path": "collectibles/coin.glb",
+    "bytes": 5744,
+    "meshes": 4,
+    "materials": 3,
+    "triangles": 576,
+    "vertices": 316,
+    "bounds": {
+      "min": [
+        -0.20999999344348907,
+        -0.20999999344348907,
+        -0.03999999910593033
+      ],
+      "max": [
+        0.20999999344348907,
+        0.20999999344348907,
+        0.03999999910593033
+      ]
+    },
+    "animations": []
+  },
+  {
     "path": "cosmetics/non-la.glb",
     "bytes": 1500,
     "meshes": 1,

@@ -139,8 +139,10 @@ for (const [id, name] of Object.entries(pets)) {
   await document.transform(dedup(), prune())
   await writeRuntime(target, document)
 }
-// Cosmetics and vehicles are project-authored, built by the Blender scripts.
+// Cosmetics, vehicles, and collectibles are project-authored, built by the
+// Blender scripts.
 const authored: Record<string, string[]> = {
+  collectibles: ['coin'],
   cosmetics: [
     'non-la',
     'helmet',
