@@ -102,3 +102,21 @@ export async function buildContext(
   ].join('\n')
   return context
 }
+
+/**
+ * The user-role message for a model turn. Some intents (notably `milestone`,
+ * and `greet` when it reaches the model) carry no typed player text, and the
+ * Google proxy rejects a request whose only message is the system context
+ * ("requires at least one non-system message"). Fall back to a short,
+ * intent-appropriate player line so there is always one non-system message.
+ */
+export function turnMessage(request: InteractRequest): string {
+  const typed = request.message.trim()
+  if (typed) return typed
+  const vi = request.locale === 'vi'
+  if (request.intent === 'milestone')
+    return vi
+      ? 'Có việc gì cần giúp cho buổi hòa nhạc không?'
+      : 'Anything I can help with for the concert?'
+  return vi ? 'Chào bạn!' : 'Hi there!'
+}

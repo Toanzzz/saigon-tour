@@ -46,7 +46,7 @@ import {
 import { cleanReply } from './safety'
 import { ShortLines } from './short-lines'
 import type { NpcRequestValues, ToolOutcome } from './tools/context'
-import { buildContext, friendshipChanges } from './turn'
+import { buildContext, friendshipChanges, turnMessage } from './turn'
 
 /** Mastra NPC harness: agents propose through tools, QuestService decides. */
 export class NpcHarness {
@@ -384,7 +384,7 @@ export class NpcHarness {
         ['outcome', outcome],
       ])
       try {
-        const result = await agent.generate(request.message, {
+        const result = await agent.generate(turnMessage(request), {
           memory: {
             thread: `${npcId}:${playerId}`,
             resource: playerId,

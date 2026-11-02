@@ -389,3 +389,15 @@ amount; it is now `size={44}` with the row keeping the emblem's symmetric bleed
 (measured: no overlap). "Wear now" used `close()`, which opened the first-reward
 hub; it now equips and drops straight back into the city
 (`screen: 'playing'`).
+
+## NPC empty-message turn fix (2026-11-03)
+
+`npc_turn_failed … Google proxy requires at least one non-system message`
+(status 400) happened on `milestone`/`greet` turns: the schema lets `message`
+be empty for those intents, and `agent.generate(request.message, …)` then sent
+only the system context. `turnMessage(request)` now returns a short,
+intent-appropriate, localized player line when no text was typed, so every model
+call carries a non-system message (`features/npc/turn.ts`,
+`test/turn-message.spec.ts`). The separate `MastraTimeoutError … 15000ms` is
+provider latency, not a bug: the turn is caught, logged, and the authored
+fallback line is served; the timeout budget is intentionally left unchanged.
