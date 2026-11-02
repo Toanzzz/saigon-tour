@@ -304,3 +304,31 @@ and scatters low-opacity puddle ellipses that glint under the evening lights.
 `features/npcs/umbrellas.tsx` opens paper umbrellas on the nearest ≤16 NPCs
 within 40 units (plus the on-foot player) with a spring pop/fold, picked by the
 pure `umbrella-picker.ts`. Routes never close; rain is visual only.
+
+## Street comedy (map Phase 5)
+
+The street level reads like a comic strip. Comic speech bubbles are CSS only
+(`shared/ui/people.css`, `shared/ui/world.css`): `.presence-bubble` and the
+`NpcLabel` `.name-tag` get a white fill, a 2px `ink` border, an offset shadow,
+a pointed tail with a thin wire, and a pop-in. All of it gates behind a single
+`data-look` attribute set once on the document root from `LOOK`, so
+`?look=classic` keeps today's pill unchanged, and `prefers-reduced-motion`
+drops the pop. Vendor cries (`features/city/cries.tsx`, scheduled by the pure
+`cry-scheduler.ts`) shout from authored anchors at the market stalls, the Bùi
+Viện alley, the Nguyễn Huệ kiosks and the river vendors: within 18 units an
+anchor shows one `Html` bubble every 6–10 s for 3.5 s, at most two at once, and
+it backs off while an NPC bubble sits within 5 units. The Vietnamese cry shows
+in both locales; English adds a gloss line (`cry_*` / `cry_*_gloss`). A scooter
+swarm (`features/city/traffic.tsx`) loops 22 instanced scooters (10 below
+700 px) on Lê Lợi, Lê Thánh Tôn and Đồng Khởi, two opposite lanes per road
+split around the ±6-unit bus-stop gaps (pure `traffic-lanes.ts`); matrices
+update only within 60 units and freeze otherwise, and reduced motion parks them.
+Each scooter carries one of four caricature cargo shapes and an oversized
+headlight that glows warm in the evening through the unlit path. The honk gag
+(pure `traffic-brake.ts`) brakes, wobbles and pops a "Bíp bíp!" bubble when the
+player — or the ride vehicle — enters a scooter's 3.5-unit forward cone, with an
+8 s per-scooter cooldown; it never adds a collider or displaces the player, so
+Rapier is untouched and the swarm never blocks a ride. Parked motorbikes and
+low corner planters at the Lê Lợi junction (`shared/world/street-life.tsx`)
+frame the fragile-parcel wobble corner; the planters sit below knee height with
+no collider, off the auto-piloted ride path. Bubbles are hidden in XR.

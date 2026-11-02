@@ -383,3 +383,46 @@ each pose (windows 1, neon 1-2, lamps merged +0) — well under the +8 evening/r
 budget. Rain adds the streak, puddle, and two umbrella instanced meshes on top,
 verified by the diagnostics counts. Triangles stay within +10k. Evidence:
 `/tmp/saigon-map-evidence/phase4/` and `weather-*.json`.
+
+## Map Phase 5 — street comedy (2026-11-02)
+
+Comic speech bubbles, vendor cries, a honking scooter swarm, comic cargo, and
+corner planters. Scenery only; no colliders added (Rapier untouched); the player
+is never displaced or blocked. `?look=classic` keeps the original bubbles.
+
+### Gates
+
+- `bun run check` clean (770 files); `check:types` 0; `build` client + server 0;
+  `test` → server 403 passed / 2 skipped, client 282 passed (34 files, incl.
+  `cries.spec.ts`, `traffic.spec.ts`, `street-bubbles.spec.ts`).
+- Bug found and fixed during review: `stepCries` counted only preceding anchors
+  for the ≤2 visible cap, so a later already-showing anchor could push the total
+  to three; now a two-pass count caps all holders. Regression test added.
+
+### Street QA (`scripts/qa-map-street.mjs`, live dev server, desktop + 390px)
+
+- Honk gag: walking a Lê Lợi lane pops a "Bíp bíp!" bubble within 3 s and the
+  player is never displaced (move delta < 6).
+- Cries: a vendor cry appears near the market within 12 s; at most two vendor
+  cries are visible at once (the honk bubble shares the class but is excluded).
+- Locale: EN shows the Vietnamese cry plus an English gloss; the vi-VN context
+  shows the cry alone (gloss 0).
+- Ride: a xe ôm ride boards, the collider count never changes during the ride
+  (the swarm never blocks it), and it arrives at City Hall.
+
+### Perf (`scripts/qa-map-perf.mjs`, vs the Phase 4 baseline)
+
+Desktop +12 draw calls at the busiest poses (spawn/alley) and +4-5 elsewhere;
++6k triangles (budget +15k). The scooter swarm is ~6 instanced part meshes whose
+draw-call cost is fixed regardless of scooter count, so it runs ~+2 over the +10
+target at spawn/alley; triangles stay well under. This phase is the plan's
+first-to-cut, and the swarm (5c) is its first cut item. Evidence:
+`/tmp/saigon-map-evidence/phase5/`.
+
+### Vietnamese review (user gate)
+
+The new `cry_*` strings are drafted in the southern register and match the
+look-guide cry table; they are shown in both locales and still need the user's
+review per the content guide: "Cà phê sữa đá đây!", "Bánh mì nóng hổi đây!",
+"Chè ba màu đây!", "Dừa tươi mát lạnh!", "Nước mía đây, mát lắm!",
+"Bắp nướng thơm phức!", and the honk "Bíp bíp!".
