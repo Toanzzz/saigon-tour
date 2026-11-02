@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useRef } from 'react'
 import type { DirectionalLight } from 'three'
 import { motion } from '@/shared/runtime/motion'
+import { LOOK } from '@/shared/world/look-flag'
 
 const OFFSET = [-22, 38, 23] as const
 
@@ -25,7 +26,7 @@ export function Sun({ evening = false }: { evening?: boolean }) {
     <directionalLight
       ref={light}
       position={[...OFFSET]}
-      intensity={evening ? 1.7 : 3.2}
+      intensity={LOOK === 'comic' ? (evening ? 1.6 : 2.9) : evening ? 1.7 : 3.2}
       color={evening ? '#aab9ff' : '#ffdfaa'}
       castShadow
       shadow-mapSize={mobile ? [1024, 1024] : [2048, 2048]}

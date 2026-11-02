@@ -9,6 +9,9 @@ import {
   Object3D,
 } from 'three'
 
+import { LOOK } from './look-flag'
+import { toToon } from './toon'
+
 export type Vec3 = [number, number, number]
 export type Placement = {
   position: Vec3
@@ -33,23 +36,34 @@ const CITY_TINTS: Record<string, string> = {
 function prepareMeshMaterial(mesh: Mesh, path: string) {
   const foliage = path.startsWith('nature/')
   const tint = CITY_TINTS[path]
-  if (!foliage && !tint) return
-  const cloneMaterial = (source: Material) => {
-    const material = source.clone()
-    if (foliage && 'metalness' in material) {
-      ;(material as { metalness: number }).metalness = 0
+  // Under classic, only tinted/foliage meshes change, exactly as before.
+  if (LOOK === 'classic' && !foliage && !tint) return
+  const convert = (source: Material) => {
+    // Apply tint/foliage tweaks on a clone first, then toon the result so
+    // the toon material carries the adjusted colour.
+    let material = source
+    if (foliage || tint) {
+      material = source.clone()
+      if (foliage && 'metalness' in material) {
+        ;(material as { metalness: number }).metalness = 0
+      }
+      if (tint && 'color' in material) {
+        ;(material as { color: Color }).color.lerp(new Color(tint), 0.18)
+      }
     }
-    if (tint && 'color' in material) {
-      ;(material as { color: Color }).color.lerp(new Color(tint), 0.18)
-    }
-    return material
+    return LOOK === 'comic' ? toToon(material) : material
   }
   mesh.material = Array.isArray(mesh.material)
-    ? mesh.material.map(cloneMaterial)
-    : cloneMaterial(mesh.material)
+    ? mesh.material.map(convert)
+    : convert(mesh.material)
 }
 
-function prepareScene(scene: Object3D, path: string) {
+/** Scenes already prepared, so a remount never re-tints the shared cache. */
+const prepared = new WeakSet<Object3D>()
+
+export function prepareScene(scene: Object3D, path: string) {
+  if (prepared.has(scene)) return
+  prepared.add(scene)
   scene.traverse((child) => {
     if (child instanceof Mesh) prepareMeshMaterial(child, path)
   })
@@ -61,17 +75,20 @@ export function Model({
   rotation,
   scale = 1,
   shadow = true,
+  classic = false,
 }: {
   path: string
   position?: Vec3
   rotation?: Vec3
   scale?: number | Vec3
   shadow?: boolean
+  /** Keep Standard materials even under `comic` (e.g. the gold coin emblem). */
+  classic?: boolean
 }) {
   const { scene } = loadModel(path)
   const object = useMemo(() => {
     const value = scene.clone(true)
-    prepareScene(value, path)
+    if (!classic) prepareScene(value, path)
     value.traverse((child) => {
       if (child instanceof Mesh) {
         child.castShadow = shadow
@@ -79,7 +96,7 @@ export function Model({
       }
     })
     return value
-  }, [path, scene, shadow])
+  }, [path, scene, shadow, classic])
   return (
     <primitive
       object={object}

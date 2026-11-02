@@ -3,39 +3,65 @@ import {
   BoxGeometry,
   CanvasTexture,
   type InstancedMesh,
+  type Material,
+  MeshBasicMaterial,
   MeshStandardMaterial,
   Object3D,
   SRGBColorSpace,
 } from 'three'
 import type { Placement, Vec3 } from './assets'
+import { LOOK, type WorldLook } from './look-flag'
+import { toToon } from './toon'
 
 const box = new BoxGeometry(1, 1, 1)
-const materialCache = new Map<string, MeshStandardMaterial>()
-function material(color: string) {
-  let value = materialCache.get(color)
+/** Lit block materials, cached per colour AND look so toon and classic never mix. */
+const materialCache = new Map<string, Material>()
+/** Pure resolver, exported for tests so both looks can be exercised. */
+export function blockMaterial(color: string, look: WorldLook) {
+  const key = `${look}:${color}`
+  let value = materialCache.get(key)
   if (!value) {
-    value = new MeshStandardMaterial({ color, roughness: 0.88 })
-    materialCache.set(color, value)
+    const standard = new MeshStandardMaterial({ color, roughness: 0.88 })
+    value = look === 'comic' ? toToon(standard) : standard
+    materialCache.set(key, value)
   }
   return value
 }
+function material(color: string) {
+  return blockMaterial(color, LOOK)
+}
+
+/** Unlit glow block materials: Basic + `toneMapped={false}`, toon-exempt. */
+const glowCache = new Map<string, MeshBasicMaterial>()
+export function glowMaterial(color: string) {
+  let value = glowCache.get(color)
+  if (!value) {
+    value = new MeshBasicMaterial({ color, toneMapped: false })
+    value.userData.unlit = true
+    glowCache.set(color, value)
+  }
+  return value
+}
+
 export function Block({
   position,
   scale,
   color,
   rotation,
   shadow = false,
+  unlit = false,
 }: {
   position: Vec3
   scale: Vec3
   color: string
   rotation?: Vec3
   shadow?: boolean
+  unlit?: boolean
 }) {
   return (
     <mesh
       geometry={box}
-      material={material(color)}
+      material={unlit ? glowMaterial(color) : material(color)}
       position={position}
       scale={scale}
       rotation={rotation}
@@ -49,10 +75,12 @@ export function Blocks({
   placements,
   color,
   shadow = false,
+  unlit = false,
 }: {
   placements: Placement[]
   color: string
   shadow?: boolean
+  unlit?: boolean
 }) {
   const ref = useRef<InstancedMesh>(null)
   useEffect(() => {
@@ -74,7 +102,11 @@ export function Blocks({
   return (
     <instancedMesh
       ref={ref}
-      args={[box, material(color), placements.length]}
+      args={[
+        box,
+        unlit ? glowMaterial(color) : material(color),
+        placements.length,
+      ]}
       castShadow={shadow}
       receiveShadow
       dispose={null}

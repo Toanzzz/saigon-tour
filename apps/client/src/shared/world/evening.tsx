@@ -100,6 +100,7 @@ export function EveningLighting({ active = true }: { active?: boolean }) {
         frustumCulled
       />
       <Blocks
+        unlit
         color="#ff9c62"
         placements={[
           { position: [-23, 2.3, 3.4], scale: [4.3, 0.08, 0.08] },

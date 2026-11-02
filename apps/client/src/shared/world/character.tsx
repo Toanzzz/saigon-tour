@@ -13,6 +13,8 @@ import { clone } from 'three/addons/utils/SkeletonUtils.js'
 import type { Vec3 } from './assets'
 import { modelUrl } from './assets'
 import { applyOutfitPalette, attachCosmetic, CLOTHING } from './look'
+import { LOOK } from './look-flag'
+import { toToon } from './toon'
 
 /** Runtime models are Draco-compressed; the decoder is self-hosted. */
 const DRACO = `${import.meta.env.BASE_URL}draco/`
@@ -66,6 +68,12 @@ export function Character({
           child.material = Array.isArray(child.material)
             ? child.material.map(tint)
             : tint(child.material)
+        }
+        // Toon the result; outfit palettes clone this toon material afterwards.
+        if (LOOK === 'comic') {
+          child.material = Array.isArray(child.material)
+            ? child.material.map(toToon)
+            : toToon(child.material)
         }
       }
     })

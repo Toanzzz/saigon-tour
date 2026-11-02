@@ -66,7 +66,12 @@ export function CoinEmblem({ size = 40 }: { size?: number }) {
           <AvatarLights />
           <Suspense fallback={null}>
             <Spin>
-              <Model path="collectibles/coin" scale={2.4} shadow={false} />
+              <Model
+                path="collectibles/coin"
+                scale={2.4}
+                shadow={false}
+                classic
+              />
             </Spin>
           </Suspense>
         </Canvas>
