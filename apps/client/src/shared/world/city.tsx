@@ -79,7 +79,7 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
       <WaterfrontLife />
       <EveningLighting active={evening} />
       <Skyline />
-      {LOOK === 'comic' && <DioramaDepth />}
+      {LOOK === 'comic' && <DioramaDepth evening={evening} />}
       <ModelInstances
         path="nature/tree_palmDetailedTall"
         placements={PALM_PLACEMENTS}
@@ -133,7 +133,7 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
  * skyline cards (desktop only, < 700 px cuts them), and the paper diorama base
  * skirt. The sky dome lives in `atmosphere.tsx`.
  */
-function DioramaDepth() {
+function DioramaDepth({ evening }: { evening: boolean }) {
   const mobile = useThree((state) => state.size.width) < 700
   // One Blocks call: a paperEdge skirt 2 units deep under each GROUND rect,
   // its top meeting the ground underside (−0.6) and dropping to −2.6, so the
@@ -146,7 +146,7 @@ function DioramaDepth() {
   return (
     <group>
       <PaperClouds />
-      {!mobile && <SkylineCards />}
+      {!mobile && <SkylineCards evening={evening} />}
       <Blocks placements={skirt} color={PALETTE.paperEdge} />
     </group>
   )

@@ -11,7 +11,7 @@ import {
  * `NearestFilter`, so every toon material bands identically. A 2-step ramp
  * clamps too hard on large walls; three steps keeps the midtone.
  */
-const RAMP = (() => {
+export const TOON_RAMP = (() => {
   const steps = new Uint8Array([
     Math.round(0.45 * 255),
     Math.round(0.75 * 255),
@@ -47,7 +47,7 @@ export function toToon(material: Material): Material {
   if (cached) return cached
   const source = material as WithColor
   const toon = new MeshToonMaterial({
-    gradientMap: RAMP,
+    gradientMap: TOON_RAMP,
     transparent: source.transparent,
     alphaTest: source.alphaTest ?? 0,
     side: source.side,

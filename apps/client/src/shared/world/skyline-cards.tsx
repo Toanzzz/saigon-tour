@@ -14,6 +14,7 @@ import {
 } from 'three'
 import { skyColors } from '@/features/city/atmosphere'
 import type { Placement, Vec3 } from './assets'
+import { PALETTE } from './palette'
 
 /**
  * Flat cutout skyline cards outside the walls on the north and west, plus the
@@ -160,7 +161,7 @@ function buildCardGeometry() {
   return geometry
 }
 
-export function SkylineCards() {
+export function SkylineCards({ evening = false }: { evening?: boolean }) {
   const geometry = useMemo(() => buildCardGeometry(), [])
   const material = useMemo(() => {
     const m = new MeshBasicMaterial({ vertexColors: true, fog: false })
@@ -177,13 +178,13 @@ export function SkylineCards() {
         frustumCulled={false}
         dispose={null}
       />
-      <WindowDots />
+      <WindowDots evening={evening} />
     </group>
   )
 }
 
 /** Window dots scattered over the cards: unlit now; Phase 4 lights them. */
-function WindowDots() {
+function WindowDots({ evening }: { evening: boolean }) {
   const ref = useRef<InstancedMesh>(null)
   const dots = useMemo<Placement[]>(() => {
     const result: Placement[] = []
@@ -218,6 +219,11 @@ function WindowDots() {
     m.userData.unlit = true
     return m
   }, [])
+  // At dusk the vellum windows warm to the 3000 K interior glow; by day they
+  // stay the dim unlit tone.
+  useEffect(() => {
+    material.color.set(evening ? PALETTE.window3000k : '#3a3f55')
+  }, [evening, material])
   useEffect(() => {
     if (!ref.current) return
     const dummy = new Object3D()
