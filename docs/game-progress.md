@@ -237,3 +237,37 @@ hemisphere light moved out of `app/scene.tsx` into `features/city/atmosphere.tsx
 A/B and rollback; the flag is frozen at boot in `shared/world/look-flag.ts`. A
 read-only `camera()` test hook (fov, position, yaw) and `scripts/qa-map-perf.mjs`
 record draw calls and triangles at fixed poses for per-phase perf gating.
+
+## Landmarks and zones (map Phase 2)
+
+District 1 carries the missing icons as scenery; no `LocationId`, `PLACES`,
+`CITY_ANCHORS`, NPC, or coin changes. New world objects are procedural and
+instanced, materials come from the palette, and glow (helipad mark, string
+bulbs) uses `<Blocks unlit>`.
+
+`shared/world/district.ts` exports `ICON_FOOTPRINTS` (Bitexco at (57,29), the
+42 Nguyễn Huệ café-apartments at (57,−8)). Each icon replaces one
+`buildingRows` slot in `layout.ts`, adds a rect solid in `solids.ts`, and the
+minimap (`features/map/map.tsx`) draws the two rects in a landmark fill with
+`map_bitexco` / `map_cafe_apartments` labels. `test/city-layout.spec.ts` lints
+`ICON_FOOTPRINTS` alongside the other landmark footprints.
+
+`shared/world/icons-nguyen-hue.tsx` builds Bitexco (tapered lotus-bud stack,
+glass band, cantilever helipad with a generic comic "H" and one burst ring; the
+upper section casts no shadow) and the café-apartments (9-storey block, instanced
+balcony-frame grid coloured per panel). It exports `CAFE_NEON_STRIPS` for Phase 4.
+`shared/world/icons-market.tsx` adds the exaggerated Bến Thành clock tower on the
+market's south gate — procedural, because the `landmarks/cho-ben-thanh` GLB has
+no grouped tower node; its clock parts are flat sibling meshes — plus the market
+spill-over stalls. The clock hands tick and freeze under reduced motion.
+`shared/world/icons-postoffice.tsx` floats instanced postcards on ink wires above
+the post office entrance (gentle bob, canvas stamp texture, diegetic "SÀI GÒN"
+postmark). `shared/world/icons-park.tsx` plants four oversized Tao Đàn-style trees
+at the PARK edges, trunks carrying solids, canopy swaying as one group.
+`shared/world/icons-bui-vien.tsx` dresses the Bùi Viện alley plaza with stools,
+tables, string bulbs, shop signs, and empty neon frames exported as
+`BUI_VIEN_NEON_FRAMES` for Phase 4. Local dressing is culled with
+`shared/world/nearby.tsx`.
+
+Cathedral wire clouds (item 5) wait on Phase 3's `PaperClouds`; there is a TODO
+in `shared/world/city.tsx` and no cloud geometry yet.

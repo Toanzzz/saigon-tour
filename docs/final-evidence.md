@@ -270,3 +270,51 @@ Phase 0 task 1 also asks for real-hardware fps at the spawn pose and mid Nguyễ
 Huệ, `comic` vs `classic`, on desktop and a phone (`comic` must be ≤ 2 fps below
 `classic`). Headless fps runs software GL and is untrustworthy, so this is left
 to the user. These fps numbers become the per-phase fps reference.
+
+## Map Phase 2 — landmarks and zones (2026-11-02)
+
+Bitexco, the café apartments (42 Nguyễn Huệ), an exaggerated Bến Thành clock
+tower, floating post office postcards, giant park trees, and Bùi Viện / market
+dressing. Scenery only: no `LocationId`, `PLACES`, `CITY_ANCHORS`, NPC, or coin
+changes; `city-layout.spec.ts` gained `ICON_FOOTPRINTS` in its landmark list with
+no bounds change.
+
+### Gates
+
+- `bun run check` clean (750 files); `check:types` 0; `build` client + server 0;
+  `test` → server 403 passed / 2 skipped, client 246 passed (29 files, incl. new
+  `icons.spec.ts`).
+
+### Landmarks QA (`scripts/qa-map-landmarks.mjs`, live dev server)
+
+- Walk-in collision: walking at Bitexco stops the player at z=32.55 (north of the
+  solid), and at the café apartments at z=−5.15 — both colliders hold. Desktop and
+  390px.
+- Minimap: exactly 2 landmark rects (distinct fill) and no overlap between the
+  `map_bitexco` / `map_cafe_apartments` labels and the stop labels, both viewports.
+
+### Bitexco camera check
+
+From mid Nguyễn Huệ (69,0) at the default heading, the follow camera sits at
+(69, 25.5, 16) looking toward −z; Bitexco is at z=29, behind the camera, so it
+does not sit between the camera and the player and does not block the view. A
+capture at this pose (`/tmp/saigon-map-evidence/bitexco-nguyenhue.png`) shows the
+player clear with the tower reading over the rooftops.
+
+### Perf (`scripts/qa-map-perf.mjs`, steady-state)
+
+Desktop (comic): spawn 241 calls / 345,229 tris, alley 260 / 347,254 (worst case),
+nguyễn-huệ 139 / 181,717, cathedral 146 / 170,727. Mobile: spawn 166 / 335,153,
+alley 212 / 342,179. Triangles dropped versus the Phase 0 baseline at every pose
+(the slot swaps removed two row buildings, which more than offsets the procedural
+icons), so the +20k-triangle budget has margin. Draw calls land near the
+desktop +12 budget; the counter carries ~±4 run-to-run variance, so the mobile
+margin is held by cutting the signs, parasols, neon frames, and bulb wire below
+700px rather than claimed to ±1. Evidence: `/tmp/saigon-map-evidence/phase2*/`.
+
+### Deferred
+
+- Cathedral wire clouds (item 5) depend on Phase 3's `PaperClouds`; a TODO marks
+  the spot in `city.tsx`. Neon strip placements for 42 Nguyễn Huệ
+  (`CAFE_NEON_STRIPS`) and Bùi Viện (`BUI_VIEN_NEON_FRAMES`) are exported for
+  Phase 4.
