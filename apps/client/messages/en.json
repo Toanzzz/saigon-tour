@@ -523,5 +523,12 @@
   "wardrobe_slot_empty": "Nothing here yet — earn it from a neighbor.",
   "hud_hop_on": "Hop on bike",
   "hud_hop_off": "Hop off bike",
-  "hud_hint_bike": "bike"
+  "hud_hint_bike": "bike",
+  "map_debug_title": "Map inspector",
+  "map_debug_focus": "Focus",
+  "map_debug_all": "Whole map",
+  "map_debug_overhead": "Top view",
+  "map_debug_colliders": "Collision shapes",
+  "map_debug_help": "Drag to orbit · scroll to zoom · right-drag to pan. Touch: one finger rotates, two fingers zoom/pan.",
+  "map_debug_exit": "Return to game"
 }

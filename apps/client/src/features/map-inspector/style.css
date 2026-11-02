@@ -1,0 +1,35 @@
+.map-inspector {
+  position: fixed;
+  inset: 0;
+}
+.map-inspector canvas {
+  touch-action: none;
+}
+.map-inspector-controls {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  max-width: min(650px, calc(100% - 24px));
+  padding: 12px;
+  border: 2px solid #292735;
+  border-radius: 12px;
+  background: #fff3d5;
+  color: #292735;
+}
+.map-inspector-controls label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.map-inspector-controls select {
+  max-width: 210px;
+}
+.map-inspector-controls p {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 13px;
+}

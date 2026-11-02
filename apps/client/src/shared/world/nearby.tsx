@@ -1,6 +1,7 @@
 import { useFrame } from '@react-three/fiber'
 import { type ReactNode, useRef } from 'react'
 import type { Group } from 'three'
+import { mapInspectorEnabled } from './map-debug'
 
 /**
  * Culls its children when the camera is farther than `distance` from the
@@ -21,8 +22,9 @@ export function Nearby({
   useFrame(({ camera }) => {
     if (ref.current)
       ref.current.visible =
+        mapInspectorEnabled() ||
         (camera.position.x - at[0]) ** 2 + (camera.position.z - at[1]) ** 2 <
-        distance * distance
+          distance * distance
   })
   return <group ref={ref}>{children}</group>
 }

@@ -8,7 +8,7 @@ import { DistrictLife } from './district-life'
 import { DistrictLifeTwo } from './district-life-2'
 import { EveningLighting } from './evening'
 import { BuiVienDressing } from './icons-bui-vien'
-import { MarketClockTower, MarketSpillover } from './icons-market'
+import { MarketSpillover } from './icons-market'
 import { Bitexco, CafeApartments } from './icons-nguyen-hue'
 import { GiantParkTrees } from './icons-park'
 import { PostOfficePostcards } from './icons-postoffice'
@@ -53,7 +53,6 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
         shadow={false}
       />
       <MarketStall />
-      <MarketClockTower />
       <MarketSpillover />
       <Shophouses />
       <ParkFeatures />

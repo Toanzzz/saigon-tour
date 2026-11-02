@@ -1,5 +1,6 @@
 import { beforeEach } from 'vitest'
 import { resetCarry } from '@/features/carry'
+import { resetMapInspector } from '@/features/map-inspector/store'
 import { resetAsides } from '@/features/transport/asides'
 import { setLocale } from '@/paraglide/runtime'
 import { resetPresenceView } from '@/shared/api/presence-view'
@@ -13,6 +14,7 @@ import { resetXr } from '@/shared/xr'
 void setLocale('en', { reload: false })
 
 beforeEach(() => {
+  resetMapInspector()
   resetUiStores()
   resetViewStores()
   resetTwists()

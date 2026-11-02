@@ -492,5 +492,12 @@
   "wardrobe_slot_empty": "Chưa có gì ở đây — hãy nhận từ hàng xóm.",
   "hud_hop_on": "Lên xe đạp",
   "hud_hop_off": "Xuống xe đạp",
-  "hud_hint_bike": "xe đạp"
+  "hud_hint_bike": "xe đạp",
+  "map_debug_title": "Kiểm tra bản đồ",
+  "map_debug_focus": "Khu vực",
+  "map_debug_all": "Toàn bản đồ",
+  "map_debug_overhead": "Nhìn từ trên",
+  "map_debug_colliders": "Khối va chạm",
+  "map_debug_help": "Kéo để xoay · cuộn để thu phóng · kéo chuột phải để di chuyển. Cảm ứng: một ngón xoay, hai ngón thu phóng/di chuyển.",
+  "map_debug_exit": "Trở về trò chơi"
 }

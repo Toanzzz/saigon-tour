@@ -1,6 +1,7 @@
 import { useProgress } from '@react-three/drei'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react'
+import { MapInspector, mapInspectorEnabled } from '@/features/map-inspector'
 import { queryClient } from '@/shared/api/agent'
 import { initializeSession } from '@/shared/api/session'
 import { installRealtime } from '@/shared/api/socket'
@@ -25,6 +26,10 @@ function Loading() {
 }
 
 export function App() {
+  return mapInspectorEnabled() ? <MapInspector /> : <GameApp />
+}
+
+function GameApp() {
   // Remount only the DOM layer on language change; the scene keeps running.
   const locale = useLocale()
   useEffect(() => {

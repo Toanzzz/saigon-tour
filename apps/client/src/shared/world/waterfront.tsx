@@ -2,6 +2,7 @@ import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import type { Group } from 'three'
 import { Model, type Placement, type Vec3 } from './assets'
+import { mapInspectorEnabled } from './map-debug'
 import { Block, Blocks, Sign } from './primitives'
 
 const pierPosts: Placement[] = [-1, 1].flatMap((side) =>
@@ -68,9 +69,10 @@ function RiverBoat({
   useFrame(({ camera }, delta) => {
     if (!ref.current) return
     const near =
+      mapInspectorEnabled() ||
       (camera.position.x - origin[0]) ** 2 +
         (camera.position.z - origin[2]) ** 2 <
-      90 * 90
+        90 * 90
     ref.current.visible = near
     if (!near || paused) return
     time.current += Math.min(delta, 0.05)

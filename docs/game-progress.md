@@ -433,3 +433,10 @@ This is the same authored line the live path returns for an accepted offer
 rotation then offers `arc` once `gag` is completed. The client `offline()` passes
 `body.demo` through to `seedsFor`, so offline play gives the same sequence.
 Non-demo turns are unchanged.
+
+## Map inspection
+
+- `?mapDebug=1` opens a standalone map inspector without starting a player session.
+- Whole-map and eight landmark presets; orbit, pan, zoom, top view, and collision shapes. Desktop mouse and mobile touch controls are supported.
+- Inspection keeps distance-culled scenery and boats visible. Normal game culling remains active.
+- Bến Thành uses the clock tower included in its GLB; no procedural tower is layered above it.

@@ -1,7 +1,5 @@
-import { useFrame } from '@react-three/fiber'
-import { type ReactNode, useRef } from 'react'
-import type { Group } from 'three'
 import { ModelInstances, type Placement, type Vec3 } from './assets'
+import { Nearby } from './nearby'
 import { Blocks, Sign } from './primitives'
 import {
   assemble,
@@ -96,26 +94,6 @@ export const STREET_PROPS_COLLIDERS = [
   { x: 20.5, z: -15.7, w: 3.2, d: 0.4, h: 2.5 },
   { x: 35.3, z: -4.2, w: 1.8, d: 1.5, h: 1.3 },
 ]
-
-function Nearby({
-  at: center,
-  distance,
-  children,
-}: {
-  at: [number, number]
-  distance: number
-  children: ReactNode
-}) {
-  const ref = useRef<Group>(null)
-  useFrame(({ camera }) => {
-    if (ref.current)
-      ref.current.visible =
-        (camera.position.x - center[0]) ** 2 +
-          (camera.position.z - center[1]) ** 2 <
-        distance * distance
-  })
-  return <group ref={ref}>{children}</group>
-}
 
 export function StreetLife() {
   return (
