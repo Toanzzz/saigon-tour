@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { type HarnessUsage, meteredFetch } from '@/features/npc/meter'
+import { modelTiming } from '@/features/npc/model-timing'
 import { setupNpc } from './support/npc'
 
 const ctx = setupNpc()
@@ -11,6 +12,22 @@ const usage = (): HarnessUsage => ({
 })
 
 describe('model response timing', () => {
+  it('distinguishes a tool-only stream from a buffered response', () => {
+    const observation = modelTiming()
+    observation.read(
+      { choices: [{ delta: { reasoning_content: 'private' } }] },
+      true
+    )
+    expect(observation.timing.firstOutputMs).toBeNull()
+    observation.read(
+      {
+        choices: [{ delta: { tool_calls: [{ index: 0, id: 'proposal' }] } }],
+      },
+      true
+    )
+    expect(observation.timing.firstOutputMs).toBeTypeOf('number')
+    expect(observation.timing.firstTextMs).toBeNull()
+  })
   it('records unary usage without inventing a first-text time', async () => {
     const stats = usage()
     const fetcher = meteredFetch(
@@ -34,6 +51,8 @@ describe('model response timing', () => {
       outputTokens: 60,
       lastCall: {
         status: 200,
+        streaming: false,
+        firstOutputMs: null,
         firstTextMs: null,
         reasoningTokens: 45,
         cachedInputTokens: 80,
@@ -84,7 +103,11 @@ describe('model response timing', () => {
       calls: 1,
       inputTokens: 100,
       outputTokens: 50,
-      lastCall: { reasoningTokens: 40, cachedInputTokens: 80 },
+      lastCall: {
+        streaming: true,
+        reasoningTokens: 40,
+        cachedInputTokens: 80,
+      },
     })
     expect(stats.lastCall?.firstTextMs).toBeTypeOf('number')
     expect((await ctx.fx.db.spendLedger()).calls).toBe(previousCalls + 1)

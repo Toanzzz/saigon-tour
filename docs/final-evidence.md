@@ -12,6 +12,11 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 
 ## Current gates
 
+- All generated NDJSON chat turns stream independently of the casual-context classifier. Control tests reproduced buffered replies for “How are you?” with and without an active errand; both stream after removing that gate. Multi-step tests verify interim text clears at tool boundaries and only the final reply is saved.
+- All-chat streaming gates: `check` → `check:types` → `build` → `test` pass on the shared worktree; server 445 passed / 2 skipped, client 290 passed. This includes concurrent demo work, which is outside the streaming commit.
+- Official Meta all-chat probe: casual first visible text 1,627 ms, total 2,403 ms; errand provisional text 2,719 ms, validated result 4,593 ms. Both one request, `streaming: true`. `firstOutputMs` distinguishes streamed tool calls from text; a tool-only request can correctly have null `firstTextMs`. Evidence: `artifacts/npc-latency/official-all-stream.json`.
+- Headless Playwright at 1440px and 390px: opened Hoa, submitted an errand request, then asked “How are you?” while the errand remained active. Both rendered growing text before the final reply (12 / 16 updates), preserved the quest, had no horizontal overflow, and reported no page errors. Totals 7,193 / 5,073 ms. Evidence: `artifacts/npc-latency/all-stream-browser.json`, `all-stream-1440.png`, `all-stream-390.png`.
+
 - Official Meta streaming samples (`muse-spark-1.3-contributor`): casual first visible text at 3,262 / 2,714 ms, complete at 3,890 / 3,202 ms, 14 / 13 text updates, one request each. Errand replies complete at 5,765 / 6,629 ms with one request and zero unvalidated text updates. Evidence: `artifacts/npc-latency/official-stream.json`.
 - Cache reads are observed, not assumed: one casual request reported 1,521 cached tokens out of 1,574 input; one errand request reported 3,953 out of 4,024. Other calls reported zero. These samples do not establish a stable percentage reduction in latency.
 - Streaming tests exercise delivery before model completion, reasoning isolation, final usage settlement, buffered errand validation, JSON/NDJSON negotiation, temporary text without early state/history updates, interrupted-response fallback, and late chunks after dialogue replacement.

@@ -146,6 +146,7 @@ export function meteredFetch(
         response.ok &&
         response.headers.get('content-type')?.includes('text/event-stream')
       ) {
+        observation.timing.streaming = true
         const stream = observeModelStream(response, observation.read, settle)
         if (stream) return stream
       }

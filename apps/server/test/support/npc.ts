@@ -94,6 +94,39 @@ export function scripted(steps: Step[], seen: unknown[] = []) {
           ],
         }
       : { role: 'assistant', content: step.text }
+    if (body.stream) {
+      const toolCalls = 'tool_calls' in message ? message.tool_calls : undefined
+      const delta = {
+        role: 'assistant',
+        content: message.content,
+        ...(toolCalls
+          ? {
+              tool_calls: toolCalls.map((tool, index) => ({ ...tool, index })),
+            }
+          : {}),
+      }
+      const chunks = [
+        {
+          id: `r${index}`,
+          choices: [{ index: 0, delta, finish_reason: null }],
+        },
+        {
+          id: `r${index}`,
+          choices: [
+            {
+              index: 0,
+              delta: {},
+              finish_reason: step.tool ? 'tool_calls' : 'stop',
+            },
+          ],
+          usage: { prompt_tokens: 100, completion_tokens: 20 },
+        },
+      ]
+      return new Response(
+        `${chunks.map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`).join('')}data: [DONE]\n\n`,
+        { headers: { 'content-type': 'text/event-stream' } }
+      )
+    }
     return new Response(
       JSON.stringify({
         id: `r${index}`,

@@ -2,6 +2,8 @@
 export interface ModelTiming {
   status: number | null
   totalMs: number
+  streaming: boolean
+  firstOutputMs: number | null
   firstTextMs: number | null
   reasoningTokens: number
   cachedInputTokens: number
@@ -15,6 +17,8 @@ export function modelTiming() {
   const timing: ModelTiming = {
     status: null,
     totalMs: 0,
+    streaming: false,
+    firstOutputMs: null,
     firstTextMs: null,
     reasoningTokens: 0,
     cachedInputTokens: 0,
@@ -23,7 +27,9 @@ export function modelTiming() {
   const read = (body: unknown, streaming = false) => {
     if (!body || typeof body !== 'object') return
     const data = body as {
-      choices?: { delta?: { content?: unknown } }[]
+      choices?: {
+        delta?: { content?: unknown; tool_calls?: unknown[] }
+      }[]
       usage?: {
         prompt_tokens?: number
         completion_tokens?: number
@@ -41,6 +47,17 @@ export function modelTiming() {
       )
     )
       timing.firstTextMs = elapsed()
+    if (
+      streaming &&
+      timing.firstOutputMs === null &&
+      data.choices?.some(
+        (choice) =>
+          (typeof choice.delta?.content === 'string' &&
+            choice.delta.content.length > 0) ||
+          Boolean(choice.delta?.tool_calls?.length)
+      )
+    )
+      timing.firstOutputMs = elapsed()
     const usage = data.usage
     if (
       typeof usage?.prompt_tokens === 'number' &&

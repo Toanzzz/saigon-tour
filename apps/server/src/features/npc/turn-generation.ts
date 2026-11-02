@@ -104,20 +104,23 @@ export class TurnGenerator {
           },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         }
-        const result =
-          casual && delivery
-            ? await (async () => {
-                await delivery.onText('')
-                const stream = await agent.stream(turnMessage(request), options)
-                let text = ''
-                for await (const chunk of stream.textStream) {
-                  text += chunk
-                  const safe = cleanReply(text)
-                  await delivery.onText(safe ?? '')
+        const result = delivery
+          ? await (async () => {
+              await delivery.onText('')
+              const stream = await agent.stream(turnMessage(request), options)
+              let text = ''
+              for await (const chunk of stream.fullStream) {
+                if (chunk.type === 'step-start' || chunk.type === 'tool-call') {
+                  text = ''
+                  await delivery.onText('')
+                } else if (chunk.type === 'text-delta') {
+                  text += chunk.payload.text
+                  await delivery.onText(cleanReply(text) ?? '')
                 }
-                return { text: await stream.text, steps: await stream.steps }
-              })()
-            : await agent.generate(turnMessage(request), options)
+              }
+              return { text: await stream.text, steps: await stream.steps }
+            })()
+          : await agent.generate(turnMessage(request), options)
         const offered = newlyOffered()
         if (offered) {
           this.report('npc_turn_completed', npcId, outcome.calls)
