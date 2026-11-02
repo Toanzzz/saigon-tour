@@ -318,3 +318,35 @@ margin is held by cutting the signs, parasols, neon frames, and bulb wire below
   the spot in `city.tsx`. Neon strip placements for 42 Nguyễn Huệ
   (`CAFE_NEON_STRIPS`) and Bùi Viện (`BUI_VIEN_NEON_FRAMES`) are exported for
   Phase 4.
+
+## Map Phase 3 — diorama depth (2026-11-02)
+
+Committed in the diorama-depth feature commit. Comic-only; `?look=classic`
+unchanged. Scenery only.
+
+### Gates
+
+- `bun run check` clean (754 files); `check:types` 0; `build` client + server 0;
+  `test` → server 403 passed / 2 skipped, client 253 passed (30 files, incl. new
+  `world-diorama.spec.ts`).
+
+### Depth QA (`scripts/qa-map-depth.mjs`, live dev server, canvas-pixel sampling)
+
+- Title shot: fov 22 on the title screen, 49 after Play, both desktop and 390px
+  (read via the Phase 0 `camera()` hook).
+- Sky gradient (canvas element sampled with sharp; full-page WebGL capture is
+  unreliable headless): day and evening skies each vary top-to-horizon (desktop
+  sep 105 / 149) and differ from each other. Rain sky tokens are covered by the
+  `world-diorama` unit test — room weather is server-authoritative and reverts a
+  local override, so it is not scanned live.
+- Cloud/skyline cluster: a bright cluster stands out above the horizon after a
+  heading sweep (run 247 desktop, 98 mobile).
+
+### Perf (`scripts/qa-map-perf.mjs`, vs the Phase 2 baseline)
+
+Desktop +8 draw calls / +3.5k triangles at every pose (e.g. spawn 241→249,
+alley 260→268); triangles well under the +5k budget. The phase's own budget is
++6 (sky 1, clouds 2, skyline 2, base 1); the extra +2 is the two cathedral-cloud
+instanced meshes — Phase 2's deferred item 5, fulfilled here. Mobile +3 at spawn
+(skyline cards cut below 700px, clouds reduced to 6). Evidence:
+`/tmp/saigon-map-evidence/phase3/`.

@@ -271,3 +271,19 @@ tables, string bulbs, shop signs, and empty neon frames exported as
 
 Cathedral wire clouds (item 5) wait on Phase 3's `PaperClouds`; there is a TODO
 in `shared/world/city.tsx` and no cloud geometry yet.
+
+## Diorama depth (map Phase 3)
+
+The comic view reads as a shadowbox. `features/city/atmosphere.tsx` adds a
+gradient paper `SkyDome`: a radius-200 `BackSide` sphere recentred on the camera
+each frame, a shader that blends the palette top/horizon tokens on direction.y,
+`fog:false`/`depthWrite:false`, rendered first. Classic keeps the flat
+background. `shared/world/paper-clouds.tsx` instances 3-lobe cream clouds with an
+ink shadow card on a ring outside the walls (10 desktop, 6 mobile), drifting and
+Y-axis billboarded, static under reduced motion; the same component hangs 3
+clouds behind the cathedral spires (Phase 2's deferred item). `shared/world/
+skyline-cards.tsx` adds vertex-coloured `ExtrudeGeometry` rooftop strips outside
+the north/west walls (desktop only) with unlit window dots for Phase 4, keeping
+the Thủ Thiêm Kenney towers in front. A `paperEdge` base skirt under the ground
+rects completes the diorama. The title screen frames the district through a long
+lens (fov 22) and play restores fov 49 (`features/player/camera.tsx`).
