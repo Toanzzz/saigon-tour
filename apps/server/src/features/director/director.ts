@@ -1,4 +1,4 @@
-import type { CityEvent, CityPlanBeat, CitySnapshot } from '@saigon/shared'
+import type { CityPlanBeat } from '@saigon/shared'
 import type { CityWorld } from '@/domain/city'
 import { isLiveConfigured, type ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
@@ -38,12 +38,7 @@ export class CityDirector {
     readonly city: CityWorld,
     private readonly config: ServerConfig,
     private readonly db: GameDb,
-    private readonly fetcher: Fetcher = fetch,
-    /** Signaled with newly started events so relevant NPCs can prepare greetings. */
-    private readonly onEvents: (
-      city: CitySnapshot,
-      events: CityEvent[]
-    ) => void = () => {}
+    private readonly fetcher: Fetcher = fetch
   ) {}
 
   private day(now: number) {
@@ -75,9 +70,6 @@ export class CityDirector {
   /** Fire every scheduled beat whose time has arrived, in order. */
   private applyDue(now: number) {
     if (!this.schedule.length) return
-    const before = this.city.snapshot()
-    const knownEventIds = new Set(before.events.map((event) => event.id))
-    let fired = false
     while (this.schedule.length && this.schedule[0].at <= now) {
       const { beat } = this.schedule.shift() as {
         at: number
@@ -87,15 +79,10 @@ export class CityDirector {
         const result = this.city.apply(action)
         if (result.accepted) {
           this.calls.push(action.type)
-          fired = true
         }
       }
     }
     if (this.calls.length > 64) this.calls.splice(0, this.calls.length - 64)
-    if (!fired) return
-    const after = this.city.snapshot()
-    const started = after.events.filter((event) => !knownEventIds.has(event.id))
-    if (started.length) this.onEvents(after, started)
   }
 
   /** Draft and queue the day's plan, reserving one director run for the day. */

@@ -102,7 +102,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 - [ ] 16. **Demo seed + pre-warm/cache** (R10.1, R10.2, R10.4)
   - One-key `DemoSeed` scenario reproducing spawn → NPC → AI quest → ride → complete →
     reward; pre-warm/cache the demo path's AI responses; verify every fallback path.
-  - Exists: greeting prewarm for all NPCs, cached greetings, `DIRECTOR_MODE=scripted`, and
+  - Exists: authored activities for all NPCs, Director activity selection, `DIRECTOR_MODE=scripted`, and
     deterministic offline seeds. Missing: the one-key demo scenario.
   - _Requirements: R10.1, R10.2, R10.4_
 
@@ -129,7 +129,7 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   _(docs/multiplayer.md)_
 - [x] 22b. **City Director** — shared events, weather, NPC moves and needs, headlines.
   _(docs/agent-harness.md)_
-- [x] 22c. **NPC friendship and memory** — affinity, observational memory, history, greetings.
+- [x] 22c. **NPC friendship and memory** — affinity, observational memory, timestamped history, activity narration.
   _(docs/agent-harness.md)_
 - [x] 22d. **Quest reward unlocks and 3D wardrobe** — cosmetics, rides, pets, plain bodies.
   _(docs/game-design.md)_

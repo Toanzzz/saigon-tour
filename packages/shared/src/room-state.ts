@@ -73,6 +73,15 @@ export const CityHeadlineState = schema(
   'CityHeadlineState'
 )
 
+export const NpcActivityState = schema(
+  {
+    activityId: t.string(),
+    startedAt: t.float64(),
+    endsAt: t.float64(),
+  },
+  'NpcActivityState'
+)
+
 /** Colyseus room state: the street name and its connected players. */
 export const WorldRoomState = schema(
   {
@@ -83,6 +92,7 @@ export const WorldRoomState = schema(
     npcPlacements: t.map(CityNpcState),
     events: t.map(CityEventState),
     needs: t.map('string'),
+    npcActivities: t.map(NpcActivityState),
     headlines: t.map(CityHeadlineState),
   },
   'WorldRoomState'
@@ -143,6 +153,14 @@ export function syncCity(state: WorldRoomState, city: CitySnapshot) {
     if (!(npcId in city.needs)) state.needs.delete(npcId)
   for (const [npcId, need] of Object.entries(city.needs))
     if (need !== undefined) state.needs.set(npcId, need)
+  for (const npcId of [...state.npcActivities.keys()])
+    if (!(npcId in city.npcActivities)) state.npcActivities.delete(npcId)
+  for (const [npcId, activity] of Object.entries(city.npcActivities)) {
+    if (!activity) continue
+    const entry = state.npcActivities.get(npcId) ?? new NpcActivityState()
+    Object.assign(entry, activity)
+    if (!state.npcActivities.has(npcId)) state.npcActivities.set(npcId, entry)
+  }
   const headlineIds = new Set(city.headlines.map((headline) => headline.id))
   for (const id of [...state.headlines.keys()])
     if (!headlineIds.has(id)) state.headlines.delete(id)
@@ -178,6 +196,16 @@ export function cityFromRoomState(state: WorldRoomState): CitySnapshot {
       endsAt: entry.endsAt,
     })),
     needs: Object.fromEntries(state.needs),
+    npcActivities: Object.fromEntries(
+      [...state.npcActivities].map(([id, entry]) => [
+        id,
+        {
+          activityId: entry.activityId,
+          startedAt: entry.startedAt,
+          endsAt: entry.endsAt,
+        },
+      ])
+    ),
     headlines: [...state.headlines.values()].map((entry) => ({
       id: entry.id,
       text: entry.text,

@@ -1,8 +1,9 @@
 import { useGLTF } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { type AvatarBody, bodyModel, type Look, UNLOCKS } from '@saigon/shared'
-import { useEffect, useMemo } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import {
+  type AnimationAction,
   AnimationMixer,
   Color,
   type Material,
@@ -10,6 +11,7 @@ import {
   type Object3D,
 } from 'three'
 import { clone } from 'three/addons/utils/SkeletonUtils.js'
+import { ActivityProp } from './activity-prop'
 import type { Vec3 } from './assets'
 import { modelUrl } from './assets'
 import { applyOutfitPalette, attachCosmetic, CLOTHING } from './look'
@@ -26,6 +28,7 @@ export function Character({
   position = [0, 0, 0],
   rotation,
   animation = 'idle',
+  activityProp,
   scale = 2.35,
   color,
   active,
@@ -37,7 +40,8 @@ export function Character({
   path?: string
   position?: Vec3
   rotation?: Vec3
-  animation?: string
+  animation?: string | (() => string)
+  activityProp?: string
   scale?: number
   color?: string
   /** Nearby actors can suspend their mixer without removing their pose. */
@@ -95,25 +99,29 @@ export function Character({
     [object, color]
   )
   const mixer = useMemo(() => new AnimationMixer(object), [object])
+  const playing = useRef<{ name: string; action: AnimationAction } | null>(null)
   useEffect(() => {
-    const clip =
-      animations.find((candidate) => candidate.name === animation) ??
-      animations.find((candidate) => candidate.name === 'idle')
-    if (!clip) return
-    const action = mixer.clipAction(clip).reset().fadeIn(0.2).play()
+    playing.current = null
     return () => {
-      action.fadeOut(0.2)
-    }
-  }, [animation, animations, mixer])
-  useEffect(
-    () => () => {
       mixer.stopAllAction()
       mixer.uncacheRoot(object)
-    },
-    [mixer, object]
-  )
+    }
+  }, [mixer, object])
   useFrame((_, delta) => {
+    const name = typeof animation === 'function' ? animation() : animation
+    if (playing.current?.name !== name) {
+      const clip =
+        animations.find((candidate) => candidate.name === name) ??
+        animations.find((candidate) => candidate.name === 'idle')
+      if (clip) {
+        playing.current?.action.fadeOut(0.2)
+        const action = mixer.clipAction(clip).reset().fadeIn(0.2).play()
+        playing.current = { name, action }
+        object.userData.activeAnimation = clip.name
+      }
+    }
     if (!active || active()) mixer.update(Math.min(delta, 0.05))
+    object.userData.animationTime = playing.current?.action.time ?? 0
   })
   const cosmetics = look
     ? ([look.hat, look.accessory].filter(Boolean) as string[]).filter(
@@ -128,6 +136,11 @@ export function Character({
       scale={scale}
       dispose={null}
     >
+      {activityProp && (
+        <Suspense fallback={null}>
+          <ActivityProp root={object} path={activityProp} />
+        </Suspense>
+      )}
       {cosmetics.map((id) => (
         <Cosmetic key={id} id={id} root={object} />
       ))}

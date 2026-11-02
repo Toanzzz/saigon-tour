@@ -1,4 +1,5 @@
 import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { activities } from './activities'
 
 const look: NpcLook = {
   body: 'own',
@@ -10,6 +11,7 @@ const look: NpcLook = {
 }
 
 export default defineResident({
+  activities,
   id: 'alley-vendor',
   name: { en: 'Mr. Loc', vi: 'Chú Lộc' },
   roles: { en: 'Alley cook', vi: 'Người nấu ăn trong hẻm' },

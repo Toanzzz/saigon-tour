@@ -14,6 +14,7 @@ import { audio } from '@/shared/audio'
 import { m } from '@/shared/i18n'
 import { noteFriendship } from '@/shared/state/friendship'
 import {
+  type ChatMessage,
   celebrate,
   type GameState,
   game,
@@ -22,7 +23,7 @@ import {
 } from '@/shared/state/game'
 import { nearbyNpcs } from './nearby'
 
-export type Intent = 'chat' | 'greet' | 'milestone'
+export type Intent = 'chat' | 'open' | 'greet' | 'milestone'
 
 const timeOfDay = (hour = new Date().getHours()): TimeOfDay =>
   hour < 11
@@ -73,9 +74,14 @@ export async function converse(text: string, intent: Intent, opening = false) {
   if (
     !dialog ||
     (!opening && dialog.thinking) ||
-    (intent !== 'greet' && intent !== 'milestone' && !text.trim())
+    (intent !== 'open' &&
+      intent !== 'greet' &&
+      intent !== 'milestone' &&
+      !text.trim())
   )
     return
+  const messageId = crypto.randomUUID()
+  const sentAt = new Date().toISOString()
   update({ dialogue: { ...dialog, thinking: true, streamingText: undefined } })
   const session = game.state.sessionId
   const canSend = await beginHttpTurn()
@@ -97,7 +103,15 @@ export async function converse(text: string, intent: Intent, opening = false) {
   const history =
     opening || intent !== 'chat'
       ? dialog.history
-      : [...dialog.history, { role: 'user' as const, content: text }]
+      : [
+          ...dialog.history,
+          {
+            id: messageId,
+            at: sentAt,
+            role: 'user' as const,
+            content: text.slice(0, 500),
+          },
+        ]
   update({
     dialogue: { ...dialog, history, thinking: true, streamingText: undefined },
     pending: pending.slice(sentEvents.length),
@@ -108,6 +122,8 @@ export async function converse(text: string, intent: Intent, opening = false) {
       {
         message: text.slice(0, 500),
         intent,
+        messageId,
+        sentAt,
         ...(game.state.guestName
           ? { playerName: game.state.guestName.slice(0, 60) }
           : {}),
@@ -131,12 +147,21 @@ export async function converse(text: string, intent: Intent, opening = false) {
   )
   endHttpTurn()
   if (game.state.sessionId !== sessionId) return
-  appendHistory(dialog.npc, text, result.response.reply, intent === 'greet')
+  const turnMessages = appendHistory(
+    dialog.npc,
+    text.slice(0, 500),
+    result.response.reply,
+    false,
+    {
+      messageId,
+      sentAt,
+      messages: result.response.messages,
+    }
+  )
   apply(
-    intent,
     result.response,
     dialog.npc,
-    history,
+    [...dialog.history, ...turnMessages],
     requestId,
     result.synced,
     partyVersion
@@ -149,14 +174,9 @@ export async function converse(text: string, intent: Intent, opening = false) {
 }
 
 function apply(
-  intent: Intent,
   result: InteractResponse,
   npc: NpcId,
-  history: {
-    role: 'user' | 'assistant'
-    content: string
-    greeting?: boolean
-  }[],
+  history: ChatMessage[],
   requestId: string,
   synced: boolean,
   partyVersion: number
@@ -200,7 +220,9 @@ function apply(
         ? state.trackedQuestId
         : (result.quests[0]?.id ?? null),
       source: result.source,
-      lastLine: { ...state.lastLine, [npc]: result.reply },
+      lastLine: result.reply
+        ? { ...state.lastLine, [npc]: result.reply }
+        : state.lastLine,
     }
     offered = events.some(
       (event) =>
@@ -256,26 +278,12 @@ function apply(
               thinking: false,
               streamingText: undefined,
               source: result.source,
-              history:
-                intent === 'greet' &&
-                history.at(-1)?.role === 'assistant' &&
-                history.at(-1)?.greeting
-                  ? [
-                      ...history.slice(0, -1),
-                      {
-                        role: 'assistant' as const,
-                        content: result.reply,
-                        greeting: true,
-                      },
-                    ]
-                  : [
-                      ...history,
-                      {
-                        role: 'assistant' as const,
-                        content: result.reply,
-                        ...(intent === 'greet' ? { greeting: true } : {}),
-                      },
-                    ].slice(-30),
+              history: history.slice(-30),
+              earlierCount: Math.max(
+                0,
+                (state.dialogue.earlierCount ?? 0) -
+                  Math.max(0, history.length - 30)
+              ),
             }
           : state.dialogue,
     }

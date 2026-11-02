@@ -127,7 +127,7 @@ describe('Colyseus street rooms and NPC barks', () => {
     await ctx.move(first.peer, first.player.id, NPC_POSITIONS.hoa)
     ctx.app.realtime.manager.tick()
     const line = await second.peer.wait('npc-line', (m) => m.npcId === 'hoa')
-    expect(line.reply).toContain('Sài Gòn')
+    expect(line.reply).toContain('arranging bowls')
     expect(await first.peer.wait('npc-line', (m) => m.npcId === 'hoa')).toEqual(
       line
     )
@@ -206,7 +206,7 @@ describe('Colyseus street rooms and NPC barks', () => {
     await room.scheduler.tick(Date.now())
     expect(
       (await peer.wait('npc-line', (m) => m.npcId === 'linh')).reply
-    ).toContain('Sài Gòn')
+    ).toContain('nearby gathering place')
     expect(calls).toBe(1)
     const ledger = await ctx.fx.sql.query<{ barks: number }>(
       'SELECT barks FROM model_spend'

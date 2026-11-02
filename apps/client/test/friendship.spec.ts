@@ -37,26 +37,36 @@ describe('friendship feedback and local history', () => {
     expect(pulses.state.hoa?.at).toBe(at)
     expect(pulses.state.tam).toBeUndefined()
   })
-  it('collapses an unanswered greeting but keeps a real reply', () => {
-    appendHistory('hoa', '', 'Chào bạn!', true)
-    appendHistory('hoa', '', 'Chào bạn!', true)
-    appendHistory('hoa', '', 'Rainy evening, friend.', true)
-    expect(cachedHistory('hoa')).toEqual([
-      { role: 'assistant', content: 'Rainy evening, friend.', greeting: true },
-    ])
-    // A substantive reply is never overwritten by a later greeting.
-    appendHistory('hoa', 'Can I help?', 'Take these herbs to Linh.')
-    appendHistory('hoa', '', 'Welcome back, friend.', true)
-    expect(cachedHistory('hoa')).toEqual([
-      { role: 'assistant', content: 'Rainy evening, friend.', greeting: true },
-      { role: 'user', content: 'Can I help?' },
-      { role: 'assistant', content: 'Take these herbs to Linh.' },
-      { role: 'assistant', content: 'Welcome back, friend.', greeting: true },
-    ])
+  it('preserves substantive replies and timestamps on revisit', () => {
+    const messages = [
+      {
+        id: 'user-1',
+        role: 'user' as const,
+        text: 'Can I help?',
+        at: '2026-11-03T07:32:00Z',
+      },
+      {
+        id: 'reply-1',
+        role: 'assistant' as const,
+        text: 'Take these herbs to Linh.',
+        at: '2026-11-03T07:32:10Z',
+      },
+    ]
+    appendHistory('hoa', 'Can I help?', messages[1]?.text ?? '', false, {
+      messages,
+    })
+    appendHistory('hoa', '', '', false, { messages: [] })
+    expect(cachedHistory('hoa')).toEqual(
+      messages.map(({ text, ...rest }) => ({ ...rest, content: text }))
+    )
+    appendHistory('hoa', 'Can I help?', messages[1]?.text ?? '', false, {
+      messages,
+    })
+    expect(cachedHistory('hoa')).toHaveLength(2)
   })
   it('retains offline conversation in the persisted history query and clears it', () => {
     appendHistory('market-walk', 'Any errands?', 'Say hello to Linh.')
-    expect(cachedHistory('market-walk')).toEqual([
+    expect(cachedHistory('market-walk')).toMatchObject([
       { role: 'user', content: 'Any errands?' },
       { role: 'assistant', content: 'Say hello to Linh.' },
     ])

@@ -1,4 +1,5 @@
 import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { activities } from './activities'
 
 const look: NpcLook = {
   body: 'own',
@@ -10,6 +11,7 @@ const look: NpcLook = {
 }
 
 export default defineResident({
+  activities,
   id: 'riverside-friends',
   name: { en: 'Nhi', vi: 'Nhi' },
   roles: { en: 'River neighbor', vi: 'Hàng xóm bên sông' },

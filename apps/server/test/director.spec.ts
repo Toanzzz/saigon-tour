@@ -11,28 +11,15 @@ const DAY = '2098-03-01T08:00:00Z'
 const atDay = (offsetMs = 0) => Date.parse(DAY) + offsetMs
 
 describe('room city director', () => {
-  it('signals relevant NPCs with newly started events', async () => {
+  it('assigns a concrete activity in the first scripted beat', async () => {
     const city = new CityWorld(() => atDay())
-    const signalled: { ids: string[]; events: string[] } = {
-      ids: [],
-      events: [],
-    }
-    const director = new CityDirector(
-      city,
-      config,
-      ctx.fx.db,
-      vi.fn(),
-      (snapshot, events) => {
-        signalled.events = events.map((event) => event.title)
-        signalled.ids = events.flatMap((event) =>
-          snapshot.events.some((e) => e.id === event.id) ? [event.id] : []
-        )
-      }
-    )
+    const director = new CityDirector(city, config, ctx.fx.db, vi.fn())
     await director.tick(atDay(), 2)
-    // The first scripted beat (now) starts the morning market.
-    expect(signalled.events).toContain('Morning market')
-    expect(signalled.ids).toHaveLength(signalled.events.length)
+    expect(city.snapshot().npcActivities.hoa).toEqual({
+      activityId: 'busy',
+      startedAt: atDay(),
+      endsAt: atDay(180000),
+    })
   })
 
   it('does nothing in empty rooms and drafts one scripted day plan', async () => {

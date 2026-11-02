@@ -50,10 +50,7 @@ export function createRealtime(
   const manager = new RoomManager(
     harness,
     now,
-    (city) =>
-      new CityDirector(city, config, db, fetcher, (snapshot, events) => {
-        void harness.prepareGreetings(snapshot, events).catch(() => {})
-      })
+    (city) => new CityDirector(city, config, db, fetcher)
   )
   const party = new PartyService(manager, db, now)
   harness.game.party = party

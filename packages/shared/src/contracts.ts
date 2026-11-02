@@ -76,12 +76,14 @@ export const InteractRequestSchema = z
     message: z.string().trim().max(500).default(''),
     // Deprecated help/check are accepted as chat for older clients.
     intent: z
-      .enum(['chat', 'help', 'check', 'greet', 'milestone'])
+      .enum(['chat', 'help', 'check', 'open', 'greet', 'milestone'])
       .default('chat'),
     // Optional display name used to fill a persona greeting's {name} placeholder.
     playerName: z.string().trim().max(60).optional(),
     // `?demo` recording path: offer the giver's demo seed first, deterministically.
     demo: z.boolean().optional(),
+    messageId: z.uuid().optional(),
+    sentAt: z.iso.datetime().optional(),
     locale: LocaleSchema.default('en'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z
@@ -96,6 +98,7 @@ export const InteractRequestSchema = z
   .refine(
     (request) =>
       request.intent === 'greet' ||
+      request.intent === 'open' ||
       request.intent === 'milestone' ||
       request.message.length > 0,
     {
@@ -116,7 +119,18 @@ export const InteractResponseSchema = z
     cached: z.boolean(),
     party: PartySnapshotSchema.nullable(),
     npcId: NpcIdSchema,
-    reply: z.string().min(1).max(700),
+    reply: z.string().max(700),
+    messages: z
+      .array(
+        z.object({
+          id: z.string(),
+          role: z.enum(['user', 'assistant']),
+          text: z.string(),
+          at: z.string(),
+        })
+      )
+      .max(2)
+      .optional(),
     source: SourceSchema,
     degraded: z.boolean(),
     friendship: FriendshipMapSchema.default({}),
@@ -149,6 +163,7 @@ export const NpcHistorySchema = z.object({
     .array(
       z.object({
         role: z.enum(['user', 'assistant']),
+        id: z.string().optional(),
         text: z.string(),
         at: z.string(),
         greeting: z.boolean().optional(),

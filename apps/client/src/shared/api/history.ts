@@ -1,19 +1,53 @@
-import { type NpcHistory, NpcHistorySchema, type NpcId } from '@saigon/shared'
+import {
+  type InteractResponse,
+  type NpcHistory,
+  NpcHistorySchema,
+  type NpcId,
+} from '@saigon/shared'
+import { type ChatMessage, game } from '@/shared/state/game'
 import { rpc } from './client'
 import { queryClient } from './query'
+
 export const historyKey = (npcId: NpcId) => ['npc-history', npcId] as const
-export function cachedHistory(npcId: NpcId) {
+
+type StoredMessage = NpcHistory['messages'][number]
+const fingerprint = (line: StoredMessage) =>
+  `${line.role}:${line.at}:${line.text}`
+export function mergeHistory(...groups: StoredMessage[][]): StoredMessage[] {
+  const messages = new Map<string, StoredMessage>()
+  const legacy = new Map<string, string>()
+  for (const group of groups) {
+    for (const line of group) {
+      const signature = fingerprint(line)
+      const key = line.id ?? signature
+      const legacyKey = legacy.get(signature)
+      if (legacyKey) {
+        const existing = messages.get(legacyKey)
+        if (existing?.id && !line.id) continue
+        if (!existing?.id || !line.id) messages.delete(legacyKey)
+      }
+      messages.set(key, line)
+      legacy.set(signature, key)
+    }
+  }
+  return [...messages.values()]
+    .sort((a, b) => (Date.parse(a.at) || 0) - (Date.parse(b.at) || 0))
+    .slice(-30)
+}
+const display = ({ role, text, ...rest }: StoredMessage): ChatMessage => ({
+  ...rest,
+  role,
+  content: text,
+})
+export function cachedHistory(npcId: NpcId): ChatMessage[] {
   return (
     queryClient
       .getQueryData<NpcHistory>(historyKey(npcId))
-      ?.messages.map(({ role, text, greeting }) => ({
-        role,
-        content: text,
-        ...(greeting ? { greeting: true } : {}),
-      })) ?? []
+      ?.messages.map(display) ?? []
   )
 }
 export async function fetchHistory(npcId: NpcId) {
+  const sessionId = game.state.sessionId
   return queryClient.fetchQuery({
     queryKey: historyKey(npcId),
     staleTime: 0,
@@ -23,7 +57,11 @@ export async function fetchHistory(npcId: NpcId) {
         { init: { signal: AbortSignal.timeout(5000) } }
       )
       if (!response.ok) throw new Error('history_unavailable')
-      return NpcHistorySchema.parse(await response.json())
+      const fetched = NpcHistorySchema.parse(await response.json())
+      if (game.state.sessionId !== sessionId)
+        throw new Error('history_session_changed')
+      const old = queryClient.getQueryData<NpcHistory>(historyKey(npcId))
+      return { messages: mergeHistory(old?.messages ?? [], fetched.messages) }
     },
   })
 }
@@ -31,46 +69,39 @@ export function appendHistory(
   npcId: NpcId,
   message: string,
   reply: string,
-  isGreeting = false
+  isGreeting = false,
+  metadata: {
+    messageId?: string
+    sentAt?: string
+    messages?: InteractResponse['messages']
+  } = {}
 ) {
-  queryClient.setQueryData<NpcHistory>(historyKey(npcId), (old) => {
-    const messages = old?.messages ?? []
-    const latest = messages.at(-1)
-    // Collapse a greeting only into a previous greeting. A real reply (e.g.
-    // accepting an errand) stays, and the fresh greeting is appended after it.
-    if (!message.trim() && latest?.role === 'assistant' && latest.greeting) {
-      if (latest.text === reply) return old
-      return {
-        messages: [
-          ...messages.slice(0, -1),
+  const now = new Date().toISOString()
+  const messages: StoredMessage[] = metadata.messages ?? [
+    ...(message.trim()
+      ? [
           {
-            ...latest,
-            text: reply,
-            at: new Date().toISOString(),
-            greeting: true,
+            role: 'user' as const,
+            text: message,
+            id: metadata.messageId ?? crypto.randomUUID(),
+            at: metadata.sentAt ?? now,
           },
-        ],
-      }
-    }
-    return {
-      messages: [
-        ...messages,
-        ...(message.trim()
-          ? [
-              {
-                role: 'user' as const,
-                text: message,
-                at: new Date().toISOString(),
-              },
-            ]
-          : []),
-        {
-          role: 'assistant' as const,
-          text: reply,
-          at: new Date().toISOString(),
-          ...(isGreeting ? { greeting: true } : {}),
-        },
-      ].slice(-30),
-    }
-  })
+        ]
+      : []),
+    ...(reply.trim()
+      ? [
+          {
+            role: 'assistant' as const,
+            text: reply,
+            id: crypto.randomUUID(),
+            at: now,
+            ...(isGreeting ? { greeting: true } : {}),
+          },
+        ]
+      : []),
+  ]
+  queryClient.setQueryData<NpcHistory>(historyKey(npcId), (old) => ({
+    messages: mergeHistory(old?.messages ?? [], messages),
+  }))
+  return messages.map(display)
 }

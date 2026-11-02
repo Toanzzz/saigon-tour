@@ -50,6 +50,11 @@ describe('city room schema sync', () => {
       position: CITY_ANCHORS.park.gathering as [number, number, number],
     }
     updated.needs.vy = 'Bring a neighbor something warm.'
+    updated.npcActivities.vy = {
+      activityId: 'busy',
+      startedAt: 1_800_000_000_000,
+      endsAt: 1_800_000_090_000,
+    }
     updated.events.push({
       id: 'event_1',
       kind: 'rain',
@@ -75,6 +80,7 @@ describe('city room schema sync', () => {
     updated.events = []
     updated.headlines = []
     updated.needs = {}
+    updated.npcActivities = {}
     syncCity(authoritative, updated)
     decoder.decode(encoder.encode())
     expect(cityFromRoomState(client)).toEqual(updated)

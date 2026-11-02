@@ -7,6 +7,7 @@ import {
   type CitySnapshot,
   initialCitySnapshot,
   type NeighborId,
+  NPC_ACTIVITIES,
 } from '@saigon/shared'
 import { safeLine } from '@/features/npc/safety'
 
@@ -40,8 +41,16 @@ export class CityWorld {
   expire(now = this.now()) {
     if (this.disposed) return
     const remaining = this.state.events.filter((event) => event.endsAt > now)
-    if (remaining.length === this.state.events.length) return
+    const activities = Object.entries(this.state.npcActivities).filter(
+      ([, activity]) => activity && activity.endsAt > now
+    )
+    if (
+      remaining.length === this.state.events.length &&
+      activities.length === Object.keys(this.state.npcActivities).length
+    )
+      return
     this.state.events = remaining
+    this.state.npcActivities = Object.fromEntries(activities)
     this.state.revision += 1
     this.changed()
   }
@@ -55,7 +64,10 @@ export class CityWorld {
     if (!parsed.success)
       return { reason: `invalid_action:${parsed.error.issues[0]?.message}` }
     const action = parsed.data
-    if (action.type === 'start-event') {
+    if (action.type === 'set-npc-activity') {
+      if (!Object.hasOwn(NPC_ACTIVITIES[action.npcId], action.activityId))
+        return { reason: 'unknown_npc_activity' }
+    } else if (action.type === 'start-event') {
       if (pendingEvents >= 2) return { reason: 'active_event_cap:2' }
       if (!safeLine(action.title) || !safeLine(action.description))
         return { reason: 'unsafe_event_text' }
@@ -101,7 +113,14 @@ export class CityWorld {
     const result = this.check(input, this.state.events.length)
     if ('reason' in result) return { accepted: false, reason: result.reason }
     const action = result.action
-    if (action.type === 'start-event') {
+    if (action.type === 'set-npc-activity') {
+      const now = this.now()
+      this.state.npcActivities[action.npcId] = {
+        activityId: action.activityId,
+        startedAt: now,
+        endsAt: now + action.durationMs,
+      }
+    } else if (action.type === 'start-event') {
       const now = this.now()
       this.state.events.push({
         id: `event_${randomUUID()}`,

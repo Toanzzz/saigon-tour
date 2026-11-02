@@ -517,6 +517,19 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - Visual inspection of the eight landmark captures found no additional duplicate landmark structures. This is a sampled visual audit, not proof that every prop placement is correct. Floating post-office postcards, oversized park trees, and distant skyline cards are authored decorations.
 - Type checks and client/server production builds pass. Tests: server 445 passed, 2 skipped; client 287 passed. Scoped Biome checks pass on all map changes. Repository-wide Biome check reports two formatting errors in concurrent work (`features/conversation/transcript.tsx`, `test/friendship.spec.ts`).
 
+## NPC activity encounters
+
+- Proven: `scripts/qa-npc-encounters.mjs` passes at 1440px desktop and 390px mobile with no page errors or horizontal overflow. It drives real interaction/composer/close/language controls. Live openings return empty speech; chat replies and original timestamps survive reopening and reloading. Each viewport records six successful no-greeting opening responses.
+- Proven: the same browser flow verifies English/Vietnamese scene narration, short local clock labels, offline replies through a forced 503, all 30 recent messages without a collapse toggle, unavailable legacy times, and scroll position retained while reading older turns.
+- Proven with injected client activity fixtures: narration stays captured for the current encounter, the next encounter reads the current activity, actual animation mixer clips advance and change with the activity, hand props attach/detach, and a walking resident switches to idle for conversation and resumes walking afterward. Unit tests separately validate authoritative Director actions and Colyseus activity encoding, updates, and expiry.
+- Proven: `scripts/qa-npc-dialog.mjs` passes desktop/mobile errand controls, tracking toggles, available/active/ready/full states, celebration feedback, and visible previous messages.
+- Proven: all 29 packaged NPC models contain every catalog animation, referenced existing props exist, walking activities have authored routes, invalid/prototype activity IDs are rejected, expiration restores defaults, and rooms do not share assignments.
+- Proven: message history preserves IDs and submission/reply times, merges legacy cache entries without duplication, retains local messages arriving during a fetch, rejects history from a prior session, and scopes player-supplied message identity to its NPC/player thread. Routine openings make no provider call or memory entry; quest payoffs, twists, and riddle reveals retain their regression coverage.
+- Mobile layout experiment: the 76px affinity portrait overlapped the heading with 56px header padding (`headingLeft=97`, `portraitRight=117`). Changing only that padding to 90px cleared the overlap (`headingLeft=131`). Desktop/mobile browser QA asserts the heading stays clear; captured UI was visually inspected.
+- Local artifacts: `artifacts/npc-encounters/results.json`, `encounter-{1440,390}.png`, `vietnamese-offline-{1440,390}.png`, and `artifacts/npc-dialog-clarity/history-visible-{1440,390}.png`.
+- Validation: client/server production builds and type checks pass. Server tests: 445 passed, 2 skipped. Client tests: 292 passed. Repository-wide and NPC-scoped lint and `git diff --check` pass.
+- Release constraint: deploy matching client/server room schemas and reconnect clients. No database migration is required. No deployment was performed for this validation.
+
 ## Home-screen market framing
 
 - Desktop camera places the market clock and entrance to the right of the title; portrait framing keeps the market above the form. Title overlays leave the landmark visible.

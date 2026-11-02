@@ -9,6 +9,17 @@ import type {
 
 export type Text = Record<Locale, string>
 
+export interface NpcActivity {
+  text: Text
+  animation: string
+  movement?: 'walk'
+  prop?: 'food/cup-coffee' | 'food/bowl-soup' | 'food/loaf-baguette'
+}
+
+export type NpcActivities = Record<string, NpcActivity> & {
+  default: NpcActivity
+}
+
 /** Per-locale role and local knowledge shown in conversation and prompts. */
 export interface LocalizedProfile {
   role: string
@@ -108,6 +119,7 @@ export interface NpcPlace {
 
 export interface NpcDefinition {
   id: NpcId
+  activities: NpcActivities
   profile: NpcProfile
   story: NpcStory
   unlocks: UnlockSpec[]
@@ -123,6 +135,7 @@ export function defineNpc<const T extends NpcDefinition>(def: T): T {
 /** Resident defaults: fills the repetitive role/knowledge/idle text from today's resident() template. */
 export interface ResidentInput {
   id: NpcId
+  activities: NpcActivities
   name: Text
   roles: { en: string; vi: string }
   place: { en: string; vi: string }
@@ -170,6 +183,7 @@ export function defineResident(input: ResidentInput): NpcDefinition {
   const seedPlaceVi = home === 'park' ? 'cô Hoa ở chợ' : 'chị Linh ở công viên'
   return {
     id: input.id,
+    activities: input.activities,
     profile: {
       kind: 'resident',
       friendliness,

@@ -88,16 +88,16 @@ try {
 
     await meet(page, 'hoa')
     const npcReplies = page.locator('dialog.conversation .speech.assistant')
-    await npcReplies.first().waitFor({ timeout: 30000 })
-    result.greeting = await npcReplies.last().innerText()
-    result.greetingSource = (await diagnostics(page)).state.source
+    await page.locator('.activity-scene').waitFor()
+    assert.equal(await npcReplies.count(), 0)
+    result.activity = await page.locator('.activity-scene').innerText()
     await page.getByLabel('Tin nhắn của bạn').fill('Chợ hôm nay có gì ngon?')
     await page
       .getByRole('button', { name: 'Gửi tin nhắn', exact: true })
       .click()
     await page
-      .locator('.thinking')
-      .waitFor({ state: 'detached', timeout: 30000 })
+      .locator('#npc-message:not([disabled])')
+      .waitFor({ timeout: 45000 })
     result.reply = await npcReplies.last().innerText()
     result.replySource = (await diagnostics(page)).state.source
     await page.screenshot({ path: `${out}/chat-vi-${width}.png` })

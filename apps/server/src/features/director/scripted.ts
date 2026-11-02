@@ -35,6 +35,12 @@ export function scriptedDayPlan(): CityDayPlan {
           },
           { type: 'set-weather', weather: 'clear' },
           {
+            type: 'set-npc-activity',
+            npcId: 'hoa',
+            activityId: 'busy',
+            durationMs: 180000,
+          },
+          {
             type: 'post-headline',
             text: 'The morning market is open. Hoa could use a hand with the herbs.',
           },
@@ -66,6 +72,12 @@ export function scriptedDayPlan(): CityDayPlan {
             type: 'post-headline',
             text: 'City Hall is gathering for a little neighborhood festival. Vy could use a hand.',
           },
+          {
+            type: 'set-npc-activity',
+            npcId: 'vy',
+            activityId: 'busy',
+            durationMs: 180000,
+          },
         ],
       },
       {
@@ -92,6 +104,12 @@ export function scriptedDayPlan(): CityDayPlan {
             need: 'Listen for the cathedral echo and share a hello with Linh.',
           },
           { type: 'set-weather', weather: 'rain' },
+          {
+            type: 'set-npc-activity',
+            npcId: 'thao',
+            activityId: 'busy',
+            durationMs: 180000,
+          },
           {
             type: 'post-headline',
             text: 'A little evening rain and a melody travel toward the cathedral square.',

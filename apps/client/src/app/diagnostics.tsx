@@ -2,6 +2,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useRapier } from '@react-three/rapier'
 import { useEffect } from 'react'
 import { gameUiRenders } from '@/app/game-ui'
+import { npcBehaviors } from '@/features/npcs/activity'
 import { crowdStats } from '@/features/npcs/residents'
 import { city } from '@/shared/api/city'
 import { eventDiagnostics } from '@/shared/api/events'
@@ -53,6 +54,28 @@ export function Diagnostics() {
           : 'idle',
       },
       world: crowdStats(),
+      npcBehaviors: Object.fromEntries(npcBehaviors),
+      npcAnimations: (() => {
+        const actors: Record<
+          string,
+          { clip: string; time: number; props: string[] }
+        > = {}
+        scene.traverse((object) => {
+          const id = object.userData.npcId
+          if (typeof id !== 'string') return
+          const actor = { clip: '', time: 0, props: [] as string[] }
+          object.traverse((child) => {
+            if (typeof child.userData.activeAnimation === 'string') {
+              actor.clip = child.userData.activeAnimation
+              actor.time = child.userData.animationTime
+            }
+            if (typeof child.userData.activityProp === 'string')
+              actor.props.push(child.userData.activityProp)
+          })
+          actors[id] = actor
+        })
+        return actors
+      })(),
       city: city.state,
       physics: {
         engine: 'rapier',

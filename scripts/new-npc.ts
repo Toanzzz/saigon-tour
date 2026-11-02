@@ -61,10 +61,27 @@ await writeFile(
   `/** ${id}'s AI prompt body. Server-only; SHARED_RULES is appended by the server. */\nexport const persona = ''\n`
 )
 
+await writeFile(
+  resolve(dir, 'src/activities.ts'),
+  `import type { NpcActivities } from '@saigon/npc-kit'
+export const activities = {
+  default: {
+    animation: 'idle',
+    text: { en: '{name} is watching the neighborhood.', vi: '{name} đang ngắm khu phố.' },
+  },
+  busy: {
+    animation: 'interact-right',
+    text: { en: '{name} is gesturing toward the street.', vi: '{name} đang chỉ về phía đường.' },
+  },
+} satisfies NpcActivities
+`
+)
+
 if (kind === 'neighbor') {
   await writeFile(
     resolve(dir, 'src/index.ts'),
     `import { defineNpc, type NpcLook } from '@saigon/npc-kit'
+import { activities } from './activities'
 
 const look: NpcLook = {
   body: 'female-a',
@@ -73,6 +90,7 @@ const look: NpcLook = {
 }
 
 export default defineNpc({
+  activities,
   id: '${id}',
   profile: {
     kind: 'neighbor',
@@ -106,6 +124,7 @@ export default defineNpc({
   await writeFile(
     resolve(dir, 'src/index.ts'),
     `import { defineResident, type NpcLook } from '@saigon/npc-kit'
+import { activities } from './activities'
 
 const look: NpcLook = {
   body: 'female-a',
@@ -116,6 +135,7 @@ const look: NpcLook = {
 }
 
 export default defineResident({
+  activities,
   id: '${id}',
   name: { en: 'TODO', vi: 'TODO' },
   roles: { en: 'TODO', vi: 'TODO' },

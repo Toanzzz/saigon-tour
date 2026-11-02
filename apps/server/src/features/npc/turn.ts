@@ -5,6 +5,7 @@ import {
   isRevealed,
   NPCS,
   type NpcId,
+  npcActivity,
   type QuestEvent,
 } from '@saigon/shared'
 export function friendshipChanges(
@@ -51,7 +52,6 @@ export async function buildContext(
   twistedLine: string | null = null,
   riddleContext: string | null = null,
   milestoneContext: string | null = null,
-  referredGreeting: string | null = null,
   casual = false
 ) {
   const [facts, record] = await Promise.all([
@@ -97,11 +97,7 @@ export async function buildContext(
       : []),
     ...(riddleContext ? [riddleContext] : []),
     ...(milestoneContext ? [milestoneContext] : []),
-    ...(referredGreeting
-      ? [
-          `The player is referring back to how you greeted them: "${referredGreeting}". Treat it as something you already said and respond to their reference naturally.`,
-        ]
-      : []),
+    `Your current activity (world observation, not something you said): ${npcActivity(npcId, game.city?.(playerId)).text[request.locale]}`,
     casual
       ? `Weather: ${game.city?.(playerId)?.weather ?? 'unknown'}`
       : `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,

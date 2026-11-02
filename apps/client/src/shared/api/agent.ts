@@ -127,10 +127,13 @@ export function offline(
     quests = quests.map((quest) => advance(quest, event))
   }
   world = applyPlayerEvents(world, [{ type: 'talk', npcId: npc }])
-  let reply: string = m.offline_greeting({
-    name: npcLabel(npc),
-    fact: npcDisplay(npc).knowledge[0] ?? '',
-  })
+  const opening = body.intent === 'open' || body.intent === 'greet'
+  let reply: string = opening
+    ? ''
+    : m.offline_greeting({
+        name: npcLabel(npc),
+        fact: npcDisplay(npc).knowledge[0] ?? '',
+      })
   // A twist that applied during this turn speaks its authored line.
   const freshTwist = quests.find(
     (quest) => quest.twist?.replaced && !twistedBefore.has(quest.id)

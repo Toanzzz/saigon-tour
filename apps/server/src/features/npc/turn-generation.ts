@@ -40,7 +40,6 @@ export class TurnGenerator {
     twistedLine: string | null,
     riddleContext: string | null = null,
     milestoneContext: string | null = null,
-    referredGreeting: string | null = null,
     delivery?: TurnDelivery
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
@@ -63,7 +62,6 @@ export class TurnGenerator {
       twistedLine,
       riddleContext,
       milestoneContext,
-      referredGreeting,
       casual
     )
     for (let attempt = 0; attempt < 2; attempt++) {

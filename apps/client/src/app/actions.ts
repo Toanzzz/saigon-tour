@@ -4,6 +4,7 @@ import {
   MARKET_ITEMS,
   type MarketItemId,
   type NpcId,
+  npcActivity,
 } from '@saigon/shared'
 import {
   carePhrase,
@@ -14,7 +15,7 @@ import {
 import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
 import { resetAsides } from '@/features/transport/asides'
-import { npcPosition } from '@/shared/api/city'
+import { city, npcPosition } from '@/shared/api/city'
 import {
   beginHttpTurn,
   endHttpTurn,
@@ -235,11 +236,16 @@ export function interact() {
 export async function talk(npc: NpcId) {
   const state = game.state
   if (state.dialogue || distance(state.position, npcPosition(npc)) > 4) return
+  const requestId = crypto.randomUUID()
+  const sessionId = state.sessionId
+  const activity = npcActivity(npc, city.state)
   game.setState((s) => ({
     ...s,
     dialogue: {
       npc,
-      requestId: crypto.randomUUID(),
+      requestId,
+      openedAt: new Date().toISOString(),
+      activity: { id: activity.id, text: activity.text },
       history: cachedHistory(npc),
       earlierCount: cachedHistory(npc).length,
       thinking: true,
@@ -250,7 +256,11 @@ export async function talk(npc: NpcId) {
   }))
   if (state.guestStatus === 'online') {
     await fetchHistory(npc).catch(() => {})
-    if (game.state.dialogue?.npc !== npc) return
+    if (
+      game.state.sessionId !== sessionId ||
+      game.state.dialogue?.requestId !== requestId
+    )
+      return
     update({
       dialogue: {
         ...game.state.dialogue,
@@ -259,7 +269,7 @@ export async function talk(npc: NpcId) {
       },
     })
   }
-  await converse('', 'greet', true)
+  await converse('', 'open', true)
 }
 export const chat = (text: string) => converse(text, 'chat')
 export const askMilestone = () => converse('', 'milestone')

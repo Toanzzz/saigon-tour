@@ -12,7 +12,6 @@
     "start": "node dist/index.js",
     "check:types": "tsc -b",
     "test": "vitest run",
-    "prewarm": "bun src/prewarm.ts",
     "test:integration": "RUN_POSTGRES_INTEGRATION=1 vitest run test/integration.spec.ts",
     "auth:generate": "auth generate --config src/features/auth/cli.ts --output src/shared/db/auth-schema.ts -y && biome format --write src/shared/db/auth-schema.ts",
     "db:generate": "drizzle-kit generate"

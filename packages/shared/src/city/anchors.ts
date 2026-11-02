@@ -40,6 +40,7 @@ export function initialCitySnapshot(): CitySnapshot {
     npcPlacements,
     events: [],
     needs: {},
+    npcActivities: {},
     weather: 'clear',
     headlines: [],
   }

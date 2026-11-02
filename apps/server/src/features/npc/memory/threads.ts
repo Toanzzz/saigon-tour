@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto'
+import { createHash, randomUUID } from 'node:crypto'
 import type { MastraDBMessage } from '@mastra/core/agent'
 import type { MastraCompositeStore } from '@mastra/core/storage'
 import { NPCS, type NpcId } from '@saigon/shared'
@@ -9,12 +9,27 @@ export async function recordTurn(
   playerId: string,
   message: string,
   reply: string,
-  replaceGreeting = false
+  timing: { messageId?: string; sentAt?: Date } = {}
 ) {
   const memory = await storage.getStore('memory')
   if (!memory) throw new Error('npc_memory_store_unavailable')
   const threadId = `${npcId}:${playerId}`
-  const createdAt = new Date()
+  const userId = timing.messageId
+    ? createHash('sha256')
+        .update(`${threadId}:${timing.messageId}`)
+        .digest('hex')
+    : randomUUID()
+  const latest = (
+    await memory.listMessages({
+      threadId,
+      resourceId: playerId,
+      perPage: 1,
+      page: 0,
+      orderBy: { field: 'createdAt', direction: 'DESC' },
+    })
+  ).messages[0]
+  const previousAt = latest?.createdAt.getTime() ?? 0
+  const createdAt = new Date(Math.max(Date.now(), previousAt + 2))
   const existing = await memory.getThreadById({ threadId })
   if (!existing)
     await memory.saveThread({
@@ -26,62 +41,41 @@ export async function recordTurn(
         updatedAt: createdAt,
       },
     })
-  if (!message.trim()) {
-    const latest = (
-      await memory.listMessages({
-        threadId,
-        resourceId: playerId,
-        perPage: 1,
-        page: 0,
-        orderBy: { field: 'createdAt', direction: 'DESC' },
-      })
-    ).messages[0]
-    if (latest?.role === 'assistant') {
-      const text = latest.content.parts
-        .filter((part) => part.type === 'text')
-        .map((part) => part.text)
-        .join('\n')
-      if (text === reply) return false
-      // Only collapse a stale greeting into the new one. A substantive reply
-      // (e.g. accepting an errand) is preserved, and the fresh state-aware
-      // greeting is appended after it.
-      if (replaceGreeting && latest.content.metadata?.greeting === true) {
-        await memory.updateMessages({
-          messages: [
-            {
-              id: latest.id,
-              content: {
-                format: 2,
-                parts: [{ type: 'text', text: reply }],
-                metadata: { greeting: true },
-              },
-            },
-          ],
-        })
-        return true
-      }
-    }
-  }
   const messages: MastraDBMessage[] = [
     ...(message.trim() ? [{ role: 'user' as const, text: message }] : []),
     { role: 'assistant' as const, text: reply },
-  ].map(({ role, text }, index) => ({
-    id: randomUUID(),
+  ].map(({ role, text }) => ({
+    id: role === 'user' ? userId : randomUUID(),
     threadId,
     resourceId: playerId,
     role,
-    createdAt: new Date(createdAt.getTime() + index),
+    createdAt:
+      role === 'user'
+        ? new Date(
+            Math.max(
+              previousAt + 1,
+              Math.min(
+                createdAt.getTime() - 1,
+                timing.sentAt?.getTime() ?? createdAt.getTime() - 1
+              )
+            )
+          )
+        : createdAt,
     content: {
       format: 2,
       parts: [{ type: 'text', text }],
-      // Tag greeting-only turns so a later revisit replaces rather than stacks.
-      ...(role === 'assistant' && replaceGreeting && !message.trim()
-        ? { metadata: { greeting: true } }
-        : {}),
     },
   }))
   await memory.saveMessages({ messages })
-  return true
+  return messages.map((entry) => ({
+    id: entry.id,
+    role: entry.role as 'user' | 'assistant',
+    text: entry.content.parts
+      .filter((part) => part.type === 'text')
+      .map((part) => part.text)
+      .join('\n'),
+    at: entry.createdAt.toISOString(),
+  }))
 }
 
 export async function clearPlayerThreads(
@@ -121,6 +115,7 @@ export async function readHistory(
       return text.trim()
         ? [
             {
+              id: message.id,
               role: message.role,
               text,
               at: message.createdAt.toISOString(),

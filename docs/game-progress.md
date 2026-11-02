@@ -28,7 +28,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - **Party errands:** a shared quest id and original recipient list, independent progress, atomic group assignment, and once-only rewards pushed to every member. Leave/disconnect keeps participation; abandon/reset removes the player’s copy.
 - **Collectible coins:** ambient `collectibles/coin` pickups spin along the Lê Lợi / Nguyễn Huệ / park / river walkways (authored in `packages/shared/src/collectibles.ts`). Walking into one grants coins once per player through `POST /me/pickups/:coinId` and the `coin_pickups` ledger, and plays a short collect effect (pop + rise + gold `Sparkles` burst, ~0.5 s, transform-only so the shared coin material is untouched); reduced motion collapses it to an instant vanish. On any coin gain the HUD header wallet pulses and floats a "+N" (reduced motion fades without the bounce). The client never mutates currency directly, offline guests still see the coin vanish with a pickup ping, and reset clears the ledger and any in-flight effect. Decorative-plus-grant only — amounts, fares, and the HUD glyph are unchanged.
 - **Fragile parcel carry:** a client `features/carry/` slice wobbles a fragile deliverable (`FRAGILE_ITEM_IDS`, currently `cake`) while an active quest will deliver it and the item is held. A pure spring-damper (`wobble.ts`) takes impulses from sprint toggles and sharp on-foot turns, and from xe ôm path corners; cyclo, bus, and metro rides stay smooth. The peak wobble maps to a sticky care level (pristine → wobbly → landscape) in `carryStore`; it never un-squashes until `resetCarry()` on a new carry or restart. A procedural 3-tier cake on a tray (THREE primitives, no asset) tilts with the wobble at the avatar's hands and on the rider, gated out of XR and pinned level under reduced motion. Narrator asides (≤1 per 8 s) and the recipient's per-care reaction are authored EN/VI lines; delivery sends `carry_prompt_deliver_care` so a live NPC reacts to the care, and the reaction toast shows immediately offline. Reward and quest behavior are unchanged by care level — no failure state. `carry()` test hook exposes the snapshot for QA.
-- **NPCs, friendship, memory:** 29 agents, nine neighbors and twenty residents. Friendship (−5 to +5) lives on the player row with normal locks, revisions, socket saves, and reset. Rules and memory: `docs/agent-harness.md`. Opening a conversation shows a cached greeting stored in the NPC/player thread; reopening shows earlier messages. Resident walkers pause near the player.
+- **NPCs, friendship, memory:** 29 agents, nine neighbors and twenty residents. Friendship (−5 to +5) lives on the player row with normal locks, revisions, socket saves, and reset. Rules and memory: `docs/agent-harness.md`. Opening a conversation shows the current activity as scene narration; reopening keeps recent messages visible with a new encounter divider. Resident walkers pause near the player.
 - **Conversation UI:** an errands strip (ready, needs you, in progress, available) from the shared `dialogueQuests`; NPC speech bubbles; a `role · location` eyebrow; a portrait rendered from the character model with a five-tier affinity crest and `affinity-info` popover; mini-avatars per NPC message. World quest diamonds render only with a `!`/`?` glyph; Pause has a symbols guide.
 - **City Director:** the world room’s events, weather, NPC placements and needs, and headlines, with deterministic validation, authored anchors, a two-event cap, one news-informed day plan drafted per UTC day, and daily count/spend guards. News sets the day's mood and may lightly theme an event, reframed rather than copied. `DIRECTOR_MODE` is `live`, `scripted`, or `off`; the news feed defaults in code to VnExpress `thoi-su`, overridable by `DIRECTOR_NEWS_URL`. Colyseus patches synchronize state; headlines produce toasts; rain uses tint/fog; event markers and the hub City pulse reflect room state.
 - **Unlocks and wardrobe:** 27 signature unlocks (nine neighbors × neutral 0 / warm 2 / close 4 friendship tiers) in `packages/shared/src/unlocks`. A reward carries the giver’s first not-owned, tier-allowed unlock; grants are idempotent inside the completion guard; reset clears them. `POST /me/equip` validates ownership and slot, then pushes the look to presence. The wardrobe (`I`) is a 3D fitting room under one shared drei `View` canvas, usable while walking, riding, paused, or in the hub; the reward popup offers “Wear now”. Bicycle unlocks render the procedural `Bike`.
@@ -36,7 +36,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - **Shared room:** one `world` room of twenty with a waiting notice and `GET /realtime/status`. Details: `docs/multiplayer.md`.
 - **Title and journey:** a fresh player sees the name field with gender toggle and dice, Start exploring (plus Enter VR where supported), and the guest/Meta account line. A returning player sees Welcome back, a summary chip (favors · tracked quest · location), `Continue journey as {name}`, and Start a new journey. Renaming and body choice during a journey live in Pause. Start a new journey is a two-tap confirm on the title, Pause, and reward screens; the confirm reverts after 4 seconds; it erases progress only and returns to the fresh title with the name prefilled. Escape toggles pause; the game store owns modal close.
 - **Identity:** anonymous Better Auth guests get a generated editable name; the dice draws a random body and a matching first name. Facebook login links progress, and an existing account save wins. Reset preserves identity; clear saved data drops the persisted query cache.
-- **i18n:** English and Vietnamese through Paraglide JS 2. The title `EN | VI` toggle and the Pause language select switch live. The server adds a per-turn language rule, caches greetings per locale, and has Vietnamese fallbacks and seed quests. Room-wide barks, headlines, and Director events stay English; saved quests keep their original language.
+- **i18n:** English and Vietnamese through Paraglide JS 2. The title `EN | VI` toggle and the Pause language select switch live. The server adds a per-turn language rule and has Vietnamese fallbacks and seed quests. Room-wide barks, headlines, and Director events stay English; saved quests keep their original language.
 - **Client state:** TanStack Stores with explicit resets (`docs/architecture.md` §4). Position-only changes do not re-render `GameUI`; `?debug` exposes `state.gameUiRenders`, and `scripts/qa-store-perf.mjs` checks it while walking.
 - **City solids:** one registry (`shared/world/solids.ts`) feeds the colliders (`shared/world/collision.tsx`), the layout lint (`test/city-layout.spec.ts`) and the `?debug` physics overlay, so visuals and collision cannot drift apart. Building and market colliders come from measured model bounds in `shared/world/footprints.generated.ts` (written by `scripts/prepare-assets.ts`), including the bbox centre offset. Shared prop placements live in `shared/world/placements.ts`. The lint checks building/road/plaza/landmark/park overlap, collider coverage, that spawn/NPC/stop/map points sit outside solids, and flood-fill reachability from spawn.
 
@@ -51,7 +51,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 ## NPC packages
 
 Each of the 29 NPCs owns a `packages/npc-<id>/` package (profile, story, unlocks,
-look, place, and a server-only persona), aggregated by
+look, place, activity catalog, and a server-only persona), aggregated by
 `packages/shared/src/npcs/registry.ts`. The legacy shared exports and a new
 `NPC_LOOKS` derive from the registry; prompts load through the server-only
 `@saigon/shared/personas` subpath, so no prompt text reaches the client bundle.
@@ -72,8 +72,8 @@ Each of the eight neighbors has a first seed (`packages/npc-<id>/src/seeds/arc.t
 imported first in `story.ts`) that is a Ki -> Sho -> Final arc. A `twist` rewrites
 the final step once every earlier step is done, keeping the step type (a DELIVER
 twist keeps its item) and staying inside the giver's domain. The twist `line` is
-the in-world reason, spoken by the Sho TALK_TO target: on greet the harness
-speaks it over the cached greeting, and on a chat turn `buildContext` adds
+the in-world reason, spoken by the Sho TALK_TO target: on opening the harness
+speaks it after the scene narration, and on a chat turn `buildContext` adds
 `Twist just happened: <line>. React in character.`
 
 The client announces a twist through `shared/state/twists.ts`: it watches `game`
@@ -120,7 +120,7 @@ journal show the riddle with a `?` and the options
 `Ask a neighbor · Ride a cyclo · Clear in m:ss`. `shared/state/riddles.ts`
 watches quests plus the shared UI clock (reference-counted with the waiting
 notice), toasts `riddle_revealed_{talk,cyclo,time}` or `riddle_sharp_eye`, and is
-reset in `restart()` and test setup. A greet that reveals the riddle replies with
+reset in `restart()` and test setup. An opening that reveals the riddle replies with
 the authored `That riddle? {stepText(answer)}` on the server and in `offline()`.
 `turn.ts` adds `Riddle unrevealed: …. Hint, never answer.` for the giver while
 hidden and `You just told the player the riddle answer: …` on the turn it
@@ -176,35 +176,31 @@ shows "Ask about the concert" (`canAskMilestone`) which calls
 gets a `milestone_reward_banner`, and a `milestone_begins_toast` fires on
 completion. `milestone_*` message keys added in EN + southern VI.
 
-## On-demand greetings prepared by the Director
+## NPC activities and encounter history
 
-Greetings are prepared when the city changes, not assembled on every greet. When
-a Director turn starts a new event (`CityDirector.turn` diffs the pre/post city
-snapshot for new event ids), it calls `onEvents(snapshot, started)`; `realtime.ts`
-wires that to `harness.prepareGreetings`. `relevantNpcsForEvent`
-(`packages/shared/src/city/anchors.ts`) picks NPCs placed at the event location
-(or whose home is there) plus any NPC the event hands a need. Each is passed to
-`ShortLines.prepare`, which precomputes greetings across every affinity tier and
-time bucket per locale into the existing `npc_greetings` cache, so a player's
-greet hits a warm, state-aware line.
+Every NPC package owns an English/Vietnamese activity catalog with a default
+and a Director-selectable `busy` activity. `set-npc-activity` selects a supported
+activity for 30–900 seconds. City snapshots and Colyseus patches carry activity
+IDs and start/end times; expiration restores the authored default. Scripted and
+live Director plans select activities explicitly. Narration, world animation,
+existing hand props, and authored walking behavior use the same activity.
+Opening an encounter captures the activity as a scene observation; conversation
+pauses local travel and closing resumes the current world activity.
 
-Affinity tiers live in `packages/shared/src/quest/friendship.ts`:
-`AFFINITY_TIERS` (hostile/guarded/neutral/warm/close), `affinityTier(level)`, and
-`TIER_LEVEL` (representative level per tier used when precomputing). The player's
-live level maps to a tier whose cached greeting is served.
+The `open` interaction applies talk/visit events and preserves quest payoffs,
+twists, and riddle reveals. `greet` is a compatibility alias for `open`.
+Routine openings produce no speech, model call, or conversation-memory entry.
+The greeting cache table remains unused; no schema migration is needed.
 
-Player name: a persona opts in with `greetsByName: true` (npc-kit `NpcProfile`,
-surfaced on `NPCS[*].greetsByName`); Hoa and Mai opt in. When live, `greetingPrompt`
-tells the model to address the visitor as the literal `{name}` token
-(`NAME_PLACEHOLDER`). The cached line keeps `{name}`; `fillGreetingName` fills it
-on first interact from `InteractRequest.playerName` (client sends `guestName`),
-and drops the token cleanly when no name is available.
-
-Greetings no longer enter the conversation thread. The greet path stores the
-shown opener in `NpcHarness.lastGreeting` (`npc:player`) instead of `recordTurn`.
-A later chat turn injects it as context only when `refersToGreeting(message)`
-matches (e.g. "what did you say", "the gathering", VI "sự kiện"); `buildContext`
-takes `referredGreeting` and frames it as something the NPC already said.
+Chat shows the most recent 30 messages with an encounter divider and scene
+narration. Earlier messages remain in the scrollback. Message IDs and original
+submission/reply timestamps survive history reloads and persisted Query caches.
+Times use local 24-hour `HH:mm`, date dividers, and accessible full dates.
+Unknown legacy timestamps display a dash. Streaming text is transient; final
+replies carry the persisted server message IDs and times. Scrolling older
+messages suspends automatic following until the reader returns to the bottom.
+Client and server builds share the updated room schema; reconnect clients after
+releasing both builds.
 
 ## Errand offers describe the task; accept/finish celebrate
 

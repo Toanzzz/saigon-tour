@@ -38,7 +38,7 @@ describe('resetUiStores', () => {
     armJourneyConfirm()
     resetUiStores()
     expect(nameDraft.state.name).toBe('')
-    expect(chatDraft.state).toEqual({ text: '', showEarlier: false })
+    expect(chatDraft.state).toEqual({ text: '' })
     expect(transportForm.state).toEqual({ mode: 'bus', destination: 'park' })
     expect(wardrobeTab.state.slot).toBe('hat')
     expect(journeyConfirm.state.armed).toBe(false)

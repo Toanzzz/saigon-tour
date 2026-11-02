@@ -1,5 +1,13 @@
 import { z } from 'zod'
-import { LocationIdSchema, NeighborIdSchema } from '../entities'
+import { LocationIdSchema, NeighborIdSchema, NpcIdSchema } from '../entities'
+
+export const NpcActivityStateSchema = z
+  .object({
+    activityId: z.string().min(1).max(40),
+    startedAt: z.number().int().min(0),
+    endsAt: z.number().int().min(0),
+  })
+  .strict()
 
 export const CityWeatherSchema = z.enum(['clear', 'rain'])
 export const CityEventKindSchema = z.enum([
@@ -43,6 +51,9 @@ export const CitySnapshotSchema = z
     npcPlacements: z.record(NeighborIdSchema, NpcPlacementSchema),
     events: z.array(CityEventSchema).max(2),
     needs: z.partialRecord(NeighborIdSchema, z.string().min(1).max(180)),
+    npcActivities: z
+      .partialRecord(NpcIdSchema, NpcActivityStateSchema)
+      .default({}),
     weather: CityWeatherSchema,
     headlines: z.array(CityHeadlineSchema).max(12),
   })
@@ -50,6 +61,14 @@ export const CitySnapshotSchema = z
 export type CitySnapshot = z.infer<typeof CitySnapshotSchema>
 
 export const CityActionSchema = z.discriminatedUnion('type', [
+  z
+    .object({
+      type: z.literal('set-npc-activity'),
+      npcId: NpcIdSchema,
+      activityId: z.string().min(1).max(40),
+      durationMs: z.number().int().min(30_000).max(900_000),
+    })
+    .strict(),
   z
     .object({
       type: z.literal('start-event'),

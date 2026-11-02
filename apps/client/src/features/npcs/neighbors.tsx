@@ -2,7 +2,7 @@ import { useFrame } from '@react-three/fiber'
 import { NEIGHBOR_IDS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { Group } from 'three'
 import { isTestPausedForScreenshot } from '@/app/test-hooks'
 import { npcPosition } from '@/shared/api/city'
@@ -11,6 +11,7 @@ import { game } from '@/shared/state/game'
 import { questTarget } from '@/shared/state/quests'
 import { Character } from '@/shared/world'
 import { ownModelPath, PEOPLE } from '@/shared/world/places'
+import { npcBehaviors, useNpcActivity } from './activity'
 import { NpcLabel, NpcLabelsTicker } from './npc-label'
 import { Crowd } from './residents'
 
@@ -47,23 +48,48 @@ function Neighbor({
   ready: boolean
 }) {
   const ref = useRef<Group>(null)
-  const anchor = npcPosition(id)
+  const activity = useNpcActivity(id)
+  const animation = useRef(activity.animation)
+  useEffect(
+    () => () => {
+      npcBehaviors.delete(id)
+    },
+    [id]
+  )
+  const anchor = useRef(npcPosition(id)).current
   useFrame((_, delta) => {
     if (!ref.current || isTestPausedForScreenshot()) return
     const target = npcPosition(id)
     const alpha = 1 - Math.exp(-Math.min(delta, 0.05) * 6)
     const dx = target[0] - ref.current.position.x
     const dz = target[2] - ref.current.position.z
-    ref.current.position.x += dx * alpha
-    ref.current.position.z += dz * alpha
-    if (Math.hypot(dx, dz) > 0.1) ref.current.rotation.y = Math.atan2(dx, dz)
+    const paused = game.state.dialogue?.npc === id
+    const moving = !paused && Math.hypot(dx, dz) > 0.1
+    if (paused) {
+      ref.current.rotation.y = Math.atan2(
+        motion.position.x - ref.current.position.x,
+        motion.position.z - ref.current.position.z
+      )
+    } else {
+      ref.current.position.x += dx * alpha
+      ref.current.position.z += dz * alpha
+      if (moving) ref.current.rotation.y = Math.atan2(dx, dz)
+    }
+    animation.current = moving ? 'walk' : activity.animation
+    npcBehaviors.set(id, {
+      activityId: activity.id,
+      animation: animation.current,
+      moving,
+      paused,
+    })
   })
   return (
-    <group ref={ref} position={anchor}>
+    <group ref={ref} position={anchor} userData={{ npcId: id }}>
       <Character
         model={PEOPLE[id].model as 'female-a'}
         path={ownModelPath(id) ?? undefined}
-        animation="idle"
+        animation={() => animation.current}
+        activityProp={activity.prop}
         active={() =>
           game.state.screen === 'playing' &&
           !isTestPausedForScreenshot() &&

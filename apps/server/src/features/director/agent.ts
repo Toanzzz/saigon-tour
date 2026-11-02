@@ -4,6 +4,7 @@ import {
   CITY_ANCHORS,
   type CityPlanBeat,
   NEIGHBOR_IDS,
+  NPC_ACTIVITIES,
   QUEST_DOMAINS,
 } from '@saigon/shared'
 import type { CityWorld } from '@/domain/city'
@@ -40,7 +41,7 @@ export function directorAgent(
     id: 'city-director',
     name: 'City Director',
     model: provider.chatModel(config.model ?? ''),
-    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
+    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(NPC_ACTIVITIES)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
     tools: directorPlanTools(city, plan, active),
   })
 }

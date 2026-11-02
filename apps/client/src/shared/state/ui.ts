@@ -57,17 +57,11 @@ export const seedTransportForm = (stop: keyof typeof PLACES) =>
 export const resetTransportForm = () =>
   transportForm.setState(() => ({ mode: 'bus', destination: 'park' }))
 
-// --- Chat draft (text + earlier-history toggle) ------------------------------
-export const chatDraft = new Store({ text: '', showEarlier: false })
+// --- Chat draft --------------------------------------------------------------
+export const chatDraft = new Store({ text: '' })
 export const setChatText = (text: string) =>
-  chatDraft.setState((draft) => ({ ...draft, text }))
-export const setChatShowEarlier = (showEarlier: boolean) =>
-  chatDraft.setState((draft) => ({ ...draft, showEarlier }))
-export const toggleChatShowEarlier = () =>
-  chatDraft.setState((draft) => ({ ...draft, showEarlier: !draft.showEarlier }))
-/** Clear the composer and collapse earlier history (NPC switch or new chat). */
-export const resetChatDraft = () =>
-  chatDraft.setState(() => ({ text: '', showEarlier: false }))
+  chatDraft.setState(() => ({ text }))
+export const resetChatDraft = () => chatDraft.setState(() => ({ text: '' }))
 
 // --- Wardrobe slot tab -------------------------------------------------------
 export const wardrobeTab = new Store<{ slot: UnlockSlot }>({ slot: 'hat' })

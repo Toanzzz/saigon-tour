@@ -29,11 +29,20 @@ export type Panel =
 export interface Dialogue {
   npc: NpcId
   requestId: string
-  history: { role: 'user' | 'assistant'; content: string; greeting?: boolean }[]
+  history: ChatMessage[]
+  openedAt?: string
+  activity?: { text: { en: string; vi: string }; id: string }
   earlierCount?: number
   thinking: boolean
   streamingText?: string
   source: AgentSource | null
+}
+export interface ChatMessage {
+  id?: string
+  role: 'user' | 'assistant'
+  content: string
+  at?: string
+  greeting?: boolean
 }
 export interface Ride {
   from: WorldState['locationId']

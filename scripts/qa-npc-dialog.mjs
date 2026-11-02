@@ -29,6 +29,7 @@ async function apply(page, kind) {
           content: 'Chào bạn! The market is busy and bright today.',
         },
       ],
+      openedAt: new Date().toISOString(),
       thinking: false,
       source: 'live',
     }
@@ -171,17 +172,12 @@ try {
 
     await apply(page, 'collapse')
     const log = page.locator('.conversation-history')
-    // Earlier turns are collapsed behind a toggle; the accepted-errand reply and
-    // the latest greeting stay visible.
-    assert.match(await log.innerText(), /Show earlier messages \(3\)/)
-    assert.doesNotMatch(await log.innerText(), /let me help/)
-    assert.match(await log.innerText(), /come back when it is done/i)
-    await page.screenshot({ path: `${out}/collapse-closed-${width}.png` })
-    await page.locator('.history-toggle').click()
-    await page.locator('.history-toggle[aria-expanded="true"]').waitFor()
+    assert.equal(await page.locator('.history-toggle').count(), 0)
     assert.match(await log.innerText(), /let me help/)
     assert.match(await log.innerText(), /errand is in the journal/i)
-    await page.screenshot({ path: `${out}/collapse-open-${width}.png` })
+    assert.match(await log.innerText(), /come back when it is done/i)
+    assert.match(await log.innerText(), /New encounter/)
+    await page.screenshot({ path: `${out}/history-visible-${width}.png` })
 
     assert.equal(
       await page.evaluate(() => document.body.scrollWidth > innerWidth),

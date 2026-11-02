@@ -56,7 +56,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
   replaces it with the server's authoritative `world`.
 - **Multiplayer:** one shared world room (20 players) with a waiting notice when full, remote tourists, emotes, parties (2–4) with invitations and presence.
 - **Avatar and wardrobe:** a plain man or woman body chosen with the title gender toggle and carried in presence as `body`; split `outfit-top`/`outfit-bottom` clothing materials recoloured by earned outfits; a 3D wardrobe (one shared drei `View` canvas) equips hats, outfits, accessories, rides, and pets at any time.
-- **City:** room-authoritative NPC anchors, events, needs, headlines, and weather. The hub exposes City pulse; rain uses tint/fog. NPC proximity follows synchronized positions.
+- **City:** room-authoritative NPC anchors, activities, events, needs, headlines, and weather. The hub exposes City pulse; rain uses tint/fog. NPC proximity follows synchronized positions.
 - **World render look:** a comic papercraft look is the default. World materials pass through a shared 3-step `MeshToonMaterial` ramp (`shared/world/toon.ts`); glow, neon, and signs stay unlit `MeshBasicMaterial` with `toneMapped={false}` via `<Blocks unlit>`. Colour tokens live in `shared/world/palette.ts`; sky colour, fog, and the hemisphere light live in `features/city/atmosphere.tsx`. ACES tone mapping is kept. `?look=classic` restores the original Standard-material look for A/B and rollback; the frozen flag is read once at boot (`shared/world/look-flag.ts`). A comic-only gradient sky dome, drifting paper clouds, cutout skyline cards, and a paper diorama base build the shadowbox depth; the title screen frames the district through a long lens.
 - **XR:** world-space panels and XR HUD; the DOM hub is hidden in XR.
 - **i18n:** locale comes from the saved choice, then a `vi*` browser, then `en`. Switching remounts only the DOM UI; NPC requests carry `locale`.
@@ -64,7 +64,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 
 ## 5. NPC agents
 
-`POST /npc/:npcId/interact` takes `{ message, intent, locale, events, worldContext }` and derives player identity from the authenticated session. Intents are `chat | greet` (`help` and `check` are accepted as chat); events are `visit | talk | deliver | purchase | spend`.
+`POST /npc/:npcId/interact` takes `{ message, intent, locale, events, worldContext, messageId?, sentAt? }` and derives player identity from the authenticated session. Intents are `chat | open | milestone` (`greet` aliases open; `help` and `check` are accepted as chat); events are `visit | talk | deliver | purchase | spend`.
 
 - All 29 NPCs (nine neighbors, twenty residents) have `propose-quest`, `drop-quest`, `adjust-friendliness`, `get-context`, and `remember-player-fact`.
 - `QuestService` owns player mutations, validates proposals against shared persona domains, completes ready quests on any interaction with the giver, and grants rewards once through durable completion records.
@@ -78,7 +78,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 
 The world room runs its director once per UTC day, while occupied. The daily run reads Ho Chi Minh City news and the city snapshot, then drafts a script of timed beats for the whole day; each beat applies when its time arrives, with no further model calls. News sets the day's mood and may lightly theme a mini-game or event, reframed into a wholesome neighborhood moment rather than copied verbatim. `CityWorld` validates event limits, authored anchors, safe text, needs, and weather, and also dry-validates planned beats before they are scheduled. The daily run uses the shared spend reservation plus a daily director count. `DIRECTOR_MODE=scripted` selects a deterministic demo day plan; `off` disables the director. Live failures or an exhausted budget fall back to the scripted day plan. The news feed defaults in code to `https://vnexpress.net/rss/thoi-su.rss`; `DIRECTOR_NEWS_URL` overrides it, and an empty value disables news.
 
-Colyseus patches carry placements, events, needs, headlines, and weather. A `city-headline` message announces each headline. NPC agents see the current snapshot and their own need in context. City state lasts for the room’s lifetime; player quests remain durable in Postgres.
+Colyseus patches carry placements, activity IDs and lifetimes, events, needs, headlines, and weather. A `city-headline` message announces each headline. NPC agents see the current snapshot and their own need in context. City state lasts for the room’s lifetime; player quests remain durable in Postgres.
 
 ## 6. NPCs
 

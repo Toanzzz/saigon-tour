@@ -39,14 +39,16 @@ export async function verifyCityLife({
     if (mobile) await page.locator('button.touch-interact').click()
     else await page.keyboard.press('e')
     await page.getByRole('heading', { name, exact: true }).waitFor()
-    await page.locator('.speech.assistant').first().waitFor({ timeout: 30000 })
+    await page.locator('.activity-scene').waitFor({ timeout: 30000 })
     await page
       .getByLabel('Your message')
       .fill('I enjoy coffee and architecture. What should I notice nearby?')
     await page
       .getByRole('button', { name: 'Send message', exact: true })
       .click()
-    await page.locator('.speech.assistant').nth(1).waitFor({ timeout: 30000 })
+    await page
+      .locator('#npc-message:not([disabled])')
+      .waitFor({ timeout: 45000 })
     assert.equal(
       (await diag()).state.currency,
       wallet,

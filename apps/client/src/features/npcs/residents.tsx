@@ -8,6 +8,7 @@ import { Character } from '@/shared/world'
 import { npcPoses } from '@/shared/world/npc-pose'
 import { ownModelPath } from '@/shared/world/places'
 import { RESIDENT_VISUALS as RESIDENTS } from '@/shared/world/residents'
+import { npcBehaviors, useNpcActivity } from './activity'
 import { NpcLabel } from './npc-label'
 
 const activity = new Map<string, boolean>()
@@ -39,10 +40,13 @@ function AmbientResident({
   const ref = useRef<Group>(null)
   const active = useRef(false)
   const elapsed = useRef(resident.phase ?? phase)
+  const currentActivity = useNpcActivity(resident.id)
+  const animation = useRef(currentActivity.animation)
   useEffect(
     () => () => {
       activity.delete(resident.id)
       npcPoses.delete(resident.id)
+      npcBehaviors.delete(resident.id)
     },
     [resident.id]
   )
@@ -62,21 +66,32 @@ function AmbientResident({
       object.position.y,
       object.position.z,
     ])
-    if (
+    const paused =
       game.state.dialogue?.npc === resident.id ||
       Math.hypot(
         motion.position.x - object.position.x,
         motion.position.z - object.position.z
       ) < 3.5
-    ) {
+    const moving =
+      !paused && currentActivity.movement === 'walk' && !!resident.walk
+    animation.current =
+      paused && currentActivity.movement === 'walk'
+        ? 'idle'
+        : currentActivity.animation
+    npcBehaviors.set(resident.id, {
+      activityId: currentActivity.id,
+      animation: animation.current,
+      moving,
+      paused,
+    })
+    if (paused) {
       object.rotation.y = Math.atan2(
         motion.position.x - object.position.x,
         motion.position.z - object.position.z
       )
-      active.current = false
       return
     }
-    if (!active.current || !resident.walk) return
+    if (!active.current || !moving || !resident.walk) return
     elapsed.current += Math.min(delta, 0.05) * 0.3
     const t = Math.sin(elapsed.current)
     const direction = Math.cos(elapsed.current) > 0 ? 1 : -1
@@ -94,6 +109,7 @@ function AmbientResident({
     <group
       ref={ref}
       name={`ambient-${resident.id}`}
+      userData={{ npcId: resident.id }}
       position={[resident.at[0], 0.12, resident.at[1]]}
       rotation={[0, resident.yaw ?? 0, 0]}
     >
@@ -101,7 +117,8 @@ function AmbientResident({
       <Character
         model={resident.model}
         path={ownModelPath(resident.id) ?? undefined}
-        animation={resident.animation}
+        animation={() => animation.current}
+        activityProp={currentActivity.prop}
         scale={2.25}
         active={() => active.current}
         shadow={false}

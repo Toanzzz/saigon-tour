@@ -205,6 +205,7 @@ describe('NPC authored errands', () => {
     const harness = ctx.fx.harness(offline)
     harness.game.city = () => ({
       revision: 1,
+      npcActivities: {},
       npcPlacements: {
         vy: { locationId: 'cityhall', anchorId: 'vy', position: [64, 0, -18] },
       } as never,
@@ -235,7 +236,7 @@ describe('NPC authored errands', () => {
       ctx.playerId
     )
     // The revisit greeting reflects the accepted errand, not the host pitch.
-    expect(revisit.reply.toLowerCase()).toContain('taking this on')
+    expect(revisit.reply).toBe('')
     expect(revisit.reply.toLowerCase()).not.toContain('hosting')
     // The acceptance chat turn is recorded; the greeting stays out of history.
     const { messages } = await harness.history('vy', ctx.playerId, 30)
@@ -243,10 +244,11 @@ describe('NPC authored errands', () => {
     expect(messages.map((line) => line.text)).not.toContain(revisit.reply)
   })
 
-  it('greets as busy hosting when an event sits at the NPC location', async () => {
+  it('opens without speech even when an event sits at the NPC location', async () => {
     const harness = ctx.fx.harness(offline)
     harness.game.city = () => ({
       revision: 1,
+      npcActivities: {},
       npcPlacements: {
         vy: { locationId: 'cityhall', anchorId: 'vy', position: [64, 0, -18] },
       } as never,
@@ -270,8 +272,8 @@ describe('NPC authored errands', () => {
       ask('', { intent: 'greet' }),
       ctx.playerId
     )
-    expect(greeting.reply).toContain('An evening gathering')
-    expect(greeting.reply.toLowerCase()).toContain('hosting')
+    expect(greeting.reply).toBe('')
+    expect(greeting.messages).toEqual([])
   })
 
   it('offers an errand when the player asks to join an active event', async () => {
@@ -297,7 +299,10 @@ describe('NPC authored errands', () => {
     // No orphaned user runs: every user line is answered by an assistant line.
     for (let i = 0; i < messages.length - 1; i++)
       if (messages[i]?.role === 'user')
-        expect(messages[i + 1]?.role).toBe('assistant')
+        expect(
+          messages[i + 1]?.role,
+          JSON.stringify(messages.map(({ role, at }) => ({ role, at })))
+        ).toBe('assistant')
   })
 
   it('rejects unsafe model text and limits player bursts', async () => {
