@@ -76,7 +76,7 @@ Layers flow `app → widgets → features → shared`; each slice exposes `index
 
 ### City Director
 
-The world room runs a director, while occupied, at most once per ninety seconds through the NPC scheduler. `CityWorld` validates event limits, authored anchors, safe text, needs, and weather. Model calls use the shared spend reservation plus a daily director turn count. `DIRECTOR_MODE=scripted` selects deterministic demo beats; `off` disables the loop. Live failures use the validated scripted beat list.
+The world room runs its director once per UTC day, while occupied. The daily run reads Ho Chi Minh City news and the city snapshot, then drafts a script of timed beats for the whole day; each beat applies when its time arrives, with no further model calls. News sets the day's mood and may lightly theme a mini-game or event, reframed into a wholesome neighborhood moment rather than copied verbatim. `CityWorld` validates event limits, authored anchors, safe text, needs, and weather, and also dry-validates planned beats before they are scheduled. The daily run uses the shared spend reservation plus a daily director count. `DIRECTOR_MODE=scripted` selects a deterministic demo day plan; `off` disables the director. Live failures or an exhausted budget fall back to the scripted day plan. The news feed defaults in code to `https://vnexpress.net/rss/thoi-su.rss`; `DIRECTOR_NEWS_URL` overrides it, and an empty value disables news.
 
 Colyseus patches carry placements, events, needs, headlines, and weather. A `city-headline` message announces each headline. NPC agents see the current snapshot and their own need in context. City state lasts for the room’s lifetime; player quests remain durable in Postgres.
 

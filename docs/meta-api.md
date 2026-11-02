@@ -40,7 +40,7 @@ Each model HTTP request reserves spend before calling the provider and settles r
 
 The world room’s city snapshot contains a revision, all NPC placements (`locationId`, `anchorId`, `position`), up to two active events, per-NPC needs, clear/rain weather, and the last twelve headlines. City events carry an enum kind, location, title, description, start time, and expiry. Room state patches synchronize the snapshot; `city-headline` messages deliver new headlines immediately.
 
-The City Director calls validated `start-event`, `end-event`, `move-npc`, `set-npc-need`, `post-headline`, and `set-weather` tools. Live turns run at most once per ninety seconds while the room is occupied, with a daily director count and the shared model-spend guard. NPC `get-context` reads this room snapshot so quest proposals can respond to city needs.
+The City Director drafts a day with a single `plan-beat` tool: each call schedules a batch of validated `start-event`, `end-event`, `move-npc`, `set-npc-need`, `post-headline`, and `set-weather` actions at a time offset. It runs once per UTC day while the room is occupied, reading local news (VnExpress `thoi-su` by default) and the city snapshot, bounded by a daily director count and the shared model-spend guard. News may lightly theme an event but is never shown verbatim. NPC `get-context` reads this room snapshot so quest proposals can respond to city needs.
 
 ## Abandon and party rewards
 

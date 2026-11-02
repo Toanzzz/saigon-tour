@@ -22,7 +22,7 @@ Remote tourists interpolate snapshots with a 150 ms delay. The client draws the 
 
 The room owns city events, NPC placements and needs, weather, and twelve recent headlines. Colyseus schema patches synchronize them to all room members; `city-headline` messages announce new headlines. NPC movement uses authored anchors and interpolated client positions. Interaction range and NPC speech follow synchronized positions.
 
-The director runs only with players present, at most one live turn per ninety seconds. `DIRECTOR_MODE=scripted` provides deterministic demo beats; `off` disables turns. Live failures or exhausted budgets use scripted actions through the same validator. At most two events are active, each with an expiry. City state ends with the room; player quest progress stays in Postgres.
+The director runs only with players present, at most one draft per UTC day; the drafted beats then play out over the day. `DIRECTOR_MODE=scripted` provides a deterministic demo day plan; `off` disables the director. Live failures or exhausted budgets use the scripted day plan through the same validator. At most two events are active, each with an expiry. City state ends with the room; player quest progress stays in Postgres.
 
 ## Local operation
 

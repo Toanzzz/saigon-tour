@@ -36,11 +36,11 @@ Party assignment validates every recipient before mutation. Original recipient o
 
 ## City Director
 
-The single world room owns one `CityWorld` and one `CityDirector`. The scheduler wakes the director for world events and schedules, with at most one turn per ninety seconds. An empty room generates no model calls. Director context contains the city snapshot and the last twelve headlines; it has no conversation-memory thread.
+The single world room owns one `CityWorld` and one `CityDirector`. The director drafts a day once per UTC day while the room is occupied, then applies its scheduled beats as their times arrive with no further model calls. An empty room generates no model calls. Director context contains today's Ho Chi Minh City news and the city snapshot; it has no conversation-memory thread.
 
 The agent can start or end a city event, move an NPC to an authored location anchor, set an NPC’s need, post a safe headline, and choose clear or rainy weather. `CityWorld` validates enum values, authored anchors, safe text, event lifetime, and the two-active-event cap. NPCs read these events and their own need when shaping quest proposals; ordinary quest-domain validation still applies.
 
-`DIRECTOR_MODE` selects `live`, `scripted`, or `off`. Scripted beats and live-failure fallback use the same action validator. `DIRECTOR_DAILY_LIMIT` bounds daily live director turns in `model_spend`; each model HTTP step also reserves spend through `meteredFetch`.
+`DIRECTOR_MODE` selects `live`, `scripted`, or `off`. The scripted day plan and the live-failure fallback use the same action validator. `DIRECTOR_DAILY_LIMIT` bounds daily live director drafts in `model_spend`; each model HTTP step also reserves spend through `meteredFetch`. The news feed defaults in code to `https://vnexpress.net/rss/thoi-su.rss`; `DIRECTOR_NEWS_URL` overrides it (RSS/Atom/JSON), and an empty value disables news. News headlines are untrusted data: markup and links are stripped before the model reads them.
 
 Colyseus schema patches carry NPC placements, city events, weather, and snapshot context to every player in the room. Headlines also travel as `city-headline` messages. The client interpolates NPCs toward room placements, uses them for proximity, shows event markers and City pulse, and represents rain with tint and fog.
 
