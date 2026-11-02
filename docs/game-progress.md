@@ -371,3 +371,21 @@ dismounts the earned personal ride without opening the wardrobe, via
 `toggleVehicle`/`ownedVehicle` (`shared/api/wardrobe.ts`). The pill only renders
 once a vehicle is owned. Mounting applies `UNLOCKS[vehicle].speed` in the Player
 loop. Verified the key/button fire the equip with the right slot/id.
+
+## Wardrobe render + reward popup fixes (2026-11-03)
+
+Wardrobe 3D was blank (empty stage, blank item thumbnails) because the shared
+`<Canvas>` + drei `<View>` pattern painted nothing. Replaced it with a
+self-contained `<Canvas>` per preview box in `ViewSlot` (the reliable approach
+the coin emblem already uses), each with an explicit camera. Element-screenshot
+pixel spread confirms the avatar stage and the accessory thumbnails now render.
+The dialog also overflowed horizontally at narrow/zoomed widths: the wardrobe
+dialog is now `min(620px, 100vw-32px)`, the body layout is single-column by
+default (two-column only ≥760px), and the slot tabs wrap instead of scrolling
+off the edge. Verified no horizontal overflow at 1440 / 970 / 390 px.
+
+Reward popup: the coin emblem was `size={88}` and overlapped the "+N coins"
+amount; it is now `size={44}` with the row keeping the emblem's symmetric bleed
+(measured: no overlap). "Wear now" used `close()`, which opened the first-reward
+hub; it now equips and drops straight back into the city
+(`screen: 'playing'`).

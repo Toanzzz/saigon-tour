@@ -5,7 +5,7 @@ import { NpcAvatar } from '@/features/conversation/npc-avatar'
 import { rewardCopy } from '@/shared/api/party'
 import { equipUnlock } from '@/shared/api/wardrobe'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
-import type { GameState } from '@/shared/state/game'
+import { type GameState, update } from '@/shared/state/game'
 import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
@@ -46,7 +46,7 @@ export function RewardPanel({ state }: { state: GameState }) {
       )}
       <div className="reward-earned">
         <span className="reward-coin-row">
-          <CoinEmblem size={88} />+{m.coins({ count: state.reward })}
+          <CoinEmblem size={44} />+{m.coins({ count: state.reward })}
         </span>
         <span>
           <Icon name="star" />
@@ -91,8 +91,15 @@ export function RewardPanel({ state }: { state: GameState }) {
           className="primary-button wide reward-wear-now"
           onClick={() => {
             const id = state.rewardQuest?.reward.unlockId
-            if (id) equipUnlock(slotOf(id), id)
-            close()
+            if (id) void equipUnlock(slotOf(id), id)
+            // Equip and drop straight back into the city so the player sees the
+            // new look; skip the first-reward hub that `close()` would open.
+            update({
+              dialogue: null,
+              panel: 'none',
+              screen: 'playing',
+              hubShown: true,
+            })
           }}
         >
           {m.wardrobe_wear_now()}
