@@ -1,12 +1,27 @@
 import { useFrame, useThree } from '@react-three/fiber'
 import { useEffect, useMemo } from 'react'
-import { Vector3 } from 'three'
+import { type PerspectiveCamera, Vector3 } from 'three'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 
+/** The active scene camera, exposed read-only to the `camera()` test hook. */
+let activeCamera: PerspectiveCamera | null = null
+
+/** Read-only snapshot of the current camera: fov, position and yaw. */
+export function cameraSnapshot(): {
+  fov: number
+  position: [number, number, number]
+  yaw: number
+} | null {
+  if (!activeCamera) return null
+  const { x, y, z } = activeCamera.position
+  return { fov: activeCamera.fov, position: [x, y, z], yaw: input.yaw }
+}
+
 export function CameraRig() {
   const { camera, gl, size } = useThree()
+  activeCamera = camera as PerspectiveCamera
   const target = useMemo(() => new Vector3(), [])
   const eye = useMemo(() => new Vector3(), [])
   useEffect(() => {

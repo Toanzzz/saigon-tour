@@ -3,6 +3,7 @@ import { createQuest, seedsFor } from '@saigon/shared'
 const seedQuest = () => createQuest(seedsFor('hoa')[0], 'q_demo')
 
 import { carryStore } from '@/features/carry'
+import { cameraSnapshot } from '@/features/player/camera'
 import { clearInput } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, initialState, update } from '@/shared/state/game'
@@ -33,6 +34,11 @@ declare global {
       hideDebugUi: (hidden: boolean) => void
       teleport: (x: number, z: number) => void
       carry: () => { care: string; aside: string | null; peak: number }
+      camera: () => {
+        fov: number
+        position: [number, number, number]
+        yaw: number
+      } | null
       setCurrency: (value: number) => void
     }
   }
@@ -193,6 +199,9 @@ export function installTestHooks() {
     carry() {
       const { care, aside, peak } = carryStore.state
       return { care, aside, peak }
+    },
+    camera() {
+      return cameraSnapshot()
     },
     setCurrency(value) {
       if (!Number.isSafeInteger(value) || value < 0)
