@@ -40,7 +40,7 @@ class GameAudio {
   private master: GainNode | null = null
   private groups = new Map<AudioGroup, GainNode>()
   private buffers = new Map<SoundId, AudioBuffer>()
-  private effects = new Map<AudioBufferSourceNode, GainNode>()
+  private effects = new Map<AudioScheduledSourceNode, GainNode>()
   private ambience: AudioBufferSourceNode | null = null
   private loadPromise: Promise<void> | null = null
   private loadAbort: AbortController | null = null
@@ -114,6 +114,13 @@ class GameAudio {
       (event === 'click' ? 0.08 : 0.12)
     )
       return
+    // Coins get a playful synthesized chime rather than the flat confirm blip.
+    if (event === 'pickup') {
+      this.lastPlayed.set(event, now)
+      this.playCoin(context, now)
+      this.events[event] += 1
+      return
+    }
     const { sound, group, gain: level } = EVENTS[event]
     const buffer = this.buffers.get(sound)
     const output = this.groups.get(group)
@@ -182,6 +189,54 @@ class GameAudio {
       activeEffects: this.effects.size,
       ambienceLoops: this.ambience ? 1 : 0,
       events: { ...this.events },
+    }
+  }
+
+  /**
+   * A bright, bouncy coin chime: a short staccato note that hops up a perfect
+   * fifth, with a shimmer of overtones. Synthesized so it stays crisp and
+   * "free" to fire on every pickup without a dedicated asset. Routed through
+   * the sfx group so the city-sounds volume still governs it.
+   */
+  private playCoin(context: AudioContext, start: number): void {
+    const output = this.groups.get('sfx')
+    if (!output || this.effects.size >= 8) return
+    // B5 then a quick hop to F#6 — the classic coin two-step.
+    const notes: { freq: number; at: number; length: number }[] = [
+      { freq: 988, at: 0, length: 0.08 },
+      { freq: 1480, at: 0.07, length: 0.22 },
+    ]
+    const bus = context.createGain()
+    bus.gain.value = 0.5
+    bus.connect(output)
+    const sources: OscillatorNode[] = []
+    for (const note of notes) {
+      const at = start + note.at
+      // A main square-ish tone plus a quiet octave sparkle for shimmer.
+      for (const [type, mul, peak] of [
+        ['triangle', 1, 1],
+        ['square', 2, 0.28],
+      ] as const) {
+        const osc = context.createOscillator()
+        const env = context.createGain()
+        osc.type = type
+        osc.frequency.setValueAtTime(note.freq * mul, at)
+        env.gain.setValueAtTime(0, at)
+        env.gain.linearRampToValueAtTime(peak, at + 0.008)
+        env.gain.exponentialRampToValueAtTime(0.0001, at + note.length)
+        osc.connect(env).connect(bus)
+        osc.start(at)
+        osc.stop(at + note.length + 0.02)
+        sources.push(osc)
+      }
+    }
+    // Track the chime as one effect so the 8-voice cap and cleanup still apply.
+    const key = sources[sources.length - 1]
+    this.effects.set(key, bus)
+    key.onended = () => {
+      for (const osc of sources) osc.disconnect()
+      bus.disconnect()
+      this.effects.delete(key)
     }
   }
 
