@@ -42,6 +42,7 @@ export function Diagnostics() {
         completed: state.completed.length,
         unlocks: state.unlocks,
         ride: state.ride,
+        locationId: state.world.locationId,
         timeOfDay: state.timeOfDay,
         viewpoint: state.viewpoint,
         source: state.source,
