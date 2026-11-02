@@ -6,10 +6,13 @@ import { ACESFilmicToneMapping } from 'three'
 import { Diagnostics } from '@/app/diagnostics'
 import { Atmosphere } from '@/features/city/atmosphere'
 import { CityEvents } from '@/features/city/events'
+import { WetPavement } from '@/features/city/puddles'
+import { Rain } from '@/features/city/rain'
 import { Sun } from '@/features/city/sun'
 import { Coins } from '@/features/collectibles'
 import { Neighbors } from '@/features/npcs/neighbors'
 import { RemotePlayers } from '@/features/npcs/remote-players'
+import { Umbrellas } from '@/features/npcs/umbrellas'
 import { CameraRig } from '@/features/player/camera'
 import { Player } from '@/features/player/player'
 import { Transport } from '@/features/transport/transport'
@@ -48,14 +51,17 @@ export function Scene() {
             debug={debug}
           >
             <CityWorld evening={evening} />
+            <WetPavement />
             <Coins />
             <Player key={generation} />
             <Transport />
             <Neighbors />
+            <Umbrellas />
             <CityEvents />
             <RemotePlayers />
             <Diagnostics />
           </Physics>
+          <Rain />
           <CameraRig />
         </XRRuntime>
       </Suspense>

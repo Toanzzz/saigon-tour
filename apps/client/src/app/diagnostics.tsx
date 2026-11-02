@@ -17,7 +17,7 @@ declare global {
   }
 }
 export function Diagnostics() {
-  const { gl } = useThree()
+  const { gl, scene } = useThree()
   const { world } = useRapier()
   const enabled = new URLSearchParams(location.search).has('debug')
   useFrame(() => {
@@ -84,6 +84,51 @@ export function Diagnostics() {
         party: net.state.party,
         invite: net.state.invite,
       },
+      weather: (() => {
+        let rainStreaks = 0
+        let puddles = 0
+        let wetTint = 0
+        let umbrellas = 0
+        const umbrellaPositions: [number, number, number][] = []
+        scene.traverse((object) => {
+          const mesh = object as unknown as {
+            name?: string
+            count?: number
+            isInstancedMesh?: boolean
+            getMatrixAt?: (i: number, m: unknown) => void
+          }
+          if (mesh.name === 'rain-streaks') rainStreaks = mesh.count ?? 0
+          if (mesh.name === 'puddles') puddles = mesh.count ?? 0
+          if (mesh.name === 'wet-tint') wetTint = mesh.count ?? 0
+        })
+        // Count open umbrellas by walking the canopy mesh matrices.
+        const canopy = scene.getObjectByName('umbrella-canopy') as unknown as {
+          count?: number
+          instanceMatrix?: { array: ArrayLike<number> }
+        } | null
+        if (canopy?.instanceMatrix) {
+          const array = canopy.instanceMatrix.array
+          for (let i = 0; i < (canopy.count ?? 0); i++) {
+            const sx = array[i * 16]
+            if (sx > 0.05) {
+              umbrellas++
+              umbrellaPositions.push([
+                array[i * 16 + 12],
+                array[i * 16 + 13],
+                array[i * 16 + 14],
+              ])
+            }
+          }
+        }
+        return {
+          weather: city.state.weather,
+          rainStreaks,
+          puddles,
+          wetTint,
+          umbrellas,
+          umbrellaPositions,
+        }
+      })(),
       fps: 1 / motion.dt,
       dpr: gl.getPixelRatio(),
     }
