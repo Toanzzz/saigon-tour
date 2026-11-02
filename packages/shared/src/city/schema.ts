@@ -95,3 +95,26 @@ export const CityActionSchema = z.discriminatedUnion('type', [
     .strict(),
 ])
 export type CityAction = z.infer<typeof CityActionSchema>
+
+/**
+ * A single scheduled beat in the City Director's day plan: a batch of validated
+ * city actions to apply at `atMinutes` minutes after the plan was drafted.
+ * The director drafts one plan per day from the city snapshot and local news,
+ * then applies each beat as its time arrives. Actions still pass the live
+ * `CityActionSchema` validator when they fire.
+ */
+export const CityPlanBeatSchema = z
+  .object({
+    atMinutes: z.number().int().min(0).max(1440),
+    actions: z.array(CityActionSchema).min(1).max(6),
+  })
+  .strict()
+export type CityPlanBeat = z.infer<typeof CityPlanBeatSchema>
+
+/** A full day's worth of director beats, ordered as the model drafted them. */
+export const CityDayPlanSchema = z
+  .object({
+    beats: z.array(CityPlanBeatSchema).min(1).max(24),
+  })
+  .strict()
+export type CityDayPlan = z.infer<typeof CityDayPlanSchema>
