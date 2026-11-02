@@ -20,9 +20,6 @@
   font-weight: 800;
   line-height: 1;
 }
-.world-label.active .name-tag {
-  background: var(--wall);
-}
 
 /* Event banners can hold longer titles; keep them on one legible line
    so the pill radius never collapses the text. */
@@ -67,4 +64,25 @@
   50% {
     transform: translateX(-50%) translateY(-5px) rotate(45deg);
   }
+}
+
+/* Comic name-tag (map Phase 5a). The NpcLabel marker becomes an inked
+   papercraft pill: white fill, a 2px ink border, an offset ink shadow and a
+   pop-in. Classic keeps the warm pill above. */
+[data-look="comic"] .name-tag {
+  background: #fff;
+  border: 2px solid var(--ink);
+  box-shadow: var(--lift-sm);
+  animation: comic-pop 220ms cubic-bezier(0.2, 1.4, 0.4, 1);
+  transform-origin: center bottom;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-look="comic"] .name-tag {
+    animation: none;
+  }
+}
+
+/* Keep the active-label fill last so it wins over the comic pill. */
+.world-label.active .name-tag {
+  background: var(--wall);
 }

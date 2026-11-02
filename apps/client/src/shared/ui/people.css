@@ -198,3 +198,76 @@
     display: none;
   }
 }
+
+/* Comic speech bubble (map Phase 5a). Only the comic look opts in; classic
+   keeps the plain pill above. White fill, a 2px ink border and an offset ink
+   shadow, a pointed tail and a thin wire down to the anchor, and a pop-in. */
+[data-look="comic"] .presence-bubble {
+  position: relative;
+  background: #fff;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 16px;
+  box-shadow: var(--lift-sm);
+  margin-bottom: 22px;
+  transform-origin: center bottom;
+  animation: comic-pop 220ms cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+/* The tail: an ink-outlined triangle pointing down from the bubble. */
+[data-look="comic"] .presence-bubble::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-width: 12px 9px 0;
+  border-color: var(--ink) transparent transparent;
+}
+/* The wire: a thin ink line from the tail tip down toward the anchor. */
+[data-look="comic"] .presence-bubble::after {
+  content: "";
+  position: absolute;
+  top: calc(100% + 11px);
+  left: 50%;
+  width: 2px;
+  height: 14px;
+  transform: translateX(-50%);
+  background: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-look="comic"] .presence-bubble {
+    animation: none;
+  }
+}
+@keyframes comic-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Street cry bubble (map Phase 5b): the Vietnamese cry, with an EN gloss line
+   below under English. `still` drops the pop-in for reduced motion. */
+.street-cry {
+  font-weight: 600;
+}
+.street-cry .cry-gloss {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+[data-look="comic"] .presence-bubble.still {
+  animation: none;
+}
