@@ -1,12 +1,18 @@
 import { log } from '@/shared'
 import type { GameDb } from '@/shared/db'
 import type { Fetcher } from '@/shared/http'
+import {
+  type ModelTiming,
+  modelTiming,
+  observeModelStream,
+} from './model-timing'
 
 export interface HarnessUsage {
   calls: number
   inputTokens: number
   outputTokens: number
   estimatedUsd: number
+  lastCall?: ModelTiming
 }
 
 export class BudgetExceeded extends Error {}
@@ -111,47 +117,50 @@ export function meteredFetch(
         'warn'
       )
     }
-    let inputTokens = 0
-    let outputTokens = 0
-    // Unknown usage stays at the reservation ceiling; failures can still be billed.
-    let estimatedUsd = 0.03
+    const observation = modelTiming()
+    let settled = false
+    const settle = async () => {
+      if (settled) return
+      settled = true
+      const cost = observation.finish()
+      if (reservation)
+        await db.settleSpend(reservation, cost).catch((error) => {
+          throw new StorageUnavailable('model_budget_storage_unavailable', {
+            cause: error,
+          })
+        })
+      usage.calls += 1
+      usage.inputTokens += cost.inputTokens
+      usage.outputTokens += cost.outputTokens
+      usage.estimatedUsd += cost.estimatedUsd
+      usage.lastCall = observation.timing
+      log(
+        'model_call_timing',
+        JSON.stringify({ ...observation.timing, ...cost })
+      )
+    }
     try {
       const response = await fetcher(input, init)
-      if (response.ok) {
-        const body = await response
-          .clone()
-          .json()
-          .catch(() => null)
-        const tokens = body?.usage
-        if (
-          Number.isFinite(tokens?.prompt_tokens) &&
-          Number.isFinite(tokens?.completion_tokens) &&
-          tokens.prompt_tokens >= 0 &&
-          tokens.completion_tokens >= 0
-        ) {
-          inputTokens = tokens.prompt_tokens
-          outputTokens = tokens.completion_tokens
-          estimatedUsd = inputTokens * (0.5 / 1e6) + outputTokens * (2 / 1e6)
-        }
+      observation.timing.status = response.status
+      if (
+        response.ok &&
+        response.headers.get('content-type')?.includes('text/event-stream')
+      ) {
+        const stream = observeModelStream(response, observation.read, settle)
+        if (stream) return stream
       }
+      if (response.ok)
+        observation.read(
+          await response
+            .clone()
+            .json()
+            .catch(() => null)
+        )
+      await settle()
       return response
-    } finally {
-      if (reservation)
-        await db
-          .settleSpend(reservation, {
-            inputTokens,
-            outputTokens,
-            estimatedUsd,
-          })
-          .catch((error) => {
-            throw new StorageUnavailable('model_budget_storage_unavailable', {
-              cause: error,
-            })
-          })
-      usage.calls += 1
-      usage.inputTokens += inputTokens
-      usage.outputTokens += outputTokens
-      usage.estimatedUsd += estimatedUsd
+    } catch (error) {
+      await settle()
+      throw error
     }
   }
 }

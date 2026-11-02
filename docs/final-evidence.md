@@ -12,6 +12,9 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 
 ## Current gates
 
+- NPC timing instrumentation: `check` → `check:types` → `build` → `test` pass; server 420 passed / 2 skipped, client 283 passed. Tests cover unary timing, first visible SSE text (excluding reasoning), final usage settlement, and cancellation at the conservative reservation cost.
+- Official Meta control (`muse-spark-1.3-contributor`, November 3, 2026): fresh casual chat 3,386 ms / 3,967 input tokens / 112 reasoning tokens; fresh errand 6,142 ms / 3,970 input tokens / 131 reasoning tokens. Both one request, live, no cache reads reported. These are single samples with unary delivery; first visible streamed text is not measurable yet. Evidence: `artifacts/npc-latency/official-baseline.json`.
+
 - At `ee46866`: `bun run check:types` → `bun run build` → `bun run test` pass. Server 186 passed / 2 skipped; client 135 passed.
 - On this docs tree: `bun run check` passes with one existing `cards.css` `!important` warning.
 
