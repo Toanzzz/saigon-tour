@@ -67,7 +67,8 @@ async function verify(viewport) {
       window.__THREE_GAME_TEST_HOOKS__.setState('quest')
     )
     await page.waitForFunction(
-      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.trackedQuestId === 'q_demo',
+      () =>
+        window.__THREE_GAME_DIAGNOSTICS__?.state?.trackedQuestId === 'q_demo',
       { timeout: 10000 }
     )
     // The quest state seeds an open dialogue; Escape closes it so the map key
