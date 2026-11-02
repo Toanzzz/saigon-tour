@@ -3,6 +3,7 @@ import type { SeedQuest } from '@saigon/npc-kit'
 /** Hoa's running gag: she measures every problem in bowls of broth. */
 export const gag: SeedQuest = {
   scope: 'solo',
+  demo: true,
   steps: [{ type: 'DELIVER', itemId: 'broth', npcId: 'linh' }],
   text: {
     en: {

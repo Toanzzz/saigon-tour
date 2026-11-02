@@ -50,11 +50,33 @@ function projectSeed(seed: DerivedSeed, locale: Locale): QuestSpec {
       }
 }
 
-/** Offerable seeds for an NPC: milestone seeds are excluded. */
-export function seedsFor(npcId: NpcId, locale: Locale = 'en'): QuestSpec[] {
-  return QUEST_SEEDS.filter(
+/**
+ * Offerable seeds for an NPC: milestone seeds are excluded. With `demo`,
+ * demo-flagged seeds move to the front (stable); the default order is unchanged.
+ * The `demo` marker itself never reaches the projected spec.
+ */
+export function seedsFor(
+  npcId: NpcId,
+  locale: Locale = 'en',
+  options: { demo?: boolean } = {}
+): QuestSpec[] {
+  const seeds = QUEST_SEEDS.filter(
     (seed) => seed.giverNpcId === npcId && !seed.milestone
-  ).map((seed) => projectSeed(seed, locale))
+  )
+  const ordered = options.demo
+    ? [
+        ...seeds.filter((seed) => seed.demo),
+        ...seeds.filter((seed) => !seed.demo),
+      ]
+    : seeds
+  return ordered.map((seed) => projectSeed(seed, locale))
+}
+
+/** Whether this NPC has a seed authored for the demo path. */
+export function hasDemoSeed(npcId: NpcId): boolean {
+  return QUEST_SEEDS.some(
+    (seed) => seed.giverNpcId === npcId && seed.demo && !seed.milestone
+  )
 }
 
 /** Milestone seeds for an NPC, projected to the locale. */

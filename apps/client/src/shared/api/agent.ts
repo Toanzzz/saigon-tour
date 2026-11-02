@@ -279,7 +279,9 @@ export function offline(
             ).length <=
             100
       )
-    const candidates = seedsFor(npc, getLocale()).filter(offerable)
+    const candidates = seedsFor(npc, getLocale(), {
+      demo: body.demo,
+    }).filter(offerable)
     const spec =
       candidates.find((candidate) => !isRecentSeed(candidate)) ?? candidates[0]
     if (spec) {

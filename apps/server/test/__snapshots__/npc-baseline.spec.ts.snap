@@ -6209,6 +6209,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       },
     },
     {
+      "demo": true,
       "giverNpcId": "hoa",
       "payoff": {
         "en": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",

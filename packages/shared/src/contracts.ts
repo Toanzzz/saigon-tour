@@ -80,6 +80,8 @@ export const InteractRequestSchema = z
       .default('chat'),
     // Optional display name used to fill a persona greeting's {name} placeholder.
     playerName: z.string().trim().max(60).optional(),
+    // `?demo` recording path: offer the giver's demo seed first, deterministically.
+    demo: z.boolean().optional(),
     locale: LocaleSchema.default('en'),
     events: z.array(PlayerEventSchema).max(16).default([]),
     worldContext: z

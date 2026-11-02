@@ -281,4 +281,30 @@ describe('offline NPC quests', () => {
     expect(result.quests[0]?.title).not.toBe(first?.title)
     expect(result.quests[0]?.title).toBe(next?.title)
   })
+
+  it('mirrors the demo order offline: gag first, then the twist arc', () => {
+    const [arc, gag] = seedsFor('hoa')
+    const demo = { ...request('hoa', 'help'), demo: true }
+    const first = offline('hoa', demo, initialState())
+    expect(first.quests[0]?.title).toBe(gag?.title)
+    const state = {
+      ...initialState(),
+      completed: [
+        {
+          id: 'q_gag',
+          title: gag?.title ?? '',
+          giverNpcId: 'hoa' as const,
+          reward: { currency: 10, itemId: null, reputation: 1 },
+          completedAt: Date.now(),
+        },
+      ],
+    }
+    const second = offline('hoa', demo, state)
+    expect(second.quests[0]?.title).toBe(arc?.title)
+    expect(second.quests[0]?.twist).toBeDefined()
+    // Without the flag the catalog order is unchanged.
+    expect(
+      offline('hoa', request('hoa', 'help'), initialState()).quests[0]?.title
+    ).toBe(arc?.title)
+  })
 })

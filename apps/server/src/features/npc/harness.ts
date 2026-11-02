@@ -22,6 +22,7 @@ import {
   hostedMilestone,
   outcomeKind as kind,
   offerApex,
+  offerDemoSeed,
   offerMilestone,
   offerSeed,
   QuestService,
@@ -289,7 +290,18 @@ export class NpcHarness {
     }
     let reply: string | null = null
     let source: 'live' | 'fallback' = 'fallback'
+    // `?demo`: the authored demo seed is offered and described instantly, with
+    // no model call, so the recording path never waits on the provider.
+    const demoQuest = milestoneContext
+      ? null
+      : await offerDemoSeed(this.game, npcId, request, playerId, outcome)
+    if (demoQuest) {
+      reply = offeredErrandLine(demoQuest, request.locale)
+      // Same authored line the live path returns for an accepted offer.
+      source = this.live ? 'live' : 'fallback'
+    }
     const allowed =
+      !demoQuest &&
       this.live &&
       this.guard.allow(playerId) &&
       this.npcGuard.allow(`${npcId}:${playerId}`)

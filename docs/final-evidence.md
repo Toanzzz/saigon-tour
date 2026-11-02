@@ -475,3 +475,15 @@ viewBox units), the tracked pin carries `g.quest-pin.tracked` with an animated
 `circle.quest-pin-ring` (animation `quest-pin-ring`) and a pulsing
 `path.quest-pin-mark` (animation `quest-pin-pulse`), and no page/console errors.
 Both viewports pass. Artifacts in `artifacts/map-labels/`.
+
+## Demo seed contract and offer (2026-11-03)
+
+- All four gates pass: `bun run check` → `check:types` → `build` → `test`. Server: 441 passed, 2 skipped. Client: 287 passed.
+- `apps/server/test/demo-seed.spec.ts` (7 tests):
+  - The default order keeps `arc` first, demo order puts `gag` first, and the projected spec has no `demo` key.
+  - The schema accepts the `demo` flag and works without it.
+  - A demo turn on a fresh save offers `gag` with `harness.usage.calls === 0` in the offline, live (scripted), and hanging-provider cases.
+  - Delivering broth to Linh and returning to Hoa completes `gag`. The next demo request offers `arc`, which has a twist.
+  - A non-demo turn still offers `arc`.
+- `apps/client/test/offline-quests.spec.ts` checks offline parity: gag first, then arc after gag completes, and the default order without the flag.
+- The `npc-baseline` snapshot changed by one line: `"demo": true` on Hoa's gag seed.

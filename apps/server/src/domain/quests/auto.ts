@@ -1,6 +1,8 @@
 import {
+  hasDemoSeed,
   type InteractRequest,
   type NpcId,
+  type Quest,
   type QuestSpec,
   seedsFor,
   wantsErrand,
@@ -49,7 +51,7 @@ export async function offerSeed(
   ) {
     const record = await game.get(playerId)
     const recent = recentTitles(record.completed, npcId)
-    const seeds = seedsFor(npcId, request.locale)
+    const seeds = seedsFor(npcId, request.locale, { demo: request.demo })
     // Prefer the first valid seed whose title is not among the last 3
     // completed; fall back to the original order if every seed is recent.
     const order = [
@@ -77,6 +79,36 @@ export async function offerSeed(
     }
   }
   return outcome.events.length > before
+}
+
+/**
+ * `?demo` recording path: before any model call, offer the giver's demo-ordered
+ * seed so the take is identical live, slow, or offline. Only applies to NPCs
+ * with an authored demo seed and when the giver has no errand in progress.
+ * Returns the offered quest, or null to fall through to the normal turn.
+ */
+export async function offerDemoSeed(
+  game: QuestService,
+  npcId: NpcId,
+  request: InteractRequest,
+  playerId: string,
+  outcome: ToolOutcome
+): Promise<Quest | null> {
+  if (!request.demo || !hasDemoSeed(npcId) || !wantsErrand(request.message))
+    return null
+  const record = await game.get(playerId)
+  if (
+    record.quests.some(
+      (quest) => quest.giverNpcId === npcId && quest.status !== 'completed'
+    )
+  )
+    return null
+  const before = outcome.events.length
+  if (!(await offerSeed(game, npcId, request, playerId, outcome))) return null
+  const offered = outcome.events
+    .slice(before)
+    .find((event) => event.type === 'offered')
+  return offered?.quest ?? null
 }
 
 export const outcomeKind = (outcome: ToolOutcome) =>

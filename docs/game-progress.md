@@ -406,3 +406,22 @@ call carries a non-system message (`features/npc/turn.ts`,
 `test/turn-message.spec.ts`). The separate `MastraTimeoutError … 15000ms` is
 provider latency, not a bug: the turn is caught, logged, and the authored
 fallback line is served; the timeout budget is intentionally left unchanged.
+
+## Demo seed contract and deterministic offer (2026-11-03)
+
+A seed may carry `demo: true` (npc-kit `SeedQuest`, carried on `DerivedSeed`);
+Hoa's `gag` ("A two-bowl problem", broth to Linh in the park) is the only one.
+`seedsFor(npc, locale, { demo })` stable-sorts demo seeds first; the default order
+is unchanged, so `seedsFor('hoa')[0]` is still the `arc` twist quest, and the
+marker never reaches the projected `QuestSpec`. `InteractRequestSchema` gains an
+optional `demo` flag.
+
+Server: `offerDemoSeed` (`domain/quests/auto.ts`) runs in `NpcHarness.interact`
+after milestone offers and before any model call. When `demo` is set, the NPC has
+a demo seed, the player wants an errand, and the giver has no errand in
+progress, it offers the demo-ordered seed and replies with `offeredErrandLine`.
+This is the same authored line the live path returns for an accepted offer
+(`b0066fe`), so there is no model call and no wait. The existing recent-title
+rotation then offers `arc` once `gag` is completed. The client `offline()` passes
+`body.demo` through to `seedsFor`, so offline play gives the same sequence.
+Non-demo turns are unchanged.

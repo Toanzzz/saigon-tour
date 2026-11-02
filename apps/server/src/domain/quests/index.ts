@@ -1,4 +1,9 @@
-export { completeReady, offerSeed, outcomeKind } from './auto'
+export {
+  completeReady,
+  offerDemoSeed,
+  offerSeed,
+  outcomeKind,
+} from './auto'
 export {
   allowMilestoneEvent,
   hostedMilestone,

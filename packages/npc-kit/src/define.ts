@@ -53,6 +53,8 @@ export interface SeedQuest {
   gift?: ItemId
   /** Marks this as a milestone errand (Phase 4). */
   milestone?: MilestoneId
+  /** Offered first when the client runs the `?demo` recording path. */
+  demo?: true
 }
 
 export interface QuestDomain {
