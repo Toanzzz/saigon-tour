@@ -215,3 +215,58 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 - Portrait: `.affinity-portrait` 52→88px (mobile 46→76px) in `friendship.css`; header text clearance widened in `conversation.css`.
 - Tests: `apps/server/test/clues-fallbacks.spec.ts` — added `offeredErrandLine` describe (EN describes setup+step, no "journal"; hidden-riddle offer stays at the description only). `apps/server/test/harness-greetings.spec.ts` — updated the VI help assertion to expect the descriptive line ("Trước tiên, hãy") and not "nhật ký".
 - UI: `scripts/qa-npc-dialog.mjs` (headless Playwright, run unsandboxed) passed at 1440 and 390 — portrait ≥70px and the `celebration-accepted`/`celebration-completed` overlays render. Screenshots in `artifacts/npc-dialog-clarity/`.
+
+## Map Phase 0 — comic papercraft foundation (2026-11-02)
+
+Committed at `bb7b88b` (slices: `3092b77` perf script + camera hook, `5134ea9`
+atmosphere module, `0ece67a` toon palette/materials/glow/look flag, `bb7b88b`
+perf-script cold-start hardening).
+
+### Gates (committed HEAD)
+
+- `bun run check` clean (742 files); `bun run check:types` code 0; `bun run build`
+  code 0; `bun run test` → server 403 passed / 2 skipped, client 242 passed
+  (28 files, incl. new `world-toon.spec.ts` and `world-primitives.spec.ts`).
+
+### Perf baseline (new reference for phases 1–5)
+
+`scripts/qa-map-perf.mjs` against the running dev server, 4 fixed poses × 2
+viewports × day/evening. Evidence: `/tmp/saigon-map-evidence/perf-*.json`
+(comic) and `/tmp/saigon-map-evidence/classic/perf-*.json`. Worst-case pose is
+the alley.
+
+| Pose (desktop)   | comic calls / tris | classic calls / tris |
+| ---------------- | ------------------ | -------------------- |
+| spawn (day)      | 228 / 350,209      | 227 / 350,145        |
+| nguyễn-huệ (day) | 134 / 186,345      | 133 / 186,281        |
+| cathedral (day)  | 145 / 176,807      | 145 / 176,807        |
+| alley (day)      | 252 / 352,580      | 251 / 352,516        |
+
+| Pose (mobile 390) | comic calls / tris | classic calls / tris |
+| ----------------- | ------------------ | -------------------- |
+| spawn (day)       | 154 / 340,217      | 153 / 340,153        |
+| alley (day)       | 204 / 347,219      | 205 / 347,599        |
+
+The toon swap adds ≈0 draw calls and ≈0 triangles (within ±1-call measurement
+noise), confirming the look-guide expectation. These re-measured numbers — not
+the earlier 192/346k desktop figure — are the Phase 0 reference; later phases add
+their budgeted deltas on top. The alley pose already sits near the desktop
+call ceiling, so phases that add alley dressing watch it closely.
+
+### UI proofs (headless Playwright, 1440×900)
+
+Evidence: `/tmp/saigon-map-evidence/toon-proof.json`, plus `toon-comic-spawn.png`,
+`toon-classic-spawn.png`, `evening-glow.png`.
+- Toon banding: a 40×40 patch on the spawn market façade shows 3 distinct
+  quantized luminance levels under `comic` vs 6 under `classic` — fewer levels
+  proves the 3-step ramp banding.
+- Evening glow: with evening on, the warmest glow-strip pixel reads
+  `rgb(255,156,98)` = `#ff9c62`, delta 0 from target — proves the unlit
+  `MeshBasicMaterial` + `toneMapped={false}` path renders glow untoned.
+
+### Hand-off (needs real hardware — user)
+
+Phase 0 task 1 also asks for real-hardware fps at the spawn pose and mid Nguyễn
+Huệ, `comic` vs `classic`, on desktop and a phone (`comic` must be ≤ 2 fps below
+`classic`). Headless fps runs software GL and is untrustworthy, so this is left
+to the user. These fps numbers become the per-phase fps reference.

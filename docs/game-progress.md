@@ -213,3 +213,27 @@ with a badge, ring, and label; it respects reduced motion.
 The conversation header portrait is enlarged (88px desktop, 76px mobile; ~1.7x)
 in `friendship.css`/`conversation.css`, with header text clearance widened to
 match.
+
+## Comic papercraft look (map Phase 0)
+
+The world renders in a comic papercraft look by default. `shared/world/toon.ts`
+converts lit materials to a shared 3-step `MeshToonMaterial` ramp (0.45/0.75/1.0,
+`NearestFilter`), cached per source in a `WeakMap`; it passes through materials
+already toon or marked `userData.unlit`. `primitives.tsx` `material()` returns a
+toon material under `comic` and `MeshStandardMaterial` under `classic`, cached per
+colour and look. `<Blocks unlit>`/`<Block unlit>` use a cached `MeshBasicMaterial`
+with `toneMapped={false}` (marked unlit) for glow, neon, and window dots; the
+evening glow strips use it. `assets.tsx` `prepareMeshMaterial` toons every mesh
+under `comic`, and `prepareScene` is idempotent (`WeakSet`) so a remount of the
+shared drei-cached scene no longer re-lerps `CITY_TINTS` and compounds the tint.
+Characters toon after the remote-player colour tint and before `applyOutfitPalette`,
+so outfits stay toon; the coin emblem opts out (`<Model classic>`) to keep its lit
+gold look.
+
+Colour tokens live in `shared/world/palette.ts`. Sky colour, fog, and the
+hemisphere light moved out of `app/scene.tsx` into `features/city/atmosphere.tsx`
+(`<Atmosphere rain evening />`); the fog colour tracks the current horizon colour.
+`?look=classic` restores the original Standard-material render byte-for-byte for
+A/B and rollback; the flag is frozen at boot in `shared/world/look-flag.ts`. A
+read-only `camera()` test hook (fov, position, yaw) and `scripts/qa-map-perf.mjs`
+record draw calls and triangles at fixed poses for per-phase perf gating.

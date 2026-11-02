@@ -36,7 +36,7 @@ The player starts in front of the market, facing Cô Hoa. The first decision is 
 
 Modular shophouses, palms, pavement, stall props, benches, and ambient pedestrians form the surrounding city. Static building colliders use simple Rapier proxies; detailed meshes do not drive collision.
 
-Scope guardrails: keep a stylized, hand-authored District 1, not a full-scale or geographically exact city; no Chợ Lớn or District 5, no visitable tower interiors, no full metro network or traffic simulation, and no photorealistic assets. Repeated props render through `ModelInstances`, and residents beyond 62 units are hidden. Targets are ≥ 60 FPS on desktop and ≥ 72 FPS on Quest 3.
+Scope guardrails: keep a stylized, hand-authored District 1, not a full-scale or geographically exact city; no Chợ Lớn or District 5, no visitable tower interiors, no full metro network or traffic simulation, and no photorealistic assets; the art target is a comic papercraft diorama (toon shading, warm paper palette, unlit neon and window glow), with `?look=classic` restoring the original render. Repeated props render through `ModelInstances`, and residents beyond 62 units are hidden. Targets are ≥ 60 FPS on desktop and ≥ 72 FPS on Quest 3.
 
 ## Shared neighborhood and co-op
 
