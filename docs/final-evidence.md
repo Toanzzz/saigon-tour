@@ -426,3 +426,22 @@ look-guide cry table; they are shown in both locales and still need the user's
 review per the content guide: "Cà phê sữa đá đây!", "Bánh mì nóng hổi đây!",
 "Chè ba màu đây!", "Dừa tươi mát lạnh!", "Nước mía đây, mát lắm!",
 "Bắp nướng thơm phức!", and the honk "Bíp bíp!".
+
+## Map Phase 1 — ink outlines spike: not shipped (2026-11-02)
+
+The depth-edge ink spike was built (an `EffectComposer` + `RenderPass` + a Sobel
+`ShaderPass` on linearized depth, three/examples, no new dependency) and
+evaluated against the phase gate. Building and prop silhouettes inked cleanly and
+read well, but the spike FAILED gate 3 (flat ground stays clean, < 1% ink on a
+mid-road patch): the Sobel filter on linearized depth tripped on the toon-banded
+ground and pavement at the shallow play-camera angle, measuring ~4% ink at the
+spawn market frontage and up to ~29% on the Nguyễn Huệ promenade lower screen —
+the depth gradient across a near-horizontal ground plane is large even where the
+surface is smooth, and the view-distance threshold scale did not separate it from
+true silhouette steps without also erasing real edges.
+
+Per the plan ("If it fails: keep toon-only, record why, close the phase") the ink
+pass is NOT shipped: no composer is mounted, the world stays toon-only (Phase 0),
+and the spike files were removed. A future retry would need a normal-buffer (or
+normal+depth) edge pass, or a ground-plane-aware threshold, to hold the < 1%
+ground-cleanliness gate — out of the spike's time box. Phase 1 is closed.
