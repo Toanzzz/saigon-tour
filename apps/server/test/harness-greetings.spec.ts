@@ -208,7 +208,6 @@ describe('Mastra NPC harness greetings', () => {
       ctx.playerId
     )
     expect(before.reply).toContain('rainy')
-    expect(before.reply).toContain('Lantern walk')
     await harness.game.adjustFriendship(ctx.playerId, 'hoa', 'warmer', 0)
     const after = await harness.interact(
       'hoa',

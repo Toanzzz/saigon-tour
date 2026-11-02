@@ -107,7 +107,11 @@ export function setupRealtime() {
     return new Peer(await client.joinOrCreate<WorldRoomState>(WORLD_ROOM))
   }
   async function start(apiKey?: string, fetcher: typeof fetch = fetch) {
-    app = createApp({ ...readConfig({}), apiKey }, fetcher, fx)
+    app = createApp(
+      { ...readConfig({}), apiKey, production: true },
+      fetcher,
+      fx
+    )
     server = serve({ fetch: app.fetch, port: 0, hostname: '127.0.0.1' })
     if (!server.listening) await once(server, 'listening')
     await app.realtime.attach(server as Server)

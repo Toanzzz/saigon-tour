@@ -1,3 +1,4 @@
+import { log } from '@/shared'
 import type { GameDb } from '@/shared/db'
 import type { Fetcher } from '@/shared/http'
 
@@ -85,7 +86,8 @@ export function meteredFetch(
   fetcher: Fetcher,
   limit: number,
   usage: HarnessUsage,
-  bark = false
+  bark = false,
+  enforce = true
 ): Fetcher {
   return async (input, init) => {
     const reservation = await db.reserveSpend(limit, bark).catch((error) => {
@@ -93,7 +95,22 @@ export function meteredFetch(
         cause: error,
       })
     })
-    if (!reservation) throw new BudgetExceeded('daily_model_budget_exhausted')
+    // Local dev warns and proceeds when the daily spend/bark budget is spent;
+    // production still fails the call. Without a reservation there is nothing
+    // to settle, so the usage tally advances but reserved_usd stays untouched.
+    if (!reservation) {
+      if (enforce) throw new BudgetExceeded('daily_model_budget_exhausted')
+      const spent = await db.spendLedger().catch(() => null)
+      const used = spent
+        ? `used $${spent.reservedUsd.toFixed(4)} of $${limit.toFixed(2)} across ${spent.calls} calls (${spent.barks} barks, ${spent.directors} directors), tokens in=${spent.inputTokens} out=${spent.outputTokens}`
+        : `cap $${limit.toFixed(2)}`
+      const hit = bark ? 'daily bark allowance' : 'daily USD budget'
+      log(
+        'model_budget_bypassed',
+        `local dev: ${hit} exhausted (${used}); +$0.03 this ${bark ? 'bark' : 'call'}; allowing instead of enforcing`,
+        'warn'
+      )
+    }
     let inputTokens = 0
     let outputTokens = 0
     // Unknown usage stays at the reservation ceiling; failures can still be billed.
@@ -119,13 +136,18 @@ export function meteredFetch(
       }
       return response
     } finally {
-      await db
-        .settleSpend(reservation, { inputTokens, outputTokens, estimatedUsd })
-        .catch((error) => {
-          throw new StorageUnavailable('model_budget_storage_unavailable', {
-            cause: error,
+      if (reservation)
+        await db
+          .settleSpend(reservation, {
+            inputTokens,
+            outputTokens,
+            estimatedUsd,
           })
-        })
+          .catch((error) => {
+            throw new StorageUnavailable('model_budget_storage_unavailable', {
+              cause: error,
+            })
+          })
       usage.calls += 1
       usage.inputTokens += inputTokens
       usage.outputTokens += outputTokens

@@ -201,6 +201,41 @@ export class GameDb {
     )
     return rows.length > 0
   }
+  /** Today's model-spend ledger, or zeros before the first reservation. */
+  async spendLedger(): Promise<{
+    day: string
+    reservedUsd: number
+    calls: number
+    barks: number
+    directors: number
+    inputTokens: number
+    outputTokens: number
+  }> {
+    const day = this.now().toISOString().slice(0, 10)
+    const { rows } = await this.sql.query(
+      'SELECT reserved_usd AS "reservedUsd",calls,barks,directors,input_tokens AS "inputTokens",output_tokens AS "outputTokens" FROM model_spend WHERE day=$1',
+      [day]
+    )
+    const row = rows[0] as
+      | {
+          reservedUsd: number
+          calls: number
+          barks: number
+          directors: number
+          inputTokens: number
+          outputTokens: number
+        }
+      | undefined
+    return {
+      day,
+      reservedUsd: Number(row?.reservedUsd ?? 0),
+      calls: Number(row?.calls ?? 0),
+      barks: Number(row?.barks ?? 0),
+      directors: Number(row?.directors ?? 0),
+      inputTokens: Number(row?.inputTokens ?? 0),
+      outputTokens: Number(row?.outputTokens ?? 0),
+    }
+  }
   async reserveSpend(limit: number, bark = false): Promise<Reservation | null> {
     const day = this.now().toISOString().slice(0, 10)
     await this.sql.query(

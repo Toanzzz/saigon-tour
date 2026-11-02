@@ -1,3 +1,5 @@
+import { log } from '@/shared'
+
 interface SessionBudget {
   calls: number
   lastCallAt: number
@@ -8,9 +10,19 @@ export class CostGuard {
   private sessions = new Map<string, SessionBudget>()
   private globalCalls = 0
 
+  /**
+   * `enforce=false` (local dev) never blocks on a quota: a call that would
+   * exceed the per-session, global, or session-table limit is logged as a
+   * warning and allowed through. The 400ms burst throttle is a provider-safety
+   * debounce, not a quota, so it stays enforced in every mode. `label` names
+   * the guard in the warning. Counters still advance so the warnings report
+   * real usage.
+   */
   constructor(
     private readonly sessionLimit: number,
-    private readonly globalLimit: number
+    private readonly globalLimit: number,
+    private readonly enforce = true,
+    private readonly label = 'cost_guard'
   ) {}
 
   allow(sessionId: string, now = Date.now()): boolean {
@@ -22,14 +34,24 @@ export class CostGuard {
       lastCallAt: 0,
       expiresAt: now + 60 * 60 * 1000,
     }
-    if (
-      this.globalCalls >= this.globalLimit ||
-      session.calls >= this.sessionLimit ||
-      (session.lastCallAt > 0 && now - session.lastCallAt < 400)
-    )
-      return false
-    if (!this.sessions.has(sessionId) && this.sessions.size >= 2000)
-      return false
+    // Burst throttle is a safety debounce, never bypassed.
+    if (session.lastCallAt > 0 && now - session.lastCallAt < 400) return false
+    const quota =
+      this.globalCalls >= this.globalLimit
+        ? `global call limit reached: ${this.globalCalls}/${this.globalLimit} calls`
+        : session.calls >= this.sessionLimit
+          ? `session call limit reached for ${sessionId}: ${session.calls}/${this.sessionLimit} calls`
+          : !this.sessions.has(sessionId) && this.sessions.size >= 2000
+            ? `session table full: ${this.sessions.size}/2000 sessions`
+            : null
+    if (quota) {
+      if (this.enforce) return false
+      log(
+        `${this.label}_bypassed`,
+        `local dev: ${quota}; global so far ${this.globalCalls}/${this.globalLimit}; allowing instead of enforcing`,
+        'warn'
+      )
+    }
     session.calls += 1
     session.lastCallAt = now
     this.globalCalls += 1

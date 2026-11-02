@@ -83,7 +83,6 @@ export function fallbackGreeting(
   context: GreetingContext,
   locale: Locale
 ) {
-  const event = context.hosting ?? context.events[0]
   if (locale === 'vi') {
     const tone =
       context.level <= -3
@@ -104,9 +103,7 @@ export function fallbackGreeting(
           ? ' Bạn xong việc rồi hả? Ghé lại để mình cảm ơn nhé.'
           : context.hosting
             ? ` Mình đang bận lo ${context.hosting.title}, ghé phụ một tay nhé.`
-            : event
-              ? ` ${event.title} đang diễn ra.`
-              : ''
+            : ''
     return `${tone}${weather}${tail}`
   }
   const tone =
@@ -128,9 +125,7 @@ export function fallbackGreeting(
         ? ' You are back — let us settle up when you are ready.'
         : context.hosting
           ? ` I'm caught up hosting ${context.hosting.title} right now, but I could use a hand.`
-          : event
-            ? ` ${event.title} is happening.`
-            : ` ${NPCS[npc].knowledge[0] ?? ''}`
+          : ` ${NPCS[npc].knowledge[0] ?? ''}`
   return `${tone}${weather}${tail}`.trim()
 }
 

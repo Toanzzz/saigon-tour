@@ -77,8 +77,18 @@ export class NpcHarness {
     this.game = new QuestService(db)
     this.memory = new NpcMemoryService(db)
     this.live = isLiveConfigured(config)
-    this.guard = new CostGuard(config.sessionCallLimit, config.globalCallLimit)
-    this.npcGuard = new CostGuard(12, Number.POSITIVE_INFINITY)
+    this.guard = new CostGuard(
+      config.sessionCallLimit,
+      config.globalCallLimit,
+      config.production,
+      'npc_call_guard'
+    )
+    this.npcGuard = new CostGuard(
+      12,
+      Number.POSITIVE_INFINITY,
+      config.production,
+      'npc_per_pair_guard'
+    )
     const provider = (bark = false) =>
       createOpenAICompatible({
         name: 'meta',
@@ -89,7 +99,8 @@ export class NpcHarness {
           fetcher,
           config.spendLimitUsd,
           this.usage,
-          bark
+          bark,
+          config.production
         ),
       })
     const agents = createNpcAgents(provider().chatModel(config.model ?? ''), {
