@@ -12,6 +12,9 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 
 ## Current gates
 
+- Compact dialogue/prefix verification: all four gates pass; server 431 passed / 2 skipped, client 283 passed. Casual food/market questions omit quest tools, quest examples, and full city JSON; EN/VI and active-quest/event guards covered. Captured provider requests prove the same static prefix precedes different locations/time buckets.
+- Official Meta compact samples: casual 5,622 / 4,579 ms at 1,574 input tokens; errands 6,612 / 4,461 ms at 4,024 input tokens. Input reduction is proven; wall-clock improvement and cache reuse are not established (cached tokens reported zero). Evidence: `artifacts/npc-latency/official-compact.json`.
+
 - NPC timing instrumentation: `check` → `check:types` → `build` → `test` pass; server 420 passed / 2 skipped, client 283 passed. Tests cover unary timing, first visible SSE text (excluding reasoning), final usage settlement, and cancellation at the conservative reservation cost.
 - Official Meta control (`muse-spark-1.3-contributor`, November 3, 2026): fresh casual chat 3,386 ms / 3,967 input tokens / 112 reasoning tokens; fresh errand 6,142 ms / 3,970 input tokens / 131 reasoning tokens. Both one request, live, no cache reads reported. These are single samples with unary delivery; first visible streamed text is not measurable yet. Evidence: `artifacts/npc-latency/official-baseline.json`.
 

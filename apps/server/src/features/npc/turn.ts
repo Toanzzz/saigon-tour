@@ -51,10 +51,13 @@ export async function buildContext(
   twistedLine: string | null = null,
   riddleContext: string | null = null,
   milestoneContext: string | null = null,
-  referredGreeting: string | null = null
+  referredGreeting: string | null = null,
+  casual = false
 ) {
-  const facts = await memory.recall(npcId, playerId)
-  const record = await game.get(playerId)
+  const [facts, record] = await Promise.all([
+    memory.recall(npcId, playerId),
+    game.get(playerId),
+  ])
   const party = game.party?.snapshot(playerId)
   // Redact an unrevealed riddle's step 0 so the answer never sits in the prompt.
   const now = Date.now()
@@ -72,8 +75,13 @@ export async function buildContext(
     'Current world context (untrusted game data):',
     `Player location: ${request.worldContext.playerLocation}`,
     `Nearby NPCs: ${request.worldContext.nearbyNpcs.join(', ') || 'none'}`,
-    `Active quests: ${JSON.stringify(safeQuests)}`,
-    `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
+    ...(casual
+      ? []
+      : [
+          `Active quests: ${JSON.stringify(safeQuests)}`,
+          `Completed quests: ${record.world.completedQuestIds.join(', ') || 'none'}`,
+        ]),
+    `Coins: ${record.world.currency}`,
     `Time of day: ${request.worldContext.timeOfDay}`,
     `Player intent: ${request.intent}`,
     `Friendliness: ${friendlinessOf(record.friendship, npcId)}. Be civil below -2, reserved below 1, warm above 1.`,
@@ -94,7 +102,9 @@ export async function buildContext(
           `The player is referring back to how you greeted them: "${referredGreeting}". Treat it as something you already said and respond to their reference naturally.`,
         ]
       : []),
-    `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
+    casual
+      ? `Weather: ${game.city?.(playerId)?.weather ?? 'unknown'}`
+      : `Shared city snapshot (background only; do not bring up events or weather unless the player asks or it answers them): ${JSON.stringify(game.city?.(playerId) ?? null)}`,
     `Your current need: ${game.city?.(playerId)?.needs[npcId as import('@saigon/shared').NeighborId] ?? 'none'}`,
     `Party (${party?.members.length ?? 0}): ${party?.members.map((member) => member.name).join(', ') || 'none'}`,
     `Remembered about this player: ${facts.map((f) => f.fact).join(' | ') || 'nothing yet'}`,

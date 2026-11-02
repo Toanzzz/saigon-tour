@@ -1,6 +1,5 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible'
 import { Mastra } from '@mastra/core/mastra'
-import { RequestContext } from '@mastra/core/request-context'
 import { InMemoryStore, type MastraCompositeStore } from '@mastra/core/storage'
 import {
   type CityEvent,
@@ -37,16 +36,11 @@ import { fillGreetingName, greetingContext } from './greeting-context'
 import { CostGuard } from './guard'
 import { NpcMemoryService } from './memory/npc-memory'
 import { clearPlayerThreads, readHistory, recordTurn } from './memory/threads'
-import {
-  describeError,
-  type HarnessUsage,
-  meteredFetch,
-  storageUnavailable,
-} from './meter'
-import { cleanReply } from './safety'
+import { type HarnessUsage, meteredFetch } from './meter'
 import { ShortLines } from './short-lines'
-import type { NpcRequestValues, ToolOutcome } from './tools/context'
-import { buildContext, friendshipChanges, turnMessage } from './turn'
+import type { ToolOutcome } from './tools/context'
+import { friendshipChanges } from './turn'
+import { TurnGenerator } from './turn-generation'
 
 /** Mastra NPC harness: agents propose through tools, QuestService decides. */
 export class NpcHarness {
@@ -63,6 +57,7 @@ export class NpcHarness {
   private readonly npcGuard: CostGuard
   private readonly live: boolean
   private readonly shortLines: ShortLines
+  private readonly turns: TurnGenerator
   private readonly storage: MastraCompositeStore
   /** The opener shown to each player per NPC, injected only when they refer to it. */
   private readonly lastGreeting = new Map<string, string>()
@@ -112,6 +107,13 @@ export class NpcHarness {
       storage: this.storage,
       logger: false,
     })
+    this.turns = new TurnGenerator(
+      config,
+      this.mastra,
+      this.game,
+      this.memory,
+      (...args) => this.report(...args)
+    )
     this.shortLines = new ShortLines(
       db,
       provider().chatModel(config.model ?? ''),
@@ -293,7 +295,7 @@ export class NpcHarness {
       const referredGreeting = refersToGreeting(request.message)
         ? (this.lastGreeting.get(`${npcId}:${playerId}`) ?? null)
         : null
-      reply = await this.generate(
+      reply = await this.turns.generate(
         npcId,
         request,
         playerId,
@@ -354,94 +356,6 @@ export class NpcHarness {
     }
   }
 
-  private async generate(
-    npcId: NpcId,
-    request: InteractRequest,
-    playerId: string,
-    outcome: ToolOutcome,
-    twistedLine: string | null,
-    riddleContext: string | null = null,
-    milestoneContext: string | null = null,
-    referredGreeting: string | null = null
-  ): Promise<string | null> {
-    const agent = this.mastra.getAgentById(npcId)
-    // Only offers made by this generation end the loop; milestone offers may
-    // already be present and still need their normal dialogue.
-    const eventOffset = outcome.events.length
-    const newlyOffered = () =>
-      outcome.events
-        .slice(eventOffset)
-        .find((event) => event.type === 'offered')?.quest
-    const context = await buildContext(
-      this.game,
-      this.memory,
-      npcId,
-      request,
-      playerId,
-      outcome,
-      twistedLine,
-      riddleContext,
-      milestoneContext,
-      referredGreeting
-    )
-    for (let attempt = 0; attempt < 2; attempt++) {
-      const requestContext = new RequestContext<NpcRequestValues>([
-        ['playerId', playerId],
-        ['npcId', npcId],
-        ['outcome', outcome],
-      ])
-      try {
-        const result = await agent.generate(turnMessage(request), {
-          memory: {
-            thread: `${npcId}:${playerId}`,
-            resource: playerId,
-            // The harness is the single history writer (see recordTurn below).
-            // Read memory for recall, but never let the agent persist turns, or
-            // live and fallback writers duplicate/orphan messages in the thread.
-            options: { readOnly: true },
-          },
-          context: [{ role: 'system', content: context }],
-          requestContext,
-          maxSteps: 3,
-          stopWhen: () => Boolean(newlyOffered()),
-          abortSignal: AbortSignal.timeout(this.config.timeoutMs + 2000),
-          modelSettings: {
-            maxOutputTokens: 4000,
-            maxRetries: 0,
-            timeout: {
-              totalMs: this.config.timeoutMs + 2000,
-              stepMs: this.config.timeoutMs,
-            },
-          },
-          providerOptions: { meta: { reasoningEffort: 'minimal' } },
-        })
-        const offered = newlyOffered()
-        if (offered) {
-          this.report('npc_turn_completed', npcId, outcome.calls)
-          return offeredErrandLine(offered, request.locale)
-        }
-        // Tool-call steps may carry interim narration; reply with the final step.
-        const last = result.steps?.at(-1)?.text
-        const reply = cleanReply(last?.trim() ? last : result.text)
-        if (reply) {
-          this.report('npc_turn_completed', npcId, outcome.calls)
-          return reply
-        }
-        if (outcome.calls.length) return null
-      } catch (error) {
-        if (storageUnavailable(error)) throw error
-        this.report(
-          'npc_turn_failed',
-          npcId,
-          outcome.calls,
-          'error',
-          describeError(error, attempt)
-        )
-        if (outcome.calls.length) return null
-      }
-    }
-    return null
-  }
   /**
    * Director signal: an event just started, so NPCs tied to it precompute a
    * fresh greeting across every affinity tier before any player walks up.

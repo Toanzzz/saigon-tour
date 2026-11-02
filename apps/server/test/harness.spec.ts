@@ -184,7 +184,7 @@ describe('NPC authored errands', () => {
     const harness = ctx.fx.harness(live, scripted([{ text: 'Chào!' }], seen))
     for (const npc of Object.keys(NPCS) as (keyof typeof NPCS)[]) {
       const guest = await ctx.fx.guest()
-      await harness.interact(npc, ask('Hello'), guest.player.id)
+      await harness.interact(npc, ask('Any errands?'), guest.player.id)
     }
     for (const body of seen) {
       expect(body.tools?.map((t) => t.function.name).sort()).toEqual([
