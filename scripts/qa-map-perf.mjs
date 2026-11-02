@@ -102,10 +102,23 @@ async function measure(viewport) {
     await page
       .getByRole('button', { name: 'Start exploring', exact: true })
       .click({ timeout: 60000 })
-    await page.waitForFunction(
-      () => window.__THREE_GAME_DIAGNOSTICS__?.state?.screen === 'playing',
-      { timeout: 15000 }
-    )
+    // A cold WebGL context (notably the second viewport) can take a while to
+    // reach 'playing'; give it room and nudge once if it stalls on the title.
+    try {
+      await page.waitForFunction(
+        () => window.__THREE_GAME_DIAGNOSTICS__?.state?.screen === 'playing',
+        { timeout: 30000 }
+      )
+    } catch {
+      await page
+        .getByRole('button', { name: 'Start exploring', exact: true })
+        .click({ timeout: 5000 })
+        .catch(() => {})
+      await page.waitForFunction(
+        () => window.__THREE_GAME_DIAGNOSTICS__?.state?.screen === 'playing',
+        { timeout: 30000 }
+      )
+    }
     await page.waitForFunction(
       () =>
         window.__THREE_GAME_DIAGNOSTICS__?.renderer?.render?.triangles > 1000
