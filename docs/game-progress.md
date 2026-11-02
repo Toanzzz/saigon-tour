@@ -287,3 +287,20 @@ the north/west walls (desktop only) with unlit window dots for Phase 4, keeping
 the Thủ Thiêm Kenney towers in front. A `paperEdge` base skirt under the ground
 rects completes the diorama. The title screen frames the district through a long
 lens (fov 22) and play restores fov 49 (`features/player/camera.tsx`).
+
+## Light and weather (map Phase 4)
+
+Evening lights heritage windows (one unlit `window3000k` InstancedMesh from
+`shared/world/windows.ts` for the cathedral, post office, opera, and City Hall —
+windows only, lanterns stay with the milestone), switches the Phase-2 neon on
+(emissive cyan/magenta/yellow tubes, one café strip flickers ≤3 Hz, static under
+reduced motion), merges the 16 `STREET_LIGHT_PLACEMENTS` heads with the existing
+glow boxes into one lamp-glow mesh, and warms the Phase-3 skyline window dots to
+`window3000k`. The alley point light is retinted toward magenta; the total stays
+two point lights. Rain (`features/city/rain.tsx`) runs ~600 camera-following
+streaks animated entirely in a vertex shader (300 mobile, half in XR, sparse
+under reduced motion); `features/city/puddles.tsx` tints roads toward `wetRoad`
+and scatters low-opacity puddle ellipses that glint under the evening lights.
+`features/npcs/umbrellas.tsx` opens paper umbrellas on the nearest ≤16 NPCs
+within 40 units (plus the on-foot player) with a spring pop/fold, picked by the
+pure `umbrella-picker.ts`. Routes never close; rain is visual only.

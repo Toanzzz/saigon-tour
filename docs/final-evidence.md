@@ -350,3 +350,36 @@ alley 260→268); triangles well under the +5k budget. The phase's own budget is
 instanced meshes — Phase 2's deferred item 5, fulfilled here. Mobile +3 at spawn
 (skyline cards cut below 700px, clouds reduced to 6). Evidence:
 `/tmp/saigon-map-evidence/phase3/`.
+
+## Map Phase 4 — light and weather (2026-11-02)
+
+Committed in the night-lighting and rain/umbrella feature commits. Evening and
+rain visuals only; day baseline and `?look=classic` unchanged. Two point lights
+total (invariant held); `features/city/events.tsx` untouched.
+
+### Gates
+
+- `bun run check` clean (761 files); `check:types` 0; `build` client + server 0;
+  `test` → server 403 passed / 2 skipped, client 262 passed (31 files, incl. new
+  `world-weather.spec.ts`).
+
+### Weather QA (`scripts/qa-map-weather.mjs`, live dev server, canvas sampling)
+
+- Evening windows: the warmest pixel on the heritage band reads a clear 3000 K
+  glow (r−b > 30), desktop and 390px.
+- Evening neon: alley neon pixels are saturated (channel spread 52.2 desktop /
+  51.8 mobile) cyan/magenta.
+- Rain: after `setWeather('rain')` the streak mesh is present (600 desktop / 300
+  mobile), 13 umbrellas open near the market, and the wet road band is darker
+  than the dry baseline at the same pose.
+- Rain → clear: streaks go to 0 and the umbrellas fold (13 → 0).
+- Room weather is server-authoritative, so the QA re-sets and polls the override
+  before sampling (it reverts on the next room snapshot).
+
+### Perf (`scripts/qa-map-perf.mjs`, vs the Phase 3 baseline)
+
+Day is unchanged (±1-2 call noise). Evening adds only ~+2 draw calls over day at
+each pose (windows 1, neon 1-2, lamps merged +0) — well under the +8 evening/rain
+budget. Rain adds the streak, puddle, and two umbrella instanced meshes on top,
+verified by the diagnostics counts. Triangles stay within +10k. Evidence:
+`/tmp/saigon-map-evidence/phase4/` and `weather-*.json`.
