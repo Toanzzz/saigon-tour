@@ -536,3 +536,14 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - Proven mobile form cause: the name grid and nested flex row's automatic minimum width forced a 371px row inside a 342px form. Explicit `min-width: 0` fits the row and button within the viewport.
 - `scripts/qa-title-market.mjs` covers 1440px desktop and 390px mobile title layout, language switching, Start/Continue journey, and pause/resume. Screenshots: `/tmp/title-market-<width>.png` and `/tmp/title-market-returning-<width>.png`.
 - Gates pass: `bun run check`, `bun run check:types`, `bun run build`, `bun run test`. Server: 445 passed, 2 skipped. Client: 292 passed.
+
+
+## Chat scroll containment and activity-note design
+
+- Proven cause: a positioned-history-only experiment reduces outer dialog `scrollHeight` from 6079px to 724px at 1440×900; the full-date labels use absolute positioning and need the transcript as their containing block. The message history retains its independent overflow in the experiment.
+- Proven: `scripts/qa-npc-scroll.mjs` drives real NPC interaction, mouse-wheel scrolling, native mobile touch swipes, input focus, send, and language controls at 1440×900, 604×627, 390×844, 390×600, and 844×390. Each dialog has matching `scrollHeight`/`clientHeight` (746, 595, 701, 568, and 362px respectively), no horizontal overflow, and no page errors.
+- Proven: the initial encounter scrolls to the newest content after modal layout. Scrolling to the earliest message keeps header and composer coordinates stable. Submitting through the real composer during a forced 503 keeps the reader at the earliest message; scrolling beyond the final message leaves the outer dialog at zero scroll. Three simultaneous errands remain accessible in their bounded list.
+- Activity narration is a warm paper note with the game's ink outline, leaf stamp, dashed divider, localized heading, and compact clock. EN desktop and VI mobile captures are visually inspected for text fit, header/composer visibility, and cohesion with existing controls.
+- Artifacts: `artifacts/npc-scroll/results.json`, `activity-<width>x<height>.png`, `chat-<width>x<height>.png`, and `activity-vi-390.png`. `scripts/qa-npc-dialog.mjs` verifies the existing desktop/mobile errand and history controls.
+
+- Validation: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass; server 445 passed / 2 skipped, client 292 passed. `scripts/qa-npc-dialog.mjs` passes at 1440px and 390px.

@@ -199,6 +199,11 @@ Times use local 24-hour `HH:mm`, date dividers, and accessible full dates.
 Unknown legacy timestamps display a dash. Streaming text is transient; final
 replies carry the persisted server message IDs and times. Scrolling older
 messages suspends automatic following until the reader returns to the bottom.
+The conversation uses a bounded flex layout: header and composer stay visible,
+errand lists and transcript scroll within their own bounds, and hidden full-date
+labels remain contained inside the transcript. Initial scrolling waits for the
+modal layout. Activity observations use a warm paper note, ink outline, leaf
+stamp, localized heading, and an inline clock that matches the game's UI.
 Client and server builds share the updated room schema; reconnect clients after
 releasing both builds.
 

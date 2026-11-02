@@ -2,6 +2,7 @@ import { NPCS, npcActivity } from '@saigon/shared'
 import { Fragment, useEffect, useRef } from 'react'
 import { getLocale, m, npcLabel } from '@/shared/i18n'
 import type { ChatMessage, Dialogue } from '@/shared/state/game'
+import { Icon } from '@/shared/ui/icons'
 import { NpcAvatar } from './npc-avatar'
 
 const date = (at?: string) =>
@@ -61,8 +62,11 @@ export function Transcript({ dialog }: { dialog: Dialogue }) {
     const fresh = encounter.current !== dialog.requestId
     encounter.current = dialog.requestId
     if (fresh) following.current = true
-    if (ref.current && following.current)
-      ref.current.scrollTop = ref.current.scrollHeight
+    const frame = requestAnimationFrame(() => {
+      if (ref.current && following.current)
+        ref.current.scrollTop = ref.current.scrollHeight
+    })
+    return () => cancelAnimationFrame(frame)
   }, [dialog])
   const activity = dialog.activity ?? npcActivity(dialog.npc)
   const scene = activity.text[getLocale()].replace(
@@ -104,10 +108,20 @@ export function Transcript({ dialog }: { dialog: Dialogue }) {
         day(dialog.openedAt) !== day(dialog.history[earlierCount - 1]?.at) && (
           <div className="chat-date">{day(dialog.openedAt)}</div>
         )}
-      <div className="activity-scene" data-activity={activity.id}>
+      <aside
+        className="activity-scene"
+        data-activity={activity.id}
+        aria-label={m.chat_scene_label()}
+      >
+        <span className="activity-stamp">
+          <Icon name="leaf" size={18} />
+        </span>
+        <div className="activity-scene-heading">
+          <span>{m.chat_scene_label()}</span>
+          <MessageTime at={dialog.openedAt} />
+        </div>
         <p>{scene}</p>
-        <MessageTime at={dialog.openedAt} />
-      </div>
+      </aside>
       {dialog.history
         .slice(earlierCount)
         .map((line, index) => row(line, earlierCount + index))}

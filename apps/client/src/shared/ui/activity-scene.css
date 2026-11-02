@@ -1,0 +1,50 @@
+.activity-scene {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  column-gap: 10px;
+  row-gap: 5px;
+  margin: 2px 0 16px;
+  padding: 12px 14px;
+  background: var(--wall-hi);
+  border: var(--edge);
+  border-radius: 4px 14px 14px 14px;
+  box-shadow: 0 3px 0 var(--wall-side);
+}
+.activity-stamp {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  align-self: start;
+  width: 30px;
+  height: 30px;
+  background: var(--roof-hi);
+  color: var(--ink);
+  border: var(--edge);
+  border-radius: 7px;
+  transform: rotate(-6deg);
+}
+.activity-scene-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed var(--wall-side);
+  color: var(--ink-soft);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.activity-scene-heading .message-time {
+  flex-shrink: 0;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+}
+.activity-scene > p {
+  grid-column: 2;
+  font-size: 14px;
+  line-height: 1.6;
+}

@@ -499,5 +499,6 @@
   "map_debug_overhead": "Nhìn từ trên",
   "map_debug_colliders": "Khối va chạm",
   "map_debug_help": "Kéo để xoay · cuộn để thu phóng · kéo chuột phải để di chuyển. Cảm ứng: một ngón xoay, hai ngón thu phóng/di chuyển.",
-  "map_debug_exit": "Trở về trò chơi"
+  "map_debug_exit": "Trở về trò chơi",
+  "chat_scene_label": "Một thoáng khu phố"
 }
