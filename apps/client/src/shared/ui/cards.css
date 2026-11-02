@@ -88,6 +88,9 @@
 .story-card {
   grid-column: span 7;
 }
+.milestone-card {
+  grid-column: span 5;
+}
 .story-road {
   position: relative;
   display: grid;
@@ -395,6 +398,17 @@
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 12px;
   overflow-y: auto;
+  align-content: start;
+}
+.wardrobe-empty {
+  display: grid;
+  place-items: center;
+  min-height: 160px;
+  margin: 0;
+  padding: 24px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 14px;
 }
 .wardrobe-card {
   display: flex;

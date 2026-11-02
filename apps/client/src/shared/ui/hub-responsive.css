@@ -1,13 +1,15 @@
 @media (max-width: 1080px) {
   .story-card,
-  .neighbor-card {
+  .milestone-card,
+  .neighbor-card,
+  .places-card {
     grid-column: span 12;
   }
   .ride-card,
-  .places-card {
+  .sound-card {
     grid-column: span 6;
   }
-  .sound-card {
+  .pulse-card {
     grid-column: span 12;
   }
 }
@@ -46,7 +48,10 @@
     gap: 22px;
   }
   .ride-card,
-  .places-card {
+  .places-card,
+  .sound-card,
+  .pulse-card,
+  .milestone-card {
     grid-column: span 12;
   }
   .hub-card {

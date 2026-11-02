@@ -1,7 +1,10 @@
 .ride-card,
-.places-card,
-.sound-card {
+.sound-card,
+.pulse-card {
   grid-column: span 4;
+}
+.places-card {
+  grid-column: span 7;
 }
 .ticket-route {
   display: flex;

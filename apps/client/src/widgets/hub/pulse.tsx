@@ -6,7 +6,7 @@ import { placeName } from '@/shared/world/places'
 export function CityPulse() {
   const snapshot = useSelector(city, (state) => state)
   return (
-    <section className="hub-card" aria-label={m.hub_pulse()}>
+    <section className="hub-card pulse-card" aria-label={m.hub_pulse()}>
       <div className="card-header">
         <div>
           <p className="card-kicker">{m.hub_shared()}</p>
