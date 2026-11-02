@@ -5,10 +5,12 @@ import { Suspense } from 'react'
 import { ACESFilmicToneMapping } from 'three'
 import { Diagnostics } from '@/app/diagnostics'
 import { Atmosphere } from '@/features/city/atmosphere'
+import { Cries } from '@/features/city/cries'
 import { CityEvents } from '@/features/city/events'
 import { WetPavement } from '@/features/city/puddles'
 import { Rain } from '@/features/city/rain'
 import { Sun } from '@/features/city/sun'
+import { Traffic } from '@/features/city/traffic'
 import { Coins } from '@/features/collectibles'
 import { Neighbors } from '@/features/npcs/neighbors'
 import { RemotePlayers } from '@/features/npcs/remote-players'
@@ -58,6 +60,8 @@ export function Scene() {
             <Neighbors />
             <Umbrellas />
             <CityEvents />
+            <Cries />
+            <Traffic />
             <RemotePlayers />
             <Diagnostics />
           </Physics>

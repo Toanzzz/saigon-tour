@@ -49,6 +49,33 @@ const boxes = [
   { x: -19.8, z: 31.8 },
 ]
 
+// Phase 5d: load every third parked bike with a comic cargo stack and give
+// all of them an oversized headlight that glows warm in the evening. The
+// cargo reuses the same box batch so it adds no new draw call beyond the two
+// cargo colours; the headlight glow is one unlit mesh.
+const parkedCargo = assemble([
+  {
+    positions: bikes,
+    parts: (i: number) =>
+      i % 3 === 0
+        ? [
+            part([0, 1.7, -0.78], [0.5, 1.5, 0.5], '#d8b773'),
+            part([0, 2.1, -0.78], [0.42, 0.18, 0.42], '#b85a4d'),
+          ]
+        : [part([0, 1.62, -0.78], [0.78, 0.6, 0.62], '#bcd3dc')],
+  },
+])
+const parkedHeadlights = bikes.map((bike) => at(bike, [0, 1.2, 0.86], 0.42))
+// Low planters (below knee, no collider) framing the Lê Lợi junction where the
+// xe ôm fragile-parcel wobble fires (corners around the x=8 spur). They sit
+// ±4.5 off the x=8 ride path so the auto-piloted ride never clips them.
+const cornerPlanters: StreetPlacement[] = [
+  { x: 3.5, z: 8.6 },
+  { x: 12.5, z: 8.6 },
+  { x: 3.5, z: 15.4 },
+  { x: 12.5, z: 15.4 },
+]
+
 const silhouettes = assemble([
   { positions: bikes, parts: BIKE_PARTS },
   { positions: carts, parts: CART_PARTS },
@@ -95,6 +122,15 @@ export function StreetLife() {
     <group name="street-life">
       <Nearby at={[-22, 18]} distance={95}>
         <PropBlocks batches={silhouettes} />
+        <PropBlocks batches={parkedCargo} />
+        <Blocks
+          color="#ffeec2"
+          unlit
+          placements={parkedHeadlights.map((p) => ({
+            ...p,
+            scale: [0.26, 0.26, 0.12],
+          }))}
+        />
         <PropRounds bikes={bikes} pots={pots} tables={tables} />
         <ModelInstances path="nature/plant_bush" placements={bushPlacements} />
         <Nearby at={[-22, 18]} distance={58}>
@@ -114,6 +150,9 @@ export function StreetLife() {
       </Nearby>
       <Nearby at={[27, -9]} distance={65}>
         <ParkExercise />
+      </Nearby>
+      <Nearby at={[8, 12]} distance={60}>
+        <CornerPlanters />
       </Nearby>
     </group>
   )
@@ -236,6 +275,23 @@ function ParkExercise() {
           { position: [35.3, 0.16, -4.2], scale: [2.4, 0.1, 2] },
         ]}
       />
+    </group>
+  )
+}
+
+// Phase 5d: low corner planters framing the Lê Lợi junction where the xe ôm
+// fragile-parcel wobble fires. Below knee height, no collider; purely scenery.
+const planterBoxes = cornerPlanters.map((p) => ({
+  position: [p.x, 0.22, p.z] as Vec3,
+  scale: [1.1, 0.44, 1.1] as Vec3,
+}))
+const planterGreens = cornerPlanters.map((p) => at(p, [0, 0.6, 0], 1.6))
+
+function CornerPlanters() {
+  return (
+    <group name="corner-planters">
+      <Blocks color="#b89f78" placements={planterBoxes} />
+      <ModelInstances path="nature/plant_bush" placements={planterGreens} />
     </group>
   )
 }
