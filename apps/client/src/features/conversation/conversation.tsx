@@ -37,10 +37,11 @@ export function Conversation({ state }: { state: GameState }) {
   const historyRef = useRef<HTMLDivElement>(null)
   const historyLength = dialog?.history.length
   const thinking = dialog?.thinking
+  const streamingText = dialog?.streamingText
   useEffect(() => {
-    if ((historyLength || thinking) && historyRef.current)
+    if ((historyLength || thinking || streamingText) && historyRef.current)
       historyRef.current.scrollTop = historyRef.current.scrollHeight
-  }, [historyLength, thinking])
+  }, [historyLength, thinking, streamingText])
   if (!dialog) return null
   const npc = { ...NPCS[dialog.npc], ...npcDisplay(dialog.npc) }
   async function send(event: SubmitEvent<HTMLFormElement>) {
@@ -109,7 +110,13 @@ export function Conversation({ state }: { state: GameState }) {
             </>
           )
         })()}
-        {dialog.thinking && (
+        {dialog.thinking && dialog.streamingText && (
+          <div className="speech-row">
+            <NpcAvatar id={dialog.npc} size="sm" />
+            <p className="speech assistant">{dialog.streamingText}</p>
+          </div>
+        )}
+        {dialog.thinking && !dialog.streamingText && (
           <p className="thinking" role="status">
             <span />
             {m.chat_thinking({ name: npc.name })}

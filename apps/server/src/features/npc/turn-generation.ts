@@ -18,6 +18,10 @@ export type TurnReport = (
   level?: 'info' | 'warn' | 'error',
   detail?: string
 ) => void
+export interface TurnDelivery {
+  onText: (text: string) => void | Promise<void>
+  signal?: AbortSignal
+}
 
 export class TurnGenerator {
   constructor(
@@ -36,7 +40,8 @@ export class TurnGenerator {
     twistedLine: string | null,
     riddleContext: string | null = null,
     milestoneContext: string | null = null,
-    referredGreeting: string | null = null
+    referredGreeting: string | null = null,
+    delivery?: TurnDelivery
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
     // Only offers made by this generation end the loop; milestone offers may
@@ -68,7 +73,8 @@ export class TurnGenerator {
         ['outcome', outcome],
       ])
       try {
-        const result = await agent.generate(turnMessage(request), {
+        const deadline = AbortSignal.timeout(this.config.timeoutMs + 2000)
+        const options: AgentExecutionOptions = {
           instructions: turnInstructions(npcId, request.locale, casual),
           ...(casual
             ? { activeTools: ['adjustFriendliness', 'rememberPlayerFact'] }
@@ -85,7 +91,9 @@ export class TurnGenerator {
           requestContext,
           maxSteps: 3,
           stopWhen: () => Boolean(newlyOffered()),
-          abortSignal: AbortSignal.timeout(this.config.timeoutMs + 2000),
+          abortSignal: delivery?.signal
+            ? AbortSignal.any([deadline, delivery.signal])
+            : deadline,
           modelSettings: {
             maxOutputTokens: 4000,
             maxRetries: 0,
@@ -95,7 +103,21 @@ export class TurnGenerator {
             },
           },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
-        })
+        }
+        const result =
+          casual && delivery
+            ? await (async () => {
+                await delivery.onText('')
+                const stream = await agent.stream(turnMessage(request), options)
+                let text = ''
+                for await (const chunk of stream.textStream) {
+                  text += chunk
+                  const safe = cleanReply(text)
+                  await delivery.onText(safe ?? '')
+                }
+                return { text: await stream.text, steps: await stream.steps }
+              })()
+            : await agent.generate(turnMessage(request), options)
         const offered = newlyOffered()
         if (offered) {
           this.report('npc_turn_completed', npcId, outcome.calls)
@@ -111,6 +133,8 @@ export class TurnGenerator {
         if (outcome.calls.length) return null
       } catch (error) {
         if (storageUnavailable(error)) throw error
+        if (delivery?.signal?.aborted) throw error
+        await delivery?.onText('')
         this.report(
           'npc_turn_failed',
           npcId,
@@ -124,3 +148,5 @@ export class TurnGenerator {
     return null
   }
 }
+
+import type { AgentExecutionOptions } from '@mastra/core/agent'

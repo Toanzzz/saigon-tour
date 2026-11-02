@@ -1,6 +1,11 @@
 import { zValidator } from '@hono/zod-validator'
-import { InteractRequestSchema, NpcIdSchema } from '@saigon/shared'
+import {
+  InteractRequestSchema,
+  NpcIdSchema,
+  type NpcStreamEvent,
+} from '@saigon/shared'
 import { Hono } from 'hono'
+import { stream } from 'hono/streaming'
 import { z } from 'zod'
 import { requireAuth } from './auth'
 import type { Env, RouteDeps } from './deps'
@@ -37,13 +42,44 @@ export function npcRoutes({ auth, db, harness }: RouteDeps) {
       zValidator('json', InteractRequestSchema, (result, c) => {
         if (!result.success) return c.json({ error: 'invalid_request' }, 400)
       }),
-      async (c) =>
-        c.json(
+      async (c) => {
+        const npcId = c.req.valid('param').npcId
+        const request = c.req.valid('json')
+        const playerId = c.var.player.id
+        if (c.req.header('accept')?.includes('application/x-ndjson')) {
+          c.header('Content-Type', 'application/x-ndjson')
+          c.header('Cache-Control', 'no-cache, no-transform')
+          c.header('X-Accel-Buffering', 'no')
+          return stream(c, async (output) => {
+            const controller = new AbortController()
+            output.onAbort(() => controller.abort())
+            const send = (event: NpcStreamEvent) =>
+              output.write(`${JSON.stringify(event)}\n`)
+            try {
+              const response = await harness.interact(
+                npcId,
+                request,
+                playerId,
+                {
+                  signal: controller.signal,
+                  onText: async (text) => {
+                    await send({ type: 'text', text })
+                  },
+                }
+              )
+              await send({ type: 'result', response })
+            } catch {
+              if (!controller.signal.aborted) await send({ type: 'error' })
+            }
+          })
+        }
+        return c.json(
           await harness.interact(
             c.req.valid('param').npcId,
             c.req.valid('json'),
             c.var.player.id
           )
         )
+      }
     )
 }

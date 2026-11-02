@@ -32,6 +32,7 @@ export interface Dialogue {
   history: { role: 'user' | 'assistant'; content: string; greeting?: boolean }[]
   earlierCount?: number
   thinking: boolean
+  streamingText?: string
   source: AgentSource | null
 }
 export interface Ride {

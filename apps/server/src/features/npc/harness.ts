@@ -40,7 +40,7 @@ import { type HarnessUsage, meteredFetch } from './meter'
 import { ShortLines } from './short-lines'
 import type { ToolOutcome } from './tools/context'
 import { friendshipChanges } from './turn'
-import { TurnGenerator } from './turn-generation'
+import { type TurnDelivery, TurnGenerator } from './turn-generation'
 
 /** Mastra NPC harness: agents propose through tools, QuestService decides. */
 export class NpcHarness {
@@ -89,6 +89,7 @@ export class NpcHarness {
         name: 'meta',
         baseURL: (config.apiUrl ?? '').replace(/\/chat\/completions\/?$/, ''),
         apiKey: config.apiKey ?? 'unset',
+        includeUsage: true,
         fetch: meteredFetch(
           db,
           fetcher,
@@ -127,7 +128,8 @@ export class NpcHarness {
   async interact(
     npcId: NpcId,
     input: z.input<typeof InteractRequestSchema>,
-    playerId: string
+    playerId: string,
+    delivery?: TurnDelivery
   ): Promise<InteractResponse> {
     const request = InteractRequestSchema.parse(input)
     if (request.intent === 'help' || request.intent === 'check')
@@ -303,7 +305,8 @@ export class NpcHarness {
         twistedLine ?? null,
         riddleContext,
         milestoneContext,
-        referredGreeting
+        referredGreeting,
+        delivery
       )
       if (reply) source = 'live'
     }

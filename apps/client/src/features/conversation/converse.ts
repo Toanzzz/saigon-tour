@@ -76,7 +76,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
     (intent !== 'greet' && intent !== 'milestone' && !text.trim())
   )
     return
-  update({ dialogue: { ...dialog, thinking: true } })
+  update({ dialogue: { ...dialog, thinking: true, streamingText: undefined } })
   const session = game.state.sessionId
   const canSend = await beginHttpTurn()
   if (
@@ -99,7 +99,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
       ? dialog.history
       : [...dialog.history, { role: 'user' as const, content: text }]
   update({
-    dialogue: { ...dialog, history, thinking: true },
+    dialogue: { ...dialog, history, thinking: true, streamingText: undefined },
     pending: pending.slice(sentEvents.length),
   })
   const result = await mutate(() =>
@@ -118,7 +118,15 @@ export async function converse(text: string, intent: Intent, opening = false) {
           timeOfDay: timeOfDay(),
         },
       },
-      snapshot
+      snapshot,
+      (streamingText) => {
+        const current = game.state.dialogue
+        if (
+          game.state.sessionId === sessionId &&
+          current?.requestId === requestId
+        )
+          update({ dialogue: { ...current, streamingText } })
+      }
     )
   )
   endHttpTurn()
@@ -171,7 +179,14 @@ function apply(
   game.setState((state) => {
     if (result.revision < state.serverRevision) {
       return state.dialogue?.requestId === requestId
-        ? { ...state, dialogue: { ...state.dialogue, thinking: false } }
+        ? {
+            ...state,
+            dialogue: {
+              ...state.dialogue,
+              thinking: false,
+              streamingText: undefined,
+            },
+          }
         : state
     }
     let next: GameState = {
@@ -239,6 +254,7 @@ function apply(
           ? {
               ...state.dialogue,
               thinking: false,
+              streamingText: undefined,
               source: result.source,
               history:
                 intent === 'greet' &&

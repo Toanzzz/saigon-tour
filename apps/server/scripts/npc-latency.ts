@@ -4,7 +4,7 @@ import { NpcHarness } from '../src/features/npc'
 import { readConfig } from '../src/shared/config'
 import { fixture } from '../test/fixture'
 
-// bun apps/server/scripts/npc-latency.ts --official --samples=2
+// bun apps/server/scripts/npc-latency.ts --official --stream --samples=2
 const args = new Set(process.argv.slice(2))
 const env = {
   ...process.env,
@@ -37,6 +37,8 @@ try {
         fx.storage
       )
       const started = performance.now()
+      let firstVisibleMs: number | null = null
+      let partialUpdates = 0
       const result = await harness.interact(
         'hoa',
         {
@@ -50,7 +52,16 @@ try {
             timeOfDay: 'morning',
           },
         },
-        player.id
+        player.id,
+        args.has('--stream')
+          ? {
+              onText: (text) => {
+                if (!text) return
+                firstVisibleMs ??= Math.round(performance.now() - started)
+                partialUpdates++
+              },
+            }
+          : undefined
       )
       const record = {
         sample,
@@ -58,6 +69,8 @@ try {
         endpoint: new URL(config.apiUrl ?? '').origin,
         model: config.model,
         elapsedMs: Math.round(performance.now() - started),
+        firstVisibleMs,
+        partialUpdates,
         usage: harness.usage,
         source: result.source,
         toolCalls: result.toolCalls,

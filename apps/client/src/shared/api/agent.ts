@@ -7,7 +7,6 @@ import {
   createQuest,
   friendlinessOf,
   type InteractResponse,
-  InteractResponseSchema,
   isExpired,
   MILESTONES,
   milestoneForGiver,
@@ -21,10 +20,12 @@ import {
   wantsErrand,
   ZERO_REWARD,
 } from '@saigon/shared'
-import type { InferRequestType, InferResponseType } from 'hono/client'
+import type { InferRequestType } from 'hono/client'
 import { getLocale, m, npcDisplay, npcLabel } from '@/shared/i18n'
 import { type GameState, game } from '@/shared/state/game'
 import { rpc } from './client'
+import { readNpcResponse } from './npc-stream'
+import { authorizationHeaders } from './transport'
 
 export { queryClient } from './query'
 
@@ -37,7 +38,7 @@ export type InteractBody = Omit<
   InferRequestType<typeof interact$post>['json'],
   'locale'
 >
-export type InteractResponsePayload = InferResponseType<typeof interact$post>
+export type InteractResponsePayload = InteractResponse
 
 export interface InteractionResult {
   response: InteractResponse
@@ -48,7 +49,8 @@ export interface InteractionResult {
 export async function interactWith(
   npc: NpcId,
   body: InteractBody,
-  state: GameState
+  state: GameState,
+  onText?: (text: string) => void
 ): Promise<InteractionResult> {
   try {
     if (!sessionToken() || state.guestStatus !== 'online') {
@@ -60,6 +62,11 @@ export async function interactWith(
       {
         init: {
           credentials: 'include',
+          headers: {
+            ...authorizationHeaders(),
+            'Content-Type': 'application/json',
+            Accept: 'application/x-ndjson',
+          },
           // Outlasts the server: two live attempts of up to 17s each, then fallback.
           signal: AbortSignal.timeout(40000),
         },
@@ -67,11 +74,13 @@ export async function interactWith(
     )
     if (!response.ok) throw new Error(`Guide unavailable (${response.status})`)
     // Validate the untrusted body; the parsed shape must match the RPC payload.
-    const payload: InteractResponsePayload = InteractResponseSchema.parse(
-      await response.json()
+    const payload: InteractResponsePayload = await readNpcResponse(
+      response,
+      onText
     )
     return { response: payload, synced: true }
   } catch {
+    onText?.('')
     return { response: offline(npc, body, state), synced: false }
   }
 }

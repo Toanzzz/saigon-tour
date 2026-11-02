@@ -12,6 +12,11 @@ QA captures referenced below live in `artifacts/`, which is local-only and gitig
 
 ## Current gates
 
+- Official Meta streaming samples (`muse-spark-1.3-contributor`): casual first visible text at 3,262 / 2,714 ms, complete at 3,890 / 3,202 ms, 14 / 13 text updates, one request each. Errand replies complete at 5,765 / 6,629 ms with one request and zero unvalidated text updates. Evidence: `artifacts/npc-latency/official-stream.json`.
+- Cache reads are observed, not assumed: one casual request reported 1,521 cached tokens out of 1,574 input; one errand request reported 3,953 out of 4,024. Other calls reported zero. These samples do not establish a stable percentage reduction in latency.
+- Streaming tests exercise delivery before model completion, reasoning isolation, final usage settlement, buffered errand validation, JSON/NDJSON negotiation, temporary text without early state/history updates, interrupted-response fallback, and late chunks after dialogue replacement.
+- Streaming gates: `check` → `check:types` → `build` → `test` pass; server 434 passed / 2 skipped, client 286 passed. Headless Playwright through real controls at 1440px and 390px captured 16 / 17 NDJSON text updates and observed growing text in the rendered bubble. Both preserve exactly one final reply, re-enable the composer, recover from an interrupted stream, have no horizontal overflow, and report no page errors. Browser totals 6,172 / 5,070 ms demonstrate variable provider latency despite progressive display. Evidence: `artifacts/npc-latency/stream-browser.json`, `stream-1440.png`, `stream-390.png`.
+
 - Compact dialogue/prefix verification: all four gates pass; server 431 passed / 2 skipped, client 283 passed. Casual food/market questions omit quest tools, quest examples, and full city JSON; EN/VI and active-quest/event guards covered. Captured provider requests prove the same static prefix precedes different locations/time buckets.
 - Official Meta compact samples: casual 5,622 / 4,579 ms at 1,574 input tokens; errands 6,612 / 4,461 ms at 4,024 input tokens. Input reduction is proven; wall-clock improvement and cache reuse are not established (cached tokens reported zero). Evidence: `artifacts/npc-latency/official-compact.json`.
 
