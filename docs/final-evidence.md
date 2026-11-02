@@ -1,5 +1,22 @@
 # Final evidence
 
+## Escape pause verification — November 3, 2026
+
+- Proven: the control run emits a native dialog `cancel` on Escape while opening
+  the pause menu. Preventing the keydown default removes that native event while
+  preserving the game's pause/resume transitions.
+- The reported invisible third pause was not reproduced in headless Chromium.
+  Browser dismissal interfering with store-driven visibility remains an inferred
+  explanation for the reported failure.
+- `node scripts/qa-pause.mjs`, unsandboxed against the running local dev server:
+  1280px desktop and 390px mobile pass twelve alternating Escape presses,
+  Escape with a range input focused, held-key repeats, Resume, and reopening.
+  Assertions verify visible open dialogs, matching game/audio pause state,
+  prevented key defaults, no native cancel events, and no page exceptions.
+  Store/audio checks import the exact module URLs loaded by Vite.
+- `bun run check` → `bun run check:types` → `bun run build` → `bun run test`
+  pass. Server: 445 passed, 2 skipped. Client: 287 passed.
+
 QA captures referenced below live in `artifacts/`, which is local-only and gitignored. Live model usage JSON lives under `/tmp/saigon-quest-evidence/`. Dated sections identify newer observations; other observations are from November 1, 2026.
 
 ## Immediate NPC errand replies — November 3, 2026

@@ -31,6 +31,8 @@ export function installInput() {
     // pause. It must run even when a form control inside a dialog is focused,
     // so handle it before the typing early-return below.
     if (event.code === 'Escape') {
+      // Consume the browser's dialog dismissal before changing store state.
+      event.preventDefault()
       if (event.repeat) return
       clearInput()
       if (net.state.emotesOpen) updateNet({ emotesOpen: false })

@@ -1,5 +1,13 @@
 # Game progress
 
+## Escape pause handling
+
+The global Escape handler prevents the browser's default dialog dismissal
+before toggling the game store, including held-key repeats. Pause visibility
+and audio state follow the store. `scripts/qa-pause.mjs` verifies repeated
+Escape cycles, focused form controls, held Escape, and Resume at desktop and
+390px mobile widths.
+
 ## Current scope
 
 Stylized District 1 exploration with NPC-authored errands, a shared-room City Director, persistent player progress, and anonymous-first co-op presence.
