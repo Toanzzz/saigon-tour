@@ -5,6 +5,15 @@ import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 
+/** Long lens for the title diorama shot and the regular play field of view. */
+export const TITLE_FOV = 22
+export const PLAY_FOV = 49
+
+/** The field of view for a given game screen: the title gets the long lens. */
+export function lensFor(screen: string): number {
+  return screen === 'title' ? TITLE_FOV : PLAY_FOV
+}
+
 /** The active scene camera, exposed read-only to the `camera()` test hook. */
 let activeCamera: PerspectiveCamera | null = null
 
@@ -61,7 +70,10 @@ export function CameraRig() {
       eye.set(29, 27, 69)
       target.set(29, 3.5, 36)
     } else if (state.screen === 'title') {
-      eye.set(14, 32, 39)
+      // A long lens from further away flattens the view into an isometric
+      // diorama. The eye stays inside far = 220 of every corner (the north
+      // skyline cards are the closest-to-clipping geometry).
+      eye.set(36, 58, 80)
       target.set(-17, 0, -10)
     } else {
       const mobile = size.width < 700
@@ -81,6 +93,13 @@ export function CameraRig() {
       state.reducedMotion ? 1 : 1 - Math.exp(-5 * Math.min(delta, 0.1))
     )
     camera.lookAt(target)
+    // The title uses the long lens; every other state restores fov 49.
+    const lens = camera as PerspectiveCamera
+    const fov = lensFor(state.screen)
+    if (lens.fov !== fov) {
+      lens.fov = fov
+      lens.updateProjectionMatrix()
+    }
   })
   return null
 }

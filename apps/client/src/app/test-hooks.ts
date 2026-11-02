@@ -4,6 +4,7 @@ const seedQuest = () => createQuest(seedsFor('hoa')[0], 'q_demo')
 
 import { carryStore } from '@/features/carry'
 import { cameraSnapshot } from '@/features/player/camera'
+import { city } from '@/shared/api/city'
 import { clearInput } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
 import { game, initialState, update } from '@/shared/state/game'
@@ -40,6 +41,7 @@ declare global {
         yaw: number
       } | null
       setCurrency: (value: number) => void
+      setWeather: (weather: 'clear' | 'rain') => void
     }
   }
 }
@@ -207,6 +209,11 @@ export function installTestHooks() {
       if (!Number.isSafeInteger(value) || value < 0)
         throw new Error('Currency must be a non-negative integer')
       update({ world: { ...game.state.world, currency: value } })
+    },
+    setWeather(weather) {
+      if (weather !== 'clear' && weather !== 'rain')
+        throw new Error('Weather must be clear or rain')
+      city.setState((state) => ({ ...state, weather }))
     },
   }
 }

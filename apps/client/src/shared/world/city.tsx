@@ -1,4 +1,5 @@
-import { Model, ModelInstances } from './assets'
+import { useThree } from '@react-three/fiber'
+import { Model, ModelInstances, type Placement } from './assets'
 import { CivicDistrict, Skyline } from './civic'
 import { Collision } from './collision'
 import { CulturalLandmarks } from './cultural'
@@ -12,13 +13,17 @@ import { Bitexco, CafeApartments } from './icons-nguyen-hue'
 import { GiantParkTrees } from './icons-park'
 import { PostOfficePostcards } from './icons-postoffice'
 import { MarketStall, ParkFeatures } from './landmarks'
+import { LOOK } from './look-flag'
+import { PALETTE } from './palette'
+import { PaperClouds } from './paper-clouds'
 import {
   PALM_PLACEMENTS,
   STREET_LIGHT_PLACEMENTS,
   TREE_PLACEMENTS,
 } from './placements'
-import { Block, Sign } from './primitives'
+import { Block, Blocks, Sign } from './primitives'
 import { Roads } from './roads'
+import { SkylineCards } from './skyline-cards'
 import { StreetLife } from './street-life'
 import { Planting, Promenade, Shophouses, StopSign } from './streets'
 import { WaterfrontLife } from './waterfront'
@@ -57,8 +62,15 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
       <Bitexco />
       <CafeApartments />
       <CulturalLandmarks />
-      {/* TODO(phase-2 item 5): cathedral wire clouds behind the spires at
-          (88, −95). Blocked on Phase 3's PaperClouds; skip until it lands. */}
+      {LOOK === 'comic' && (
+        <PaperClouds
+          placements={[
+            { position: [80, 34, -108], scale: 0.9, phase: 0.2 },
+            { position: [94, 38, -112], scale: 1.05, phase: 1.9 },
+            { position: [88, 30, -116], scale: 0.8, phase: 3.4 },
+          ]}
+        />
+      )}
       <PostOfficePostcards />
       <DistrictLife />
       <DistrictLifeTwo />
@@ -67,6 +79,7 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
       <WaterfrontLife />
       <EveningLighting active={evening} />
       <Skyline />
+      {LOOK === 'comic' && <DioramaDepth />}
       <ModelInstances
         path="nature/tree_palmDetailedTall"
         placements={PALM_PLACEMENTS}
@@ -111,6 +124,30 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
         color="#b45940"
       />
       <Collision />
+    </group>
+  )
+}
+
+/**
+ * Phase-3 diorama depth, comic-only: the default cloud ring, the cutout
+ * skyline cards (desktop only, < 700 px cuts them), and the paper diorama base
+ * skirt. The sky dome lives in `atmosphere.tsx`.
+ */
+function DioramaDepth() {
+  const mobile = useThree((state) => state.size.width) < 700
+  // One Blocks call: a paperEdge skirt 2 units deep under each GROUND rect,
+  // its top meeting the ground underside (−0.6) and dropping to −2.6, so the
+  // diorama reads as a solid slab at the walls. The ink top edge comes from
+  // the Phase-1 silhouette pass.
+  const skirt: Placement[] = GROUND.map((rect) => ({
+    position: [rect.x, -1.6, rect.z],
+    scale: [rect.w, 2, rect.d],
+  }))
+  return (
+    <group>
+      <PaperClouds />
+      {!mobile && <SkylineCards />}
+      <Blocks placements={skirt} color={PALETTE.paperEdge} />
     </group>
   )
 }
