@@ -1,8 +1,5 @@
 import type { AvatarBody, Look } from '@saigon/shared'
-import { AVATAR_BODIES, UNLOCKS } from '@saigon/shared'
-import { saveProfile } from '@/shared/api/session'
-import { m } from '@/shared/i18n'
-import { game, notify, update } from '@/shared/state/game'
+import { UNLOCKS } from '@saigon/shared'
 import {
   AvatarLights,
   AvatarTurntable,
@@ -11,19 +8,7 @@ import {
 } from '@/shared/world'
 import { ViewSlot } from './view-slot'
 
-/** Change the body from the wardrobe; identity persists like the name. */
-async function chooseBody(body: AvatarBody) {
-  if (body === game.state.body) return
-  update({ body })
-  if (game.state.guestStatus !== 'online') return
-  try {
-    await saveProfile(game.state.guestName ?? '', body)
-  } catch {
-    notify(m.toast_name_not_saved())
-  }
-}
-
-/** The large avatar stage: the current body, look, ride, pet, and a body toggle. */
+/** The large avatar stage: the current body, look, ride, and pet. */
 export function WardrobeStage({
   body,
   look,
@@ -52,20 +37,6 @@ export function WardrobeStage({
           )}
         </group>
       </ViewSlot>
-      <div className="wardrobe-body">
-        <span className="wardrobe-body-label">{m.wardrobe_body()}</span>
-        {AVATAR_BODIES.map((option) => (
-          <button
-            key={option}
-            type="button"
-            className={`wardrobe-body-option${body === option ? ' is-active' : ''}`}
-            aria-pressed={body === option}
-            onClick={() => chooseBody(option)}
-          >
-            {option === 'man' ? m.body_man() : m.body_woman()}
-          </button>
-        ))}
-      </div>
     </div>
   )
 }

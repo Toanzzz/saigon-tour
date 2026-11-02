@@ -405,7 +405,6 @@
   "slot_pet": "Thú cưng",
   "wardrobe_title": "Tủ đồ",
   "wardrobe_empty_slot": "Không",
-  "wardrobe_locked_hint": "Quà từ {giver} · {tier}",
   "wardrobe_open": "Mở tủ đồ",
   "reward_unlock": "Mở khóa {item}",
   "reward_unlock_reputation": "Mở khóa {item} · +{reputation} uy tín",
@@ -417,7 +416,6 @@
   "wardrobe_equip": "Mặc",
   "wardrobe_unequip": "Cởi ra",
   "wardrobe_wear_now": "Mặc ngay",
-  "wardrobe_body": "Hình dáng",
   "wardrobe_tab_hat": "Nón",
   "wardrobe_tab_outfit": "Trang phục",
   "wardrobe_tab_accessory": "Phụ kiện",
@@ -490,5 +488,9 @@
   "cry_corn": "Bắp nướng thơm phức!",
   "cry_corn_gloss": "Smoky grilled corn!",
   "cry_honk": "Bíp bíp!",
-  "cry_honk_gloss": "Beep beep!"
+  "cry_honk_gloss": "Beep beep!",
+  "wardrobe_slot_empty": "Chưa có gì ở đây — hãy nhận từ hàng xóm.",
+  "hud_hop_on": "Lên xe đạp",
+  "hud_hop_off": "Xuống xe đạp",
+  "hud_hint_bike": "xe đạp"
 }

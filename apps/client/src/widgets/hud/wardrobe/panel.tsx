@@ -13,19 +13,15 @@ import { m, slotLabel } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
 import { setWardrobeTab, wardrobeTab } from '@/shared/state/ui'
 import { Dialog } from '@/shared/ui/dialog'
-import { LockedCard, OwnedCard } from './item-card'
+import { OwnedCard } from './item-card'
 import { WardrobeStage } from './stage'
 
-/** Owned and still-locked ids for a slot, in catalog order. */
-function slotEntries(slot: UnlockSlot, owned: readonly string[]) {
-  const ids = Object.values(UNLOCKS)
-    .filter((entry) => entry.slot === slot)
-    .map((entry) => entry.id as UnlockId)
+/** Owned ids for a slot, in catalog order. Locked items stay hidden. */
+function ownedForSlot(slot: UnlockSlot, owned: readonly string[]) {
   const ownedSet = new Set(owned)
-  return {
-    owned: ids.filter((id) => ownedSet.has(id)),
-    locked: ids.filter((id) => !ownedSet.has(id)),
-  }
+  return Object.values(UNLOCKS)
+    .filter((entry) => entry.slot === slot && ownedSet.has(entry.id))
+    .map((entry) => entry.id as UnlockId)
 }
 
 export function WardrobePanel() {
@@ -36,7 +32,7 @@ export function WardrobePanel() {
   const [mounted, setMounted] = useState(false)
   const eventSource = useRef<HTMLDivElement>(null)
   useEffect(() => setMounted(true), [])
-  const { owned, locked } = slotEntries(slot, unlocks.owned)
+  const owned = ownedForSlot(slot, unlocks.owned)
 
   return (
     <Dialog
@@ -72,20 +68,21 @@ export function WardrobePanel() {
               </button>
             ))}
           </div>
-          <div className="wardrobe-grid">
-            {owned.map((id) => (
-              <OwnedCard
-                key={id}
-                id={id}
-                slot={slot}
-                body={body}
-                equipped={unlocks.equipped[slot] === id}
-              />
-            ))}
-            {locked.map((id) => (
-              <LockedCard key={id} id={id} />
-            ))}
-          </div>
+          {owned.length ? (
+            <div className="wardrobe-grid">
+              {owned.map((id) => (
+                <OwnedCard
+                  key={id}
+                  id={id}
+                  slot={slot}
+                  body={body}
+                  equipped={unlocks.equipped[slot] === id}
+                />
+              ))}
+            </div>
+          ) : (
+            <p className="wardrobe-empty">{m.wardrobe_slot_empty()}</p>
+          )}
         </div>
       </div>
       <button type="button" className="primary-button wide" onClick={close}>

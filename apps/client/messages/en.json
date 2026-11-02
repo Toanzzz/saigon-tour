@@ -436,7 +436,6 @@
   "slot_pet": "Pet",
   "wardrobe_title": "Wardrobe",
   "wardrobe_empty_slot": "None",
-  "wardrobe_locked_hint": "Gift from {giver} · {tier}",
   "wardrobe_open": "Open wardrobe",
   "reward_unlock": "{item} unlocked",
   "reward_unlock_reputation": "{item} unlocked · +{reputation} reputation",
@@ -448,7 +447,6 @@
   "wardrobe_equip": "Equip",
   "wardrobe_unequip": "Unequip",
   "wardrobe_wear_now": "Wear now",
-  "wardrobe_body": "Body",
   "wardrobe_tab_hat": "Hats",
   "wardrobe_tab_outfit": "Outfits",
   "wardrobe_tab_accessory": "Accessories",
@@ -521,5 +519,9 @@
   "cry_corn": "Bắp nướng thơm phức!",
   "cry_corn_gloss": "Smoky grilled corn!",
   "cry_honk": "Bíp bíp!",
-  "cry_honk_gloss": "Beep beep!"
+  "cry_honk_gloss": "Beep beep!",
+  "wardrobe_slot_empty": "Nothing here yet — earn it from a neighbor.",
+  "hud_hop_on": "Hop on bike",
+  "hud_hop_off": "Hop off bike",
+  "hud_hint_bike": "bike"
 }

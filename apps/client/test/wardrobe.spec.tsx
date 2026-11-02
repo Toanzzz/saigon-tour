@@ -4,26 +4,42 @@ import { beforeEach, describe, expect, it } from 'vitest'
 import { equipUnlock } from '@/shared/api/wardrobe'
 import { unlockLabel } from '@/shared/i18n'
 import { game, initialState } from '@/shared/state/game'
+import { resetWardrobeTab, setWardrobeTab } from '@/shared/state/ui'
 import { WardrobePanel } from '@/widgets/hud/wardrobe'
 
 const hatId = GIVER_UNLOCKS.hoa[0]
 
 beforeEach(() => {
   game.setState(() => initialState())
+  resetWardrobeTab()
 })
 
 describe('wardrobe panel', () => {
-  it('renders owned hats as cards and locked hats without 3D', () => {
+  it('renders owned hats as cards and hides locked ones', () => {
     game.setState((state) => ({
       ...state,
       unlocks: { owned: [hatId], equipped: {} },
     }))
     const html = renderToStaticMarkup(<WardrobePanel />)
+    // The default Hat tab shows the owned hat as an equip card.
     expect(html).toContain(unlockLabel(hatId))
-    // The default Hat tab shows the owned hat as an equip card and others locked.
-    expect(html).toContain('wardrobe-card is-locked')
+    expect(html).toContain('wardrobe-card')
+    // Locked items stay hidden: no locked card and no un-owned hat label.
+    expect(html).not.toContain('wardrobe-card is-locked')
     const lockedHatId = GIVER_UNLOCKS.ba[0]
-    expect(html).toContain(unlockLabel(lockedHatId))
+    expect(html).not.toContain(unlockLabel(lockedHatId))
+  })
+
+  it('shows the empty-slot message for a slot with no owned items', () => {
+    game.setState((state) => ({
+      ...state,
+      unlocks: { owned: [hatId], equipped: {} },
+    }))
+    // The Hat tab is the default; a slot the player owns nothing in is empty.
+    // Force the Ride tab, which the seed player has not earned.
+    setWardrobeTab('vehicle')
+    const html = renderToStaticMarkup(<WardrobePanel />)
+    expect(html).toContain('wardrobe-empty')
   })
 
   it('equips an owned unlock optimistically for an offline guest', async () => {
