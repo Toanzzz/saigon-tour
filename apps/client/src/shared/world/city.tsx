@@ -6,6 +6,11 @@ import { GROUND, MARKET } from './district'
 import { DistrictLife } from './district-life'
 import { DistrictLifeTwo } from './district-life-2'
 import { EveningLighting } from './evening'
+import { BuiVienDressing } from './icons-bui-vien'
+import { MarketClockTower, MarketSpillover } from './icons-market'
+import { Bitexco, CafeApartments } from './icons-nguyen-hue'
+import { GiantParkTrees } from './icons-park'
+import { PostOfficePostcards } from './icons-postoffice'
 import { MarketStall, ParkFeatures } from './landmarks'
 import {
   PALM_PLACEMENTS,
@@ -43,13 +48,22 @@ export function CityWorld({ evening = false }: { evening?: boolean }) {
         shadow={false}
       />
       <MarketStall />
+      <MarketClockTower />
+      <MarketSpillover />
       <Shophouses />
       <ParkFeatures />
+      <GiantParkTrees />
       <CivicDistrict />
+      <Bitexco />
+      <CafeApartments />
       <CulturalLandmarks />
+      {/* TODO(phase-2 item 5): cathedral wire clouds behind the spires at
+          (88, −95). Blocked on Phase 3's PaperClouds; skip until it lands. */}
+      <PostOfficePostcards />
       <DistrictLife />
       <DistrictLifeTwo />
       <StreetLife />
+      <BuiVienDressing />
       <WaterfrontLife />
       <EveningLighting active={evening} />
       <Skyline />

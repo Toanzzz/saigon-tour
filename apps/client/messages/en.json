@@ -135,6 +135,8 @@
   "map_stops": "Transport stops",
   "map_discovered": "{count}/{total} places discovered",
   "map_intro": "Take a ride or follow your curiosity. Every street leads somewhere.",
+  "map_bitexco": "Bitexco",
+  "map_cafe_apartments": "42 Nguyen Hue",
   "pause_title": "Take your time.",
   "pause_eyebrow": "The city can wait",
   "pause_continue": "Continue exploring",

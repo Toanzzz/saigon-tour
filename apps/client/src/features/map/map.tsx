@@ -9,6 +9,7 @@ import {
   BOUNDS,
   CULTURAL_FOOTPRINTS,
   GROUND,
+  ICON_FOOTPRINTS,
   LANDMARKS,
   MARKET,
   NORTH_ANGLE,
@@ -145,6 +146,39 @@ export function NeighborhoodMap({
           strokeWidth="1"
         />
       ))}
+      {rect(ICON_FOOTPRINTS.bitexco, '#7c6cc6', 'bitexco')}
+      {rect(ICON_FOOTPRINTS.cafeApartments, '#7c6cc6', 'cafe-apartments')}
+      {[ICON_FOOTPRINTS.bitexco, ICON_FOOTPRINTS.cafeApartments].map((r) => (
+        <rect
+          key={`edge-${r.x}/${r.z}`}
+          x={x(r.x - r.w / 2)}
+          y={z(r.z - r.d / 2)}
+          width={r.w}
+          height={r.d}
+          rx="1.5"
+          fill="none"
+          stroke="#262835"
+          strokeWidth="1"
+        />
+      ))}
+      {large && (
+        <>
+          <g
+            transform={`translate(${x(ICON_FOOTPRINTS.bitexco.x)} ${z(ICON_FOOTPRINTS.bitexco.z)})`}
+          >
+            <MapLabel y={-5} size={3.6}>
+              {m.map_bitexco()}
+            </MapLabel>
+          </g>
+          <g
+            transform={`translate(${x(ICON_FOOTPRINTS.cafeApartments.x)} ${z(ICON_FOOTPRINTS.cafeApartments.z)})`}
+          >
+            <MapLabel y={-5} size={3.6}>
+              {m.map_cafe_apartments()}
+            </MapLabel>
+          </g>
+        </>
+      )}
       {Object.entries(PLACES).map(([id, place]) => (
         <g
           key={id}

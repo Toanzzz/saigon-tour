@@ -72,3 +72,15 @@ export const WALLS: [number, number, number, number][] = [
   [121.5, -37, 0.5, 76],
   [36.5, 39.2, 85.5, 0.5],
 ]
+
+/**
+ * Phase-2 landmark icons that occupy a former `buildingRows` slot. Each rect
+ * is drawn on the minimap in the landmark fill, linted by city-layout.spec,
+ * and backed by a solid in solids.ts. Scenery only — no `LocationId` changes.
+ */
+export const ICON_FOOTPRINTS = {
+  /** Bitexco: lotus-bud tower near the river end of Nguyễn Huệ. */
+  bitexco: { x: 57, z: 29, w: 6.4, d: 6.4 },
+  /** 42 Nguyễn Huệ café-apartments: 9-storey block facing the plaza. */
+  cafeApartments: { x: 57, z: -8, w: 6, d: 5 },
+} as const

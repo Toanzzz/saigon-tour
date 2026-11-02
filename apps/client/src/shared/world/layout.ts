@@ -30,11 +30,22 @@ export const buildingRows = [
     yaw: Math.PI / 2,
     type: ['g', 'j', 'c'][i],
   })),
-  // Facing Nguyễn Huệ from both sides.
-  ...[-8, 1, 20, 29].flatMap((z, i) => [
-    { x: 57, z, scale: 6, yaw: Math.PI / 2, type: ['a', 'g', 'c', 'f'][i] },
-    { x: 81, z, scale: 6, yaw: -Math.PI / 2, type: ['e', 'c', 'g', 'a'][i] },
-  ]),
+  // Facing Nguyễn Huệ. West-side slots at z −8 (42 Nguyễn Huệ) and z 29
+  // (Bitexco) are now landmark icons; see ICON_FOOTPRINTS in district.ts.
+  ...[1, 20].map((z, i) => ({
+    x: 57,
+    z,
+    scale: 6,
+    yaw: Math.PI / 2,
+    type: ['g', 'c'][i],
+  })),
+  ...[-8, 1, 20, 29].map((z, i) => ({
+    x: 81,
+    z,
+    scale: 6,
+    yaw: -Math.PI / 2,
+    type: ['e', 'c', 'g', 'a'][i],
+  })),
   // East side of Đồng Khởi, then the north corridor to the cathedral.
   ...[-56, -46, -22, -6, 2, 21, 30].map((z, i) => ({
     x: 97,

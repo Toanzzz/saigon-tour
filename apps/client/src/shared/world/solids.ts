@@ -1,5 +1,12 @@
-import { CULTURAL_FOOTPRINTS, LANDMARKS, type Rect, WALLS } from './district'
+import {
+  CULTURAL_FOOTPRINTS,
+  ICON_FOOTPRINTS,
+  LANDMARKS,
+  type Rect,
+  WALLS,
+} from './district'
 import { FOOTPRINTS } from './footprints.generated'
+import { GIANT_TREE_TRUNKS } from './icons-park'
 import { buildingRows } from './layout'
 import { BENCH_PLACEMENTS, FOUNTAIN, PALM_XZ, TREE_XZ } from './placements'
 import { STREET_PROPS_COLLIDERS } from './street-life'
@@ -132,6 +139,24 @@ const cultural: Solid[] = [
   fromRect('postoffice', 'cultural', CULTURAL_FOOTPRINTS.postoffice, 12),
 ]
 
+const icons: Solid[] = [
+  // Bitexco rises ~3× the row height; the upper section casts no shadow, set
+  // in icons-nguyen-hue.tsx, so the sun that follows the player throws none.
+  fromRect('bitexco', 'landmark', ICON_FOOTPRINTS.bitexco, 24),
+  fromRect('cafe-apartments', 'landmark', ICON_FOOTPRINTS.cafeApartments, 18),
+]
+
+const giantTrees: Solid[] = GIANT_TREE_TRUNKS.map(({ x, z }, i) => ({
+  id: `giant-tree-${i}`,
+  kind: 'prop' as const,
+  x,
+  z,
+  hx: 0.55,
+  hz: 0.55,
+  h: 9,
+  yaw: 0,
+}))
+
 const trees: Solid[] = [...PALM_XZ, ...TREE_XZ].map(([x, z], i) => ({
   id: `tree-${i}`,
   kind: 'prop' as const,
@@ -205,6 +230,8 @@ export const SOLIDS: Solid[] = [
   ...BUILDING_SOLIDS,
   ...landmarks,
   ...cultural,
+  ...icons,
+  ...giantTrees,
   ...trees,
   ...benches,
   marketStall,

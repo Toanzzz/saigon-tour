@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   CULTURAL_FOOTPRINTS,
+  ICON_FOOTPRINTS,
   LANDMARKS,
   MARKET,
   PARK,
@@ -44,6 +45,10 @@ const streetFootprints: { name: string; box: Box }[] = [
     box: rectBox(l.footprint),
   })),
   ...Object.entries(CULTURAL_FOOTPRINTS).map(([id, f]) => ({
+    name: id,
+    box: rectBox(f),
+  })),
+  ...Object.entries(ICON_FOOTPRINTS).map(([id, f]) => ({
     name: id,
     box: rectBox(f),
   })),
