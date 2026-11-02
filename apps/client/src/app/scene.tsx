@@ -4,6 +4,7 @@ import { useSelector } from '@tanstack/react-store'
 import { Suspense } from 'react'
 import { ACESFilmicToneMapping } from 'three'
 import { Diagnostics } from '@/app/diagnostics'
+import { Atmosphere } from '@/features/city/atmosphere'
 import { CityEvents } from '@/features/city/events'
 import { Sun } from '@/features/city/sun'
 import { Coins } from '@/features/collectibles'
@@ -15,6 +16,7 @@ import { Transport } from '@/features/transport/transport'
 import { city } from '@/shared/api/city'
 import { game } from '@/shared/state/game'
 import { CityWorld } from '@/shared/world'
+import { LOOK } from '@/shared/world/look-flag'
 import { XRRuntime, xrStore } from '@/shared/xr'
 import { XRGameHud } from '@/widgets/xr-hud'
 
@@ -32,26 +34,10 @@ export function Scene() {
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
         gl.toneMapping = ACESFilmicToneMapping
-        gl.toneMappingExposure = 1.12
+        gl.toneMappingExposure = LOOK === 'comic' ? 1.2 : 1.12
       }}
     >
-      <color
-        attach="background"
-        args={[rain ? '#8293a3' : evening ? '#2d385f' : '#b1b8cb']}
-      />
-      <fog
-        attach="fog"
-        args={[
-          rain ? '#8293a3' : evening ? '#2d385f' : '#b1b8cb',
-          rain ? 40 : 75,
-          rain ? 110 : 150,
-        ]}
-      />
-      <hemisphereLight
-        args={
-          evening ? ['#a9b9ef', '#33465a', 1.45] : ['#fff3d5', '#7e8976', 2.1]
-        }
-      />
+      <Atmosphere rain={rain} evening={evening} />
       <Sun evening={evening} />
       <Suspense fallback={null}>
         <XRRuntime store={xrStore} hud={<XRGameHud />}>
