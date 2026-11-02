@@ -297,20 +297,22 @@
 .wardrobe-dialog .dialog-body {
   min-height: 0;
 }
+.wardrobe-dialog {
+  width: min(620px, calc(100vw - 32px));
+}
 .wardrobe-body-layout {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(220px, 300px) 1fr;
+  grid-template-columns: 1fr;
   gap: 18px;
   margin-bottom: 16px;
-  min-height: 360px;
 }
-/* The shared WebGL canvas covers the dialog body; each View draws into a box. */
-.wardrobe-canvas {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+/* Two columns only when the dialog is wide enough for the stage beside the grid. */
+@media (min-width: 760px) {
+  .wardrobe-body-layout {
+    grid-template-columns: minmax(220px, 280px) 1fr;
+    min-height: 360px;
+  }
 }
 /* 3D coin emblem: a small transparent Canvas sized like an inline glyph, used
    wherever the currency appears (header, journal, hub, reward popup). */
@@ -334,14 +336,10 @@
   inset: 0;
   pointer-events: none;
 }
-/* Snug the larger reward-popup coin against the earned amount. */
-.reward-coin-row .coin-emblem {
-  margin: -6px -2px -6px -4px;
-}
-.wardrobe-stage,
-.wardrobe-main {
-  position: relative;
-  z-index: 1;
+/* The reward coin sits as a chip glyph; let it keep its symmetric bleed so it
+   never overlaps the "+N coins" amount beside it. */
+.reward-coin-row {
+  padding-left: 4px;
 }
 .wardrobe-stage {
   display: flex;
@@ -349,11 +347,13 @@
   gap: 10px;
 }
 .wardrobe-stage-view {
+  position: relative;
   flex: 1;
   min-height: 300px;
   border: var(--edge);
   border-radius: 12px;
   background: var(--wall-hi);
+  overflow: hidden;
 }
 .wardrobe-body {
   display: flex;
@@ -389,8 +389,8 @@
 }
 .wardrobe-tabs {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  overflow-x: auto;
   padding-bottom: 4px;
 }
 .wardrobe-grid {
@@ -424,9 +424,11 @@
   outline: 2px solid var(--roof-hi);
 }
 .wardrobe-card-stage {
+  position: relative;
   height: 110px;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.04);
+  overflow: hidden;
 }
 .wardrobe-card-locked {
   display: flex;
@@ -455,9 +457,6 @@
   font-weight: 600;
 }
 @media (max-width: 640px) {
-  .wardrobe-body-layout {
-    grid-template-columns: 1fr;
-  }
   .wardrobe-stage-view {
     min-height: 200px;
     height: 200px;

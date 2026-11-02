@@ -1,5 +1,3 @@
-import { View } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
 import {
   UNLOCK_SLOTS,
   UNLOCKS,
@@ -7,7 +5,6 @@ import {
   type UnlockSlot,
 } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { useEffect, useRef, useState } from 'react'
 import { close } from '@/app/actions'
 import { m, slotLabel } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
@@ -28,10 +25,6 @@ export function WardrobePanel() {
   const unlocks = useSelector(game, (s) => s.unlocks)
   const body = useSelector(game, (s) => s.body)
   const slot = useSelector(wardrobeTab, (s) => s.slot)
-  // Only mount the shared Canvas on the client so SSR tests still render cards.
-  const [mounted, setMounted] = useState(false)
-  const eventSource = useRef<HTMLDivElement>(null)
-  useEffect(() => setMounted(true), [])
   const owned = ownedForSlot(slot, unlocks.owned)
 
   return (
@@ -40,18 +33,7 @@ export function WardrobePanel() {
       onClose={close}
       className="wardrobe-dialog"
     >
-      <div className="wardrobe-body-layout" ref={eventSource}>
-        {mounted && (
-          <Canvas
-            className="wardrobe-canvas"
-            style={{ position: 'absolute' }}
-            dpr={[1, 1.5]}
-            eventSource={eventSource as React.RefObject<HTMLElement>}
-            gl={{ alpha: true }}
-          >
-            <View.Port />
-          </Canvas>
-        )}
+      <div className="wardrobe-body-layout">
         <WardrobeStage body={body} look={unlocks.equipped} />
         <div className="wardrobe-main">
           <div className="wardrobe-tabs" role="tablist">
