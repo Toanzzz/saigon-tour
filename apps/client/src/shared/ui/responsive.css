@@ -5,6 +5,10 @@
   .game-ui .desktop-only {
     display: none;
   }
+  /* The quick-ride pill is tap-driven on touch; the key hint is irrelevant. */
+  .ride-toggle kbd {
+    display: none;
+  }
 }
 @media (max-width: 700px) {
   .game-ui .desktop-only {

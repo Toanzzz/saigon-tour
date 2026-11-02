@@ -1,5 +1,6 @@
 import {
   GuestPlayerSchema,
+  UNLOCKS,
   type UnlockId,
   type UnlockSlot,
 } from '@saigon/shared'
@@ -38,4 +39,32 @@ export async function equipUnlock(slot: UnlockSlot, id: UnlockId | null) {
       update({ unlocks: { ...game.state.unlocks, equipped: previous } })
     notify(m.toast_equip_failed())
   }
+}
+
+/** The first owned personal ride, in catalog order, or null if none earned. */
+export function ownedVehicle(state = game.state): UnlockId | null {
+  for (const def of Object.values(UNLOCKS))
+    if (def.slot === 'vehicle' && state.unlocks.owned.includes(def.id))
+      return def.id as UnlockId
+  return null
+}
+
+/** True while a personal ride is mounted (equipped in the vehicle slot). */
+export function isMounted(state = game.state): boolean {
+  return Boolean(state.unlocks.equipped.vehicle)
+}
+
+/**
+ * Quick-ride toggle: hop on the earned bike (or hop off) without opening the
+ * wardrobe. A no-op when the player has not earned any ride yet. Mounting
+ * speeds up walking via `UNLOCKS[vehicle].speed` in the Player loop.
+ */
+export function toggleVehicle() {
+  const mounted = game.state.unlocks.equipped.vehicle
+  if (mounted) {
+    void equipUnlock('vehicle', null)
+    return
+  }
+  const vehicle = ownedVehicle()
+  if (vehicle) void equipUnlock('vehicle', vehicle)
 }

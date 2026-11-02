@@ -14,7 +14,8 @@
 .minimap-button,
 .interaction-prompt,
 .game-toast,
-.ride-banner {
+.ride-banner,
+.ride-toggle {
   background: var(--wall);
   color: var(--ink);
   border: var(--edge);

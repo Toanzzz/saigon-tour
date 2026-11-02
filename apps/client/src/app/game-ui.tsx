@@ -22,6 +22,7 @@ import {
 import { PartyInviteControls } from '@/widgets/hud/party'
 import { EmoteControls, PeoplePanel } from '@/widgets/hud/people'
 import { RideLine } from '@/widgets/hud/ride-line'
+import { RideToggle } from '@/widgets/hud/ride-toggle'
 import { TouchStick } from '@/widgets/hud/touch'
 import { WaitingNotice } from '@/widgets/hud/waiting'
 import { WardrobePanel } from '@/widgets/hud/wardrobe'
@@ -136,6 +137,7 @@ export function GameUI() {
               {m.hud_river_postcard()}
             </button>
           )}
+          <RideToggle />
           <div className="desktop-hint desktop-only">
             <span>
               <kbd>WASD</kbd> {m.hud_hint_stroll()}
@@ -148,6 +150,9 @@ export function GameUI() {
             </span>
             <span>
               <kbd>H</kbd> {m.hud_hint_hub()}
+            </span>
+            <span>
+              <kbd>B</kbd> {m.hud_hint_bike()}
             </span>
           </div>
         </>

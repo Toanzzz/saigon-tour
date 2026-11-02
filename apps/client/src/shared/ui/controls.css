@@ -91,3 +91,35 @@
   font-weight: 800;
   line-height: 1;
 }
+.ride-toggle {
+  position: absolute;
+  right: 26px;
+  bottom: 96px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 8px 12px;
+  border-radius: 99px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 750;
+  min-height: 50px;
+  white-space: nowrap;
+}
+.ride-toggle.is-mounted {
+  background: var(--leaf);
+}
+.ride-toggle:active {
+  transform: translateY(3px);
+  box-shadow: var(--lift-sm);
+}
+.ride-toggle kbd {
+  background: var(--roof);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  min-width: 30px;
+  text-align: center;
+  border-radius: 99px;
+  padding: 1px 0;
+}

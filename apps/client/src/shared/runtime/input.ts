@@ -1,5 +1,6 @@
 import { close, closeHub, interact, pause, toggleHub } from '@/app/actions'
 import { net, updateNet } from '@/shared/api/status'
+import { toggleVehicle } from '@/shared/api/wardrobe'
 import { game, update } from '@/shared/state/game'
 import { resetTouchKnob } from '@/shared/state/view'
 import { isXRPresenting } from '@/shared/xr/store'
@@ -79,6 +80,9 @@ export function installInput() {
       !isXRPresenting()
     )
       updateNet({ emotesOpen: !net.state.emotesOpen })
+    // Quick-ride: hop on/off the earned bike without opening the wardrobe.
+    if (event.code === 'KeyB' && canOpen && game.state.panel === 'none')
+      toggleVehicle()
   }
   const up = (event: KeyboardEvent) => {
     keys.delete(event.code)

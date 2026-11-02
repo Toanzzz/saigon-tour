@@ -344,3 +344,30 @@ quest pin (`state.trackedQuestId`) now animates: the diamond `.quest-pin-mark`
 scale-pulses and an expanding `.quest-pin-ring` radiates from it
 (`shared/ui/hud.css`). Reduced motion (state flag and `prefers-reduced-motion`)
 drops the ring and freezes the mark.
+
+## Hub, coin sound, wardrobe, quick-ride (2026-11-03)
+
+Hub grid: `milestone-card` and the City Pulse card (`pulse-card`) had no
+`grid-column` span and collapsed to a single 1/12 column. Every hub card now
+carries an explicit span: story 7 / milestone 5, neighbor 5 / ride 4, places 7 /
+sound 4, pulse 4 (`shared/ui/cards.css`, `hub-city.css`). Breakpoints collapse
+to two-up then one-up (`hub-responsive.css`). Measured card widths at 1440 /
+1000 / 390 px show no squished cards.
+
+Coin pickup sound: the `pickup` event no longer reuses the flat `confirm.mp3`.
+`GameAudio.playCoin` synthesizes a bright two-note chime (B5 → F#6) with a quiet
+octave sparkle through the sfx group, tracked as one effect for the 8-voice cap
+and cleanup (`shared/audio/index.ts`). Verified the context runs, the chime
+fires with no errors, and the 0.12 s debounce still throttles repeats.
+
+Wardrobe: gender/body selection removed from the panel (body stays chosen on the
+title screen); locked items are hidden instead of shown as lock cards; a slot
+with nothing owned shows `wardrobe_slot_empty`. Removed the dead `LockedCard`,
+`wardrobe_body`, and `wardrobe_locked_hint`. Verified: locked cards 0, body
+toggle 0, item thumbnails render at 149×110 across all five tabs.
+
+Quick-ride: `B` (and a HUD pill `.ride-toggle`, touch-friendly) mounts or
+dismounts the earned personal ride without opening the wardrobe, via
+`toggleVehicle`/`ownedVehicle` (`shared/api/wardrobe.ts`). The pill only renders
+once a vehicle is owned. Mounting applies `UNLOCKS[vehicle].speed` in the Player
+loop. Verified the key/button fire the equip with the right slot/id.
