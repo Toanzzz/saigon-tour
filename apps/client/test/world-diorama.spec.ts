@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { skyColors } from '@/features/city/atmosphere'
-import { lensFor, PLAY_FOV, TITLE_FOV } from '@/features/player/camera'
+import {
+  lensFor,
+  MOBILE_TITLE_FOV,
+  PLAY_FOV,
+  TITLE_FOV,
+} from '@/features/player/camera'
 import { BOUNDS } from '@/shared/world/district'
 import { PALETTE } from '@/shared/world/palette'
 import { ringPlacements } from '@/shared/world/paper-clouds'
@@ -62,6 +67,8 @@ describe('the title shot uses the long lens', () => {
     expect(TITLE_FOV).toBe(22)
     expect(PLAY_FOV).toBe(49)
     expect(lensFor('title')).toBe(22)
+    expect(lensFor('title', true)).toBe(MOBILE_TITLE_FOV)
+    expect(lensFor('playing', true)).toBe(49)
     expect(lensFor('playing')).toBe(49)
     expect(lensFor('paused')).toBe(49)
   })

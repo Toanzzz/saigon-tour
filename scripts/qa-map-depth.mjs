@@ -142,8 +142,8 @@ async function verify(viewport) {
     )
     report.title.beforePlay = titleCam.fov
     assert(
-      Math.abs(titleCam.fov - 22) <= 1.5,
-      `title fov ~22, got ${titleCam.fov}`
+      Math.abs(titleCam.fov - (mobile ? 44 : 22)) <= 1.5,
+      `title fov ${mobile ? 44 : 22}, got ${titleCam.fov}`
     )
 
     const start = page.getByRole('button', {

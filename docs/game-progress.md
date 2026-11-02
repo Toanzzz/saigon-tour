@@ -440,3 +440,9 @@ Non-demo turns are unchanged.
 - Whole-map and eight landmark presets; orbit, pan, zoom, top view, and collision shapes. Desktop mouse and mobile touch controls are supported.
 - Inspection keeps distance-culled scenery and boats visible. Normal game culling remains active.
 - Bến Thành uses the clock tower included in its GLB; no procedural tower is layered above it.
+
+## Home-screen market framing
+
+- Desktop title camera frames Bến Thành's clock, entrance, and roof beside the title copy.
+- Portrait title camera uses a wider lens and vertical composition to place the market above the form. Gameplay restores its regular lens and centered projection.
+- Title gradients keep the landmark visible; the mobile name row and start button fit the viewport.

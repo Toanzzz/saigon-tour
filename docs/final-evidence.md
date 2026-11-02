@@ -516,3 +516,10 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - `scripts/qa-map-inspector.mjs` drives all eight landmark selectors and whole-map view, top-view toggle, collision checkbox, orbit/zoom, and return to game at 1440px and 390px. Both viewports pass with no page errors or horizontal overflow. Captures: `/tmp/map-<place>-<width>.png`.
 - Visual inspection of the eight landmark captures found no additional duplicate landmark structures. This is a sampled visual audit, not proof that every prop placement is correct. Floating post-office postcards, oversized park trees, and distant skyline cards are authored decorations.
 - Type checks and client/server production builds pass. Tests: server 445 passed, 2 skipped; client 287 passed. Scoped Biome checks pass on all map changes. Repository-wide Biome check reports two formatting errors in concurrent work (`features/conversation/transcript.tsx`, `test/friendship.spec.ts`).
+
+## Home-screen market framing
+
+- Desktop camera places the market clock and entrance to the right of the title; portrait framing keeps the market above the form. Title overlays leave the landmark visible.
+- Proven mobile form cause: the name grid and nested flex row's automatic minimum width forced a 371px row inside a 342px form. Explicit `min-width: 0` fits the row and button within the viewport.
+- `scripts/qa-title-market.mjs` covers 1440px desktop and 390px mobile title layout, language switching, Start/Continue journey, and pause/resume. Screenshots: `/tmp/title-market-<width>.png` and `/tmp/title-market-returning-<width>.png`.
+- Gates pass: `bun run check`, `bun run check:types`, `bun run build`, `bun run test`. Server: 445 passed, 2 skipped. Client: 292 passed.

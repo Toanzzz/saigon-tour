@@ -4,8 +4,8 @@
   background: linear-gradient(
     100deg,
     var(--sky) 0%,
-    #b1b8cbe6 30%,
-    #b1b8cb00 64%
+    #b1b8cbe6 26%,
+    #b1b8cb00 56%
   );
 }
 .title-content {
@@ -108,6 +108,7 @@
   color: var(--ink);
 }
 .title-name {
+  min-width: 0;
   display: grid;
   gap: 6px;
   font-size: 13px;
@@ -115,6 +116,7 @@
   color: var(--ink);
 }
 .title-name-row {
+  min-width: 0;
   display: flex;
   gap: 8px;
 }

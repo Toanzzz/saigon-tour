@@ -7,11 +7,12 @@ import { game } from '@/shared/state/game'
 
 /** Long lens for the title diorama shot and the regular play field of view. */
 export const TITLE_FOV = 22
+export const MOBILE_TITLE_FOV = 44
 export const PLAY_FOV = 49
 
-/** The field of view for a given game screen: the title gets the long lens. */
-export function lensFor(screen: string): number {
-  return screen === 'title' ? TITLE_FOV : PLAY_FOV
+/** The title fits the market to each viewport; gameplay uses its regular lens. */
+export function lensFor(screen: string, mobile = false): number {
+  return screen === 'title' ? (mobile ? MOBILE_TITLE_FOV : TITLE_FOV) : PLAY_FOV
 }
 
 /** The active scene camera, exposed read-only to the `camera()` test hook. */
@@ -70,11 +71,15 @@ export function CameraRig() {
       eye.set(29, 27, 69)
       target.set(29, 3.5, 36)
     } else if (state.screen === 'title') {
-      // A long lens from further away flattens the view into an isometric
-      // diorama. The eye stays inside far = 220 of every corner (the north
-      // skyline cards are the closest-to-clipping geometry).
-      eye.set(36, 58, 80)
-      target.set(-17, 0, -10)
+      // Leave the desktop copy on the left; show the gate and roof on the right.
+      // Portrait screens keep the market above the bottom-aligned title form.
+      if (size.width < 700) {
+        target.set(-23, 4, -12)
+        eye.set(2, 49, 53)
+      } else {
+        target.set(-31, 4, -6)
+        eye.set(7, 52, 64)
+      }
     } else {
       const mobile = size.width < 700
       const mounted = state.unlocks.equipped.vehicle ? 3 : 0
@@ -93,9 +98,27 @@ export function CameraRig() {
       state.reducedMotion ? 1 : 1 - Math.exp(-5 * Math.min(delta, 0.1))
     )
     camera.lookAt(target)
-    // The title uses the long lens; every other state restores fov 49.
+    // Portrait titles shift the landmark above the form; gameplay recenters.
     const lens = camera as PerspectiveCamera
-    const fov = lensFor(state.screen)
+    const mobileTitle = state.screen === 'title' && size.width < 700
+    const fov = lensFor(state.screen, size.width < 700)
+    if (
+      mobileTitle &&
+      (!lens.view?.enabled ||
+        lens.view.fullWidth !== size.width ||
+        lens.view.fullHeight !== size.height)
+    ) {
+      lens.setViewOffset(
+        size.width,
+        size.height,
+        0,
+        size.height * 0.34,
+        size.width,
+        size.height
+      )
+    } else if (!mobileTitle && lens.view?.enabled) {
+      lens.clearViewOffset()
+    }
     if (lens.fov !== fov) {
       lens.fov = fov
       lens.updateProjectionMatrix()
