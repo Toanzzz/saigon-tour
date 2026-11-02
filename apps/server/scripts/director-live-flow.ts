@@ -41,17 +41,17 @@ try {
     'live director gives a neighbor a need'
   )
   const calls = director.usage.calls
-  await director.tick(Date.now() + 1000, 2)
+  await director.tick(Date.now() + 60_000, 2)
   assert.equal(
     director.usage.calls,
     calls,
-    'cooldown prevents another live turn'
+    'the day is drafted only once; no second live draft the same day'
   )
   await director.tick(Date.now() + 100000, 0)
   assert.equal(
     director.usage.calls,
     calls,
-    'empty room prevents another live turn'
+    'empty room prevents another live draft'
   )
   const affectedNpc = Object.keys(after.needs)[0] as NpcId
   const { player } = await fx.guest()

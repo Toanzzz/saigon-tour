@@ -5,6 +5,8 @@ export interface ServerConfig {
   barkDailyLimit: number
   directorDailyLimit: number
   directorMode: 'live' | 'scripted' | 'off'
+  /** Optional Ho Chi Minh City news feed (RSS/Atom/JSON) the director reads daily. */
+  directorNewsUrl?: string
   port: number
   origins: string[]
   apiUrl?: string
@@ -104,6 +106,22 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   )
     throw new Error('DIRECTOR_DAILY_LIMIT must be between 0 and 10000')
 
+  // Default in code so the director reads news with zero config; the env var is
+  // a positive override. Set DIRECTOR_NEWS_URL to an empty value to disable.
+  const DEFAULT_NEWS_URL = 'https://vnexpress.net/rss/thoi-su.rss'
+  const directorNewsUrl =
+    env.DIRECTOR_NEWS_URL === undefined
+      ? DEFAULT_NEWS_URL
+      : env.DIRECTOR_NEWS_URL.trim() || undefined
+  if (directorNewsUrl) {
+    const newsParsed = new URL(directorNewsUrl)
+    if (
+      newsParsed.protocol !== 'https:' &&
+      !['localhost', '127.0.0.1'].includes(newsParsed.hostname)
+    )
+      throw new Error('DIRECTOR_NEWS_URL must use HTTPS outside localhost')
+  }
+
   return {
     databaseUrl: fallback(
       'DATABASE_URL',
@@ -113,6 +131,7 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
     barkDailyLimit,
     directorDailyLimit,
     directorMode: directorMode as ServerConfig['directorMode'],
+    directorNewsUrl,
     port,
     origins: fallback(
       'CORS_ORIGINS',

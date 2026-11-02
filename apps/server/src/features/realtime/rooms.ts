@@ -83,7 +83,6 @@ export class RoomManager {
         (headline) => this.broadcast(room, { type: 'city-headline', headline }),
         () => {
           room.sync?.(this.players(room), room.city.snapshot())
-          room.director?.notify('world-event')
         }
       ),
       scheduler: new NpcScheduler(async ({ npcId }) => {
