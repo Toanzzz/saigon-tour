@@ -43,11 +43,19 @@ describe('NPC authored errands', () => {
     expect(result.quests[0]?.id).toMatch(/^q_/)
     expect(result.world.inventory.broth).toBe(1)
     expect(result.toolCalls).toEqual(['propose-quest'])
+    expect(result.reply).toContain(spec.description)
+    expect(result.reply).not.toContain('Let me see.')
+    expect(result.degraded).toBe(false)
     expect(harness.usage).toMatchObject({
-      calls: 2,
-      inputTokens: 200,
-      outputTokens: 40,
+      calls: 1,
+      inputTokens: 100,
+      outputTokens: 20,
     })
+    const history = await harness.history('hoa', ctx.playerId)
+    expect(history.messages.map((message) => message.text)).toEqual([
+      'Can I help?',
+      result.reply,
+    ])
   })
 
   it('lets models correct rejected proposals within three steps', async () => {
@@ -74,6 +82,7 @@ describe('NPC authored errands', () => {
     )
     expect(result.quests).toHaveLength(1)
     expect(result.toolCalls).toEqual(['propose-quest', 'propose-quest'])
+    expect(harness.usage.calls).toBe(2)
   })
 
   it('rejects another giver and rewards only validated delivery, once under concurrent checks', async () => {

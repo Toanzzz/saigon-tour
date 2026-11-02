@@ -365,6 +365,13 @@ export class NpcHarness {
     referredGreeting: string | null = null
   ): Promise<string | null> {
     const agent = this.mastra.getAgentById(npcId)
+    // Only offers made by this generation end the loop; milestone offers may
+    // already be present and still need their normal dialogue.
+    const eventOffset = outcome.events.length
+    const newlyOffered = () =>
+      outcome.events
+        .slice(eventOffset)
+        .find((event) => event.type === 'offered')?.quest
     const context = await buildContext(
       this.game,
       this.memory,
@@ -396,6 +403,7 @@ export class NpcHarness {
           context: [{ role: 'system', content: context }],
           requestContext,
           maxSteps: 3,
+          stopWhen: () => Boolean(newlyOffered()),
           abortSignal: AbortSignal.timeout(this.config.timeoutMs + 2000),
           modelSettings: {
             maxOutputTokens: 4000,
@@ -407,6 +415,11 @@ export class NpcHarness {
           },
           providerOptions: { meta: { reasoningEffort: 'minimal' } },
         })
+        const offered = newlyOffered()
+        if (offered) {
+          this.report('npc_turn_completed', npcId, outcome.calls)
+          return offeredErrandLine(offered, request.locale)
+        }
         // Tool-call steps may carry interim narration; reply with the final step.
         const last = result.steps?.at(-1)?.text
         const reply = cleanReply(last?.trim() ? last : result.text)

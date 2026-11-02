@@ -1,6 +1,14 @@
 # Final evidence
 
-QA captures referenced below live in `artifacts/`, which is local-only and gitignored. Live model usage JSON lives under `/tmp/saigon-quest-evidence/`. All observations are from November 1, 2026.
+QA captures referenced below live in `artifacts/`, which is local-only and gitignored. Live model usage JSON lives under `/tmp/saigon-quest-evidence/`. Dated sections identify newer observations; other observations are from November 1, 2026.
+
+## Immediate NPC errand replies — November 3, 2026
+
+- `bun run check` → `bun run check:types` → `bun run build` → `bun run test` pass: server 417 passed / 2 skipped; client 283 passed.
+- Harness tests verify one model request for an accepted proposal, live/non-degraded response classification, exact saved reply history, correction after rejection, and the three-step cap for repeated rejection. English/Vietnamese riddle tests use a stalled follow-up response to prove no second request occurs and no hidden first step is exposed.
+- Live harness probes against configured `google/gemini-3.8-flash` through the configured gateway: English 32,876 ms; Vietnamese 31,510 ms. Each made exactly one metered request, accepted `proposeQuest`, and returned a live/non-degraded reply. Evidence: `artifacts/npc-latency/fast-live.json`.
+- First-request latency remains high in these samples. Local browser attempts received fallback offers after roughly 30 seconds under the existing timeout; the one-request path does not eliminate upstream stalls. These measurements do not establish a wall-clock percentage improvement against the earlier Muse Spark control, which used a different model.
+- Headless Playwright at 1440px and 390px: opened the game, interacted with Hoa, typed an errand request, and submitted through real controls. Both rendered the returned errand description and first step, cleared thinking, and reported no page errors. Both exercised provider-timeout fallback (30,315 / 30,263 ms), not live browser success. Evidence: `artifacts/npc-latency/browser.json`.
 
 ## Current gates
 
