@@ -1,7 +1,7 @@
 import { NPCS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
-import { type ReactNode, useLayoutEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { city, npcPosition } from '@/shared/api/city'
 import { m, npcLabel, placeSign } from '@/shared/i18n'
 import { type GameState, game } from '@/shared/state/game'
@@ -22,57 +22,37 @@ import {
 import { PEOPLE, PLACES, placeName } from '@/shared/world/places'
 import { questPin } from './targets'
 
-/* Text on a translucent pill so labels stay legible over roads and blocks. */
+/* Transparent labels centered on their place. A matching outline keeps the
+   text legible over roads and blocks without an opaque pill behind it. */
 function MapLabel({
   x = 0,
-  y,
+  y = 0,
   size,
   anchor = 'middle',
   children,
 }: {
   x?: number
-  y: number
+  y?: number
   size: number
   anchor?: 'start' | 'middle' | 'end'
   children: ReactNode
 }) {
-  const ref = useRef<SVGTextElement>(null)
-  const [box, setBox] = useState<DOMRect | null>(null)
-  useLayoutEffect(() => {
-    const measure = () => {
-      const next = ref.current?.getBBox?.()
-      if (next) setBox(next)
-    }
-    measure()
-    void document.fonts?.ready.then(measure)
-  }, [])
-  const padX = size * 0.45
-  const padY = size * 0.12
   return (
-    <g>
-      {box && (
-        <rect
-          x={box.x - padX}
-          y={box.y - padY}
-          width={box.width + padX * 2}
-          height={box.height + padY * 2}
-          rx={(box.height + padY * 2) / 2}
-          fill="#fff6d6"
-          fillOpacity=".82"
-        />
-      )}
-      <text
-        ref={ref}
-        x={x}
-        y={y}
-        textAnchor={anchor}
-        fill="#262835"
-        fontSize={size}
-        fontWeight="700"
-      >
-        {children}
-      </text>
-    </g>
+    <text
+      x={x}
+      y={y}
+      textAnchor={anchor}
+      dominantBaseline="middle"
+      fill="#262835"
+      fontSize={size}
+      fontWeight="700"
+      stroke="#fff6d6"
+      strokeWidth={size * 0.5}
+      strokeLinejoin="round"
+      paintOrder="stroke"
+    >
+      {children}
+    </text>
   )
 }
 
@@ -166,16 +146,12 @@ export function NeighborhoodMap({
           <g
             transform={`translate(${x(ICON_FOOTPRINTS.bitexco.x)} ${z(ICON_FOOTPRINTS.bitexco.z)})`}
           >
-            <MapLabel y={-5} size={3.6}>
-              {m.map_bitexco()}
-            </MapLabel>
+            <MapLabel size={3.6}>{m.map_bitexco()}</MapLabel>
           </g>
           <g
             transform={`translate(${x(ICON_FOOTPRINTS.cafeApartments.x)} ${z(ICON_FOOTPRINTS.cafeApartments.z)})`}
           >
-            <MapLabel y={-5} size={3.6}>
-              {m.map_cafe_apartments()}
-            </MapLabel>
+            <MapLabel size={3.6}>{m.map_cafe_apartments()}</MapLabel>
           </g>
         </>
       )}
@@ -186,14 +162,7 @@ export function NeighborhoodMap({
         >
           <circle r="3.4" fill="#ee7448" stroke="#262835" strokeWidth="1.5" />
           {large && (
-            <MapLabel
-              x={place.stop[0] > 85 ? -4 : 0}
-              y={id === 'alley' ? 12 : place.stop[2] > 20 ? -7 : 10}
-              size={4}
-              anchor={place.stop[0] > 85 ? 'end' : 'middle'}
-            >
-              {placeSign(id as keyof typeof PLACES)}
-            </MapLabel>
+            <MapLabel size={4}>{placeSign(id as keyof typeof PLACES)}</MapLabel>
           )}
         </g>
       ))}
@@ -213,15 +182,28 @@ export function NeighborhoodMap({
       {state.quests.map((quest) => {
         const target = questPin(quest)
         if (!target) return null
+        const tracked = state.trackedQuestId === quest.id
+        const animate = tracked && !state.reducedMotion
         return (
           <g
             key={quest.id}
             transform={`translate(${x(target[0])} ${z(target[2])})`}
+            className={tracked ? 'quest-pin tracked' : 'quest-pin'}
           >
             <title>{m.map_errand_target({ title: quest.title })}</title>
+            {animate && (
+              <circle
+                className="quest-pin-ring"
+                r="6"
+                fill="none"
+                stroke="#ffd84d"
+                strokeWidth="1.4"
+              />
+            )}
             <path
+              className="quest-pin-mark"
               d="M0 -6 4 0 0 6 -4 0Z"
-              fill={state.trackedQuestId === quest.id ? '#ffd84d' : '#fff6d6'}
+              fill={tracked ? '#ffd84d' : '#fff6d6'}
               stroke="#262835"
               strokeWidth="1.2"
             />

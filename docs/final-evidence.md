@@ -445,3 +445,14 @@ pass is NOT shipped: no composer is mounted, the world stays toon-only (Phase 0)
 and the spike files were removed. A future retry would need a normal-buffer (or
 normal+depth) edge pass, or a ground-plane-aware threshold, to hold the < 1%
 ground-cleanliness gate — out of the spike's time box. Phase 1 is closed.
+
+## Minimap labels + tracked-quest pulse (2026-11-02)
+
+`scripts/qa-map-labels.mjs` (headless Playwright, desktop 1440×900 and 390px
+mobile) seeds a tracked quest, opens the large neighborhood map, and asserts:
+10 place/landmark labels paint with `paint-order` starting `stroke` (transparent
+background), 8 stop labels center on their markers (|dx| < 0.6, |dy| < 1.2 in
+viewBox units), the tracked pin carries `g.quest-pin.tracked` with an animated
+`circle.quest-pin-ring` (animation `quest-pin-ring`) and a pulsing
+`path.quest-pin-mark` (animation `quest-pin-pulse`), and no page/console errors.
+Both viewports pass. Artifacts in `artifacts/map-labels/`.

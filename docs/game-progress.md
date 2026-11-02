@@ -332,3 +332,15 @@ Rapier is untouched and the swarm never blocks a ride. Parked motorbikes and
 low corner planters at the Lê Lợi junction (`shared/world/street-life.tsx`)
 frame the fragile-parcel wobble corner; the planters sit below knee height with
 no collider, off the auto-piloted ride path. Bubbles are hidden in XR.
+
+## Minimap labels + tracked-quest pulse (2026-11-02)
+
+Place labels on the neighborhood map lost their translucent pill. `MapLabel`
+now draws transparent text with a matching `#fff6d6` stroke under the fill
+(`paint-order: stroke`) so names stay legible over roads and blocks without an
+opaque background, and every label is centered on its place marker (x/y 0,
+`dominant-baseline: middle`) instead of the old per-place offsets. The tracked
+quest pin (`state.trackedQuestId`) now animates: the diamond `.quest-pin-mark`
+scale-pulses and an expanding `.quest-pin-ring` radiates from it
+(`shared/ui/hud.css`). Reduced motion (state flag and `prefers-reduced-motion`)
+drops the ring and freezes the mark.
