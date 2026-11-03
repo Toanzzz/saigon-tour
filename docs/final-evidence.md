@@ -1,5 +1,24 @@
 # Final evidence
 
+## Public demo deployment — November 3, 2026
+
+- Deploy run `41613124343` succeeded for
+  `0aff02b4257adc7b10dd67776ae163e81c7897ea`: CI verification, API image,
+  backend rollout, public health, and static client deployment passed.
+- Unsandboxed headless Playwright against
+  `https://saigon-tour.toanz.workers.dev/?demo=1&debug=1`, at 1440×900 and
+  390×844, passes Start demo → Hoa's gag → real motorbike taxi to park →
+  broth delivery → Hoa reward/Wear now → arc offer → Mai's twist.
+  Each viewport sends eight demo NPC requests; both report zero page exceptions
+  and no horizontal overflow. Evidence: `artifacts/demo-production/results.json`
+  and per-beat screenshots.
+- Public health reports `{ ok: true, db: "up", mode: "live",
+  model: "muse-spark-1.3-contributor" }`. Read-only runtime inspection confirms
+  `CORS_ORIGINS` and `CLIENT_URL` match the workers.dev origin.
+- Voice availability returns `{ available: false }`; the production container
+  has no `META_TRANSCRIBE_MODEL`. Combined production microphone verification
+  remains pending that configuration. No server environment was changed.
+
 ## Demo, voice spike, and submission verification — November 3, 2026
 
 - Proven: local `?demo` at 1440×900 and 390×844 starts with a fresh journey, sends

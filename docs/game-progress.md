@@ -70,7 +70,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Ports: client 58000, API 58001, Postgres 58002. Ask the user to start/restart local development servers. `bun dev` exits the API on SIGINT/SIGTERM and force-kills it after 3 seconds.
 - Model: `muse-spark-1.3-contributor` at `https://api.meta.ai/v1/chat/completions` by default; `META_MODEL`/`META_API_URL` select another OpenAI-compatible provider. `META_MUSE_API_KEY` stays server-side.
 - `.github/workflows/deploy.yml`: a push to `main` runs verify → arm64 API image to GHCR → SSH recreate on t-oracle via `scripts/deploy-remote.sh` and `compose.prod.yml` → client `wrangler deploy` with `VITE_API_BASE_URL=${API_URL}`. Pull requests run verify only. `bun run credentials` sets the secrets, vars, deploy key, and host `.env`.
-- Deployed: successful Deploy run `41560115705` serves commit `8b914d7`. Public client: `https://saigon-tour.toanz.workers.dev`. Public API health reports `live` with Muse Spark. Local demo/voice changes require deployment and browser verification.
+- Deployed: successful Deploy run `41613124343` serves commit `0aff02b`. Public client: `https://saigon-tour.toanz.workers.dev`. The deployed demo passes at 1440×900 and 390×844 through ride, delivery, reward/Wear now, and twist with no page errors or horizontal overflow. Public API health reports `live` with Muse Spark. Voice remains disabled: the host has no `META_TRANSCRIBE_MODEL`, and `/voice/status` returns `{ available: false }`.
 
 ## NPC packages
 
