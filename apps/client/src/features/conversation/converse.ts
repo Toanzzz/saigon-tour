@@ -4,6 +4,7 @@ import {
   type NpcId,
   type TimeOfDay,
 } from '@saigon/shared'
+import { confirmVoiceMessage, rememberVoice } from '@/features/voice'
 import { interactWith, queryClient } from '@/shared/api/agent'
 import { beginHttpTurn, endHttpTurn } from '@/shared/api/events'
 import { appendHistory } from '@/shared/api/history'
@@ -59,7 +60,12 @@ async function mutate<T>(fn: () => Promise<T>) {
 }
 
 /** One turn with an NPC through POST /npc/:npcId/interact. */
-export async function converse(text: string, intent: Intent, opening = false) {
+export async function converse(
+  text: string,
+  intent: Intent,
+  opening = false,
+  recording?: Blob
+) {
   const dialog = game.state.dialogue
   if (
     !dialog ||
@@ -90,6 +96,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
   const sentEvents = pending.slice(0, 16)
   const partyVersion = net.state.partyVersion
   const requestId = dialog.requestId
+  if (recording) rememberVoice(messageId, recording)
   const history =
     opening || intent !== 'chat'
       ? dialog.history
@@ -149,6 +156,11 @@ export async function converse(text: string, intent: Intent, opening = false) {
       messages: result.response.messages,
     }
   )
+  if (recording)
+    confirmVoiceMessage(
+      messageId,
+      turnMessages.find((line) => line.role === 'user')?.id
+    )
   apply(
     result.response,
     dialog.npc,

@@ -2,6 +2,7 @@ import { beforeEach } from 'vitest'
 import { resetCarry } from '@/features/carry'
 import { resetMapInspector } from '@/features/map-inspector/store'
 import { resetAsides } from '@/features/transport/asides'
+import { resetVoiceClips } from '@/features/voice/clips'
 import { resetVoice } from '@/features/voice/store'
 import { resetWorkshop } from '@/features/workshop/store'
 import { setLocale } from '@/paraglide/runtime'
@@ -31,4 +32,5 @@ beforeEach(() => {
   resetWardrobeThumbnails()
   resetLoadingPanels()
   resetVoice()
+  resetVoiceClips()
 })

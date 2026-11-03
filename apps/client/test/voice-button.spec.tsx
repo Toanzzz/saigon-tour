@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MicButton } from '@/features/voice'
+import { VoiceComposer } from '@/features/voice'
 
 afterEach(() => vi.unstubAllGlobals())
 function render(available: boolean, supported = true) {
@@ -15,7 +15,7 @@ function render(available: boolean, supported = true) {
   client.setQueryData(['voice', 'available'], available)
   const html = renderToStaticMarkup(
     <QueryClientProvider client={client}>
-      <MicButton thinking={false} onTranscript={vi.fn()} />
+      <VoiceComposer thinking={false} onSend={vi.fn()} />
     </QueryClientProvider>
   )
   client.clear()
@@ -23,8 +23,8 @@ function render(available: boolean, supported = true) {
 }
 describe('voice control availability', () => {
   it('hides the mic when the service is unavailable or capture unsupported', () => {
-    expect(render(false)).toBe('')
-    expect(render(true, false)).toBe('')
+    expect(render(false)).not.toContain('voice-button')
+    expect(render(true, false)).not.toContain('voice-button')
   })
   it('renders an accessible mic when capture and service are available', () => {
     expect(render(true)).toContain('aria-label="Record a voice message"')

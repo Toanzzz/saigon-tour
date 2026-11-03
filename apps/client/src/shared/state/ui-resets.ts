@@ -1,4 +1,4 @@
-import { resetVoice } from '@/features/voice'
+import { resetVoice, resetVoiceClips } from '@/features/voice'
 import { net } from '@/shared/api/status'
 import { type GameState, game } from '@/shared/state/game'
 import {
@@ -20,6 +20,7 @@ export function installUiResets() {
   const unsubscribe = game.subscribe((state) => {
     const was = prev
     prev = state
+    if (state.sessionId !== was.sessionId) resetVoiceClips()
     if (
       state.sessionId !== was.sessionId ||
       state.dialogue?.requestId !== was.dialogue?.requestId ||

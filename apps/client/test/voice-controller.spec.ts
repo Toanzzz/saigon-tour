@@ -34,13 +34,22 @@ beforeEach(() => {
 describe('voice encounter ownership', () => {
   it('returns a transcript only to the captured encounter', async () => {
     vi.mocked(transcribeVoice).mockResolvedValue('Hello')
-    await startVoice(vi.fn())
+    await startVoice()
     expect(voiceStore.state.phase).toBe('recording')
     const result = await finishVoice()
     expect(result?.text).toBe('Hello')
+    expect(result?.recording).toBeInstanceOf(Blob)
     expect(result?.current()).toBe(true)
     update({ dialogue: null })
     expect(result?.current()).toBe(false)
+  })
+  it('holds the fifteen-second recording for Send without uploading', async () => {
+    vi.mocked(transcribeVoice).mockResolvedValue('Hello')
+    await startVoice()
+    vi.mocked(recordMicrophone).mock.calls[0]?.[0]()
+    await vi.waitFor(() => expect(voiceStore.state.phase).toBe('ready'))
+    expect(transcribeVoice).not.toHaveBeenCalled()
+    expect((await finishVoice())?.text).toBe('Hello')
   })
   it('discards an upload result after reset or an NPC switch', async () => {
     let done!: (text: string) => void
@@ -49,7 +58,7 @@ describe('voice encounter ownership', () => {
         done = resolve
       })
     )
-    await startVoice(vi.fn())
+    await startVoice()
     const pending = finishVoice()
     await vi.waitFor(() => expect(transcribeVoice).toHaveBeenCalledOnce())
     resetVoice()
@@ -65,7 +74,7 @@ describe('voice encounter ownership', () => {
         grant = resolve
       })
     )
-    const pending = startVoice(vi.fn())
+    const pending = startVoice()
     resetVoice()
     grant({ stop: async () => new Blob(), cancel })
     await pending

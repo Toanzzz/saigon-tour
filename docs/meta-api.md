@@ -18,10 +18,16 @@ failures 503. Other routes retain the 16 KiB request limit.
 The server sends multipart JSON settings and WAV audio to Meta with a 15-second
 timeout. Spend uses the existing conservative reservation and settles by audio
 duration at $0.18 per hour, with zero chat tokens. Recordings are transient.
-The browser converts its native recording to WAV, automatically stops after
-15 seconds, and sends non-empty transcripts through the existing conversation
-turn. Conversation changes, pause, and restart cancel stale work; text input
-remains available.
+The browser shows a reactive waveform while listening. Cancel discards the
+recording and preserves typed text; Send stops capture, converts the recording
+to WAV, and sends non-empty transcripts through the existing conversation turn.
+Capture stops at 15 seconds and waits for Send or Cancel. Conversation changes,
+pause, and restart cancel stale work; text input remains available.
+
+Original recordings can be replayed beside the player's sent transcript during
+the current page session. The client holds at most twenty object URLs and
+follows server-confirmed message IDs. Reset and eviction revoke recordings;
+audio is excluded from persisted history and is unavailable after reload.
 
 `bun scripts/spike-transcribe.ts <english.wav> <vietnamese.wav>` verifies the
 upstream contract using the server environment and writes results under

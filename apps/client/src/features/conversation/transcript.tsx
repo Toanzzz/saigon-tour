@@ -1,5 +1,6 @@
 import { NPCS, npcActivity } from '@saigon/shared'
 import { Fragment, useEffect, useRef } from 'react'
+import { VoicePlayback } from '@/features/voice'
 import { getLocale, m, npcLabel } from '@/shared/i18n'
 import type { ChatMessage, Dialogue } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
@@ -48,6 +49,7 @@ function Message({ line, npc }: { line: ChatMessage; npc: Dialogue['npc'] }) {
     <div className="speech user">
       <span className="speaker">{m.map_you()}</span>
       <p>{line.content}</p>
+      <VoicePlayback messageId={line.id} />
       <MessageTime at={line.at} />
     </div>
   )

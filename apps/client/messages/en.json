@@ -594,8 +594,13 @@
   "title_start_demo": "Start demo",
   "title_demo_reset": "Starting the demo resets this journey. Your name and character are kept.",
   "voice_start": "Record a voice message",
-  "voice_stop": "Stop recording and send",
   "voice_transcribing": "Transcribing your message",
   "voice_failed": "Voice is unavailable. You can type your message instead.",
-  "voice_empty": "No speech was detected. Try again or type your message."
+  "voice_empty": "No speech was detected. Try again or type your message.",
+  "voice_cancel": "Cancel recording",
+  "voice_send": "Send voice message",
+  "voice_listening": "Listening",
+  "voice_connecting": "Waiting for microphone",
+  "voice_ready": "Recording ready to send",
+  "voice_replay": "Play your voice message"
 }

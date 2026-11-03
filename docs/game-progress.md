@@ -1,5 +1,17 @@
 # Game progress
 
+## Voice composer
+
+- Pressing the mic enters listening mode: Cancel replaces the mic, and a live
+  microphone waveform and elapsed timer replace the text field. Send stops and
+  submits the audio, then restores the text composer during transcription.
+- Cancel preserves the typed draft without uploading. The 15-second limit stops
+  capture and holds the recording for Send or Cancel.
+- User voice messages include replay of the original browser recording for the
+  current page session. A bounded twenty-clip buffer follows confirmed message
+  IDs and revokes URLs on eviction or journey reset. Audio is not persisted in
+  chat history and is not available after reload.
+
 ## Demo and submission
 
 - `?demo` exposes Start demo, discloses the journey reset, preserves identity, and starts near Hoa's current city placement. Reset/profile failures retain the title. Audio unlock begins in the click gesture.

@@ -15,7 +15,7 @@ import {
 import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
 import { resetAsides } from '@/features/transport/asides'
-import { resetVoice } from '@/features/voice'
+import { resetVoice, resetVoiceClips } from '@/features/voice'
 import { city, npcPosition } from '@/shared/api/city'
 import {
   beginHttpTurn,
@@ -78,6 +78,7 @@ export async function restart() {
     return false
   }
   queryClient.removeQueries({ queryKey: ['npc-history'] })
+  resetVoiceClips()
   resetEventSequence()
   audio.setPaused(false)
   game.setState(() => ({
@@ -279,7 +280,8 @@ export async function talk(npc: NpcId) {
   }
   await converse('', 'open', true)
 }
-export const chat = (text: string) => converse(text, 'chat')
+export const chat = (text: string, recording?: Blob) =>
+  converse(text, 'chat', false, recording)
 export const askMilestone = () => converse('', 'milestone')
 export async function giveItem() {
   const state = game.state

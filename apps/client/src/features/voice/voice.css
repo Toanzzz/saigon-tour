@@ -1,21 +1,42 @@
-.conversation-input > .voice-button.is-recording {
+.conversation-input > .voice-button.is-listening {
   color: var(--ink);
   background: #ff7959;
-  animation: voice-recording 1s ease-in-out infinite;
 }
 
-.voice-button.is-recording[data-reduced-motion="true"] {
-  animation: none;
+.voice-waveform {
+  min-width: 0;
+  min-height: 44px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
 }
 
-@keyframes voice-recording {
-  50% {
-    box-shadow: 0 0 0 4px #ff795940;
-  }
+.voice-wave-bars {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .voice-button.is-recording {
-    animation: none;
-  }
+.voice-wave-bars span {
+  flex: 1;
+  min-width: 1px;
+  max-width: 6px;
+  background: var(--ink);
+  border-radius: 3px;
+}
+.voice-duration {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-soft);
+}
+.voice-playback {
+  display: block;
+  width: 240px;
+  max-width: 100%;
+  height: 36px;
+  margin: 8px 0;
 }

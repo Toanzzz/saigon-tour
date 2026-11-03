@@ -1,3 +1,4 @@
+import { microphoneMeter } from './meter'
 import { VOICE_MAX_SECONDS } from './wav'
 
 export interface VoiceRecording {
@@ -15,10 +16,33 @@ export function supportsVoice() {
 }
 
 export async function recordMicrophone(
-  autoStop: () => void
+  autoStop: () => void,
+  sample?: (levels: number[], seconds: number) => void,
+  signal?: AbortSignal
 ): Promise<VoiceRecording> {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  if (signal?.aborted) throw new Error('voice_cancelled')
+  const context = sample ? new AudioContext() : undefined
+  const cancelPermission = () => {
+    void context?.close().catch(() => {})
+  }
+  signal?.addEventListener('abort', cancelPermission, { once: true })
+  if (context) void context.resume().catch(() => {})
+  let stream: MediaStream
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+  } catch (error) {
+    signal?.removeEventListener('abort', cancelPermission)
+    void context?.close().catch(() => {})
+    throw error
+  }
+  signal?.removeEventListener('abort', cancelPermission)
+  if (signal?.aborted) {
+    for (const track of stream.getTracks()) track.stop()
+    cancelPermission()
+    throw new Error('voice_cancelled')
+  }
   let recorder: MediaRecorder
+  let stopMeter: (() => void) | undefined
   try {
     const mimeType = [
       'audio/webm;codecs=opus',
@@ -26,7 +50,10 @@ export async function recordMicrophone(
       'audio/mp4',
     ].find((type) => MediaRecorder.isTypeSupported(type))
     recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined)
+    if (sample && context) stopMeter = microphoneMeter(stream, sample, context)
   } catch (error) {
+    stopMeter?.()
+    if (!stopMeter) void context?.close().catch(() => {})
     for (const track of stream.getTracks()) track.stop()
     throw error
   }
@@ -43,6 +70,8 @@ export async function recordMicrophone(
   void stopped.catch(() => {})
   const cleanup = () => {
     clearTimeout(timer)
+    stopMeter?.()
+    stopMeter = undefined
     for (const track of stream.getTracks()) track.stop()
   }
   recorder.ondataavailable = (event) => {

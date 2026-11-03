@@ -8,6 +8,7 @@ import {
   meet,
   openGame,
 } from './qa-quest-flow.mjs'
+import { inspectVoiceUpload, observeMicrophone } from './qa-voice-observer.mjs'
 
 const out = process.env.QA_OUTPUT || 'artifacts/voice'
 const mock = process.env.QA_VOICE_MOCK === '1'
@@ -43,25 +44,7 @@ try {
     const uploads = []
     let mockMode = 'success'
     let finishDelayed
-    await page.addInitScript(() => {
-      const original = navigator.mediaDevices.getUserMedia.bind(
-        navigator.mediaDevices
-      )
-      window.__VOICE_QA_STREAMS__ = []
-      window.__VOICE_QA_CAPTURE_ERRORS__ = []
-      navigator.mediaDevices.getUserMedia = async (...args) => {
-        try {
-          const stream = await original(...args)
-          window.__VOICE_QA_STREAMS__.push(stream)
-          return stream
-        } catch (error) {
-          window.__VOICE_QA_CAPTURE_ERRORS__.push(
-            `${error.name}: ${error.message}`
-          )
-          throw error
-        }
-      }
-    })
+    await observeMicrophone(page)
     if (mock) {
       await page.routeWebSocket('**/*', (socket) => socket.close())
       await page.route(`${url.origin}/api/**`, async (route) => {
@@ -69,27 +52,7 @@ try {
         if (pathname.endsWith('/voice/status'))
           return route.fulfill({ json: { available: true } })
         if (!pathname.endsWith('/voice/transcribe')) return route.abort()
-        const request = route.request()
-        const multipart = await new Request('http://voice-qa.test', {
-          method: 'POST',
-          headers: request.headers(),
-          body: request.postDataBuffer(),
-        }).formData()
-        const audio = multipart.get('audio')
-        assert(audio instanceof File)
-        const bytes = await audio.arrayBuffer()
-        const view = new DataView(bytes)
-        assert.equal(new TextDecoder().decode(bytes.slice(0, 4)), 'RIFF')
-        assert.equal(new TextDecoder().decode(bytes.slice(8, 12)), 'WAVE')
-        assert.equal(view.getUint16(20, true), 1)
-        assert.equal(view.getUint16(22, true), 1)
-        assert.equal(view.getUint32(24, true), 24000)
-        assert.equal(view.getUint16(34, true), 16)
-        assert(bytes.byteLength > 44 && bytes.byteLength <= 44 + 15 * 48000)
-        uploads.push({
-          bytes: bytes.byteLength,
-          locale: multipart.get('locale'),
-        })
+        uploads.push(await inspectVoiceUpload(route.request()))
         if (mockMode === 'delayed')
           await new Promise((resolve) => {
             finishDelayed = resolve
@@ -136,12 +99,39 @@ try {
       exact: true,
     })
     await mic.waitFor({ timeout: 15000 })
+    const cancel = page.getByRole('button', {
+      name: 'Cancel recording',
+      exact: true,
+    })
+    await page.locator('#npc-message').fill('Keep this draft')
+    await mic.click()
+    await cancel.waitFor()
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('.voice-wave-bars span')].some(
+        (bar) => bar.getBoundingClientRect().height > 5
+      )
+    )
+    const waves = await page.locator('.voice-wave-bars').innerHTML()
+    await page.waitForFunction(
+      (before) =>
+        document.querySelector('.voice-wave-bars')?.innerHTML !== before,
+      waves
+    )
+    assert.equal(await page.locator('#npc-message').count(), 0)
+    await page.screenshot({ path: `${out}/listening-${width}.png` })
+    await cancel.click()
+    assert.equal(
+      await page.locator('#npc-message').inputValue(),
+      'Keep this draft'
+    )
+    assert.equal(uploads.length, 0, 'cancel does not upload')
+    await page.locator('#npc-message').fill('')
     const before = await page.locator('.speech.user').count()
     const replyBefore = await page.locator('.speech.assistant').count()
     await mic.click()
     await page.waitForTimeout(500)
     const stop = page.getByRole('button', {
-      name: 'Stop recording and send',
+      name: 'Send voice message',
       exact: true,
     })
     await stop.waitFor()
@@ -152,6 +142,8 @@ try {
         response.request().method() === 'POST'
     )
     await stop.click()
+    await page.locator('#npc-message').waitFor()
+    assert.equal(await page.locator('.voice-waveform').count(), 0)
     const response = await posted
     assert.equal(response.status(), 200)
     const { text } = await response.json()
@@ -173,7 +165,17 @@ try {
       false
     )
     await page.screenshot({ path: `${out}/success-${width}.png` })
-
+    const playback = page
+      .getByLabel('Play your voice message', { exact: true })
+      .last()
+    await playback.waitFor()
+    await playback.evaluate((audio) => audio.play())
+    await page.waitForFunction(() =>
+      [...document.querySelectorAll('.voice-playback')].some(
+        (audio) => audio.currentTime > 0
+      )
+    )
+    await playback.evaluate((audio) => audio.pause())
     // A provider failure leaves typed composition and its draft usable.
     if (mock) mockMode = 'failure'
     else
@@ -201,6 +203,18 @@ try {
     )
     assert.equal(await page.locator('#npc-message').isEnabled(), true)
     await page.screenshot({ path: `${out}/fallback-${width}.png` })
+    if (mock) {
+      mockMode = 'success'
+      const count = uploads.length
+      await mic.click()
+      await cancel.waitFor()
+      await page
+        .getByRole('status', { name: 'Recording ready to send', exact: true })
+        .waitFor({ timeout: 20000 })
+      assert.equal(uploads.length, count, 'time limit does not upload')
+      assert.equal(await stop.isEnabled(), true)
+      await cancel.click()
+    }
     if (mock) {
       // A late transcript must not send into the next NPC encounter.
       mockMode = 'delayed'

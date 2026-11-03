@@ -1,5 +1,30 @@
 # Final evidence
 
+## Voice composer listening, Send, and replay — November 3, 2026
+
+- Headless Playwright drives the local client at 1440×900 and 390×844 through
+  the mic, live waveform, Cancel, Send, and replay controls. Captured microphone
+  samples change the waveform; the text field is replaced only while listening.
+  Cancel restores an existing draft without uploading.
+- Send restores the text field during transcription. Non-empty transcripts
+  become user messages with playable original recordings. Native audio
+  `play()` advances playback time. Server-confirmed message IDs retain the clip;
+  the server hashes the request's user-message ID.
+- Both configured live API runs return real Meta transcripts and NPC replies.
+  Simulated transcription 503 keeps typed composition usable. Both viewports
+  report no page exceptions or horizontal overflow. Evidence:
+  `artifacts/voice-composer-live/results.json` and listening/success/fallback
+  captures.
+- Synthetic service checks also cover the 15-second hold without auto-upload,
+  late responses after a conversation switch, and ended microphone tracks.
+  Evidence: `artifacts/voice-composer/results.json`.
+- Replay is page-session-only, with at most twenty clips and URL revocation on
+  replacement, eviction, and reset. Recordings are not added to persisted Query
+  history or stored by the server.
+- Ordered gates pass: `bun run check` → `bun run check:types` →
+  `bun run build` → `bun run test`. Server: 523 passed, 2 skipped.
+  Client: 347 passed. Logs: `/tmp/saigon-voice-composer-{check,types,build,test}.log`.
+
 ## Production voice restart and verification — November 3, 2026
 
 - User authorized recreating the API on `t-oracle` after updating its environment.

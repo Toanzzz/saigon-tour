@@ -1,17 +1,44 @@
 import { game } from '@/shared/state/game'
 import { transcribeVoice } from './api'
 import { recordMicrophone, type VoiceRecording } from './recorder'
-import { ownVoiceResource, voiceGeneration, voiceStore } from './store'
+import {
+  ownVoiceResource,
+  sampleVoice,
+  voiceGeneration,
+  voiceStore,
+} from './store'
 import { recordingWav } from './wav'
 
 let active: VoiceRecording | null = null
 let release: (() => void) | undefined
-export async function startVoice(autoStop: () => void) {
+export async function startVoice() {
   const generation = voiceGeneration()
-  const recording = await recordMicrophone(autoStop).catch((error) => {
-    if (generation !== voiceGeneration()) return null
-    throw error
-  })
+  const permission = new AbortController()
+  const releasePermission = ownVoiceResource(() => permission.abort())
+  voiceStore.setState(() => ({ phase: 'requesting' }))
+  const recording = await recordMicrophone(
+    () => {
+      if (generation !== voiceGeneration()) return
+      void active
+        ?.stop()
+        .then(() => {
+          if (generation === voiceGeneration() && active === recording) {
+            sampleVoice(Array<number>(24).fill(0), 15)
+            voiceStore.setState(() => ({ phase: 'ready' }))
+          }
+        })
+        .catch(() => {})
+    },
+    (levels, seconds) => {
+      if (generation === voiceGeneration()) sampleVoice(levels, seconds)
+    },
+    permission.signal
+  )
+    .catch((error) => {
+      if (generation !== voiceGeneration()) return null
+      throw error
+    })
+    .finally(releasePermission)
   if (!recording) return
   if (generation !== voiceGeneration()) {
     recording.cancel()
@@ -47,7 +74,7 @@ export async function finishVoice() {
     const wav = await recordingWav(blob)
     if (!current()) return null
     const text = await transcribeVoice(wav, abort.signal)
-    return current() ? { text, current } : null
+    return current() ? { text, recording: blob, current } : null
   } catch (error) {
     if (!current()) return null
     throw error
