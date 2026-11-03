@@ -1,5 +1,24 @@
 # Final evidence
 
+## Production voice restart and verification — November 3, 2026
+
+- User authorized recreating the API on `t-oracle` after updating its environment.
+  `docker compose -f compose.prod.yml up -d --no-deps --force-recreate api`
+  completed. The API container is healthy and loads
+  `META_TRANSCRIBE_MODEL=muse-voice-transcribe-1.0`.
+- Public `/health` reports live Muse Spark with database up; `/voice/status`
+  returns `{ available: true }`.
+- Unsandboxed Chromium headless-shell with a 48 kHz speech capture fixture
+  drives the public client at 1440×900 and 390×844. Both actual-route runs
+  record audio, convert to WAV, POST to the authenticated production route,
+  receive a non-empty transcript from Meta, automatically send it as a user
+  turn, and receive an NPC reply.
+- A simulated transcription 503 leaves text composition usable. Both runs
+  report zero page exceptions and no horizontal overflow.
+  Evidence: `artifacts/voice-production/results.json` and success/fallback
+  screenshots. The looped fixture produces repeated words; this verifies
+  integration rather than human speech accuracy.
+
 ## Public demo deployment — November 3, 2026
 
 - Deploy run `41613124343` succeeded for

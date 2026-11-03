@@ -150,11 +150,13 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - Draw-call reduction, baked lighting, LODs, foveation.
   - _Requirements: R7.4_
 
-- [ ] 25. **Voice interaction via Muse Transcribe** (R8)
+- [x] 25. **Voice interaction via Muse Transcribe** (R8, desktop/mobile slice)
   - Authenticated voice route and desktop/mobile mic implemented. Live EN/VI spike,
     authenticated in-process route against Meta, and desktop/mobile browser capture,
     conversion, mocked-transcript chat, cancellation, and text fallback pass.
-    Combined browser-to-configured-API check remains pending.
+    Production browser → authenticated API → real Meta transcription → NPC chat,
+    plus error/text fallback, passes at desktop and 390px mobile. VR voice and TTS
+    are outside this slice.
   - _Requirements: R8.1, R8.2, R8.3_
 
 - [ ] 26. **(Optional) AI-generated textures/art via Muse Image/Wonder** (Best Creative Build)

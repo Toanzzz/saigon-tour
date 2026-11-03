@@ -43,7 +43,7 @@ live interaction. Offline or failed calls show an offline guide and preserve tex
 Optional voice input records a short message, transcribes it with Muse Voice Transcribe,
 and sends the text through the NPC agent. It is disabled until the server sets
 `META_TRANSCRIBE_MODEL=muse-voice-transcribe-1.0`; text remains usable on failure.
-Integrated live microphone verification is pending.
+Production microphone capture, transcription, and NPC chat are verified at desktop and mobile sizes.
 
 ## Hackathon contributions
 
