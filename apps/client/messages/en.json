@@ -59,6 +59,7 @@
   "journey_confirm": "Tap again to erase progress",
   "journey_new": "Start a new journey",
   "app_loading": "Preparing your neighborhood",
+  "wardrobe_loading": "Getting your look ready…",
   "app_label": "Saigon exploration game",
   "app_fatal_title": "The neighborhood couldn’t load",
   "app_fatal_body": "Check your connection and enable WebGL in your browser, then try again.",

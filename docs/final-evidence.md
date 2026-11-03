@@ -596,3 +596,11 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - `bun run test:integration`: two real Postgres tests pass. Independent application/service instances retain progress and concurrent solo/party completion grants once per participant. Fixtures use a stable delivery specification and clean up their own temporary guests.
 - Proven wearable coverage: all 27 rewards on both bodies, with 54 static thumbnails and six rigged garments per body. `scripts/qa-wardrobe.mjs` drives walking, running, freeze, front/back accessory combinations, four rides, and five pets at 1440px and 390px. Animation clocks advance and freeze correctly; each preview has one live canvas, no horizontal overflow, and no browser exceptions. Evidence: `artifacts/wardrobe/motion-qa.json` and `thumbnails.json`.
 - Paired garment controls verify solid áo dài panels during sprint, sitting, and driving on both bodies. Final woman captures include nonblank canvas pixel guards. Source garments retain the original rig and 32 animation clips; provenance is in `assets/outfits/CREDITS.md`. Final `bun run prepare:assets` emits 102 runtime models totaling 6.88 MiB.
+
+## Item loading panels — November 3, 2026
+
+- Proven control: holding only the nón lá model request leaves the wardrobe composition blank beneath a small generic loading label.
+- Headless Playwright at 1440px and 390px drives Equip with the model request held, asserts an opaque panel covers the full preview, releases the request, and verifies dismissal. Cached unequip/equip, reduced motion, overflow, and browser errors are checked (`scripts/qa-item-loading.mjs`). Screenshots: `/tmp/item-loading-1440.png`, `/tmp/item-loading-390.png`.
+- A real Start exploring → Wardrobe → Equip flow with the same held request shows both the city and preview panels at both widths; both disappear after release.
+- Existing headless wardrobe checks pass on both widths: all five categories, equip/unequip, mouse/touch rotation, keyboard rotation, reopen, empty collection, thumbnail failure/retry, and model failure/retry.
+- `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass: 513 server and 329 client tests; two server tests skipped.

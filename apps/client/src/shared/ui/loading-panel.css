@@ -1,0 +1,95 @@
+.loading-panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--wall-hi);
+  color: var(--ink);
+  padding: 16px;
+  pointer-events: auto;
+  cursor: wait;
+}
+.loading-panel-card {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  max-width: 280px;
+  text-align: center;
+  font-size: 14px;
+}
+.loading-panel-lantern {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 52px;
+  border: var(--edge);
+  border-radius: 18px;
+  background: var(--roof-hi);
+  box-shadow: 4px 4px 0 var(--roof-side);
+  transform-origin: 50% -8px;
+  animation: loading-sway 1.8s ease-in-out infinite alternate;
+}
+.loading-panel-lantern::before,
+.loading-panel-lantern::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 16px;
+  height: 6px;
+  border: var(--edge);
+  background: var(--wall);
+  transform: translateX(-50%);
+}
+.loading-panel-lantern::before {
+  top: -7px;
+}
+.loading-panel-lantern::after {
+  bottom: -7px;
+}
+.loading-panel-lantern span {
+  position: absolute;
+  inset: 0 13px;
+  border-inline: 2px solid var(--ink);
+  border-radius: 50%;
+  opacity: 0.45;
+}
+.loading-panel-dots {
+  display: flex;
+  gap: 7px;
+}
+.loading-panel-dots i {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--roof-hi);
+  animation: loading-pulse 1.2s ease-in-out infinite alternate;
+}
+.loading-panel-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loading-panel-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes loading-sway {
+  from {
+    transform: rotate(-7deg);
+  }
+  to {
+    transform: rotate(7deg);
+  }
+}
+@keyframes loading-pulse {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading-panel-lantern,
+  .loading-panel-dots i {
+    animation: none;
+  }
+}

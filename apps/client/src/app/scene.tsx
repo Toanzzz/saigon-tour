@@ -20,6 +20,7 @@ import { Player } from '@/features/player/player'
 import { Transport } from '@/features/transport/transport'
 import { city } from '@/shared/api/city'
 import { game } from '@/shared/state/game'
+import { LoadingSignal, SuspensePanel } from '@/shared/ui/loading-panel'
 import { CityWorld } from '@/shared/world'
 import { LOOK } from '@/shared/world/look-flag'
 import { XRRuntime, xrStore } from '@/shared/xr'
@@ -32,43 +33,46 @@ export function Scene() {
   const evening = useSelector(game, (s) => s.timeOfDay === 'evening')
   const debug = new URLSearchParams(location.search).has('debug')
   return (
-    <Canvas
-      shadows="percentage"
-      camera={{ position: [14, 32, 39], fov: 49, near: 0.1, far: 220 }}
-      dpr={[1, 1.5]}
-      gl={{ antialias: true, powerPreference: 'high-performance' }}
-      onCreated={({ gl }) => {
-        gl.toneMapping = ACESFilmicToneMapping
-        gl.toneMappingExposure = LOOK === 'comic' ? 1.2 : 1.12
-      }}
-    >
-      <Atmosphere rain={rain} evening={evening} />
-      <Sun evening={evening} />
-      <Suspense fallback={null}>
-        <XRRuntime store={xrStore} hud={<XRGameHud />}>
-          <Physics
-            gravity={[0, -20, 0]}
-            timeStep={1 / 60}
-            paused={paused}
-            debug={debug}
-          >
-            <CityWorld evening={evening} />
-            <WetPavement />
-            <Coins />
-            <Player key={generation} />
-            <Transport />
-            <Neighbors />
-            <Umbrellas />
-            <CityEvents />
-            <Cries />
-            <Traffic />
-            <RemotePlayers />
-            <Diagnostics />
-          </Physics>
-          <Rain />
-          <CameraRig />
-        </XRRuntime>
-      </Suspense>
-    </Canvas>
+    <>
+      <Canvas
+        shadows="percentage"
+        camera={{ position: [14, 32, 39], fov: 49, near: 0.1, far: 220 }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, powerPreference: 'high-performance' }}
+        onCreated={({ gl }) => {
+          gl.toneMapping = ACESFilmicToneMapping
+          gl.toneMappingExposure = LOOK === 'comic' ? 1.2 : 1.12
+        }}
+      >
+        <Atmosphere rain={rain} evening={evening} />
+        <Sun evening={evening} />
+        <Suspense fallback={<LoadingSignal scope="scene" />}>
+          <XRRuntime store={xrStore} hud={<XRGameHud />}>
+            <Physics
+              gravity={[0, -20, 0]}
+              timeStep={1 / 60}
+              paused={paused}
+              debug={debug}
+            >
+              <CityWorld evening={evening} />
+              <WetPavement />
+              <Coins />
+              <Player key={generation} />
+              <Transport />
+              <Neighbors />
+              <Umbrellas />
+              <CityEvents />
+              <Cries />
+              <Traffic />
+              <RemotePlayers />
+              <Diagnostics />
+            </Physics>
+            <Rain />
+            <CameraRig />
+          </XRRuntime>
+        </Suspense>
+      </Canvas>
+      <SuspensePanel scope="scene" />
+    </>
   )
 }

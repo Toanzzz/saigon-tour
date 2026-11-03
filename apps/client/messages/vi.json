@@ -50,6 +50,7 @@
   "journey_confirm": "Chạm lần nữa để xóa tiến trình",
   "journey_new": "Bắt đầu hành trình mới",
   "app_loading": "Đang chuẩn bị khu phố",
+  "wardrobe_loading": "Đang chuẩn bị trang phục…",
   "app_label": "Trò chơi khám phá Sài Gòn",
   "app_fatal_title": "Không tải được khu phố",
   "app_fatal_body": "Kiểm tra kết nối và bật WebGL trong trình duyệt, rồi thử lại.",

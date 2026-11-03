@@ -476,3 +476,8 @@ Non-demo turns are unchanged.
 
 - All 29 NPCs have authored English/Vietnamese suggestions for each activity, with separate first/returning encounter copy. Suggestions follow the encounter narration, friendship, confirmed hosting events, and city needs.
 - Guidance disappears after the player speaks or when quest/milestone cards already guide the conversation. Full journals retain social topics alongside the capacity notice.
+
+## Item loading panels
+
+- Wardrobe previews and the city scene show an opaque loading panel while their models suspend. The panel uses the game's wall/roof colors, ink outlines, and an animated lantern with reduced-motion support.
+- Preview copy is localized in English and Vietnamese. Each canvas signals its own pending state; the panel disappears when its suspended composition commits, and model errors retain retry controls.

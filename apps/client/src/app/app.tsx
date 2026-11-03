@@ -85,7 +85,6 @@ function GameApp() {
             <a href="?wardrobeDebug">{m.debug_wardrobe()}</a>
           </nav>
         )}
-        <Loading />
       </main>
     </QueryClientProvider>
   )

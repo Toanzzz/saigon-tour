@@ -1,7 +1,8 @@
-import { useGLTF, useProgress } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { Component, type ReactNode, Suspense } from 'react'
+import { Component, type ReactNode, Suspense, useId } from 'react'
 import { m } from '@/shared/i18n'
+import { LoadingSignal, SuspensePanel } from '@/shared/ui/loading-panel'
 import { modelUrl } from '@/shared/world/assets'
 
 class SlotBoundary extends Component<
@@ -40,15 +41,6 @@ class SlotBoundary extends Component<
 }
 
 /** One live fitting canvas; catalog cards use baked thumbnails. */
-function PreviewLoading() {
-  const { active } = useProgress()
-  return active ? (
-    <span className="wardrobe-preview-loading" role="status">
-      {m.app_loading()}
-    </span>
-  ) : null
-}
-
 export function ViewSlot({
   className,
   children,
@@ -58,6 +50,7 @@ export function ViewSlot({
   children: ReactNode
   modelPaths?: string[]
 }) {
+  const scope = useId()
   return (
     <div className={className}>
       <SlotBoundary
@@ -71,9 +64,11 @@ export function ViewSlot({
           gl={{ alpha: true, preserveDrawingBuffer: true }}
           style={{ position: 'absolute', inset: 0 }}
         >
-          <Suspense fallback={null}>{children}</Suspense>
+          <Suspense fallback={<LoadingSignal scope={scope} />}>
+            {children}
+          </Suspense>
         </Canvas>
-        <PreviewLoading />
+        <SuspensePanel scope={scope} preview />
       </SlotBoundary>
     </div>
   )
