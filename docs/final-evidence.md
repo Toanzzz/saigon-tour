@@ -555,3 +555,9 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - Proven rendering defect: outfit application changed single materials to arrays on skinned meshes with zero geometry groups. A one-variable browser experiment unwrapped those arrays and restored the body. The fix preserves the material shape. Toon conversion preserves material names so outfit palettes match their clothing targets. `wardrobe-materials.spec.ts` covers both contracts and shared-material isolation.
 - `scripts/qa-wardrobe-controls.mjs` passes at 1440px desktop and 390px mobile: All default, all five category filters, per-slot equip, mixed-category unequip/re-equip, mouse/touch rotation, keyboard rotation, default reset on reopen, empty collection, and no horizontal overflow or page errors. Captures: `/tmp/wardrobe-controls-<width>.png`, `/tmp/wardrobe-full-character-<width>.png`.
 - `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass. Server: 445 passed, 2 skipped. Client: 294 passed.
+
+## Fresh encounter narration
+
+- Proven: `scripts/qa-npc-dialog.mjs` passes at 1440px desktop and 390px mobile. Fresh encounters show narration with no encounter/date separator; composer entry and close controls work. Returning history retains its encounter separator. No page errors or horizontal overflow.
+- Captures: `artifacts/npc-dialog-clarity/fresh-1440.png` and `fresh-390.png`.
+- Validation: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass. Client: 295 passed.

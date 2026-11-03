@@ -101,13 +101,18 @@ export function Transcript({ dialog }: { dialog: Dialogue }) {
       }}
     >
       {dialog.history.slice(0, earlierCount).map(row)}
-      <div className="encounter-divider">
-        {m.chat_new_encounter()} · <MessageTime at={dialog.openedAt} />
-      </div>
-      {day(dialog.openedAt) &&
-        day(dialog.openedAt) !== day(dialog.history[earlierCount - 1]?.at) && (
-          <div className="chat-date">{day(dialog.openedAt)}</div>
-        )}
+      {earlierCount > 0 && (
+        <>
+          <div className="encounter-divider">
+            {m.chat_new_encounter()} · <MessageTime at={dialog.openedAt} />
+          </div>
+          {day(dialog.openedAt) &&
+            day(dialog.openedAt) !==
+              day(dialog.history[earlierCount - 1]?.at) && (
+              <div className="chat-date">{day(dialog.openedAt)}</div>
+            )}
+        </>
+      )}
       <aside
         className="activity-scene"
         data-activity={activity.id}

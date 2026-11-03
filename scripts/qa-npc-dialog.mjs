@@ -46,7 +46,12 @@ async function apply(page, kind) {
       createdAt: Date.now(),
       ...over,
     })
-    if (kind === 'available') {
+    if (kind === 'fresh') {
+      update({
+        quests: [],
+        dialogue: { ...dialogue, earlierCount: 0, history: [] },
+      })
+    } else if (kind === 'available') {
       update({ quests: [], dialogue })
     } else if (kind === 'active') {
       update({ quests: [quest()], trackedQuestId: null, dialogue })
@@ -109,6 +114,17 @@ try {
     const errors = []
     page.on('pageerror', (error) => errors.push(error.message))
     await openGame(page)
+
+    await apply(page, 'fresh')
+    assert.equal(await page.locator('.encounter-divider').count(), 0)
+    assert.equal(await page.locator('.chat-date').count(), 0)
+    assert.ok(await page.locator('.activity-scene p').innerText())
+    await page
+      .locator('dialog.conversation textarea, dialog.conversation input')
+      .fill('Hello')
+    await page.screenshot({ path: `${out}/fresh-${width}.png` })
+    await page.getByRole('button', { name: 'Close panel', exact: true }).click()
+    await page.locator('dialog.conversation').waitFor({ state: 'detached' })
 
     await apply(page, 'available')
     assert.match(

@@ -40,6 +40,15 @@ const dialog: Dialogue = {
 }
 
 describe('encounter transcript', () => {
+  it('shows narration without encounter or date separators when there are no earlier turns', () => {
+    const html = renderToStaticMarkup(
+      <Transcript dialog={{ ...dialog, earlierCount: 0, history: [] }} />
+    )
+    expect(html).toContain('Ms. Hoa is tending the stall.')
+    expect(html).not.toContain('encounter-divider')
+    expect(html).not.toContain('chat-date')
+  })
+
   it('renders earlier turns before the encounter divider and current turns after narration', () => {
     const html = renderToStaticMarkup(<Transcript dialog={dialog} />)
     const earlier = html.indexOf('Earlier answer')

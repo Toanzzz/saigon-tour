@@ -453,3 +453,7 @@ Non-demo turns are unchanged.
 - All is the default wardrobe category and includes every owned item across slots. Individual categories filter the same collection.
 - The full-character preview supports mouse/touch rotation, a Rotate button, and left/right arrow keys on that button. Pets and rides sit beside the avatar; the viewport reserves space for the whole character.
 - Outfit palettes preserve single-material meshes and toon material names so the dressed body remains visible and uses its authored colors.
+
+## Fresh encounter narration
+
+- Conversations without earlier turns show activity narration without encounter or date separators. Returning conversations retain their history boundary.
