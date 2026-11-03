@@ -547,3 +547,11 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - Artifacts: `artifacts/npc-scroll/results.json`, `activity-<width>x<height>.png`, `chat-<width>x<height>.png`, and `activity-vi-390.png`. `scripts/qa-npc-dialog.mjs` verifies the existing desktop/mobile errand and history controls.
 
 - Validation: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass; server 445 passed / 2 skipped, client 292 passed. `scripts/qa-npc-dialog.mjs` passes at 1440px and 390px.
+
+## Wardrobe categories and full-character controls
+
+- All is selected initially and whenever the wardrobe opens. It shows owned items from every category; category filters and equip/unequip retain each item's own slot.
+- Preview uses a full-character camera composition for portrait/desktop aspect ratios, hats, and equipped companions. Mouse/touch drag, Rotate avatar button, and left/right arrows on that button turn the view. Pets and rides sit beside the avatar.
+- Proven rendering defect: outfit application changed single materials to arrays on skinned meshes with zero geometry groups. A one-variable browser experiment unwrapped those arrays and restored the body. The fix preserves the material shape. Toon conversion preserves material names so outfit palettes match their clothing targets. `wardrobe-materials.spec.ts` covers both contracts and shared-material isolation.
+- `scripts/qa-wardrobe-controls.mjs` passes at 1440px desktop and 390px mobile: All default, all five category filters, per-slot equip, mixed-category unequip/re-equip, mouse/touch rotation, keyboard rotation, default reset on reopen, empty collection, and no horizontal overflow or page errors. Captures: `/tmp/wardrobe-controls-<width>.png`, `/tmp/wardrobe-full-character-<width>.png`.
+- `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass. Server: 445 passed, 2 skipped. Client: 294 passed.

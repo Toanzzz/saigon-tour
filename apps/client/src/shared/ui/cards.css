@@ -347,8 +347,11 @@
   gap: 10px;
 }
 .wardrobe-stage-view {
+  touch-action: none;
+  cursor: grab;
   position: relative;
-  flex: 1;
+  height: 320px;
+  flex: none;
   min-height: 300px;
   border: var(--edge);
   border-radius: 12px;
@@ -473,4 +476,8 @@
 }
 .reward-unlock {
   margin-top: 6px;
+}
+
+.wardrobe-stage-view:active {
+  cursor: grabbing;
 }

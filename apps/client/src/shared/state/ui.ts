@@ -64,11 +64,14 @@ export const setChatText = (text: string) =>
 export const resetChatDraft = () => chatDraft.setState(() => ({ text: '' }))
 
 // --- Wardrobe slot tab -------------------------------------------------------
-export const wardrobeTab = new Store<{ slot: UnlockSlot }>({ slot: 'hat' })
-export const setWardrobeTab = (slot: UnlockSlot) =>
+export type WardrobeCategory = UnlockSlot | 'all'
+export const wardrobeTab = new Store<{ slot: WardrobeCategory }>({
+  slot: 'all',
+})
+export const setWardrobeTab = (slot: WardrobeCategory) =>
   wardrobeTab.setState(() => ({ slot }))
 export const resetWardrobeTab = () =>
-  wardrobeTab.setState(() => ({ slot: 'hat' }))
+  wardrobeTab.setState(() => ({ slot: 'all' }))
 
 // --- Shared 1 s clock (waiting notice, riddle countdown) ---------------------
 export const clock = new Store({ now: Date.now() })

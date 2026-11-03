@@ -21,7 +21,7 @@ describe('wardrobe panel', () => {
       unlocks: { owned: [hatId], equipped: {} },
     }))
     const html = renderToStaticMarkup(<WardrobePanel />)
-    // The default Hat tab shows the owned hat as an equip card.
+    // All shows each owned item as an equip card.
     expect(html).toContain(unlockLabel(hatId))
     expect(html).toContain('wardrobe-card')
     // Locked items stay hidden: no locked card and no un-owned hat label.
@@ -30,12 +30,32 @@ describe('wardrobe panel', () => {
     expect(html).not.toContain(unlockLabel(lockedHatId))
   })
 
+  it('defaults to All and equips mixed categories through their own slots', () => {
+    const outfit = Object.values(UNLOCKS).find(
+      (entry) => entry.slot === 'outfit'
+    )
+    if (!outfit) throw new Error('Missing outfit fixture')
+    game.setState((state) => ({
+      ...state,
+      unlocks: { owned: [hatId, outfit.id], equipped: { outfit: outfit.id } },
+    }))
+    const all = renderToStaticMarkup(<WardrobePanel />)
+    expect(all).toContain(unlockLabel(hatId))
+    expect(all).toContain(unlockLabel(outfit.id))
+    expect(all.match(/class="wardrobe-card(?: is-equipped)?"/g)).toHaveLength(2)
+    expect(all).toContain('aria-selected="true">All')
+    setWardrobeTab('hat')
+    const hats = renderToStaticMarkup(<WardrobePanel />)
+    expect(hats).toContain(unlockLabel(hatId))
+    expect(hats).not.toContain(unlockLabel(outfit.id))
+  })
+
   it('shows the empty-slot message for a slot with no owned items', () => {
     game.setState((state) => ({
       ...state,
       unlocks: { owned: [hatId], equipped: {} },
     }))
-    // The Hat tab is the default; a slot the player owns nothing in is empty.
+    // A category the player owns nothing in is empty.
     // Force the Ride tab, which the seed player has not earned.
     setWardrobeTab('vehicle')
     const html = renderToStaticMarkup(<WardrobePanel />)

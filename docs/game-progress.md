@@ -447,3 +447,9 @@ Non-demo turns are unchanged.
 - Desktop title camera frames Bến Thành's clock, entrance, and roof beside the title copy.
 - Portrait title camera uses a wider lens and vertical composition to place the market above the form. Gameplay restores its regular lens and centered projection.
 - Title gradients keep the landmark visible; the mobile name row and start button fit the viewport.
+
+## Wardrobe browsing and rotation
+
+- All is the default wardrobe category and includes every owned item across slots. Individual categories filter the same collection.
+- The full-character preview supports mouse/touch rotation, a Rotate button, and left/right arrow keys on that button. Pets and rides sit beside the avatar; the viewport reserves space for the whole character.
+- Outfit palettes preserve single-material meshes and toon material names so the dressed body remains visible and uses its authored colors.

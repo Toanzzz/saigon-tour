@@ -1,23 +1,25 @@
-import {
-  UNLOCK_SLOTS,
-  UNLOCKS,
-  type UnlockId,
-  type UnlockSlot,
-} from '@saigon/shared'
+import { UNLOCK_SLOTS, UNLOCKS, type UnlockId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { close } from '@/app/actions'
 import { m, slotLabel } from '@/shared/i18n'
 import { game } from '@/shared/state/game'
-import { setWardrobeTab, wardrobeTab } from '@/shared/state/ui'
+import {
+  setWardrobeTab,
+  type WardrobeCategory,
+  wardrobeTab,
+} from '@/shared/state/ui'
 import { Dialog } from '@/shared/ui/dialog'
 import { OwnedCard } from './item-card'
 import { WardrobeStage } from './stage'
 
-/** Owned ids for a slot, in catalog order. Locked items stay hidden. */
-function ownedForSlot(slot: UnlockSlot, owned: readonly string[]) {
+/** Owned ids for the selected category, in catalog order. */
+function ownedForSlot(slot: WardrobeCategory, owned: readonly string[]) {
   const ownedSet = new Set(owned)
   return Object.values(UNLOCKS)
-    .filter((entry) => entry.slot === slot && ownedSet.has(entry.id))
+    .filter(
+      (entry) =>
+        (slot === 'all' || entry.slot === slot) && ownedSet.has(entry.id)
+    )
     .map((entry) => entry.id as UnlockId)
 }
 
@@ -37,7 +39,7 @@ export function WardrobePanel() {
         <WardrobeStage body={body} look={unlocks.equipped} />
         <div className="wardrobe-main">
           <div className="wardrobe-tabs" role="tablist">
-            {UNLOCK_SLOTS.map((option) => (
+            {(['all', ...UNLOCK_SLOTS] as const).map((option) => (
               <button
                 key={option}
                 type="button"
@@ -46,7 +48,7 @@ export function WardrobePanel() {
                 aria-selected={slot === option}
                 onClick={() => setWardrobeTab(option)}
               >
-                {slotLabel(option)}
+                {option === 'all' ? m.wardrobe_all() : slotLabel(option)}
               </button>
             ))}
           </div>
@@ -56,9 +58,9 @@ export function WardrobePanel() {
                 <OwnedCard
                   key={id}
                   id={id}
-                  slot={slot}
+                  slot={UNLOCKS[id].slot}
                   body={body}
-                  equipped={unlocks.equipped[slot] === id}
+                  equipped={unlocks.equipped[UNLOCKS[id].slot] === id}
                 />
               ))}
             </div>

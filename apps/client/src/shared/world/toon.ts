@@ -59,6 +59,7 @@ export function toToon(material: Material): Material {
   if (source.color && 'color' in toon) {
     toon.color.copy(source.color as unknown as import('three').Color)
   }
+  toon.name = source.name
   toon.needsUpdate = true
   cache.set(material, toon)
   return toon

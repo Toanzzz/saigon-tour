@@ -32,7 +32,7 @@ export function applyOutfitPalette(
     const materials = Array.isArray(child.material)
       ? child.material
       : [child.material]
-    child.material = materials.map((material: Material) => {
+    const recolored = materials.map((material: Material) => {
       const hex = palette[material.name]
       if (!hex) return material
       const clone = material.clone()
@@ -40,6 +40,7 @@ export function applyOutfitPalette(
         (clone as Material & { color: Color }).color.set(hex)
       return clone
     })
+    child.material = Array.isArray(child.material) ? recolored : recolored[0]
   })
 }
 

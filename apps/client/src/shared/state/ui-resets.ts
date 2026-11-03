@@ -24,7 +24,7 @@ export function installUiResets() {
     if (state.panel === 'transport' && was.panel !== 'transport')
       seedTransportForm(state.stop)
 
-    // Wardrobe opened: start on the first slot tab.
+    // Wardrobe opened: show all owned items.
     if (state.panel === 'wardrobe' && was.panel !== 'wardrobe')
       resetWardrobeTab()
 

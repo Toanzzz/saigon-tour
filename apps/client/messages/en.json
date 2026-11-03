@@ -531,5 +531,8 @@
   "map_debug_colliders": "Collision shapes",
   "map_debug_help": "Drag to orbit · scroll to zoom · right-drag to pan. Touch: one finger rotates, two fingers zoom/pan.",
   "map_debug_exit": "Return to game",
-  "chat_scene_label": "A moment in the neighborhood"
+  "chat_scene_label": "A moment in the neighborhood",
+  "wardrobe_all": "All",
+  "wardrobe_rotate": "Rotate avatar",
+  "wardrobe_rotate_hint": "Drag to rotate · arrow keys when focused"
 }
