@@ -12,6 +12,9 @@ export interface ServerConfig {
   apiUrl?: string
   apiKey?: string
   model?: string
+  transcribeUrl?: string
+  transcribeModel?: string
+  transcribeApiKey?: string
   timeoutMs: number
   sessionCallLimit: number
   globalCallLimit: number
@@ -88,6 +91,14 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
   ) {
     throw new Error('META_API_URL must use HTTPS outside localhost')
   }
+  const transcribeUrl =
+    env.META_TRANSCRIBE_URL?.trim() || 'https://api.meta.ai/v1/asr/transcribe'
+  const voiceUrl = new URL(transcribeUrl)
+  if (
+    voiceUrl.protocol !== 'https:' &&
+    !['localhost', '127.0.0.1'].includes(voiceUrl.hostname)
+  )
+    throw new Error('META_TRANSCRIBE_URL must use HTTPS outside localhost')
 
   const barkDailyLimit = Number(env.NPC_BARK_DAILY_LIMIT ?? 200)
   if (env.NPC_BARK_DAILY_LIMIT === undefined)
@@ -142,6 +153,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): ServerConfig {
       .map((origin) => origin.trim()),
     apiUrl,
     apiKey,
+    transcribeUrl,
+    transcribeModel: env.META_TRANSCRIBE_MODEL?.trim() || undefined,
+    transcribeApiKey: env.META_TRANSCRIBE_API_KEY?.trim() || undefined,
     model: fallback('META_MODEL', env.META_MODEL, 'muse-spark-1.3-contributor'),
     // Per model call; the current provider needs ~8–9s for a tool-enabled NPC turn.
     timeoutMs: 15000,

@@ -3,6 +3,7 @@ import { NPCS } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import type { SubmitEvent } from 'react'
 import { chat, close } from '@/app/actions'
+import { MicButton } from '@/features/voice'
 import { city } from '@/shared/api/city'
 import { m, npcDisplay } from '@/shared/i18n'
 import type { GameState } from '@/shared/state/game'
@@ -60,6 +61,7 @@ export function Conversation({ state }: { state: GameState }) {
           onChange={(event) => setChatText(event.target.value)}
           disabled={dialog.thinking}
         />
+        <MicButton thinking={dialog.thinking} onTranscript={chat} />
         <button
           type="submit"
           className="icon-button"

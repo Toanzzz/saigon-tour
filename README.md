@@ -3,6 +3,62 @@
 A stylized neighborhood exploration game for the Meta Global AI Developer Hackathon.
 Meet Cô Hoa at Bến Thành, help a neighbor, take a ride, and collect a little piece of the city.
 
+**[Play the demo](https://saigon-tour.toanz.workers.dev/?demo)** ·
+[Recording guide](docs/demo.md) · [Validation evidence](docs/final-evidence.md)
+
+Demo video: pending recording and upload.
+
+![Demo start beside Cô Hoa at Bến Thành Market](docs/media/demo-start.webp)
+
+![Completed broth delivery with a wearable reward](docs/media/demo-reward.webp)
+
+![Mai redirects the next delivery to Vy's lantern crew](docs/media/demo-twist.webp)
+
+Gameplay captures from the local demo QA run, showing the start, completed delivery,
+and story twist. Debug inspector controls are visible in these captures.
+
+## Explore the neighborhood
+
+- Meet 29 NPC agents with distinct personalities, activities, conversation memory, and friendship.
+- Ask for errands: agents use tools to propose quests; the game validates progress and grants rewards.
+- Follow deliveries, clues, and story twists across eight District 1 locations.
+- Take a bus, xe ôm, cyclo, or metro; earn wearable rewards and equip them on your character.
+- Share a room with other players. The City Director plans events, weather, and neighborhood needs.
+- Play in English or Vietnamese with desktop and touch controls.
+- WebXR includes controller movement and world-space dialogue. Physical Quest 3 performance remains unverified.
+
+## How Meta models are used
+
+Meta Muse Spark powers the live NPC agents through the server's Mastra tool loop.
+Agents can propose or drop quests, adjust friendship, read world context, and remember
+player facts. Shared rules validate quest steps and rewards; credentials remain server-side.
+The live City Director uses the same configured model to draft a daily plan from local
+news and the shared city state.
+
+The default model is `muse-spark-1.3-contributor` at Meta's API. The endpoint and model
+are configurable; the server health response identifies the active configuration.
+The `?demo` route uses authored quest offers for a repeatable gag → twist sequence.
+Those deterministic offers do not call the model; the recording includes a separate
+live interaction. Offline or failed calls show an offline guide and preserve text play.
+Optional voice input records a short message, transcribes it with Muse Voice Transcribe,
+and sends the text through the NPC agent. It is disabled until the server sets
+`META_TRANSCRIBE_MODEL=muse-voice-transcribe-1.0`; text remains usable on failure.
+Integrated live microphone verification is pending.
+
+## Hackathon contributions
+
+Hackathon development window: October 27–November 4, 2026. This repository contains the
+gameplay, NPC agents and tool validation, City Director, shared rooms, bilingual interface,
+WebXR integration, and deployment work developed for the event. Repository history begins
+October 28, 2026, in the contributor's UTC+7 timezone.
+
+Contributor: **Toàn** ([toanzzz](https://github.com/toanzzz)), the sole author recorded in
+the repository history. Existing libraries and supplied asset packs retain their separate
+licenses; asset sources and unresolved provenance are listed in [Asset provenance](assets/LICENSES.md).
+
+Submission deadline: **November 4, 2026, 9:00 PM EST** /
+**November 5, 2026, 9:00 AM ICT**. The video and final submission are pending.
+
 ## Run
 
 ```sh
@@ -99,7 +155,7 @@ auth schema from the plugin list; never edit `src/shared/db/auth-schema.ts` by h
 - [Architecture](docs/architecture.md)
 - [Progress and open checks](docs/game-progress.md)
 - [Requirements](docs/requirements.md) · [Implementation plan](docs/tasks.md)
+- [Asset provenance](assets/LICENSES.md) · [Third-party asset notices](apps/client/public/THIRD_PARTY_NOTICES.txt)
 
-Project period: October 27–November 4, 2026. Submission deadline: November 4, 9 PM ET.
-The repository includes supplied asset packs and a custom market source model; their
-provenance is recorded separately from the game's implementation.
+Original source code is licensed under [Apache-2.0](LICENSE), copyright 2026 Toàn.
+Bundled assets and dependencies retain their separate licenses; see the provenance inventory.

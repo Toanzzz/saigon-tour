@@ -1,5 +1,33 @@
 # NPC API
 
+## Voice transcription
+
+`GET /voice/status` returns `{ available }`. Set
+`META_TRANSCRIBE_MODEL=muse-voice-transcribe-1.0` to enable voice with the server's
+Meta credential. `META_TRANSCRIBE_API_KEY` may override that credential.
+`META_TRANSCRIBE_URL` defaults independently of the chat endpoint to
+`https://api.meta.ai/v1/asr/transcribe`; non-local endpoints require HTTPS.
+
+`POST /voice/transcribe` requires the existing authenticated session. It accepts
+multipart `audio` (mono PCM16 WAV, 24 kHz, at most 15 seconds) and `locale`
+(`en` or `vi`), with a 1 MiB request limit. It returns `{ text }`, capped at
+500 characters. Invalid audio returns 400, missing authentication 401,
+oversized requests 413, throttling 429, and unavailable/provider/budget
+failures 503. Other routes retain the 16 KiB request limit.
+
+The server sends multipart JSON settings and WAV audio to Meta with a 15-second
+timeout. Spend uses the existing conservative reservation and settles by audio
+duration at $0.18 per hour, with zero chat tokens. Recordings are transient.
+The browser converts its native recording to WAV, automatically stops after
+15 seconds, and sends non-empty transcripts through the existing conversation
+turn. Conversation changes, pause, and restart cancel stale work; text input
+remains available.
+
+`bun scripts/spike-transcribe.ts <english.wav> <vietnamese.wav>` verifies the
+upstream contract using the server environment and writes results under
+`/tmp/saigon-quest-evidence/`. Synthetic speech fixtures establish the upstream
+contract; microphone behavior requires the browser check.
+
 The Node + Hono API runs Mastra NPC agents against an OpenAI-compatible chat-completions endpoint. The default is Meta Muse Spark (`muse-spark-1.3-contributor` at `https://api.meta.ai/v1/chat/completions`); `META_MODEL` and `META_API_URL` override both. `META_MUSE_API_KEY` is the server credential (`META_API_KEY` is an alias). Credentials never enter the browser build. Each model call has a 15-second limit; the client waits up to 40 seconds for a turn.
 
 ## Interaction

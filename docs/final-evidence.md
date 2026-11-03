@@ -1,5 +1,75 @@
 # Final evidence
 
+## Demo, voice spike, and submission verification — November 3, 2026
+
+- Proven: local `?demo` at 1440×900 and 390×844 starts with a fresh journey, sends
+  the demo flag, offers Hoa's gag, boards the motorbike taxi to the park, delivers
+  broth, returns for the reward, equips Wear now, then reaches Mai's arc twist.
+  Both runs report zero page exceptions and no horizontal overflow.
+  Evidence: `artifacts/demo/results.json` and the beat screenshots.
+- Proven: with all API requests and shared-room sockets blocked, a fresh offline
+  guest completes the same ride/delivery/reward/twist at both viewports, with no
+  NPC HTTP requests or page exceptions. Evidence:
+  `artifacts/demo-api-offline/results.json`.
+- Proven limitation: blocking only NPC interactions leaves authoritative save
+  channels active. The fallback gag disappears before delivery. A socket-disabled
+  control still fails; an isolated `applyQuestSave` experiment creates the fallback
+  quest, then applies a pickup-shaped authoritative save and observes its removal.
+  This establishes pickup-save overwrite; room updates remain another applicable
+  authoritative path. No speculative reconciliation policy is implemented.
+  Failed browser evidence: `artifacts/demo-socket-control/failure.json`.
+- Visible Chromium 153.0.8010.12, 1440×900, ANGLE Metal on Apple M1 Pro:
+  five-second frame samples at market, park, alley, and active walking each average
+  approximately 120 FPS. Median frame interval 8.3 ms; p95 9.4–9.8 ms. This is
+  sampled desktop hardware evidence; it does not prove Quest 3 performance or
+  sustained performance across all world states. Evidence:
+  `artifacts/demo-perf/results.json`.
+- Actual Meta transcription spike: `muse-voice-transcribe-1.0`,
+  `/v1/asr/transcribe`, multipart application/json settings plus WAV.
+  Synthetic English speech: HTTP 200, 2,445 ms, 2,640 ms audio, usable transcript.
+  Synthetic Vietnamese speech: HTTP 200, 1,317 ms, 3,760 ms audio, correct request
+  for Hoa's errand. Response fields include `transcript`, `audioDurationMs`,
+  `sessionId`, and `turns`. Duration-priced estimate totals $0.00032 at $0.18/hour;
+  provider billing was not independently reconciled. Private local evidence:
+  `/tmp/saigon-quest-evidence/transcribe-spike.json`.
+- Public client desktop and 390px mobile browser checks through actual controls, without `demo`:
+  live Muse Spark returns accepted `propose-quest`, a valid two-step broth-delivery
+  quest, and a live/non-degraded response. Evidence:
+  `artifacts/demo-meta-public/results.json` and
+  `artifacts/demo-meta-public-mobile/results.json`. This is separate from the authored
+  zero-model-call demo offers.
+- Public repository visibility is PUBLIC. Deploy run `41560115705` succeeded
+  for `8b914d7`; the public client responds HTTP 200. Production health reports
+  live `muse-spark-1.3-contributor`. Read-only container inspection confirms both
+  `CLIENT_URL` and `CORS_ORIGINS` equal the workers.dev client origin.
+  Production `META_TRANSCRIBE_MODEL` is unset.
+- Integrated live mic verification and deployment of this pass remain pending.
+  The local API stopped listening during implementation; the user owns its restart.
+  Video upload, asset provenance gaps, and platform submission remain open.
+- Capture environment experiment: full Chrome's fake-file `getUserMedia` remains
+  pending with both 24 kHz and 48 kHz fixtures, before any recorder or conversion.
+  Changing only to the cached Chromium headless-shell executable captures the
+  48 kHz fixture successfully. The game then converts it to 24 kHz WAV, uploads
+  it to the synthetic transcript endpoint, and renders the transcript as a chat
+  turn. This is browser-contract evidence, not integrated live Meta verification.
+- Voice browser contract passes at 1440×900 and 390×844 with the cached headless
+  shell, 48 kHz capture fixture, and mocked transcript service. The actual
+  uploaded recordings validate as PCM16 mono 24 kHz WAV (285,164 / 247,724 bytes).
+  Transcript auto-chat produces an offline NPC quest. Simulated 503 keeps typed
+  composition usable; closing/switching NPC discards a delayed result; all media
+  tracks end. No page exceptions or overflow. Evidence:
+  `artifacts/voice-mock/results.json` and success/fallback/cancelled captures.
+- Actual authenticated voice route and real Meta upstream pass in-process using
+  an isolated PGlite fixture, without starting a listening server:
+  HTTP 200 in 2,308 ms, normalized non-empty transcript, one ledger call,
+  zero chat tokens, settled cost $0.000132. Evidence:
+  `/tmp/saigon-quest-evidence/voice-route-live.json`. Reproduce with
+  `bun --tsconfig-override apps/server/tsconfig.json apps/server/scripts/voice-live.ts <wav>`.
+  This does not replace the combined browser → configured local/deployed API check.
+- Ordered repository gates pass: `bun run check` → `bun run check:types` →
+  `bun run build` → `bun run test`. Server: 523 passed, 2 skipped. Client:
+  344 passed. Logs: `/tmp/saigon-demo-verified-{check,types,build,test}.log`.
+
 ## Market cry follows Hoa — November 3, 2026
 
 - Proven: the market street cry had a fixed authored position while Hoa's

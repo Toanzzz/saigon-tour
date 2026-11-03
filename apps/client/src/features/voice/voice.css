@@ -1,0 +1,21 @@
+.conversation-input > .voice-button.is-recording {
+  color: var(--ink);
+  background: #ff7959;
+  animation: voice-recording 1s ease-in-out infinite;
+}
+
+.voice-button.is-recording[data-reduced-motion="true"] {
+  animation: none;
+}
+
+@keyframes voice-recording {
+  50% {
+    box-shadow: 0 0 0 4px #ff795940;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-button.is-recording {
+    animation: none;
+  }
+}

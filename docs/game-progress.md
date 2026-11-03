@@ -1,5 +1,15 @@
 # Game progress
 
+## Demo and submission
+
+- `?demo` exposes Start demo, discloses the journey reset, preserves identity, and starts near Hoa's current city placement. Reset/profile failures retain the title. Audio unlock begins in the click gesture.
+- NPC turns carry the demo flag. Hoa offers the two-bowl delivery immediately, then the twist arc after completion. These authored offers make no provider call.
+- Local headless desktop/mobile checks cover the real motorbike ride, broth delivery, reward/Wear now, and Mai's twist without page errors. Full API-offline progression also passes. The public client's separate non-demo Muse Spark interaction executes `propose-quest`.
+- Visible Chromium on Apple M1 Pro at 1440×900 measured approximately 120 mean FPS across market, park, alley, and walking samples; p95 frame times were 9.4–9.8 ms. These are five-second samples, not a physical Quest 3 result.
+- Voice is opt-in through `META_TRANSCRIBE_MODEL=muse-voice-transcribe-1.0`. The upstream English/Vietnamese spike and authenticated in-process route against Meta pass. Desktop/mobile mic capture, WAV conversion, mocked-transcript chat, error fallback, and cancellation pass. The combined browser-to-configured-API check awaits a running API.
+- Submission materials include gameplay WebPs, a three-minute recording guide, contributor details, Apache-2.0 source licensing, and third-party notices. Unresolved asset provenance, uploaded video, and submission remain pending.
+- Known resilience gap: NPC HTTP failure while authoritative save channels remain active can erase a locally offered fallback quest. Full offline progression is checked separately.
+
 ## Map cries
 
 The market greeting follows Hoa's current city position. Bubble placement,
@@ -60,7 +70,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - Ports: client 58000, API 58001, Postgres 58002. Ask the user to start/restart local development servers. `bun dev` exits the API on SIGINT/SIGTERM and force-kills it after 3 seconds.
 - Model: `muse-spark-1.3-contributor` at `https://api.meta.ai/v1/chat/completions` by default; `META_MODEL`/`META_API_URL` select another OpenAI-compatible provider. `META_MUSE_API_KEY` stays server-side.
 - `.github/workflows/deploy.yml`: a push to `main` runs verify → arm64 API image to GHCR → SSH recreate on t-oracle via `scripts/deploy-remote.sh` and `compose.prod.yml` → client `wrangler deploy` with `VITE_API_BASE_URL=${API_URL}`. Pull requests run verify only. `bun run credentials` sets the secrets, vars, deploy key, and host `.env`.
-- Deployed: the last successful Deploy run is for `d9a2bc1`; later commits are not deployed. `https://saigon-tour-api.toan.io/health` reports `live` with the Muse model.
+- Deployed: successful Deploy run `41560115705` serves commit `8b914d7`. Public client: `https://saigon-tour.toanz.workers.dev`. Public API health reports `live` with Muse Spark. Local demo/voice changes require deployment and browser verification.
 
 ## NPC packages
 

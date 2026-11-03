@@ -3,11 +3,14 @@ import { PlayerNameSchema } from '@saigon/shared'
 import { useMutation } from '@tanstack/react-query'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
+import { audio } from '@/shared/audio'
 import { LanguageToggle, m } from '@/shared/i18n'
+import { DEMO } from '@/shared/runtime/demo-flag'
 import { game, update } from '@/shared/state/game'
 import { nameDraft, setNameDraft } from '@/shared/state/ui'
 import { XRSessionButton, xrStore } from '@/shared/xr'
 import { start } from './actions'
+import { startDemo } from './start-demo'
 import { commitProfile, TitleAccount, TitleName } from './title-identity'
 import { hasJourney, JourneySummary, NewJourneyButton } from './title-journey'
 
@@ -28,9 +31,10 @@ export function TitleScreen() {
   const name = useSelector(nameDraft, (s) => s.name)
   const valid = PlayerNameSchema.safeParse(name).success
   const begin = useMutation({
-    mutationFn: () => commitProfile(name, body),
+    mutationFn: () =>
+      DEMO ? startDemo(name, body) : commitProfile(name, body),
     onSuccess: (saved) => {
-      if (saved) start()
+      if (saved && !DEMO) start()
     },
   })
   return (
@@ -46,7 +50,7 @@ export function TitleScreen() {
           {continuing && <JourneySummary />}
         </p>
         <div className="title-form">
-          {!continuing && (
+          {(!continuing || DEMO) && (
             <TitleName
               name={name}
               onName={setNameDraft}
@@ -61,12 +65,17 @@ export function TitleScreen() {
               disabled={
                 active || guestStatus === 'loading' || !valid || begin.isPending
               }
-              onClick={() => begin.mutate()}
+              onClick={() => {
+                void audio.unlock()
+                begin.mutate()
+              }}
             >
               {active ? (
                 m.title_loading({ percent: Math.round(progress) })
               ) : guestStatus === 'loading' ? (
                 m.title_finding_journey()
+              ) : DEMO ? (
+                m.title_start_demo()
               ) : continuing ? (
                 <span className="title-continue">
                   {m.title_continue()}
@@ -80,7 +89,10 @@ export function TitleScreen() {
             </button>
             <XRSessionButton store={xrStore} />
           </div>
-          {continuing && <NewJourneyButton className="title-new-journey" />}
+          {DEMO && <p className="title-summary">{m.title_demo_reset()}</p>}
+          {continuing && !DEMO && (
+            <NewJourneyButton className="title-new-journey" />
+          )}
           <TitleAccount />
         </div>
         <p className="title-controls desktop-only">

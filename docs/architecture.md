@@ -143,5 +143,5 @@ id, which is persisted in DB rows and Mastra threads). A package exports a defau
 
 ## 10. Open decisions
 
-- **D1.** Voice (Muse Transcribe) only if time remains.
+- **D1.** Optional desktop/mobile voice uses a server-authenticated Meta transcription route. The browser converts recordings to 24 kHz mono PCM16 WAV; transcripts enter the existing NPC turn. Configuration gates availability. VR voice and spoken NPC replies are outside this slice.
 - **D2.** Open-weight endpoint (Muse Spark Open) not wired; `META_API_URL` can point to one.

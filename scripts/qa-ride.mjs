@@ -30,7 +30,9 @@ await page.evaluate(() =>
   window.__THREE_GAME_TEST_HOOKS__.setState('transport')
 )
 await page.waitForTimeout(500)
-await page.getByLabel('Destination').selectOption({ label: 'Nhà thờ Đức Bà' })
+await page
+  .getByLabel('Destination')
+  .selectOption({ label: 'Notre-Dame Cathedral' })
 await page.getByRole('button', { name: /Board City bus/ }).click()
 const t0 = Date.now()
 await page.waitForFunction(

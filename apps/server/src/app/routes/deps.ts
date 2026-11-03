@@ -2,7 +2,7 @@ import type { GuestPlayer } from '@saigon/shared'
 import { createFactory } from 'hono/factory'
 import type { Auth, AuthSession } from '@/features/auth'
 import type { NpcHarness } from '@/features/npc'
-import type { GameDb, ServerConfig } from '@/shared'
+import type { Fetcher, GameDb, ServerConfig } from '@/shared'
 import type { createRealtime } from '../realtime'
 
 /** Per-request dependencies shared across every route module. */
@@ -11,6 +11,7 @@ export interface RouteDeps {
   config: ServerConfig
   db: GameDb
   harness: NpcHarness
+  voiceFetch: Fetcher
   realtime: ReturnType<typeof createRealtime>
 }
 

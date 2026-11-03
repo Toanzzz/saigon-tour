@@ -1,3 +1,4 @@
+import { resetVoice } from '@/features/voice'
 import { net } from '@/shared/api/status'
 import { type GameState, game } from '@/shared/state/game'
 import {
@@ -19,6 +20,13 @@ export function installUiResets() {
   const unsubscribe = game.subscribe((state) => {
     const was = prev
     prev = state
+    if (
+      state.sessionId !== was.sessionId ||
+      state.dialogue?.requestId !== was.dialogue?.requestId ||
+      (state.dialogue?.thinking && !was.dialogue?.thinking) ||
+      (state.screen !== 'playing' && was.screen === 'playing')
+    )
+      resetVoice()
 
     // Transport panel opened: fresh bus ride away from the current stop.
     if (state.panel === 'transport' && was.panel !== 'transport')

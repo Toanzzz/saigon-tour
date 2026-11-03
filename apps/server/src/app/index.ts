@@ -16,6 +16,7 @@ import type { Env, RouteDeps } from './routes/deps'
 import { meRoutes } from './routes/me'
 import { npcRoutes } from './routes/npc'
 import { sessionRoutes } from './routes/session'
+import { voiceRoutes } from './routes/voice'
 
 export type { Fetcher } from '@/shared/http'
 export interface AppServices {
@@ -31,6 +32,7 @@ function createRoutes(deps: RouteDeps) {
     .route('/', sessionRoutes(deps))
     .route('/me', meRoutes(deps))
     .route('/npc', npcRoutes(deps))
+    .route('/voice', voiceRoutes(deps))
 }
 
 /** RPC contract for `hc<AppType>`; excludes the non-RPC `/ws` upgrade. */
@@ -58,12 +60,14 @@ export function createApp(
       maxAge: 86400,
     })
   )
-  app.use(
-    '*',
-    bodyLimit({
-      maxSize: 16 * 1024,
-      onError: (c) => c.json({ error: 'request_too_large' }, 413),
-    })
+  const jsonLimit = bodyLimit({
+    maxSize: 16 * 1024,
+    onError: (c) => c.json({ error: 'request_too_large' }, 413),
+  })
+  app.use('*', (c, next) =>
+    c.req.method === 'POST' && c.req.path === '/voice/transcribe'
+      ? next()
+      : jsonLimit(c, next)
   )
   const realtime = createRealtime(
     app,
@@ -74,7 +78,10 @@ export function createApp(
     services.now,
     fetcher
   )
-  app.route('/', createRoutes({ auth, config, db, harness, realtime }))
+  app.route(
+    '/',
+    createRoutes({ auth, config, db, harness, realtime, voiceFetch: fetcher })
+  )
   app.onError((_error, c) => {
     log('request_failed', 'Storage or request unavailable', 'error')
     return c.json({ error: 'service_unavailable' }, 503)

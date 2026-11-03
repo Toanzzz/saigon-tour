@@ -95,9 +95,13 @@ describe('party controls and authoritative quest rewards', () => {
         source: null,
       },
     }
-    expect(renderToStaticMarkup(<Conversation state={state} />)).toContain(
-      'Ask Ms. Hoa about the bowls being prepared.'
-    )
+    expect(
+      renderToStaticMarkup(
+        <QueryClientProvider client={new QueryClient()}>
+          <Conversation state={state} />
+        </QueryClientProvider>
+      )
+    ).toContain('Ask Ms. Hoa about the bowls being prepared.')
   })
   it('handles invites, expiry, and presence membership', () => {
     handlePartyMessage({

@@ -559,5 +559,12 @@
   "chat_hint_event_market_rush": "giờ cao điểm ở chợ",
   "chat_hint_event_rain": "cơn mưa",
   "chat_hint_event_street_music": "buổi nhạc đường phố",
-  "chat_hint_event_lost_item": "món đồ thất lạc"
+  "chat_hint_event_lost_item": "món đồ thất lạc",
+  "title_start_demo": "Bắt đầu chơi thử",
+  "title_demo_reset": "Chơi thử sẽ đặt lại hành trình này. Tên và nhân vật của bạn được giữ nguyên.",
+  "voice_start": "Ghi âm lời nhắn",
+  "voice_stop": "Dừng ghi âm và gửi",
+  "voice_transcribing": "Đang chuyển giọng nói thành chữ",
+  "voice_failed": "Chưa dùng được giọng nói. Bạn vẫn có thể nhập lời nhắn.",
+  "voice_empty": "Chưa nghe rõ lời nói. Bạn thử lại hoặc nhập lời nhắn nhé."
 }

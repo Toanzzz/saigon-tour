@@ -83,7 +83,7 @@ export async function teleport(page, x, z) {
   )
   await page.waitForTimeout(300)
 }
-export async function meet(page, npcId) {
+export async function meet(page, npcId, { reward = false } = {}) {
   const position = (await diagnostics(page)).city?.npcPlacements?.[npcId]
     ?.position
   const [x, z] = position ? [position[0], position[2]] : anchors[npcId]
@@ -91,7 +91,12 @@ export async function meet(page, npcId) {
   const touch = page.locator('button.touch-interact')
   if (await touch.isVisible()) await touch.click()
   else await page.keyboard.press('e')
-  await page.locator('dialog.conversation').waitFor()
+  await page
+    .locator(
+      reward ? 'dialog.conversation, .reward-dialog' : 'dialog.conversation'
+    )
+    .first()
+    .waitFor()
   await page.locator('.thinking').waitFor({ state: 'detached', timeout: 30000 })
 }
 export async function openGame(page) {
@@ -103,7 +108,7 @@ export async function openGame(page) {
 }
 export async function enterPlay(page) {
   const start = page.getByRole('button', {
-    name: /^(Start exploring$|Continue journey)/,
+    name: /^(Start exploring$|Start demo$|Continue journey)/,
   })
   await start.click({ timeout: 45000 })
   try {

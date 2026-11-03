@@ -1,5 +1,6 @@
 import type { PresencePlayer } from '@saigon/shared'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { ownVoiceResource } from '@/features/voice/store'
 import { clearPresence, recordPlayer } from '@/shared/api/presence'
 import {
   presenceView,
@@ -27,6 +28,38 @@ afterEach(() => {
   resetUiStores()
   resetPresenceView()
   clearPresence()
+})
+
+it('cancels microphone ownership when a typed turn, close, pause, or reset begins', () => {
+  const dialog = {
+    npc: 'hoa' as const,
+    requestId: 'voice-conversation',
+    history: [],
+    thinking: false,
+    source: null,
+  }
+  game.setState(() => ({
+    ...initialState(),
+    screen: 'playing',
+    dialogue: dialog,
+  }))
+  const stop = installUiResets()
+  try {
+    for (const patch of [
+      { dialogue: { ...dialog, thinking: true } },
+      { dialogue: null },
+      { screen: 'paused' as const },
+      { sessionId: crypto.randomUUID() },
+    ]) {
+      update({ screen: 'playing', dialogue: dialog })
+      const cancel = vi.fn()
+      ownVoiceResource(cancel)
+      update(patch)
+      expect(cancel).toHaveBeenCalledOnce()
+    }
+  } finally {
+    stop()
+  }
 })
 
 describe('resetUiStores', () => {

@@ -15,6 +15,7 @@ import {
 import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
 import { resetAsides } from '@/features/transport/asides'
+import { resetVoice } from '@/features/voice'
 import { city, npcPosition } from '@/shared/api/city'
 import {
   beginHttpTurn,
@@ -59,12 +60,13 @@ export function start() {
 }
 export async function restart() {
   const state = game.state
-  if (state.guestStatus === 'resetting') return
+  if (state.guestStatus === 'resetting') return false
   const acquired = await beginHttpTurn()
   if (!acquired) {
     notify(m.toast_wait_conversation())
-    return
+    return false
   }
+  resetVoice()
   update({ guestStatus: 'resetting' })
   let player = null
   try {
@@ -73,7 +75,7 @@ export async function restart() {
     endHttpTurn()
     update({ guestStatus: state.guestStatus })
     notify(m.toast_reset_failed())
-    return
+    return false
   }
   queryClient.removeQueries({ queryKey: ['npc-history'] })
   resetEventSequence()
@@ -102,6 +104,7 @@ export async function restart() {
   resetTwists()
   resetRiddles()
   resetAsides()
+  return true
 }
 /** Drop this device's saved session; reload as a brand-new guest. */
 export async function forgetDevice() {

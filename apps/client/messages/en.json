@@ -590,5 +590,12 @@
   "chat_hint_event_market_rush": "the market rush",
   "chat_hint_event_rain": "the rain",
   "chat_hint_event_street_music": "the street music",
-  "chat_hint_event_lost_item": "the lost item"
+  "chat_hint_event_lost_item": "the lost item",
+  "title_start_demo": "Start demo",
+  "title_demo_reset": "Starting the demo resets this journey. Your name and character are kept.",
+  "voice_start": "Record a voice message",
+  "voice_stop": "Stop recording and send",
+  "voice_transcribing": "Transcribing your message",
+  "voice_failed": "Voice is unavailable. You can type your message instead.",
+  "voice_empty": "No speech was detected. Try again or type your message."
 }

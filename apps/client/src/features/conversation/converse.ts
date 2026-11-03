@@ -8,6 +8,7 @@ import { interactWith, queryClient } from '@/shared/api/agent'
 import { beginHttpTurn, endHttpTurn } from '@/shared/api/events'
 import { appendHistory } from '@/shared/api/history'
 import { net } from '@/shared/api/status'
+import { DEMO } from '@/shared/runtime/demo-flag'
 import { type GameState, game, update } from '@/shared/state/game'
 import { applyResponse as apply } from './apply-response'
 import { nearbyNpcs } from './nearby'
@@ -109,6 +110,7 @@ export async function converse(text: string, intent: Intent, opening = false) {
     interactWith(
       dialog.npc,
       {
+        ...(DEMO ? { demo: true } : {}),
         message: text.slice(0, 500),
         intent,
         messageId,

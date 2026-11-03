@@ -100,17 +100,18 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
 ## Phase 4 — Demo hardening (P0 cross-cutting)
 
 - [ ] 16. **Demo seed + pre-warm/cache** (R10.1, R10.2, R10.4)
-  - One-key `DemoSeed` scenario reproducing spawn → NPC → AI quest → ride → complete →
-    reward; pre-warm/cache the demo path's AI responses; verify every fallback path.
-  - Exists: authored activities for all NPCs, Director activity selection, `DIRECTOR_MODE=scripted`, and
-    deterministic offline seeds. Missing: the one-key demo scenario.
+  - `?demo` resets and starts beside Hoa; authored offers reproduce gag → arc.
+    Desktop/mobile live route passes through ride, delivery, reward, and twist.
+  - Rehearsal warms assets; deterministic offers need no model call. Partial-outage
+    reconciliation and full offline checks remain required before closing this task.
   - _Requirements: R10.1, R10.2, R10.4_
 
 - [x] 17. **Title/intro + controls screen** (R6.2)
   - _Requirements: R6.2_
 
-- [ ] 18. **First playtest + perf pass (desktop)** (R1.4, R10)
-  - Confirm ≥ 60 FPS; fix blockers along the demo path.
+- [x] 18. **First playtest + perf pass (desktop)** (R1.4, R10)
+  - Visible Chromium 153 on Apple M1 Pro, 1440×900: market, park, alley, and
+    walking five-second samples average approximately 120 FPS, p95 9.4–9.8 ms.
   - _Requirements: R1.4_
 
 > **Checkpoint: after Task 18 a complete, demoable P0 slice exists. A valid hackathon
@@ -150,8 +151,10 @@ as they land. Given the Nov 4 deadline, treat the tier boundaries (P0 → P1 →
   - _Requirements: R7.4_
 
 - [ ] 25. **Voice interaction via Muse Transcribe** (R8)
-  - Voice route; mic capture → transcript → NPC agent; optional TTS reply; graceful
-    degrade to text.
+  - Authenticated voice route and desktop/mobile mic implemented. Live EN/VI spike,
+    authenticated in-process route against Meta, and desktop/mobile browser capture,
+    conversion, mocked-transcript chat, cancellation, and text fallback pass.
+    Combined browser-to-configured-API check remains pending.
   - _Requirements: R8.1, R8.2, R8.3_
 
 - [ ] 26. **(Optional) AI-generated textures/art via Muse Image/Wonder** (Best Creative Build)

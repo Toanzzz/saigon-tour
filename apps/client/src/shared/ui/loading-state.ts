@@ -1,6 +1,6 @@
 import { Store } from '@tanstack/store'
 
-export const loadingPanels = new Store<ReadonlySet<string>>(new Set())
+export const loadingPanels = new Store<ReadonlySet<string>>(new Set<string>())
 
 export function setLoadingPanel(scope: string, pending: boolean) {
   loadingPanels.setState((current) => {
@@ -13,5 +13,5 @@ export function setLoadingPanel(scope: string, pending: boolean) {
 }
 
 export function resetLoadingPanels() {
-  loadingPanels.setState(new Set())
+  loadingPanels.setState(() => new Set<string>())
 }
