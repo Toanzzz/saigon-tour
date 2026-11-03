@@ -34,6 +34,8 @@ export function Character({
   active,
   shadow = true,
   look,
+  body = 'man',
+  frozen = false,
 }: {
   model?: 'female-a' | 'female-b' | 'male-a' | 'male-b'
   /** Runtime model path override, e.g. a player body. */
@@ -49,6 +51,8 @@ export function Character({
   shadow?: boolean
   /** Equipped cosmetics/outfit to render on the avatar. */
   look?: Look | null
+  body?: AvatarBody
+  frozen?: boolean
 }) {
   const { scene, animations } = loadModel(path ?? `people/character-${model}`)
   const object = useMemo(() => {
@@ -114,13 +118,17 @@ export function Character({
         animations.find((candidate) => candidate.name === name) ??
         animations.find((candidate) => candidate.name === 'idle')
       if (clip) {
-        playing.current?.action.fadeOut(0.2)
-        const action = mixer.clipAction(clip).reset().fadeIn(0.2).play()
+        if (frozen) playing.current?.action.stop()
+        else playing.current?.action.fadeOut(0.2)
+        const action = mixer.clipAction(clip).reset()
+        if (frozen) action.setEffectiveWeight(1).play()
+        else action.fadeIn(0.2).play()
         playing.current = { name, action }
+        mixer.update(0)
         object.userData.activeAnimation = clip.name
       }
     }
-    if (!active || active()) mixer.update(Math.min(delta, 0.05))
+    if (!frozen && (!active || active())) mixer.update(Math.min(delta, 0.05))
     object.userData.animationTime = playing.current?.action.time ?? 0
   })
   const cosmetics = look
@@ -142,14 +150,22 @@ export function Character({
         </Suspense>
       )}
       {cosmetics.map((id) => (
-        <Cosmetic key={id} id={id} root={object} />
+        <Cosmetic key={id} id={id} root={object} body={body} />
       ))}
     </primitive>
   )
 }
 
 /** Load one cosmetic GLB and attach it to the avatar's bone. */
-function Cosmetic({ id, root }: { id: string; root: Object3D }) {
+function Cosmetic({
+  id,
+  root,
+  body,
+}: {
+  id: string
+  root: Object3D
+  body: AvatarBody
+}) {
   const path = UNLOCKS[id]?.model
   const { scene } = loadModel(path ?? 'cosmetics/non-la')
   useEffect(() => {
@@ -159,13 +175,17 @@ function Cosmetic({ id, root }: { id: string; root: Object3D }) {
       if (child instanceof Mesh) {
         child.castShadow = true
         child.receiveShadow = true
+        if (LOOK === 'comic')
+          child.material = Array.isArray(child.material)
+            ? child.material.map(toToon)
+            : toToon(child.material)
       }
     })
-    attachCosmetic(root, id, piece)
+    attachCosmetic(root, id, piece, body)
     return () => {
       piece.removeFromParent()
     }
-  }, [id, path, root, scene])
+  }, [id, path, root, scene, body])
   return null
 }
 
@@ -180,6 +200,7 @@ export function Avatar({
   color,
   active,
   shadow = true,
+  frozen = false,
 }: {
   body: AvatarBody
   look?: Look | null
@@ -190,10 +211,16 @@ export function Avatar({
   color?: string
   active?: () => boolean
   shadow?: boolean
+  frozen?: boolean
 }) {
   return (
     <Character
-      path={bodyModel(body)}
+      path={
+        (look?.outfit && UNLOCKS[look.outfit]?.outfitModels?.[body]) ||
+        bodyModel(body)
+      }
+      body={body}
+      frozen={frozen}
       look={look}
       animation={animation}
       position={position}

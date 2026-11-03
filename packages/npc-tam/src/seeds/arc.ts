@@ -31,7 +31,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Smooth ride? Do not tell me. I will tell everyone it was smooth.',
-    vi: 'Đi êm chứ? Đừng kể anh nghe. Để anh khoe với mọi người là êm ru.',
+    en: 'The cake reached Ông Ba for the riverside wedding! Thanks for carrying those three tiers of trust. I am telling everyone you were the express route.',
+    vi: 'Bánh tới chỗ ông Ba cho đám cưới bên sông rồi! Cảm ơn em đã mang ba tầng tin tưởng nha. Để anh khoe em mới là đường tắt xịn nhất.',
   },
 }

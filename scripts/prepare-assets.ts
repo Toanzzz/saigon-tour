@@ -175,6 +175,14 @@ const authored: Record<string, string[]> = {
     'headphones',
   ],
   vehicles: ['cub', 'vespa'],
+  outfits: [
+    'apron',
+    'barista',
+    'photo-vest',
+    'ao-ba-ba',
+    'evening',
+    'ao-dai',
+  ].flatMap((id) => [`${id}-man`, `${id}-woman`]),
 }
 for (const [pack, names] of Object.entries(authored)) {
   for (const name of names) {
@@ -274,6 +282,17 @@ for (const dir of npcDirs) {
       .resize(96, 96, { fit: 'cover' })
       .webp({ quality: 90 })
       .toFile(resolve(outDir, 'avatar-sm.webp'))
+  }
+  const gratitude = (await listSafe(avatarDir)).find((file) =>
+    /^gratitude\.(png|webp|jpg|jpeg)$/i.test(file)
+  )
+  if (gratitude) {
+    const outDir = resolve(root, 'apps/client/public/npcs', id)
+    await mkdir(outDir, { recursive: true })
+    await sharp(resolve(avatarDir, gratitude))
+      .resize(768, 768, { fit: 'cover', withoutEnlargement: true })
+      .webp({ quality: 88 })
+      .toFile(resolve(outDir, 'gratitude.webp'))
   }
 }
 const decoderSource = resolve(

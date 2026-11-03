@@ -58,7 +58,7 @@ export function Pet({
     <group ref={group}>
       <Character
         path={def?.model}
-        animation={animation.current}
+        animation={() => animation.current}
         scale={(def?.scale ?? 0.5) * 2.35}
       />
     </group>

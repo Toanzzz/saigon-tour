@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up.',
-    vi: 'Bạn gặp chị Vy ở Tòa Thị Chính chứ không phải bờ sông hả? Thấy chưa, bản đồ 1998 không sai bao giờ — nó chỉ làm tròn thôi.',
+    en: 'Vy has the postcard at City Hall! Thank you, bạn. My 1998 map calls that a successful river trip; I call it excellent company.',
+    vi: 'Chị Vy nhận thiệp ở Tòa Thị Chính rồi! Cảm ơn bạn nha. Bản đồ 1998 gọi đó là chuyến ra sông thành công; tôi gọi là gặp được bạn đồng hành tốt.',
   },
 }

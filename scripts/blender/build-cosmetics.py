@@ -9,6 +9,7 @@ import math
 import sys
 
 import bpy
+from mathutils import Matrix, Vector
 
 repo = sys.argv[sys.argv.index("--") + 1]
 out = f"{repo}/assets/cosmetics"
@@ -55,7 +56,7 @@ def box(name, size, loc, mat, bevel=0.012):
     obj = bpy.context.object
     obj.name = name
     obj.scale = size
-    bpy.ops.object.transform_apply(scale=True)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
     return finish(obj, mat, bevel)
 
 
@@ -114,7 +115,8 @@ def lantern_hat():
     glow = material("lantern-glow", "#ffcf6b", 0.3)
     crown = cone("lantern-crown", 0.19, 0.16, 0.08, (0, 0, HEAD_TOP), frame, 18)
     lantern = torus("lantern-ring", 0.12, 0.05, (0, 0, HEAD_TOP + 0.16), glow)
-    return [crown, lantern]
+    stem = cone("lantern-support", 0.025, 0.025, 0.1, (0, 0, HEAD_TOP + 0.08), frame, 8)
+    return [crown, stem, lantern]
 
 
 def beret():
@@ -141,45 +143,62 @@ def sunglasses():
 
 def scarf():
     cloth = material("scarf-cloth", "#c2452f")
-    ring = torus("scarf", 0.17, 0.06, (0, 0, 0.42), cloth, 20, 8)
+    ring = torus("scarf", 0.17, 0.045, (0, 0, 0.345), cloth, 20, 8)
     ring.scale = (1, 0.7, 0.5)
     bpy.ops.object.transform_apply(scale=True)
-    return [ring]
+    tail = box("scarf-tail", (0.055, 0.018, 0.115), (-0.06, -0.133, 0.285), cloth)
+    return [ring, tail]
 
 
 def camera_strap():
     strap = material("strap", "#2a2d3a", 0.5)
     body = material("strap-body", "#1d1f2a", 0.4)
-    band = torus("camera-strap", 0.2, 0.02, (0, 0, 0.3), strap, 20, 6)
-    band.scale = (1, 0.6, 1.1)
-    bpy.ops.object.transform_apply(scale=True)
-    cam = box("camera-strap-body", (0.09, 0.04, 0.06), (0, -0.1, 0.25), body, 0.006)
-    return [band, cam]
+    parts = []
+    for side in (-1, 1):
+        a, b = Vector((side * 0.08, -0.08, 0.36)), Vector((side * 0.045, -0.15, 0.245))
+        strap_obj = box("camera-neck-strap", (0.018, 0.012, (a-b).length), (a+b)/2, strap)
+        strap_obj.rotation_euler = (b-a).to_track_quat("Z", "Y").to_euler()
+        parts.append(strap_obj)
+    cam = box("camera-strap-body", (0.13, 0.065, 0.085), (0, -0.15, 0.23), body, 0.006)
+    lens = cone("camera-lens", 0.03, 0.027, 0.025, (0, -0.195, 0.23), strap, 12)
+    lens.rotation_euler.x = math.pi / 2
+    return [*parts, cam, lens]
 
 
 def lantern_backpack():
     frame = material("pack-frame", "#b2472f")
     glow = material("pack-glow", "#ffcf6b", 0.3)
-    body = box("lantern-backpack", (0.16, 0.08, 0.18), (0, 0.11, 0.28), frame, 0.01)
-    lantern = cone("lantern-backpack-light", 0.06, 0.04, 0.12, (0, 0.17, 0.42), glow, 12)
+    body = box("lantern-backpack", (0.22, 0.12, 0.22), (0, 0.16, 0.26), frame, 0.01)
+    lantern = cone("lantern-backpack-light", 0.06, 0.04, 0.12, (0, 0.19, 0.41), glow, 12)
     return [body, lantern]
 
 
 def satchel():
     leather = material("satchel-leather", "#7a5230")
-    body = box("satchel", (0.14, 0.06, 0.12), (0.14, 0.02, 0.2), leather, 0.01)
-    flap = box("satchel-flap", (0.145, 0.065, 0.05), (0.14, 0.03, 0.26), leather, 0.008)
-    return [body, flap]
+    body = box("satchel", (0.14, 0.08, 0.13), (0.2, -0.07, 0.2), leather, 0.01)
+    flap = box("satchel-flap", (0.145, 0.085, 0.04), (0.2, -0.075, 0.26), leather, 0.008)
+    a, b = Vector((-0.08, -0.13, 0.35)), Vector((0.2, -0.13, 0.22))
+    strap = box("satchel-strap", (0.019, 0.012, (a-b).length), (a+b)/2, leather)
+    strap.rotation_euler = (b-a).to_track_quat("Z", "Y").to_euler()
+    return [body, flap, strap]
 
 
 def headphones():
     band_mat = material("headphone-band", "#262835", 0.5)
     cup_mat = material("headphone-cup", "#c2452f", 0.4)
-    band = torus("headphones", 0.21, 0.02, (0, 0.03, HEAD_TOP - 0.02), band_mat, 20, 6)
-    band.scale = (1, 1, 1)
-    parts = [band]
+    parts = []
+    for index in range(12):
+        angle = math.pi * index / 12
+        next_angle = math.pi * (index + 1) / 12
+        a = Vector((0.235 * math.cos(angle), 0.02, 0.48 + 0.23 * math.sin(angle)))
+        b = Vector((0.235 * math.cos(next_angle), 0.02, 0.48 + 0.23 * math.sin(next_angle)))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.018, depth=(b-a).length, location=(a+b)/2)
+        segment = bpy.context.object
+        segment.rotation_euler = (b-a).to_track_quat("Z", "Y").to_euler()
+        finish(segment, band_mat)
+        parts.append(segment)
     for side in (-1, 1):
-        parts.append(box(f"headphone-cup-{side}", (0.04, 0.05, 0.08), (side * 0.2, 0.02, 0.44), cup_mat, 0.01))
+        parts.append(box(f"headphone-cup-{side}", (0.055, 0.095, 0.12), (side * 0.235, 0.02, 0.48), cup_mat, 0.01))
     return parts
 
 
@@ -220,10 +239,26 @@ def preview(name):
     bpy.ops.render.render(write_still=True)
 
 
-for cid, (builder, _bone) in COSMETICS.items():
+def attachment_origins():
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    bpy.ops.import_scene.gltf(filepath=f"{repo}/assets/player-bases/player-man.glb")
+    arm = next(o for o in bpy.data.objects if o.type == "ARMATURE")
+    return {
+        name: Matrix.Translation(arm.matrix_world @ arm.data.bones[name].head_local)
+        for name in ("head", "torso")
+    }
+
+
+origins = attachment_origins()
+for cid, (builder, bone) in COSMETICS.items():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     parts = builder()
     preview(cid)
+    # Builders use the avatar's model coordinates. Store each piece in its
+    # attachment bone's bind coordinates, so animation adds that transform once.
+    inverse = origins[bone].inverted()
+    for obj in parts:
+        obj.matrix_world = inverse @ obj.matrix_world
     for obj in parts:
         obj.select_set(True)
     bpy.context.view_layer.objects.active = parts[0]

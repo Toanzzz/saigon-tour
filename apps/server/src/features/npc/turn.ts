@@ -1,4 +1,5 @@
 import {
+  completionLine,
   type FriendshipEvent,
   type FriendshipMap,
   friendlinessOf,
@@ -87,10 +88,10 @@ export async function buildContext(
     `Friendliness: ${friendlinessOf(record.friendship, npcId)}. Be civil below -2, reserved below 1, warm above 1.`,
     `Quests just completed: ${JSON.stringify(outcome.events.filter((event) => event.type === 'completed'))}`,
     ...outcome.events
-      .filter((event) => event.type === 'completed' && event.quest.payoff)
+      .filter((event) => event.type === 'completed')
       .map(
         (event) =>
-          `Completed this turn: ${event.quest.title}; payoff: ${event.quest.payoff}. Deliver it in your own words.`
+          `Completed this turn: ${event.quest.title}; thank-you: ${completionLine(event.quest, request.locale)}. Express gratitude and the outcome in your own voice.`
       ),
     ...(twistedLine
       ? [`Twist just happened: ${twistedLine}. React in character.`]

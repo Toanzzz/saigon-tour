@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Hoa said it tastes like coffee? Finally, an honest review. Five stars.',
-    vi: 'Cô Hoa bảo nó có vị cà phê hả? Cuối cùng cũng có một đánh giá thành thật. Năm sao.',
+    en: 'Cô Hoa has her cà phê sữa đá. Thank you! The ambition made it across the market; the honest review is up to her.',
+    vi: 'Cô Hoa có cà phê sữa đá rồi. Cảm ơn bạn nha! Chút hoài bão đã qua tới bên kia chợ; còn nhận xét thành thật thì để cô.',
   },
 }

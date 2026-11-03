@@ -1,5 +1,13 @@
 # Game progress
 
+## Quest completion and wardrobe
+
+- Completion content covers 65 authored errands in English and Vietnamese, with 29 NPC gratitude illustrations and per-person fallback dialogue.
+- New quest rewards use round-trip travel, required purchases, and complexity. Component errands remain distinct from the concert finale.
+- Completion cards queue individually. Development inspectors preview quests and the full wardrobe in isolated memory.
+- All 27 unlocks have fitted previews for both bodies. Six outfits use rigged garment models; hats and accessories use explicit bone anchors. Rides use seated poses, and pets use catalog scales in the world and fitting stage.
+- Development entry points: `?questDebug` and `?wardrobeDebug`. They expose all authored quests, completion replay, reward calculations, the full unlock catalog, animation/freeze, viewpoints, bounds, and skeleton anchors without saving or calling gameplay APIs.
+
 ## Escape pause handling
 
 The global Escape handler prevents the browser's default dialog dismissal
@@ -31,7 +39,7 @@ Stylized District 1 exploration with NPC-authored errands, a shared-room City Di
 - **NPCs, friendship, memory:** 29 agents, nine neighbors and twenty residents. Friendship (−5 to +5) lives on the player row with normal locks, revisions, socket saves, and reset. Rules and memory: `docs/agent-harness.md`. Opening a conversation shows the current activity as scene narration; reopening keeps recent messages visible with a new encounter divider. Resident walkers pause near the player.
 - **Conversation UI:** an errands strip (ready, needs you, in progress, available) from the shared `dialogueQuests`; NPC speech bubbles; a `role · location` eyebrow; a portrait rendered from the character model with a five-tier affinity crest and `affinity-info` popover; mini-avatars per NPC message. World quest diamonds render only with a `!`/`?` glyph; Pause has a symbols guide.
 - **City Director:** the world room’s events, weather, NPC placements and needs, and headlines, with deterministic validation, authored anchors, a two-event cap, one news-informed day plan drafted per UTC day, and daily count/spend guards. News sets the day's mood and may lightly theme an event, reframed rather than copied. `DIRECTOR_MODE` is `live`, `scripted`, or `off`; the news feed defaults in code to VnExpress `thoi-su`, overridable by `DIRECTOR_NEWS_URL`. Colyseus patches synchronize state; headlines produce toasts; rain uses tint/fog; event markers and the hub City pulse reflect room state.
-- **Unlocks and wardrobe:** 27 signature unlocks (nine neighbors × neutral 0 / warm 2 / close 4 friendship tiers) in `packages/shared/src/unlocks`. A reward carries the giver’s first not-owned, tier-allowed unlock; grants are idempotent inside the completion guard; reset clears them. `POST /me/equip` validates ownership and slot, then pushes the look to presence. The wardrobe (`I`) is a 3D fitting room under one shared drei `View` canvas, usable while walking, riding, paused, or in the hub; the reward popup offers “Wear now”. Bicycle unlocks render the procedural `Bike`.
+- **Unlocks and wardrobe:** 27 signature unlocks (nine neighbors × neutral 0 / warm 2 / close 4 friendship tiers) in `packages/shared/src/unlocks`. A reward carries the giver’s first not-owned, tier-allowed unlock; grants are idempotent inside the completion guard; reset clears them. `POST /me/equip` validates ownership and slot, then pushes the look to presence. The wardrobe (`I`) uses one live 3D fitting canvas and static body-specific thumbnails, usable while walking, riding, paused, or in the hub. Completion cards show NPC gratitude art, individual rewards, and Wear/Bring/Ride actions. Bicycle unlocks render a two-wheel bicycle with a basket variant.
 - **Avatar:** plain `player-man` and `player-woman` bodies built by `scripts/blender/build-player-bases.py`, with recolourable `outfit-top`/`outfit-bottom` materials. `players.body` defaults to `man` and travels on `GuestPlayer`, `PresencePlayer`, and the Colyseus `PresenceState`. Remote tints recolour clothing only.
 - **Shared room:** one `world` room of twenty with a waiting notice and `GET /realtime/status`. Details: `docs/multiplayer.md`.
 - **Title and journey:** a fresh player sees the name field with gender toggle and dice, Start exploring (plus Enter VR where supported), and the guest/Meta account line. A returning player sees Welcome back, a summary chip (favors · tracked quest · location), `Continue journey as {name}`, and Start a new journey. Renaming and body choice during a journey live in Pause. Start a new journey is a two-tap confirm on the title, Pause, and reward screens; the confirm reverts after 4 seconds; it erases progress only and returns to the fresh title with the name prefilled. Escape toggles pause; the game store owns modal close.
@@ -451,7 +459,7 @@ Non-demo turns are unchanged.
 ## Wardrobe browsing and rotation
 
 - All is the default wardrobe category and includes every owned item across slots. Individual categories filter the same collection.
-- The full-character preview supports mouse/touch rotation, a Rotate button, and left/right arrow keys on that button. Pets and rides sit beside the avatar; the viewport reserves space for the whole character.
+- The full-character preview supports mouse/touch rotation, a Rotate button, and left/right arrow keys on that button. Pets stand beside the avatar; rides show the avatar seated on the vehicle. The viewport frames the full composition.
 - Outfit palettes preserve single-material meshes and toon material names so the dressed body remains visible and uses its authored colors.
 
 ## Fresh encounter narration

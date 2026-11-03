@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.',
-    vi: 'Ông Ba mê chiếc xích lô ở góc hình hả? Dĩ nhiên rồi. Khung hình chân thật luôn là cái mình không cố chụp.',
+    en: 'Ông Ba has the cyclo photo! Thanks for helping it find the right home. The best part of the frame was waiting in the corner.',
+    vi: 'Ông Ba nhận tấm hình xích lô rồi! Cảm ơn bạn giúp nó về đúng chỗ nha. Phần đẹp nhất của khung hình hóa ra chờ ngay trong góc.',
   },
 }

@@ -26,7 +26,7 @@ export const milestone: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Alex returned the frames, still dressed for a photo. See, a lantern always comes home before the show.',
-    vi: 'Alex trả lại mấy khung, còn nguyên dáng chụp hình. Thấy chưa, đèn lồng nào rồi cũng về kịp trước giờ diễn.',
+    en: 'Alex has returned the lantern frames for the concert. Thank you, cháu. Even a lantern that wanders comes home in time for the show.',
+    vi: 'Alex trả khung đèn lồng cho đêm nhạc rồi. Cảm ơn cháu nha. Đèn có đi chơi xa thì cũng biết về kịp giờ diễn.',
   },
 }

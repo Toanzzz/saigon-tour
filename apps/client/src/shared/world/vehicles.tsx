@@ -1,5 +1,6 @@
 import { UNLOCKS } from '@saigon/shared'
 import { Model, type Vec3 } from './assets'
+import { Bicycle } from './bicycle'
 import { Block, Blocks, Sign } from './primitives'
 
 export function Vehicle({
@@ -40,10 +41,17 @@ export function PersonalVehicle({
       {def?.model ? (
         <Model path={def.model} scale={(def.scale ?? 1) * 1.4} />
       ) : (
-        <Bike cyclo={id === 'basket-bicycle'} />
+        <Bicycle basket={id === 'basket-bicycle'} />
       )}
     </group>
   )
+}
+
+/** Align the original driving pose's hip with each personal saddle. */
+export function riderPosition(id: string): Vec3 {
+  return id === 'bicycle' || id === 'basket-bicycle'
+    ? [0, 0.53, -0.13]
+    : [0, 0.68, -0.35]
 }
 
 function Bus() {

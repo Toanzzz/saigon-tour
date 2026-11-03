@@ -1,4 +1,4 @@
-import { type Look, slotOf, UNLOCKS } from '@saigon/shared'
+import { type AvatarBody, type Look, UNLOCKS } from '@saigon/shared'
 import { type Color, type Material, Mesh, type Object3D } from 'three'
 
 /** Materials the remote-player `color` tint and outfit palettes may recolour. */
@@ -45,12 +45,22 @@ export function applyOutfitPalette(
 }
 
 /** Attach a loaded cosmetic object to its bone, scaled per its catalog entry. */
-export function attachCosmetic(root: Object3D, id: string, object: Object3D) {
+export function attachCosmetic(
+  root: Object3D,
+  id: string,
+  object: Object3D,
+  body: AvatarBody = 'man'
+) {
   const def = UNLOCKS[id]
   if (!def) return
-  const bone = slotOf(id) === 'accessory' ? 'torso' : 'head'
+  const bone = def.attachment ?? (def.slot === 'hat' ? 'head' : 'torso')
   const target = root.getObjectByName(bone)
   if (!target) return
-  object.scale.setScalar(def.scale ?? 1)
+  const fit = def.fit?.[body]
+  object.scale.setScalar((def.scale ?? 1) * (fit?.scale ?? 1))
+  object.position.set(...(fit?.position ?? [0, 0, 0]))
+  object.rotation.set(...(fit?.rotation ?? [0, 0, 0]))
+  object.userData.cosmeticId = id
+  object.userData.attachment = bone
   target.add(object)
 }

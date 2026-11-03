@@ -23,7 +23,7 @@ export const riddle: SeedQuest = {
     },
   },
   payoff: {
-    en: 'You read the riddle like a postcard. Dear You: nicely done. It wrote back this time.',
-    vi: 'Bạn đọc câu đố như đọc bưu thiếp. Gửi bạn: giỏi lắm. Lần này nó có hồi âm đó.',
+    en: 'You found the place in my riddle. Thank you, dear reader! For once, the postcard has written back.',
+    vi: 'Bạn tìm được nơi trong câu đố rồi. Cảm ơn bạn đọc thân mến nha! Lần này tấm bưu thiếp có hồi âm thật rồi.',
   },
 }

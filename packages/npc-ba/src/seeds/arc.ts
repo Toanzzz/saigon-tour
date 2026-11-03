@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.',
-    vi: 'Tâm rưng rưng hả? Thấy chưa, đó là bài học: tấm hình nào rồi cũng tìm đường về nhà, như chuyện của ông rồi cũng tới chỗ cần tới.',
+    en: 'The old photo is with Tâm now. Thank you, cháu. A picture finding its way home is a fine ending to one of my wandering stories.',
+    vi: 'Tấm ảnh cũ về với Tâm rồi. Cảm ơn cháu nha. Hình tìm được đường về nhà, chuyện dài dòng của ông cũng có cái kết đẹp rồi.',
   },
 }

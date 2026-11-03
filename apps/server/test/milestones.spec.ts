@@ -1,4 +1,11 @@
-import { type ItemId, type MilestoneId, milestoneSeeds } from '@saigon/shared'
+import {
+  type ItemId,
+  type MilestoneId,
+  milestoneSeeds,
+  type NpcId,
+  type PlayerEvent,
+  type Quest,
+} from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { CityWorld } from '@/domain/city'
 import {
@@ -10,7 +17,7 @@ import {
   runConcertSequence,
 } from '@/domain/quests'
 import { safeLine } from '@/features/npc/safety'
-import { setupNpc } from './support/npc'
+import { required, setupNpc } from './support/npc'
 
 const ctx = setupNpc()
 
@@ -100,6 +107,51 @@ describe('offerApex gating', () => {
 })
 
 describe('apex completion', () => {
+  it('completes all component errands before the finale and only fires at the finale', async () => {
+    const game = new QuestService(ctx.fx.db)
+    const fired: MilestoneId[] = []
+    game.milestone = (_playerId, id) => fired.push(id)
+    const finish = async (quest: Quest, giver: NpcId) => {
+      for (const step of quest.steps) {
+        const event: PlayerEvent =
+          step.type === 'GO_TO'
+            ? { type: 'visit', locationId: step.locationId }
+            : step.type === 'BUY'
+              ? { type: 'purchase', itemId: step.marketItemId }
+              : step.type === 'TALK_TO'
+                ? { type: 'talk', npcId: step.npcId }
+                : {
+                    type: 'deliver',
+                    itemId: step.itemId,
+                    npcId: step.npcId,
+                  }
+        await game.applyEvents(ctx.playerId, [event])
+      }
+      const events = await game.checkQuests(ctx.playerId, giver)
+      expect(events.map((event) => event.type)).toEqual(['completed'])
+    }
+    for (const giver of ['mai', 'thao', 'ba'] as const) {
+      const offered = await offerMilestone(game, ctx.playerId, giver)
+      expect(offered.offered).toBe(true)
+      await finish(required(offered.quest), giver)
+      expect(fired).toEqual([])
+    }
+    const offered = await offerApex(game, ctx.playerId, 'vy')
+    expect(offered.offered).toBe(true)
+    await finish(required(offered.quest), 'vy')
+    expect(fired).toEqual(['evening-concert'])
+    expect(await offerApex(game, ctx.playerId, 'vy')).toMatchObject({
+      offered: false,
+      reason: 'milestone_completed',
+    })
+    expect(await offerMilestone(game, ctx.playerId, 'mai')).toMatchObject({
+      offered: false,
+      reason: 'milestone_completed',
+    })
+    await game.checkQuests(ctx.playerId, 'vy')
+    expect(fired).toHaveLength(1)
+  })
+
   it('consumes the components and fires the hook exactly once', async () => {
     const game = new QuestService(ctx.fx.db)
     const fired: { playerId: string; milestoneId: MilestoneId }[] = []

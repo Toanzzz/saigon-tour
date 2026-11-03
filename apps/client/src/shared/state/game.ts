@@ -14,6 +14,7 @@ import {
 } from '@saigon/shared'
 import { Store } from '@tanstack/store'
 import { type Point, SPAWN, type TravelMode } from '@/shared/world/places'
+import { queueCompletions } from './completions'
 
 export type Panel =
   | 'none'
@@ -88,6 +89,7 @@ export interface GameState {
   reducedMotion: boolean
   reward: number
   rewardQuest: Quest | null
+  rewardQueue: Quest[]
   reputation: number
   timeOfDay: 'day' | 'evening'
   viewpoint: 'river' | null
@@ -136,6 +138,7 @@ export function initialState(generation = 0): GameState {
     reducedMotion: false,
     reward: 0,
     rewardQuest: null,
+    rewardQueue: [],
     reputation: 0,
     timeOfDay: 'day',
     viewpoint: null,
@@ -226,8 +229,7 @@ export function grantReward(state: GameState, quest: Quest): GameState {
         ...(quest.milestone ? { milestone: quest.milestone } : {}),
       },
     ],
-    reward: quest.reward.currency,
-    rewardQuest: quest,
+    ...queueCompletions(state, [quest]),
     reputation: state.reputation + quest.reward.reputation,
     panel: 'reward',
     dialogue: null,

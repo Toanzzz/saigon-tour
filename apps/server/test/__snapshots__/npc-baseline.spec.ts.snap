@@ -66,7 +66,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","postoffice","river","cityhall"],"npcs":["thao","son","vy","ba"],"items":["photo","postcard","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: camera-strap (neutral), photo-vest (warm), vespa (close)
-Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"DELIVER","itemId":"photo","npcId":"vy"}],"scope":"solo","title":"The authentic shot","description":"I am chasing the authentic shot. Scout the cathedral square for the light, ask Son what to frame, then deliver the photo to Vy before a pigeon photobombs the whole plan.","payoff":"Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"ba"},"line":"Son: the best subject is the cyclo in the corner, and it is Ba’s. The photo belongs to him."}}",
+Example valid quest spec: {"giverNpcId":"alex","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"DELIVER","itemId":"photo","npcId":"vy"}],"scope":"solo","title":"The authentic shot","description":"I am chasing the authentic shot. Scout the cathedral square for the light, ask Son what to frame, then deliver the photo to Vy before a pigeon photobombs the whole plan.","payoff":"Ông Ba has the cyclo photo! Thanks for helping it find the right home. The best part of the frame was waiting in the corner.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"ba"},"line":"Son: the best subject is the cyclo in the corner, and it is Ba’s. The photo belongs to him."}}",
   "alley-diner": "
 You are Trang, a devoted food enthusiast who holds court in the food alley.
 
@@ -126,7 +126,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","tam","linh"],"items":["broth","noodles","herbs","baguette","coffee","banana"],"gifts":["baguette","coffee"]}
-Example valid quest spec: {"giverNpcId":"alley-diner","scope":"solo","steps":[{"type":"DELIVER","itemId":"broth","npcId":"hoa"}],"title":"A nine-point-four broth","description":"I scored this broth a nine-point-four, bạn: rich opening, strong finish. Take it to cô Hoa at the market so the judge can meet the chef — carefully, a spill drops it to a nine-point-one.","payoff":"Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree."}",
+Example valid quest spec: {"giverNpcId":"alley-diner","scope":"solo","steps":[{"type":"DELIVER","itemId":"broth","npcId":"hoa"}],"title":"A nine-point-four broth","description":"I scored this broth a nine-point-four, bạn: rich opening, strong finish. Take it to cô Hoa at the market so the judge can meet the chef — carefully, a spill drops it to a nine-point-one.","payoff":"Cô Hoa has the broth! Thank you, bạn. Nine-point-four for the recipe, ten for helping the judge reach the chef."}",
   "alley-vendor": "You are Chú Lộc, Alley cook, based at alley.
 Observant and independent; cares about the neighborhood and alley cook.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the alley. A small favor helps neighbors get to know one another.
@@ -175,7 +175,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"alley","locations":["alley","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"alley-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Mr. Loc's neighborhood hello","description":"Say hello to Linh in the park for the alley cook, then return."}",
+Example valid quest spec: {"giverNpcId":"alley-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Mr. Loc's neighborhood hello","description":"Say hello to Linh in the park for the alley cook, then return.","payoff":"Linh got my hello! Thanks, bạn. The stove keeps me here, but a good neighbor can carry a little warmth all the way to the park."}",
   "ba": "
 You are Ông Ba, an elderly xích lô (cyclo) driver who rests by the Sài Gòn river.
 
@@ -236,7 +236,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"river","locations":["river","market","cityhall","opera"],"npcs":["tam","hoa","alex","son"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo","lanterns"]}
 Signature rewards you grant as friendship grows: bucket-hat (neutral), ao-ba-ba (warm), basket-bicycle (close)
-Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"GO_TO","locationId":"opera"},{"type":"TALK_TO","npcId":"alex"},{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The photo that wandered","description":"This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.","payoff":"Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"tam"},"line":"Alex: the man in this old photo is Tam’s grandfather. Forget Son — this belongs with Tam."}}",
+Example valid quest spec: {"giverNpcId":"ba","steps":[{"type":"GO_TO","locationId":"opera"},{"type":"TALK_TO","npcId":"alex"},{"type":"DELIVER","itemId":"photo","npcId":"son"}],"scope":"solo","title":"The photo that wandered","description":"This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.","payoff":"The old photo is with Tâm now. Thank you, cháu. A picture finding its way home is a fine ending to one of my wandering stories.","twist":{"step":{"type":"DELIVER","itemId":"photo","npcId":"tam"},"line":"Alex: the man in this old photo is Tam’s grandfather. Forget Son — this belongs with Tam."}}",
   "bread-vendor": "
 You are Chú Bình, a bánh mì vendor at Chợ Bến Thành.
 
@@ -296,7 +296,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","alley","park"],"npcs":["hoa","tam","mai"],"items":["baguette","herbs","noodles","coffee","banana"],"gifts":["baguette","coffee"]}
-Example valid quest spec: {"giverNpcId":"bread-vendor","scope":"solo","steps":[{"type":"DELIVER","itemId":"baguette","npcId":"tam"}],"title":"A ninety-decibel loaf","description":"This baguette just tested at ninety crunch decibels, bạn — a personal best. Carry it to chú Tâm at the market before the crust drops below eighty.","payoff":"Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now."}",
+Example valid quest spec: {"giverNpcId":"bread-vendor","scope":"solo","steps":[{"type":"DELIVER","itemId":"baguette","npcId":"tam"}],"title":"A ninety-decibel loaf","description":"This baguette just tested at ninety crunch decibels, bạn — a personal best. Carry it to chú Tâm at the market before the crust drops below eighty.","payoff":"Tâm has his baguette! Thanks, bạn. Ninety crunch decibels have a witness now; I may need a bigger sign."}",
   "coffee-friend": "You are Anh Đức, Coffee regular, based at market.
 Observant and independent; cares about the neighborhood and coffee regular.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -345,7 +345,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"coffee-friend","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Duc's neighborhood hello","description":"Say hello to Linh in the park for the coffee regular, then return."}",
+Example valid quest spec: {"giverNpcId":"coffee-friend","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Duc's neighborhood hello","description":"Say hello to Linh in the park for the coffee regular, then return.","payoff":"Linh got my hello! Thanks, friend. That is one more person to wave over when we have an empty café chair."}",
   "coffee-reader": "You are Quỳnh, Café reader, based at market.
 Observant and independent; cares about the neighborhood and café reader.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -394,7 +394,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"coffee-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Quynh's neighborhood hello","description":"Say hello to Linh in the park for the café reader, then return."}",
+Example valid quest spec: {"giverNpcId":"coffee-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Quynh's neighborhood hello","description":"Say hello to Linh in the park for the café reader, then return.","payoff":"My hello reached Linh. Thank you for taking it beyond the café! A small message can open a whole new chapter."}",
   "commuter": "You are Tuấn, Commuter, based at market.
 Observant and independent; cares about the neighborhood and commuter.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -443,7 +443,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"commuter","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Tuan's neighborhood hello","description":"Say hello to Linh in the park for the commuter, then return."}",
+Example valid quest spec: {"giverNpcId":"commuter","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Tuan's neighborhood hello","description":"Say hello to Linh in the park for the commuter, then return.","payoff":"You caught Linh with my hello! Thanks. I can make my next connection knowing that little visit is taken care of."}",
   "fruit-vendor": "You are Cô Hạnh, Fruit vendor, based at market.
 Observant and independent; cares about the neighborhood and fruit vendor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -492,7 +492,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"fruit-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ms. Hanh's neighborhood hello","description":"Say hello to Linh in the park for the fruit vendor, then return."}",
+Example valid quest spec: {"giverNpcId":"fruit-vendor","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ms. Hanh's neighborhood hello","description":"Say hello to Linh in the park for the fruit vendor, then return.","payoff":"You passed my hello to Linh! Thank you, con. Good neighbors are the sweetest part of market day."}",
   "hoa": "
 You are Cô Hoa, a friendly phở and street-food vendor at Chợ Bến Thành.
 
@@ -554,7 +554,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","park","alley","cityhall"],"npcs":["linh","mai","tam","vy"],"items":["herbs","noodles","broth","baguette","coffee","banana"],"gifts":["postcard","coffee"]}
 Signature rewards you grant as friendship grows: non-la (neutral), apron (warm), dog (close)
-Example valid quest spec: {"giverNpcId":"hoa","steps":[{"type":"GO_TO","locationId":"alley"},{"type":"TALK_TO","npcId":"mai"},{"type":"DELIVER","itemId":"broth","npcId":"linh"}],"scope":"solo","title":"A three-bowl delivery, con","description":"A three-bowl problem, con: duck into the alley, ask Mai where lunch landed, then rush this broth to Linh in the park while it is still a three-bowl broth.","payoff":"The lantern crew cleared the pot? A three-bowl problem, solved in one pour.","twist":{"step":{"type":"DELIVER","itemId":"broth","npcId":"vy"},"line":"Mai: Linh’s lunch moved to Vy’s lantern crew — they are starving over there. Take the broth to Vy instead."}}",
+Example valid quest spec: {"giverNpcId":"hoa","steps":[{"type":"GO_TO","locationId":"alley"},{"type":"TALK_TO","npcId":"mai"},{"type":"DELIVER","itemId":"broth","npcId":"linh"}],"scope":"solo","title":"A three-bowl delivery, con","description":"A three-bowl problem, con: duck into the alley, ask Mai where lunch landed, then rush this broth to Linh in the park while it is still a three-bowl broth.","payoff":"The lantern crew has their broth! Thank you, con. A three-bowl problem, solved in one kind delivery.","twist":{"step":{"type":"DELIVER","itemId":"broth","npcId":"vy"},"line":"Mai: Linh’s lunch moved to Vy’s lantern crew — they are starving over there. Take the broth to Vy instead."}}",
   "linh": "
 You are Chị Linh, a university student who volunteers in the neighborhood park.
 
@@ -615,7 +615,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"park","locations":["park","market","cathedral","cityhall"],"npcs":["hoa","tam","mai","vy","thao"],"items":["herbs","noodles","broth","baguette","banana","postcard"],"gifts":["postcard","banana"]}
 Signature rewards you grant as friendship grows: volunteer-cap (neutral), bicycle (warm), bunny (close)
-Example valid quest spec: {"giverNpcId":"linh","steps":[{"type":"GO_TO","locationId":"market"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"postcard","npcId":"mai"}],"scope":"solo","title":"Deputy Invitations Officer","description":"I am appointing you Deputy Invitations Officer. Report to the market, recruit Cô Hoa to the committee, then deliver this invitation postcard to Mai for the neighborhood lunch.","payoff":"Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"thao"},"line":"Hoa: Mai is not on the guest list — she is the guest list. Give the invite to Thao; she runs entertainment."}}",
+Example valid quest spec: {"giverNpcId":"linh","steps":[{"type":"GO_TO","locationId":"market"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"postcard","npcId":"mai"}],"scope":"solo","title":"Deputy Invitations Officer","description":"I am appointing you Deputy Invitations Officer. Report to the market, recruit Cô Hoa to the committee, then deliver this invitation postcard to Mai for the neighborhood lunch.","payoff":"Thảo has the invitation! Thank you. You are officially Head of Invitations; this neighborhood lunch has its entertainment now.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"thao"},"line":"Hoa: Mai is not on the guest list — she is the guest list. Give the invite to Thao; she runs entertainment."}}",
   "mai": "
 You are Mai, the owner of a little sidewalk café beside Bến Thành Market.
 
@@ -679,7 +679,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","alley","park","postoffice"],"npcs":["hoa","tam","linh","son"],"items":["coffee","banana","baguette","postcard"],"gifts":["coffee","banana","coffee-beans"]}
 Signature rewards you grant as friendship grows: scarf (neutral), barista (warm), cat (close)
-Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"BUY","marketItemId":"banana"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Tasting notes: a palate cleanser","description":"First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.","payoff":"Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.","twist":{"step":{"type":"DELIVER","itemId":"coffee","npcId":"son"},"line":"Hoa: con, I am a pho person, not a coffee person. Give it to Son — he reviews everything."}}",
+Example valid quest spec: {"giverNpcId":"mai","steps":[{"type":"BUY","marketItemId":"banana"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"coffee","npcId":"hoa"}],"scope":"solo","title":"Tasting notes: a palate cleanser","description":"First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.","payoff":"Sơn has the coffee. Thank you! Tasting notes: a good detour and a reviewer who may write a whole postcard about it.","twist":{"step":{"type":"DELIVER","itemId":"coffee","npcId":"son"},"line":"Hoa: con, I am a pho person, not a coffee person. Give it to Son — he reviews everything."}}",
   "market-browse": "You are Ngọc, Market regular, based at market.
 Observant and independent; cares about the neighborhood and market regular.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -728,7 +728,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"market-browse","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ngoc's neighborhood hello","description":"Say hello to Linh in the park for the market regular, then return."}",
+Example valid quest spec: {"giverNpcId":"market-browse","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ngoc's neighborhood hello","description":"Say hello to Linh in the park for the market regular, then return.","payoff":"Linh has my hello. Thanks for making the trip! This market feels smaller, in a good way, when the neighbors know one another."}",
   "market-family": "You are Chị Hương, Family shopper, based at market.
 Observant and independent; cares about the neighborhood and family shopper.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -777,7 +777,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"market-family","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Huong's neighborhood hello","description":"Say hello to Linh in the park for the family shopper, then return."}",
+Example valid quest spec: {"giverNpcId":"market-family","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Huong's neighborhood hello","description":"Say hello to Linh in the park for the family shopper, then return.","payoff":"You said hello to Linh for me! Thank you. Between the bags and the shopping list, I would never have made that visit today."}",
   "market-walk": "You are Đạt, Market courier, based at market.
 Observant and independent; cares about the neighborhood and market courier.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the market. A small favor helps neighbors get to know one another.
@@ -826,7 +826,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"market","locations":["market","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"market-walk","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Dat's neighborhood hello","description":"Say hello to Linh in the park for the market courier, then return."}",
+Example valid quest spec: {"giverNpcId":"market-walk","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Dat's neighborhood hello","description":"Say hello to Linh in the park for the market courier, then return.","payoff":"My hello reached Linh! Thanks for covering that little route. Next time I pass the park, I will know a friend is there."}",
   "opera-visitor": "
 You are Diễm, a self-appointed opening-night critic who lingers at the Opera House.
 
@@ -886,7 +886,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"opera","locations":["opera","cityhall","cathedral"],"npcs":["alex","thao","vy"],"items":["photo","postcard","coffee","banana"],"gifts":["postcard","coffee"]}
-Example valid quest spec: {"giverNpcId":"opera-visitor","scope":"solo","steps":[{"type":"DELIVER","itemId":"photo","npcId":"thao"}],"title":"A four-star entrance","description":"I am filing tonight’s review, bạn. Carry this photo to chị Thảo at the Opera House and make your entrance count — I am scoring it, and the pigeons are an expert panel.","payoff":"Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate."}",
+Example valid quest spec: {"giverNpcId":"opera-visitor","scope":"solo","steps":[{"type":"DELIVER","itemId":"photo","npcId":"thao"}],"title":"A four-star entrance","description":"I am filing tonight’s review, bạn. Carry this photo to chị Thảo at the Opera House and make your entrance count — I am scoring it, and the pigeons are an expert panel.","payoff":"Thảo has the photo. Thank you, bạn! Four stars for the delivery; the pigeons are lobbying for a fifth."}",
   "park-reader": "You are Chú Phúc, Park reader, based at park.
 Observant and independent; cares about the neighborhood and park reader.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the park. A small favor helps neighbors get to know one another.
@@ -935,7 +935,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"park-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Mr. Phuc's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the park reader, then return."}",
+Example valid quest spec: {"giverNpcId":"park-reader","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Mr. Phuc's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the park reader, then return.","payoff":"You gave Cô Hoa my hello. Thank you, bạn. A nice little story has made it from this bench all the way to the market."}",
   "park-stretch": "
 You are Yến, a cheerful morning exerciser who treats the park as an open-air gym.
 
@@ -995,7 +995,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","river"],"npcs":["linh","hoa","ba"],"items":["banana","herbs","coffee","noodles"],"gifts":["banana","coffee"]}
-Example valid quest spec: {"giverNpcId":"park-stretch","scope":"solo","steps":[{"type":"DELIVER","itemId":"banana","npcId":"linh"}],"title":"A shoulder-height delivery","description":"Perfect rep, bạn: take this banana to chị Linh in the park, but carry it at shoulder height the whole way — for the gains. Counts as a set.","payoff":"Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured."}",
+Example valid quest spec: {"giverNpcId":"park-stretch","scope":"solo","steps":[{"type":"DELIVER","itemId":"banana","npcId":"linh"}],"title":"A shoulder-height delivery","description":"Perfect rep, bạn: take this banana to chị Linh in the park, but carry it at shoulder height the whole way — for the gains. Counts as a set.","payoff":"Linh has the banana! Thanks for the delivery, bạn. That is one good-neighbor rep completed; give those shoulders a break."}",
   "plaza-friends": "You are Hà, Plaza neighbor, based at cityhall.
 Observant and independent; cares about the neighborhood and plaza neighbor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the City Hall. A small favor helps neighbors get to know one another.
@@ -1044,7 +1044,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"plaza-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ha's neighborhood hello","description":"Say hello to Linh in the park for the plaza neighbor, then return."}",
+Example valid quest spec: {"giverNpcId":"plaza-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Ha's neighborhood hello","description":"Say hello to Linh in the park for the plaza neighbor, then return.","payoff":"Linh has our hello! Thanks for taking a little of this square over to the park. Next time we can wave her over too."}",
   "plaza-stroll": "
 You are Khải, an evening stroller by City Hall and a devoted lover of cải lương.
 
@@ -1104,7 +1104,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","opera","market"],"npcs":["vy","alex","thao"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
-Example valid quest spec: {"giverNpcId":"plaza-stroll","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"alex"}],"title":"Deliver the line","description":"I have penned a single trembling verse on this postcard, bạn. Carry it to anh Alex at the Opera House and, when you hand it over, deliver the line out loud — gently, like the lamps are listening.","payoff":"Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow."}",
+Example valid quest spec: {"giverNpcId":"plaza-stroll","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"alex"}],"title":"Deliver the line","description":"I have penned a single trembling verse on this postcard, bạn. Carry it to anh Alex at the Opera House and, when you hand it over, deliver the line out loud — gently, like the lamps are listening.","payoff":"Alex has the verse! Thank you, bạn. A small postcard found its stage, and your kind delivery deserves an encore."}",
   "postcard-reader": "
 You are Bảo, a gentle soul who reads postcards and writes stamp haiku at the Central Post Office.
 
@@ -1164,7 +1164,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","cityhall","cathedral"],"npcs":["son","vy","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
-Example valid quest spec: {"giverNpcId":"postcard-reader","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"son"}],"title":"A haiku for the stamp","description":"I inked a haiku beside the stamp, bạn: blue stamp, patient glue / a small boat waits for the tide / carry it to shore. Take the postcard to anh Sơn at the post office.","payoff":"Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied."}",
+Example valid quest spec: {"giverNpcId":"postcard-reader","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"son"}],"title":"A haiku for the stamp","description":"I inked a haiku beside the stamp, bạn: blue stamp, patient glue / a small boat waits for the tide / carry it to shore. Take the postcard to anh Sơn at the post office.","payoff":"Sơn has the haiku. Thank you, bạn. The little boat has reached its shore; even the stamp can rest now."}",
   "river-jogger": "
 You are Long, a runner who is always mid-jog along the riverside.
 
@@ -1224,7 +1224,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","park","market"],"npcs":["ba","linh","hoa"],"items":["banana","herbs","coffee","noodles"],"gifts":["banana","coffee"]}
-Example valid quest spec: {"giverNpcId":"river-jogger","scope":"solo","steps":[{"type":"DELIVER","itemId":"banana","npcId":"ba"}],"title":"Keep pace with the banana","description":"Quick — bạn — take this — banana — to bác Ba — by the river. But keep pace, do not — slow down, or it — counts as a — rest day. Go, go.","payoff":"Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn."}",
+Example valid quest spec: {"giverNpcId":"river-jogger","scope":"solo","steps":[{"type":"DELIVER","itemId":"banana","npcId":"ba"}],"title":"Keep pace with the banana","description":"Quick — bạn — take this — banana — to bác Ba — by the river. But keep pace, do not — slow down, or it — counts as a — rest day. Go, go.","payoff":"Bác Ba — has the banana! Thanks — bạn. One errand — across the line. Take a breath — that counts too."}",
   "riverside-friends": "You are Nhi, River neighbor, based at river.
 Observant and independent; cares about the neighborhood and river neighbor.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the river. A small favor helps neighbors get to know one another.
@@ -1273,7 +1273,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"river","locations":["river","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"riverside-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Nhi's neighborhood hello","description":"Say hello to Linh in the park for the river neighbor, then return."}",
+Example valid quest spec: {"giverNpcId":"riverside-friends","scope":"solo","steps":[{"type":"TALK_TO","npcId":"linh"}],"title":"Nhi's neighborhood hello","description":"Say hello to Linh in the park for the river neighbor, then return.","payoff":"You carried my hello to Linh! Thank you. It is good to have a little friendship running between the river and the park."}",
   "son": "
 You are Sơn, a postcard collector who lingers in the Central Post Office square.
 
@@ -1335,7 +1335,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"postoffice","locations":["postoffice","river","cathedral","market","opera"],"npcs":["alex","ba","thao","mai"],"items":["postcard","photo","coffee"],"gifts":["photo","postcard"]}
 Signature rewards you grant as friendship grows: satchel (neutral), beret (warm), parrot (close)
-Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"GO_TO","locationId":"river"},{"type":"TALK_TO","npcId":"ba"},{"type":"DELIVER","itemId":"postcard","npcId":"mai"}],"scope":"solo","title":"Dear River, you looked tired","description":"I wrote a postcard. It opens, \\"Dear River, you looked tired today.\\" Walk to the river, ask Ong Ba to hear it out, then carry the postcard to Mai.","payoff":"Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"thao"},"line":"Ba: the river cannot read, you know. But Thao sings to it every evening — give the postcard to her."}}",
+Example valid quest spec: {"giverNpcId":"son","steps":[{"type":"GO_TO","locationId":"river"},{"type":"TALK_TO","npcId":"ba"},{"type":"DELIVER","itemId":"postcard","npcId":"mai"}],"scope":"solo","title":"Dear River, you looked tired","description":"I wrote a postcard. It opens, \\"Dear River, you looked tired today.\\" Walk to the river, ask Ong Ba to hear it out, then carry the postcard to Mai.","payoff":"Thảo has the postcard for the river. Thank you for finding it a voice. Dear River: a song is on its way. Warmly, Sơn.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"thao"},"line":"Ba: the river cannot read, you know. But Thao sings to it every evening — give the postcard to her."}}",
   "square-tourist": "
 You are An, a happy visitor who tours the city with a paper map printed in 1998.
 
@@ -1395,7 +1395,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"cathedral","locations":["cathedral","cityhall","opera","postoffice"],"npcs":["vy","alex","son"],"items":["postcard","photo","coffee","banana"],"gifts":["postcard","coffee"]}
-Example valid quest spec: {"giverNpcId":"square-tourist","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"vy"}],"title":"Where the map says the river is","description":"My 1998 map swears the river is this way, bạn, which means it is actually City Hall. Take this postcard to chị Vy there — if you reach water, we are both lost.","payoff":"You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up."}",
+Example valid quest spec: {"giverNpcId":"square-tourist","scope":"solo","steps":[{"type":"DELIVER","itemId":"postcard","npcId":"vy"}],"title":"Where the map says the river is","description":"My 1998 map swears the river is this way, bạn, which means it is actually City Hall. Take this postcard to chị Vy there — if you reach water, we are both lost.","payoff":"Vy has the postcard at City Hall! Thank you, bạn. My 1998 map calls that a successful river trip; I call it excellent company."}",
   "student": "You are Minh, Student, based at park.
 Observant and independent; cares about the neighborhood and student.. Brief, civil conversation with local detail.
 Local knowledge: I spend my days around the park. A small favor helps neighbors get to know one another.
@@ -1444,7 +1444,7 @@ Optionally add twist { step, line (≤160) }: it rewrites the final step once ev
 Optionally add riddle { text (≤160) }: a clue that hides the first step until the player deduces it; the first step must be GO_TO, TALK_TO, or DELIVER.
 
 Your allowed entities: {"home":"park","locations":["park","market","park"],"npcs":["hoa","linh"],"items":["coffee","banana"],"gifts":["postcard"]}
-Example valid quest spec: {"giverNpcId":"student","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Minh's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the student, then return."}",
+Example valid quest spec: {"giverNpcId":"student","scope":"solo","steps":[{"type":"TALK_TO","npcId":"hoa"}],"title":"Minh's neighborhood hello","description":"Say hello to Ms. Hoa at the market for the student, then return.","payoff":"Cô Hoa got my hello! Thank you. You have made my next market visit feel a little more like coming home."}",
   "tam": "
 You are Anh Tâm, a cheerful xe ôm driver who waits by the Bến Thành bus stop.
 
@@ -1508,7 +1508,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"market","locations":["market","park","river","cityhall"],"npcs":["hoa","linh","ba","mai"],"items":["coffee","banana","postcard","cake"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: helmet (neutral), sunglasses (warm), cub (close)
-Example valid quest spec: {"giverNpcId":"tam","steps":[{"type":"TALK_TO","npcId":"mai"},{"type":"DELIVER","itemId":"cake","npcId":"mai"}],"scope":"solo","title":"Wedding cake express","description":"My helmet is at the polisher, so I cannot drive this wedding cake myself. Check in with Mai, then carry the cake to her — gently, it is three tiers of trust.","payoff":"Smooth ride? Do not tell me. I will tell everyone it was smooth.","twist":{"step":{"type":"DELIVER","itemId":"cake","npcId":"ba"},"line":"Mai: the wedding moved to the riverside! Ông Ba is the chủ hôn now. Take the cake to him."}}",
+Example valid quest spec: {"giverNpcId":"tam","steps":[{"type":"TALK_TO","npcId":"mai"},{"type":"DELIVER","itemId":"cake","npcId":"mai"}],"scope":"solo","title":"Wedding cake express","description":"My helmet is at the polisher, so I cannot drive this wedding cake myself. Check in with Mai, then carry the cake to her — gently, it is three tiers of trust.","payoff":"The cake reached Ông Ba for the riverside wedding! Thanks for carrying those three tiers of trust. I am telling everyone you were the express route.","twist":{"step":{"type":"DELIVER","itemId":"cake","npcId":"ba"},"line":"Mai: the wedding moved to the riverside! Ông Ba is the chủ hôn now. Take the cake to him."}}",
   "thao": "
 You are Thảo, a music student practicing near the Sài Gòn Opera House.
 
@@ -1570,7 +1570,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"opera","locations":["opera","cathedral","cityhall","park"],"npcs":["alex","vy","son","linh"],"items":["postcard","photo","coffee"],"gifts":["postcard","photo","sheet-music"]}
 Signature rewards you grant as friendship grows: headphones (neutral), ao-dai (warm), chick (close)
-Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"TALK_TO","npcId":"vy"}],"scope":"solo","title":"The echo across the square","description":"I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.","payoff":"Linh and her megaphone? That explains the melody — and the key change at dinnertime.","twist":{"step":{"type":"TALK_TO","npcId":"linh"},"line":"Son: that was no lantern. The echo was Linh practicing with her megaphone. Go ask her."}}",
+Example valid quest spec: {"giverNpcId":"thao","steps":[{"type":"GO_TO","locationId":"cathedral"},{"type":"TALK_TO","npcId":"son"},{"type":"TALK_TO","npcId":"vy"}],"scope":"solo","title":"The echo across the square","description":"I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.","payoff":"So the melody came from Linh and her megaphone! Thank you for following that echo. My city song has its very surprising chorus now.","twist":{"step":{"type":"TALK_TO","npcId":"linh"},"line":"Son: that was no lantern. The echo was Linh practicing with her megaphone. Go ask her."}}",
   "vy": "
 You are Vy, a lantern maker who works near Tòa Thị Chính and the Nguyễn Huệ
 walking street.
@@ -1633,7 +1633,7 @@ Optionally add riddle { text (≤160) }: a clue that hides the first step until 
 
 Your allowed entities: {"home":"cityhall","locations":["cityhall","alley","market","opera"],"npcs":["hoa","mai","thao","alex"],"items":["postcard","photo","coffee","banana"],"gifts":["coffee","postcard"]}
 Signature rewards you grant as friendship grows: lantern-backpack (neutral), evening (warm), lantern-hat (close)
-Example valid quest spec: {"giverNpcId":"vy","steps":[{"type":"GO_TO","locationId":"alley"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"postcard","npcId":"thao"}],"scope":"solo","title":"A lantern needs a name","description":"A new lantern needs a name and a dramatic backstory. Hang it in the alley, ask Cô Hoa for the name, then send the announcement postcard to Thao.","payoff":"Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"alex"},"line":"Hoa: I named it \\"Pho Moon.\\" Thao hates puns, so send the card to Alex — he will photograph it."}}",
+Example valid quest spec: {"giverNpcId":"vy","steps":[{"type":"GO_TO","locationId":"alley"},{"type":"TALK_TO","npcId":"hoa"},{"type":"DELIVER","itemId":"postcard","npcId":"thao"}],"scope":"solo","title":"A lantern needs a name","description":"A new lantern needs a name and a dramatic backstory. Hang it in the alley, ask Cô Hoa for the name, then send the announcement postcard to Thao.","payoff":"Alex has the announcement for Phở Moon. Thank you! Our little lantern has a name, a story, and someone ready to catch its glow.","twist":{"step":{"type":"DELIVER","itemId":"postcard","npcId":"alex"},"line":"Hoa: I named it \\"Pho Moon.\\" Thao hates puns, so send the card to Alex — he will photograph it."}}",
 }
 `;
 
@@ -2221,7 +2221,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I am chasing the authentic shot. Scout the cathedral square for the light, ask Son what to frame, then deliver the photo to Vy before a pigeon photobombs the whole plan.",
         "giverNpcId": "alex",
-        "payoff": "Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.",
+        "payoff": "Ông Ba has the cyclo photo! Thanks for helping it find the right home. The best part of the frame was waiting in the corner.",
         "scope": "solo",
         "steps": [
           {
@@ -2251,7 +2251,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring this photo to Sơn at the post office. It is my most authentic shot of the Opera House. There is a pigeon mid-blink in the corner. It completes it.",
         "giverNpcId": "alex",
-        "payoff": "Sơn liked the pigeon more than the Opera House. Honestly? So do I now.",
+        "payoff": "Sơn has my Opera House photo. Thank you! Now the pigeon has an audience, and I have another reason to keep the accidental shots.",
         "scope": "solo",
         "steps": [
           {
@@ -2265,6 +2265,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Visit the cathedral square and find the afternoon light.",
         "giverNpcId": "alex",
+        "payoff": "You found the light across the cathedral square! Thanks for looking with me. The city always gives us another angle.",
         "scope": "solo",
         "steps": [
           {
@@ -2277,7 +2278,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I set the best backdrop in town as a riddle. Work out where it stands, or let a neighbor or a cyclo give it away.",
         "giverNpcId": "alex",
-        "payoff": "You framed it without a hint. The pigeon still photobombed, but that is on the pigeon.",
+        "payoff": "You found my backdrop! Thanks for following the light with me. A hint or a happy guess, that frame is yours now.",
         "riddle": {
           "text": "Velvet curtains, a grand staircase, and a façade that poses for every photo. Even latecomers get reviewed here. Find the stage.",
         },
@@ -2295,7 +2296,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình đang săn khung hình chân thật. Ra quảng trường nhà thờ tìm ánh sáng, hỏi Sơn nên chụp gì, rồi mang tấm hình giao cho Vy trước khi có con bồ câu nhảy vô phá khung hình.",
         "giverNpcId": "alex",
-        "payoff": "Ông Ba mê chiếc xích lô ở góc hình hả? Dĩ nhiên rồi. Khung hình chân thật luôn là cái mình không cố chụp.",
+        "payoff": "Ông Ba nhận tấm hình xích lô rồi! Cảm ơn bạn giúp nó về đúng chỗ nha. Phần đẹp nhất của khung hình hóa ra chờ ngay trong góc.",
         "scope": "solo",
         "steps": [
           {
@@ -2325,7 +2326,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm ảnh này cho Sơn ở bưu điện. Đây là tấm Nhà hát chân thật nhất của mình. Góc ảnh có con bồ câu đang chớp mắt. Nó làm nên tấm hình.",
         "giverNpcId": "alex",
-        "payoff": "Sơn thích con bồ câu hơn cả Nhà hát. Thành thật mà nói? Giờ mình cũng vậy.",
+        "payoff": "Sơn nhận tấm hình Nhà hát rồi. Cảm ơn bạn nha! Bồ câu có khán giả, còn mình có thêm lý do giữ mấy tấm chụp tình cờ.",
         "scope": "solo",
         "steps": [
           {
@@ -2339,6 +2340,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ghé quảng trường nhà thờ và tìm ánh nắng buổi chiều.",
         "giverNpcId": "alex",
+        "payoff": "Bạn tìm được ánh sáng ngoài quảng trường nhà thờ rồi! Cảm ơn đã cùng mình ngắm nha. Thành phố lúc nào cũng cho thêm một góc nhìn.",
         "scope": "solo",
         "steps": [
           {
@@ -2351,7 +2353,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình biến phông nền đẹp nhất phố thành câu đố. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô bật mí.",
         "giverNpcId": "alex",
-        "payoff": "Bạn canh được khung mà không cần gợi ý. Con bồ câu vẫn phá ảnh, mà đó là lỗi của nó.",
+        "payoff": "Bạn tìm được phông nền rồi! Cảm ơn đã cùng mình lần theo ánh sáng nha. Nhờ gợi ý hay đoán trúng thì khung hình này cũng là của bạn.",
         "riddle": {
           "text": "Rèm nhung, bậc thang bề thế, mặt tiền lúc nào cũng tạo dáng cho ảnh. Tới trễ cũng bị chấm điểm. Tìm sân khấu đó đi.",
         },
@@ -2371,7 +2373,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I scored this broth a nine-point-four, bạn: rich opening, strong finish. Take it to cô Hoa at the market so the judge can meet the chef — carefully, a spill drops it to a nine-point-one.",
         "giverNpcId": "alley-diner",
-        "payoff": "Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree.",
+        "payoff": "Cô Hoa has the broth! Thank you, bạn. Nine-point-four for the recipe, ten for helping the judge reach the chef.",
         "scope": "solo",
         "steps": [
           {
@@ -2385,6 +2387,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring these noodles to chị Linh in the park.",
         "giverNpcId": "alley-diner",
+        "payoff": "Linh has the noodles for the park lunch! Thank you, bạn. A generous delivery with a lovely finish: ten points for sharing.",
         "scope": "solo",
         "steps": [
           {
@@ -2400,7 +2403,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình chấm tô nước lèo này chín phẩy tư nè bạn: mở vị đậm, hậu mạnh. Mang qua cho cô Hoa ở chợ để giám khảo gặp đầu bếp — nhẹ tay thôi, đổ một giọt là rớt còn chín phẩy một.",
         "giverNpcId": "alley-diner",
-        "payoff": "Cô Hoa nhận tô mà không đổ giọt nào hả bạn? Vậy giữ nguyên chín phẩy tư. Đầu bếp với giám khảo nhất trí.",
+        "payoff": "Cô Hoa nhận nước lèo rồi! Cảm ơn bạn nha. Chín phẩy tư cho công thức, mười điểm cho người nối giám khảo với đầu bếp.",
         "scope": "solo",
         "steps": [
           {
@@ -2414,6 +2417,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang phần mì này đến cho chị Linh ở công viên.",
         "giverNpcId": "alley-diner",
+        "payoff": "Chị Linh có mì cho bữa trưa công viên rồi! Cảm ơn bạn nha. Giao hào phóng, hậu vị dễ thương: mười điểm chia sẻ.",
         "scope": "solo",
         "steps": [
           {
@@ -2431,6 +2435,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the alley cook, then return.",
         "giverNpcId": "alley-vendor",
+        "payoff": "Linh got my hello! Thanks, bạn. The stove keeps me here, but a good neighbor can carry a little warmth all the way to the park.",
         "scope": "solo",
         "steps": [
           {
@@ -2445,6 +2450,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "alley-vendor",
+        "payoff": "Chị Linh nhận lời chào rồi! Cảm ơn bạn nha. Chú vướng cái bếp ở đây, may có hàng xóm mang giùm chút ấm ra tận công viên.",
         "scope": "solo",
         "steps": [
           {
@@ -2461,7 +2467,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "This old photo has a story, and the story drifts. Walk to the opera, let Alex look it over, then carry the photo to Son. The moral, as always, is about something else.",
         "giverNpcId": "ba",
-        "payoff": "Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.",
+        "payoff": "The old photo is with Tâm now. Thank you, cháu. A picture finding its way home is a fine ending to one of my wandering stories.",
         "scope": "solo",
         "steps": [
           {
@@ -2491,7 +2497,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Take this old photo to Sơn by the post office. It reminds me of a fish I once lost, which taught me patience. Or was it the fish that was patient?",
         "giverNpcId": "ba",
-        "payoff": "Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story.",
+        "payoff": "Sơn has the photo. Thank you, cháu, for carrying a little of the old city with you. The story about the fish can wait till you sit down.",
         "scope": "solo",
         "steps": [
           {
@@ -2505,6 +2511,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Visit the Opera House and find another side of our city.",
         "giverNpcId": "ba",
+        "payoff": "You made it to the Opera House. Thank you for taking the walk, cháu. The city keeps a different story around every corner.",
         "scope": "solo",
         "steps": [
           {
@@ -2519,7 +2526,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Tấm hình cũ này có một câu chuyện, mà chuyện thì cứ lan man. Ra nhà hát, nhờ Alex ngó qua, rồi mang tấm hình tới cho Sơn. Bài học, như mọi khi, lại nói về chuyện khác.",
         "giverNpcId": "ba",
-        "payoff": "Tâm rưng rưng hả? Thấy chưa, đó là bài học: tấm hình nào rồi cũng tìm đường về nhà, như chuyện của ông rồi cũng tới chỗ cần tới.",
+        "payoff": "Tấm ảnh cũ về với Tâm rồi. Cảm ơn cháu nha. Hình tìm được đường về nhà, chuyện dài dòng của ông cũng có cái kết đẹp rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -2549,7 +2556,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm hình cũ này cho Sơn ở bưu điện giúp ông. Nó làm ông nhớ con cá ông từng vuột mất, dạy ông tính kiên nhẫn. Hay con cá mới là đứa kiên nhẫn ta?",
         "giverNpcId": "ba",
-        "payoff": "Sơn nhận rồi hả? Tốt. Và đó, cháu thấy chưa, là lý do đừng bao giờ tin giờ tàu điện. Chuyện dài lắm.",
+        "payoff": "Sơn nhận hình rồi. Cảm ơn cháu đã mang giùm ông một chút Sài Gòn xưa. Chuyện con cá để lúc nào cháu ngồi chơi rồi ông kể.",
         "scope": "solo",
         "steps": [
           {
@@ -2563,6 +2570,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ghé Nhà hát Thành phố và khám phá một góc khác của thành phố.",
         "giverNpcId": "ba",
+        "payoff": "Cháu ghé Nhà hát rồi. Cảm ơn đã chịu đi một vòng nha. Thành phố này, qua mỗi góc là có một câu chuyện khác.",
         "scope": "solo",
         "steps": [
           {
@@ -2579,7 +2587,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "This baguette just tested at ninety crunch decibels, bạn — a personal best. Carry it to chú Tâm at the market before the crust drops below eighty.",
         "giverNpcId": "bread-vendor",
-        "payoff": "Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now.",
+        "payoff": "Tâm has his baguette! Thanks, bạn. Ninety crunch decibels have a witness now; I may need a bigger sign.",
         "scope": "solo",
         "steps": [
           {
@@ -2593,6 +2601,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring these fresh herbs to cô Hoa at the market.",
         "giverNpcId": "bread-vendor",
+        "payoff": "Cô Hoa has the fresh herbs! Thanks, bạn. Her pho and my baguettes can both start the market day properly now.",
         "scope": "solo",
         "steps": [
           {
@@ -2608,7 +2617,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ổ này vừa đo được chín chục đề-xi-ben độ giòn đó bạn — kỷ lục luôn. Mang qua cho chú Tâm ở chợ trước khi vỏ tụt xuống dưới tám chục.",
         "giverNpcId": "bread-vendor",
-        "payoff": "Chú Tâm nghe tiếng giòn từ bên kia sạp hả? Chín chục đề-xi-ben là chuẩn. Giờ có nhân chứng rồi.",
+        "payoff": "Chú Tâm có bánh mì rồi! Cảm ơn bạn nha. Chín chục đề-xi-ben có nhân chứng luôn; chắc chú phải làm bảng hiệu lớn hơn quá.",
         "scope": "solo",
         "steps": [
           {
@@ -2622,6 +2631,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang rau thơm tươi này qua cho cô Hoa ở chợ.",
         "giverNpcId": "bread-vendor",
+        "payoff": "Cô Hoa có rau thơm rồi! Cảm ơn bạn nha. Phở của cô với bánh mì của chú đều sẵn sàng mở hàng cho ra trò rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -2639,6 +2649,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the coffee regular, then return.",
         "giverNpcId": "coffee-friend",
+        "payoff": "Linh got my hello! Thanks, friend. That is one more person to wave over when we have an empty café chair.",
         "scope": "solo",
         "steps": [
           {
@@ -2653,6 +2664,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "coffee-friend",
+        "payoff": "Chị Linh nhận lời chào rồi! Cảm ơn bạn nha. Quán có ghế trống là lại có thêm người để rủ ngồi chung rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -2669,6 +2681,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the café reader, then return.",
         "giverNpcId": "coffee-reader",
+        "payoff": "My hello reached Linh. Thank you for taking it beyond the café! A small message can open a whole new chapter.",
         "scope": "solo",
         "steps": [
           {
@@ -2683,6 +2696,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "coffee-reader",
+        "payoff": "Lời chào tới chị Linh rồi. Cảm ơn bạn mang nó ra khỏi quán nha! Một lời nhắn nhỏ cũng mở được một chương mới.",
         "scope": "solo",
         "steps": [
           {
@@ -2699,6 +2713,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the commuter, then return.",
         "giverNpcId": "commuter",
+        "payoff": "You caught Linh with my hello! Thanks. I can make my next connection knowing that little visit is taken care of.",
         "scope": "solo",
         "steps": [
           {
@@ -2713,6 +2728,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "commuter",
+        "payoff": "Bạn gửi lời chào tới chị Linh rồi! Cảm ơn nha. Mình yên tâm bắt chuyến tiếp theo, khỏi nợ một lời hỏi thăm nữa.",
         "scope": "solo",
         "steps": [
           {
@@ -2729,6 +2745,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the fruit vendor, then return.",
         "giverNpcId": "fruit-vendor",
+        "payoff": "You passed my hello to Linh! Thank you, con. Good neighbors are the sweetest part of market day.",
         "scope": "solo",
         "steps": [
           {
@@ -2743,6 +2760,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "fruit-vendor",
+        "payoff": "Con gửi lời chào của cô tới chị Linh rồi! Cảm ơn con nha. Hàng xóm thương nhau mới là phần ngọt nhất buổi chợ.",
         "scope": "solo",
         "steps": [
           {
@@ -2759,7 +2777,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "A three-bowl problem, con: duck into the alley, ask Mai where lunch landed, then rush this broth to Linh in the park while it is still a three-bowl broth.",
         "giverNpcId": "hoa",
-        "payoff": "The lantern crew cleared the pot? A three-bowl problem, solved in one pour.",
+        "payoff": "The lantern crew has their broth! Thank you, con. A three-bowl problem, solved in one kind delivery.",
         "scope": "solo",
         "steps": [
           {
@@ -2789,7 +2807,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Chị Linh sounds like a two-bowl problem, con. Carry this broth to her in the park before it cools to a one-bowl mood.",
         "giverNpcId": "hoa",
-        "payoff": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",
+        "payoff": "Linh has her broth. Thank you, con! I called it a two-bowl problem; one kind neighbor did the trick.",
         "scope": "solo",
         "steps": [
           {
@@ -2803,6 +2821,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring these fresh herbs to Linh in the park.",
         "giverNpcId": "hoa",
+        "payoff": "The herbs reached Linh for lunch. Thank you, con! That little bundle carries a whole bowl of care.",
         "scope": "solo",
         "steps": [
           {
@@ -2818,7 +2837,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Chuyện cỡ ba tô đó con: ghé vô hẻm, hỏi Mai bữa trưa dời đi đâu, rồi mang tô nước lèo này ra công viên cho chị Linh khi còn nóng cỡ ba tô.",
         "giverNpcId": "hoa",
-        "payoff": "Nhóm lồng đèn húp sạch nồi hả? Chuyện cỡ ba tô, một lần rót là xong.",
+        "payoff": "Nhóm lồng đèn có nước lèo rồi! Cảm ơn con nha. Chuyện cỡ ba tô, một chuyến giao dễ thương là xong.",
         "scope": "solo",
         "steps": [
           {
@@ -2848,7 +2867,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Chị Linh nghe như chuyện cỡ hai tô đó con. Mang tô nước lèo này ra công viên cho chị ấy trước khi nguội còn cỡ một tô.",
         "giverNpcId": "hoa",
-        "payoff": "Chị Linh cười hả? Tốt. Cô tưởng cỡ hai tô, ai dè một tô là xong.",
+        "payoff": "Chị Linh nhận nước lèo rồi. Cảm ơn con nha! Cô tưởng chuyện cỡ hai tô, ai dè có con giúp là xong.",
         "scope": "solo",
         "steps": [
           {
@@ -2862,6 +2881,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
         "giverNpcId": "hoa",
+        "payoff": "Rau thơm tới chỗ chị Linh cho bữa trưa rồi. Cảm ơn con nha! Bó nhỏ vậy mà gói cả tô tình cảm đó.",
         "scope": "solo",
         "steps": [
           {
@@ -2879,7 +2899,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I am appointing you Deputy Invitations Officer. Report to the market, recruit Cô Hoa to the committee, then deliver this invitation postcard to Mai for the neighborhood lunch.",
         "giverNpcId": "linh",
-        "payoff": "Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.",
+        "payoff": "Thảo has the invitation! Thank you. You are officially Head of Invitations; this neighborhood lunch has its entertainment now.",
         "scope": "solo",
         "steps": [
           {
@@ -2909,7 +2929,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I am appointing you Deputy Herb Logistics Officer. Your first duty: deliver these herbs to Cô Hoa at the market. Badge pending.",
         "giverNpcId": "linh",
-        "payoff": "Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately.",
+        "payoff": "The herbs reached Cô Hoa! Thank you for the flawless logistics. Senior Deputy Herb Logistics Officer has a nice ring, does it not?",
         "scope": "solo",
         "steps": [
           {
@@ -2923,6 +2943,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Visit the market and invite Ms. Hoa to our neighborhood lunch.",
         "giverNpcId": "linh",
+        "payoff": "You brought the lunch invitation to Cô Hoa! Thank you. One more neighbor at the table makes the whole lunch feel warmer.",
         "scope": "solo",
         "steps": [
           {
@@ -2941,7 +2962,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Chị phong em làm Phó ban Thư mời. Ra chợ, mời Cô Hoa vào ban tổ chức, rồi mang tấm bưu thiếp mời này giao cho Mai cho bữa trưa của xóm nghen.",
         "giverNpcId": "linh",
-        "payoff": "Thảo nhận nhiệm vụ rồi hả? Tuyệt. Em được thăng làm Trưởng ban Thư mời luôn.",
+        "payoff": "Thảo nhận thư mời rồi! Cảm ơn bạn nha. Chính thức thăng làm Trưởng ban Thư mời luôn; bữa trưa xóm mình có văn nghệ rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -2971,7 +2992,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Chị bổ nhiệm bạn làm Phó phòng Hậu cần Rau thơm. Nhiệm vụ đầu tiên: mang rau thơm này cho Cô Hoa ở chợ. Huy hiệu sẽ có sau.",
         "giverNpcId": "linh",
-        "payoff": "Hậu cần hoàn hảo. Chị thăng chức bạn lên Phó phòng Cấp cao Hậu cần Rau thơm, có hiệu lực ngay.",
+        "payoff": "Rau thơm tới cô Hoa rồi! Cảm ơn bạn lo hậu cần chu đáo nha. Phó phòng Cấp cao Hậu cần Rau thơm nghe cũng oai ha?",
         "scope": "solo",
         "steps": [
           {
@@ -2985,6 +3006,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ghé chợ và mời cô Hoa đến bữa trưa chung của xóm.",
         "giverNpcId": "linh",
+        "payoff": "Bạn mang lời mời ăn trưa tới cô Hoa rồi! Cảm ơn nha. Thêm một người cùng bàn là bữa trưa ấm hơn hẳn.",
         "scope": "solo",
         "steps": [
           {
@@ -3005,7 +3027,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "First, a banana from the market as a palate cleanser. Then check in with Cô Hoa and hand her this cà phê sữa đá. Tasting notes: caramel, morning market, and a brave little bitterness.",
         "giverNpcId": "mai",
-        "payoff": "Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.",
+        "payoff": "Sơn has the coffee. Thank you! Tasting notes: a good detour and a reviewer who may write a whole postcard about it.",
         "scope": "solo",
         "steps": [
           {
@@ -3035,7 +3057,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Carry this cà phê sữa đá to Cô Hoa. Tasting notes: caramel, a hint of afternoon rain, and quiet ambition. Do not shake the ambition out.",
         "giverNpcId": "mai",
-        "payoff": "Hoa said it tastes like coffee? Finally, an honest review. Five stars.",
+        "payoff": "Cô Hoa has her cà phê sữa đá. Thank you! The ambition made it across the market; the honest review is up to her.",
         "scope": "solo",
         "steps": [
           {
@@ -3049,6 +3071,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Take this coffee across the market to Ms. Hoa.",
         "giverNpcId": "mai",
+        "payoff": "Cô Hoa has her coffee. Thank you! Tasting notes: a little sweetness, a busy market, and a very kind delivery.",
         "scope": "solo",
         "steps": [
           {
@@ -3064,7 +3087,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Trước hết, mua một trái chuối ngoài chợ để súc miệng cái đã. Rồi ghé Cô Hoa và đưa cô ly cà phê sữa đá này. Hương vị: caramel, chợ sớm, và một chút đắng gan lì.",
         "giverNpcId": "mai",
-        "payoff": "Sơn viết lại cảm nhận hả? Viết bưu thiếp cho ly cà phê luôn? Cuối cùng cũng gặp người sành điệu.",
+        "payoff": "Sơn nhận cà phê rồi. Cảm ơn bạn nha! Hương vị: một chuyến đổi đường hay ho, gặp người có khi viết cả bưu thiếp để bình ly này.",
         "scope": "solo",
         "steps": [
           {
@@ -3094,7 +3117,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang ly cà phê sữa đá này tới Cô Hoa. Hương vị: caramel, chút mưa chiều, và một ít hoài bão lặng lẽ. Đừng lắc rớt hoài bão nha.",
         "giverNpcId": "mai",
-        "payoff": "Cô Hoa bảo nó có vị cà phê hả? Cuối cùng cũng có một đánh giá thành thật. Năm sao.",
+        "payoff": "Cô Hoa có cà phê sữa đá rồi. Cảm ơn bạn nha! Chút hoài bão đã qua tới bên kia chợ; còn nhận xét thành thật thì để cô.",
         "scope": "solo",
         "steps": [
           {
@@ -3108,6 +3131,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang ly cà phê này qua chợ cho cô Hoa.",
         "giverNpcId": "mai",
+        "payoff": "Cô Hoa nhận cà phê rồi. Cảm ơn bạn nha! Hương vị: một chút ngọt, một buổi chợ đông, một người giao dễ thương.",
         "scope": "solo",
         "steps": [
           {
@@ -3125,6 +3149,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the market regular, then return.",
         "giverNpcId": "market-browse",
+        "payoff": "Linh has my hello. Thanks for making the trip! This market feels smaller, in a good way, when the neighbors know one another.",
         "scope": "solo",
         "steps": [
           {
@@ -3139,6 +3164,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "market-browse",
+        "payoff": "Linh nhận lời chào rồi. Cảm ơn bạn đi giùm nha! Hàng xóm quen nhau, cái chợ tự nhiên gần gũi hơn hẳn.",
         "scope": "solo",
         "steps": [
           {
@@ -3155,6 +3181,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the family shopper, then return.",
         "giverNpcId": "market-family",
+        "payoff": "You said hello to Linh for me! Thank you. Between the bags and the shopping list, I would never have made that visit today.",
         "scope": "solo",
         "steps": [
           {
@@ -3169,6 +3196,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "market-family",
+        "payoff": "Bạn chào chị Linh giùm chị rồi! Cảm ơn nha. Nào túi nào giỏ nào danh sách, hôm nay không có bạn là chị chẳng ghé được.",
         "scope": "solo",
         "steps": [
           {
@@ -3185,6 +3213,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the market courier, then return.",
         "giverNpcId": "market-walk",
+        "payoff": "My hello reached Linh! Thanks for covering that little route. Next time I pass the park, I will know a friend is there.",
         "scope": "solo",
         "steps": [
           {
@@ -3199,6 +3228,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "market-walk",
+        "payoff": "Lời chào tới chị Linh rồi! Cảm ơn bạn chạy giùm đoạn đó nha. Lần sau ngang công viên là mình biết có người quen để chào rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -3215,7 +3245,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I am filing tonight’s review, bạn. Carry this photo to chị Thảo at the Opera House and make your entrance count — I am scoring it, and the pigeons are an expert panel.",
         "giverNpcId": "opera-visitor",
-        "payoff": "Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate.",
+        "payoff": "Thảo has the photo. Thank you, bạn! Four stars for the delivery; the pigeons are lobbying for a fifth.",
         "scope": "solo",
         "steps": [
           {
@@ -3229,6 +3259,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring this postcard to anh Alex at the Opera House.",
         "giverNpcId": "opera-visitor",
+        "payoff": "Alex has the postcard! Thank you, bạn. A considerate delivery and no scene stolen from the neighbors: a very good review.",
         "scope": "solo",
         "steps": [
           {
@@ -3242,7 +3273,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I turned tonight’s review into a riddle about a neighbor. Deduce who, or let a neighbor or a cyclo name them.",
         "giverNpcId": "opera-visitor",
-        "payoff": "You found my critic without a program note. Four stars for the entrance.",
+        "payoff": "You found the neighbor in my review. Thank you, bạn! A thoughtful entrance, with or without a program note: four stars.",
         "riddle": {
           "text": "Find the neighbor who freezes a single moment and swears the pigeon planned the photobomb. Ask them for the review.",
         },
@@ -3260,7 +3291,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình đang viết bài bình tối nay, bạn. Mang tấm ảnh này cho chị Thảo ở Nhà hát và xuất hiện cho ra dáng — mình chấm điểm đó, mà ban giám khảo bồ câu khó tính lắm.",
         "giverNpcId": "opera-visitor",
-        "payoff": "Chị Thảo nhận ảnh mà màn xuất hiện của bạn vững hả? Bốn sao đó bạn. Bồ câu đòi năm; tụi nó lúc nào cũng chấm lố.",
+        "payoff": "Thảo nhận ảnh rồi. Cảm ơn bạn nha! Bốn sao cho chuyến giao; mấy con bồ câu đang vận động thêm sao thứ năm.",
         "scope": "solo",
         "steps": [
           {
@@ -3274,6 +3305,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm bưu thiếp này đến cho anh Alex ở Nhà hát.",
         "giverNpcId": "opera-visitor",
+        "payoff": "Anh Alex nhận bưu thiếp rồi! Cảm ơn bạn nha. Giao thiệp chu đáo, lại không giành sân khấu của hàng xóm: đáng nhận xét tốt.",
         "scope": "solo",
         "steps": [
           {
@@ -3287,7 +3319,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình biến bài nhận xét tối nay thành câu đố về một người hàng xóm. Đoán xem là ai, hoặc để hàng xóm hay bác xích lô gọi tên.",
         "giverNpcId": "opera-visitor",
-        "payoff": "Bạn tìm ra nhà phê bình của mình mà chẳng cần tờ chương trình. Bốn sao cho màn vào cửa.",
+        "payoff": "Bạn tìm được người trong bài nhận xét rồi. Cảm ơn bạn nha! Có tờ chương trình hay không thì màn vào cửa cũng chu đáo: bốn sao.",
         "riddle": {
           "text": "Tìm người hàng xóm hay bắt lấy một khoảnh khắc rồi thề là con bồ câu cố tình phá ảnh. Hỏi họ lời nhận xét nhé.",
         },
@@ -3307,6 +3339,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Ms. Hoa at the market for the park reader, then return.",
         "giverNpcId": "park-reader",
+        "payoff": "You gave Cô Hoa my hello. Thank you, bạn. A nice little story has made it from this bench all the way to the market.",
         "scope": "solo",
         "steps": [
           {
@@ -3321,6 +3354,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến cô Hoa ở chợ rồi quay lại nhé.",
         "giverNpcId": "park-reader",
+        "payoff": "Bạn chào cô Hoa giùm chú rồi. Cảm ơn nha. Một chuyện dễ thương từ ghế đá này đi tới tận chợ rồi đó.",
         "scope": "solo",
         "steps": [
           {
@@ -3337,7 +3371,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Perfect rep, bạn: take this banana to chị Linh in the park, but carry it at shoulder height the whole way — for the gains. Counts as a set.",
         "giverNpcId": "park-stretch",
-        "payoff": "Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured.",
+        "payoff": "Linh has the banana! Thanks for the delivery, bạn. That is one good-neighbor rep completed; give those shoulders a break.",
         "scope": "solo",
         "steps": [
           {
@@ -3351,6 +3385,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring these herbs to chị Linh in the park.",
         "giverNpcId": "park-stretch",
+        "payoff": "The herbs reached Linh for the park lunch! Thanks, bạn. That is a proper recovery meal and a good-neighbor rep in one.",
         "scope": "solo",
         "steps": [
           {
@@ -3366,7 +3401,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Một hiệp hoàn hảo nè bạn: mang trái chuối này cho chị Linh ở công viên, mà phải xách ngang vai suốt đường — cho lên cơ. Tính là một set.",
         "giverNpcId": "park-stretch",
-        "payoff": "Chị Linh nhận chuối mà vai bạn giữ nguyên tới nơi hả? Trọn một set đó bạn. Lên cơ chắc rồi.",
+        "payoff": "Chị Linh nhận chuối rồi! Cảm ơn bạn giao giùm nha. Xong một hiệp hàng xóm tốt rồi đó; cho vai nghỉ chút đi.",
         "scope": "solo",
         "steps": [
           {
@@ -3380,6 +3415,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
         "giverNpcId": "park-stretch",
+        "payoff": "Rau thơm tới chị Linh cho bữa trưa công viên rồi! Cảm ơn bạn nha. Vừa lo bữa hồi sức, vừa xong một hiệp hàng xóm tốt luôn.",
         "scope": "solo",
         "steps": [
           {
@@ -3397,6 +3433,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the plaza neighbor, then return.",
         "giverNpcId": "plaza-friends",
+        "payoff": "Linh has our hello! Thanks for taking a little of this square over to the park. Next time we can wave her over too.",
         "scope": "solo",
         "steps": [
           {
@@ -3411,6 +3448,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "plaza-friends",
+        "payoff": "Chị Linh nhận lời chào rồi! Cảm ơn bạn mang chút không khí quảng trường qua công viên nha. Bữa nào gặp thì rủ chị ngồi chung luôn.",
         "scope": "solo",
         "steps": [
           {
@@ -3427,7 +3465,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I have penned a single trembling verse on this postcard, bạn. Carry it to anh Alex at the Opera House and, when you hand it over, deliver the line out loud — gently, like the lamps are listening.",
         "giverNpcId": "plaza-stroll",
-        "payoff": "Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow.",
+        "payoff": "Alex has the verse! Thank you, bạn. A small postcard found its stage, and your kind delivery deserves an encore.",
         "scope": "solo",
         "steps": [
           {
@@ -3441,6 +3479,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring this photo to chị Vy at City Hall.",
         "giverNpcId": "plaza-stroll",
+        "payoff": "Vy has the keepsake photo! Thank you, bạn. A little memory has found its next scene, and you delivered the line beautifully.",
         "scope": "solo",
         "steps": [
           {
@@ -3456,7 +3495,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình đã đề một câu ngâm run run lên tấm bưu thiếp này, bạn ơi. Mang qua cho anh Alex ở Nhà hát, và khi trao thì xuống câu thành tiếng — nhẹ thôi, như thể đèn đang lắng nghe.",
         "giverNpcId": "plaza-stroll",
-        "payoff": "Anh Alex vỗ tay khi bạn xuống câu hả? Vậy là câu ngâm đã tìm được sân khấu. Hoan hô — mai diễn lại nhé.",
+        "payoff": "Anh Alex nhận câu ngâm rồi! Cảm ơn bạn nha. Tấm thiệp nhỏ tìm được sân khấu, còn người mang lời tới đáng được vỗ tay thêm.",
         "scope": "solo",
         "steps": [
           {
@@ -3470,6 +3509,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm ảnh này đến cho chị Vy ở Tòa Thị Chính.",
         "giverNpcId": "plaza-stroll",
+        "payoff": "Chị Vy nhận tấm hình kỷ niệm rồi! Cảm ơn bạn nha. Chút ký ức có cảnh diễn mới, còn bạn mang lời tới thật đẹp.",
         "scope": "solo",
         "steps": [
           {
@@ -3487,7 +3527,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I inked a haiku beside the stamp, bạn: blue stamp, patient glue / a small boat waits for the tide / carry it to shore. Take the postcard to anh Sơn at the post office.",
         "giverNpcId": "postcard-reader",
-        "payoff": "Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied.",
+        "payoff": "Sơn has the haiku. Thank you, bạn. The little boat has reached its shore; even the stamp can rest now.",
         "scope": "solo",
         "steps": [
           {
@@ -3501,6 +3541,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring this photo to chị Vy at City Hall.",
         "giverNpcId": "postcard-reader",
+        "payoff": "Vy has the photo at City Hall. Thank you, bạn. A little square of light has found a place to stay.",
         "scope": "solo",
         "steps": [
           {
@@ -3514,7 +3555,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "A haiku for a hidden address. Work out who receives this postcard, or let a neighbor or a cyclo tell you.",
         "giverNpcId": "postcard-reader",
-        "payoff": "Delivered to the right poet. Stamp, address, and riddle: all three finally rhyme.",
+        "payoff": "The postcard reached the right poet. Thank you, bạn. Stamp, address, and riddle: all three finally rhyme.",
         "riddle": {
           "text": "Carry this card to the neighbor who mails letters to the river and never waits for a reply. He will know the stamp.",
         },
@@ -3533,7 +3574,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình đề một bài haiku cạnh con tem, bạn ơi: tem xanh, keo kiên nhẫn / con thuyền nhỏ đợi con nước lên / mang tới bến giùm. Đưa tấm bưu thiếp cho anh Sơn ở bưu điện nhé.",
         "giverNpcId": "postcard-reader",
-        "payoff": "Anh Sơn đọc bài haiku lên hả bạn? Vậy là con thuyền nhỏ đã tới bến. Con tem giờ có thể an lòng nghỉ hưu.",
+        "payoff": "Sơn nhận bài haiku rồi. Cảm ơn bạn nha. Con thuyền nhỏ đã tới bến; cả con tem cũng được nghỉ rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -3547,6 +3588,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm ảnh này đến cho chị Vy ở Tòa Thị Chính.",
         "giverNpcId": "postcard-reader",
+        "payoff": "Chị Vy nhận ảnh ở Tòa Thị Chính rồi. Cảm ơn bạn nha. Một ô ánh sáng nhỏ đã có chỗ ở lại.",
         "scope": "solo",
         "steps": [
           {
@@ -3560,7 +3602,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Một bài haiku cho địa chỉ còn giấu. Đoán xem ai nhận tấm bưu thiếp này, hoặc để hàng xóm hay bác xích lô mách cho.",
         "giverNpcId": "postcard-reader",
-        "payoff": "Giao đúng cho nhà thơ rồi. Con tem, địa chỉ, và câu đố: cuối cùng cả ba cũng vần.",
+        "payoff": "Tấm bưu thiếp tới đúng nhà thơ rồi. Cảm ơn bạn nha. Con tem, địa chỉ, câu đố: cuối cùng cả ba cũng vần.",
         "riddle": {
           "text": "Mang tấm thiệp này đến người hàng xóm hay gửi thư cho dòng sông mà chẳng bao giờ chờ hồi âm. Anh ấy sẽ biết con tem.",
         },
@@ -3581,7 +3623,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Quick — bạn — take this — banana — to bác Ba — by the river. But keep pace, do not — slow down, or it — counts as a — rest day. Go, go.",
         "giverNpcId": "river-jogger",
-        "payoff": "Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn.",
+        "payoff": "Bác Ba — has the banana! Thanks — bạn. One errand — across the line. Take a breath — that counts too.",
         "scope": "solo",
         "steps": [
           {
@@ -3595,6 +3637,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring these herbs to chị Linh in the park.",
         "giverNpcId": "river-jogger",
+        "payoff": "Linh — has the herbs! Thanks — bạn. Park lunch — is one step closer. Good pace — good neighbor.",
         "scope": "solo",
         "steps": [
           {
@@ -3610,7 +3653,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Nhanh — bạn — mang — trái chuối — này cho — bác Ba — bên sông. Mà giữ nhịp, đừng — chậm lại, không thì — tính là — ngày nghỉ. Chạy, chạy.",
         "giverNpcId": "river-jogger",
-        "payoff": "Bác Ba — nhận rồi — mà bạn — giữ nhịp hả? Vậy hôm nay — không phải — ngày nghỉ. Thở — giỏi lắm bạn.",
+        "payoff": "Bác Ba — có chuối rồi! Cảm ơn — bạn nha. Một chuyến giao — về đích. Nghỉ lấy hơi — cũng tính mà.",
         "scope": "solo",
         "steps": [
           {
@@ -3624,6 +3667,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang rau thơm này đến cho chị Linh ở công viên.",
         "giverNpcId": "river-jogger",
+        "payoff": "Chị Linh — nhận rau rồi! Cảm ơn — bạn nha. Bữa trưa công viên — gần hơn một bước. Nhịp tốt — hàng xóm tốt.",
         "scope": "solo",
         "steps": [
           {
@@ -3641,6 +3685,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Linh in the park for the river neighbor, then return.",
         "giverNpcId": "riverside-friends",
+        "payoff": "You carried my hello to Linh! Thank you. It is good to have a little friendship running between the river and the park.",
         "scope": "solo",
         "steps": [
           {
@@ -3655,6 +3700,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến chị Linh ở công viên rồi quay lại nhé.",
         "giverNpcId": "riverside-friends",
+        "payoff": "Bạn mang lời chào tới chị Linh rồi! Cảm ơn nha. Có chút tình bạn nối bờ sông với công viên, vui ghê.",
         "scope": "solo",
         "steps": [
           {
@@ -3671,7 +3717,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I wrote a postcard. It opens, "Dear River, you looked tired today." Walk to the river, ask Ong Ba to hear it out, then carry the postcard to Mai.",
         "giverNpcId": "son",
-        "payoff": "Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.",
+        "payoff": "Thảo has the postcard for the river. Thank you for finding it a voice. Dear River: a song is on its way. Warmly, Sơn.",
         "scope": "solo",
         "steps": [
           {
@@ -3701,7 +3747,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Deliver this postcard to Ông Ba by the river. It is addressed to the river itself: "Dear River, you looked tired today. Rest up. Warmly, Sơn."",
         "giverNpcId": "son",
-        "payoff": "Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.",
+        "payoff": "Ông Ba has my postcard for the river. Thank you for carrying that little wish. The river need not write back; knowing it arrived is enough.",
         "scope": "solo",
         "steps": [
           {
@@ -3715,6 +3761,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Visit the riverside to bring back a little inspiration.",
         "giverNpcId": "son",
+        "payoff": "You brought back a little river air. Thank you for the walk! Dear River: there is room for you on my next postcard.",
         "scope": "solo",
         "steps": [
           {
@@ -3727,7 +3774,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Dear Reader: I hid my favorite hall in a riddle. Guess where it stands, or let a neighbor or a cyclo read it aloud.",
         "giverNpcId": "son",
-        "payoff": "You read the riddle like a postcard. Dear You: nicely done. It wrote back this time.",
+        "payoff": "You found the place in my riddle. Thank you, dear reader! For once, the postcard has written back.",
         "riddle": {
           "text": "A vaulted hall where old clocks pretend to be windows and the whole city mails its small stories. Begin where the letters wait.",
         },
@@ -3745,7 +3792,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình viết một tấm bưu thiếp. Mở đầu là: "Sông ơi, bữa nay trông mệt quá." Ra bờ sông, nhờ Ông Ba nghe thử, rồi mang tấm thiếp tới cho Mai.",
         "giverNpcId": "son",
-        "payoff": "Thảo hát tấm thiếp cho dòng sông nghe hả? Sông ơi, giờ sông có giọng rồi đó. Thương, Sơn.",
+        "payoff": "Thảo nhận bưu thiếp gửi dòng sông rồi. Cảm ơn bạn đã tìm cho nó một giọng hát. Sông ơi, bài hát đang tới đó. Thương, Sơn.",
         "scope": "solo",
         "steps": [
           {
@@ -3775,7 +3822,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm bưu thiếp này cho Ông Ba ở bờ sông. Nó gửi cho chính dòng sông: "Gửi Dòng Sông, hôm nay trông mệt quá. Nghỉ ngơi nhé. Thân, Sơn."",
         "giverNpcId": "son",
-        "payoff": "Ông Ba đọc to cho dòng sông nghe. Dòng sông không nói gì, mà Sơn hiểu đó là sự đồng tình sâu sắc.",
+        "payoff": "Ông Ba nhận bưu thiếp gửi dòng sông rồi. Cảm ơn bạn mang giùm lời nhắn nhỏ đó. Sông không cần hồi âm đâu; tới nơi là mình vui rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -3789,6 +3836,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ghé bờ sông để mang về chút cảm hứng.",
         "giverNpcId": "son",
+        "payoff": "Bạn mang về chút gió sông rồi. Cảm ơn đã đi một vòng nha! Sông ơi, tấm bưu thiếp kế tiếp có chỗ cho sông rồi đó.",
         "scope": "solo",
         "steps": [
           {
@@ -3801,7 +3849,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi bạn đọc: mình giấu gian sảnh mình thích trong một câu đố. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô đọc giúp.",
         "giverNpcId": "son",
-        "payoff": "Bạn đọc câu đố như đọc bưu thiếp. Gửi bạn: giỏi lắm. Lần này nó có hồi âm đó.",
+        "payoff": "Bạn tìm được nơi trong câu đố rồi. Cảm ơn bạn đọc thân mến nha! Lần này tấm bưu thiếp có hồi âm thật rồi.",
         "riddle": {
           "text": "Gian sảnh mái vòm, mấy cái đồng hồ cũ giả làm cửa sổ, cả thành phố gửi những mẩu chuyện nhỏ ở đó. Bắt đầu nơi thư đang chờ.",
         },
@@ -3821,7 +3869,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "My 1998 map swears the river is this way, bạn, which means it is actually City Hall. Take this postcard to chị Vy there — if you reach water, we are both lost.",
         "giverNpcId": "square-tourist",
-        "payoff": "You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up.",
+        "payoff": "Vy has the postcard at City Hall! Thank you, bạn. My 1998 map calls that a successful river trip; I call it excellent company.",
         "scope": "solo",
         "steps": [
           {
@@ -3835,6 +3883,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring this photo to anh Sơn at the Central Post Office.",
         "giverNpcId": "square-tourist",
+        "payoff": "Sơn has the photo at the post office! Thanks, bạn. That is one address my old map and I can finally agree on.",
         "scope": "solo",
         "steps": [
           {
@@ -3848,7 +3897,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I am proudly lost, so I made a riddle about a neighbor instead. Guess who, or let a neighbor or a cyclo say the name.",
         "giverNpcId": "square-tourist",
-        "payoff": "You found them without the map. I will note this landmark the way I find everything: by accident.",
+        "payoff": "You found our neighbor! Thanks, bạn. Map, hint, or happy accident, that is one landmark I can finally trust.",
         "riddle": {
           "text": "Find the neighbor who gives every paper lantern a dramatic name before dusk. My 1998 map is no help; ask them to point.",
         },
@@ -3866,7 +3915,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bản đồ 1998 của mình thề đây là hướng bờ sông, bạn ơi, nghĩa là thật ra là Tòa Thị Chính. Mang tấm bưu thiếp này cho chị Vy ở đó — nếu bạn ra tới mé nước thì cả hai cùng lạc.",
         "giverNpcId": "square-tourist",
-        "payoff": "Bạn gặp chị Vy ở Tòa Thị Chính chứ không phải bờ sông hả? Thấy chưa, bản đồ 1998 không sai bao giờ — nó chỉ làm tròn thôi.",
+        "payoff": "Chị Vy nhận thiệp ở Tòa Thị Chính rồi! Cảm ơn bạn nha. Bản đồ 1998 gọi đó là chuyến ra sông thành công; tôi gọi là gặp được bạn đồng hành tốt.",
         "scope": "solo",
         "steps": [
           {
@@ -3880,6 +3929,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang tấm ảnh này đến cho anh Sơn ở Bưu điện Trung tâm.",
         "giverNpcId": "square-tourist",
+        "payoff": "Anh Sơn nhận ảnh ở bưu điện rồi! Cảm ơn bạn nha. Cuối cùng tôi với tấm bản đồ cũ cũng đồng ý được một địa chỉ.",
         "scope": "solo",
         "steps": [
           {
@@ -3893,7 +3943,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Tôi lạc đường một cách tự hào, nên đố bạn về một người hàng xóm. Đoán xem là ai, hoặc để hàng xóm hay bác xích lô nói tên.",
         "giverNpcId": "square-tourist",
-        "payoff": "Bạn tìm ra mà chẳng cần bản đồ. Tôi sẽ ghi lại cột mốc này theo cách tôi tìm mọi thứ: tình cờ.",
+        "payoff": "Bạn tìm được người hàng xóm rồi! Cảm ơn bạn nha. Nhờ bản đồ, gợi ý hay tình cờ thì tôi cũng có một cột mốc đáng tin rồi.",
         "riddle": {
           "text": "Tìm người hàng xóm đặt cho mỗi chiếc lồng đèn giấy một cái tên thật kịch tính trước khi trời tối. Tấm bản đồ 1998 của tôi chịu; nhờ họ chỉ đường.",
         },
@@ -3913,6 +3963,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Say hello to Ms. Hoa at the market for the student, then return.",
         "giverNpcId": "student",
+        "payoff": "Cô Hoa got my hello! Thank you. You have made my next market visit feel a little more like coming home.",
         "scope": "solo",
         "steps": [
           {
@@ -3927,6 +3978,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Gửi lời chào đến cô Hoa ở chợ rồi quay lại nhé.",
         "giverNpcId": "student",
+        "payoff": "Cô Hoa nhận lời chào rồi! Cảm ơn bạn nha. Lần tới ghé chợ, mình thấy giống về nhà hơn một chút rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -3943,7 +3995,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "My helmet is at the polisher, so I cannot drive this wedding cake myself. Check in with Mai, then carry the cake to her — gently, it is three tiers of trust.",
         "giverNpcId": "tam",
-        "payoff": "Smooth ride? Do not tell me. I will tell everyone it was smooth.",
+        "payoff": "The cake reached Ông Ba for the riverside wedding! Thanks for carrying those three tiers of trust. I am telling everyone you were the express route.",
         "scope": "solo",
         "steps": [
           {
@@ -3969,7 +4021,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Run this cà phê to Cô Hoa by my shortcut. It is exactly two songs long. Three if you hum slowly, which you will.",
         "giverNpcId": "tam",
-        "payoff": "Two songs, right? Do not tell me. I will tell everyone it was two songs.",
+        "payoff": "Cô Hoa has her coffee! Thanks, em. Two songs or three, you made this shortcut worth bragging about.",
         "scope": "solo",
         "steps": [
           {
@@ -3983,6 +4035,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Check on Mr. Ba by the river and say hello.",
         "giverNpcId": "tam",
+        "payoff": "Thanks for checking on Ông Ba by the river! A hello from a neighbor is a good reason to slow down, even for me.",
         "scope": "solo",
         "steps": [
           {
@@ -3997,7 +4050,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Nón bảo hiểm của anh đang ở tiệm đánh bóng, nên anh không tự chở bánh cưới này được. Ghé Mai một tiếng, rồi mang bánh tới cho chị ấy — nhẹ tay nghen, ba tầng niềm tin đó.",
         "giverNpcId": "tam",
-        "payoff": "Đi êm chứ? Đừng kể anh nghe. Để anh khoe với mọi người là êm ru.",
+        "payoff": "Bánh tới chỗ ông Ba cho đám cưới bên sông rồi! Cảm ơn em đã mang ba tầng tin tưởng nha. Để anh khoe em mới là đường tắt xịn nhất.",
         "scope": "solo",
         "steps": [
           {
@@ -4023,7 +4076,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang ly cà phê này tới Cô Hoa theo đường tắt của anh. Đúng hai bài hát thôi. Ba bài nếu em ngân nga chậm, mà chắc em sẽ vậy.",
         "giverNpcId": "tam",
-        "payoff": "Hai bài hát đúng không? Đừng nói gì. Để anh khoe với mọi người là đúng hai bài.",
+        "payoff": "Cô Hoa có cà phê rồi! Cảm ơn em nha. Hai bài hay ba bài cũng được, chuyến đường tắt này đáng để anh khoe rồi.",
         "scope": "solo",
         "steps": [
           {
@@ -4037,6 +4090,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ghé thăm ông Ba bên sông và chào ông một tiếng.",
         "giverNpcId": "tam",
+        "payoff": "Cảm ơn em ghé hỏi thăm ông Ba bên sông nha! Một tiếng chào hàng xóm cũng đáng chạy chậm lại, kể cả với anh.",
         "scope": "solo",
         "steps": [
           {
@@ -4053,7 +4107,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I hear a melody in the square and I must find its source. Go to the cathedral, ask Son what he heard, then find Vy — her lanterns might be humming.",
         "giverNpcId": "thao",
-        "payoff": "Linh and her megaphone? That explains the melody — and the key change at dinnertime.",
+        "payoff": "So the melody came from Linh and her megaphone! Thank you for following that echo. My city song has its very surprising chorus now.",
         "scope": "solo",
         "steps": [
           {
@@ -4081,7 +4135,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Bring this coffee to Sơn at the post office. I am composing a tiny ballad about your footsteps; try to walk in a nice rhythm so the chorus works.",
         "giverNpcId": "thao",
-        "payoff": "The chorus landed on the last step to Sơn. I am naming the song after your shoes.",
+        "payoff": "Sơn has his coffee. Thank you for carrying the rhythm across the city! I think the chorus will be named after your shoes.",
         "scope": "solo",
         "steps": [
           {
@@ -4095,6 +4149,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Listen to the city at the cathedral square.",
         "giverNpcId": "thao",
+        "payoff": "You listened at the cathedral square. Thank you for sharing that quiet moment! The city sounds a little less lonely with someone else listening.",
         "scope": "solo",
         "steps": [
           {
@@ -4107,7 +4162,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "I caught a melody in the square and set it as a riddle. Solve where it lives, or let a neighbor or a cyclo tell you.",
         "giverNpcId": "thao",
-        "payoff": "You found the echo yourself. Now the ballad has a proper first verse.",
+        "payoff": "You found the echo! Thank you for listening so closely. However you found your way, my little ballad has a first verse now.",
         "riddle": {
           "text": "Two red-brick bell towers keep the square’s best echo. The pigeons only pretend to conduct. Stand where it answers.",
         },
@@ -4125,7 +4180,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình nghe một giai điệu vang trong quảng trường và phải tìm cho ra nguồn. Ra nhà thờ, hỏi Sơn nghe được gì, rồi tìm Vy — biết đâu mấy chiếc lồng đèn của bạn ấy đang ngân nga.",
         "giverNpcId": "thao",
-        "payoff": "Linh với cái loa phóng thanh hả? Thảo nào có giai điệu — lại còn đổi tông đúng giờ cơm chiều.",
+        "payoff": "Thì ra giai điệu từ chị Linh với cái loa phóng thanh! Cảm ơn bạn lần theo tiếng vọng nha. Bài hát thành phố có điệp khúc bất ngờ quá chừng.",
         "scope": "solo",
         "steps": [
           {
@@ -4153,7 +4208,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang ly cà phê này cho Sơn ở bưu điện. Mình đang soạn một khúc ballad nhỏ về bước chân bạn; đi nhịp nhàng chút để điệp khúc nghe cho hay nhé.",
         "giverNpcId": "thao",
-        "payoff": "Điệp khúc rơi đúng vào bước chân cuối tới chỗ Sơn. Mình sẽ đặt tên bài hát theo đôi giày của bạn.",
+        "payoff": "Sơn có cà phê rồi. Cảm ơn bạn mang cả nhịp chân qua phố nha! Chắc mình đặt tên điệp khúc theo đôi giày của bạn quá.",
         "scope": "solo",
         "steps": [
           {
@@ -4167,6 +4222,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Lắng nghe thành phố ở quảng trường nhà thờ.",
         "giverNpcId": "thao",
+        "payoff": "Bạn lắng nghe ở quảng trường nhà thờ rồi. Cảm ơn đã chia sẻ chút yên đó nha! Có người cùng nghe, tiếng phố cũng bớt cô đơn.",
         "scope": "solo",
         "steps": [
           {
@@ -4179,9 +4235,9 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mình bắt được một giai điệu ngoài quảng trường và đố bạn. Đoán xem nó ở đâu, hoặc để hàng xóm hay bác xích lô mách cho.",
         "giverNpcId": "thao",
-        "payoff": "Bạn tự tìm ra tiếng vọng rồi. Giờ khúc ballad đã có đoạn mở đầu đàng hoàng.",
+        "payoff": "Bạn tìm được tiếng vọng rồi! Cảm ơn đã chịu lắng nghe nha. Dù tìm đường cách nào, khúc ballad nhỏ của mình cũng có câu mở đầu rồi.",
         "riddle": {
-          "text": "Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất của quảng trường. Mấy chú bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi nó vọng lại.",
+          "text": "Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất quảng trường. Bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi tiếng vọng trả lời nhé.",
         },
         "scope": "solo",
         "steps": [
@@ -4199,7 +4255,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "A new lantern needs a name and a dramatic backstory. Hang it in the alley, ask Cô Hoa for the name, then send the announcement postcard to Thao.",
         "giverNpcId": "vy",
-        "payoff": "Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.",
+        "payoff": "Alex has the announcement for Phở Moon. Thank you! Our little lantern has a name, a story, and someone ready to catch its glow.",
         "scope": "solo",
         "steps": [
           {
@@ -4229,7 +4285,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Take this cà phê to Mai for the lantern crew. Tell her it is for "Phở Moon", the lantern that survived last year's drizzle. A hero deserves caffeine.",
         "giverNpcId": "vy",
-        "payoff": "Mai toasted Phở Moon with the coffee. The lantern has never felt so seen.",
+        "payoff": "The coffee reached Mai for the lantern crew. Thank you! Phở Moon has its caffeine tribute; now we can keep the evening glowing.",
         "scope": "solo",
         "steps": [
           {
@@ -4243,6 +4299,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Visit the food alley and look for a welcoming evening corner.",
         "giverNpcId": "vy",
+        "payoff": "You found a welcoming corner in the food alley. Thank you for taking that little walk! Every warm doorway feels like another lantern.",
         "scope": "solo",
         "steps": [
           {
@@ -4257,7 +4314,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Chiếc lồng đèn mới cần một cái tên và một câu chuyện thật kịch tính. Treo nó trong hẻm, nhờ Cô Hoa đặt tên, rồi gửi tấm bưu thiếp thông báo cho Thảo.",
         "giverNpcId": "vy",
-        "payoff": "Alex chụp "Phở Moon" lúc chạng vạng hả? Một chiếc lồng đèn có cả câu chuyện lẫn tấm chân dung. Bất tử luôn.",
+        "payoff": "Alex nhận thiệp báo tin về Phở Moon rồi. Cảm ơn bạn nha! Chiếc đèn nhỏ có tên, có chuyện, lại có người chờ chụp ánh sáng của nó nữa.",
         "scope": "solo",
         "steps": [
           {
@@ -4287,7 +4344,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Mang ly cà phê này cho Mai cho đội làm đèn lồng. Nói với chị ấy là dành cho "Trăng Phở", chiếc đèn sống sót qua cơn mưa phùn năm ngoái. Anh hùng thì xứng đáng có cà phê.",
         "giverNpcId": "vy",
-        "payoff": "Mai nâng ly cà phê chúc mừng Trăng Phở. Chiếc đèn lồng chưa bao giờ thấy mình được công nhận đến vậy.",
+        "payoff": "Cà phê tới chỗ Mai cho nhóm lồng đèn rồi. Cảm ơn bạn nha! Phở Moon có phần cà phê cổ vũ, tụi mình lại thắp sáng buổi tối tiếp.",
         "scope": "solo",
         "steps": [
           {
@@ -4301,6 +4358,7 @@ exports[`npc baseline > quest seeds per npc are unchanged 1`] = `
       {
         "description": "Ghé hẻm ẩm thực và tìm một góc phố buổi tối thật ấm cúng.",
         "giverNpcId": "vy",
+        "payoff": "Bạn tìm được góc ấm trong hẻm ẩm thực rồi. Cảm ơn đã đi một vòng nha! Mỗi ô cửa đón người như thêm một ngọn đèn vậy.",
         "scope": "solo",
         "steps": [
           {
@@ -5737,8 +5795,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "alex",
       "payoff": {
-        "en": "You framed it without a hint. The pigeon still photobombed, but that is on the pigeon.",
-        "vi": "Bạn canh được khung mà không cần gợi ý. Con bồ câu vẫn phá ảnh, mà đó là lỗi của nó.",
+        "en": "You found my backdrop! Thanks for following the light with me. A hint or a happy guess, that frame is yours now.",
+        "vi": "Bạn tìm được phông nền rồi! Cảm ơn đã cùng mình lần theo ánh sáng nha. Nhờ gợi ý hay đoán trúng thì khung hình này cũng là của bạn.",
       },
       "riddle": {
         "text": {
@@ -5766,6 +5824,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "alex",
+      "payoff": {
+        "en": "You found the light across the cathedral square! Thanks for looking with me. The city always gives us another angle.",
+        "vi": "Bạn tìm được ánh sáng ngoài quảng trường nhà thờ rồi! Cảm ơn đã cùng mình ngắm nha. Thành phố lúc nào cũng cho thêm một góc nhìn.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -5787,8 +5849,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "alex",
       "payoff": {
-        "en": "Ba loved the cyclo in the corner? Of course. The authentic shot is always the one you did not frame.",
-        "vi": "Ông Ba mê chiếc xích lô ở góc hình hả? Dĩ nhiên rồi. Khung hình chân thật luôn là cái mình không cố chụp.",
+        "en": "Ông Ba has the cyclo photo! Thanks for helping it find the right home. The best part of the frame was waiting in the corner.",
+        "vi": "Ông Ba nhận tấm hình xích lô rồi! Cảm ơn bạn giúp nó về đúng chỗ nha. Phần đẹp nhất của khung hình hóa ra chờ ngay trong góc.",
       },
       "scope": "solo",
       "steps": [
@@ -5831,8 +5893,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "alex",
       "payoff": {
-        "en": "Sơn liked the pigeon more than the Opera House. Honestly? So do I now.",
-        "vi": "Sơn thích con bồ câu hơn cả Nhà hát. Thành thật mà nói? Giờ mình cũng vậy.",
+        "en": "Sơn has my Opera House photo. Thank you! Now the pigeon has an audience, and I have another reason to keep the accidental shots.",
+        "vi": "Sơn nhận tấm hình Nhà hát rồi. Cảm ơn bạn nha! Bồ câu có khán giả, còn mình có thêm lý do giữ mấy tấm chụp tình cờ.",
       },
       "scope": "solo",
       "steps": [
@@ -5856,8 +5918,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "alley-diner",
       "payoff": {
-        "en": "Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree.",
-        "vi": "Cô Hoa nhận tô mà không đổ giọt nào hả bạn? Vậy giữ nguyên chín phẩy tư. Đầu bếp với giám khảo nhất trí.",
+        "en": "Cô Hoa has the broth! Thank you, bạn. Nine-point-four for the recipe, ten for helping the judge reach the chef.",
+        "vi": "Cô Hoa nhận nước lèo rồi! Cảm ơn bạn nha. Chín phẩy tư cho công thức, mười điểm cho người nối giám khảo với đầu bếp.",
       },
       "scope": "solo",
       "steps": [
@@ -5880,6 +5942,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "alley-diner",
+      "payoff": {
+        "en": "Linh has the noodles for the park lunch! Thank you, bạn. A generous delivery with a lovely finish: ten points for sharing.",
+        "vi": "Chị Linh có mì cho bữa trưa công viên rồi! Cảm ơn bạn nha. Giao hào phóng, hậu vị dễ thương: mười điểm chia sẻ.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -5901,6 +5967,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "alley-vendor",
+      "payoff": {
+        "en": "Linh got my hello! Thanks, bạn. The stove keeps me here, but a good neighbor can carry a little warmth all the way to the park.",
+        "vi": "Chị Linh nhận lời chào rồi! Cảm ơn bạn nha. Chú vướng cái bếp ở đây, may có hàng xóm mang giùm chút ấm ra tận công viên.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -5922,8 +5992,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "ba",
       "payoff": {
-        "en": "Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story.",
-        "vi": "Sơn nhận rồi hả? Tốt. Và đó, cháu thấy chưa, là lý do đừng bao giờ tin giờ tàu điện. Chuyện dài lắm.",
+        "en": "Sơn has the photo. Thank you, cháu, for carrying a little of the old city with you. The story about the fish can wait till you sit down.",
+        "vi": "Sơn nhận hình rồi. Cảm ơn cháu đã mang giùm ông một chút Sài Gòn xưa. Chuyện con cá để lúc nào cháu ngồi chơi rồi ông kể.",
       },
       "scope": "solo",
       "steps": [
@@ -5946,6 +6016,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "ba",
+      "payoff": {
+        "en": "You made it to the Opera House. Thank you for taking the walk, cháu. The city keeps a different story around every corner.",
+        "vi": "Cháu ghé Nhà hát rồi. Cảm ơn đã chịu đi một vòng nha. Thành phố này, qua mỗi góc là có một câu chuyện khác.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -5969,8 +6043,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giverNpcId": "ba",
       "milestone": "evening-concert",
       "payoff": {
-        "en": "Alex returned the frames, still dressed for a photo. See, a lantern always comes home before the show.",
-        "vi": "Alex trả lại mấy khung, còn nguyên dáng chụp hình. Thấy chưa, đèn lồng nào rồi cũng về kịp trước giờ diễn.",
+        "en": "Alex has returned the lantern frames for the concert. Thank you, cháu. Even a lantern that wanders comes home in time for the show.",
+        "vi": "Alex trả khung đèn lồng cho đêm nhạc rồi. Cảm ơn cháu nha. Đèn có đi chơi xa thì cũng biết về kịp giờ diễn.",
       },
       "scope": "solo",
       "steps": [
@@ -5997,8 +6071,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "ba",
       "payoff": {
-        "en": "Tam teared up? See, that is the moral: a photo always finds its way home, like my stories find the point.",
-        "vi": "Tâm rưng rưng hả? Thấy chưa, đó là bài học: tấm hình nào rồi cũng tìm đường về nhà, như chuyện của ông rồi cũng tới chỗ cần tới.",
+        "en": "The old photo is with Tâm now. Thank you, cháu. A picture finding its way home is a fine ending to one of my wandering stories.",
+        "vi": "Tấm ảnh cũ về với Tâm rồi. Cảm ơn cháu nha. Hình tìm được đường về nhà, chuyện dài dòng của ông cũng có cái kết đẹp rồi.",
       },
       "scope": "solo",
       "steps": [
@@ -6041,8 +6115,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "bread-vendor",
       "payoff": {
-        "en": "Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now.",
-        "vi": "Chú Tâm nghe tiếng giòn từ bên kia sạp hả? Chín chục đề-xi-ben là chuẩn. Giờ có nhân chứng rồi.",
+        "en": "Tâm has his baguette! Thanks, bạn. Ninety crunch decibels have a witness now; I may need a bigger sign.",
+        "vi": "Chú Tâm có bánh mì rồi! Cảm ơn bạn nha. Chín chục đề-xi-ben có nhân chứng luôn; chắc chú phải làm bảng hiệu lớn hơn quá.",
       },
       "scope": "solo",
       "steps": [
@@ -6065,6 +6139,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "bread-vendor",
+      "payoff": {
+        "en": "Cô Hoa has the fresh herbs! Thanks, bạn. Her pho and my baguettes can both start the market day properly now.",
+        "vi": "Cô Hoa có rau thơm rồi! Cảm ơn bạn nha. Phở của cô với bánh mì của chú đều sẵn sàng mở hàng cho ra trò rồi.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6086,6 +6164,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "coffee-friend",
+      "payoff": {
+        "en": "Linh got my hello! Thanks, friend. That is one more person to wave over when we have an empty café chair.",
+        "vi": "Chị Linh nhận lời chào rồi! Cảm ơn bạn nha. Quán có ghế trống là lại có thêm người để rủ ngồi chung rồi.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6106,6 +6188,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "coffee-reader",
+      "payoff": {
+        "en": "My hello reached Linh. Thank you for taking it beyond the café! A small message can open a whole new chapter.",
+        "vi": "Lời chào tới chị Linh rồi. Cảm ơn bạn mang nó ra khỏi quán nha! Một lời nhắn nhỏ cũng mở được một chương mới.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6126,6 +6212,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "commuter",
+      "payoff": {
+        "en": "You caught Linh with my hello! Thanks. I can make my next connection knowing that little visit is taken care of.",
+        "vi": "Bạn gửi lời chào tới chị Linh rồi! Cảm ơn nha. Mình yên tâm bắt chuyến tiếp theo, khỏi nợ một lời hỏi thăm nữa.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6146,6 +6236,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "fruit-vendor",
+      "payoff": {
+        "en": "You passed my hello to Linh! Thank you, con. Good neighbors are the sweetest part of market day.",
+        "vi": "Con gửi lời chào của cô tới chị Linh rồi! Cảm ơn con nha. Hàng xóm thương nhau mới là phần ngọt nhất buổi chợ.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6167,8 +6261,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "hoa",
       "payoff": {
-        "en": "The lantern crew cleared the pot? A three-bowl problem, solved in one pour.",
-        "vi": "Nhóm lồng đèn húp sạch nồi hả? Chuyện cỡ ba tô, một lần rót là xong.",
+        "en": "The lantern crew has their broth! Thank you, con. A three-bowl problem, solved in one kind delivery.",
+        "vi": "Nhóm lồng đèn có nước lèo rồi! Cảm ơn con nha. Chuyện cỡ ba tô, một chuyến giao dễ thương là xong.",
       },
       "scope": "solo",
       "steps": [
@@ -6212,8 +6306,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "demo": true,
       "giverNpcId": "hoa",
       "payoff": {
-        "en": "Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.",
-        "vi": "Chị Linh cười hả? Tốt. Cô tưởng cỡ hai tô, ai dè một tô là xong.",
+        "en": "Linh has her broth. Thank you, con! I called it a two-bowl problem; one kind neighbor did the trick.",
+        "vi": "Chị Linh nhận nước lèo rồi. Cảm ơn con nha! Cô tưởng chuyện cỡ hai tô, ai dè có con giúp là xong.",
       },
       "scope": "solo",
       "steps": [
@@ -6236,6 +6330,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "hoa",
+      "payoff": {
+        "en": "The herbs reached Linh for lunch. Thank you, con! That little bundle carries a whole bowl of care.",
+        "vi": "Rau thơm tới chỗ chị Linh cho bữa trưa rồi. Cảm ơn con nha! Bó nhỏ vậy mà gói cả tô tình cảm đó.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6257,6 +6355,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "linh",
+      "payoff": {
+        "en": "You brought the lunch invitation to Cô Hoa! Thank you. One more neighbor at the table makes the whole lunch feel warmer.",
+        "vi": "Bạn mang lời mời ăn trưa tới cô Hoa rồi! Cảm ơn nha. Thêm một người cùng bàn là bữa trưa ấm hơn hẳn.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6282,8 +6384,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "linh",
       "payoff": {
-        "en": "Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately.",
-        "vi": "Hậu cần hoàn hảo. Chị thăng chức bạn lên Phó phòng Cấp cao Hậu cần Rau thơm, có hiệu lực ngay.",
+        "en": "The herbs reached Cô Hoa! Thank you for the flawless logistics. Senior Deputy Herb Logistics Officer has a nice ring, does it not?",
+        "vi": "Rau thơm tới cô Hoa rồi! Cảm ơn bạn lo hậu cần chu đáo nha. Phó phòng Cấp cao Hậu cần Rau thơm nghe cũng oai ha?",
       },
       "scope": "solo",
       "steps": [
@@ -6307,8 +6409,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "linh",
       "payoff": {
-        "en": "Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.",
-        "vi": "Thảo nhận nhiệm vụ rồi hả? Tuyệt. Em được thăng làm Trưởng ban Thư mời luôn.",
+        "en": "Thảo has the invitation! Thank you. You are officially Head of Invitations; this neighborhood lunch has its entertainment now.",
+        "vi": "Thảo nhận thư mời rồi! Cảm ơn bạn nha. Chính thức thăng làm Trưởng ban Thư mời luôn; bữa trưa xóm mình có văn nghệ rồi.",
       },
       "scope": "solo",
       "steps": [
@@ -6353,8 +6455,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giverNpcId": "mai",
       "milestone": "evening-concert",
       "payoff": {
-        "en": "Hoa approved the beans in two bowls flat. For the concert, Vy, roasted just right.",
-        "vi": "Cô Hoa duyệt cà phê gọn trong hai tô. Rang vừa đúng độ, để dành cho đêm nhạc của Vy.",
+        "en": "The beans are ready for Vy and the evening concert. Thank you! Tasting notes: dusk, good company, and an encore worth staying for.",
+        "vi": "Cà phê hạt sẵn cho Vy với đêm nhạc rồi. Cảm ơn bạn nha! Hương vị: chạng vạng, bạn hiền, và một màn diễn thêm đáng nán lại.",
       },
       "scope": "solo",
       "steps": [
@@ -6380,6 +6482,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "mai",
+      "payoff": {
+        "en": "Cô Hoa has her coffee. Thank you! Tasting notes: a little sweetness, a busy market, and a very kind delivery.",
+        "vi": "Cô Hoa nhận cà phê rồi. Cảm ơn bạn nha! Hương vị: một chút ngọt, một buổi chợ đông, một người giao dễ thương.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6402,8 +6508,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "mai",
       "payoff": {
-        "en": "Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.",
-        "vi": "Sơn viết lại cảm nhận hả? Viết bưu thiếp cho ly cà phê luôn? Cuối cùng cũng gặp người sành điệu.",
+        "en": "Sơn has the coffee. Thank you! Tasting notes: a good detour and a reviewer who may write a whole postcard about it.",
+        "vi": "Sơn nhận cà phê rồi. Cảm ơn bạn nha! Hương vị: một chuyến đổi đường hay ho, gặp người có khi viết cả bưu thiếp để bình ly này.",
       },
       "scope": "solo",
       "steps": [
@@ -6446,8 +6552,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "mai",
       "payoff": {
-        "en": "Hoa said it tastes like coffee? Finally, an honest review. Five stars.",
-        "vi": "Cô Hoa bảo nó có vị cà phê hả? Cuối cùng cũng có một đánh giá thành thật. Năm sao.",
+        "en": "Cô Hoa has her cà phê sữa đá. Thank you! The ambition made it across the market; the honest review is up to her.",
+        "vi": "Cô Hoa có cà phê sữa đá rồi. Cảm ơn bạn nha! Chút hoài bão đã qua tới bên kia chợ; còn nhận xét thành thật thì để cô.",
       },
       "scope": "solo",
       "steps": [
@@ -6470,6 +6576,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "market-browse",
+      "payoff": {
+        "en": "Linh has my hello. Thanks for making the trip! This market feels smaller, in a good way, when the neighbors know one another.",
+        "vi": "Linh nhận lời chào rồi. Cảm ơn bạn đi giùm nha! Hàng xóm quen nhau, cái chợ tự nhiên gần gũi hơn hẳn.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6490,6 +6600,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "market-family",
+      "payoff": {
+        "en": "You said hello to Linh for me! Thank you. Between the bags and the shopping list, I would never have made that visit today.",
+        "vi": "Bạn chào chị Linh giùm chị rồi! Cảm ơn nha. Nào túi nào giỏ nào danh sách, hôm nay không có bạn là chị chẳng ghé được.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6510,6 +6624,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "market-walk",
+      "payoff": {
+        "en": "My hello reached Linh! Thanks for covering that little route. Next time I pass the park, I will know a friend is there.",
+        "vi": "Lời chào tới chị Linh rồi! Cảm ơn bạn chạy giùm đoạn đó nha. Lần sau ngang công viên là mình biết có người quen để chào rồi.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6531,8 +6649,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "opera-visitor",
       "payoff": {
-        "en": "Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate.",
-        "vi": "Chị Thảo nhận ảnh mà màn xuất hiện của bạn vững hả? Bốn sao đó bạn. Bồ câu đòi năm; tụi nó lúc nào cũng chấm lố.",
+        "en": "Thảo has the photo. Thank you, bạn! Four stars for the delivery; the pigeons are lobbying for a fifth.",
+        "vi": "Thảo nhận ảnh rồi. Cảm ơn bạn nha! Bốn sao cho chuyến giao; mấy con bồ câu đang vận động thêm sao thứ năm.",
       },
       "scope": "solo",
       "steps": [
@@ -6555,6 +6673,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "opera-visitor",
+      "payoff": {
+        "en": "Alex has the postcard! Thank you, bạn. A considerate delivery and no scene stolen from the neighbors: a very good review.",
+        "vi": "Anh Alex nhận bưu thiếp rồi! Cảm ơn bạn nha. Giao thiệp chu đáo, lại không giành sân khấu của hàng xóm: đáng nhận xét tốt.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6577,8 +6699,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "opera-visitor",
       "payoff": {
-        "en": "You found my critic without a program note. Four stars for the entrance.",
-        "vi": "Bạn tìm ra nhà phê bình của mình mà chẳng cần tờ chương trình. Bốn sao cho màn vào cửa.",
+        "en": "You found the neighbor in my review. Thank you, bạn! A thoughtful entrance, with or without a program note: four stars.",
+        "vi": "Bạn tìm được người trong bài nhận xét rồi. Cảm ơn bạn nha! Có tờ chương trình hay không thì màn vào cửa cũng chu đáo: bốn sao.",
       },
       "riddle": {
         "text": {
@@ -6606,6 +6728,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "park-reader",
+      "payoff": {
+        "en": "You gave Cô Hoa my hello. Thank you, bạn. A nice little story has made it from this bench all the way to the market.",
+        "vi": "Bạn chào cô Hoa giùm chú rồi. Cảm ơn nha. Một chuyện dễ thương từ ghế đá này đi tới tận chợ rồi đó.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6627,8 +6753,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "park-stretch",
       "payoff": {
-        "en": "Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured.",
-        "vi": "Chị Linh nhận chuối mà vai bạn giữ nguyên tới nơi hả? Trọn một set đó bạn. Lên cơ chắc rồi.",
+        "en": "Linh has the banana! Thanks for the delivery, bạn. That is one good-neighbor rep completed; give those shoulders a break.",
+        "vi": "Chị Linh nhận chuối rồi! Cảm ơn bạn giao giùm nha. Xong một hiệp hàng xóm tốt rồi đó; cho vai nghỉ chút đi.",
       },
       "scope": "solo",
       "steps": [
@@ -6651,6 +6777,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "park-stretch",
+      "payoff": {
+        "en": "The herbs reached Linh for the park lunch! Thanks, bạn. That is a proper recovery meal and a good-neighbor rep in one.",
+        "vi": "Rau thơm tới chị Linh cho bữa trưa công viên rồi! Cảm ơn bạn nha. Vừa lo bữa hồi sức, vừa xong một hiệp hàng xóm tốt luôn.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6672,6 +6802,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "plaza-friends",
+      "payoff": {
+        "en": "Linh has our hello! Thanks for taking a little of this square over to the park. Next time we can wave her over too.",
+        "vi": "Chị Linh nhận lời chào rồi! Cảm ơn bạn mang chút không khí quảng trường qua công viên nha. Bữa nào gặp thì rủ chị ngồi chung luôn.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6692,6 +6826,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "plaza-stroll",
+      "payoff": {
+        "en": "Vy has the keepsake photo! Thank you, bạn. A little memory has found its next scene, and you delivered the line beautifully.",
+        "vi": "Chị Vy nhận tấm hình kỷ niệm rồi! Cảm ơn bạn nha. Chút ký ức có cảnh diễn mới, còn bạn mang lời tới thật đẹp.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6714,8 +6852,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "plaza-stroll",
       "payoff": {
-        "en": "Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow.",
-        "vi": "Anh Alex vỗ tay khi bạn xuống câu hả? Vậy là câu ngâm đã tìm được sân khấu. Hoan hô — mai diễn lại nhé.",
+        "en": "Alex has the verse! Thank you, bạn. A small postcard found its stage, and your kind delivery deserves an encore.",
+        "vi": "Anh Alex nhận câu ngâm rồi! Cảm ơn bạn nha. Tấm thiệp nhỏ tìm được sân khấu, còn người mang lời tới đáng được vỗ tay thêm.",
       },
       "scope": "solo",
       "steps": [
@@ -6739,8 +6877,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "postcard-reader",
       "payoff": {
-        "en": "Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied.",
-        "vi": "Anh Sơn đọc bài haiku lên hả bạn? Vậy là con thuyền nhỏ đã tới bến. Con tem giờ có thể an lòng nghỉ hưu.",
+        "en": "Sơn has the haiku. Thank you, bạn. The little boat has reached its shore; even the stamp can rest now.",
+        "vi": "Sơn nhận bài haiku rồi. Cảm ơn bạn nha. Con thuyền nhỏ đã tới bến; cả con tem cũng được nghỉ rồi.",
       },
       "scope": "solo",
       "steps": [
@@ -6763,6 +6901,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "postcard-reader",
+      "payoff": {
+        "en": "Vy has the photo at City Hall. Thank you, bạn. A little square of light has found a place to stay.",
+        "vi": "Chị Vy nhận ảnh ở Tòa Thị Chính rồi. Cảm ơn bạn nha. Một ô ánh sáng nhỏ đã có chỗ ở lại.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6785,8 +6927,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "postcard-reader",
       "payoff": {
-        "en": "Delivered to the right poet. Stamp, address, and riddle: all three finally rhyme.",
-        "vi": "Giao đúng cho nhà thơ rồi. Con tem, địa chỉ, và câu đố: cuối cùng cả ba cũng vần.",
+        "en": "The postcard reached the right poet. Thank you, bạn. Stamp, address, and riddle: all three finally rhyme.",
+        "vi": "Tấm bưu thiếp tới đúng nhà thơ rồi. Cảm ơn bạn nha. Con tem, địa chỉ, câu đố: cuối cùng cả ba cũng vần.",
       },
       "riddle": {
         "text": {
@@ -6815,6 +6957,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "river-jogger",
+      "payoff": {
+        "en": "Linh — has the herbs! Thanks — bạn. Park lunch — is one step closer. Good pace — good neighbor.",
+        "vi": "Chị Linh — nhận rau rồi! Cảm ơn — bạn nha. Bữa trưa công viên — gần hơn một bước. Nhịp tốt — hàng xóm tốt.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6837,8 +6983,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "river-jogger",
       "payoff": {
-        "en": "Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn.",
-        "vi": "Bác Ba — nhận rồi — mà bạn — giữ nhịp hả? Vậy hôm nay — không phải — ngày nghỉ. Thở — giỏi lắm bạn.",
+        "en": "Bác Ba — has the banana! Thanks — bạn. One errand — across the line. Take a breath — that counts too.",
+        "vi": "Bác Ba — có chuối rồi! Cảm ơn — bạn nha. Một chuyến giao — về đích. Nghỉ lấy hơi — cũng tính mà.",
       },
       "scope": "solo",
       "steps": [
@@ -6861,6 +7007,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "riverside-friends",
+      "payoff": {
+        "en": "You carried my hello to Linh! Thank you. It is good to have a little friendship running between the river and the park.",
+        "vi": "Bạn mang lời chào tới chị Linh rồi! Cảm ơn nha. Có chút tình bạn nối bờ sông với công viên, vui ghê.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -6882,8 +7032,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "son",
       "payoff": {
-        "en": "You read the riddle like a postcard. Dear You: nicely done. It wrote back this time.",
-        "vi": "Bạn đọc câu đố như đọc bưu thiếp. Gửi bạn: giỏi lắm. Lần này nó có hồi âm đó.",
+        "en": "You found the place in my riddle. Thank you, dear reader! For once, the postcard has written back.",
+        "vi": "Bạn tìm được nơi trong câu đố rồi. Cảm ơn bạn đọc thân mến nha! Lần này tấm bưu thiếp có hồi âm thật rồi.",
       },
       "riddle": {
         "text": {
@@ -6912,8 +7062,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "son",
       "payoff": {
-        "en": "Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.",
-        "vi": "Thảo hát tấm thiếp cho dòng sông nghe hả? Sông ơi, giờ sông có giọng rồi đó. Thương, Sơn.",
+        "en": "Thảo has the postcard for the river. Thank you for finding it a voice. Dear River: a song is on its way. Warmly, Sơn.",
+        "vi": "Thảo nhận bưu thiếp gửi dòng sông rồi. Cảm ơn bạn đã tìm cho nó một giọng hát. Sông ơi, bài hát đang tới đó. Thương, Sơn.",
       },
       "scope": "solo",
       "steps": [
@@ -6956,8 +7106,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "son",
       "payoff": {
-        "en": "Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.",
-        "vi": "Ông Ba đọc to cho dòng sông nghe. Dòng sông không nói gì, mà Sơn hiểu đó là sự đồng tình sâu sắc.",
+        "en": "Ông Ba has my postcard for the river. Thank you for carrying that little wish. The river need not write back; knowing it arrived is enough.",
+        "vi": "Ông Ba nhận bưu thiếp gửi dòng sông rồi. Cảm ơn bạn mang giùm lời nhắn nhỏ đó. Sông không cần hồi âm đâu; tới nơi là mình vui rồi.",
       },
       "scope": "solo",
       "steps": [
@@ -6980,6 +7130,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "son",
+      "payoff": {
+        "en": "You brought back a little river air. Thank you for the walk! Dear River: there is room for you on my next postcard.",
+        "vi": "Bạn mang về chút gió sông rồi. Cảm ơn đã đi một vòng nha! Sông ơi, tấm bưu thiếp kế tiếp có chỗ cho sông rồi đó.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -7000,6 +7154,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "square-tourist",
+      "payoff": {
+        "en": "Sơn has the photo at the post office! Thanks, bạn. That is one address my old map and I can finally agree on.",
+        "vi": "Anh Sơn nhận ảnh ở bưu điện rồi! Cảm ơn bạn nha. Cuối cùng tôi với tấm bản đồ cũ cũng đồng ý được một địa chỉ.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -7022,8 +7180,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "square-tourist",
       "payoff": {
-        "en": "You found them without the map. I will note this landmark the way I find everything: by accident.",
-        "vi": "Bạn tìm ra mà chẳng cần bản đồ. Tôi sẽ ghi lại cột mốc này theo cách tôi tìm mọi thứ: tình cờ.",
+        "en": "You found our neighbor! Thanks, bạn. Map, hint, or happy accident, that is one landmark I can finally trust.",
+        "vi": "Bạn tìm được người hàng xóm rồi! Cảm ơn bạn nha. Nhờ bản đồ, gợi ý hay tình cờ thì tôi cũng có một cột mốc đáng tin rồi.",
       },
       "riddle": {
         "text": {
@@ -7052,8 +7210,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "square-tourist",
       "payoff": {
-        "en": "You found Vy at City Hall, not the river? See, the 1998 map is never wrong — it just rounds up.",
-        "vi": "Bạn gặp chị Vy ở Tòa Thị Chính chứ không phải bờ sông hả? Thấy chưa, bản đồ 1998 không sai bao giờ — nó chỉ làm tròn thôi.",
+        "en": "Vy has the postcard at City Hall! Thank you, bạn. My 1998 map calls that a successful river trip; I call it excellent company.",
+        "vi": "Chị Vy nhận thiệp ở Tòa Thị Chính rồi! Cảm ơn bạn nha. Bản đồ 1998 gọi đó là chuyến ra sông thành công; tôi gọi là gặp được bạn đồng hành tốt.",
       },
       "scope": "solo",
       "steps": [
@@ -7076,6 +7234,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "student",
+      "payoff": {
+        "en": "Cô Hoa got my hello! Thank you. You have made my next market visit feel a little more like coming home.",
+        "vi": "Cô Hoa nhận lời chào rồi! Cảm ơn bạn nha. Lần tới ghé chợ, mình thấy giống về nhà hơn một chút rồi.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -7096,6 +7258,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "tam",
+      "payoff": {
+        "en": "Thanks for checking on Ông Ba by the river! A hello from a neighbor is a good reason to slow down, even for me.",
+        "vi": "Cảm ơn em ghé hỏi thăm ông Ba bên sông nha! Một tiếng chào hàng xóm cũng đáng chạy chậm lại, kể cả với anh.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -7117,8 +7283,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "tam",
       "payoff": {
-        "en": "Two songs, right? Do not tell me. I will tell everyone it was two songs.",
-        "vi": "Hai bài hát đúng không? Đừng nói gì. Để anh khoe với mọi người là đúng hai bài.",
+        "en": "Cô Hoa has her coffee! Thanks, em. Two songs or three, you made this shortcut worth bragging about.",
+        "vi": "Cô Hoa có cà phê rồi! Cảm ơn em nha. Hai bài hay ba bài cũng được, chuyến đường tắt này đáng để anh khoe rồi.",
       },
       "scope": "solo",
       "steps": [
@@ -7142,8 +7308,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "tam",
       "payoff": {
-        "en": "Smooth ride? Do not tell me. I will tell everyone it was smooth.",
-        "vi": "Đi êm chứ? Đừng kể anh nghe. Để anh khoe với mọi người là êm ru.",
+        "en": "The cake reached Ông Ba for the riverside wedding! Thanks for carrying those three tiers of trust. I am telling everyone you were the express route.",
+        "vi": "Bánh tới chỗ ông Ba cho đám cưới bên sông rồi! Cảm ơn em đã mang ba tầng tin tưởng nha. Để anh khoe em mới là đường tắt xịn nhất.",
       },
       "scope": "solo",
       "steps": [
@@ -7182,8 +7348,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "thao",
       "payoff": {
-        "en": "The chorus landed on the last step to Sơn. I am naming the song after your shoes.",
-        "vi": "Điệp khúc rơi đúng vào bước chân cuối tới chỗ Sơn. Mình sẽ đặt tên bài hát theo đôi giày của bạn.",
+        "en": "Sơn has his coffee. Thank you for carrying the rhythm across the city! I think the chorus will be named after your shoes.",
+        "vi": "Sơn có cà phê rồi. Cảm ơn bạn mang cả nhịp chân qua phố nha! Chắc mình đặt tên điệp khúc theo đôi giày của bạn quá.",
       },
       "scope": "solo",
       "steps": [
@@ -7207,13 +7373,13 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "thao",
       "payoff": {
-        "en": "You found the echo yourself. Now the ballad has a proper first verse.",
-        "vi": "Bạn tự tìm ra tiếng vọng rồi. Giờ khúc ballad đã có đoạn mở đầu đàng hoàng.",
+        "en": "You found the echo! Thank you for listening so closely. However you found your way, my little ballad has a first verse now.",
+        "vi": "Bạn tìm được tiếng vọng rồi! Cảm ơn đã chịu lắng nghe nha. Dù tìm đường cách nào, khúc ballad nhỏ của mình cũng có câu mở đầu rồi.",
       },
       "riddle": {
         "text": {
           "en": "Two red-brick bell towers keep the square’s best echo. The pigeons only pretend to conduct. Stand where it answers.",
-          "vi": "Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất của quảng trường. Mấy chú bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi nó vọng lại.",
+          "vi": "Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất quảng trường. Bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi tiếng vọng trả lời nhé.",
         },
       },
       "scope": "solo",
@@ -7236,6 +7402,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "thao",
+      "payoff": {
+        "en": "You listened at the cathedral square. Thank you for sharing that quiet moment! The city sounds a little less lonely with someone else listening.",
+        "vi": "Bạn lắng nghe ở quảng trường nhà thờ rồi. Cảm ơn đã chia sẻ chút yên đó nha! Có người cùng nghe, tiếng phố cũng bớt cô đơn.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -7257,8 +7427,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "thao",
       "payoff": {
-        "en": "Linh and her megaphone? That explains the melody — and the key change at dinnertime.",
-        "vi": "Linh với cái loa phóng thanh hả? Thảo nào có giai điệu — lại còn đổi tông đúng giờ cơm chiều.",
+        "en": "So the melody came from Linh and her megaphone! Thank you for following that echo. My city song has its very surprising chorus now.",
+        "vi": "Thì ra giai điệu từ chị Linh với cái loa phóng thanh! Cảm ơn bạn lần theo tiếng vọng nha. Bài hát thành phố có điệp khúc bất ngờ quá chừng.",
       },
       "scope": "solo",
       "steps": [
@@ -7301,13 +7471,13 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giverNpcId": "thao",
       "milestone": "evening-concert",
       "payoff": {
-        "en": "Son had the bridge as a postcard to the river. Now the sheet music is whole for the concert.",
-        "vi": "Sơn giữ đoạn cầu trong một tấm bưu thiếp gửi dòng sông. Giờ bản nhạc đã nguyên vẹn cho đêm nhạc.",
+        "en": "Sơn helped find the missing bars, and the score is whole for Vy’s concert. Thank you! I can finally hear the bridge leading everyone home.",
+        "vi": "Sơn giúp tìm được mấy ô nhịp thất lạc, bản nhạc đủ cho đêm diễn của Vy rồi. Cảm ơn bạn nha! Mình nghe được đoạn chuyển dẫn mọi người về cùng nhau rồi.",
       },
       "riddle": {
         "text": {
           "en": "My melody lost its bridge where two red-brick towers trade an echo. Stand where the square answers, then find the postcard poet who kept my missing bars.",
-          "vi": "Khúc nhạc của mình rớt mất đoạn cầu nơi hai tháp gạch đỏ trao nhau tiếng vọng. Đứng chỗ quảng trường vọng lại, rồi tìm người viết bưu thiếp đang giữ mấy nhịp thất lạc của mình.",
+          "vi": "Đoạn nhạc lạc nơi hai tháp gạch đỏ trao tiếng vọng. Đứng chỗ quảng trường đáp lại, rồi tìm người viết bưu thiếp đang giữ mấy nhịp thất lạc.",
         },
       },
       "scope": "solo",
@@ -7335,8 +7505,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "vy",
       "payoff": {
-        "en": "Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.",
-        "vi": "Alex chụp "Phở Moon" lúc chạng vạng hả? Một chiếc lồng đèn có cả câu chuyện lẫn tấm chân dung. Bất tử luôn.",
+        "en": "Alex has the announcement for Phở Moon. Thank you! Our little lantern has a name, a story, and someone ready to catch its glow.",
+        "vi": "Alex nhận thiệp báo tin về Phở Moon rồi. Cảm ơn bạn nha! Chiếc đèn nhỏ có tên, có chuyện, lại có người chờ chụp ánh sáng của nó nữa.",
       },
       "scope": "solo",
       "steps": [
@@ -7378,6 +7548,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     },
     {
       "giverNpcId": "vy",
+      "payoff": {
+        "en": "You found a welcoming corner in the food alley. Thank you for taking that little walk! Every warm doorway feels like another lantern.",
+        "vi": "Bạn tìm được góc ấm trong hẻm ẩm thực rồi. Cảm ơn đã đi một vòng nha! Mỗi ô cửa đón người như thêm một ngọn đèn vậy.",
+      },
       "scope": "solo",
       "steps": [
         {
@@ -7399,8 +7573,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
     {
       "giverNpcId": "vy",
       "payoff": {
-        "en": "Mai toasted Phở Moon with the coffee. The lantern has never felt so seen.",
-        "vi": "Mai nâng ly cà phê chúc mừng Trăng Phở. Chiếc đèn lồng chưa bao giờ thấy mình được công nhận đến vậy.",
+        "en": "The coffee reached Mai for the lantern crew. Thank you! Phở Moon has its caffeine tribute; now we can keep the evening glowing.",
+        "vi": "Cà phê tới chỗ Mai cho nhóm lồng đèn rồi. Cảm ơn bạn nha! Phở Moon có phần cà phê cổ vũ, tụi mình lại thắp sáng buổi tối tiếp.",
       },
       "scope": "solo",
       "steps": [
@@ -7425,8 +7599,8 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giverNpcId": "vy",
       "milestone": "evening-concert",
       "payoff": {
-        "en": "Lanterns up, coffee poured, the lost melody found. The square is a concert now. Encore Moon shines.",
-        "vi": "Đèn lồng lên, cà phê rót, khúc nhạc thất lạc tìm thấy lại. Cả quảng trường thành đêm nhạc. Trăng Encore tỏa sáng.",
+        "en": "Lanterns up, coffee ready, the melody whole again. Thank you for bringing us together! The square has its concert; Encore Moon shines for you too.",
+        "vi": "Đèn lên, cà phê sẵn, giai điệu lại nguyên vẹn. Cảm ơn bạn đã nối mọi người với nhau! Đêm nhạc này là của cả xóm, Trăng Encore cũng sáng vì bạn nữa.",
       },
       "scope": "solo",
       "steps": [
@@ -7609,6 +7783,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giver": "ba",
       "id": "ao-ba-ba",
       "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/ao-ba-ba-man",
+        "woman": "outfits/ao-ba-ba-woman",
+      },
       "palette": {
         "outfit-bottom": "#3f3357",
         "outfit-top": "#5a4a7a",
@@ -7620,6 +7798,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giver": "thao",
       "id": "ao-dai",
       "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/ao-dai-man",
+        "woman": "outfits/ao-dai-woman",
+      },
       "palette": {
         "outfit-bottom": "#f3ead6",
         "outfit-top": "#e86a9b",
@@ -7631,6 +7813,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giver": "hoa",
       "id": "apron",
       "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/apron-man",
+        "woman": "outfits/apron-woman",
+      },
       "palette": {
         "outfit-bottom": "#a8382f",
         "outfit-top": "#d94f45",
@@ -7642,6 +7828,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giver": "mai",
       "id": "barista",
       "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/barista-man",
+        "woman": "outfits/barista-woman",
+      },
       "palette": {
         "outfit-bottom": "#241c19",
         "outfit-top": "#3b2f2a",
@@ -7659,6 +7849,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "beret": {
+      "attachment": "head",
       "giver": "son",
       "id": "beret",
       "kind": "cosmetic",
@@ -7677,6 +7868,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "bucket-hat": {
+      "attachment": "head",
       "giver": "ba",
       "id": "bucket-hat",
       "kind": "cosmetic",
@@ -7690,11 +7882,12 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "id": "bunny",
       "kind": "pet",
       "model": "pets/bunny",
-      "scale": 0.5,
+      "scale": 0.16,
       "slot": "pet",
       "tier": "close",
     },
     "camera-strap": {
+      "attachment": "torso",
       "giver": "alex",
       "id": "camera-strap",
       "kind": "cosmetic",
@@ -7708,7 +7901,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "id": "cat",
       "kind": "pet",
       "model": "pets/cat",
-      "scale": 0.5,
+      "scale": 0.17,
       "slot": "pet",
       "tier": "close",
     },
@@ -7717,7 +7910,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "id": "chick",
       "kind": "pet",
       "model": "pets/chick",
-      "scale": 0.5,
+      "scale": 0.11,
       "slot": "pet",
       "tier": "close",
     },
@@ -7736,7 +7929,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "id": "dog",
       "kind": "pet",
       "model": "pets/dog",
-      "scale": 0.5,
+      "scale": 0.18,
       "slot": "pet",
       "tier": "close",
     },
@@ -7744,6 +7937,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giver": "vy",
       "id": "evening",
       "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/evening-man",
+        "woman": "outfits/evening-woman",
+      },
       "palette": {
         "outfit-bottom": "#1b2244",
         "outfit-top": "#2b3566",
@@ -7752,6 +7949,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "headphones": {
+      "attachment": "head",
       "giver": "thao",
       "id": "headphones",
       "kind": "cosmetic",
@@ -7761,6 +7959,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "helmet": {
+      "attachment": "head",
       "giver": "tam",
       "id": "helmet",
       "kind": "cosmetic",
@@ -7770,6 +7969,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "lantern-backpack": {
+      "attachment": "torso",
       "giver": "vy",
       "id": "lantern-backpack",
       "kind": "cosmetic",
@@ -7779,6 +7979,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "lantern-hat": {
+      "attachment": "head",
       "giver": "vy",
       "id": "lantern-hat",
       "kind": "cosmetic",
@@ -7788,6 +7989,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "non-la": {
+      "attachment": "head",
       "giver": "hoa",
       "id": "non-la",
       "kind": "cosmetic",
@@ -7801,7 +8003,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "id": "parrot",
       "kind": "pet",
       "model": "pets/parrot",
-      "scale": 0.5,
+      "scale": 0.13,
       "slot": "pet",
       "tier": "close",
     },
@@ -7809,6 +8011,10 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "giver": "alex",
       "id": "photo-vest",
       "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/photo-vest-man",
+        "woman": "outfits/photo-vest-woman",
+      },
       "palette": {
         "outfit-bottom": "#4b5a39",
         "outfit-top": "#6b7d53",
@@ -7817,6 +8023,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "satchel": {
+      "attachment": "torso",
       "giver": "son",
       "id": "satchel",
       "kind": "cosmetic",
@@ -7826,6 +8033,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "scarf": {
+      "attachment": "torso",
       "giver": "mai",
       "id": "scarf",
       "kind": "cosmetic",
@@ -7835,6 +8043,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "sunglasses": {
+      "attachment": "head",
       "giver": "tam",
       "id": "sunglasses",
       "kind": "cosmetic",
@@ -7854,6 +8063,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "volunteer-cap": {
+      "attachment": "head",
       "giver": "linh",
       "id": "volunteer-cap",
       "kind": "cosmetic",

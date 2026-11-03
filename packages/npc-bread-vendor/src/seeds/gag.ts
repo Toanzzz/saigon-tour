@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Tâm heard the crunch from across the stall? Ninety decibels confirmed. We have a witness now.',
-    vi: 'Chú Tâm nghe tiếng giòn từ bên kia sạp hả? Chín chục đề-xi-ben là chuẩn. Giờ có nhân chứng rồi.',
+    en: 'Tâm has his baguette! Thanks, bạn. Ninety crunch decibels have a witness now; I may need a bigger sign.',
+    vi: 'Chú Tâm có bánh mì rồi! Cảm ơn bạn nha. Chín chục đề-xi-ben có nhân chứng luôn; chắc chú phải làm bảng hiệu lớn hơn quá.',
   },
 }

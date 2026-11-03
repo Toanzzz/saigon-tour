@@ -23,6 +23,7 @@ import { game, update, visit } from '@/shared/state/game'
 import { playerView, setPlayerAnimation } from '@/shared/state/view'
 import { Avatar, PersonalVehicle } from '@/shared/world'
 import { distance, PLACES, type Point, SPAWN } from '@/shared/world/places'
+import { riderPosition } from '@/shared/world/vehicles'
 
 const velocity = new Vector3()
 const up = new Vector3(0, 1, 0)
@@ -140,7 +141,12 @@ export function Player() {
       >
         <CapsuleCollider args={[0.45, 0.35]} />
         <group ref={avatar} visible={!riding} position={[0, -0.8, 0]}>
-          <Avatar body={avatarBody} animation={animation} look={equipped} />
+          <Avatar
+            body={avatarBody}
+            animation={vehicle ? 'drive' : animation}
+            position={vehicle ? riderPosition(vehicle) : undefined}
+            look={equipped}
+          />
           {carrying && !riding && !gl.xr.isPresenting && <CarriedCake />}
           {vehicle && !riding && <PersonalVehicle id={vehicle} />}
         </group>

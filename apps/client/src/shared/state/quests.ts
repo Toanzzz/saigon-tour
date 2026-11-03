@@ -1,5 +1,6 @@
 import {
   canOfferQuests,
+  isMilestoneFinale,
   isRevealed,
   MILESTONES,
   milestoneForGiver,
@@ -142,7 +143,11 @@ export function canAskMilestone(state: GameState, npc: NpcId): boolean {
     (entry) => entry.giver === npc
   )
   if (!component) return false
-  if (state.completed.some((quest) => quest.milestone === milestoneId))
+  if (
+    state.completed.some(
+      (quest) => quest.milestone === milestoneId && isMilestoneFinale(quest)
+    )
+  )
     return false
   if ((state.world.inventory[component.itemId] ?? 0) > 0) return false
   return !state.quests.some(

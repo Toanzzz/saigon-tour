@@ -23,7 +23,7 @@ export const riddle: SeedQuest = {
     },
   },
   payoff: {
-    en: 'You found them without the map. I will note this landmark the way I find everything: by accident.',
-    vi: 'Bạn tìm ra mà chẳng cần bản đồ. Tôi sẽ ghi lại cột mốc này theo cách tôi tìm mọi thứ: tình cờ.',
+    en: 'You found our neighbor! Thanks, bạn. Map, hint, or happy accident, that is one landmark I can finally trust.',
+    vi: 'Bạn tìm được người hàng xóm rồi! Cảm ơn bạn nha. Nhờ bản đồ, gợi ý hay tình cờ thì tôi cũng có một cột mốc đáng tin rồi.',
   },
 }

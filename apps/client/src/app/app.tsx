@@ -1,6 +1,13 @@
 import { useProgress } from '@react-three/drei'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { Component, type ErrorInfo, type ReactNode, useEffect } from 'react'
+import {
+  Component,
+  type ErrorInfo,
+  lazy,
+  type ReactNode,
+  Suspense,
+  useEffect,
+} from 'react'
 import { MapInspector, mapInspectorEnabled } from '@/features/map-inspector'
 import { queryClient } from '@/shared/api/agent'
 import { initializeSession } from '@/shared/api/session'
@@ -16,6 +23,10 @@ import { GameUI } from './game-ui'
 import { Scene } from './scene'
 import { installTestHooks } from './test-hooks'
 
+const Workshop = import.meta.env.DEV
+  ? lazy(() => import('@/features/workshop'))
+  : null
+
 function Loading() {
   const { active, progress } = useProgress()
   return active ? (
@@ -26,6 +37,13 @@ function Loading() {
 }
 
 export function App() {
+  const params = new URLSearchParams(location.search)
+  if (Workshop && (params.has('questDebug') || params.has('wardrobeDebug')))
+    return (
+      <Suspense fallback={<Loading />}>
+        <Workshop />
+      </Suspense>
+    )
   return mapInspectorEnabled() ? <MapInspector /> : <GameApp />
 }
 
@@ -61,6 +79,12 @@ function GameApp() {
           <Scene />
         </div>
         <GameUI key={locale} />
+        {import.meta.env.DEV && (
+          <nav className="dev-workshop-links" aria-label={m.debug_title()}>
+            <a href="?questDebug">{m.debug_quests()}</a>
+            <a href="?wardrobeDebug">{m.debug_wardrobe()}</a>
+          </nav>
+        )}
         <Loading />
       </main>
     </QueryClientProvider>

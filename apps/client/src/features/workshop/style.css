@@ -1,0 +1,126 @@
+.workshop {
+  min-height: 100vh;
+  height: 100dvh;
+  overflow: auto;
+  padding: clamp(16px, 3vw, 36px);
+  background: var(--wall);
+  color: var(--ink);
+}
+.workshop header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: var(--edge);
+}
+.workshop h1 {
+  font-size: clamp(24px, 4vw, 36px);
+  margin: 0;
+}
+.workshop header p {
+  margin: 6px 0;
+}
+.workshop nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.workshop a {
+  color: var(--ink);
+}
+.workshop-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 14px;
+  padding: 22px 0;
+}
+.workshop-controls label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+.workshop select,
+.workshop input[type="number"],
+.workshop-controls button {
+  min-height: 44px;
+  max-width: 100%;
+  border: var(--edge);
+  border-radius: 8px;
+  background: var(--wall-hi);
+  color: var(--ink);
+  padding: 8px 12px;
+  font: inherit;
+}
+.workshop-controls select {
+  max-width: min(380px, calc(100vw - 40px));
+}
+.workshop-controls .workshop-checkbox {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+}
+.workshop input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+.workshop-quest,
+.workshop-fitting {
+  padding: 20px;
+  border: var(--edge);
+  border-radius: 16px;
+  background: var(--wall-hi);
+}
+.workshop-quest li {
+  margin: 12px 0;
+}
+.workshop pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+.workshop-fitting {
+  display: grid;
+  grid-template-columns: minmax(250px, 1fr) 1fr;
+  gap: 24px;
+}
+.workshop-fitting .wardrobe-stage-view {
+  height: 400px;
+}
+.workshop-catalog {
+  margin-top: 24px;
+  overflow: visible;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.workshop .wardrobe-card-stage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.workshop-capture {
+  width: 512px;
+  height: 512px;
+}
+.workshop-capture .wardrobe-stage-view {
+  width: 512px;
+  height: 512px;
+  border: 0;
+}
+.workshop-capture .wardrobe-stage > button,
+.workshop-capture .wardrobe-stage > small {
+  display: none;
+}
+@media (max-width: 640px) {
+  .workshop-fitting {
+    grid-template-columns: 1fr;
+    padding: 12px;
+  }
+  .workshop-fitting .wardrobe-stage-view {
+    height: 300px;
+  }
+  .workshop-catalog {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -4,10 +4,12 @@ import {
   bonusCurrency,
   canOfferQuests,
   completionBonus,
+  completionLine,
   createQuest,
   friendlinessOf,
   type InteractResponse,
   isExpired,
+  isMilestoneFinale,
   MILESTONES,
   milestoneForGiver,
   milestoneReady,
@@ -184,12 +186,13 @@ export function offline(
   if (completedWithPayoff?.quest.payoff)
     reply = completedWithPayoff.quest.payoff
   else if (questEvents.some((event) => event.type === 'completed'))
-    reply = m.offline_thanks()
+    reply = completionLine({ giverNpcId: npc }, getLocale())
   // Mirror the server milestone offers: the apex auto-offers for the host on
   // every interaction; the `milestone` intent asks a component giver.
   let milestoneOffered = false
   const completedMilestones = new Set(
     state.completed
+      .filter(isMilestoneFinale)
       .map((entry) => entry.milestone)
       .filter((id): id is NonNullable<typeof id> => Boolean(id))
   )

@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Thao read it to the river as a song? Dear River, you have a voice now. Yours, Son.',
-    vi: 'Thảo hát tấm thiếp cho dòng sông nghe hả? Sông ơi, giờ sông có giọng rồi đó. Thương, Sơn.',
+    en: 'Thảo has the postcard for the river. Thank you for finding it a voice. Dear River: a song is on its way. Warmly, Sơn.',
+    vi: 'Thảo nhận bưu thiếp gửi dòng sông rồi. Cảm ơn bạn đã tìm cho nó một giọng hát. Sông ơi, bài hát đang tới đó. Thương, Sơn.',
   },
 }

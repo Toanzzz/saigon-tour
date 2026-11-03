@@ -22,6 +22,7 @@ export function AvatarTurntable({
   animation = 'idle',
   spin = 0.4,
   yaw,
+  frozen = false,
 }: {
   body: AvatarBody
   look?: Look | null
@@ -30,6 +31,7 @@ export function AvatarTurntable({
   spin?: number
   /** Controlled yaw (radians); disables the auto-rotation when provided. */
   yaw?: () => number
+  frozen?: boolean
 }) {
   const group = useRef<Group>(null)
   useFrame((_, delta) => {
@@ -39,7 +41,13 @@ export function AvatarTurntable({
   })
   return (
     <group ref={group} position={[0, -1.6, 0]}>
-      <Avatar body={body} look={look} animation={animation} shadow={false} />
+      <Avatar
+        body={body}
+        look={look}
+        animation={animation}
+        shadow={false}
+        frozen={frozen}
+      />
     </group>
   )
 }

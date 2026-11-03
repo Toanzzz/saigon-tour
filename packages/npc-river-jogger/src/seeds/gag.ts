@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Bác Ba — got it — and you — kept pace? Then today — is not — a rest day. Huff — nice work, bạn.',
-    vi: 'Bác Ba — nhận rồi — mà bạn — giữ nhịp hả? Vậy hôm nay — không phải — ngày nghỉ. Thở — giỏi lắm bạn.',
+    en: 'Bác Ba — has the banana! Thanks — bạn. One errand — across the line. Take a breath — that counts too.',
+    vi: 'Bác Ba — có chuối rồi! Cảm ơn — bạn nha. Một chuyến giao — về đích. Nghỉ lấy hơi — cũng tính mà.',
   },
 }

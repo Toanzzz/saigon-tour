@@ -5,6 +5,30 @@ import { hoaDelivery, offline, required, setupNpc } from './support/npc'
 
 const ctx = setupNpc()
 describe('quest transactions', () => {
+  it('preserves an outstanding promise when granting a legacy quest', async () => {
+    const game = new QuestService(ctx.fx.db)
+    await game.proposeQuest(ctx.playerId, 'hoa', hoaDelivery())
+    await ctx.fx.db.mutatePlayer(ctx.playerId, (save) => {
+      save.quests[0].reward = {
+        currency: 12,
+        reputation: 1,
+        itemId: 'postcard',
+      }
+    })
+    await game.applyEvents(ctx.playerId, [
+      { type: 'deliver', itemId: 'broth', npcId: 'linh' },
+    ])
+    const [completed] = await game.checkQuests(ctx.playerId, 'hoa')
+    expect(completed.reward).toMatchObject({
+      currency: 17,
+      reputation: 1,
+      itemId: 'postcard',
+      bonus: { thrifty: 5 },
+    })
+    expect((await game.get(ctx.playerId)).world.currency).toBe(47)
+    expect(await game.checkQuests(ctx.playerId, 'hoa')).toEqual([])
+  })
+
   it('enforces the active cap under concurrent proposals', async () => {
     const game = new QuestService(ctx.fx.db)
     const specs = ['hoa', 'tam', 'linh', 'ba'] as const

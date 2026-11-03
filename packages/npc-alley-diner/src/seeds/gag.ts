@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Hoa got the broth without a spill, bạn? Score holds at nine-point-four. The chef and the judge agree.',
-    vi: 'Cô Hoa nhận tô mà không đổ giọt nào hả bạn? Vậy giữ nguyên chín phẩy tư. Đầu bếp với giám khảo nhất trí.',
+    en: 'Cô Hoa has the broth! Thank you, bạn. Nine-point-four for the recipe, ten for helping the judge reach the chef.',
+    vi: 'Cô Hoa nhận nước lèo rồi! Cảm ơn bạn nha. Chín phẩy tư cho công thức, mười điểm cho người nối giám khảo với đầu bếp.',
   },
 }

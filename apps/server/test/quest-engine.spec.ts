@@ -195,13 +195,13 @@ describe('quest engine', () => {
         expect(reward.currency).toBeLessThanOrEqual(100)
         expect(reward.currency).toBeGreaterThanOrEqual(0)
         expect(QUEST_DOMAINS[spec.giverNpcId].gifts).toContain(reward.itemId)
-        expect([1, 2]).toContain(reward.reputation)
+        expect([1, 2, 3]).toContain(reward.reputation)
       }
     const long = {
       ...seed(),
       steps: Array(10).fill({ type: 'GO_TO', locationId: 'postoffice' }),
     } as QuestSpec
-    expect(rewardFor(long).currency).toBe(100)
+    expect(rewardFor(long).currency).toBe(90)
   })
 
   it('advances sequentially and needs fresh events after offer', () => {

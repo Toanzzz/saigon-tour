@@ -23,7 +23,7 @@ export const riddle: SeedQuest = {
     },
   },
   payoff: {
-    en: 'You framed it without a hint. The pigeon still photobombed, but that is on the pigeon.',
-    vi: 'Bạn canh được khung mà không cần gợi ý. Con bồ câu vẫn phá ảnh, mà đó là lỗi của nó.',
+    en: 'You found my backdrop! Thanks for following the light with me. A hint or a happy guess, that frame is yours now.',
+    vi: 'Bạn tìm được phông nền rồi! Cảm ơn đã cùng mình lần theo ánh sáng nha. Nhờ gợi ý hay đoán trúng thì khung hình này cũng là của bạn.',
   },
 }

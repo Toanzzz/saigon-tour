@@ -2,9 +2,17 @@ import type { NpcStory } from '@saigon/npc-kit'
 import { gag } from './seeds/gag'
 
 export const story: NpcStory = {
+  completion: {
+    en: 'Thanks, bạn! Helping a neighbor counts as a good rep. Take a breath; you have earned it.',
+    vi: 'Cảm ơn bạn nha! Giúp hàng xóm cũng tính là một hiệp đẹp đó. Nghỉ lấy hơi chút đi, xứng đáng mà.',
+  },
   seeds: [
     gag,
     {
+      payoff: {
+        en: 'The herbs reached Linh for the park lunch! Thanks, bạn. That is a proper recovery meal and a good-neighbor rep in one.',
+        vi: 'Rau thơm tới chị Linh cho bữa trưa công viên rồi! Cảm ơn bạn nha. Vừa lo bữa hồi sức, vừa xong một hiệp hàng xóm tốt luôn.',
+      },
       scope: 'solo',
       steps: [{ type: 'DELIVER', itemId: 'herbs', npcId: 'linh' }],
       text: {

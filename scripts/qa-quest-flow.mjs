@@ -139,7 +139,11 @@ export async function offerQuest(page, giver = 'hoa') {
   return offered
 }
 export async function followQuest(page, offered) {
-  for (const [index, step] of offered.steps.entries()) {
+  for (const index of offered.steps.keys()) {
+    const current = (await diagnostics(page)).state.quests.find(
+      (quest) => quest.id === offered.id
+    )
+    const step = current?.steps[index] ?? offered.steps[index]
     if (step.type === 'GO_TO') {
       await teleport(page, ...locations[step.locationId])
     } else if (step.type === 'BUY') {
@@ -156,7 +160,7 @@ export async function followQuest(page, offered) {
         .click()
     } else {
       await meet(page, step.npcId)
-      if (step.type === 'DELIVER')
+      if (step.type === 'DELIVER' || step.type === 'BRING')
         await page
           .getByRole('button', {
             name: `Give ${itemLabels[step.itemId]}`,
@@ -179,6 +183,18 @@ export async function completeQuest(page, giver = 'hoa') {
   await followQuest(page, offered)
   const before = (await diagnostics(page)).state.currency
   const completed = (await diagnostics(page)).state.completed
+  const ready = (await diagnostics(page)).state.quests.find(
+    (quest) => quest.id === offered.id
+  )
+  const expected = await page.evaluate(async (quest) => {
+    const { bonusCurrency, completionBonus } = await import(
+      '/@fs/Users/toan/code/hackathon/saigon-tour/packages/shared/src/index.ts'
+    )
+    return Math.min(
+      100,
+      quest.reward.currency + bonusCurrency(completionBonus(quest))
+    )
+  }, ready)
   await meet(page, giver)
   await page.waitForFunction(
     (completed) =>
@@ -187,7 +203,7 @@ export async function completeQuest(page, giver = 'hoa') {
     { timeout: 30000 }
   )
   const rewarded = await diagnostics(page)
-  assert.equal(rewarded.state.currency, before + offered.reward.currency)
+  assert.equal(rewarded.state.currency, before + expected)
   assert.equal(rewarded.state.completed, completed + 1)
   return { offered, rewarded }
 }

@@ -3,10 +3,18 @@ import { arc } from './seeds/arc'
 import { gag } from './seeds/gag'
 
 export const story: NpcStory = {
+  completion: {
+    en: 'Thank you! You have made a little more room for kindness in our neighborhood. Come sit with us whenever you like.',
+    vi: 'Cảm ơn bạn nhé! Nhờ bạn mà xóm mình có thêm một chuyện dễ thương. Rảnh thì ghé ngồi chơi với mọi người nha.',
+  },
   seeds: [
     arc,
     gag,
     {
+      payoff: {
+        en: 'You brought the lunch invitation to Cô Hoa! Thank you. One more neighbor at the table makes the whole lunch feel warmer.',
+        vi: 'Bạn mang lời mời ăn trưa tới cô Hoa rồi! Cảm ơn nha. Thêm một người cùng bàn là bữa trưa ấm hơn hẳn.',
+      },
       scope: 'solo',
       steps: [
         { type: 'GO_TO', locationId: 'market' },

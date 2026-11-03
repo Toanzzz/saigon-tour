@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Sơn read the haiku aloud, bạn? Then the little boat reached shore. The stamp may retire, satisfied.',
-    vi: 'Anh Sơn đọc bài haiku lên hả bạn? Vậy là con thuyền nhỏ đã tới bến. Con tem giờ có thể an lòng nghỉ hưu.',
+    en: 'Sơn has the haiku. Thank you, bạn. The little boat has reached its shore; even the stamp can rest now.',
+    vi: 'Sơn nhận bài haiku rồi. Cảm ơn bạn nha. Con thuyền nhỏ đã tới bến; cả con tem cũng được nghỉ rồi.',
   },
 }

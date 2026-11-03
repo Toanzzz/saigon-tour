@@ -1,4 +1,5 @@
 import {
+  isMilestoneFinale,
   type Locale,
   MILESTONES,
   type MilestoneId,
@@ -20,11 +21,11 @@ export interface MilestoneOffer {
 }
 
 /** The milestone a player has already completed, from the completed ledger. */
-function completedMilestones(completed: { milestone?: MilestoneId }[]) {
+function completedMilestones(
+  completed: { giverNpcId: NpcId; milestone?: MilestoneId }[]
+) {
   return new Set(
-    completed
-      .map((entry) => entry.milestone)
-      .filter((id): id is MilestoneId => Boolean(id))
+    completed.filter(isMilestoneFinale).map((entry) => entry.milestone)
   )
 }
 

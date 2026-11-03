@@ -1,4 +1,5 @@
 import {
+  completionLine,
   isRevealed,
   type Locale,
   type NeighborId,
@@ -140,6 +141,8 @@ export function fallbackLine(
       : 'Hello. I am not ready to ask any favors today.'
   if (outcome === 'incomplete')
     return incompleteLine(quests, npcId, locale, now)
+  if (outcome === 'completed')
+    return completionLine({ giverNpcId: npcId }, locale)
   if (outcome) return OUTCOMES[outcome][locale]
   const neighbor = IDLE[npcId as NeighborId]
   if (neighbor) return neighbor[locale]

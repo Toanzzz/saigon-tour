@@ -80,6 +80,7 @@ export interface QuestDomain {
 export interface NpcStory {
   seeds: SeedQuest[]
   domain: QuestDomain
+  completion?: Text
 }
 
 /** Signature cosmetic/vehicle/pet unlocks a neighbor grants. */
@@ -92,6 +93,18 @@ export interface UnlockSpec {
   scale?: number
   speed?: number
   palette?: Record<string, string>
+  attachment?: 'head' | 'torso'
+  fit?: Partial<
+    Record<
+      'man' | 'woman',
+      {
+        position?: [number, number, number]
+        rotation?: [number, number, number]
+        scale?: number
+      }
+    >
+  >
+  outfitModels?: Partial<Record<'man' | 'woman', string>>
 }
 
 /** How the NPC renders in the world and in its portrait. */
@@ -138,6 +151,8 @@ export interface ResidentInput {
   id: NpcId
   activities: NpcActivities
   name: Text
+  completion?: Text
+  helloPayoff?: Text
   roles: { en: string; vi: string }
   place: { en: string; vi: string }
   home: LocationId
@@ -199,9 +214,11 @@ export function defineResident(input: ResidentInput): NpcDefinition {
       idle: { en: rt.en.idleLine, vi: rt.vi.idleLine },
     },
     story: {
+      ...(input.completion ? { completion: input.completion } : {}),
       seeds: [
         {
           scope: 'solo',
+          ...(input.helloPayoff ? { payoff: input.helloPayoff } : {}),
           steps: [{ type: 'TALK_TO', npcId: seedTarget }],
           text: {
             en: {

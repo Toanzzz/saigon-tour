@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Two songs, right? Do not tell me. I will tell everyone it was two songs.',
-    vi: 'Hai bài hát đúng không? Đừng nói gì. Để anh khoe với mọi người là đúng hai bài.',
+    en: 'Cô Hoa has her coffee! Thanks, em. Two songs or three, you made this shortcut worth bragging about.',
+    vi: 'Cô Hoa có cà phê rồi! Cảm ơn em nha. Hai bài hay ba bài cũng được, chuyến đường tắt này đáng để anh khoe rồi.',
   },
 }

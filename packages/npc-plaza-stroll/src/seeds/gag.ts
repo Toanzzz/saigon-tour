@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Alex clapped at your line, bạn? Then the verse found its stage. Bravo — encore tomorrow.',
-    vi: 'Anh Alex vỗ tay khi bạn xuống câu hả? Vậy là câu ngâm đã tìm được sân khấu. Hoan hô — mai diễn lại nhé.',
+    en: 'Alex has the verse! Thank you, bạn. A small postcard found its stage, and your kind delivery deserves an encore.',
+    vi: 'Anh Alex nhận câu ngâm rồi! Cảm ơn bạn nha. Tấm thiệp nhỏ tìm được sân khấu, còn người mang lời tới đáng được vỗ tay thêm.',
   },
 }

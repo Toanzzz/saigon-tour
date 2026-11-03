@@ -10,7 +10,7 @@ export const riddle: SeedQuest = {
   riddle: {
     text: {
       en: 'Two red-brick bell towers keep the square\u2019s best echo. The pigeons only pretend to conduct. Stand where it answers.',
-      vi: 'Hai th\u00e1p chu\u00f4ng g\u1ea1ch \u0111\u1ecf gi\u1eef ti\u1ebfng v\u1ecdng \u0111\u1eb9p nh\u1ea5t c\u1ee7a qu\u1ea3ng tr\u01b0\u1eddng. M\u1ea5y ch\u00fa b\u1ed3 c\u00e2u ch\u1ec9 gi\u1ea3 b\u1ed9 b\u1eaft nh\u1ecbp th\u00f4i. \u0110\u1ebfn n\u01a1i n\u00f3 v\u1ecdng l\u1ea1i.',
+      vi: 'Hai tháp chuông gạch đỏ giữ tiếng vọng đẹp nhất quảng trường. Bồ câu chỉ giả bộ bắt nhịp thôi. Đến nơi tiếng vọng trả lời nhé.',
     },
   },
   text: {
@@ -26,7 +26,7 @@ export const riddle: SeedQuest = {
     },
   },
   payoff: {
-    en: 'You found the echo yourself. Now the ballad has a proper first verse.',
-    vi: 'Bạn tự tìm ra tiếng vọng rồi. Giờ khúc ballad đã có đoạn mở đầu đàng hoàng.',
+    en: 'You found the echo! Thank you for listening so closely. However you found your way, my little ballad has a first verse now.',
+    vi: 'Bạn tìm được tiếng vọng rồi! Cảm ơn đã chịu lắng nghe nha. Dù tìm đường cách nào, khúc ballad nhỏ của mình cũng có câu mở đầu rồi.',
   },
 }

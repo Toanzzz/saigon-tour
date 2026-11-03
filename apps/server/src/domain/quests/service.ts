@@ -7,6 +7,7 @@ import {
   createQuest,
   friendlinessOf,
   type ItemId,
+  isMilestoneFinale,
   isReady,
   type Look,
   type MilestoneId,
@@ -195,7 +196,7 @@ export class QuestService {
             if (participant.id === playerId) output.push(event)
             if (quest.party)
               granted.push({ id: participant.id, quest: event.quest })
-            if (event.quest.milestone)
+            if (isMilestoneFinale(event.quest))
               milestones.push({
                 id: participant.id,
                 milestoneId: event.quest.milestone,
@@ -221,11 +222,7 @@ export class QuestService {
     return events
   }
 
-  /**
-   * Equip or clear a cosmetic/vehicle/pet slot. The player must already own the
-   * item, and the slot must match the item's slot. Returns the new look or null
-   * when the request is rejected.
-   */
+  /** Equip owned items in their declared slot, or clear the slot. */
   async equip(
     playerId: string,
     slot: UnlockSlot,

@@ -78,6 +78,8 @@ export const NPC_NAMES: Record<NpcId, Text> = entries((d) => ({
   vi: d.profile.names.vi,
 }))
 
+export const NPC_COMPLETION = entries((d) => d.story.completion)
+
 export const NEIGHBOR_TEXT: Record<
   NeighborId,
   Record<Locale, { role: string; knowledge: string[] }>

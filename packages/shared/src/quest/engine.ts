@@ -1,9 +1,9 @@
 import type { PlayerEvent, WorldState } from '../contracts'
-import { MARKET_ITEMS, type Reward, RewardSchema } from '../entities'
+import { MARKET_ITEMS } from '../entities'
 import { applyPlayerEvents } from '../events'
 import { COMPONENT_ITEM_IDS, MILESTONES, type MilestoneId } from '../milestones'
-import { selectUnlock, type UnlockId } from '../unlocks'
-import { QUEST_DOMAINS, QUEST_LOCATION_POSITIONS } from './domains'
+import { isReady } from './create'
+import { QUEST_DOMAINS } from './domains'
 import { isRevealed } from './riddle'
 import {
   type Quest,
@@ -12,6 +12,9 @@ import {
   type QuestStep,
 } from './schema'
 import { applyTwist } from './twist'
+
+export { createQuest, isReady } from './create'
+export { rewardFor, type UnlockContext } from './reward'
 
 export interface QuestPlayer {
   quests: Quest[]
@@ -166,84 +169,6 @@ export function validateSpec(
   )
     return { ok: false, reason: 'duplicate_active_quest' }
   return { ok: true, spec }
-}
-
-/** Signature-unlock context: what the player already owns, what other active quests promised, and their friendship with the giver. */
-export interface UnlockContext {
-  owned: readonly UnlockId[]
-  promised: readonly UnlockId[]
-  friendship: number
-}
-
-const NEIGHBOR_GIVERS = new Set([
-  'hoa',
-  'tam',
-  'linh',
-  'ba',
-  'mai',
-  'alex',
-  'vy',
-  'son',
-  'thao',
-])
-
-function stepLocation(step: QuestStep): keyof typeof QUEST_LOCATION_POSITIONS {
-  if (step.type === 'GO_TO') return step.locationId
-  if (step.type === 'BUY') return 'market'
-  return QUEST_DOMAINS[step.npcId].home
-}
-
-export function rewardFor(spec: QuestSpec, unlocks?: UnlockContext): Reward {
-  const domain = QUEST_DOMAINS[spec.giverNpcId]
-  const home = QUEST_LOCATION_POSITIONS[domain.home]
-  const steps: QuestStep[] = [...spec.steps]
-  // The twist can extend the final leg; count the longer of the two.
-  if (spec.twist) steps.push(spec.twist.step)
-  let distance = 0
-  for (const step of steps) {
-    const target = QUEST_LOCATION_POSITIONS[stepLocation(step)]
-    distance += Math.hypot(home[0] - target[0], home[1] - target[1])
-  }
-  const unlockId =
-    unlocks && NEIGHBOR_GIVERS.has(spec.giverNpcId)
-      ? selectUnlock(
-          spec.giverNpcId as Parameters<typeof selectUnlock>[0],
-          unlocks
-        )
-      : undefined
-  return RewardSchema.parse({
-    currency: Math.min(
-      100,
-      Math.max(0, 10 + spec.steps.length * 10 + Math.round(distance / 10))
-    ),
-    itemId: spec.gift ?? domain.gifts[0] ?? null,
-    reputation: spec.steps.length >= 2 ? 2 : 1,
-    ...(unlockId ? { unlockId } : {}),
-  })
-}
-
-export function createQuest(
-  spec: QuestSpec,
-  id = `q_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`,
-  now = Date.now(),
-  unlocks?: UnlockContext
-): Quest {
-  return {
-    ...spec,
-    steps: spec.steps.map((step) => ({ ...step })),
-    id,
-    reward: rewardFor(spec, unlocks),
-    progress: spec.steps.map(() => false),
-    status: 'active',
-    createdAt: now,
-  }
-}
-
-export function isReady(quest: Quest): boolean {
-  return (
-    quest.progress.length === quest.steps.length &&
-    quest.progress.every(Boolean)
-  )
 }
 
 function stepMatches(step: QuestStep, event: PlayerEvent): boolean {

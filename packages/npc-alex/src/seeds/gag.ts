@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Sơn liked the pigeon more than the Opera House. Honestly? So do I now.',
-    vi: 'Sơn thích con bồ câu hơn cả Nhà hát. Thành thật mà nói? Giờ mình cũng vậy.',
+    en: 'Sơn has my Opera House photo. Thank you! Now the pigeon has an audience, and I have another reason to keep the accidental shots.',
+    vi: 'Sơn nhận tấm hình Nhà hát rồi. Cảm ơn bạn nha! Bồ câu có khán giả, còn mình có thêm lý do giữ mấy tấm chụp tình cờ.',
   },
 }

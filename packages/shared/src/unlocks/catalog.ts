@@ -33,4 +33,18 @@ export interface UnlockDef {
   speed?: number
   /** Material recolours keyed by material name. Outfits only. */
   palette?: Record<string, string>
+  /** Cosmetic attachment in the avatar's bind pose. */
+  attachment?: 'head' | 'torso'
+  fit?: Partial<
+    Record<
+      'man' | 'woman',
+      {
+        position?: [number, number, number]
+        rotation?: [number, number, number]
+        scale?: number
+      }
+    >
+  >
+  /** Full rigged avatar variants, with garment geometry and matching animations. */
+  outfitModels?: Partial<Record<'man' | 'woman', string>>
 }

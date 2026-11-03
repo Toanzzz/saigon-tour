@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Thao accepted the post? Excellent. Consider yourself promoted to Head of Invitations.',
-    vi: 'Thảo nhận nhiệm vụ rồi hả? Tuyệt. Em được thăng làm Trưởng ban Thư mời luôn.',
+    en: 'Thảo has the invitation! Thank you. You are officially Head of Invitations; this neighborhood lunch has its entertainment now.',
+    vi: 'Thảo nhận thư mời rồi! Cảm ơn bạn nha. Chính thức thăng làm Trưởng ban Thư mời luôn; bữa trưa xóm mình có văn nghệ rồi.',
   },
 }

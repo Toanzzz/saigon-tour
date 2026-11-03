@@ -7,10 +7,15 @@ export const unlocks: UnlockSpec[] = [
     slot: 'accessory',
     tier: 'neutral',
     model: 'cosmetics/camera-strap',
+    attachment: 'torso',
     scale: 1,
   },
   {
     id: 'photo-vest',
+    outfitModels: {
+      man: 'outfits/photo-vest-man',
+      woman: 'outfits/photo-vest-woman',
+    },
     kind: 'cosmetic',
     slot: 'outfit',
     tier: 'warm',

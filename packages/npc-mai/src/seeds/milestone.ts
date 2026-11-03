@@ -25,7 +25,7 @@ export const milestone: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Hoa approved the beans in two bowls flat. For the concert, Vy, roasted just right.',
-    vi: 'Cô Hoa duyệt cà phê gọn trong hai tô. Rang vừa đúng độ, để dành cho đêm nhạc của Vy.',
+    en: 'The beans are ready for Vy and the evening concert. Thank you! Tasting notes: dusk, good company, and an encore worth staying for.',
+    vi: 'Cà phê hạt sẵn cho Vy với đêm nhạc rồi. Cảm ơn bạn nha! Hương vị: chạng vạng, bạn hiền, và một màn diễn thêm đáng nán lại.',
   },
 }

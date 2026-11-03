@@ -23,7 +23,7 @@ export const riddle: SeedQuest = {
     },
   },
   payoff: {
-    en: 'You found my critic without a program note. Four stars for the entrance.',
-    vi: 'Bạn tìm ra nhà phê bình của mình mà chẳng cần tờ chương trình. Bốn sao cho màn vào cửa.',
+    en: 'You found the neighbor in my review. Thank you, bạn! A thoughtful entrance, with or without a program note: four stars.',
+    vi: 'Bạn tìm được người trong bài nhận xét rồi. Cảm ơn bạn nha! Có tờ chương trình hay không thì màn vào cửa cũng chu đáo: bốn sao.',
   },
 }

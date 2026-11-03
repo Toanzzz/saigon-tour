@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Thảo took the photo and your entrance held? Four stars, bạn. The pigeons wanted five; they always overrate.',
-    vi: 'Chị Thảo nhận ảnh mà màn xuất hiện của bạn vững hả? Bốn sao đó bạn. Bồ câu đòi năm; tụi nó lúc nào cũng chấm lố.',
+    en: 'Thảo has the photo. Thank you, bạn! Four stars for the delivery; the pigeons are lobbying for a fifth.',
+    vi: 'Thảo nhận ảnh rồi. Cảm ơn bạn nha! Bốn sao cho chuyến giao; mấy con bồ câu đang vận động thêm sao thứ năm.',
   },
 }

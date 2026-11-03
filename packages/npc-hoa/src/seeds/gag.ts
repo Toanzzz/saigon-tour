@@ -18,7 +18,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Linh smiled? Good. I had her down as a two-bowl problem; turns out one bowl did it.',
-    vi: 'Chị Linh cười hả? Tốt. Cô tưởng cỡ hai tô, ai dè một tô là xong.',
+    en: 'Linh has her broth. Thank you, con! I called it a two-bowl problem; one kind neighbor did the trick.',
+    vi: 'Chị Linh nhận nước lèo rồi. Cảm ơn con nha! Cô tưởng chuyện cỡ hai tô, ai dè có con giúp là xong.',
   },
 }

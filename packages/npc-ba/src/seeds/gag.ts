@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Sơn has it? Good. And that, you see, is why you should never trust a tram timetable. Long story.',
-    vi: 'Sơn nhận rồi hả? Tốt. Và đó, cháu thấy chưa, là lý do đừng bao giờ tin giờ tàu điện. Chuyện dài lắm.',
+    en: 'Sơn has the photo. Thank you, cháu, for carrying a little of the old city with you. The story about the fish can wait till you sit down.',
+    vi: 'Sơn nhận hình rồi. Cảm ơn cháu đã mang giùm ông một chút Sài Gòn xưa. Chuyện con cá để lúc nào cháu ngồi chơi rồi ông kể.',
   },
 }

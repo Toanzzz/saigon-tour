@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Linh got the banana and your shoulders held the whole way? That is a full set, bạn. Gains secured.',
-    vi: 'Chị Linh nhận chuối mà vai bạn giữ nguyên tới nơi hả? Trọn một set đó bạn. Lên cơ chắc rồi.',
+    en: 'Linh has the banana! Thanks for the delivery, bạn. That is one good-neighbor rep completed; give those shoulders a break.',
+    vi: 'Chị Linh nhận chuối rồi! Cảm ơn bạn giao giùm nha. Xong một hiệp hàng xóm tốt rồi đó; cho vai nghỉ chút đi.',
   },
 }

@@ -10,6 +10,7 @@ import { interpolate, presence } from '@/shared/api/presence'
 import { presenceView, samplePresenceView } from '@/shared/api/presence-view'
 import { motion } from '@/shared/runtime/motion'
 import { Avatar, PersonalVehicle, Vehicle } from '@/shared/world'
+import { riderPosition } from '@/shared/world/vehicles'
 import { useXRPresenting } from '@/shared/xr'
 
 /** Single ~5 Hz ticker that refreshes the React-visible presence slice. */
@@ -93,8 +94,22 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
         <Avatar
           body={player.body}
           color={player.color}
-          position={[0, mode ? 0.3 : -0.8, 0]}
-          animation={mode ? 'sit' : moving ? 'walk' : 'idle'}
+          position={
+            !mode && player.look?.vehicle
+              ? (riderPosition(player.look.vehicle).map((value, index) =>
+                  index === 1 ? value - 0.8 : value
+                ) as [number, number, number])
+              : [0, mode ? 0.3 : -0.8, 0]
+          }
+          animation={
+            mode
+              ? 'sit'
+              : player.look?.vehicle
+                ? 'drive'
+                : moving
+                  ? 'walk'
+                  : 'idle'
+          }
           look={player.look}
         />
         {!mode && player.look?.vehicle && (

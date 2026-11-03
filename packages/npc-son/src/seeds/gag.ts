@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Ông Ba read it to the river out loud. The river said nothing, which Sơn took as deep agreement.',
-    vi: 'Ông Ba đọc to cho dòng sông nghe. Dòng sông không nói gì, mà Sơn hiểu đó là sự đồng tình sâu sắc.',
+    en: 'Ông Ba has my postcard for the river. Thank you for carrying that little wish. The river need not write back; knowing it arrived is enough.',
+    vi: 'Ông Ba nhận bưu thiếp gửi dòng sông rồi. Cảm ơn bạn mang giùm lời nhắn nhỏ đó. Sông không cần hồi âm đâu; tới nơi là mình vui rồi.',
   },
 }

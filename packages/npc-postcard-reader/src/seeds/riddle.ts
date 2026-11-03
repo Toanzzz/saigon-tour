@@ -23,7 +23,7 @@ export const riddle: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Delivered to the right poet. Stamp, address, and riddle: all three finally rhyme.',
-    vi: 'Giao đúng cho nhà thơ rồi. Con tem, địa chỉ, và câu đố: cuối cùng cả ba cũng vần.',
+    en: 'The postcard reached the right poet. Thank you, bạn. Stamp, address, and riddle: all three finally rhyme.',
+    vi: 'Tấm bưu thiếp tới đúng nhà thơ rồi. Cảm ơn bạn nha. Con tem, địa chỉ, câu đố: cuối cùng cả ba cũng vần.',
   },
 }

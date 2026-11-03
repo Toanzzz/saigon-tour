@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Linh and her megaphone? That explains the melody — and the key change at dinnertime.',
-    vi: 'Linh với cái loa phóng thanh hả? Thảo nào có giai điệu — lại còn đổi tông đúng giờ cơm chiều.',
+    en: 'So the melody came from Linh and her megaphone! Thank you for following that echo. My city song has its very surprising chorus now.',
+    vi: 'Thì ra giai điệu từ chị Linh với cái loa phóng thanh! Cảm ơn bạn lần theo tiếng vọng nha. Bài hát thành phố có điệp khúc bất ngờ quá chừng.',
   },
 }

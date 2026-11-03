@@ -3,9 +3,17 @@ import { gag } from './seeds/gag'
 import { riddle } from './seeds/riddle'
 
 export const story: NpcStory = {
+  completion: {
+    en: 'Thank you, bạn. A small kindness, carried carefully, arrives somewhere in the heart.',
+    vi: 'Cảm ơn bạn nha. Một chút tử tế, được mang đi cẩn thận, rồi cũng tới một góc trong lòng.',
+  },
   seeds: [
     gag,
     {
+      payoff: {
+        en: 'Vy has the photo at City Hall. Thank you, bạn. A little square of light has found a place to stay.',
+        vi: 'Chị Vy nhận ảnh ở Tòa Thị Chính rồi. Cảm ơn bạn nha. Một ô ánh sáng nhỏ đã có chỗ ở lại.',
+      },
       scope: 'solo',
       steps: [{ type: 'DELIVER', itemId: 'photo', npcId: 'vy' }],
       text: {

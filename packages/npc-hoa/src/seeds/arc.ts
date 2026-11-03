@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'The lantern crew cleared the pot? A three-bowl problem, solved in one pour.',
-    vi: 'Nhóm lồng đèn húp sạch nồi hả? Chuyện cỡ ba tô, một lần rót là xong.',
+    en: 'The lantern crew has their broth! Thank you, con. A three-bowl problem, solved in one kind delivery.',
+    vi: 'Nhóm lồng đèn có nước lèo rồi! Cảm ơn con nha. Chuyện cỡ ba tô, một chuyến giao dễ thương là xong.',
   },
 }

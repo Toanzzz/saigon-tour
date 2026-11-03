@@ -1,114 +1,155 @@
-import { slotOf } from '@saigon/shared'
+import { isMilestoneFinale, type Quest, slotOf, UNLOCKS } from '@saigon/shared'
+import { useMutation } from '@tanstack/react-query'
+import type { ReactNode } from 'react'
 import { close } from '@/app/actions'
 import { NewJourneyButton } from '@/app/title-journey'
 import { NpcAvatar } from '@/features/conversation/npc-avatar'
 import { rewardCopy } from '@/shared/api/party'
 import { equipUnlock } from '@/shared/api/wardrobe'
-import { itemLabel, m, unlockLabel } from '@/shared/i18n'
-import { type GameState, update } from '@/shared/state/game'
+import { itemLabel, m, npcLabel, unlockLabel } from '@/shared/i18n'
+import { type GameState, game, update } from '@/shared/state/game'
 import { CoinEmblem } from '@/shared/ui/coin-emblem'
 import { Dialog } from '@/shared/ui/dialog'
 import { Icon } from '@/shared/ui/icons'
+import { WardrobeThumbnail } from '@/shared/ui/wardrobe-thumbnail'
+import './reward.css'
 
-export function RewardPanel({ state }: { state: GameState }) {
+function GratitudeArt({ quest }: { quest: Quest }) {
+  const name = npcLabel(quest.giverNpcId)
+  return (
+    <figure className="reward-art">
+      <img
+        key={quest.giverNpcId}
+        src={`${import.meta.env.BASE_URL}npcs/${quest.giverNpcId}/gratitude.webp`}
+        alt={m.reward_art_alt({ name })}
+        onError={(event) => {
+          const image = event.currentTarget
+          if (!image.dataset.fallback) {
+            image.dataset.fallback = 'true'
+            image.src = `${import.meta.env.BASE_URL}npcs/${quest.giverNpcId}/avatar-lg.webp`
+          }
+        }}
+      />
+      <figcaption>{m.reward_from({ name })}</figcaption>
+    </figure>
+  )
+}
+
+/** Presentation accepts actions so workshop previews never touch a player save. */
+export function CompletionCard({
+  quest,
+  body = 'man',
+  remaining = 0,
+  onContinue,
+  onEquip,
+  onDismiss = onContinue,
+  footer,
+}: {
+  quest: Quest
+  body?: GameState['body']
+  remaining?: number
+  onContinue: () => void
+  onDismiss?: () => void
+  onEquip: () => Promise<boolean | undefined>
+  footer?: ReactNode
+}) {
+  const equip = useMutation({ mutationFn: onEquip })
+  const reward = quest.reward
+  const unlock = reward.unlockId ? UNLOCKS[reward.unlockId] : null
+  const action =
+    unlock?.slot === 'vehicle'
+      ? m.reward_ride_now()
+      : unlock?.slot === 'pet'
+        ? m.reward_bring_now()
+        : m.wardrobe_wear_now()
   return (
     <Dialog
-      title={m.reward_title()}
+      title={quest.title}
       eyebrow={m.reward_eyebrow()}
-      onClose={close}
+      onClose={onDismiss}
       className="reward-dialog"
     >
-      <div
-        className="postcard"
-        role="img"
-        aria-label={m.reward_earned({
-          item: state.rewardQuest?.reward.itemId
-            ? itemLabel(state.rewardQuest.reward.itemId)
-            : m.reward_keepsake(),
-        })}
-      >
-        <span className="postcard-mark">Sài Gòn</span>
-        <span>{m.reward_with_love()}</span>
-        <i className="postcard-stamp">
-          <Icon name="star" size={28} />
-        </i>
-      </div>
-      {state.rewardQuest?.milestone ? (
+      <GratitudeArt quest={quest} />
+      {isMilestoneFinale(quest) && (
         <p className="reward-milestone-banner">{m.milestone_reward_banner()}</p>
-      ) : null}
-      {state.rewardQuest?.payoff ? (
-        <blockquote className="reward-payoff">
-          <NpcAvatar id={state.rewardQuest.giverNpcId} size="sm" />
-          <span>{state.rewardQuest.payoff}</span>
-        </blockquote>
-      ) : (
-        <p className="reward-copy">{rewardCopy(state.rewardQuest)}</p>
       )}
+      <blockquote className="reward-payoff">
+        <NpcAvatar id={quest.giverNpcId} size="sm" />
+        <span>{rewardCopy(quest)}</span>
+      </blockquote>
       <div className="reward-earned">
         <span className="reward-coin-row">
-          <CoinEmblem size={44} />+{m.coins({ count: state.reward })}
+          <CoinEmblem size={36} />+{m.coins({ count: reward.currency })}
         </span>
         <span>
           <Icon name="star" />
           {m.reward_item_reputation({
-            item: state.rewardQuest?.reward.itemId
-              ? itemLabel(state.rewardQuest.reward.itemId)
+            item: reward.itemId
+              ? itemLabel(reward.itemId)
               : m.reward_new_friend(),
-            reputation: state.rewardQuest?.reward.reputation ?? 0,
+            reputation: reward.reputation,
           })}
         </span>
       </div>
-      {(state.rewardQuest?.reward.bonus?.thrifty ||
-        state.rewardQuest?.reward.bonus?.sharp) && (
-        <div className="reward-earned reward-bonus">
-          {state.rewardQuest?.reward.bonus?.thrifty ? (
-            <span>
-              <Icon name="coin" />
-              {m.reward_thrifty()}
-            </span>
-          ) : null}
-          {state.rewardQuest?.reward.bonus?.sharp ? (
-            <span>
-              <Icon name="star" />
-              {m.reward_sharp()}
-            </span>
-          ) : null}
+      {(reward.bonus?.thrifty || reward.bonus?.sharp) && (
+        <div className="reward-bonus">
+          {reward.bonus.thrifty && <span>{m.reward_thrifty()}</span>}
+          {reward.bonus.sharp && <span>{m.reward_sharp()}</span>}
         </div>
       )}
-      {state.rewardQuest?.reward.unlockId && (
-        <div className="reward-earned reward-unlock">
-          <span>
-            <Icon name="star" />
-            {m.reward_unlock({
-              item: unlockLabel(state.rewardQuest.reward.unlockId),
-            })}
-          </span>
-        </div>
+      {unlock && reward.unlockId && (
+        <section className="reward-gift">
+          <WardrobeThumbnail body={body} id={unlock.id} eager />
+          <span>{m.reward_unlock({ item: unlockLabel(reward.unlockId) })}</span>
+        </section>
       )}
-      {state.rewardQuest?.reward.unlockId && (
+      <div className="reward-actions">
+        {unlock && (
+          <button
+            type="button"
+            className="primary-button wide reward-wear-now"
+            disabled={equip.isPending}
+            onClick={() => equip.mutate()}
+          >
+            {equip.isPending ? m.app_loading() : action}
+          </button>
+        )}
+        {equip.data === false && <p role="alert">{m.reward_equip_failed()}</p>}
         <button
           type="button"
-          className="primary-button wide reward-wear-now"
-          onClick={() => {
-            const id = state.rewardQuest?.reward.unlockId
-            if (id) void equipUnlock(slotOf(id), id)
-            // Equip and drop straight back into the city so the player sees the
-            // new look; skip the first-reward hub that `close()` would open.
-            update({
-              dialogue: null,
-              panel: 'none',
-              screen: 'playing',
-              hubShown: true,
-            })
-          }}
+          className="primary-button wide"
+          onClick={onContinue}
         >
-          {m.wardrobe_wear_now()}
+          {remaining ? m.reward_next({ count: remaining }) : m.pause_continue()}
         </button>
-      )}
-      <button type="button" className="primary-button wide" onClick={close}>
-        {m.pause_continue()}
-      </button>
-      <NewJourneyButton className="restart-button" />
+      </div>
+      {footer}
     </Dialog>
+  )
+}
+
+export function RewardPanel({ state }: { state: GameState }) {
+  const quest = state.rewardQuest
+  if (!quest) return null
+  return (
+    <CompletionCard
+      key={quest.id}
+      quest={quest}
+      body={state.body}
+      remaining={Math.max(0, state.rewardQueue.length - 1)}
+      onContinue={close}
+      footer={<NewJourneyButton className="restart-button" />}
+      onEquip={async () => {
+        const id = quest.reward.unlockId
+        if (!id || !(await equipUnlock(slotOf(id), id))) return false
+        if (game.state.rewardQuest?.id !== quest.id) return true
+        if (game.state.rewardQueue.length > 1) close()
+        else {
+          close()
+          update({ panel: 'none', screen: 'playing', hubShown: true })
+        }
+        return true
+      }}
+    />
   )
 }

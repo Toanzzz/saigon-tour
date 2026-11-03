@@ -1,4 +1,4 @@
-import { createQuest, seedsFor } from '@saigon/shared'
+import { completionLine, createQuest, seedsFor } from '@saigon/shared'
 import { describe, expect, it } from 'vitest'
 import { rewardCopy } from '@/shared/api/party'
 
@@ -14,7 +14,7 @@ describe('rewardCopy', () => {
     expect(rewardCopy(quest)).toBe('Linh filed the broth under "excellent".')
   })
 
-  it('falls back to the completed title without a payoff', () => {
+  it('uses the giver voice for a legacy quest without a payoff', () => {
     const quest = createQuest(
       {
         giverNpcId: 'hoa',
@@ -26,7 +26,7 @@ describe('rewardCopy', () => {
       'q_nopay',
       0
     )
-    expect(rewardCopy(quest)).toContain(quest.title)
+    expect(rewardCopy(quest)).toBe(completionLine(quest, 'en'))
   })
 
   it('returns the generic line for no quest', () => {

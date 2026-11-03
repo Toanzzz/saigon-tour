@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
+import sharp from 'sharp'
 import {
   chromium,
   completeQuest,
   diagnostics,
+  enterPlay,
   executablePath,
+  gameUrl,
   openGame,
 } from './qa-quest-flow.mjs'
 
@@ -23,11 +26,22 @@ try {
     })
     const page = await context.newPage()
     const errors = []
+    const observerContext = await browser.newContext({
+      locale: 'en-US',
+      viewport: { width: 1000, height: 800 },
+    })
+    const observer = await observerContext.newPage()
+    observer.on('pageerror', (error) => errors.push(error.message))
+    await openGame(observer)
     page.on('pageerror', (error) => {
       errors.push(error.message)
       console.log('PAGEERROR', error.message)
     })
-    await openGame(page)
+    if (width === 390) {
+      await page.goto(gameUrl)
+      await page.getByRole('button', { name: /^Switch character look/ }).click()
+      await enterPlay(page)
+    } else await openGame(page)
 
     // Complete hoa's seed errand; the neutral-tier reward is an unlock.
     const { offered } = await completeQuest(page, 'hoa')
@@ -54,6 +68,21 @@ try {
       'completed quest should grant the unlock'
     )
 
+    // An equip failure keeps the receipt available for a real retry.
+    await page.route('**/me/equip', (route) =>
+      route.fulfill({
+        status: 503,
+        contentType: 'application/json',
+        body: '{"error":"qa_unavailable"}',
+      })
+    )
+    await page.getByRole('button', { name: 'Wear now', exact: true }).click()
+    await page
+      .getByRole('alert')
+      .filter({ hasText: 'Could not equip this reward' })
+      .waitFor()
+    assert(await page.locator('.reward-dialog').isVisible())
+    await page.unroute('**/me/equip')
     // "Wear now" equips the reward straight from the popup and closes it.
     await page.getByRole('button', { name: 'Wear now' }).click()
     await page.waitForFunction(
@@ -85,6 +114,15 @@ try {
       () => window.__THREE_GAME_DIAGNOSTICS__?.state.panel === 'wardrobe'
     )
     await page.waitForSelector('.wardrobe-dialog canvas', { timeout: 10000 })
+    await page.locator('.wardrobe-preview-loading').waitFor({ state: 'hidden' })
+    await page.waitForTimeout(700)
+    const stagePixels = await sharp(
+      await page.locator('.wardrobe-dialog canvas').screenshot()
+    ).stats()
+    assert(
+      stagePixels.channels.slice(0, 3).some((channel) => channel.stdev > 8),
+      'the live fitting preview contains the rendered avatar'
+    )
     await page.screenshot({ path: `${out}/wardrobe-${width}.png` })
 
     // The owned, equipped card shows an Unequip toggle. Clicking it clears the slot.
@@ -114,35 +152,56 @@ try {
       { timeout: 10000 }
     )
 
-    // Switch the body from the wardrobe and assert the state follows.
-    const before = (await diagnostics(page)).state.body
-    const next = before === 'man' ? 'woman' : 'man'
-    const bodyLabel = next === 'man' ? 'Young man' : 'Young woman'
-    await page
-      .locator('.wardrobe-body')
-      .getByRole('button', { name: bodyLabel })
-      .click()
+    // A fresh load restores the server-owned equipment and body.
+    await page.reload()
+    await enterPlay(page)
     await page.waitForFunction(
-      (b) => window.__THREE_GAME_DIAGNOSTICS__?.state.body === b,
-      next,
-      { timeout: 10000 }
+      (id) =>
+        window.__THREE_GAME_DIAGNOSTICS__?.state.unlocks.equipped.hat === id,
+      unlockId
     )
-
     state = (await diagnostics(page)).state
     assert(
       Object.values(state.unlocks.equipped).includes(unlockId),
       'equip should persist to state'
     )
-    assert.equal(state.body, next, 'wardrobe body switch should update state')
+    assert.equal(
+      state.body,
+      width === 390 ? 'woman' : 'man',
+      'chosen body persists'
+    )
+    await page.waitForFunction(() =>
+      Boolean(window.__THREE_GAME_DIAGNOSTICS__?.network.selfId)
+    )
+    const selfId = (await diagnostics(page)).network.selfId
+    await observer.bringToFront()
+    await observer.waitForFunction(
+      async ({ id, hat, body }) => {
+        const source = performance
+          .getEntriesByType('resource')
+          .map((entry) => entry.name)
+          .find(
+            (url) => new URL(url).pathname === '/src/shared/api/presence.ts'
+          )
+        const { presence } = await import(source)
+        const remote = presence.get(id)?.samples.at(-1)?.player
+        return remote?.look?.hat === hat && remote.body === body
+      },
+      { id: selfId, hat: unlockId, body: state.body },
+      { timeout: 30000 }
+    )
 
     results.push({
       width,
       unlockId,
       equipped: state.unlocks.equipped,
       body: state.body,
+      remoteAppearance: true,
+      livePreview: true,
       errors,
     })
     assert.equal(errors.length, 0, `no page errors at ${width}px`)
+    await observerContext.close()
     await context.close()
   }
   await writeFile(`${out}/results.json`, JSON.stringify(results, null, 2))

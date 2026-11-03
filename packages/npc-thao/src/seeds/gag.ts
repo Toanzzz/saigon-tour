@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'The chorus landed on the last step to Sơn. I am naming the song after your shoes.',
-    vi: 'Điệp khúc rơi đúng vào bước chân cuối tới chỗ Sơn. Mình sẽ đặt tên bài hát theo đôi giày của bạn.',
+    en: 'Sơn has his coffee. Thank you for carrying the rhythm across the city! I think the chorus will be named after your shoes.',
+    vi: 'Sơn có cà phê rồi. Cảm ơn bạn mang cả nhịp chân qua phố nha! Chắc mình đặt tên điệp khúc theo đôi giày của bạn quá.',
   },
 }

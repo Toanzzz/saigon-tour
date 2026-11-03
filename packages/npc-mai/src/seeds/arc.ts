@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Son wrote tasting notes back? A postcard to a coffee? Finally, a reviewer with range.',
-    vi: 'Sơn viết lại cảm nhận hả? Viết bưu thiếp cho ly cà phê luôn? Cuối cùng cũng gặp người sành điệu.',
+    en: 'Sơn has the coffee. Thank you! Tasting notes: a good detour and a reviewer who may write a whole postcard about it.',
+    vi: 'Sơn nhận cà phê rồi. Cảm ơn bạn nha! Hương vị: một chuyến đổi đường hay ho, gặp người có khi viết cả bưu thiếp để bình ly này.',
   },
 }

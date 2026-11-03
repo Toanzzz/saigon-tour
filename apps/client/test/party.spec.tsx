@@ -1,4 +1,5 @@
 import type { PartySnapshot } from '@saigon/shared'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { Conversation } from '@/features/conversation/conversation'
@@ -68,9 +69,15 @@ describe('party controls and authoritative quest rewards', () => {
       panel: 'reward',
       reward: finished.reward.currency,
     })
-    expect(renderToStaticMarkup(<RewardPanel state={result} />)).toContain(
+    expect(
+      renderToStaticMarkup(
+        <QueryClientProvider client={new QueryClient()}>
+          <RewardPanel state={result} />
+        </QueryClientProvider>
+      )
+    ).toContain(
       // The reward card now quotes the giver's payoff when present.
-      finished.payoff ?? finished.title
+      finished.title
     )
     expect(
       completedQuest({ ...result, panel: 'none' }, completion()).panel
@@ -141,9 +148,11 @@ describe('party controls and authoritative quest rewards', () => {
     }
     const firstPush = completedQuest(initialState(), message)
     const secondPush = completedQuest(firstPush, { ...message, quest: second })
-    expect(secondPush.reward).toBe(
-      finished.reward.currency + second.reward.currency
-    )
+    expect(secondPush.reward).toBe(finished.reward.currency)
+    expect(secondPush.rewardQueue.map((quest) => quest.id)).toEqual([
+      finished.id,
+      second.id,
+    ])
     expect(secondPush.completed).toHaveLength(2)
   })
   it('replays pending delivery progress after an unrelated reward push', () => {

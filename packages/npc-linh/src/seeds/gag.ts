@@ -17,7 +17,7 @@ export const gag: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Flawless logistics. I am promoting you to Senior Deputy Herb Logistics Officer, effective immediately.',
-    vi: 'Hậu cần hoàn hảo. Chị thăng chức bạn lên Phó phòng Cấp cao Hậu cần Rau thơm, có hiệu lực ngay.',
+    en: 'The herbs reached Cô Hoa! Thank you for the flawless logistics. Senior Deputy Herb Logistics Officer has a nice ring, does it not?',
+    vi: 'Rau thơm tới cô Hoa rồi! Cảm ơn bạn lo hậu cần chu đáo nha. Phó phòng Cấp cao Hậu cần Rau thơm nghe cũng oai ha?',
   },
 }

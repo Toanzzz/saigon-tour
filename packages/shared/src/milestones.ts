@@ -53,6 +53,15 @@ export const COMPONENT_ITEM_IDS: ItemId[] = Object.values(MILESTONES).flatMap(
   (milestone) => milestone.components.map((component) => component.itemId)
 )
 
+/** Only the host's finale completes a milestone; component errands do not. */
+export function isMilestoneFinale<
+  T extends { giverNpcId: NpcId; milestone?: MilestoneId },
+>(quest: T): quest is T & { milestone: MilestoneId } {
+  return Boolean(
+    quest.milestone && MILESTONES[quest.milestone].host === quest.giverNpcId
+  )
+}
+
 /** Components the player currently holds for a milestone. */
 export function heldComponents(world: WorldState, id: MilestoneId): ItemId[] {
   return MILESTONES[id].components

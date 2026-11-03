@@ -7,10 +7,15 @@ export const unlocks: UnlockSpec[] = [
     slot: 'accessory',
     tier: 'neutral',
     model: 'cosmetics/scarf',
+    attachment: 'torso',
     scale: 1,
   },
   {
     id: 'barista',
+    outfitModels: {
+      man: 'outfits/barista-man',
+      woman: 'outfits/barista-woman',
+    },
     kind: 'cosmetic',
     slot: 'outfit',
     tier: 'warm',
@@ -22,6 +27,6 @@ export const unlocks: UnlockSpec[] = [
     slot: 'pet',
     tier: 'close',
     model: 'pets/cat',
-    scale: 0.5,
+    scale: 0.17,
   },
 ]

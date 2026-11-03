@@ -16,14 +16,14 @@ import { applyQuestSave } from './quests'
  */
 export async function equipUnlock(slot: UnlockSlot, id: UnlockId | null) {
   const state = game.state
-  if (id && !state.unlocks.owned.includes(id)) return
+  if (id && !state.unlocks.owned.includes(id)) return false
   const previous = state.unlocks.equipped
   const next = { ...previous }
   if (id) next[slot] = id
   else delete next[slot]
   update({ unlocks: { ...state.unlocks, equipped: next } })
 
-  if (state.guestStatus !== 'online') return
+  if (state.guestStatus !== 'online') return true
   const sessionId = state.sessionId
   try {
     const response = await rpc.me.equip.$post(
@@ -32,12 +32,14 @@ export async function equipUnlock(slot: UnlockSlot, id: UnlockId | null) {
     )
     if (!response.ok) throw new Error('equip_failed')
     const player = GuestPlayerSchema.parse((await response.json()).player)
-    if (game.state.sessionId !== sessionId) return
+    if (game.state.sessionId !== sessionId) return false
     applyQuestSave(player)
+    return true
   } catch {
     if (game.state.sessionId === sessionId)
       update({ unlocks: { ...game.state.unlocks, equipped: previous } })
     notify(m.toast_equip_failed())
+    return false
   }
 }
 

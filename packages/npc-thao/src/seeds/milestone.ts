@@ -16,7 +16,7 @@ export const milestone: SeedQuest = {
   riddle: {
     text: {
       en: 'My melody lost its bridge where two red-brick towers trade an echo. Stand where the square answers, then find the postcard poet who kept my missing bars.',
-      vi: 'Khúc nhạc của mình rớt mất đoạn cầu nơi hai tháp gạch đỏ trao nhau tiếng vọng. Đứng chỗ quảng trường vọng lại, rồi tìm người viết bưu thiếp đang giữ mấy nhịp thất lạc của mình.',
+      vi: 'Đoạn nhạc lạc nơi hai tháp gạch đỏ trao tiếng vọng. Đứng chỗ quảng trường đáp lại, rồi tìm người viết bưu thiếp đang giữ mấy nhịp thất lạc.',
     },
   },
   text: {
@@ -32,7 +32,7 @@ export const milestone: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Son had the bridge as a postcard to the river. Now the sheet music is whole for the concert.',
-    vi: 'Sơn giữ đoạn cầu trong một tấm bưu thiếp gửi dòng sông. Giờ bản nhạc đã nguyên vẹn cho đêm nhạc.',
+    en: 'Sơn helped find the missing bars, and the score is whole for Vy’s concert. Thank you! I can finally hear the bridge leading everyone home.',
+    vi: 'Sơn giúp tìm được mấy ô nhịp thất lạc, bản nhạc đủ cho đêm diễn của Vy rồi. Cảm ơn bạn nha! Mình nghe được đoạn chuyển dẫn mọi người về cùng nhau rồi.',
   },
 }

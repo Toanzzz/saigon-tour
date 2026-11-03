@@ -7,6 +7,7 @@ export const unlocks: UnlockSpec[] = [
     slot: 'hat',
     tier: 'neutral',
     model: 'cosmetics/helmet',
+    attachment: 'head',
     scale: 1,
   },
   {
@@ -15,6 +16,7 @@ export const unlocks: UnlockSpec[] = [
     slot: 'accessory',
     tier: 'warm',
     model: 'cosmetics/sunglasses',
+    attachment: 'head',
     scale: 1,
   },
   {

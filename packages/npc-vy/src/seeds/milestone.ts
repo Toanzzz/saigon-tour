@@ -26,7 +26,7 @@ export const milestone: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Lanterns up, coffee poured, the lost melody found. The square is a concert now. Encore Moon shines.',
-    vi: 'Đèn lồng lên, cà phê rót, khúc nhạc thất lạc tìm thấy lại. Cả quảng trường thành đêm nhạc. Trăng Encore tỏa sáng.',
+    en: 'Lanterns up, coffee ready, the melody whole again. Thank you for bringing us together! The square has its concert; Encore Moon shines for you too.',
+    vi: 'Đèn lên, cà phê sẵn, giai điệu lại nguyên vẹn. Cảm ơn bạn đã nối mọi người với nhau! Đêm nhạc này là của cả xóm, Trăng Encore cũng sáng vì bạn nữa.',
   },
 }

@@ -26,6 +26,7 @@ import { clearPersistedQueries, queryClient } from '@/shared/api/query'
 import { guestState, resetSession, signOut } from '@/shared/api/session'
 import { audio } from '@/shared/audio'
 import { itemLabel, m, marketItemLabel, npcLabel } from '@/shared/i18n'
+import { nextCompletion } from '@/shared/state/completions'
 import {
   advanceQuests,
   game,
@@ -118,6 +119,10 @@ export function openJournal() {
 }
 export function close() {
   const { panel, hubShown } = game.state
+  if (panel === 'reward') {
+    update(nextCompletion(game.state))
+    if (game.state.rewardQuest) return
+  }
   if (panel === 'reward' && !hubShown && !isXRPresenting()) {
     update({ dialogue: null, panel: 'none', screen: 'hub', hubShown: true })
     return

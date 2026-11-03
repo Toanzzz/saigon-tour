@@ -2,9 +2,17 @@ import type { NpcStory } from '@saigon/npc-kit'
 import { gag } from './seeds/gag'
 
 export const story: NpcStory = {
+  completion: {
+    en: 'Thank you, bạn. Generous portion, lovely finish: your kindness scores a ten. No tasting notes needed.',
+    vi: 'Cảm ơn bạn nha. Phần hào phóng, hậu vị dễ thương: lòng tốt của bạn được mười điểm. Khỏi cần ghi chú nếm thử luôn.',
+  },
   seeds: [
     gag,
     {
+      payoff: {
+        en: 'Linh has the noodles for the park lunch! Thank you, bạn. A generous delivery with a lovely finish: ten points for sharing.',
+        vi: 'Chị Linh có mì cho bữa trưa công viên rồi! Cảm ơn bạn nha. Giao hào phóng, hậu vị dễ thương: mười điểm chia sẻ.',
+      },
       scope: 'solo',
       steps: [{ type: 'DELIVER', itemId: 'noodles', npcId: 'linh' }],
       text: {

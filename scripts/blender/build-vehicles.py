@@ -56,7 +56,7 @@ def cyl(name, r, depth, loc, mat, rot=(math.radians(90), 0, 0), verts=18):
 
 
 def wheel(name, loc, tyre):
-    return cyl(name, 0.26, 0.12, loc, tyre, verts=20)
+    return cyl(name, 0.26, 0.12, loc, tyre, (0, math.radians(90), 0), verts=20)
 
 
 def cub():

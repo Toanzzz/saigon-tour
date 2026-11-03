@@ -32,7 +32,7 @@ export const arc: SeedQuest = {
     },
   },
   payoff: {
-    en: 'Alex photographed Pho Moon at dusk? A lantern with its own backstory and a portrait. Immortal.',
-    vi: 'Alex chụp "Phở Moon" lúc chạng vạng hả? Một chiếc lồng đèn có cả câu chuyện lẫn tấm chân dung. Bất tử luôn.',
+    en: 'Alex has the announcement for Phở Moon. Thank you! Our little lantern has a name, a story, and someone ready to catch its glow.',
+    vi: 'Alex nhận thiệp báo tin về Phở Moon rồi. Cảm ơn bạn nha! Chiếc đèn nhỏ có tên, có chuyện, lại có người chờ chụp ánh sáng của nó nữa.',
   },
 }
