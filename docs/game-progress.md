@@ -457,3 +457,8 @@ Non-demo turns are unchanged.
 ## Fresh encounter narration
 
 - Conversations without earlier turns show activity narration without encounter or date separators. Returning conversations retain their history boundary.
+
+## Contextual conversation hints
+
+- All 29 NPCs have authored English/Vietnamese suggestions for each activity, with separate first/returning encounter copy. Suggestions follow the encounter narration, friendship, confirmed hosting events, and city needs.
+- Guidance disappears after the player speaks or when quest/milestone cards already guide the conversation. Full journals retain social topics alongside the capacity notice.

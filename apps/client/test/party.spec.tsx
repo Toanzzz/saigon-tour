@@ -76,7 +76,7 @@ describe('party controls and authoritative quest rewards', () => {
       completedQuest({ ...result, panel: 'none' }, completion()).panel
     ).toBe('none')
   })
-  it('keeps generic errand controls available after a completed quest', () => {
+  it('keeps contextual conversation guidance available after a completed quest', () => {
     const state = {
       ...initialState(),
       completed: [summary],
@@ -89,7 +89,7 @@ describe('party controls and authoritative quest rewards', () => {
       },
     }
     expect(renderToStaticMarkup(<Conversation state={state} />)).toContain(
-      'Ask Ms. Hoa if they need a hand.'
+      'Ask Ms. Hoa about the bowls being prepared.'
     )
   })
   it('handles invites, expiry, and presence membership', () => {

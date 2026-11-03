@@ -15,6 +15,17 @@ import { type HarnessUsage, meteredFetch } from '../npc/meter'
 import { DIRECTOR_PERSONA } from './persona'
 import { directorPlanTools } from './tools'
 
+const directorActivities = Object.fromEntries(
+  Object.entries(NPC_ACTIVITIES).map(([npc, catalog]) => [
+    npc,
+    Object.fromEntries(
+      Object.entries(catalog).map(
+        ([id, { conversationHints: _, ...activity }]) => [id, activity]
+      )
+    ),
+  ])
+)
+
 export function directorAgent(
   config: ServerConfig,
   db: GameDb,
@@ -41,7 +52,7 @@ export function directorAgent(
     id: 'city-director',
     name: 'City Director',
     model: provider.chatModel(config.model ?? ''),
-    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(NPC_ACTIVITIES)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
+    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(directorActivities)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
     tools: directorPlanTools(city, plan, active),
   })
 }

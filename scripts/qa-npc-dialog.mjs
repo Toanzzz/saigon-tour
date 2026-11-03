@@ -127,10 +127,7 @@ try {
     await page.locator('dialog.conversation').waitFor({ state: 'detached' })
 
     await apply(page, 'available')
-    assert.match(
-      await page.locator('.errands').innerText(),
-      /if they need a hand|ask if they need a hand/i
-    )
+    assert.ok(await page.locator('.conversation-hint').innerText())
     await page.screenshot({ path: `${out}/available-${width}.png` })
 
     // The header portrait is enlarged (~1.5-2x the old 52/46px).

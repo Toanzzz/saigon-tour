@@ -503,5 +503,14 @@
   "chat_scene_label": "Một thoáng khu phố",
   "wardrobe_all": "Tất cả",
   "wardrobe_rotate": "Xoay nhân vật",
-  "wardrobe_rotate_hint": "Kéo để xoay · dùng phím mũi tên khi chọn"
+  "wardrobe_rotate_hint": "Kéo để xoay · dùng phím mũi tên khi chọn",
+  "chat_hint_cold": "Để {name} thoải mái; bắt đầu bằng một lời chào nhẹ nhàng.",
+  "chat_hint_wary": "Trò chuyện nhẹ nhàng với {name}; hỏi hôm nay thế nào.",
+  "chat_hint_hosting": "Cùng {name} trò chuyện về {event} và ngỏ ý giúp một tay.",
+  "chat_hint_need": "Hỏi {name} đang bận tâm điều gì và bạn có thể giúp gì không.",
+  "chat_hint_event_festival": "lễ hội",
+  "chat_hint_event_market_rush": "giờ cao điểm ở chợ",
+  "chat_hint_event_rain": "cơn mưa",
+  "chat_hint_event_street_music": "buổi nhạc đường phố",
+  "chat_hint_event_lost_item": "món đồ thất lạc"
 }

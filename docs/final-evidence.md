@@ -561,3 +561,11 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - Proven: `scripts/qa-npc-dialog.mjs` passes at 1440px desktop and 390px mobile. Fresh encounters show narration with no encounter/date separator; composer entry and close controls work. Returning history retains its encounter separator. No page errors or horizontal overflow.
 - Captures: `artifacts/npc-dialog-clarity/fresh-1440.png` and `fresh-390.png`.
 - Validation: `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass. Client: 295 passed.
+
+## Contextual conversation hints
+
+- All 29 NPCs provide bilingual first/returning suggestions for both authored activities. Captured encounter activity, friendship, hosting events, explicit city needs, quest guidance, and journal capacity determine the suggestion. Generated city titles/needs are not inserted into localized hints.
+- Proven: `scripts/qa-conversation-hints.mjs` passes at 1440px and 390px using real encounter, composer, close, and language controls. It covers walking/paused narration agreement, stable captured activity after a live assignment change, EN/VI switching, earlier-history copy, cold friendship, and social guidance beside a full journal. A forced 503 is observed on the actual send; the hint stays hidden afterward and returns only on the next encounter. No page errors or horizontal overflow.
+- Proven: `scripts/qa-npc-dialog.mjs` passes at both widths for existing quest cards, tracking, history, and fresh narration. Desktop English and mobile Vietnamese captures were visually inspected. Artifacts: `artifacts/conversation-hints/results.json`, `first-1440.png`, `vi-390.png`, and `returning-full-390.png`.
+- Validation: 329 client tests pass; 13 focused Director/activity tests pass, including exact Director prompt-context preservation. Type checks and client/server production builds pass. Changed-file lint passes.
+- Full-worktree gates: `bun run check` reports formatting in the concurrently edited English catalog and generated footprints. The saved pre-edit English catalog has the same formatting issue. `bun run test` reaches 512 passing server tests, 2 skipped, and one NPC-baseline snapshot mismatch for concurrently changed pet scales; the client suite was run separately and passes. These unrelated edits are preserved.

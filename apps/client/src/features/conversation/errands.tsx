@@ -1,10 +1,4 @@
-import {
-  friendlinessOf,
-  hostingEvent,
-  type ItemId,
-  type NpcId,
-  type Quest,
-} from '@saigon/shared'
+import type { ItemId, NpcId, Quest } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { askMilestone, giveItem, openJournal } from '@/app/actions'
 import { city } from '@/shared/api/city'
@@ -16,6 +10,7 @@ import {
   questHint,
 } from '@/shared/state/quests'
 import { Icon } from '@/shared/ui/icons'
+import { conversationHint } from './hint'
 
 function Pill({ tone, label }: { tone: string; label: string }) {
   return <span className={`errand-pill errand-pill-${tone}`}>{label}</span>
@@ -30,12 +25,12 @@ function deliveryItem(quest: Quest, npc: NpcId): ItemId | null {
 }
 
 export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
-  const { fromNpc, forNpc, canHelp, full } = dialogueQuests(state, npc)
+  const { fromNpc, forNpc, full } = dialogueQuests(state, npc)
   const ready = fromNpc.filter((quest) => quest.status === 'ready')
   const active = fromNpc.filter((quest) => quest.status === 'active')
   const npcName = npcLabel(npc)
   const snapshot = useSelector(city, (s) => s)
-  const hosting = hostingEvent(snapshot, npc)
+  const hint = conversationHint(state, snapshot)
   const askConcert = canAskMilestone(state, npc)
   return (
     <section className="errands" aria-label={m.errands_label()}>
@@ -131,23 +126,14 @@ export function NpcErrands({ state, npc }: { state: GameState; npc: NpcId }) {
           </div>
         )
       })}
-      {canHelp ? (
-        <p>
-          {friendlinessOf(state.friendship, npc) <= -3
-            ? m.errands_cold({ name: npcName })
-            : hosting
-              ? m.errands_busy_hint({ name: npcName, event: hosting.title })
-              : m.errands_chat_hint({ name: npcName })}
-        </p>
-      ) : (
-        full && (
-          <div className="errand errand-full">
-            <p className="errand-need">{m.errands_full()}</p>
-            <button type="button" className="text-button" onClick={openJournal}>
-              {m.header_open_journal()}
-            </button>
-          </div>
-        )
+      {hint && <p className="conversation-hint">{hint}</p>}
+      {full && (
+        <div className="errand errand-full">
+          <p className="errand-need">{m.errands_full()}</p>
+          <button type="button" className="text-button" onClick={openJournal}>
+            {m.header_open_journal()}
+          </button>
+        </div>
       )}
     </section>
   )

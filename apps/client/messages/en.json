@@ -534,5 +534,14 @@
   "chat_scene_label": "A moment in the neighborhood",
   "wardrobe_all": "All",
   "wardrobe_rotate": "Rotate avatar",
-  "wardrobe_rotate_hint": "Drag to rotate · arrow keys when focused"
+  "wardrobe_rotate_hint": "Drag to rotate · arrow keys when focused",
+  "chat_hint_cold": "Give {name} some space; start with a gentle hello.",
+  "chat_hint_wary": "Keep it light with {name}; ask how the day is going.",
+  "chat_hint_hosting": "Ask {name} whether you can help with {event}.",
+  "chat_hint_need": "Ask {name} what is on their mind and whether you can help.",
+  "chat_hint_event_festival": "the festival",
+  "chat_hint_event_market_rush": "the market rush",
+  "chat_hint_event_rain": "the rain",
+  "chat_hint_event_street_music": "the street music",
+  "chat_hint_event_lost_item": "the lost item"
 }

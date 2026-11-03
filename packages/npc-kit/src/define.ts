@@ -10,6 +10,7 @@ import type {
 export type Text = Record<Locale, string>
 
 export interface NpcActivity {
+  conversationHints: { first: Text; returning: Text }
   text: Text
   animation: string
   movement?: 'walk'
