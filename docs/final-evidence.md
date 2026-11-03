@@ -1,5 +1,18 @@
 # Final evidence
 
+## Market cry follows Hoa — November 3, 2026
+
+- Proven: the market street cry had a fixed authored position while Hoa's
+  live city placement was the market gathering anchor.
+- The market cry resolves Hoa's current position for rendering, player range,
+  and NPC-speech backoff. Coordinate changes update already-visible bubbles.
+- Unsandboxed headless Playwright enters through Start exploring, then varies
+  only Hoa's placement between her home `[-23, 0, 3.5]` and gathering
+  `[-17, 0, 8]` anchors. At 1440px desktop and 390px mobile, it asserts a
+  rendered street-cry object at each position and visible cry DOM content.
+- `bun run check`, `bun run check:types`, `bun run build`, and `bun run test`
+  pass.
+
 ## Escape pause verification — November 3, 2026
 
 - Proven: the control run emits a native dialog `cancel` on Escape while opening

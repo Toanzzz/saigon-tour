@@ -8,6 +8,8 @@
  * skipped while any NPC bubble sits within 5 units of it.
  */
 
+import type { NpcId } from '@saigon/shared'
+
 /** Horizontal `[x, z]` position. */
 export type Vec2 = [number, number]
 
@@ -15,6 +17,7 @@ export type Vec2 = [number, number]
 export interface CryAnchor {
   id: string
   at: Vec2
+  npc?: NpcId
   /** Message keys from the look-guide cry table; one is picked per show. */
   cries: string[]
 }
@@ -130,10 +133,16 @@ export function stepCries(
 /**
  * Authored cry anchors (map Phase 5b): market stalls, the Bùi Viện alley, the
  * Nguyễn Huệ kiosks and the river vendors. Positions sit on the paved
- * dressing, not on the road; each carries 2–3 look-guide cries. Scenery only.
+ * dressing, not on the road; each carries 2–3 look-guide cries. NPC sources
+ * resolve their current position in the frame ticker.
  */
 export const CRY_ANCHORS: CryAnchor[] = [
-  { id: 'market-stalls', at: [-23, 3.4], cries: ['cry_coffee', 'cry_banhmi'] },
+  {
+    id: 'market-stalls',
+    npc: 'hoa',
+    at: [-23, 3.4],
+    cries: ['cry_coffee', 'cry_banhmi'],
+  },
   { id: 'market-west', at: [-36, 1.5], cries: ['cry_banhmi', 'cry_che'] },
   { id: 'alley', at: [-20, 29], cries: ['cry_che', 'cry_coffee', 'cry_corn'] },
   { id: 'nguyen-hue', at: [69, 3], cries: ['cry_sugarcane', 'cry_coconut'] },

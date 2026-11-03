@@ -1,5 +1,11 @@
 # Game progress
 
+## Map cries
+
+The market greeting follows Hoa's current city position. Bubble placement,
+audible range, and speech-overlap checks use the same resolved coordinates.
+Visible cries update their position while their text remains active.
+
 ## Quest completion and wardrobe
 
 - Completion content covers 65 authored errands in English and Vietnamese, with 29 NPC gratitude illustrations and per-person fallback dialogue.

@@ -67,8 +67,13 @@ export function Cries() {
     if (now - lastTick.current < 180) return
     lastTick.current = now
     const player: Vec2 = [motion.position.x, motion.position.z]
+    const anchors = CRY_ANCHORS.map((anchor) => {
+      if (!anchor.npc) return anchor
+      const [x, , z] = npcPosition(anchor.npc)
+      return { ...anchor, at: [x, z] as Vec2 }
+    })
     const result = stepCries(
-      CRY_ANCHORS,
+      anchors,
       states.current,
       player,
       activeNpcBubbles(now),
@@ -81,7 +86,10 @@ export function Cries() {
       prev.length === result.bubbles.length &&
       prev.every(
         (b, i) =>
-          b.id === result.bubbles[i].id && b.cry === result.bubbles[i].cry
+          b.id === result.bubbles[i].id &&
+          b.cry === result.bubbles[i].cry &&
+          b.at[0] === result.bubbles[i].at[0] &&
+          b.at[1] === result.bubbles[i].at[1]
       )
         ? prev
         : result.bubbles
