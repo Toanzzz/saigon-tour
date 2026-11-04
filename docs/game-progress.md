@@ -505,3 +505,7 @@ Non-demo turns are unchanged.
 
 - Wardrobe previews and the city scene show an opaque loading panel while their models suspend. The panel uses the game's wall/roof colors, ink outlines, and an animated lantern with reduced-motion support.
 - Preview copy is localized in English and Vietnamese. Each canvas signals its own pending state; the panel disappears when its suspended composition commits, and model errors retain retry controls.
+# Legal links
+
+Title-screen Privacy Policy and User Data Deletion links accept pointer input
+through the game overlay. Desktop and 390px mobile navigation are verified.

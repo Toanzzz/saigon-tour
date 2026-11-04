@@ -744,3 +744,9 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - Proven: the same script at 390×844 uses native touch events. Ground taps do not navigate, touch-drag changes camera yaw, and the joystick moves the player and recenters after release. No page exceptions or horizontal overflow in either viewport. Inspected captures: `artifacts/navigation/verified-1440.png`, `verified-390.png`. Evidence: `artifacts/navigation/results.json`.
 - Proven: navigation unit tests cover collision-safe detours, rejected building/out-of-bounds/invalid targets, replacement targets, overlay cancellation, exactly-once interaction with the selected NPC, distance gating, moving-NPC replanning, teleport/reset cancellation, and stalled-route cancellation.
 - Verification: `bun run check` → `bun run check:types` → `bun run build` → `bun run test` pass; server 523 passed / 2 skipped, client 355 passed. Browser compilation and QA run sequentially because i18n generation can reload the development page.
+# Legal link interaction
+
+- Proven control: both title-screen legal links inherit `pointer-events: none`; real clicks time out at 1440px and 390px.
+- One-variable experiment: adding `.game-ui a { pointer-events: auto; }` enables navigation to both legal pages at both widths.
+- Proven fix: headless Playwright clicks each actual link, asserts its destination URL and rendered heading, and navigates back at both widths. Script: `/tmp/saigon-tour-qa/legal-links.mjs`.
+- `bun run check` → `bun run check:types` → `bun run build` → `bun run test` pass. Server: 523 passed, 2 skipped. Client: 355 passed.

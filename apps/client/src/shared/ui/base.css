@@ -56,6 +56,7 @@ p {
   pointer-events: none;
 }
 .game-ui button,
+.game-ui a,
 .game-ui input,
 .game-ui select,
 .game-ui dialog,
