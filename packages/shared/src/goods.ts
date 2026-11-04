@@ -59,8 +59,9 @@ export function staminaModifiers(
   )
   return {
     max: active.has('pho') ? 150 : 100,
-    drain: (100 / 12) * (active.has('coffee') ? 0.5 : 1),
+    drain: active.has('coffee') ? 0 : 100 / 12,
     regen: 12.5 * (active.has('baguette') ? 1.5 : 1),
+    unlimited: active.has('coffee'),
   }
 }
 

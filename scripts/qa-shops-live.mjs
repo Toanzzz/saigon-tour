@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { chromium, executablePath, gameUrl } from './qa-quest-flow.mjs'
-import { bind, enterLivePlay, meetLive, saved } from './qa-shops-live-helpers.mjs'
+import {
+  bind,
+  enterLivePlay,
+  meetLive,
+  saved,
+} from './qa-shops-live-helpers.mjs'
 
 const out = 'artifacts/shops-live'
 await mkdir(out, { recursive: true })
@@ -217,7 +222,10 @@ try {
       await enterLivePlay(page)
       await page.waitForFunction(() => {
         const meter = document.querySelector('#stamina-meter')
-        return meter?.value === 150 && meter.max === 150
+        return (
+          Number(meter?.getAttribute('aria-valuenow')) === 150 &&
+          Number(meter?.getAttribute('aria-valuemax')) === 150
+        )
       })
       await page.screenshot({ path: `${out}/reload-${locale}-${width}.png` })
       assert.equal(

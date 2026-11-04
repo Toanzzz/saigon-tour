@@ -5,6 +5,7 @@ interface StaminaView {
   current: number
   max: number
   exhausted: boolean
+  boosted: boolean
   usedAt: number
   now: number
 }
@@ -12,6 +13,7 @@ const initial = (): StaminaView => ({
   current: 100,
   max: 100,
   exhausted: false,
+  boosted: false,
   usedAt: 0,
   now: Date.now(),
 })
@@ -49,7 +51,11 @@ export function stepStamina(
   const modifiers = staminaModifiers(effects, now)
   const dt = Math.min(Math.max(delta, 0), 0.1)
   runtime.current = Math.min(runtime.current, modifiers.max)
-  if (active) {
+  if (modifiers.unlimited) {
+    runtime.current = modifiers.max
+    runtime.exhausted = false
+    runtime.recovery = 0
+  } else if (active) {
     if (!runtime.started) {
       runtime.current = modifiers.max
       runtime.started = true
@@ -75,6 +81,7 @@ export function stepStamina(
   if (
     runtime.publish >= 0.1 ||
     stamina.state.exhausted !== runtime.exhausted ||
+    stamina.state.boosted !== modifiers.unlimited ||
     stamina.state.max !== modifiers.max
   ) {
     runtime.publish = 0
@@ -83,6 +90,7 @@ export function stepStamina(
       current !== stamina.state.current ||
       modifiers.max !== stamina.state.max ||
       runtime.exhausted !== stamina.state.exhausted ||
+      modifiers.unlimited !== stamina.state.boosted ||
       Math.floor(now / 1000) !== Math.floor(stamina.state.now / 1000)
     )
       stamina.setState((state) => ({
@@ -90,6 +98,7 @@ export function stepStamina(
         current,
         max: modifiers.max,
         exhausted: runtime.exhausted,
+        boosted: modifiers.unlimited,
         now,
       }))
   }
@@ -104,14 +113,16 @@ export function restoreStamina(
   if (receipts.has(requestId)) return
   receipts.add(requestId)
   runtime.started = true
-  const { max } = staminaModifiers(effects, now)
-  runtime.current = Math.min(max, runtime.current + amount)
+  const { max, unlimited } = staminaModifiers(effects, now)
+  runtime.current = unlimited ? max : Math.min(max, runtime.current + amount)
+  if (unlimited) runtime.recovery = 0
   if (runtime.current >= 25) runtime.exhausted = false
   stamina.setState((state) => ({
     ...state,
     current: runtime.current,
     max,
     exhausted: runtime.exhausted,
+    boosted: unlimited,
     usedAt: now,
     now,
   }))

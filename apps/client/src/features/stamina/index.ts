@@ -1,4 +1,4 @@
-export { StaminaHud } from './stamina-hud'
+export { StaminaBar } from './stamina-bar'
 export {
   canSprint,
   resetStamina,

@@ -1,0 +1,91 @@
+{
+  "source": "shop-items-sheet.png",
+  "width": 1774,
+  "height": 887,
+  "items": [
+    {
+      "id": "coffee",
+      "crop": {
+        "left": 0,
+        "top": 0,
+        "width": 443,
+        "height": 443
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 27172
+    },
+    {
+      "id": "banana",
+      "crop": {
+        "left": 443,
+        "top": 0,
+        "width": 444,
+        "height": 443
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 21700
+    },
+    {
+      "id": "baguette",
+      "crop": {
+        "left": 887,
+        "top": 0,
+        "width": 443,
+        "height": 443
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 36902
+    },
+    {
+      "id": "pho",
+      "crop": {
+        "left": 1330,
+        "top": 0,
+        "width": 444,
+        "height": 443
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 43400
+    },
+    {
+      "id": "lacquer-non-la",
+      "crop": {
+        "left": 0,
+        "top": 443,
+        "width": 443,
+        "height": 444
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 25442
+    },
+    {
+      "id": "silk-scarf",
+      "crop": {
+        "left": 443,
+        "top": 443,
+        "width": 444,
+        "height": 444
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 22902
+    },
+    {
+      "id": "festival-ao-dai",
+      "crop": {
+        "left": 887,
+        "top": 443,
+        "width": 443,
+        "height": 444
+      },
+      "width": 448,
+      "height": 448,
+      "bytes": 23892
+    }
+  ]
+}

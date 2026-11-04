@@ -55,6 +55,7 @@ describe('merchant goods and stamina effects', () => {
       max: 100,
       drain: 100 / 12,
       regen: 12.5,
+      unlimited: false,
     })
     expect(initialCity().rareOffer).toBeUndefined()
   })
@@ -95,13 +96,15 @@ describe('merchant goods and stamina effects', () => {
     expect(world.effects).toHaveLength(3)
     expect(staminaModifiers(world.effects, 180999)).toEqual({
       max: 150,
-      drain: 100 / 24,
+      drain: 0,
       regen: 18.75,
+      unlimited: true,
     })
     expect(staminaModifiers(world.effects, 181000)).toEqual({
       max: 100,
       drain: 100 / 12,
       regen: 12.5,
+      unlimited: false,
     })
     const refreshed = consumeGood(world, [], 'coffee', 2000)
     expect(

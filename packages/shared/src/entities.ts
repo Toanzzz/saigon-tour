@@ -79,7 +79,7 @@ export const MARKET_ITEMS = {
     label: 'iced milk coffee',
     price: 3,
     icon: 'coffee',
-    effect: { kind: 'drain', amount: 0.5, durationMs: 180_000 },
+    effect: { kind: 'drain', amount: 0, durationMs: 180_000 },
   },
   banana: {
     label: 'ripe banana',

@@ -32,11 +32,14 @@ standing, conversations, and rides restore 12.5 per second after a 1.5-second
 delay. Exhaustion allows walking until stamina reaches 25. Pause freezes stamina.
 Desktop uses Shift; mobile provides a hold-to-sprint control.
 
-Coffee halves sprint drain, bánh mì increases recovery by 50%, and phở adds 50
+Coffee keeps stamina full, bánh mì increases recovery by 50%, and phở adds 50
 maximum stamina and restores 50. Each timed effect lasts three real minutes;
 different effects combine, and another copy refreshes its duration. Bananas
 restore 40 immediately. Effect icons show remaining seconds. Inventory and
 effect expiry persist on the server; the stamina gauge starts full on page load.
+The small gauge follows the character overhead and turns amber with a coffee
+bean while coffee is active. Shop and bag cards use flat product illustrations,
+including wearable listings.
 
 The Director schedules one to three ten-minute rare-sale windows per UTC day,
 at least an hour apart. It selects a named neighbor and one shop-exclusive

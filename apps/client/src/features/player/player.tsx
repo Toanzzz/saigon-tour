@@ -16,7 +16,12 @@ import {
   stepFootCarry,
 } from '@/features/carry'
 import { Pet } from '@/features/pets'
-import { ConsumeEffect, canSprint, stepStamina } from '@/features/stamina'
+import {
+  ConsumeEffect,
+  canSprint,
+  StaminaBar,
+  stepStamina,
+} from '@/features/stamina'
 import { arriveAside } from '@/features/transport/asides'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
@@ -178,6 +183,7 @@ export function Player() {
             look={equipped}
           />
           <ConsumeEffect />
+          <StaminaBar />
           {carrying && !riding && !gl.xr.isPresenting && <CarriedCake />}
           {vehicle && !riding && <PersonalVehicle id={vehicle} />}
         </group>

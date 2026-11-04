@@ -583,7 +583,7 @@
   "shop_in_bag": "Trong túi: {count}",
   "shop_reserved_count": "Giữ {count} cho việc nhờ",
   "shop_reserved": "Món này cần cho việc nhờ đang làm.",
-  "shop_effect_coffee": "Giảm nửa hao thể lực khi chạy · 3 phút",
+  "shop_effect_coffee": "Thể lực luôn đầy khi khám phá · 3 phút",
   "shop_effect_banana": "Hồi 40 thể lực",
   "shop_effect_baguette": "Hồi thể lực nhanh hơn 50% · 3 phút",
   "shop_effect_pho": "Thêm 50 thể lực tối đa, hồi 50 · 3 phút",
@@ -606,5 +606,9 @@
   "step_buy_merchant": "Mua {item} từ {name}",
   "unlock_lacquer_non_la": "Nón lá sơn mài",
   "unlock_silk_scarf": "Khăn lụa",
-  "unlock_festival_ao_dai": "Áo dài lễ hội"
+  "unlock_festival_ao_dai": "Áo dài lễ hội",
+  "shop_buy": "Mua",
+  "shop_stock_heading": "Trên sạp",
+  "shop_intro": "Chút năng lượng cho chuyến dạo.",
+  "shop_rare_intro": "Món đặc biệt cho bộ sưu tập của bạn."
 }

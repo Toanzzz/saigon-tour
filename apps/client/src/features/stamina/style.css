@@ -1,0 +1,73 @@
+.stamina-overhead {
+  --stamina-ink: #352c25;
+  --stamina-fill: #74c6a3;
+  position: relative;
+  width: 54px;
+  height: 8px;
+  overflow: visible;
+  border: 2px solid var(--stamina-ink);
+  border-radius: 4px;
+  background: #efe1ba;
+  box-shadow:
+    0 2px 0 #352c253d,
+    0 0 0 1px #fff5d7c9;
+  pointer-events: none;
+  user-select: none;
+}
+.stamina-overhead-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: left;
+  border-radius: 1px;
+  background: var(--stamina-fill);
+  box-shadow: inset 0 1px 0 #ffffff73;
+}
+.stamina-overhead.is-low {
+  --stamina-fill: #e58967;
+}
+.stamina-overhead.is-boosted {
+  --stamina-fill: #efbd50;
+  background: #e4b63d;
+  box-shadow:
+    0 2px 0 #352c253d,
+    0 0 0 1px #fff5d7,
+    0 0 8px #f2c75966;
+}
+.stamina-overhead.is-boosted .stamina-overhead-fill {
+  background: repeating-linear-gradient(
+    115deg,
+    #f3ca64 0 8px,
+    #eab343 8px 12px
+  );
+}
+.stamina-overhead-bean {
+  position: absolute;
+  right: -9px;
+  top: -6px;
+  width: 10px;
+  height: 13px;
+  fill: #ffe3a2;
+  stroke: var(--stamina-ink);
+  stroke-width: 1.5px;
+  transform: rotate(20deg);
+}
+.stamina-overhead-bean path {
+  fill: none;
+}
+.stamina-overhead.is-restored {
+  animation: stamina-overhead-gain 0.6s ease-out;
+}
+@keyframes stamina-overhead-gain {
+  40% {
+    box-shadow:
+      0 2px 0 #352c253d,
+      0 0 0 2px #fff5d7,
+      0 0 12px #f3ca64aa;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamina-overhead.is-restored {
+    animation: none;
+  }
+}

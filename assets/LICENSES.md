@@ -88,3 +88,11 @@ per-file model receipts. Those records remain pending.
 
 Resolve the pending production and rights records before representing the asset audit
 as complete. The presence of a script or a prompt alone is not provenance proof.
+
+## Shop item illustrations
+
+Project artwork: `assets/ui/shop/shop-items-sheet.png`. The seven 2D inventory
+illustrations have runtime WebP derivatives under `apps/client/public/images/shop/`.
+`assets/ui/shop/manifest.json` records each crop; `scripts/prepare-shop-images.ts`
+rebuilds the derivatives. The wearable illustrations are separate inventory art;
+the equipped wearable models retain their own source records above.

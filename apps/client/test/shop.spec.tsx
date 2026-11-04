@@ -1,16 +1,25 @@
-import { createQuest } from '@saigon/shared'
+import { createQuest, type RareWearableId } from '@saigon/shared'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ConsumableBag, NpcShop } from '@/features/shop'
 import { commerce, retryCommerce, transact } from '@/features/shop/api'
+import { ShopItemArt } from '@/features/shop/item-art'
+import {
+  failShopArt,
+  resetShop,
+  shopView,
+  showShop,
+} from '@/features/shop/store'
 import { stamina, stepStamina } from '@/features/stamina'
+import { city, resetCity } from '@/shared/api/city'
 import { queryClient } from '@/shared/api/query'
 import { game, initialState, update } from '@/shared/state/game'
 
-beforeEach(() =>
+beforeEach(() => {
+  resetCity()
   game.setState(() => ({ ...initialState(), guestStatus: 'offline' }))
-)
+})
 const render = (node: React.ReactNode) =>
   renderToStaticMarkup(
     <QueryClientProvider client={queryClient}>{node}</QueryClientProvider>
@@ -20,9 +29,49 @@ describe('NPC goods and bag', () => {
   it('renders only the NPC stock, with its specific food icon and effect', () => {
     const html = render(<NpcShop npc="mai" state={game.state} />)
     expect(html).toContain('Buy iced milk coffee')
-    expect(html).toContain('Half sprint drain')
+    expect(html).toContain('Full stamina while you explore')
     expect(html).toContain('good-icon')
     expect(html).not.toContain('Buy ripe banana')
+    expect(html).toContain('images/shop/coffee.webp')
+    expect(html).not.toContain('<canvas')
+  })
+
+  it.each([
+    'lacquer-non-la',
+    'silk-scarf',
+    'festival-ao-dai',
+  ] as RareWearableId[])(
+    'lists %s as a flat product illustration without loading a model',
+    (unlockId) => {
+      city.setState((value) => ({
+        ...value,
+        rareOffer: {
+          id: 'test-offer',
+          npcId: 'mai',
+          unlockId,
+          price: 1500,
+          startedAt: Date.now(),
+          endsAt: Date.now() + 600000,
+        },
+      }))
+      const html = render(<NpcShop npc="mai" state={game.state} />)
+      expect(html).toContain(`images/shop/${unlockId}.webp`)
+      expect(html).not.toContain('<canvas')
+      expect(html).not.toContain('.glb')
+      expect(html).not.toContain('images/wardrobe')
+    }
+  )
+
+  it('replaces failed art with a readable product label and retries on shop reset', () => {
+    failShopArt('coffee')
+    showShop('mai')
+    expect(shopView.state.failedArt).toEqual(['coffee'])
+    const html = render(<ShopItemArt id="coffee" label="iced milk coffee" />)
+    expect(html).toContain('shop-art-fallback')
+    expect(html).toContain('iced milk coffee')
+    expect(html).not.toContain('<img')
+    resetShop()
+    expect(shopView.state.failedArt).toEqual([])
   })
 
   it('buys then consumes a good offline without sending a trusted purchase event', async () => {

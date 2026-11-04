@@ -66,6 +66,8 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
   const ride = view?.ride ?? player.ride
   const moving = view?.moving ?? false
   const xr = useXRPresenting()
+  // Html projects at priority 0. Apply the interpolated pose first so its
+  // screen anchor and the rendered avatar use the same frame.
   useFrame(() => {
     const entry = presence.get(player.id)
     if (!entry || !ref.current) {
@@ -78,7 +80,7 @@ function RemotePlayer({ player }: { player: PresencePlayer }) {
     ref.current.position.set(...sample.position)
     ref.current.rotation.y = sample.heading
     if (label.current) label.current.rotation.y = -sample.heading
-  })
+  }, -1)
   const mode =
     ride === 'bus' || ride === 'metro' || ride === 'xeom' || ride === 'cyclo'
       ? ride

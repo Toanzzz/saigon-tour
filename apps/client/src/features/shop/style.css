@@ -1,148 +1,240 @@
+@import "./item-art.css";
+
 .conversation-shop-tabs {
   display: flex;
-  gap: 8px;
-  margin: 8px 0 14px;
+  gap: 10px;
+  margin: 8px 0 16px;
 }
 .conversation-shop-tabs button {
-  min-height: 44px;
   flex: 1;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: var(--edge);
+  border-radius: var(--round-sm);
+  background: var(--wall-hi);
+  box-shadow: var(--lift-sm);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 750;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s,
+    background 0.1s;
 }
 .conversation-shop-tabs [aria-pressed="true"] {
-  background: var(--ink, #352c25);
-  color: #fff8e7;
+  background: var(--roof);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink);
+}
+.conversation-shop-tabs button:hover:not(:disabled) {
+  background: var(--roof-hi);
 }
 .npc-shop,
 .consumable-bag {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 .conversation > .npc-shop {
   flex: 0 1 auto;
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
+  padding: 2px 4px 6px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--wall-side) transparent;
 }
-.good-row {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) auto;
-  gap: 12px;
+.shop-wallet {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #af8b5540;
+  gap: 12px;
+  padding: 0 1px 2px;
 }
-.good-row strong,
-.good-row small {
-  display: block;
+.shop-eyebrow {
+  font: 800 22px / 1.1 var(--font-display);
 }
-.good-row small {
-  margin-top: 4px;
+.shop-wallet p {
+  margin-top: 5px;
+  color: var(--ink-soft);
   font-size: 12px;
   line-height: 1.45;
+  max-width: 24ch;
 }
-.good-row button {
+.shop-wallet-value {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 9px;
+  background: var(--wall-hi);
+  border: var(--edge);
+  border-radius: 8px;
+  box-shadow: var(--lift-sm);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.shop-good {
+  min-width: 0;
+  padding: 14px;
+  border: var(--edge);
+  border-radius: 14px;
+  background: var(--wall-hi);
+  box-shadow: var(--lift-sm);
+}
+.shop-product-row {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+.shop-product-copy {
+  min-width: 0;
+}
+.shop-product-copy h3 {
+  font: 800 25px / 1.05 var(--font-display);
+  overflow-wrap: anywhere;
+}
+.shop-effect {
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.shop-credit {
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.shop-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 2px dashed var(--wall-side);
+}
+.shop-bag-count,
+.shop-owned {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.shop-owned {
+  color: var(--ink);
+  background: var(--leaf-hi);
+  border: 2px solid var(--ink);
+  padding: 5px 8px;
+  border-radius: 6px;
+}
+.shop-buy.primary-button,
+.shop-use.primary-button {
+  flex-shrink: 0;
   min-height: 44px;
-  padding: 8px 10px;
-  max-width: 110px;
+  padding: 8px 12px;
+  font-size: 17px;
+  box-shadow: var(--lift-sm);
 }
-.good-icon {
-  flex: 0 0 auto;
-  color: #976428;
+.shop-price {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  padding-left: 10px;
+  border-left: 2px solid var(--ink);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 .rare-offer {
-  display: grid;
-  justify-items: center;
-  gap: 10px;
-  padding: 14px;
-  border: 2px solid #c29834;
-  border-radius: 12px;
+  background: #fff0b8;
 }
-.rare-offer .wardrobe-thumbnail {
-  width: 150px;
-  height: 150px;
-}
-.rare-offer .wardrobe-thumbnail img {
-  width: 100%;
-  height: 100%;
-}
-.rare-offer button {
-  min-height: 44px;
-  max-width: 100%;
+.rare-offer-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -2px 0 12px;
 }
 .rare-badge,
-.merchant-mark {
-  color: #795516;
-  background: #f8df9b;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 12px;
-}
 .merchant-mark {
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  color: var(--ink);
+  background: var(--roof-hi);
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: 750;
+}
+.shop-sale-time,
+.shop-card-note {
+  min-width: 0;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.shop-rare-price {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 9px;
+  font-weight: 750;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 .merchant-mark.is-rare {
   box-shadow: 0 0 8px #eebf45;
 }
+.bag-good {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px;
+  background: var(--wall-hi);
+  border: var(--edge);
+  border-radius: 12px;
+  box-shadow: var(--lift-sm);
+}
+.bag-good .shop-art {
+  width: 64px;
+  border-radius: 9px;
+}
+.bag-good h3 {
+  font-size: 20px;
+}
+.bag-good .shop-effect {
+  font-size: 11px;
+  margin-top: 5px;
+}
+.shop-reserved {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.4;
+}
+.rare-offer.is-expired .shop-art {
+  opacity: 0.65;
+}
 .shop-retry {
-  padding: 10px;
-  border: 1px solid #b36c30;
+  padding: 12px;
+  border: var(--edge);
+  border-radius: 9px;
+  background: var(--roof-hi);
+  font-size: 13px;
+  line-height: 1.5;
 }
 .shop-retry button {
   min-height: 44px;
-}
-.stamina-hud {
-  position: absolute;
-  left: 24px;
-  bottom: 86px;
-  display: grid;
-  grid-template-columns: auto minmax(70px, 110px) auto;
-  gap: 6px;
-  align-items: center;
-  padding: 8px 12px;
-  background: #302d27e8;
-  color: #fff4db;
-  border-radius: 10px;
-  font-size: 12px;
-  pointer-events: none;
-}
-.stamina-hud meter {
-  width: 100%;
-  accent-color: #94ba66;
-}
-.stamina-number {
-  font-variant-numeric: tabular-nums;
-  min-width: 48px;
-}
-.stamina-hud small,
-.stamina-effects {
-  grid-column: 1 / -1;
-}
-.stamina-effects:empty {
-  display: none;
-}
-.stamina-effects,
-.stamina-effects > span {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.stamina-effects .good-icon {
-  width: 18px;
-  height: 18px;
-  color: #f3d087;
-}
-.stamina-hud.is-exhausted {
-  color: #ffd099;
-}
-.stamina-hud.is-restored {
-  animation: stamina-gain 0.6s ease-out;
-}
-@keyframes stamina-gain {
-  40% {
-    box-shadow: 0 0 18px #a4d570;
-  }
+  margin-top: 8px;
 }
 .touch-sprint {
   position: absolute;
@@ -162,23 +254,44 @@
   opacity: 0.55;
 }
 @media (max-width: 600px) {
-  .stamina-hud {
-    left: 12px;
-    bottom: max(202px, calc(env(safe-area-inset-bottom) + 190px));
-    grid-template-columns: auto 76px auto;
-    max-width: calc(100vw - 24px);
+  .shop-product-row {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 12px;
+  }
+  .shop-art {
+    width: 88px;
+  }
+  .shop-good {
+    padding: 12px;
+  }
+  .shop-product-copy h3 {
+    font-size: 23px;
+  }
+  .shop-wallet-value {
+    padding: 7px;
+  }
+  .bag-good {
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 10px;
+  }
+  .bag-good .shop-art {
+    width: 54px;
+  }
+  .bag-good h3 {
+    font-size: 19px;
+  }
+  .shop-use.primary-button {
+    padding: 8px 10px;
+    font-size: 16px;
   }
   .touch-sprint {
     right: 16px;
     bottom: max(115px, calc(env(safe-area-inset-bottom) + 110px));
   }
-  .good-row {
-    gap: 8px;
-    grid-template-columns: 30px minmax(0, 1fr) auto;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .stamina-hud.is-restored {
-    animation: none;
+  .conversation-shop-tabs button {
+    transition: none;
   }
 }

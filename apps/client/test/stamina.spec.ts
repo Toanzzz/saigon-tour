@@ -35,7 +35,7 @@ describe('sprint stamina', () => {
     expect(stamina.state.current).toBe(100)
   })
 
-  it('halves drain with coffee and independently expands capacity with phở', () => {
+  it('keeps coffee stamina full and independently expands capacity with phở', () => {
     const effects = [
       { itemId: 'coffee' as const, endsAt: 181000 },
       { itemId: 'pho' as const, endsAt: 181000 },
@@ -44,11 +44,35 @@ describe('sprint stamina', () => {
     expect(stamina.state.current).toBe(150)
     for (let frame = 0; frame < 720; frame++)
       stepStamina(1 / 60, true, effects, true, 1000)
-    expect(stamina.state.current).toBeCloseTo(100, 0)
+    expect(stamina.state.current).toBe(150)
     expect(canSprint()).toBe(true)
     stepStamina(0.1, false, effects, false, 182000)
     expect(stamina.state.max).toBe(100)
     expect(stamina.state.current).toBeLessThanOrEqual(100)
+  })
+
+  it('instantly refills exhausted stamina with coffee, including while paused', () => {
+    run(12)
+    expect(canSprint()).toBe(false)
+    const effects = [{ itemId: 'coffee' as const, endsAt: 181000 }]
+    restoreStamina('coffee', 0, effects, 1000)
+    expect(stamina.state.current).toBe(100)
+    expect(canSprint()).toBe(true)
+    expect(stamina.state.boosted).toBe(true)
+    stepStamina(0.1, true, effects, false, 180999)
+    expect(stamina.state.current).toBe(100)
+    expect(stamina.state.boosted).toBe(true)
+    stepStamina(0.1, true, effects, true, 181000)
+    expect(stamina.state.current).toBeLessThan(100)
+    expect(stamina.state.boosted).toBe(false)
+  })
+
+  it('loads coffee full and does not drain during its last active instant', () => {
+    const effects = [{ itemId: 'coffee' as const, endsAt: 181000 }]
+    stepStamina(0.1, true, effects, true, 180999)
+    expect(stamina.state.current).toBe(100)
+    stepStamina(0.1, true, effects, true, 181000)
+    expect(stamina.state.current).toBeLessThan(100)
   })
 
   it('restores from a server receipt once and retains state across ordinary saves', () => {

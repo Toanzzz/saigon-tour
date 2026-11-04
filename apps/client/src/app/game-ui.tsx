@@ -2,7 +2,6 @@ import { useSelector } from '@tanstack/react-store'
 import { Conversation } from '@/features/conversation/conversation'
 import { NeighborhoodMap } from '@/features/map/map'
 import { RewardPanel } from '@/features/postcard/reward'
-import { StaminaHud } from '@/features/stamina'
 import { m } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
@@ -66,7 +65,6 @@ export function GameUI() {
   return (
     <div className="game-ui">
       <GameHeader state={state} />
-      {!xrPresenting && <StaminaHud />}
       <WaitingNotice />
       {clear && !xrPresenting && (
         <div className="party-invite-toast">

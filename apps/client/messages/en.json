@@ -614,7 +614,7 @@
   "shop_in_bag": "{count} in bag",
   "shop_reserved_count": "{count} reserved for errands",
   "shop_reserved": "This is needed for an active errand.",
-  "shop_effect_coffee": "Half sprint drain · 3 min",
+  "shop_effect_coffee": "Full stamina while you explore · 3 min",
   "shop_effect_banana": "Restore 40 stamina",
   "shop_effect_baguette": "+50% stamina recovery · 3 min",
   "shop_effect_pho": "+50 maximum stamina and restore 50 · 3 min",
@@ -637,5 +637,9 @@
   "step_buy_merchant": "Buy {item} from {name}",
   "unlock_lacquer_non_la": "Lacquer nón lá",
   "unlock_silk_scarf": "Silk scarf",
-  "unlock_festival_ao_dai": "Festival áo dài"
+  "unlock_festival_ao_dai": "Festival áo dài",
+  "shop_buy": "Buy",
+  "shop_stock_heading": "On the stall",
+  "shop_intro": "A little energy for the road.",
+  "shop_rare_intro": "A special find for your collection."
 }

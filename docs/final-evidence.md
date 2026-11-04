@@ -1,5 +1,39 @@
 # Final evidence
 
+## Shop illustrations, overhead stamina, and multiplayer tags — November 4, 2026
+
+- Headless Playwright at 1440×900 and 390×844 drives keyboard or touch sprint
+  and the real bag Use button. Normal stamina drains; coffee immediately
+  restores 100/100, displays the amber overhead bar and coffee bean, and stays
+  full while sprinting. An accelerated expiry fixture restores normal drain.
+  The 54×8px gauge follows the avatar within 6px during motion and hides while
+  paused. Both flows report no page exceptions or horizontal overflow.
+  Evidence: `artifacts/overhead-stamina/results.json` and captures.
+- Two independent Chromium clients verify multiplayer name tags during keyboard
+  movement and teleport stress at desktop and 390px. The remote player moves
+  six world units; the tag center stays within 0.001px of the rendered avatar's
+  projected anchor. Remote interpolation runs before HTML label projection.
+  Evidence: `artifacts/remote-tags/results.json` and captures.
+- Seven 448×448 WebP product illustrations cover coffee, bananas, bánh mì,
+  phở, lacquer nón lá, silk scarf, and festival áo dài. Shop and bag listings
+  use flat images; equipped wearable models retain their existing 3D assets.
+  Source: `assets/ui/shop/shop-items-sheet.png`; crop and output dimensions:
+  `assets/ui/shop/manifest.json`; rebuild: `bun scripts/prepare-shop-images.ts`.
+- Shop Playwright flows cover 1440×900 and 390×844 in English and Vietnamese.
+  Real NPC purchase and bag Use controls succeed for authored goods. Seven
+  images load, shop listings contain no canvas, buttons are at least 44px high,
+  and layouts have no horizontal overflow. Synthetic rare-sale and HTTP
+  fixtures exercise purchase, Owned, Equip, expiry, and a 503 retry that retains
+  its request ID. A failed image shows its product label and reloads on retry.
+  All four flows report no page exceptions.
+  Evidence: `artifacts/shop-design/results.json` and captures.
+- Independent agent reviews cover stamina effect semantics, remote projection
+  order, shop transaction states, responsive layout, and the product art.
+- Ordered checks pass: `bun run check` → `bun run check:types` →
+  `bun run build` → `bun run test`. Server: 549 passed, 3 skipped; client:
+  377 passed. All three real Postgres integration tests pass.
+  Logs: `/tmp/saigon-shop-polish-{check,types,build,test,integration}.log`.
+
 ## NPC shops, stamina, and rare wearables — November 4, 2026
 
 - Proven live: headless Playwright at 1440×900 and 390×844 in English and
@@ -35,11 +69,11 @@
   receipt; the local API is healthy with the receipt-table migrations applied.
 - Ordered gates pass: `bun run check` → `bun run check:types` →
   `bun run build` → `bun run test`. Server: 549 passed, 3 skipped.
-  Client: 371 passed. `bun run test:integration` passes all three real
+  Client: 377 passed. `bun run test:integration` passes all three real
   Postgres cases, including concurrent requests through independent services:
   ten identical requests charge once, duplicate consumption applies once,
   and eight competing rare purchases grant one owned item and one debit.
-  Logs: `/tmp/saigon-shops-{check,types,build,test,integration}.log`.
+  Logs: `/tmp/saigon-shop-polish-{check,types,build,test,integration}.log`.
 
 ## Voice composer listening, Send, and replay — November 3, 2026
 
