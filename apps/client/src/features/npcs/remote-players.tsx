@@ -2,12 +2,16 @@ import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { NPCS, type NpcId, type PresencePlayer } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { Group } from 'three'
 import { Pet } from '@/features/pets'
 import { npcPosition } from '@/shared/api/city'
 import { interpolate, presence } from '@/shared/api/presence'
-import { presenceView, samplePresenceView } from '@/shared/api/presence-view'
+import {
+  clearVisiblePlayers,
+  presenceView,
+  samplePresenceView,
+} from '@/shared/api/presence-view'
 import { motion } from '@/shared/runtime/motion'
 import { Avatar, PersonalVehicle, Vehicle } from '@/shared/world'
 import { riderPosition } from '@/shared/world/vehicles'
@@ -16,12 +20,14 @@ import { useXRPresenting } from '@/shared/xr'
 /** Single ~5 Hz ticker that refreshes the React-visible presence slice. */
 function PresenceTicker() {
   const elapsed = useRef(0)
-  useFrame((_, delta) => {
+  useEffect(() => clearVisiblePlayers, [])
+  useFrame(({ camera }, delta) => {
     elapsed.current += delta
     if (elapsed.current < 0.2) return
     elapsed.current = 0
     samplePresenceView(
-      matchMedia('(max-width: 700px), (pointer: coarse)').matches ? 6 : 8
+      matchMedia('(max-width: 700px), (pointer: coarse)').matches ? 6 : 8,
+      camera
     )
   })
   return null

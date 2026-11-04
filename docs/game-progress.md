@@ -517,6 +517,14 @@ Non-demo turns are unchanged.
 
 - Wardrobe previews and the city scene show an opaque loading panel while their models suspend. The panel uses the game's wall/roof colors, ink outlines, and an animated lantern with reduced-motion support.
 - Preview copy is localized in English and Vietnamese. Each canvas signals its own pending state; the panel disappears when its suspended composition commits, and model errors retain retry controls.
+
+## Camera and social HUD review
+
+- Left mouse drags rotate the camera; ground clicks select walking destinations.
+- The gameplay HUD omits the bottom-left walking instruction.
+- Greeting controls depend on another player being within the camera view.
+- Mobile review covers HUD spacing, touch controls, and the greeting popover at 390px.
+- Mobile toolbar controls have 44px targets beneath the city/location line. Greeting, sprint, talk, and quick-ride controls occupy separate positions around the joystick and minimap; notifications leave room for Vietnamese objective text.
 # Legal links
 
 Title-screen Privacy Policy and User Data Deletion links accept pointer input

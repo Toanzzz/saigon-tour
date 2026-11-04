@@ -173,7 +173,7 @@
     flex: 1;
   }
   .game-identity > small {
-    max-width: 92px;
+    max-width: calc(100vw - 140px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -182,17 +182,22 @@
     flex-shrink: 0;
   }
   .header-tools .icon-button {
-    width: 30px;
-    min-width: 30px;
-    padding: 4px;
+    width: 44px;
+    min-width: 44px;
+    padding: 6px;
   }
   .header-tools .wallet {
     padding: 4px;
     margin-right: 0;
   }
   .emote-controls {
-    bottom: 122px;
-    right: 20px;
+    bottom: max(160px, calc(env(safe-area-inset-bottom) + 140px));
+    left: max(24px, env(safe-area-inset-left));
+    right: auto;
+  }
+  .emote-popover {
+    left: 0;
+    right: auto;
   }
   .emote-opener kbd {
     display: none;

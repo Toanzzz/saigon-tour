@@ -130,7 +130,6 @@ export function GameUI() {
           )}
           <RideToggle />
           <div className="desktop-hint desktop-only">
-            <span>{m.controls_click_walk()}</span>
             <span>
               <kbd>WASD</kbd> {m.hud_hint_stroll()}
             </span>

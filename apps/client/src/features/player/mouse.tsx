@@ -51,11 +51,7 @@ export function MouseControls() {
       if (!gesture || event.pointerId !== gesture.id) return
       gesture.dragged ||=
         Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) >= 6
-      if (
-        enabled() &&
-        gesture.dragged &&
-        (!gesture.mouse || gesture.button === 2)
-      ) {
+      if (enabled() && gesture.dragged) {
         input.yaw -= (event.clientX - gesture.lastX) * 0.007
         input.dragging = true
       }

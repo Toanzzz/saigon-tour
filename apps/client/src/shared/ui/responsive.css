@@ -64,13 +64,20 @@
     left: 12px;
     right: 12px;
     gap: 8px;
+    flex-wrap: wrap;
   }
   .game-identity {
-    padding: 0 12px 7px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    width: 100%;
+    padding: 0 4px;
+    background: none;
+    border: 0;
+    box-shadow: none;
   }
   .game-identity::before {
-    height: 9px;
-    margin: 0 -12px 5px;
+    display: none;
   }
   .game-identity > span {
     font-size: 21px;
@@ -80,6 +87,8 @@
   }
   .header-tools {
     padding: 3px;
+    width: 100%;
+    justify-content: space-between;
   }
   .wallet {
     padding: 4px 9px 4px 6px;
@@ -94,7 +103,7 @@
   .objective-note {
     left: 12px;
     right: 12px;
-    top: 98px;
+    top: 124px;
     bottom: auto;
     width: auto;
     padding: 10px 14px 10px 0;
@@ -124,9 +133,12 @@
     display: none;
   }
   .game-toast {
-    top: 200px;
+    top: 270px;
     width: max-content;
     font-size: 13px;
+  }
+  .game-ui:has(.emote-popover) .game-toast {
+    visibility: hidden;
   }
   .ride-banner {
     bottom: 36px;
@@ -148,6 +160,19 @@
   .market-prompt:active,
   .postcard-prompt:active {
     transform: translateY(3px);
+  }
+  .ride-toggle {
+    right: max(14px, env(safe-area-inset-right));
+    bottom: max(290px, calc(env(safe-area-inset-bottom) + 270px));
+  }
+  .game-ui .touch-sprint {
+    right: max(120px, calc(env(safe-area-inset-right) + 104px));
+    bottom: max(46px, calc(env(safe-area-inset-bottom) + 16px));
+    color: var(--ink);
+    background: var(--bus);
+    border: var(--edge);
+    border-radius: var(--round-sm);
+    box-shadow: var(--lift);
   }
 }
 @media (max-height: 550px) and (orientation: landscape) {

@@ -1,4 +1,5 @@
 import { close, closeHub, interact, pause, toggleHub } from '@/app/actions'
+import { presenceView } from '@/shared/api/presence-view'
 import { net, updateNet } from '@/shared/api/status'
 import { toggleVehicle } from '@/shared/api/wardrobe'
 import { game, update } from '@/shared/state/game'
@@ -80,6 +81,7 @@ export function installInput() {
       update({ panel: game.state.panel === 'people' ? 'none' : 'people' })
     if (
       event.code === 'KeyQ' &&
+      presenceView.state.hasVisiblePlayer &&
       canOpen &&
       game.state.panel === 'none' &&
       !isXRPresenting()

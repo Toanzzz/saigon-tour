@@ -100,11 +100,22 @@ try {
           )
       )
       const at = (await diagnostics(page)).state.position
+      const leftYaw = await page.evaluate(
+        () => window.__THREE_GAME_TEST_HOOKS__.camera().yaw
+      )
       await page.mouse.move(ground.x, ground.y)
       await page.mouse.down()
       await page.mouse.move(ground.x + 100, ground.y, { steps: 10 })
       await page.mouse.up()
       await page.waitForTimeout(800)
+      assert(
+        Math.abs(
+          (await page.evaluate(
+            () => window.__THREE_GAME_TEST_HOOKS__.camera().yaw
+          )) - leftYaw
+        ) > 0.3,
+        'left drag rotates the camera'
+      )
       assert(
         Math.hypot(
           (await diagnostics(page)).state.position[0] - at[0],
@@ -185,7 +196,8 @@ try {
         width,
         npcConversation: true,
         rightDrag: true,
-        leftDragSuppressed: true,
+        leftDrag: true,
+        leftDragWalkSuppressed: true,
       })
       await dismiss(page)
       await teleport(page, -23, 10)

@@ -829,3 +829,12 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - One-variable experiment: adding `.game-ui a { pointer-events: auto; }` enables navigation to both legal pages at both widths.
 - Proven fix: headless Playwright clicks each actual link, asserts its destination URL and rendered heading, and navigates back at both widths. Script: `/tmp/saigon-tour-qa/legal-links.mjs`.
 - `bun run check` → `bun run check:types` → `bun run build` → `bun run test` pass. Server: 523 passed, 2 skipped. Client: 355 passed.
+
+## Camera and contextual greetings
+
+- Proven: `scripts/qa-navigation.mjs` passes at 1440×900 and 390×844. Both mouse buttons rotate the camera while dragging; left drags do not walk. Ground clicks, obstacle detours, keyboard cancellation, static/moving NPC selection, mobile joystick, and touch rotation pass. No page exceptions or horizontal overflow. Evidence: `/tmp/saigon-camera-navigation/results.json`.
+- Proven: greeting unit tests cover camera rotation, offscreen/self/loading players, departure, popover dismissal, and scene cleanup. Visibility uses the camera frustum and interpolated remote positions.
+- Proven: headless Playwright at 1440px and 390px checks empty/self/loading/offscreen states, clicking the greeting opener, Q, camera-drag dismissal, and departure. The picker closes as the remote player leaves view, and Q remains unavailable while hidden. No page exceptions or horizontal overflow. Evidence: `/tmp/saigon-greeting-review/results.json`.
+- Proven: mobile design review and headless interaction checks pass at 1440×900, 390×844, 390×667, and 650×844. English/Vietnamese HUD bounds do not intersect, including an active toast. Mobile toolbar targets are at least 44px; sprint hold/release, joystick movement, pause, language switching, resume, and map opening pass. Final screenshots and measured bounds: `/tmp/saigon-mobile-review/final-results.json` and `*-final-vi.png`. Independent review caught and verified the sprint CSS cascade correction.
+- Proven: at 390×667, the mobile toast hides while the greeting picker is open and returns when it closes. Clicking Wave produces a server-echoed emote. Evidence and inspected screenshot: `/tmp/saigon-greeting-short/results.json`, `greeting-open-390.png`.
+- `bun run check` → `bun run check:types` → `bun run build` → `bun run test` pass: 549 server tests and 380 client tests; three server tests skipped.

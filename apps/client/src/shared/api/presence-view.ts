@@ -1,5 +1,6 @@
 import { NPCS, type NpcId, type PresencePlayer } from '@saigon/shared'
 import { Store } from '@tanstack/store'
+import { type Camera, Frustum, Matrix4, Sphere, Vector3 } from 'three'
 import { game } from '@/shared/state/game'
 import {
   interpolate,
@@ -8,12 +9,14 @@ import {
   presence,
   speech,
 } from './presence'
+import { net, updateNet } from './status'
 
 export interface RemoteView {
   ride: PresencePlayer['ride']
   moving: boolean
 }
 export interface PresenceView {
+  hasVisiblePlayer: boolean
   /** Nearest remote players, refreshed ~5 Hz. */
   nearest: PresencePlayer[]
   /** Per-player display flags (ride + moving), keyed by player id. */
@@ -27,6 +30,7 @@ export interface PresenceView {
 }
 
 const EMPTY: PresenceView = {
+  hasVisiblePlayer: false,
   nearest: [],
   remote: {},
   bubbles: { self: '', players: {}, npcs: {} },
@@ -67,10 +71,45 @@ function sameBubbles(a: PresenceView['bubbles'], b: PresenceView['bubbles']) {
   return same(a.players, b.players) && same(a.npcs, b.npcs)
 }
 
+const frustum = new Frustum()
+const projection = new Matrix4()
+const avatarBounds = new Sphere(new Vector3(), 1.5)
+
+export function clearVisiblePlayers() {
+  if (presenceView.state.hasVisiblePlayer)
+    presenceView.setState((state) => ({ ...state, hasVisiblePlayer: false }))
+  if (net.state.emotesOpen) updateNet({ emotesOpen: false })
+}
+
 /** Recompute the React-visible presence slice; called ~5 Hz by PresenceTicker. */
-export function samplePresenceView(limit: number) {
+export function samplePresenceView(limit: number, camera?: Camera) {
   const now = performance.now()
   const nearest = nearestPlayers(game.state.position, limit, now)
+  let hasVisiblePlayer = false
+  if (camera) {
+    camera.updateMatrixWorld()
+    projection.multiplyMatrices(
+      camera.projectionMatrix,
+      camera.matrixWorldInverse
+    )
+    frustum.setFromProjectionMatrix(projection)
+    hasVisiblePlayer = nearest.some((player) => {
+      if (
+        player.id === net.state.selfId ||
+        player.id === game.state.guestId ||
+        player.ride === 'loading'
+      )
+        return false
+      avatarBounds.center.set(
+        player.position[0],
+        player.position[1] + 0.5,
+        player.position[2]
+      )
+      return frustum.intersectsSphere(avatarBounds)
+    })
+  }
+  if (!hasVisiblePlayer && net.state.emotesOpen)
+    updateNet({ emotesOpen: false })
   const nearestIds = new Set(nearest.map((player) => player.id))
   for (const id of previousPos.keys())
     if (!nearestIds.has(id)) previousPos.delete(id)
@@ -111,11 +150,13 @@ export function samplePresenceView(limit: number) {
     ? prev.bubbles
     : bubbles
   if (
+    hasVisiblePlayer !== prev.hasVisiblePlayer ||
     nextNearest !== prev.nearest ||
     nextRemote !== prev.remote ||
     nextBubbles !== prev.bubbles
   )
     presenceView.setState(() => ({
+      hasVisiblePlayer,
       nearest: nextNearest,
       remote: nextRemote,
       bubbles: nextBubbles,

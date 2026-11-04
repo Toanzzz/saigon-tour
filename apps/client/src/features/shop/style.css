@@ -285,10 +285,6 @@
     padding: 8px 10px;
     font-size: 16px;
   }
-  .touch-sprint {
-    right: 16px;
-    bottom: max(115px, calc(env(safe-area-inset-bottom) + 110px));
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .conversation-shop-tabs button {

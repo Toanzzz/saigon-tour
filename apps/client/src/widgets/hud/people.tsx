@@ -1,6 +1,7 @@
 import type { Emote } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { close } from '@/app/actions'
+import { presenceView } from '@/shared/api/presence-view'
 import { sendEmote, sendParty } from '@/shared/api/socket'
 import { type NetState, net, updateNet } from '@/shared/api/status'
 import { m } from '@/shared/i18n'
@@ -126,8 +127,12 @@ const choices: { emote: Emote; label: () => string }[] = [
 ]
 export function EmoteControls() {
   const state = useSelector(net, (value) => value)
+  const hasVisiblePlayer = useSelector(
+    presenceView,
+    (value) => value.hasVisiblePlayer
+  )
   const xr = useXRPresenting()
-  if (xr) return null
+  if (xr || !hasVisiblePlayer) return null
   return (
     <div className="emote-controls">
       <button
