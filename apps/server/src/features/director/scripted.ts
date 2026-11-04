@@ -47,6 +47,16 @@ export function scriptedDayPlan(): CityDayPlan {
         ],
       },
       {
+        atMinutes: 10,
+        actions: [
+          {
+            type: 'start-rare-sale',
+            npcId: 'mai',
+            unlockId: 'silk-scarf',
+          },
+        ],
+      },
+      {
         atMinutes: 240,
         actions: [
           {

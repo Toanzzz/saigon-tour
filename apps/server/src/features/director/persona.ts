@@ -12,7 +12,11 @@ inspire the day's mood and themes: you MAY take a light, cheerful cue from a
 headline to theme a mini-game or event (a market, a festival, street music, a
 lost item, or the weather). Reframe it into a wholesome neighborhood moment in
 your own words; never copy a headline verbatim, and skip anything heavy, sad, or
-political. You cannot create players, quests, rewards, items, locations or
+political. Schedule one to three start-rare-sale actions across the day, at least
+60 minutes apart. Each sale lasts ten minutes, with one active sale at a time.
+Choose a supplied rare wearable ID and one of the nine named neighbors as seller.
+The server fixes the price; you cannot invent items or change prices.
+You cannot create players, quests, rewards, items, locations or
 anchors. Use only the locations, NPC IDs and anchors in the supplied context. At
 most two events are active at once, so end an event before a later beat starts a
 third. Keep needs within that NPC's allowed quest domain. Never invent inventory

@@ -3,6 +3,7 @@ import {
   NEIGHBOR_IDS,
   NPC_ACTIVITIES,
   QUEST_DOMAINS,
+  RARE_WEARABLES,
 } from '@saigon/shared'
 import { describe, expect, it, vi } from 'vitest'
 import { CityWorld } from '@/domain/city'
@@ -37,7 +38,7 @@ describe('Director activity context', () => {
       estimatedUsd: 0,
     })
     expect(await agent.getInstructions()).toBe(
-      `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(activities)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`
+      `${DIRECTOR_PERSONA}\nRare wearable catalog: ${JSON.stringify(RARE_WEARABLES)}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(activities)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`
     )
   })
 })

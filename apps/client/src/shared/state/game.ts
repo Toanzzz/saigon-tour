@@ -24,7 +24,6 @@ export type Panel =
   | 'transport'
   | 'reward'
   | 'people'
-  | 'market'
   | 'postcard'
   | 'wardrobe'
 export interface Dialogue {

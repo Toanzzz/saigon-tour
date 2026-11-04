@@ -216,6 +216,8 @@ export class RoomManager {
     events: PlayerEvent[],
     game: Pick<QuestService, 'get' | 'applyEvents'>
   ): Promise<PlayerSave> {
+    if (events.some((event) => event.type === 'purchase'))
+      return Promise.reject(new Error('purchase_event_forbidden'))
     const member = this.room(playerId)?.members.get(playerId)
     if (!member) return Promise.reject(new Error('player_not_in_room'))
     const work = member.eventQueue.then(async () => {

@@ -1,5 +1,18 @@
 import { z } from 'zod'
 import { LocationIdSchema, NeighborIdSchema, NpcIdSchema } from '../entities'
+import { RareWearableIdSchema } from '../unlocks/rare'
+
+export const RareOfferSchema = z
+  .object({
+    id: z.string().min(1).max(80),
+    npcId: NeighborIdSchema,
+    unlockId: RareWearableIdSchema,
+    price: z.number().int().positive(),
+    startedAt: z.number().int().min(0),
+    endsAt: z.number().int().min(0),
+  })
+  .strict()
+export type RareOffer = z.infer<typeof RareOfferSchema>
 
 export const NpcActivityStateSchema = z
   .object({
@@ -56,11 +69,19 @@ export const CitySnapshotSchema = z
       .default({}),
     weather: CityWeatherSchema,
     headlines: z.array(CityHeadlineSchema).max(12),
+    rareOffer: RareOfferSchema.optional(),
   })
   .strict()
 export type CitySnapshot = z.infer<typeof CitySnapshotSchema>
 
 export const CityActionSchema = z.discriminatedUnion('type', [
+  z
+    .object({
+      type: z.literal('start-rare-sale'),
+      npcId: NeighborIdSchema,
+      unlockId: RareWearableIdSchema,
+    })
+    .strict(),
   z
     .object({
       type: z.literal('set-npc-activity'),

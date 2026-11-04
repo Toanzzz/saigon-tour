@@ -45,6 +45,8 @@ export function npcRoutes({ auth, db, harness }: RouteDeps) {
       async (c) => {
         const npcId = c.req.valid('param').npcId
         const request = c.req.valid('json')
+        if (request.events.some((event) => event.type === 'purchase'))
+          return c.json({ error: 'purchase_event_forbidden' }, 400)
         const playerId = c.var.player.id
         if (c.req.header('accept')?.includes('application/x-ndjson')) {
           c.header('Content-Type', 'application/x-ndjson')

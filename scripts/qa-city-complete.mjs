@@ -3,6 +3,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { movePlayer } from './qa-city-controls.mjs'
+import { buyGood } from './qa-quest-flow.mjs'
 
 const require = createRequire(
   `${process.env.QA_MODULE_ROOT || '/private/tmp/saigon-tour-qa'}/package.json`
@@ -111,15 +112,8 @@ async function verify(viewport) {
       .getByRole('button', { name: 'Continue exploring', exact: true })
       .click()
 
-    await teleport(-23, 3.5)
-    await page.getByRole('button', { name: 'Browse market goods' }).click()
-    await page.getByRole('heading', { name: 'A little market break' }).waitFor()
     const walletBefore = (await diag()).state.currency
-    const coffee = page.locator('button.market-item').filter({
-      hasText: 'iced milk coffee',
-    })
-    await coffee.click()
-    await page.getByText('iced milk coffee added to your bag.').waitFor()
+    await buyGood(page, 'coffee')
     await page.waitForFunction(
       (expected) =>
         window.__THREE_GAME_DIAGNOSTICS__?.state?.currency === expected,
@@ -127,14 +121,7 @@ async function verify(viewport) {
     )
     assert.equal((await diag()).state.currency, walletBefore - 3)
     assert(
-      (
-        await page
-          .locator('button.market-item')
-          .filter({
-            hasText: 'iced milk coffee',
-          })
-          .innerText()
-      ).includes('×1'),
+      (await page.locator('.npc-shop').innerText()).includes('1 in bag'),
       'coffee appears in the saved bag'
     )
     await capture('market-purchase')

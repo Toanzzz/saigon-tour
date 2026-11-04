@@ -2,6 +2,7 @@ import { isRevealed, QUEST_EXPIRY_MS } from '@saigon/shared'
 import { useMutation } from '@tanstack/react-query'
 import { useSelector } from '@tanstack/react-store'
 import { close } from '@/app/actions'
+import { ConsumableBag } from '@/features/shop'
 import { abandonQuest } from '@/shared/api/quests'
 import { itemLabel, m, unlockLabel } from '@/shared/i18n'
 import { type GameState, update } from '@/shared/state/game'
@@ -136,6 +137,7 @@ export function JournalPanel({ state }: { state: GameState }) {
       </div>
       <div className="journal-section">
         <h3>{m.journal_bag()}</h3>
+        <ConsumableBag state={state} />
         <div className="bag-items">
           <span>
             <CoinEmblem />
@@ -157,18 +159,6 @@ export function JournalPanel({ state }: { state: GameState }) {
             <span>
               <Icon name="star" />
               {m.journal_photo()} × {state.world.inventory.photo}
-            </span>
-          )}
-          {(state.world.inventory.coffee ?? 0) > 0 && (
-            <span>
-              <Icon name="sound" />
-              Cà phê sữa × {state.world.inventory.coffee}
-            </span>
-          )}
-          {(state.world.inventory.banana ?? 0) > 0 && (
-            <span>
-              <Icon name="leaf" />
-              Chuối chín × {state.world.inventory.banana}
             </span>
           )}
         </div>

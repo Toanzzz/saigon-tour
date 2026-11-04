@@ -2,12 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { GuestPlayer, NpcId } from '@saigon/shared'
-import {
-  EMPTY_UNLOCKS,
-  GuestPlayerSchema,
-  randomPlayerColor,
-  STARTING_CURRENCY,
-} from '@saigon/shared'
+import { GuestPlayerSchema, randomPlayerColor } from '@saigon/shared'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import { migrate } from 'drizzle-orm/node-postgres/migrator'
 import { Pool } from 'pg'
@@ -16,29 +11,16 @@ import * as schema from './schema'
 export type { PlayerSave, SqlClient } from './player-save'
 
 import { PlayerMutations } from './player-mutations'
-import type { PlayerSave, SqlClient } from './player-save'
+import {
+  initialPlayerSave,
+  type PlayerSave,
+  type SqlClient,
+} from './player-save'
 
 export interface Reservation {
   day: string
   id: string
 }
-const initial = (): PlayerSave => ({
-  friendship: {},
-  revision: 0,
-  world: {
-    locationId: 'market',
-    inventory: {},
-    visitedLocations: ['market'],
-    talkedTo: [],
-    deliveredItems: [],
-    completedQuestIds: [],
-    currency: STARTING_CURRENCY,
-  },
-  quests: [],
-  completed: [],
-  reputation: 0,
-  unlocks: structuredClone(EMPTY_UNLOCKS),
-})
 const publicPlayer = (r: Record<string, unknown>): GuestPlayer =>
   GuestPlayerSchema.parse(r)
 
@@ -59,7 +41,7 @@ export class GameDb {
   }
   /** The player saved for an auth user, created on first sight. */
   async ensurePlayer(user: { id: string; name: string }) {
-    const save = initial()
+    const save = initialPlayerSave()
     await this.sql.query(
       'INSERT INTO players(id,user_id,name,color,world,quests,completed,reputation,unlocks) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9) ON CONFLICT (user_id) DO NOTHING',
       [
@@ -133,12 +115,13 @@ export class GameDb {
   async reset(id: string) {
     await this.mutatePlayer(id, async (save, client) => {
       const revision = save.revision
-      Object.assign(save, initial(), { revision })
+      Object.assign(save, initialPlayerSave(), { revision })
       await client.query('DELETE FROM npc_facts WHERE player_id=$1', [id])
       await client.query('DELETE FROM quest_completions WHERE player_id=$1', [
         id,
       ])
       await client.query('DELETE FROM coin_pickups WHERE player_id=$1', [id])
+      await client.query('DELETE FROM item_actions WHERE player_id=$1', [id])
     })
     return this.player(id)
   }

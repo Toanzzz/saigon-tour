@@ -27,6 +27,8 @@ const selected = {
     'lantern-backpack',
     'satchel',
     'headphones',
+    'lacquer-non-la',
+    'silk-scarf',
   ],
   outfits: [
     'apron',
@@ -35,15 +37,25 @@ const selected = {
     'ao-ba-ba',
     'evening',
     'ao-dai',
+    'festival-ao-dai',
   ].flatMap((id) => [`${id}-man`, `${id}-woman`]),
 }
+const only = new Set(
+  process.argv
+    .find((arg) => arg.startsWith('--only='))
+    ?.slice(7)
+    .split(',')
+)
+let prepared = 0
 for (const [pack, ids] of Object.entries(selected)) {
   const output = resolve(root, 'apps/client/public/models', pack)
   await mkdir(output, { recursive: true })
   for (const id of ids) {
+    if (only.size && !only.has(id)) continue
     const document = await io.read(resolve(root, 'assets', pack, `${id}.glb`))
     await document.transform(dedup(), prune(), draco({ method: 'edgebreaker' }))
     await io.write(resolve(output, `${id}.glb`), document)
+    prepared++
   }
 }
-console.log('Prepared 26 wardrobe runtime models.')
+console.log(`Prepared ${prepared} wardrobe runtime models.`)

@@ -22,7 +22,10 @@ COLORS = {
     "ao-ba-ba": ("#78628e", "#40344f", "#9575a8"),
     "evening": ("#344c7b", "#202d4a", "#e4bc71"),
     "ao-dai": ("#e86a9b", "#f3ead6", "#ffd6b4"),
+    "festival-ao-dai": ("#192b51", "#24283b", "#e8bd5e"),
 }
+only = next((arg.split("=", 1)[1].split(",") for arg in sys.argv
+             if arg.startswith("--only=")), [])
 
 
 def material(name, color):
@@ -125,7 +128,7 @@ def garments(kind, cloth, accent, trim):
                               (side * 0.09, 0.1, 0.34), 0.075, accent))
         parts.append(panel("vest-back", -0.145, 0.145, 0.185, 0.345,
                            0.115, accent))
-    elif kind in ("ao-ba-ba", "ao-dai"):
+    elif kind in ("ao-ba-ba", "ao-dai", "festival-ao-dai"):
         parts.append(shell("tunic-bodice", 0.175, 0.35, 0.153, 0.137,
                            0.123, cloth))
         parts.append(shell("standing-collar", 0.34, 0.369, 0.068, 0.068,
@@ -150,6 +153,17 @@ def garments(kind, cloth, accent, trim):
         for z in (0.23, 0.265, 0.30, 0.33):
             parts.append(box("tunic-button", (0.012, 0.01, 0.012),
                              (0.005, -0.127, z), trim))
+        if kind == "festival-ao-dai":
+            for side in (-1, 1):
+                for z in (0.055, 0.085):
+                    parts.append(panel("embroidered-stem-hem",
+                                       side * 0.012, side * 0.155,
+                                       z, z + 0.006, front - 0.019, trim))
+                for dx, dz in ((0, 0.014), (-0.014, 0), (0.014, 0), (0, -0.014)):
+                    parts.append(box("embroidered-stem-lotus",
+                                     (0.013, 0.008, 0.013),
+                                     (side * 0.075 + dx, front - 0.019,
+                                      0.14 + dz), trim))
     else:
         parts.append(shell("evening-jacket", 0.17, 0.347, 0.153, 0.14,
                            0.124, cloth))
@@ -167,6 +181,8 @@ def garments(kind, cloth, accent, trim):
 
 for body in ("man", "woman"):
     for kind, (top_color, bottom_color, detail_color) in COLORS.items():
+        if only and kind not in only:
+            continue
         bpy.ops.wm.read_factory_settings(use_empty=True)
         bpy.ops.import_scene.gltf(
             filepath=f"{repo}/assets/player-bases/player-{body}.glb")

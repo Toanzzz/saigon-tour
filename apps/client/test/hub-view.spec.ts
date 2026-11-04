@@ -1,10 +1,12 @@
 import { advance, createQuest } from '@saigon/shared'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
+import { city, resetCity } from '@/shared/api/city'
 import { grantQuest, grantReward, initialState } from '@/shared/state/game'
 import { greetingFor, hubView } from '@/widgets/hub'
 import { questFixture } from './quest-fixture'
 
 const now = new Date(2026, 9, 31, 15)
+afterEach(resetCity)
 describe('city hub quest view', () => {
   it('derives active title, step and reward from the tracked quest', () => {
     const quest = questFixture()
@@ -43,6 +45,28 @@ describe('city hub quest view', () => {
     expect(
       hubView({ ...state, world: { ...state.world, currency: 2 } }, now).ride
     ).toBeNull()
+  })
+  it('offers a route to the moved merchant for a BUY step', () => {
+    const quest = createQuest({
+      giverNpcId: 'hoa',
+      title: 'Coffee run',
+      description: 'Buy coffee from Mai.',
+      scope: 'solo',
+      steps: [{ type: 'BUY', marketItemId: 'coffee' }],
+    })
+    city.setState((state) => ({
+      ...state,
+      npcPlacements: {
+        ...state.npcPlacements,
+        mai: {
+          locationId: 'cathedral',
+          anchorId: 'gathering',
+          position: [88, 0, -62],
+        },
+      },
+    }))
+    const state = grantQuest(initialState(), quest)
+    expect(hubView(state, now).ride?.to).toBe('cathedral')
   })
   it('keeps an uncompleted visit current after its location was explored', () => {
     const quest = questFixture('vy')

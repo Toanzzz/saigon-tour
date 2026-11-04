@@ -8,6 +8,7 @@ import { story } from './story'
 export default defineNpc({
   activities,
   id: 'bread-vendor',
+  shop: ['baguette'],
   profile,
   story,
   unlocks: [],

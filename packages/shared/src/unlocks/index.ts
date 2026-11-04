@@ -1,10 +1,12 @@
 import { z } from 'zod'
 import { COSMETIC_UNLOCKS } from './cosmetics'
 import { PET_UNLOCKS } from './pets'
+import { RARE_WEARABLES } from './rare'
 import { VEHICLE_UNLOCKS } from './vehicles'
 
 export * from './avatar'
 export * from './catalog'
+export * from './rare'
 
 import {
   UNLOCK_SLOTS,
@@ -25,6 +27,7 @@ const ALL_UNLOCKS: UnlockDef[] = [
   ...COSMETIC_UNLOCKS,
   ...VEHICLE_UNLOCKS,
   ...PET_UNLOCKS,
+  ...Object.values(RARE_WEARABLES),
 ]
 
 export const UNLOCKS: Record<string, UnlockDef> = Object.fromEntries(
@@ -44,6 +47,7 @@ const TIER_ORDER: UnlockTier[] = ['neutral', 'warm', 'close']
 export const GIVER_UNLOCKS: Record<UnlockGiver, UnlockId[]> = (() => {
   const map = {} as Record<UnlockGiver, UnlockId[]>
   for (const entry of ALL_UNLOCKS) {
+    if (entry.acquisition !== 'friendship') continue
     const list = map[entry.giver] ?? []
     list.push(entry.id)
     map[entry.giver] = list
@@ -51,8 +55,8 @@ export const GIVER_UNLOCKS: Record<UnlockGiver, UnlockId[]> = (() => {
   for (const giver of Object.keys(map) as UnlockGiver[])
     map[giver].sort(
       (a, b) =>
-        TIER_ORDER.indexOf(UNLOCKS[a].tier) -
-        TIER_ORDER.indexOf(UNLOCKS[b].tier)
+        TIER_ORDER.indexOf(UNLOCKS[a].tier ?? 'neutral') -
+        TIER_ORDER.indexOf(UNLOCKS[b].tier ?? 'neutral')
     )
   return map
 })()
@@ -101,7 +105,12 @@ export function selectUnlock(
   const promised = new Set(options.promised)
   for (const id of GIVER_UNLOCKS[giver] ?? []) {
     if (owned.has(id) || promised.has(id)) continue
-    if (!tierAllows(options.friendship, UNLOCKS[id].tier)) continue
+    const def = UNLOCKS[id]
+    if (
+      def.acquisition !== 'friendship' ||
+      !tierAllows(options.friendship, def.tier)
+    )
+      continue
     return id
   }
   return undefined

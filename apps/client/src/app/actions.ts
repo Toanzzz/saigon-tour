@@ -1,11 +1,4 @@
-import {
-  creditEligible,
-  FRAGILE_ITEM_IDS,
-  MARKET_ITEMS,
-  type MarketItemId,
-  type NpcId,
-  npcActivity,
-} from '@saigon/shared'
+import { FRAGILE_ITEM_IDS, type NpcId, npcActivity } from '@saigon/shared'
 import {
   carePhrase,
   carryStore,
@@ -14,6 +7,8 @@ import {
 } from '@/features/carry'
 import { resetCollectedCoins } from '@/features/collectibles/pickup'
 import { converse, deliver } from '@/features/conversation/converse'
+import { resetCommerce, resetShop } from '@/features/shop'
+import { resetStamina } from '@/features/stamina'
 import { resetAsides } from '@/features/transport/asides'
 import { resetVoice, resetVoiceClips } from '@/features/voice'
 import { city, npcPosition } from '@/shared/api/city'
@@ -26,7 +21,7 @@ import { cachedHistory, fetchHistory } from '@/shared/api/history'
 import { clearPersistedQueries, queryClient } from '@/shared/api/query'
 import { guestState, resetSession, signOut } from '@/shared/api/session'
 import { audio } from '@/shared/audio'
-import { itemLabel, m, marketItemLabel, npcLabel } from '@/shared/i18n'
+import { itemLabel, m, npcLabel } from '@/shared/i18n'
 import { nextCompletion } from '@/shared/state/completions'
 import {
   advanceQuests,
@@ -99,6 +94,9 @@ export async function restart() {
     timeOfDay: state.timeOfDay,
   }))
   resetNavigation()
+  resetCommerce()
+  resetShop()
+  resetStamina()
   resetChatDraft()
   resetTransportForm()
   resetWardrobeTab()
@@ -159,49 +157,6 @@ export function toggleHub() {
 }
 export function toggleTimeOfDay() {
   update({ timeOfDay: game.state.timeOfDay === 'day' ? 'evening' : 'day' })
-}
-export function buyMarketItem(itemId: MarketItemId) {
-  const state = game.state
-  const item = MARKET_ITEMS[itemId]
-  if (
-    state.world.locationId !== 'market' ||
-    (state.world.inventory[itemId] ?? 0) >= 100
-  )
-    return
-  const shortByCoins = state.world.currency < item.price
-  // Cô Hoa fronts a quest's BUY step when the player cannot pay; the engine
-  // (0B) only honors the credit for an unaffordable, active-quest BUY.
-  const onCredit = shortByCoins && creditEligible(state.quests, itemId)
-  if (shortByCoins && !onCredit) {
-    notify(
-      m.toast_need_coins({ count: item.price, item: marketItemLabel(itemId) })
-    )
-    return
-  }
-  const event = onCredit
-    ? ({ type: 'purchase', itemId, credit: true } as const)
-    : ({ type: 'purchase', itemId } as const)
-  update({
-    panel: 'market',
-    world: {
-      ...state.world,
-      currency: onCredit
-        ? state.world.currency
-        : state.world.currency - item.price,
-      inventory: {
-        ...state.world.inventory,
-        [itemId]: (state.world.inventory[itemId] ?? 0) + 1,
-      },
-    },
-    quests: advanceQuests(state.quests, [event]),
-    pending: [...state.pending, event],
-  })
-  audio.play('pickup')
-  notify(
-    onCredit
-      ? m.market_on_credit({ item: marketItemLabel(itemId) })
-      : m.toast_added_to_bag({ item: marketItemLabel(itemId) })
-  )
 }
 export function openRiverPostcard() {
   if (game.state.world.locationId !== 'river') return

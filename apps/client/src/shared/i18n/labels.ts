@@ -23,6 +23,7 @@ export function itemLabel(itemId: ItemId): string {
     broth: m.item_broth,
     baguette: m.item_baguette,
     coffee: m.item_coffee,
+    pho: m.item_pho,
     banana: m.item_banana,
     cake: m.item_cake,
     'coffee-beans': m['item_coffee-beans'],

@@ -4,12 +4,15 @@ import {
   type CityAction,
   CityActionSchema,
   type CityHeadline,
+  type CityPlanBeat,
   type CitySnapshot,
   initialCitySnapshot,
   type NeighborId,
   NPC_ACTIVITIES,
+  RARE_WEARABLES,
 } from '@saigon/shared'
 import { safeLine } from '@/features/npc/safety'
+import { RARE_SALE_MS, RareSales } from './rare-sales'
 
 export type CityActionResult =
   | { accepted: true; revision: number }
@@ -19,6 +22,7 @@ export type CityActionResult =
 export class CityWorld {
   private state: CitySnapshot = initialCitySnapshot()
   private disposed = false
+  private sales = new RareSales()
   constructor(
     private readonly now = Date.now,
     private readonly publishHeadline: (
@@ -44,13 +48,17 @@ export class CityWorld {
     const activities = Object.entries(this.state.npcActivities).filter(
       ([, activity]) => activity && activity.endsAt > now
     )
+    const expiredOffer =
+      this.state.rareOffer !== undefined && this.state.rareOffer.endsAt <= now
     if (
       remaining.length === this.state.events.length &&
-      activities.length === Object.keys(this.state.npcActivities).length
+      activities.length === Object.keys(this.state.npcActivities).length &&
+      !expiredOffer
     )
       return
     this.state.events = remaining
     this.state.npcActivities = Object.fromEntries(activities)
+    if (expiredOffer) delete this.state.rareOffer
     this.state.revision += 1
     this.changed()
   }
@@ -107,13 +115,34 @@ export class CityWorld {
     return { accepted: true, revision: this.state.revision }
   }
 
-  apply(input: unknown): CityActionResult {
+  apply(input: unknown, rareStartedAt?: number): CityActionResult {
     if (this.disposed) return { accepted: false, reason: 'room_disposed' }
     this.expire()
     const result = this.check(input, this.state.events.length)
     if ('reason' in result) return { accepted: false, reason: result.reason }
     const action = result.action
-    if (action.type === 'set-npc-activity') {
+    if (action.type === 'start-rare-sale') {
+      const now = this.now()
+      const startedAt = rareStartedAt ?? now
+      if (
+        !Number.isSafeInteger(startedAt) ||
+        startedAt < 0 ||
+        startedAt > now ||
+        startedAt + RARE_SALE_MS <= now
+      )
+        return { accepted: false, reason: 'rare_sale_window_inactive' }
+      const reason = this.sales.check(startedAt)
+      if (reason) return { accepted: false, reason }
+      this.sales.record(startedAt)
+      this.state.rareOffer = {
+        id: `sale_${randomUUID()}`,
+        npcId: action.npcId,
+        unlockId: action.unlockId,
+        price: RARE_WEARABLES[action.unlockId].price,
+        startedAt,
+        endsAt: startedAt + RARE_SALE_MS,
+      }
+    } else if (action.type === 'set-npc-activity') {
       const now = this.now()
       this.state.npcActivities[action.npcId] = {
         activityId: action.activityId,
@@ -157,5 +186,12 @@ export class CityWorld {
     this.state.revision += 1
     this.changed()
     return { accepted: true, revision: this.state.revision }
+  }
+
+  validatePlan(beats: readonly CityPlanBeat[]): CityActionResult {
+    const reason = this.sales.validatePlan(beats, this.now())
+    return reason
+      ? { accepted: false, reason }
+      : { accepted: true, revision: this.state.revision }
   }
 }

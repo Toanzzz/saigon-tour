@@ -45,7 +45,7 @@ describe('cosmetic fitting', () => {
     const outfits = Object.values(UNLOCKS).filter(
       (item) => item.slot === 'outfit'
     )
-    expect(outfits).toHaveLength(6)
+    expect(outfits).toHaveLength(7)
     for (const outfit of outfits) {
       expect(outfit.outfitModels?.man).toBe(`outfits/${outfit.id}-man`)
       expect(outfit.outfitModels?.woman).toBe(`outfits/${outfit.id}-woman`)

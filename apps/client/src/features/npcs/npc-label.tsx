@@ -1,10 +1,10 @@
 import { Html } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { isRevealed, NEIGHBOR_IDS, type NpcId } from '@saigon/shared'
+import { isRevealed, merchantFor, NPC_SHOPS, type NpcId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
-import { npcPosition } from '@/shared/api/city'
-import { npcLabel } from '@/shared/i18n'
+import { city, npcPosition } from '@/shared/api/city'
+import { m, npcLabel } from '@/shared/i18n'
 import { motion } from '@/shared/runtime/motion'
 import { pulses } from '@/shared/state/friendship'
 import { type GameState, game } from '@/shared/state/game'
@@ -15,6 +15,7 @@ import {
   npcLabels,
   writeNpcLabels,
 } from '@/shared/state/view'
+import { Icon } from '@/shared/ui/icons'
 
 /**
  * Does any quest point at this NPC as a next step? A hidden riddle on step 0
@@ -32,8 +33,9 @@ export function npcIsQuestTarget(
         !quest.progress[i] &&
         !(hidden && i === 0) &&
         step.type !== 'GO_TO' &&
-        step.type !== 'BUY' &&
-        step.npcId === id
+        (step.type === 'BUY'
+          ? merchantFor(step.marketItemId) === id
+          : step.npcId === id)
     )
   })
 }
@@ -78,7 +80,7 @@ function labelFor(id: NpcId): NpcLabelView {
 export function NpcLabelsTicker() {
   useFrame(() => {
     const next: Record<string, NpcLabelView> = {}
-    for (const id of NEIGHBOR_IDS) next[id] = labelFor(id)
+    for (const id of Object.keys(NPC_SHOPS) as NpcId[]) next[id] = labelFor(id)
     writeNpcLabels(next)
   })
   return null
@@ -88,6 +90,8 @@ export function NpcLabel({ id }: { id: NpcId }) {
   const view = useSelector(npcLabels, (map) => map[id] ?? npcLabelOf(id), {
     compare: shallow,
   })
+  const sale = useSelector(city, (value) => value.rareOffer)
+  const rare = sale?.npcId === id && sale.endsAt > Date.now()
   if (!view.visible) return null
   return (
     <Html
@@ -100,6 +104,16 @@ export function NpcLabel({ id }: { id: NpcId }) {
         {view.marker && (
           <span className="quest-marker">
             <b>{view.marker}</b>
+          </span>
+        )}
+        {(NPC_SHOPS[id].length > 0 || rare) && (
+          <span className={`merchant-mark${rare ? ' is-rare' : ''}`}>
+            <Icon name="shop" size={14} />
+            {rare ? (
+              m.shop_rare()
+            ) : (
+              <span className="sr-only">{m.shop_title()}</span>
+            )}
           </span>
         )}
         <span className="name-tag">{npcLabel(id)}</span>

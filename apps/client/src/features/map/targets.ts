@@ -1,4 +1,4 @@
-import { isRevealed, type Quest } from '@saigon/shared'
+import { isRevealed, merchantFor, type Quest } from '@saigon/shared'
 import { npcPosition } from '@/shared/api/city'
 import { nextStep } from '@/shared/state/quests'
 import { clock } from '@/shared/state/ui'
@@ -10,6 +10,6 @@ export function questPin(quest: Quest): Point | null {
   const step = nextStep(quest)
   if (!step) return npcPosition(quest.giverNpcId)
   if (step.type === 'GO_TO') return PLACES[step.locationId].at
-  if (step.type === 'BUY') return PLACES.market.at
+  if (step.type === 'BUY') return npcPosition(merchantFor(step.marketItemId))
   return npcPosition(step.npcId)
 }

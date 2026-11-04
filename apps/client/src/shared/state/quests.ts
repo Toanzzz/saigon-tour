@@ -3,6 +3,7 @@ import {
   isMilestoneFinale,
   isRevealed,
   MILESTONES,
+  merchantFor,
   milestoneForGiver,
   type NpcId,
   type Quest,
@@ -45,7 +46,13 @@ export function stepCopy(step: QuestStep): string {
         }) + movedSuffix(step)
       )
     case 'BUY':
-      return m.step_buy({ item: marketItemLabel(step.marketItemId) })
+      return (
+        m.step_buy_merchant({
+          item: marketItemLabel(step.marketItemId),
+          name: npcLabel(merchantFor(step.marketItemId)),
+        }) +
+        movedSuffix({ type: 'TALK_TO', npcId: merchantFor(step.marketItemId) })
+      )
     case 'BRING':
       return (
         m.step_bring({
@@ -89,6 +96,7 @@ export function questTarget(state: GameState): NpcId | null {
   if (!quest) return null
   if (hiddenRiddle(quest)) return null
   const step = nextStep(quest)
+  if (step?.type === 'BUY') return merchantFor(step.marketItemId)
   return step &&
     (step.type === 'DELIVER' ||
       step.type === 'TALK_TO' ||

@@ -6,6 +6,7 @@ import {
   NEIGHBOR_IDS,
   NPC_ACTIVITIES,
   QUEST_DOMAINS,
+  RARE_WEARABLES,
 } from '@saigon/shared'
 import type { CityWorld } from '@/domain/city'
 import type { ServerConfig } from '@/shared/config'
@@ -52,7 +53,7 @@ export function directorAgent(
     id: 'city-director',
     name: 'City Director',
     model: provider.chatModel(config.model ?? ''),
-    instructions: `${DIRECTOR_PERSONA}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(directorActivities)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
+    instructions: `${DIRECTOR_PERSONA}\nRare wearable catalog: ${JSON.stringify(RARE_WEARABLES)}\nAuthored anchors: ${JSON.stringify(CITY_ANCHORS)}\nNPC activities: ${JSON.stringify(directorActivities)}\nNPC quest domains: ${JSON.stringify(Object.fromEntries(NEIGHBOR_IDS.map((id) => [id, QUEST_DOMAINS[id]])))}`,
     tools: directorPlanTools(city, plan, active),
   })
 }

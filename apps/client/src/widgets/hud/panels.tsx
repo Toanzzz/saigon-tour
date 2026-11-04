@@ -1,9 +1,7 @@
-import { creditEligible, MARKET_ITEMS, type MarketItemId } from '@saigon/shared'
 import { useSelector } from '@tanstack/react-store'
 import { shallow } from '@tanstack/store'
 import {
   board,
-  buyMarketItem,
   close,
   forgetDevice,
   pause,
@@ -12,7 +10,7 @@ import {
 import { NewJourneyButton } from '@/app/title-journey'
 import { MarkerGuide } from '@/features/conversation/marker-guide'
 import { NeighborhoodMap } from '@/features/map/map'
-import { LanguageSelect, m, marketItemLabel } from '@/shared/i18n'
+import { LanguageSelect, m } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import {
   setTransportDestination,
@@ -219,55 +217,6 @@ export function PausePanel({ state }: { state: GameState }) {
       >
         {m.pause_clear_data()}
       </button>
-    </Dialog>
-  )
-}
-
-export function MarketPanel({ state }: { state: GameState }) {
-  return (
-    <Dialog
-      title={m.market_title()}
-      eyebrow={placeName('market')}
-      onClose={close}
-      className="market-dialog"
-    >
-      <p className="panel-intro">{m.market_intro()}</p>
-      <div className="market-items">
-        {(Object.keys(MARKET_ITEMS) as MarketItemId[]).map((id) => {
-          const item = MARKET_ITEMS[id]
-          const count = state.world.inventory[id] ?? 0
-          const onCredit =
-            state.world.currency < item.price &&
-            creditEligible(state.quests, id)
-          return (
-            <button
-              type="button"
-              className="market-item"
-              key={id}
-              disabled={state.world.currency < item.price && !onCredit}
-              onClick={() => buyMarketItem(id)}
-            >
-              <span>
-                <strong>{marketItemLabel(id)}</strong>
-                <small>
-                  {onCredit
-                    ? m.market_on_credit({ item: marketItemLabel(id) })
-                    : id === 'coffee'
-                      ? m.market_coffee()
-                      : m.market_banana()}
-                </small>
-              </span>
-              <span className="market-price">
-                {m.coins({ count: item.price })} · ×{count}
-              </span>
-            </button>
-          )
-        })}
-      </div>
-      <div className="fare-row">
-        <span>{m.wallet()}</span>
-        <strong>{m.coins({ count: state.world.currency })}</strong>
-      </div>
     </Dialog>
   )
 }

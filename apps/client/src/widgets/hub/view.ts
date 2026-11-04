@@ -9,6 +9,7 @@ export {
 import {
   isRevealed,
   type LocationId,
+  merchantFor,
   NPCS,
   type NpcId,
   type Quest,
@@ -136,7 +137,13 @@ function objectiveLocation(state: GameState): LocationId | null {
       ]?.locationId ?? NPCS[quest.giverNpcId].location
     )
   if (step.type === 'GO_TO') return step.locationId
-  if (step.type === 'BUY') return 'market'
+  if (step.type === 'BUY') {
+    const merchant = merchantFor(step.marketItemId)
+    return (
+      city.state.npcPlacements[merchant as import('@saigon/shared').NeighborId]
+        ?.locationId ?? NPCS[merchant].location
+    )
+  }
   return (
     city.state.npcPlacements[step.npcId as import('@saigon/shared').NeighborId]
       ?.locationId ?? NPCS[step.npcId].location

@@ -16,6 +16,7 @@ import type { Env, RouteDeps } from './routes/deps'
 import { meRoutes } from './routes/me'
 import { npcRoutes } from './routes/npc'
 import { sessionRoutes } from './routes/session'
+import { shopRoutes } from './routes/shop'
 import { voiceRoutes } from './routes/voice'
 
 export type { Fetcher } from '@/shared/http'
@@ -31,6 +32,7 @@ function createRoutes(deps: RouteDeps) {
   return new Hono<Env>()
     .route('/', sessionRoutes(deps))
     .route('/me', meRoutes(deps))
+    .route('/me', shopRoutes(deps))
     .route('/npc', npcRoutes(deps))
     .route('/voice', voiceRoutes(deps))
 }

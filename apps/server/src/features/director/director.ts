@@ -1,5 +1,6 @@
 import type { CityPlanBeat } from '@saigon/shared'
 import type { CityWorld } from '@/domain/city'
+import { RARE_SALE_MS } from '@/domain/city/rare-sales'
 import { isLiveConfigured, type ServerConfig } from '@/shared/config'
 import type { GameDb } from '@/shared/db'
 import type { Fetcher } from '@/shared/http'
@@ -71,12 +72,17 @@ export class CityDirector {
   private applyDue(now: number) {
     if (!this.schedule.length) return
     while (this.schedule.length && this.schedule[0].at <= now) {
-      const { beat } = this.schedule.shift() as {
+      const { at, beat } = this.schedule.shift() as {
         at: number
         beat: CityPlanBeat
       }
       for (const action of beat.actions) {
-        const result = this.city.apply(action)
+        if (action.type === 'start-rare-sale' && at + RARE_SALE_MS <= now)
+          continue
+        const result = this.city.apply(
+          action,
+          action.type === 'start-rare-sale' ? at : undefined
+        )
         if (result.accepted) {
           this.calls.push(action.type)
         }
@@ -115,6 +121,7 @@ export class CityDirector {
     if (this.disposed || !this.players) return
     // Only commit the day once a plan exists (live or scripted fallback), so a
     // skipped live draft re-runs next tick instead of silently doing nothing.
+    if (beats?.length && !this.city.validatePlan(beats).accepted) beats = null
     if (beats?.length) this.lastSource = 'live'
     else {
       beats = scriptedDayPlan().beats
@@ -152,6 +159,18 @@ export class CityDirector {
         providerOptions: { meta: { reasoningEffort: 'minimal' } },
       }
     )
+    if (
+      plan.length > 0 &&
+      !plan.some((beat) =>
+        beat.actions.some((action) => action.type === 'start-rare-sale')
+      )
+    ) {
+      const sale = scriptedDayPlan().beats.find((beat) =>
+        beat.actions.some((action) => action.type === 'start-rare-sale')
+      )
+      if (sale && plan.length < 24) plan.push(sale)
+      else return []
+    }
     return plan
   }
 

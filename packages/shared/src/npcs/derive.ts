@@ -72,6 +72,7 @@ function entries<V>(fn: (def: NpcDefinition) => V): Record<NpcId, V> {
 
 export const NPCS: Record<NpcId, NpcPersona> = entries(persona)
 export const NPC_ACTIVITIES = entries((def) => def.activities)
+export const NPC_SHOPS = entries((def) => def.shop ?? [])
 
 export const NPC_NAMES: Record<NpcId, Text> = entries((d) => ({
   en: d.profile.names.en,

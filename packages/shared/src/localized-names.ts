@@ -20,6 +20,8 @@ export const PLACE_NAMES: Record<LocationId, Text> = {
 export const MARKET_ITEM_NAMES: Record<MarketItemId, Text> = {
   coffee: { en: 'iced milk coffee', vi: 'cà phê sữa' },
   banana: { en: 'ripe banana', vi: 'chuối chín' },
+  baguette: { en: 'bánh mì', vi: 'bánh mì' },
+  pho: { en: 'bowl of phở', vi: 'tô phở' },
 }
 
 export function npcName(id: NpcId, locale: Locale = 'en') {

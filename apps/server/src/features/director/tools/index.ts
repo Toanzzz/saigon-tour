@@ -46,6 +46,8 @@ export function directorPlanTools(
         // plan can only carry beats the live apply step will accept.
         const dry = city.validate(parsed.data.actions as CityAction[])
         if (!dry.accepted) return dry
+        const scheduled = city.validatePlan([...plan, parsed.data])
+        if (!scheduled.accepted) return scheduled
         plan.push(parsed.data)
         return { accepted: true, beats: plan.length }
       },

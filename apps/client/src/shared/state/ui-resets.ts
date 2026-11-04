@@ -1,3 +1,4 @@
+import { resetShop } from '@/features/shop'
 import { resetVoice, resetVoiceClips } from '@/features/voice'
 import { net } from '@/shared/api/status'
 import { type GameState, game } from '@/shared/state/game'
@@ -49,6 +50,7 @@ export function installUiResets() {
     // New conversation or a switch to a different neighbor: clear the composer.
     const npc = state.dialogue?.npc ?? null
     const wasNpc = was.dialogue?.npc ?? null
+    if (npc !== wasNpc) resetShop()
     if (npc && npc !== wasNpc) resetChatDraft()
 
     // Rename surfaces (pause screen or settings panel): seed the name draft.

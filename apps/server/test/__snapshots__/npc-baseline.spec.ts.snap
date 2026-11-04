@@ -625,8 +625,8 @@ player has enjoyed, and remember their favorite drink or place when they tell yo
 Knowledge scope: Vietnamese coffee, bánh mì, market mornings, the food alley,
 and the walk along Lê Lợi to Nguyễn Huệ and City Hall. Suggest the Post Office for
 a postcard and the riverfront for a slower afternoon.
-You propose neighborhood errands through the tools. Purchases use the market controls. Players buy food
-using the market's purchase controls. Never claim that a chat has spent coins or
+You propose neighborhood errands through the tools. Players buy coffee through your Shop
+controls and other goods from their merchant's Shop. Never claim that a chat has spent coins or
 added items. You can remember a player's preferences and read their world context.
 
 Motive: you talk about coffee like a sommelier.
@@ -7780,6 +7780,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
   },
   "UNLOCKS": {
     "ao-ba-ba": {
+      "acquisition": "friendship",
       "giver": "ba",
       "id": "ao-ba-ba",
       "kind": "cosmetic",
@@ -7795,6 +7796,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "ao-dai": {
+      "acquisition": "friendship",
       "giver": "thao",
       "id": "ao-dai",
       "kind": "cosmetic",
@@ -7810,6 +7812,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "apron": {
+      "acquisition": "friendship",
       "giver": "hoa",
       "id": "apron",
       "kind": "cosmetic",
@@ -7825,6 +7828,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "barista": {
+      "acquisition": "friendship",
       "giver": "mai",
       "id": "barista",
       "kind": "cosmetic",
@@ -7840,6 +7844,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "basket-bicycle": {
+      "acquisition": "friendship",
       "giver": "ba",
       "id": "basket-bicycle",
       "kind": "vehicle",
@@ -7849,6 +7854,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "beret": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "son",
       "id": "beret",
@@ -7859,6 +7865,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "bicycle": {
+      "acquisition": "friendship",
       "giver": "linh",
       "id": "bicycle",
       "kind": "vehicle",
@@ -7868,6 +7875,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "bucket-hat": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "ba",
       "id": "bucket-hat",
@@ -7878,6 +7886,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "bunny": {
+      "acquisition": "friendship",
       "giver": "linh",
       "id": "bunny",
       "kind": "pet",
@@ -7887,6 +7896,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "camera-strap": {
+      "acquisition": "friendship",
       "attachment": "torso",
       "giver": "alex",
       "id": "camera-strap",
@@ -7897,6 +7907,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "cat": {
+      "acquisition": "friendship",
       "giver": "mai",
       "id": "cat",
       "kind": "pet",
@@ -7906,6 +7917,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "chick": {
+      "acquisition": "friendship",
       "giver": "thao",
       "id": "chick",
       "kind": "pet",
@@ -7915,6 +7927,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "cub": {
+      "acquisition": "friendship",
       "giver": "tam",
       "id": "cub",
       "kind": "vehicle",
@@ -7925,6 +7938,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "dog": {
+      "acquisition": "friendship",
       "giver": "hoa",
       "id": "dog",
       "kind": "pet",
@@ -7934,6 +7948,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "evening": {
+      "acquisition": "friendship",
       "giver": "vy",
       "id": "evening",
       "kind": "cosmetic",
@@ -7948,7 +7963,23 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "slot": "outfit",
       "tier": "warm",
     },
+    "festival-ao-dai": {
+      "acquisition": "shop",
+      "id": "festival-ao-dai",
+      "kind": "cosmetic",
+      "outfitModels": {
+        "man": "outfits/festival-ao-dai-man",
+        "woman": "outfits/festival-ao-dai-woman",
+      },
+      "palette": {
+        "outfit-bottom": "#24283b",
+        "outfit-top": "#192b51",
+      },
+      "price": 1500,
+      "slot": "outfit",
+    },
     "headphones": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "thao",
       "id": "headphones",
@@ -7959,6 +7990,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "helmet": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "tam",
       "id": "helmet",
@@ -7968,7 +8000,18 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "slot": "hat",
       "tier": "neutral",
     },
+    "lacquer-non-la": {
+      "acquisition": "shop",
+      "attachment": "head",
+      "id": "lacquer-non-la",
+      "kind": "cosmetic",
+      "model": "cosmetics/lacquer-non-la",
+      "price": 800,
+      "scale": 1,
+      "slot": "hat",
+    },
     "lantern-backpack": {
+      "acquisition": "friendship",
       "attachment": "torso",
       "giver": "vy",
       "id": "lantern-backpack",
@@ -7979,6 +8022,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "lantern-hat": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "vy",
       "id": "lantern-hat",
@@ -7989,6 +8033,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "non-la": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "hoa",
       "id": "non-la",
@@ -7999,6 +8044,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "parrot": {
+      "acquisition": "friendship",
       "giver": "son",
       "id": "parrot",
       "kind": "pet",
@@ -8008,6 +8054,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "photo-vest": {
+      "acquisition": "friendship",
       "giver": "alex",
       "id": "photo-vest",
       "kind": "cosmetic",
@@ -8023,6 +8070,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "satchel": {
+      "acquisition": "friendship",
       "attachment": "torso",
       "giver": "son",
       "id": "satchel",
@@ -8033,6 +8081,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "neutral",
     },
     "scarf": {
+      "acquisition": "friendship",
       "attachment": "torso",
       "giver": "mai",
       "id": "scarf",
@@ -8042,7 +8091,18 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "slot": "accessory",
       "tier": "neutral",
     },
+    "silk-scarf": {
+      "acquisition": "shop",
+      "attachment": "torso",
+      "id": "silk-scarf",
+      "kind": "cosmetic",
+      "model": "cosmetics/silk-scarf",
+      "price": 1100,
+      "scale": 1,
+      "slot": "accessory",
+    },
     "sunglasses": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "tam",
       "id": "sunglasses",
@@ -8053,6 +8113,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "warm",
     },
     "vespa": {
+      "acquisition": "friendship",
       "giver": "alex",
       "id": "vespa",
       "kind": "vehicle",
@@ -8063,6 +8124,7 @@ exports[`npc baseline > shared NPC tables are unchanged 1`] = `
       "tier": "close",
     },
     "volunteer-cap": {
+      "acquisition": "friendship",
       "attachment": "head",
       "giver": "linh",
       "id": "volunteer-cap",

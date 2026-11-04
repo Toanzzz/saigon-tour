@@ -137,6 +137,7 @@ export interface NpcDefinition {
   profile: NpcProfile
   story: NpcStory
   unlocks: UnlockSpec[]
+  shop?: readonly MarketItemId[]
   look: NpcLook
   place: NpcPlace
 }
@@ -149,6 +150,7 @@ export function defineNpc<const T extends NpcDefinition>(def: T): T {
 /** Resident defaults: fills the repetitive role/knowledge/idle text from today's resident() template. */
 export interface ResidentInput {
   id: NpcId
+  shop?: readonly MarketItemId[]
   activities: NpcActivities
   name: Text
   completion?: Text
@@ -199,6 +201,7 @@ export function defineResident(input: ResidentInput): NpcDefinition {
   const seedPlaceVi = home === 'park' ? 'cô Hoa ở chợ' : 'chị Linh ở công viên'
   return {
     id: input.id,
+    ...(input.shop ? { shop: input.shop } : {}),
     activities: input.activities,
     profile: {
       kind: 'resident',

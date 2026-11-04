@@ -102,7 +102,12 @@ try {
       index++
     }
     await sharp({
-      create: { width: 1200, height: 1150, channels: 4, background: '#fff6d8' },
+      create: {
+        width: 1200,
+        height: Math.ceil(index / 6) * 230,
+        channels: 4,
+        background: '#fff6d8',
+      },
     })
       .composite(composites)
       .png()

@@ -11,6 +11,33 @@ const DAY = '2098-03-01T08:00:00Z'
 const atDay = (offsetMs = 0) => Date.parse(DAY) + offsetMs
 
 describe('room city director', () => {
+  it.each([10, 19])(
+    'keeps the scripted rare window fixed when the next tick is at minute %i',
+    async (minute) => {
+      let now = atDay()
+      const city = new CityWorld(() => now)
+      const director = new CityDirector(city, config, ctx.fx.db, vi.fn())
+      await director.tick(now, 1)
+      now = atDay(minute * 60_000)
+      await director.tick(now, 1)
+      expect(city.snapshot().rareOffer).toMatchObject({
+        startedAt: atDay(10 * 60_000),
+        endsAt: atDay(20 * 60_000),
+      })
+    }
+  )
+
+  it('skips rare windows that ended while the room was empty', async () => {
+    let now = atDay()
+    const city = new CityWorld(() => now)
+    const director = new CityDirector(city, config, ctx.fx.db, vi.fn())
+    await director.tick(now, 1)
+    now = atDay(21 * 60_000)
+    await director.tick(now, 1)
+    expect(city.snapshot().rareOffer).toBeUndefined()
+    expect(director.calls).not.toContain('start-rare-sale')
+  })
+
   it('assigns a concrete activity in the first scripted beat', async () => {
     const city = new CityWorld(() => atDay())
     const director = new CityDirector(city, config, ctx.fx.db, vi.fn())

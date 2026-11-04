@@ -71,6 +71,20 @@
       "when": 1793545685564,
       "tag": "0009_chemical_silver_centurion",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793740000000,
+      "tag": "0010_item_actions",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793768027907,
+      "tag": "0011_item_action_constraint",
+      "breakpoints": true
     }
   ]
 }

@@ -105,7 +105,9 @@ export function WardrobeInspector({ capture = false }: { capture?: boolean }) {
             <summary>{m.debug_details()}</summary>
             {selected && (
               <p>
-                {npcLabel(selected.giver)} · {tierLabel(selected.tier)}
+                {selected.acquisition === 'friendship'
+                  ? `${npcLabel(selected.giver)} · ${tierLabel(selected.tier)}`
+                  : m.shop_rare()}
               </p>
             )}
             <pre>{JSON.stringify(selected, null, 2)}</pre>

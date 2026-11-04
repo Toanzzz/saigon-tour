@@ -7,12 +7,19 @@ the same local offsets used by build-tourist.py. Budget: <=1.5k triangles each.
 """
 import math
 import sys
+from pathlib import Path
 
 import bpy
 from mathutils import Matrix, Vector
 
+sys.path.insert(0, str(Path(__file__).parent))
+sys.dont_write_bytecode = True
+from rare_cosmetics import rare_cosmetics
+
 repo = sys.argv[sys.argv.index("--") + 1]
 out = f"{repo}/assets/cosmetics"
+only = next((arg.split("=", 1)[1].split(",") for arg in sys.argv
+             if arg.startswith("--only=")), [])
 
 # Head top in head-local space matches build-tourist.py.
 HEAD_TOP = 0.676
@@ -217,6 +224,7 @@ COSMETICS = {
     "satchel": (satchel, "torso"),
     "headphones": (headphones, "head"),
 }
+COSMETICS.update(rare_cosmetics(material, cone, torus, box, HEAD_TOP))
 
 
 def preview(name):
@@ -231,10 +239,16 @@ def preview(name):
         scene.collection.objects.link(cam)
     scene.camera = cam
     cam.data.type = "ORTHO"
-    cam.data.ortho_scale = 1.0
-    a = math.radians(25)
-    cam.location = (math.sin(a) * 2.0, -math.cos(a) * 2.0, 0.6)
-    cam.rotation_euler = (math.radians(82), 0, a)
+    points = [obj.matrix_world @ Vector(corner)
+              for obj in scene.objects if obj.type == "MESH"
+              for corner in obj.bound_box]
+    low = Vector(tuple(min(point[i] for point in points) for i in range(3)))
+    high = Vector(tuple(max(point[i] for point in points) for i in range(3)))
+    center = (low + high) / 2
+    size = max(high - low)
+    cam.data.ortho_scale = size * 1.5
+    cam.location = center + Vector((0.8, -2, 0.9)) * size
+    cam.rotation_euler = (center - cam.location).to_track_quat("-Z", "Y").to_euler()
     scene.render.filepath = f"{out}/preview-{name}.png"
     bpy.ops.render.render(write_still=True)
 
@@ -251,6 +265,8 @@ def attachment_origins():
 
 origins = attachment_origins()
 for cid, (builder, bone) in COSMETICS.items():
+    if only and cid not in only:
+        continue
     bpy.ops.wm.read_factory_settings(use_empty=True)
     parts = builder()
     preview(cid)
@@ -259,9 +275,12 @@ for cid, (builder, bone) in COSMETICS.items():
     inverse = origins[bone].inverted()
     for obj in parts:
         obj.matrix_world = inverse @ obj.matrix_world
+    bpy.ops.object.select_all(action="DESELECT")
     for obj in parts:
         obj.select_set(True)
     bpy.context.view_layer.objects.active = parts[0]
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=f"{out}/{cid}.blend")
     bpy.ops.export_scene.gltf(
         filepath=f"{out}/{cid}.glb",
         use_selection=True,

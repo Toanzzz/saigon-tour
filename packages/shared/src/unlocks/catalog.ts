@@ -19,12 +19,10 @@ export type UnlockKind = (typeof UNLOCK_KINDS)[number]
 /** Friendship tiers that gate which unlock a giver will promise. */
 export type UnlockTier = 'neutral' | 'warm' | 'close'
 
-export interface UnlockDef {
+interface UnlockAppearance {
   id: string
   kind: UnlockKind
   slot: UnlockSlot
-  giver: UnlockGiver
-  tier: UnlockTier
   /** Runtime GLB path under the client public models root. Omitted for palette-only outfits. */
   model?: string
   /** Uniform scale applied when rendering the GLB. */
@@ -48,3 +46,16 @@ export interface UnlockDef {
   /** Full rigged avatar variants, with garment geometry and matching animations. */
   outfitModels?: Partial<Record<'man' | 'woman', string>>
 }
+
+export type FriendshipUnlock = UnlockAppearance & {
+  acquisition: 'friendship'
+  giver: UnlockGiver
+  tier: UnlockTier
+}
+export type ShopUnlock = UnlockAppearance & {
+  acquisition: 'shop'
+  price: number
+  giver?: never
+  tier?: never
+}
+export type UnlockDef = FriendshipUnlock | ShopUnlock

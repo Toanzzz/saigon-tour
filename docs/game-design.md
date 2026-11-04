@@ -19,6 +19,31 @@ The player explores and talks to neighbors to complete neighbor-authored errands
 - Delivery consumes the carried parcel; verification grants each reward once.
 - The same journey remains playable when the model or backend is unavailable, visibly labeled as an offline guide.
 
+## NPC shops and stamina
+
+NPC conversations expose a Shop tab when the speaker has stock. Mai sells coffee
+for 3 coins, the fruit vendor sells bananas for 2, the bread vendor sells bánh mì
+for 5, and Cô Hoa sells bowls of phở for 8. Goods stay in the journal's bag until
+used. Quantities promised to unfinished delivery or BRING steps are reserved.
+BUY instructions and map pins identify the merchant.
+
+Stamina starts at 100. On-foot sprinting drains it in twelve seconds; walking,
+standing, conversations, and rides restore 12.5 per second after a 1.5-second
+delay. Exhaustion allows walking until stamina reaches 25. Pause freezes stamina.
+Desktop uses Shift; mobile provides a hold-to-sprint control.
+
+Coffee halves sprint drain, bánh mì increases recovery by 50%, and phở adds 50
+maximum stamina and restores 50. Each timed effect lasts three real minutes;
+different effects combine, and another copy refreshes its duration. Bananas
+restore 40 immediately. Effect icons show remaining seconds. Inventory and
+effect expiry persist on the server; the stamina gauge starts full on page load.
+
+The Director schedules one to three ten-minute rare-sale windows per UTC day,
+at least an hour apart. It selects a named neighbor and one shop-exclusive
+wearable: lacquer nón lá (800 coins), silk scarf (1,100), or festival áo dài
+(1,500). The room shares the offer; each player may buy their own copy and equip
+it through the wardrobe. Shop exclusives do not enter friendship reward pools.
+
 ## Level plan
 
 A compressed District 1 loop, about 160 × 160 units, bounded by the Sài Gòn River and outer streets. Landmark order and bearings come from OpenStreetMap with Chợ Bến Thành at the origin; distances are shortened so any stop is a short walk or one bus ride. Game +x follows Lê Lợi, so real north points up and to the right on the map.

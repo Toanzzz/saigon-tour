@@ -9,6 +9,7 @@ import { unlocks } from './unlocks'
 export default defineNpc({
   activities,
   id: 'mai',
+  shop: ['coffee'],
   profile,
   story,
   unlocks,

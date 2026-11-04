@@ -28,9 +28,9 @@ or establish rights to an unverified source.
 | Palms, trees, planting | `nature-kit` | Kenney | `nature-kit/License.txt`, CC0 |
 | Food and stall props | `food-kit` | Kenney | `food-kit/License.txt`, CC0 |
 | Pet followers (dog, bunny, cat, parrot, chick) | `cube-pets` | Kenney | `cube-pets/License.txt`, CC0 |
-| Cosmetic unlocks (hats, accessories) | `cosmetics` | Project artwork | Built by `scripts/blender/build-cosmetics.py`; original low-poly meshes |
+| Cosmetic unlocks (hats, accessories) | `cosmetics` | Project artwork | Built by `scripts/blender/build-cosmetics.py` and `scripts/blender/rare_cosmetics.py`; original low-poly meshes |
 | Vehicle unlocks (Cub, Vespa) | `vehicles` | Project artwork | Built by `scripts/blender/build-vehicles.py`; original low-poly meshes |
-| Reward outfits | `outfits` | Kenney base rig with project garments | `outfits/CREDITS.md`; `scripts/blender/build-outfits.py`; CC0 base |
+| Wardrobe outfits | `outfits` | Kenney base rig with project garments | `outfits/CREDITS.md`; `scripts/blender/build-outfits.py`; CC0 base |
 | Collectible red star coin | `collectibles/coin.glb` | Project artwork | Procedural mesh in `scripts/blender/build-collectibles.py` |
 | Per-NPC package assets | `packages/npc-<id>/assets` | See each package | `packages/npc-<id>/assets/CREDITS.md` |
 

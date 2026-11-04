@@ -22,6 +22,8 @@ const anchors = {
   vy: [64, -18],
   son: [103, -78],
   thao: [94, -31],
+  'bread-vendor': [-34, 2],
+  'fruit-vendor': [-11, 2],
 }
 const itemLabels = {
   herbs: 'fresh herbs',
@@ -143,6 +145,39 @@ export async function offerQuest(page, giver = 'hoa') {
   assert(offered.id.startsWith('q_'))
   return offered
 }
+
+export async function buyGood(page, itemId) {
+  const merchants = {
+    coffee: 'mai',
+    banana: 'fruit-vendor',
+    baguette: 'bread-vendor',
+    pho: 'hoa',
+  }
+  const labels = {
+    coffee: 'iced milk coffee',
+    banana: 'ripe banana',
+    baguette: 'bánh mì',
+    pho: 'bowl of phở',
+  }
+  await meet(page, merchants[itemId])
+  const vi = await page.evaluate(() => document.documentElement.lang === 'vi')
+  await page
+    .getByRole('button', { name: vi ? 'Cửa hàng' : 'Shop', exact: true })
+    .click()
+  const localized = {
+    coffee: 'cà phê sữa',
+    banana: 'chuối chín',
+    baguette: 'bánh mì',
+    pho: 'tô phở',
+  }
+  await page
+    .getByRole('button', {
+      name: `${vi ? 'Mua' : 'Buy'} ${vi ? localized[itemId] : labels[itemId]}`,
+      exact: true,
+    })
+    .click()
+}
+
 export async function followQuest(page, offered) {
   for (const index of offered.steps.keys()) {
     const current = (await diagnostics(page)).state.quests.find(
@@ -152,17 +187,7 @@ export async function followQuest(page, offered) {
     if (step.type === 'GO_TO') {
       await teleport(page, ...locations[step.locationId])
     } else if (step.type === 'BUY') {
-      await teleport(page, ...locations.market)
-      await page
-        .getByRole('button', { name: 'Browse market goods', exact: true })
-        .click()
-      await page
-        .getByRole('button', {
-          name: new RegExp(
-            step.marketItemId === 'coffee' ? 'Cà phê sữa' : 'Chuối chín'
-          ),
-        })
-        .click()
+      await buyGood(page, step.marketItemId)
     } else {
       await meet(page, step.npcId)
       if (step.type === 'DELIVER' || step.type === 'BRING')

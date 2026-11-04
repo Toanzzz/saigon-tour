@@ -95,14 +95,15 @@ export function AffinityAvatar({
               })
             : m.friendship_top()}
         </p>
-        {nextUnlock && level < FRIENDSHIP_TIERS[nextUnlock.tier] && (
-          <p className="affinity-unlock">
-            {m.tier_unlocks_hint({
-              tier: tierLabel(nextUnlock.tier),
-              item: unlockLabel(nextUnlock.id),
-            })}
-          </p>
-        )}
+        {nextUnlock?.acquisition === 'friendship' &&
+          level < FRIENDSHIP_TIERS[nextUnlock.tier] && (
+            <p className="affinity-unlock">
+              {m.tier_unlocks_hint({
+                tier: tierLabel(nextUnlock.tier),
+                item: unlockLabel(nextUnlock.id),
+              })}
+            </p>
+          )}
         <p className="affinity-tip">
           {tier.id === 'cold'
             ? m.errands_cold({ name: NPCS[npcId].name })

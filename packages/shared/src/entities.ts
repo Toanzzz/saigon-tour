@@ -58,6 +58,7 @@ export const ItemIdSchema = z.enum([
   'baguette',
   'coffee',
   'banana',
+  'pho',
   'cake',
   'coffee-beans',
   'sheet-music',
@@ -66,12 +67,39 @@ export const ItemIdSchema = z.enum([
 export type ItemId = z.infer<typeof ItemIdSchema>
 export const MilestoneIdSchema = z.enum(['evening-concert'])
 export type MilestoneId = z.infer<typeof MilestoneIdSchema>
-export const MarketItemIdSchema = z.enum(['coffee', 'banana'])
+export const MarketItemIdSchema = z.enum([
+  'coffee',
+  'banana',
+  'baguette',
+  'pho',
+])
 export type MarketItemId = z.infer<typeof MarketItemIdSchema>
 export const MARKET_ITEMS = {
-  coffee: { label: 'iced milk coffee', price: 3 },
-  banana: { label: 'ripe banana', price: 2 },
-} as const satisfies Record<MarketItemId, { label: string; price: number }>
+  coffee: {
+    label: 'iced milk coffee',
+    price: 3,
+    icon: 'coffee',
+    effect: { kind: 'drain', amount: 0.5, durationMs: 180_000 },
+  },
+  banana: {
+    label: 'ripe banana',
+    price: 2,
+    icon: 'banana',
+    effect: { kind: 'restore', amount: 40, durationMs: 0 },
+  },
+  baguette: {
+    label: 'bánh mì',
+    price: 5,
+    icon: 'baguette',
+    effect: { kind: 'regen', amount: 1.5, durationMs: 180_000 },
+  },
+  pho: {
+    label: 'bowl of phở',
+    price: 8,
+    icon: 'pho',
+    effect: { kind: 'capacity', amount: 50, durationMs: 180_000 },
+  },
+} as const
 export const SourceSchema = z.enum(['live', 'fallback'])
 export type AgentSource = z.infer<typeof SourceSchema>
 

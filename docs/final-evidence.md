@@ -1,5 +1,46 @@
 # Final evidence
 
+## NPC shops, stamina, and rare wearables — November 4, 2026
+
+- Proven live: headless Playwright at 1440×900 and 390×844 in English and
+  Vietnamese uses real NPC Shop buttons and bag Use controls. Four goods cost
+  3/2/5/8 coins; the wallet moves 30 → 27 → 25 → 20 → 12. Thirty-six real
+  purchase/consumption receipts succeed. The server rejects unaffordable
+  purchases with 409. Three timed effects persist on reload, and Continue
+  restores the active phở capacity at 150/150. All four flows report no page
+  exceptions or horizontal overflow.
+  Evidence: `artifacts/shops-live/results.json` and shop/bag/reload captures.
+- Proven browser controls: four additional desktop/mobile × EN/VI flows buy
+  offline coffee, consume it, exhaust stamina through keyboard or simultaneous
+  joystick/sprint touches, release sprint, recover past 25, and protect a
+  delivery-reserved coffee. A phở use updates capacity to 150. Synthetic
+  rare-sale state and HTTP responses exercise purchase, Owned, Equip, and
+  expired-sale controls; these captures do not establish live Director sale
+  generation. All four flows report no page exceptions or overflow.
+  Evidence: `artifacts/shops-stamina/results.json` and captures.
+- Proven assets: 26 wardrobe control states cover the three rare wearables,
+  both bodies, idle/walk/sprint/sit, and combined driving. Selected animation
+  clips advance, attachment bones match, and rendered pixels change during
+  motion. The hat has 588 triangles; the scarf 848; the outfit variants
+  1,110/1,156, each retaining 32 animation clips. Six body-specific WebP
+  thumbnails render successfully. Editable sources and compressed runtime
+  GLBs are present.
+  Evidence: `artifacts/rare-wearables/motion-qa.json`,
+  `model-metrics.json`, captures, and `artifacts/wardrobe/thumbnails.json`.
+- Proven server rules: receipt replay, payload mismatch, atomic spending,
+  quest credit/reservations, forged purchase rejection, live merchant
+  placement, independent buyers, sale expiry, hourly spacing, and daily caps
+  have regression coverage. A scheduled minute 10–20 sale retains that window
+  when processed at minute 19. Migration coverage preserves an existing
+  receipt; the local API is healthy with the receipt-table migrations applied.
+- Ordered gates pass: `bun run check` → `bun run check:types` →
+  `bun run build` → `bun run test`. Server: 549 passed, 3 skipped.
+  Client: 371 passed. `bun run test:integration` passes all three real
+  Postgres cases, including concurrent requests through independent services:
+  ten identical requests charge once, duplicate consumption applies once,
+  and eight competing rare purchases grant one owned item and one debit.
+  Logs: `/tmp/saigon-shops-{check,types,build,test,integration}.log`.
+
 ## Voice composer listening, Send, and replay — November 3, 2026
 
 - Headless Playwright drives the local client at 1440×900 and 390×844 through

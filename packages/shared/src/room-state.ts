@@ -1,6 +1,6 @@
 import { type MapSchema, schema, t } from '@colyseus/schema'
 import { z } from 'zod'
-import type { CitySnapshot } from './city/schema'
+import { type CitySnapshot, RareOfferSchema } from './city/schema'
 import type { PresencePlayer } from './multiplayer'
 import {
   type AvatarBody,
@@ -94,6 +94,7 @@ export const WorldRoomState = schema(
     needs: t.map('string'),
     npcActivities: t.map(NpcActivityState),
     headlines: t.map(CityHeadlineState),
+    rareOffer: t.string().default(''),
   },
   'WorldRoomState'
 )
@@ -131,6 +132,7 @@ export function toPresence(state: PresenceState): PresencePlayer {
 export function syncCity(state: WorldRoomState, city: CitySnapshot) {
   state.cityRevision = city.revision
   state.weather = city.weather
+  state.rareOffer = city.rareOffer ? JSON.stringify(city.rareOffer) : ''
   const npcIds = new Set(Object.keys(city.npcPlacements))
   for (const id of [...state.npcPlacements.keys()])
     if (!npcIds.has(id)) state.npcPlacements.delete(id)
@@ -173,6 +175,13 @@ export function syncCity(state: WorldRoomState, city: CitySnapshot) {
 }
 
 export function cityFromRoomState(state: WorldRoomState): CitySnapshot {
+  let rareOffer: CitySnapshot['rareOffer']
+  try {
+    const parsed = RareOfferSchema.safeParse(
+      JSON.parse(state.rareOffer || 'null')
+    )
+    if (parsed.success) rareOffer = parsed.data
+  } catch {}
   const npcPlacements = {} as CitySnapshot['npcPlacements']
   for (const [id, entry] of state.npcPlacements)
     npcPlacements[id as keyof typeof npcPlacements] = {
@@ -183,6 +192,7 @@ export function cityFromRoomState(state: WorldRoomState): CitySnapshot {
     }
   return {
     revision: state.cityRevision,
+    ...(rareOffer ? { rareOffer } : {}),
     weather: state.weather as CitySnapshot['weather'],
     npcPlacements,
     events: [...state.events.values()].map((entry) => ({

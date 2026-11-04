@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { mkdir, writeFile } from 'node:fs/promises'
 import {
+  buyGood,
   chromium,
   diagnostics,
   dismiss,
@@ -155,17 +156,7 @@ try {
     if (buyStep) {
       await dismiss(page)
       await hooks(page, 'setCurrency', 0)
-      await teleport(page, ...locations.market)
-      await page
-        .getByRole('button', { name: 'Browse market goods', exact: true })
-        .click()
-      await page
-        .getByRole('button', {
-          name: new RegExp(
-            buyStep.marketItemId === 'coffee' ? 'Cà phê' : 'Chuối'
-          ),
-        })
-        .click()
+      await buyGood(page, buyStep.marketItemId)
       await page.waitForFunction(
         (id) =>
           window.__THREE_GAME_DIAGNOSTICS__?.state.quests

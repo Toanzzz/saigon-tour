@@ -61,6 +61,7 @@ export const ITEM_IDS = [
   'baguette',
   'coffee',
   'banana',
+  'pho',
   'cake',
   'coffee-beans',
   'sheet-music',
@@ -72,7 +73,7 @@ export type ItemId = (typeof ITEM_IDS)[number]
 export const FRAGILE_ITEM_IDS = ['cake'] as const
 export type FragileItemId = (typeof FRAGILE_ITEM_IDS)[number]
 
-export const MARKET_ITEM_IDS = ['coffee', 'banana'] as const
+export const MARKET_ITEM_IDS = ['coffee', 'banana', 'baguette', 'pho'] as const
 export type MarketItemId = (typeof MARKET_ITEM_IDS)[number]
 
 export const MILESTONE_IDS = ['evening-concert'] as const

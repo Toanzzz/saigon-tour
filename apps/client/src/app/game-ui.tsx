@@ -2,6 +2,7 @@ import { useSelector } from '@tanstack/react-store'
 import { Conversation } from '@/features/conversation/conversation'
 import { NeighborhoodMap } from '@/features/map/map'
 import { RewardPanel } from '@/features/postcard/reward'
+import { StaminaHud } from '@/features/stamina'
 import { m } from '@/shared/i18n'
 import { type GameState, game, update } from '@/shared/state/game'
 import { Icon } from '@/shared/ui/icons'
@@ -14,7 +15,6 @@ import { Objective } from '@/widgets/hud/objective'
 import {
   JournalPanel,
   MapPanel,
-  MarketPanel,
   PausePanel,
   PostcardPanel,
   TransportPanel,
@@ -24,6 +24,7 @@ import { EmoteControls, PeoplePanel } from '@/widgets/hud/people'
 import { RideLine } from '@/widgets/hud/ride-line'
 import { RideToggle } from '@/widgets/hud/ride-toggle'
 import { TouchStick } from '@/widgets/hud/touch'
+import { TouchSprint } from '@/widgets/hud/touch-sprint'
 import { WaitingNotice } from '@/widgets/hud/waiting'
 import { WardrobePanel } from '@/widgets/hud/wardrobe'
 import { close, interact, nearby, openRiverPostcard } from './actions'
@@ -65,6 +66,7 @@ export function GameUI() {
   return (
     <div className="game-ui">
       <GameHeader state={state} />
+      {!xrPresenting && <StaminaHud />}
       <WaitingNotice />
       {clear && !xrPresenting && (
         <div className="party-invite-toast">
@@ -91,6 +93,7 @@ export function GameUI() {
           </button>
           <div className="touch-only">
             <TouchStick />
+            <TouchSprint />
             <button
               type="button"
               className="touch-interact"
@@ -115,16 +118,6 @@ export function GameUI() {
             >
               <kbd>E</kbd>
               {target.label}
-            </button>
-          )}
-          {state.world.locationId === 'market' && (
-            <button
-              type="button"
-              className="interaction-prompt market-prompt"
-              onClick={() => update({ panel: 'market' })}
-            >
-              <Icon name="leaf" size={20} />
-              {m.hud_browse_market()}
             </button>
           )}
           {state.world.locationId === 'river' && (
@@ -184,7 +177,6 @@ export function GameUI() {
       <Celebration />
       {state.dialogue && <Conversation state={state} />}
       {state.panel === 'transport' && <TransportPanel state={state} />}
-      {state.panel === 'market' && <MarketPanel state={state} />}
       {state.panel === 'postcard' && <PostcardPanel />}
       {state.panel === 'journal' && <JournalPanel state={state} />}
       {state.panel === 'map' && <MapPanel state={state} />}

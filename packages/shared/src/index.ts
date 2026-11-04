@@ -2,6 +2,7 @@ export * from './city'
 export * from './collectibles'
 export * from './contracts'
 export * from './events'
+export * from './goods'
 export * from './locale'
 export * from './localized-names'
 export * from './milestones'
@@ -9,7 +10,12 @@ export * from './multiplayer'
 export * from './names'
 export * from './neighbor-text'
 export * from './npc-stream'
-export { NPC_ACTIVITIES, NPC_LOOKS, type NpcLook } from './npcs/derive'
+export {
+  NPC_ACTIVITIES,
+  NPC_LOOKS,
+  NPC_SHOPS,
+  type NpcLook,
+} from './npcs/derive'
 export * from './npcs/registry'
 export * from './party'
 export * from './quest'

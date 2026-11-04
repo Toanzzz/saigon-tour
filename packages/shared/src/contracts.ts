@@ -6,6 +6,7 @@ import {
   NpcIdSchema,
   SourceSchema,
 } from './entities'
+import { ActiveEffectSchema } from './goods'
 import { LocaleSchema } from './locale'
 import { PartySnapshotSchema } from './party'
 import { FriendshipEventSchema, FriendshipMapSchema } from './quest/friendship'
@@ -30,6 +31,7 @@ export const WorldStateSchema = z
       .max(32),
     completedQuestIds: z.array(z.string().max(64)).max(32),
     currency: z.number().int().min(0).max(100000),
+    effects: z.array(ActiveEffectSchema).max(3).optional(),
   })
   .strict()
 export type WorldState = z.infer<typeof WorldStateSchema>

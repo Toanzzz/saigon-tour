@@ -3,12 +3,15 @@ import { InMemoryStore } from '@mastra/core/storage'
 import {
   bonusCurrency,
   completionBonus,
+  NPC_POSITIONS,
   type PlayerEvent,
   type QuestSpec,
 } from '@saigon/shared'
 import { afterAll, describe, expect, it } from 'vitest'
 import { createApp } from '@/app'
 import { QuestService } from '@/domain/quests'
+import { RoomManager } from '@/features/realtime'
+import { ShopService } from '@/features/shop'
 import { createDb, GameDb, readConfig } from '@/shared'
 import { required } from './support/npc'
 
@@ -208,6 +211,85 @@ describe.skipIf(!enabled)('Postgres persistence', () => {
         await db.sql.query('DELETE FROM "user" WHERE id=ANY($1::text[])', [
           userIds,
         ])
+    }
+  })
+  it('serializes shop receipts and rare ownership across independent Postgres services', async () => {
+    const config = { ...readConfig(), apiKey: undefined }
+    db ??= await createDb(config.databaseUrl)
+    const app = createApp(config, fetch, {
+      db,
+      orm: db.orm,
+      storage: new InMemoryStore({ id: randomUUID() }),
+    })
+    const rooms = new RoomManager({ bark: async () => ({ reply: '' }) })
+    const { user } = await app.auth.api.signInAnonymous()
+    try {
+      const player = await db.ensurePlayer(user)
+      rooms.connect(player, { send() {}, close() {} })
+      const presence = required(rooms.getPlayer(player.id))
+      presence.position = [...NPC_POSITIONS.mai]
+      presence.ride = null
+      const first = new ShopService(db, rooms)
+      const second = new ShopService(new GameDb(db.pool, db.pool), rooms)
+      const request = {
+        requestId: randomUUID(),
+        npcId: 'mai' as const,
+        itemId: 'coffee' as const,
+        events: [],
+      }
+      await Promise.all(
+        Array.from({ length: 10 }, (_, i) =>
+          (i % 2 ? first : second).buy(player.id, request)
+        )
+      )
+      const bought = await db.player(player.id)
+      expect(bought.world.currency).toBe(27)
+      expect(bought.world.inventory.coffee).toBe(1)
+      const use = {
+        requestId: randomUUID(),
+        itemId: 'coffee' as const,
+        events: [],
+      }
+      await Promise.all([first.use(player.id, use), second.use(player.id, use)])
+      expect((await db.player(player.id)).world.inventory.coffee).toBe(0)
+      expect((await db.player(player.id)).world.effects).toHaveLength(1)
+      await db.mutatePlayer(player.id, (save) => {
+        save.world.currency = 2000
+      })
+      const room = required(rooms.room(player.id))
+      room.city.apply({
+        type: 'start-rare-sale',
+        npcId: 'mai',
+        unlockId: 'lacquer-non-la',
+      })
+      const offer = required(room.city.snapshot().rareOffer)
+      const attempts = await Promise.allSettled(
+        Array.from({ length: 8 }, (_, i) =>
+          (i % 2 ? first : second).buy(player.id, {
+            requestId: randomUUID(),
+            npcId: 'mai',
+            offerId: offer.id,
+            events: [],
+          })
+        )
+      )
+      expect(
+        attempts.filter((result) => result.status === 'fulfilled')
+      ).toHaveLength(1)
+      const saved = await db.player(player.id)
+      expect(saved.world.currency).toBe(1200)
+      expect(
+        saved.unlocks.owned.filter((id) => id === 'lacquer-non-la')
+      ).toHaveLength(1)
+      const receipts = await db.sql.query(
+        'SELECT count(*)::int AS count FROM item_actions WHERE player_id=$1',
+        [player.id]
+      )
+      expect(receipts.rows[0]?.count).toBe(3)
+    } finally {
+      rooms.shutdown()
+      app.realtime.manager.shutdown()
+      await db.sql.query('DELETE FROM "user" WHERE id=$1', [user.id])
     }
   })
 })

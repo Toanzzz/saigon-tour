@@ -5,6 +5,25 @@ import type {
   Unlocks,
   WorldState,
 } from '@saigon/shared'
+import { EMPTY_UNLOCKS, STARTING_CURRENCY } from '@saigon/shared'
+
+export const initialPlayerSave = (): PlayerSave => ({
+  friendship: {},
+  revision: 0,
+  world: {
+    locationId: 'market',
+    inventory: {},
+    visitedLocations: ['market'],
+    talkedTo: [],
+    deliveredItems: [],
+    completedQuestIds: [],
+    currency: STARTING_CURRENCY,
+  },
+  quests: [],
+  completed: [],
+  reputation: 0,
+  unlocks: structuredClone(EMPTY_UNLOCKS),
+})
 
 export interface PlayerSave {
   friendship: FriendshipMap

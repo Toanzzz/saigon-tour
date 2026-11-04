@@ -16,6 +16,7 @@ import {
   stepFootCarry,
 } from '@/features/carry'
 import { Pet } from '@/features/pets'
+import { ConsumeEffect, canSprint, stepStamina } from '@/features/stamina'
 import { arriveAside } from '@/features/transport/asides'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
@@ -62,7 +63,31 @@ export function Player() {
     motion.frames++
     motion.dt += (delta - motion.dt) * 0.05
     if (isTestPausedForScreenshot()) return
-    if (!body.current || state.ride) return
+    const currentPosition = body.current?.translation()
+    const displaced =
+      currentPosition &&
+      Math.hypot(
+        currentPosition.x - motion.position.x,
+        currentPosition.z - motion.position.z
+      ) >
+        delta * 0.25
+    stepStamina(
+      delta,
+      Boolean(
+        displaced &&
+          motion.sprinting &&
+          !vehicle &&
+          !state.ride &&
+          !state.dialogue &&
+          state.panel === 'none'
+      ),
+      state.world.effects,
+      state.screen === 'playing' && state.guestStatus !== 'loading'
+    )
+    if (!body.current || state.ride) {
+      motion.sprinting = false
+      return
+    }
     if (motion.teleport) {
       cancelNavigation()
       const [tx, tz] = motion.teleport
@@ -83,11 +108,8 @@ export function Player() {
     const x = enabled ? (route ? routeX : input.x) : 0
     const z = enabled ? (route ? routeZ : input.z) : 0
     const moving = Math.hypot(x, z) > 0.1
-    const speed = vehicle
-      ? (UNLOCKS[vehicle]?.speed ?? 4)
-      : input.sprint
-        ? 6.5
-        : 4
+    const sprinting = moving && input.sprint && !vehicle && canSprint()
+    const speed = vehicle ? (UNLOCKS[vehicle]?.speed ?? 4) : sprinting ? 6.5 : 4
     velocity
       .set(x, 0, z)
       .clampLength(0, 1)
@@ -106,7 +128,7 @@ export function Player() {
     const pos = body.current.translation()
     motion.position.set(pos.x, pos.y, pos.z)
     motion.moving = moving
-    motion.sprinting = moving && input.sprint
+    motion.sprinting = sprinting
     if (moving) motion.heading = Math.atan2(velocity.x, velocity.z)
     if (avatar.current) avatar.current.rotation.y = motion.heading
     const holding = carriedFragile(state) !== null
@@ -115,7 +137,7 @@ export function Player() {
       if (holding) resetCarryRuntime()
     }
     stepFootCarry(delta, holding && moving)
-    const next = moving ? (input.sprint ? 'sprint' : 'walk') : 'idle'
+    const next = moving ? (sprinting ? 'sprint' : 'walk') : 'idle'
     setPlayerAnimation(next)
     timer.current += delta
     if (timer.current > 0.1) {
@@ -155,6 +177,7 @@ export function Player() {
             position={vehicle ? riderPosition(vehicle) : undefined}
             look={equipped}
           />
+          <ConsumeEffect />
           {carrying && !riding && !gl.xr.isPresenting && <CarriedCake />}
           {vehicle && !riding && <PersonalVehicle id={vehicle} />}
         </group>

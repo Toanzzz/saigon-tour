@@ -64,6 +64,21 @@ export const coinPickups = pgTable(
   },
   (t) => [primaryKey({ columns: [t.playerId, t.coinId] })]
 )
+export const itemActions = pgTable(
+  'item_actions',
+  {
+    playerId: uuid('player_id')
+      .references(() => players.id, { onDelete: 'cascade' })
+      .notNull(),
+    requestId: uuid('request_id').notNull(),
+    fingerprint: text().notNull(),
+    receipt: jsonb().notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.playerId, t.requestId] })]
+)
 export const npcFacts = pgTable(
   'npc_facts',
   {

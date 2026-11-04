@@ -9,8 +9,8 @@ import {
 import { QueryClientProvider } from '@tanstack/react-query'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { afterEach, describe, expect, it } from 'vitest'
-import { buyMarketItem } from '@/app/actions'
 import { questPin } from '@/features/map/targets'
+import { transact } from '@/features/shop/api'
 import { queryClient } from '@/shared/api/agent'
 import { city, resetCity } from '@/shared/api/city'
 import { game, initialState } from '@/shared/state/game'
@@ -77,7 +77,7 @@ describe('3a moved-target copy', () => {
 })
 
 describe('3a market credit', () => {
-  it('fronts an unaffordable quest BUY and never charges coins', () => {
+  it('fronts an unaffordable quest BUY and never charges coins', async () => {
     const buyQuest = createQuest(
       {
         giverNpcId: 'hoa',
@@ -99,24 +99,22 @@ describe('3a market credit', () => {
         locationId: 'market',
       },
     }))
-    buyMarketItem('coffee')
+    game.setState((s) => ({ ...s, guestStatus: 'offline' }))
+    await transact({ kind: 'buy', npcId: 'mai', itemId: 'coffee' })
     const state = game.state
     expect(state.world.currency).toBe(0)
     expect(state.world.inventory.coffee).toBe(1)
     expect(state.quests[0]?.progress[0]).toBe(true)
-    expect(state.pending.at(-1)).toMatchObject({
-      type: 'purchase',
-      itemId: 'coffee',
-      credit: true,
-    })
+    expect(state.pending).toEqual([])
   })
-  it('does not credit a non-quest BUY', () => {
+  it('does not credit a non-quest BUY', async () => {
     game.setState((s) => ({
       ...s,
       quests: [],
       world: { ...s.world, currency: 0, locationId: 'market' },
     }))
-    buyMarketItem('coffee')
+    game.setState((s) => ({ ...s, guestStatus: 'offline' }))
+    await transact({ kind: 'buy', npcId: 'mai', itemId: 'coffee' })
     expect(game.state.world.inventory.coffee ?? 0).toBe(0)
   })
 })
