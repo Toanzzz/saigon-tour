@@ -37,7 +37,8 @@ maximum stamina and restores 50. Each timed effect lasts three real minutes;
 different effects combine, and another copy refreshes its duration. Bananas
 restore 40 immediately. Effect icons show remaining seconds. Inventory and
 effect expiry persist on the server; the stamina gauge starts full on page load.
-The small gauge follows the character overhead and turns amber with a coffee
+The small gauge follows the character overhead while running and gently fades
+out when running stops. It turns amber with a coffee
 bean while coffee is active. Shop and bag cards use flat product illustrations,
 including wearable listings.
 

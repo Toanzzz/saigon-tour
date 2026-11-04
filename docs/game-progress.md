@@ -2,7 +2,7 @@
 
 ## NPC shops and stamina
 
-- A small overhead stamina bar follows the character. Coffee turns it amber and keeps it full for three minutes.
+- A small overhead stamina bar appears while running and fades out over 900ms when running stops. Coffee turns it amber and keeps it full for three minutes.
 - NPC shops and the bag use illustrated paper cards. Seven flat product images cover goods and rare wearables; equipped wearables retain their 3D models.
 - Multiplayer name tags project from the remote player's interpolated pose each frame.
 - Authored stock belongs to Mai (coffee), the fruit vendor (bananas), the bread vendor (bánh mì), and Cô Hoa (phở).

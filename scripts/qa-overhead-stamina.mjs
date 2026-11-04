@@ -39,6 +39,7 @@ async function sample(page) {
         rect.y + rect.height / 2 - expected.y
       ),
       pointerEvents: getComputedStyle(meter).pointerEvents,
+      opacity: Number(getComputedStyle(meter).opacity),
       fillColor: getComputedStyle(meter.querySelector('span')).backgroundColor,
     }
   })
@@ -158,6 +159,7 @@ try {
       `idle bar follows character: ${normal.anchorError}`
     )
     assert.equal(normal.pointerEvents, 'none')
+    assert.equal(normal.opacity, 0)
     assert.equal(await page.locator('.stamina-hud').count(), 0)
     await page.screenshot({ path: `${out}/normal-${width}.png` })
     const moving = await sprint(page, context, width, 900)
@@ -171,6 +173,12 @@ try {
       JSON.stringify({ normal, moving }, null, 2)
     )
     assert(moving.current < 99)
+    assert.equal(moving.opacity, 1)
+    await page.waitForTimeout(300)
+    const fading = await sample(page)
+    assert(fading.opacity > 0 && fading.opacity < 1)
+    await page.waitForTimeout(800)
+    assert.equal((await sample(page)).opacity, 0)
     assert(moving.anchorError < 6, `moving anchor: ${moving.anchorError}`)
     assert(Math.abs(moving.position[0] - normal.position[0]) > 1)
     await page.keyboard.press('j')
@@ -184,6 +192,7 @@ try {
     await page.keyboard.press('Escape')
     const coffee = await sprint(page, context, width, 1300)
     assert.equal(coffee.current, coffee.max)
+    assert.equal(coffee.opacity, 1)
     assert(coffee.className.includes('is-boosted'))
     assert(coffee.anchorError < 6)
     assert.notEqual(coffee.fillColor, normal.fillColor)

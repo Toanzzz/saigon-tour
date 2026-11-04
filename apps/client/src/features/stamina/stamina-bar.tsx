@@ -1,6 +1,9 @@
 import { Html } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
 import { useSelector } from '@tanstack/react-store'
+import { useRef } from 'react'
 import { m, marketItemLabel } from '@/shared/i18n'
+import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 import { xr } from '@/shared/xr/store'
 import { stamina } from './store'
@@ -8,6 +11,15 @@ import './style.css'
 
 /** A screen-facing ink-and-paper gauge anchored above the local avatar. */
 export function StaminaBar() {
+  const meter = useRef<HTMLDivElement>(null)
+  useFrame(() => {
+    const element = meter.current
+    if (!element) return
+    const running = motion.sprinting
+    if (element.classList.contains('is-running') === running) return
+    element.classList.toggle('is-running', running)
+    element.setAttribute('aria-hidden', String(!running))
+  })
   const view = useSelector(stamina, (value) => value)
   const showing = useSelector(
     game,
@@ -26,7 +38,9 @@ export function StaminaBar() {
       style={{ pointerEvents: 'none' }}
     >
       <div
+        ref={meter}
         id="stamina-meter"
+        aria-hidden="true"
         className={`stamina-overhead is-${state}${used && !reduced ? ' is-restored' : ''}`}
         role="progressbar"
         aria-label={

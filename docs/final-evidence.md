@@ -8,6 +8,10 @@
   full while sprinting. An accelerated expiry fixture restores normal drain.
   The 54×8px gauge follows the avatar within 6px during motion and hides while
   paused. Both flows report no page exceptions or horizontal overflow.
+  It starts transparent, becomes fully visible during running, has intermediate
+  opacity 300ms after stopping, and disappears after the 900ms fade. Coffee
+  retains the same running-only visibility.
+  Fade verification logs: `/tmp/saigon-stamina-fade-{check,types,build,test,browser}.log`.
   Evidence: `artifacts/overhead-stamina/results.json` and captures.
 - Two independent Chromium clients verify multiplayer name tags during keyboard
   movement and teleport stress at desktop and 390px. The remote player moves

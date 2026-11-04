@@ -13,6 +13,12 @@
     0 0 0 1px #fff5d7c9;
   pointer-events: none;
   user-select: none;
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+}
+.stamina-overhead.is-running {
+  opacity: 1;
+  transition-duration: 120ms;
 }
 .stamina-overhead-fill {
   display: block;
@@ -67,6 +73,9 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .stamina-overhead {
+    transition: none;
+  }
   .stamina-overhead.is-restored {
     animation: none;
   }
