@@ -7,7 +7,7 @@
 > run a few errands, catch a ride, and collect a little piece of the city to call your own.
 
 <p align="center">
-  <strong><a href="https://saigon-tour.toanz.workers.dev/?demo">▶ Play the demo in your browser</a></strong>
+  <strong><a href="https://saigon-tour.toanz.workers.dev/">▶ Play in your browser</a></strong>
   &nbsp;·&nbsp; No install &nbsp;·&nbsp; Desktop &amp; mobile &nbsp;·&nbsp; English &amp; Tiếng Việt
 </p>
 
@@ -63,7 +63,7 @@ _(Physical Quest 3 performance is still being tuned.)_
 | Map             | `M`                 | On-screen          |
 | Close / pause   | `Esc`               | On-screen          |
 
-**[▶ Start your journey →](https://saigon-tour.toanz.workers.dev/?demo)**
+**[▶ Start your journey →](https://saigon-tour.toanz.workers.dev/)**
 
 ## See it in action
 
