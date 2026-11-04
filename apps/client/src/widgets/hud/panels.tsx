@@ -191,7 +191,10 @@ export function PausePanel({ state }: { state: GameState }) {
         <span>
           <kbd>W A S D</kbd> {m.pause_key_move()}
         </span>
-        <span>
+        <span className="desktop-only">
+          <kbd>{m.controls_mouse_look()}</kbd> {m.pause_key_look()}
+        </span>
+        <span className="touch-only">
           <kbd>{m.controls_drag()}</kbd> {m.pause_key_look()}
         </span>
         <span>

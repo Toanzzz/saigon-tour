@@ -1,5 +1,5 @@
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { type PerspectiveCamera, Vector3 } from 'three'
 import { input } from '@/shared/runtime/input'
 import { motion } from '@/shared/runtime/motion'
@@ -34,36 +34,6 @@ export function CameraRig() {
   activeCamera = camera as PerspectiveCamera
   const target = useMemo(() => new Vector3(), [])
   const eye = useMemo(() => new Vector3(), [])
-  useEffect(() => {
-    const canvas = gl.domElement
-    let lastX = 0
-    const down = (event: PointerEvent) => {
-      if (game.state.screen !== 'playing') return
-      input.dragging = true
-      lastX = event.clientX
-      canvas.setPointerCapture(event.pointerId)
-    }
-    const move = (event: PointerEvent) => {
-      if (!input.dragging) return
-      input.yaw -= (event.clientX - lastX) * 0.007
-      lastX = event.clientX
-    }
-    const up = () => {
-      input.dragging = false
-    }
-    canvas.addEventListener('pointerdown', down)
-    canvas.addEventListener('pointermove', move)
-    canvas.addEventListener('pointerup', up)
-    canvas.addEventListener('pointercancel', up)
-    canvas.addEventListener('lostpointercapture', up)
-    return () => {
-      canvas.removeEventListener('pointerdown', down)
-      canvas.removeEventListener('pointermove', move)
-      canvas.removeEventListener('pointerup', up)
-      canvas.removeEventListener('pointercancel', up)
-      canvas.removeEventListener('lostpointercapture', up)
-    }
-  }, [gl])
   useFrame((_, delta) => {
     if (gl.xr.isPresenting) return
     const state = game.state

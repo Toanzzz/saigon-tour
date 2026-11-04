@@ -9,6 +9,7 @@ import { npcPoses } from '@/shared/world/npc-pose'
 import { ownModelPath } from '@/shared/world/places'
 import { RESIDENT_VISUALS as RESIDENTS } from '@/shared/world/residents'
 import { npcBehaviors, useNpcActivity } from './activity'
+import { NpcHitArea } from './hit-area'
 import { NpcLabel } from './npc-label'
 
 const activity = new Map<string, boolean>()
@@ -114,6 +115,7 @@ function AmbientResident({
       rotation={[0, resident.yaw ?? 0, 0]}
     >
       <NpcLabel id={resident.id} />
+      <NpcHitArea />
       <Character
         model={resident.model}
         path={ownModelPath(resident.id) ?? undefined}

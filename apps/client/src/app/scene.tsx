@@ -15,6 +15,7 @@ import { Coins } from '@/features/collectibles'
 import { Neighbors } from '@/features/npcs/neighbors'
 import { RemotePlayers } from '@/features/npcs/remote-players'
 import { Umbrellas } from '@/features/npcs/umbrellas'
+import { MouseControls, NavigationMarker } from '@/features/player'
 import { CameraRig } from '@/features/player/camera'
 import { Player } from '@/features/player/player'
 import { Transport } from '@/features/transport/transport'
@@ -69,6 +70,8 @@ export function Scene() {
             </Physics>
             <Rain />
             <CameraRig />
+            <MouseControls />
+            <NavigationMarker />
           </XRRuntime>
         </Suspense>
       </Canvas>

@@ -2,12 +2,14 @@ import { close, closeHub, interact, pause, toggleHub } from '@/app/actions'
 import { net, updateNet } from '@/shared/api/status'
 import { toggleVehicle } from '@/shared/api/wardrobe'
 import { game, update } from '@/shared/state/game'
+import { resetNavigation } from '@/shared/state/navigation'
 import { resetTouchKnob } from '@/shared/state/view'
 import { isXRPresenting } from '@/shared/xr/store'
 
 export const input = { x: 0, z: 0, sprint: false, yaw: 0, dragging: false }
 const keys = new Set<string>()
 export function clearInput() {
+  resetNavigation()
   keys.clear()
   input.x = 0
   input.z = 0
@@ -51,6 +53,7 @@ export function installInput() {
     if (event.repeat) return
     keys.add(event.code)
     sync()
+    if (input.x || input.z) resetNavigation()
     if (event.code === 'KeyE') interact()
     const canOpen =
       game.state.screen === 'playing' &&

@@ -24,6 +24,7 @@ import { playerView, setPlayerAnimation } from '@/shared/state/view'
 import { Avatar, PersonalVehicle } from '@/shared/world'
 import { distance, PLACES, type Point, SPAWN } from '@/shared/world/places'
 import { riderPosition } from '@/shared/world/vehicles'
+import { cancelNavigation, stepNavigation } from './navigation'
 
 const velocity = new Vector3()
 const up = new Vector3(0, 1, 0)
@@ -41,6 +42,7 @@ export function Player() {
   const timer = useRef(0)
   const wasCarrying = useRef(carrying)
   useEffect(() => {
+    cancelNavigation()
     const position = game.state.position
     motion.position.set(...position)
     input.yaw = 0
@@ -62,6 +64,7 @@ export function Player() {
     if (isTestPausedForScreenshot()) return
     if (!body.current || state.ride) return
     if (motion.teleport) {
+      cancelNavigation()
       const [tx, tz] = motion.teleport
       motion.teleport = null
       body.current.setTranslation({ x: tx, y: 0.9, z: tz }, true)
@@ -72,8 +75,13 @@ export function Player() {
     }
     const enabled =
       state.screen === 'playing' && !state.dialogue && state.panel === 'none'
-    const x = enabled ? input.x : 0
-    const z = enabled ? input.z : 0
+    if (input.x || input.z) cancelNavigation()
+    if (!enabled) cancelNavigation()
+    const route = stepNavigation(delta)
+    const routeX = route ? route[0] - motion.position.x : 0
+    const routeZ = route ? route[2] - motion.position.z : 0
+    const x = enabled ? (route ? routeX : input.x) : 0
+    const z = enabled ? (route ? routeZ : input.z) : 0
     const moving = Math.hypot(x, z) > 0.1
     const speed = vehicle
       ? (UNLOCKS[vehicle]?.speed ?? 4)
@@ -83,7 +91,7 @@ export function Player() {
     velocity
       .set(x, 0, z)
       .clampLength(0, 1)
-      .applyAxisAngle(up, input.yaw)
+      .applyAxisAngle(up, route ? 0 : input.yaw)
       .multiplyScalar(speed)
     const old = body.current.linvel()
     const smoothing = 1 - Math.exp(-20 * Math.min(delta, 0.1))

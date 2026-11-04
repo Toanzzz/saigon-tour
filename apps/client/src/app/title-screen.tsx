@@ -96,11 +96,12 @@ export function TitleScreen() {
           <TitleAccount />
         </div>
         <p className="title-controls desktop-only">
+          <span>{m.controls_click_walk()}</span>
           <span>
             <kbd>W A S D</kbd> {m.title_controls_move()}
           </span>
           <span>
-            <kbd>{m.controls_drag()}</kbd> {m.controls_look()}
+            <kbd>{m.controls_mouse_look()}</kbd> {m.controls_look()}
           </span>
           <span>
             <kbd>E</kbd> {m.title_controls_hello()}

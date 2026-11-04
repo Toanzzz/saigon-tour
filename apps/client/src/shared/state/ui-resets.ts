@@ -1,6 +1,7 @@
 import { resetVoice, resetVoiceClips } from '@/features/voice'
 import { net } from '@/shared/api/status'
 import { type GameState, game } from '@/shared/state/game'
+import { resetNavigation } from '@/shared/state/navigation'
 import {
   resetChatDraft,
   resetWardrobeTab,
@@ -20,6 +21,14 @@ export function installUiResets() {
   const unsubscribe = game.subscribe((state) => {
     const was = prev
     prev = state
+    if (
+      state.screen !== 'playing' ||
+      state.panel !== 'none' ||
+      state.dialogue ||
+      state.ride ||
+      state.generation !== was.generation
+    )
+      resetNavigation()
     if (state.sessionId !== was.sessionId) resetVoiceClips()
     if (
       state.sessionId !== was.sessionId ||

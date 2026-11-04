@@ -1,4 +1,7 @@
 {
+  "controls_mouse_look": "Right-drag",
+  "controls_click_walk": "Click ground to walk · click a person to talk",
+  "navigation_unreachable": "Cannot reach that spot.",
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "app_title": "Saigon, a little journey",
   "place_market": "Ben Thanh Market",

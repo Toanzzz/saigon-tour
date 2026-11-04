@@ -1,4 +1,7 @@
 {
+  "controls_mouse_look": "Kéo chuột phải",
+  "controls_click_walk": "Nhấp mặt đất để đi · nhấp nhân vật để trò chuyện",
+  "navigation_unreachable": "Không thể đi đến chỗ đó.",
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "app_title": "Sài Gòn, một chuyến đi nhỏ",
   "place_market": "Chợ Bến Thành",

@@ -10,8 +10,10 @@ import { motion } from '@/shared/runtime/motion'
 import { game } from '@/shared/state/game'
 import { questTarget } from '@/shared/state/quests'
 import { Character } from '@/shared/world'
+import { npcPoses } from '@/shared/world/npc-pose'
 import { ownModelPath, PEOPLE } from '@/shared/world/places'
 import { npcBehaviors, useNpcActivity } from './activity'
+import { NpcHitArea } from './hit-area'
 import { NpcLabel, NpcLabelsTicker } from './npc-label'
 import { Crowd } from './residents'
 
@@ -53,6 +55,7 @@ function Neighbor({
   useEffect(
     () => () => {
       npcBehaviors.delete(id)
+      npcPoses.delete(id)
     },
     [id]
   )
@@ -75,6 +78,11 @@ function Neighbor({
       ref.current.position.z += dz * alpha
       if (moving) ref.current.rotation.y = Math.atan2(dx, dz)
     }
+    npcPoses.set(id, [
+      ref.current.position.x,
+      ref.current.position.y,
+      ref.current.position.z,
+    ])
     animation.current = moving ? 'walk' : activity.animation
     npcBehaviors.set(id, {
       activityId: activity.id,
@@ -85,6 +93,7 @@ function Neighbor({
   })
   return (
     <group ref={ref} position={anchor} userData={{ npcId: id }}>
+      <NpcHitArea />
       <Character
         model={PEOPLE[id].model as 'female-a'}
         path={ownModelPath(id) ?? undefined}

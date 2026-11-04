@@ -139,11 +139,12 @@ export function GameUI() {
           )}
           <RideToggle />
           <div className="desktop-hint desktop-only">
+            <span>{m.controls_click_walk()}</span>
             <span>
               <kbd>WASD</kbd> {m.hud_hint_stroll()}
             </span>
             <span>
-              <kbd>{m.controls_drag()}</kbd> {m.controls_look()}
+              <kbd>{m.controls_mouse_look()}</kbd> {m.controls_look()}
             </span>
             <span>
               <kbd>J</kbd> {m.hud_hint_journal()}

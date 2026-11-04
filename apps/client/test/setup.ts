@@ -7,6 +7,7 @@ import { resetVoice } from '@/features/voice/store'
 import { resetWorkshop } from '@/features/workshop/store'
 import { setLocale } from '@/paraglide/runtime'
 import { resetPresenceView } from '@/shared/api/presence-view'
+import { resetNavigation } from '@/shared/state/navigation'
 import { resetRiddles } from '@/shared/state/riddles'
 import { resetTwists } from '@/shared/state/twists'
 import { resetUiStores } from '@/shared/state/ui'
@@ -26,6 +27,7 @@ beforeEach(() => {
   resetRiddles()
   resetAsides()
   resetCarry()
+  resetNavigation()
   resetPresenceView()
   resetXr()
   resetWorkshop()

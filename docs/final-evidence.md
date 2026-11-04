@@ -737,3 +737,10 @@ Both viewports pass. Artifacts in `artifacts/map-labels/`.
 - A real Start exploring → Wardrobe → Equip flow with the same held request shows both the city and preview panels at both widths; both disappear after release.
 - Existing headless wardrobe checks pass on both widths: all five categories, equip/unequip, mouse/touch rotation, keyboard rotation, reopen, empty collection, thumbnail failure/retry, and model failure/retry.
 - `bun run check`, `bun run check:types`, `bun run build`, and `bun run test` pass: 513 server and 329 client tests; two server tests skipped.
+
+## Mouse navigation
+
+- Proven: `scripts/qa-navigation.mjs` drives actual canvas mouse events at 1440×900. Ground clicks move through Rapier; a route crosses the park by detouring over 2.5 units around the fountain. Keyboard input cancels a route. Clicking Hoa from outside conversation range walks closer and opens her conversation; clicking the moving courier Dat also opens the selected resident conversation. Right-drag changes yaw; left-drag does not walk; the canvas cancels the context-menu event.
+- Proven: the same script at 390×844 uses native touch events. Ground taps do not navigate, touch-drag changes camera yaw, and the joystick moves the player and recenters after release. No page exceptions or horizontal overflow in either viewport. Inspected captures: `artifacts/navigation/verified-1440.png`, `verified-390.png`. Evidence: `artifacts/navigation/results.json`.
+- Proven: navigation unit tests cover collision-safe detours, rejected building/out-of-bounds/invalid targets, replacement targets, overlay cancellation, exactly-once interaction with the selected NPC, distance gating, moving-NPC replanning, teleport/reset cancellation, and stalled-route cancellation.
+- Verification: `bun run check` → `bun run check:types` → `bun run build` → `bun run test` pass; server 523 passed / 2 skipped, client 355 passed. Browser compilation and QA run sequentially because i18n generation can reload the development page.

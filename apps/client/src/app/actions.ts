@@ -35,6 +35,7 @@ import {
   notify,
   update,
 } from '@/shared/state/game'
+import { resetNavigation } from '@/shared/state/navigation'
 import { dialogueQuests } from '@/shared/state/quests'
 import { resetRiddles } from '@/shared/state/riddles'
 import { resetTwists } from '@/shared/state/twists'
@@ -44,6 +45,7 @@ import {
   resetTransportForm,
   resetWardrobeTab,
 } from '@/shared/state/ui'
+import { npcPoses } from '@/shared/world/npc-pose'
 import {
   distance,
   MODES,
@@ -96,6 +98,7 @@ export async function restart() {
     reducedMotion: state.reducedMotion,
     timeOfDay: state.timeOfDay,
   }))
+  resetNavigation()
   resetChatDraft()
   resetTransportForm()
   resetWardrobeTab()
@@ -228,6 +231,7 @@ export function nearby(
   )
 }
 export function interact() {
+  resetNavigation()
   const state = game.state
   if (
     state.screen !== 'playing' ||
@@ -244,7 +248,11 @@ export function interact() {
 }
 export async function talk(npc: NpcId) {
   const state = game.state
-  if (state.dialogue || distance(state.position, npcPosition(npc)) > 4) return
+  if (
+    state.dialogue ||
+    distance(state.position, npcPoses.get(npc) ?? npcPosition(npc)) > 4
+  )
+    return
   const requestId = crypto.randomUUID()
   const sessionId = state.sessionId
   const activity = npcActivity(npc, city.state)
